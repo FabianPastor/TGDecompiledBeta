@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.PhoneFormat.PhoneFormat;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -43,8 +43,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     private int selectedUserId;
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$1 */
-    class C10491 extends ActionBarMenuOnItemClick {
-        C10491() {
+    class C10541 extends ActionBarMenuOnItemClick {
+        C10541() {
         }
 
         public void onItemClick(int id) {
@@ -63,8 +63,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$2 */
-    class C10502 implements OnItemClickListener {
-        C10502() {
+    class C10552 implements OnItemClickListener {
+        C10552() {
         }
 
         public void onItemClick(View view, int position) {
@@ -77,11 +77,11 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$3 */
-    class C10523 implements OnItemLongClickListener {
+    class C10573 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.BlockedUsersActivity$3$1 */
-        class C10511 implements OnClickListener {
-            C10511() {
+        class C10561 implements OnClickListener {
+            C10561() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -91,14 +91,14 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C10523() {
+        C10573() {
         }
 
         public boolean onItemClick(View view, int position) {
             if (position < MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).blockedUsers.size() && BlockedUsersActivity.this.getParentActivity() != null) {
                 BlockedUsersActivity.this.selectedUserId = ((Integer) MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).blockedUsers.get(position)).intValue();
                 Builder builder = new Builder(BlockedUsersActivity.this.getParentActivity());
-                builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", C0501R.string.Unblock)}, new C10511());
+                builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", C0505R.string.Unblock)}, new C10561());
                 BlockedUsersActivity.this.showDialog(builder.create());
             }
             return true;
@@ -106,8 +106,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$4 */
-    class C10534 implements ThemeDescriptionDelegate {
-        C10534() {
+    class C10584 implements ThemeDescriptionDelegate {
+        C10584() {
         }
 
         public void didSetColor() {
@@ -149,7 +149,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                     break;
                 default:
                     view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", C0501R.string.UnblockText));
+                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", C0505R.string.UnblockText));
                     break;
             }
             return new Holder(view);
@@ -161,9 +161,9 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 if (user != null) {
                     String number;
                     if (user.bot) {
-                        number = LocaleController.getString("Bot", C0501R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", C0501R.string.Bot).substring(1);
+                        number = LocaleController.getString("Bot", C0505R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", C0505R.string.Bot).substring(1);
                     } else if (user.phone == null || user.phone.length() == 0) {
-                        number = LocaleController.getString("NumberUnknown", C0501R.string.NumberUnknown);
+                        number = LocaleController.getString("NumberUnknown", C0505R.string.NumberUnknown);
                     } else {
                         number = PhoneFormat.getInstance().format("+" + user.phone);
                     }
@@ -196,15 +196,15 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("BlockedUsers", C0501R.string.BlockedUsers));
-        this.actionBar.setActionBarMenuOnItemClick(new C10491());
-        this.actionBar.createMenu().addItem(1, (int) C0501R.drawable.plus);
+        this.actionBar.setTitle(LocaleController.getString("BlockedUsers", C0505R.string.BlockedUsers));
+        this.actionBar.setActionBarMenuOnItemClick(new C10541());
+        this.actionBar.createMenu().addItem(1, (int) C0505R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoBlocked", C0501R.string.NoBlocked));
+        this.emptyView.setText(LocaleController.getString("NoBlocked", C0505R.string.NoBlocked));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -220,8 +220,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C10502());
-        this.listView.setOnItemLongClickListener(new C10523());
+        this.listView.setOnItemClickListener(new C10552());
+        this.listView.setOnItemLongClickListener(new C10573());
         if (MessagesController.getInstance(this.currentAccount).loadingBlockedUsers) {
             this.emptyView.showProgress();
         } else {
@@ -270,19 +270,19 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C10534();
+        ThemeDescriptionDelegate cellDelegate = new C10584();
         r10 = new ThemeDescription[20];
         r10[9] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
         r10[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
+        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteGrayText);
         r10[12] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
-        r10[13] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        r10[14] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        r10[15] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        r10[16] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        r10[19] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        r10[13] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
+        r10[14] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[15] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[16] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[17] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[18] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[19] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         return r10;
     }
 }

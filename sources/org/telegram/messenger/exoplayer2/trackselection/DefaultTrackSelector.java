@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.RendererConfiguration;
@@ -142,7 +142,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     public static final class Parameters implements Parcelable {
-        public static final Creator<Parameters> CREATOR = new C07401();
+        public static final Creator<Parameters> CREATOR = new C07451();
         public static final Parameters DEFAULT = new Parameters();
         public final boolean allowMixedMimeAdaptiveness;
         public final boolean allowNonSeamlessAdaptiveness;
@@ -164,8 +164,8 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         public final int viewportWidth;
 
         /* renamed from: org.telegram.messenger.exoplayer2.trackselection.DefaultTrackSelector$Parameters$1 */
-        static class C07401 implements Creator<Parameters> {
-            C07401() {
+        static class C07451 implements Creator<Parameters> {
+            C07451() {
             }
 
             public Parameters createFromParcel(Parcel in) {
@@ -598,14 +598,14 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     public static final class SelectionOverride implements Parcelable {
-        public static final Creator<SelectionOverride> CREATOR = new C07411();
+        public static final Creator<SelectionOverride> CREATOR = new C07461();
         public final int groupIndex;
         public final int length;
         public final int[] tracks;
 
         /* renamed from: org.telegram.messenger.exoplayer2.trackselection.DefaultTrackSelector$SelectionOverride$1 */
-        static class C07411 implements Creator<SelectionOverride> {
-            C07411() {
+        static class C07461 implements Creator<SelectionOverride> {
+            C07461() {
             }
 
             public SelectionOverride createFromParcel(Parcel in) {
@@ -1197,7 +1197,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     protected static boolean formatHasNoLanguage(Format format) {
-        return TextUtils.isEmpty(format.language) || formatHasLanguage(format, C0616C.LANGUAGE_UNDETERMINED);
+        return TextUtils.isEmpty(format.language) || formatHasLanguage(format, C0621C.LANGUAGE_UNDETERMINED);
     }
 
     protected static boolean formatHasLanguage(Format format, String language) {

@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source.dash.manifest;
 
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public abstract class SegmentBase {
@@ -139,7 +139,7 @@ public abstract class SegmentBase {
             if (this.segmentTimeline != null) {
                 return this.segmentTimeline.size();
             }
-            if (periodDurationUs != C0616C.TIME_UNSET) {
+            if (periodDurationUs != C0621C.TIME_UNSET) {
                 return (int) Util.ceilDivide(periodDurationUs, (this.duration * 1000000) / this.timescale);
             }
             return -1;

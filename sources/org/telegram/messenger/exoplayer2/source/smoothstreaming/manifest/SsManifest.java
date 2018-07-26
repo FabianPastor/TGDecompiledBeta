@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.offline.FilterableManifest;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -128,7 +128,7 @@ public class SsManifest implements FilterableManifest<SsManifest, StreamKey> {
             j = Util.scaleLargeTimestamp(duration, 1000000, timescale);
         }
         if (dvrWindowLength == 0) {
-            j2 = C0616C.TIME_UNSET;
+            j2 = C0621C.TIME_UNSET;
         } else {
             j2 = Util.scaleLargeTimestamp(dvrWindowLength, 1000000, timescale);
         }

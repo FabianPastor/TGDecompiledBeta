@@ -16,7 +16,7 @@ import android.widget.FrameLayout.LayoutParams;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Bitmaps;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
@@ -39,8 +39,8 @@ public class PhotoCropActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhotoCropActivity$1 */
-    class C22581 extends ActionBarMenuOnItemClick {
-        C22581() {
+    class C22801 extends ActionBarMenuOnItemClick {
+        C22801() {
         }
 
         public void onItemClick(int id) {
@@ -80,8 +80,8 @@ public class PhotoCropActivity extends BaseFragment {
         int viewWidth;
 
         /* renamed from: org.telegram.ui.PhotoCropActivity$PhotoCropView$1 */
-        class C22591 implements OnTouchListener {
-            C22591() {
+        class C22811 implements OnTouchListener {
+            C22811() {
             }
 
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -276,7 +276,7 @@ public class PhotoCropActivity extends BaseFragment {
             this.halfPaint = new Paint();
             this.halfPaint.setColor(-939524096);
             setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
-            setOnTouchListener(new C22591());
+            setOnTouchListener(new C22811());
         }
 
         private void updateBitmapSize() {
@@ -444,11 +444,11 @@ public class PhotoCropActivity extends BaseFragment {
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         this.actionBar.setTitleColor(-1);
-        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("CropImage", C0501R.string.CropImage));
-        this.actionBar.setActionBarMenuOnItemClick(new C22581());
-        this.actionBar.createMenu().addItemWithWidth(1, C0501R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("CropImage", C0505R.string.CropImage));
+        this.actionBar.setActionBarMenuOnItemClick(new C22801());
+        this.actionBar.createMenu().addItemWithWidth(1, C0505R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         View photoCropView = new PhotoCropView(context);
         this.view = photoCropView;
         this.fragmentView = photoCropView;

@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
@@ -27,7 +27,7 @@ public final class SinglePeriodTimeline extends Timeline {
     }
 
     public SinglePeriodTimeline(long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic, Object tag) {
-        this(C0616C.TIME_UNSET, C0616C.TIME_UNSET, periodDurationUs, windowDurationUs, windowPositionInPeriodUs, windowDefaultStartPositionUs, isSeekable, isDynamic, tag);
+        this(C0621C.TIME_UNSET, C0621C.TIME_UNSET, periodDurationUs, windowDurationUs, windowPositionInPeriodUs, windowDefaultStartPositionUs, isSeekable, isDynamic, tag);
     }
 
     public SinglePeriodTimeline(long presentationStartTimeMs, long windowStartTimeMs, long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic, Object tag) {
@@ -51,12 +51,12 @@ public final class SinglePeriodTimeline extends Timeline {
         Object tag = setTag ? this.tag : null;
         long windowDefaultStartPositionUs = this.windowDefaultStartPositionUs;
         if (this.isDynamic && defaultPositionProjectionUs != 0) {
-            if (this.windowDurationUs == C0616C.TIME_UNSET) {
-                windowDefaultStartPositionUs = C0616C.TIME_UNSET;
+            if (this.windowDurationUs == C0621C.TIME_UNSET) {
+                windowDefaultStartPositionUs = C0621C.TIME_UNSET;
             } else {
                 windowDefaultStartPositionUs += defaultPositionProjectionUs;
                 if (windowDefaultStartPositionUs > this.windowDurationUs) {
-                    windowDefaultStartPositionUs = C0616C.TIME_UNSET;
+                    windowDefaultStartPositionUs = C0621C.TIME_UNSET;
                 }
             }
         }

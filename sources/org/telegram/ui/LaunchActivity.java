@@ -9,6 +9,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Point;
@@ -46,7 +47,7 @@ import net.hockeyapp.android.UpdateFragment;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -92,7 +93,9 @@ import org.telegram.tgnet.TLRPC.TL_account_getPassword;
 import org.telegram.tgnet.TLRPC.TL_contacts_resolveUsername;
 import org.telegram.tgnet.TLRPC.TL_contacts_resolvedPeer;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
 import org.telegram.tgnet.TLRPC.TL_help_deepLinkInfo;
+import org.telegram.tgnet.TLRPC.TL_help_getAppUpdate;
 import org.telegram.tgnet.TLRPC.TL_help_getDeepLinkInfo;
 import org.telegram.tgnet.TLRPC.TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC.TL_inputGameShortName;
@@ -121,6 +124,7 @@ import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AlertsCreator.AccountSelectDelegate;
 import org.telegram.ui.Components.AudioPlayerAlert;
+import org.telegram.ui.Components.BlockingUpdateView;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
@@ -135,6 +139,7 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.TermsOfServiceView.TermsOfServiceViewDelegate;
 import org.telegram.ui.Components.ThemeEditorView;
+import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
 import org.telegram.ui.LocationActivity.LocationActivityDelegate;
 import org.telegram.ui.PhonebookSelectActivity.PhonebookSelectActivityDelegate;
@@ -145,6 +150,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private static ArrayList<BaseFragment> rightFragmentsStack = new ArrayList();
     private ActionBarLayout actionBarLayout;
     private View backgroundTablet;
+    private BlockingUpdateView blockingUpdateView;
     private ArrayList<User> contactsToSend;
     private Uri contactsToSendUri;
     private int currentAccount;
@@ -180,8 +186,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private AlertDialog visibleDialog;
 
     /* renamed from: org.telegram.ui.LaunchActivity$2 */
-    class C19722 implements OnTouchListener {
-        C19722() {
+    class C19902 implements OnTouchListener {
+        C19902() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -210,8 +216,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$3 */
-    class C19753 implements OnClickListener {
-        C19753() {
+    class C19943 implements OnClickListener {
+        C19943() {
         }
 
         public void onClick(View v) {
@@ -219,8 +225,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$4 */
-    class C19764 implements OnItemClickListener {
-        C19764() {
+    class C19954 implements OnItemClickListener {
+        C19954() {
         }
 
         public void onItemClick(View view, int position) {
@@ -280,7 +286,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.presentFragment(new SettingsActivity());
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 9) {
-                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", C0501R.string.TelegramFaqUrl));
+                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", C0505R.string.TelegramFaqUrl));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 10) {
                     LaunchActivity.this.presentFragment(new CallLogActivity());
@@ -295,9 +301,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
     }
 
-    /* renamed from: org.telegram.ui.LaunchActivity$6 */
-    class C19786 implements TermsOfServiceViewDelegate {
-        C19786() {
+    /* renamed from: org.telegram.ui.LaunchActivity$7 */
+    class C19987 implements TermsOfServiceViewDelegate {
+        C19987() {
         }
 
         public void onAcceptTerms(int account) {
@@ -313,9 +319,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
     }
 
-    /* renamed from: org.telegram.ui.LaunchActivity$7 */
-    class C19797 implements PasscodeViewDelegate {
-        C19797() {
+    /* renamed from: org.telegram.ui.LaunchActivity$8 */
+    class C19998 implements PasscodeViewDelegate {
+        C19998() {
         }
 
         public void didAcceptedPassword() {
@@ -372,14 +378,14 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             }
         }
         requestWindowFeature(1);
-        setTheme(C0501R.style.Theme.TMessages);
+        setTheme(C0505R.style.Theme.TMessages);
         if (VERSION.SDK_INT >= 21) {
             try {
                 setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
             } catch (Exception e) {
             }
         }
-        getWindow().setBackgroundDrawableResource(C0501R.drawable.transparent);
+        getWindow().setBackgroundDrawableResource(C0505R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(MessagesController.UPDATE_MASK_CHANNEL, MessagesController.UPDATE_MASK_CHANNEL);
@@ -404,7 +410,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         setContentView(this.drawerLayoutContainer, new LayoutParams(-1, -1));
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(16);
-            View c19691 = new RelativeLayout(this) {
+            View c19881 = new RelativeLayout(this) {
                 private boolean inLayout;
 
                 public void requestLayout() {
@@ -458,36 +464,36 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
                 }
             };
-            this.drawerLayoutContainer.addView(c19691, LayoutHelper.createFrame(-1, -1.0f));
+            this.drawerLayoutContainer.addView(c19881, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0501R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0505R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
-            c19691.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            c19691.addView(this.actionBarLayout);
+            c19881.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            c19881.addView(this.actionBarLayout);
             this.rightActionBarLayout = new ActionBarLayout(this);
             this.rightActionBarLayout.init(rightFragmentsStack);
             this.rightActionBarLayout.setDelegate(this);
-            c19691.addView(this.rightActionBarLayout);
+            c19881.addView(this.rightActionBarLayout);
             this.shadowTabletSide = new FrameLayout(this);
             this.shadowTabletSide.setBackgroundColor(NUM);
-            c19691.addView(this.shadowTabletSide);
+            c19881.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
             this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            c19691.addView(this.shadowTablet);
-            this.shadowTablet.setOnTouchListener(new C19722());
-            this.shadowTablet.setOnClickListener(new C19753());
+            c19881.addView(this.shadowTablet);
+            this.shadowTablet.setOnTouchListener(new C19902());
+            this.shadowTablet.setOnClickListener(new C19943());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(this.shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(C0501R.drawable.boxshadow);
+            this.layersActionBarLayout.setBackgroundResource(C0505R.drawable.boxshadow);
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
             this.layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            c19691.addView(this.layersActionBarLayout);
+            c19881.addView(this.layersActionBarLayout);
         } else {
             this.drawerLayoutContainer.addView(this.actionBarLayout, new LayoutParams(-1, -1));
         }
@@ -510,7 +516,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         layoutParams.width = dp;
         layoutParams.height = -1;
         this.sideMenu.setLayoutParams(layoutParams);
-        this.sideMenu.setOnItemClickListener(new C19764());
+        this.sideMenu.setOnItemClickListener(new C19954());
         this.drawerLayoutContainer.setParentActionBarLayout(this.actionBarLayout);
         this.actionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
         this.actionBarLayout.init(mainFragmentsStack);
@@ -912,7 +918,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 View view = getWindow().getDecorView().getRootView();
                 ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
                 final View view2 = view;
-                OnGlobalLayoutListener c19775 = new OnGlobalLayoutListener() {
+                OnGlobalLayoutListener c19965 = new OnGlobalLayoutListener() {
                     public void onGlobalLayout() {
                         int height = view2.getMeasuredHeight();
                         if (VERSION.SDK_INT >= 21) {
@@ -926,8 +932,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                 };
-                this.onGlobalLayoutListener = c19775;
-                viewTreeObserver.addOnGlobalLayoutListener(c19775);
+                this.onGlobalLayoutListener = c19965;
+                viewTreeObserver.addOnGlobalLayoutListener(c19965);
             }
         } catch (Throwable e222) {
             FileLog.m3e(e222);
@@ -1111,11 +1117,27 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
     }
 
+    private void showUpdateActivity(int account, TL_help_appUpdate update) {
+        if (this.blockingUpdateView == null) {
+            this.blockingUpdateView = new BlockingUpdateView(this) {
+                public void setVisibility(int visibility) {
+                    super.setVisibility(visibility);
+                    if (visibility == 8) {
+                        LaunchActivity.this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                    }
+                }
+            };
+            this.drawerLayoutContainer.addView(this.blockingUpdateView, LayoutHelper.createFrame(-1, -1.0f));
+        }
+        this.blockingUpdateView.show(account, update);
+        this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
+    }
+
     private void showTosActivity(int account, TL_help_termsOfService tos) {
         if (this.termsOfServiceView == null) {
             this.termsOfServiceView = new TermsOfServiceView(this);
             this.drawerLayoutContainer.addView(this.termsOfServiceView, LayoutHelper.createFrame(-1, -1.0f));
-            this.termsOfServiceView.setDelegate(new C19786());
+            this.termsOfServiceView.setDelegate(new C19987());
         }
         TL_help_termsOfService currentTos = UserConfig.getInstance(account).unacceptedTermsOfService;
         if (currentTos != tos && (currentTos == null || !currentTos.id.data.equals(tos.id.data))) {
@@ -1139,7 +1161,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.passcodeView.onShow();
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new C19797());
+            this.passcodeView.setDelegate(new C19998());
         }
     }
 
@@ -1700,11 +1722,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     args.putInt("dialogsType", 3);
                     args.putBoolean("allowSwitchAccount", true);
                     if (this.contactsToSend == null) {
-                        args.putString("selectAlertString", LocaleController.getString("SendMessagesTo", C0501R.string.SendMessagesTo));
-                        args.putString("selectAlertStringGroup", LocaleController.getString("SendMessagesToGroup", C0501R.string.SendMessagesToGroup));
+                        args.putString("selectAlertString", LocaleController.getString("SendMessagesTo", C0505R.string.SendMessagesTo));
+                        args.putString("selectAlertStringGroup", LocaleController.getString("SendMessagesToGroup", C0505R.string.SendMessagesToGroup));
                     } else if (this.contactsToSend.size() != 1) {
-                        args.putString("selectAlertString", LocaleController.getString("SendContactTo", C0501R.string.SendMessagesTo));
-                        args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", C0501R.string.SendContactToGroup));
+                        args.putString("selectAlertString", LocaleController.getString("SendContactTo", C0505R.string.SendMessagesTo));
+                        args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", C0505R.string.SendContactToGroup));
                     }
                     DialogsActivity dialogsActivity = new DialogsActivity(args);
                     dialogsActivity.setDelegate(this);
@@ -1801,7 +1823,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (state != 0 || UserConfig.getActivatedAccountsCount() < 2 || auth == null) {
             final int i;
             final AlertDialog progressDialog = new AlertDialog(this, 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", C0501R.string.Loading));
+            progressDialog.setMessage(LocaleController.getString("Loading", C0505R.string.Loading));
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             int[] requestId = new int[]{0};
@@ -1827,7 +1849,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                     TL_contacts_resolvedPeer res = (TL_contacts_resolvedPeer) response;
                                     if (error != null || LaunchActivity.this.actionBarLayout == null || (str3 != null && (str3 == null || res.users.isEmpty()))) {
                                         try {
-                                            Toast.makeText(LaunchActivity.this, LocaleController.getString("NoUsernameFound", C0501R.string.NoUsernameFound), 0).show();
+                                            Toast.makeText(LaunchActivity.this, LocaleController.getString("NoUsernameFound", C0505R.string.NoUsernameFound), 0).show();
                                             return;
                                         } catch (Throwable e2) {
                                             FileLog.m3e(e2);
@@ -1844,8 +1866,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                         args.putBoolean("onlySelect", true);
                                         args.putBoolean("cantSendToChannels", true);
                                         args.putInt("dialogsType", 1);
-                                        args.putString("selectAlertString", LocaleController.getString("SendGameTo", C0501R.string.SendGameTo));
-                                        args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", C0501R.string.SendGameToGroup));
+                                        args.putString("selectAlertString", LocaleController.getString("SendGameTo", C0505R.string.SendGameTo));
+                                        args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", C0505R.string.SendGameToGroup));
                                         fragment = new DialogsActivity(args);
                                         final TL_contacts_resolvedPeer tL_contacts_resolvedPeer = res;
                                         fragment.setDelegate(new DialogsActivityDelegate() {
@@ -1895,7 +1917,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                         User user = !res.users.isEmpty() ? (User) res.users.get(0) : null;
                                         if (user == null || (user.bot && user.bot_nochats)) {
                                             try {
-                                                Toast.makeText(LaunchActivity.this, LocaleController.getString("BotCantJoinGroups", C0501R.string.BotCantJoinGroups), 0).show();
+                                                Toast.makeText(LaunchActivity.this, LocaleController.getString("BotCantJoinGroups", C0505R.string.BotCantJoinGroups), 0).show();
                                                 return;
                                             } catch (Throwable e22) {
                                                 FileLog.m3e(e22);
@@ -1905,7 +1927,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                         args = new Bundle();
                                         args.putBoolean("onlySelect", true);
                                         args.putInt("dialogsType", 2);
-                                        args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", C0501R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
+                                        args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", C0505R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
                                         fragment = new DialogsActivity(args);
                                         final User user2 = user;
                                         fragment.setDelegate(new DialogsActivityDelegate() {
@@ -1978,9 +2000,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         public void run(final TLObject response, final TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
-                                /* renamed from: org.telegram.ui.LaunchActivity$12$1$1 */
-                                class C19621 implements DialogInterface.OnClickListener {
-                                    C19621() {
+                                /* renamed from: org.telegram.ui.LaunchActivity$13$1$1 */
+                                class C19801 implements DialogInterface.OnClickListener {
+                                    C19801() {
                                     }
 
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -1998,13 +2020,13 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                         Builder builder;
                                         if (error != null || LaunchActivity.this.actionBarLayout == null) {
                                             builder = new Builder(LaunchActivity.this);
-                                            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                                            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
                                             if (error.text.startsWith("FLOOD_WAIT")) {
-                                                builder.setMessage(LocaleController.getString("FloodWait", C0501R.string.FloodWait));
+                                                builder.setMessage(LocaleController.getString("FloodWait", C0505R.string.FloodWait));
                                             } else {
-                                                builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0501R.string.JoinToGroupErrorNotExist));
+                                                builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0505R.string.JoinToGroupErrorNotExist));
                                             }
-                                            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                                            builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
                                             LaunchActivity.this.showAlertDialog(builder);
                                             return;
                                         }
@@ -2023,13 +2045,13 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                             }
                                         } else if (((invite.chat != null || (invite.channel && !invite.megagroup)) && (invite.chat == null || (ChatObject.isChannel(invite.chat) && !invite.chat.megagroup))) || LaunchActivity.mainFragmentsStack.isEmpty()) {
                                             builder = new Builder(LaunchActivity.this);
-                                            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                                            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
                                             String str = "ChannelJoinTo";
                                             Object[] objArr = new Object[1];
                                             objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
-                                            builder.setMessage(LocaleController.formatString(str, C0501R.string.ChannelJoinTo, objArr));
-                                            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new C19621());
-                                            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+                                            builder.setMessage(LocaleController.formatString(str, C0505R.string.ChannelJoinTo, objArr));
+                                            builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), new C19801());
+                                            builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
                                             LaunchActivity.this.showAlertDialog(builder);
                                         } else {
                                             BaseFragment fragment2 = (BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1);
@@ -2059,15 +2081,15 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                         }
                                         if (error != null) {
                                             Builder builder = new Builder(LaunchActivity.this);
-                                            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                                            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
                                             if (error.text.startsWith("FLOOD_WAIT")) {
-                                                builder.setMessage(LocaleController.getString("FloodWait", C0501R.string.FloodWait));
+                                                builder.setMessage(LocaleController.getString("FloodWait", C0505R.string.FloodWait));
                                             } else if (error.text.equals("USERS_TOO_MUCH")) {
-                                                builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", C0501R.string.JoinToGroupErrorFull));
+                                                builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", C0505R.string.JoinToGroupErrorFull));
                                             } else {
-                                                builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0501R.string.JoinToGroupErrorNotExist));
+                                                builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0505R.string.JoinToGroupErrorNotExist));
                                             }
-                                            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                                            builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
                                             LaunchActivity.this.showAlertDialog(builder);
                                         } else if (LaunchActivity.this.actionBarLayout != null) {
                                             Updates updates = response;
@@ -2175,9 +2197,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                         try {
                                             alertDialog.dismiss();
                                             if ("APP_VERSION_OUTDATED".equals(error.text)) {
-                                                AlertsCreator.showUpdateAppAlert(LaunchActivity.this, LocaleController.getString("UpdateAppAlert", C0501R.string.UpdateAppAlert), true);
+                                                AlertsCreator.showUpdateAppAlert(LaunchActivity.this, LocaleController.getString("UpdateAppAlert", C0505R.string.UpdateAppAlert), true);
                                             } else {
-                                                LaunchActivity.this.showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("ErrorOccurred", C0501R.string.ErrorOccurred) + "\n" + error.text));
+                                                LaunchActivity.this.showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("ErrorOccurred", C0505R.string.ErrorOccurred) + "\n" + error.text));
                                             }
                                         } catch (Throwable e) {
                                             FileLog.m3e(e);
@@ -2214,7 +2236,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             if (requestId[0] != 0) {
                 i = intentAccount;
                 final int[] iArr2 = requestId;
-                progressDialog.setButton(-2, LocaleController.getString("Cancel", C0501R.string.Cancel), new DialogInterface.OnClickListener() {
+                progressDialog.setButton(-2, LocaleController.getString("Cancel", C0505R.string.Cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ConnectionsManager.getInstance(i).cancelRequest(iArr2[0], true);
                         try {
@@ -2256,6 +2278,57 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }).show();
     }
 
+    public void checkAppUpdate(boolean force) {
+        if (!force && BuildVars.DEBUG_VERSION) {
+            return;
+        }
+        if (!force && !BuildVars.CHECK_UPDATES) {
+            return;
+        }
+        if (force || Math.abs(System.currentTimeMillis() - UserConfig.getInstance(0).lastUpdateCheckTime) >= 86400000) {
+            TL_help_getAppUpdate req = new TL_help_getAppUpdate();
+            try {
+                req.source = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
+            } catch (Exception e) {
+            }
+            if (req.source == null) {
+                req.source = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            final int accountNum = this.currentAccount;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+                public void run(TLObject response, TL_error error) {
+                    UserConfig.getInstance(0).lastUpdateCheckTime = System.currentTimeMillis();
+                    UserConfig.getInstance(0).saveConfig(false);
+                    if (response instanceof TL_help_appUpdate) {
+                        final TL_help_appUpdate res = (TL_help_appUpdate) response;
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                                    res.popup = Utilities.random.nextBoolean();
+                                }
+                                if (res.popup) {
+                                    UserConfig.getInstance(0).pendingAppUpdate = res;
+                                    UserConfig.getInstance(0).pendingAppUpdateBuildVersion = BuildVars.BUILD_VERSION;
+                                    try {
+                                        PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
+                                        UserConfig.getInstance(0).pendingAppUpdateInstallTime = Math.max(packageInfo.lastUpdateTime, packageInfo.firstInstallTime);
+                                    } catch (Throwable e) {
+                                        FileLog.m3e(e);
+                                        UserConfig.getInstance(0).pendingAppUpdateInstallTime = 0;
+                                    }
+                                    UserConfig.getInstance(0).saveConfig(false);
+                                    LaunchActivity.this.showUpdateActivity(accountNum, res);
+                                    return;
+                                }
+                                new UpdateAppAlertDialog(LaunchActivity.this, res, accountNum).show();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
     public AlertDialog showAlertDialog(Builder builder) {
         AlertDialog alertDialog = null;
         try {
@@ -2274,7 +2347,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     if (LaunchActivity.this.visibleDialog != null) {
                         if (LaunchActivity.this.visibleDialog == LaunchActivity.this.localeDialog) {
                             try {
-                                Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", C0501R.string.ChangeLanguageLater), 1).show();
+                                Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", C0505R.string.ChangeLanguageLater), 1).show();
                             } catch (Throwable e) {
                                 FileLog.m3e(e);
                             }
@@ -2478,17 +2551,17 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             }
             if (showAlert) {
                 Builder builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
                 if (requestCode == 3) {
-                    builder.setMessage(LocaleController.getString("PermissionNoAudio", C0501R.string.PermissionNoAudio));
+                    builder.setMessage(LocaleController.getString("PermissionNoAudio", C0505R.string.PermissionNoAudio));
                 } else if (requestCode == 4) {
-                    builder.setMessage(LocaleController.getString("PermissionStorage", C0501R.string.PermissionStorage));
+                    builder.setMessage(LocaleController.getString("PermissionStorage", C0505R.string.PermissionStorage));
                 } else if (requestCode == 5) {
-                    builder.setMessage(LocaleController.getString("PermissionContacts", C0501R.string.PermissionContacts));
+                    builder.setMessage(LocaleController.getString("PermissionContacts", C0505R.string.PermissionContacts));
                 } else if (requestCode == 19 || requestCode == 20) {
-                    builder.setMessage(LocaleController.getString("PermissionNoCamera", C0501R.string.PermissionNoCamera));
+                    builder.setMessage(LocaleController.getString("PermissionNoCamera", C0505R.string.PermissionNoCamera));
                 }
-                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0501R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0505R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
                     @TargetApi(9)
                     public void onClick(DialogInterface dialog, int which) {
                         try {
@@ -2500,7 +2573,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                 });
-                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
                 builder.show();
                 return;
             }
@@ -2650,7 +2723,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
         if (UserConfig.getInstance(UserConfig.selectedAccount).unacceptedTermsOfService != null) {
             showTosActivity(UserConfig.selectedAccount, UserConfig.getInstance(UserConfig.selectedAccount).unacceptedTermsOfService);
+        } else if (UserConfig.getInstance(0).pendingAppUpdate != null) {
+            showUpdateActivity(UserConfig.selectedAccount, UserConfig.getInstance(0).pendingAppUpdate);
         }
+        checkAppUpdate(false);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -2709,10 +2785,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 return;
             }
             builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
             if (!(reason.intValue() == 2 || reason.intValue() == 3)) {
                 final int i = account;
-                builder.setNegativeButton(LocaleController.getString("MoreInfo", C0501R.string.MoreInfo), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("MoreInfo", C0505R.string.MoreInfo), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (!LaunchActivity.mainFragmentsStack.isEmpty()) {
                             MessagesController.getInstance(i).openByUserName("spambot", (BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1), 1);
@@ -2721,26 +2797,26 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 });
             }
             if (reason.intValue() == 0) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", C0501R.string.NobodyLikesSpam1));
-                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", C0505R.string.NobodyLikesSpam1));
+                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
             } else if (reason.intValue() == 1) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", C0501R.string.NobodyLikesSpam2));
-                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", C0505R.string.NobodyLikesSpam2));
+                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
             } else if (reason.intValue() == 2) {
                 builder.setMessage((String) args[1]);
                 if (args[2].startsWith("AUTH_KEY_DROP_")) {
-                    builder.setPositiveButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
-                    builder.setNegativeButton(LocaleController.getString("LogOut", C0501R.string.LogOut), new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("LogOut", C0505R.string.LogOut), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             MessagesController.getInstance(LaunchActivity.this.currentAccount).performLogout(2);
                         }
                     });
                 } else {
-                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                    builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
                 }
             } else if (reason.intValue() == 3) {
-                builder.setMessage(LocaleController.getString("UseProxyTelegramError", C0501R.string.UseProxyTelegramError));
-                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                builder.setMessage(LocaleController.getString("UseProxyTelegramError", C0505R.string.UseProxyTelegramError));
+                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
                 this.proxyErrorDialog = showAlertDialog(builder);
                 return;
             }
@@ -2750,15 +2826,15 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         } else if (id == NotificationCenter.wasUnableToFindCurrentLocation) {
             HashMap<String, MessageObject> waitingForLocation = args[0];
             builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
             final HashMap<String, MessageObject> hashMap = waitingForLocation;
             final int i2 = account;
-            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", C0501R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", C0505R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
 
-                /* renamed from: org.telegram.ui.LaunchActivity$25$1 */
-                class C19701 implements LocationActivityDelegate {
-                    C19701() {
+                /* renamed from: org.telegram.ui.LaunchActivity$27$1 */
+                class C19891 implements LocationActivityDelegate {
+                    C19891() {
                     }
 
                     public void didSelectLocation(MessageMedia location, int live) {
@@ -2772,12 +2848,12 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (!LaunchActivity.mainFragmentsStack.isEmpty() && AndroidUtilities.isGoogleMapsInstalled((BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1))) {
                         LocationActivity fragment = new LocationActivity(0);
-                        fragment.setDelegate(new C19701());
+                        fragment.setDelegate(new C19891());
                         LaunchActivity.this.presentFragment(fragment);
                     }
                 }
             });
-            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", C0501R.string.ShareYouLocationUnable));
+            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", C0505R.string.ShareYouLocationUnable));
             if (!mainFragmentsStack.isEmpty()) {
                 ((BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)).showDialog(builder.create());
             }
@@ -2820,16 +2896,16 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 final boolean schedule = ((Boolean) args[3]).booleanValue();
                 BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1);
                 builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("UpdateContactsTitle", C0501R.string.UpdateContactsTitle));
-                builder.setMessage(LocaleController.getString("UpdateContactsMessage", C0501R.string.UpdateContactsMessage));
+                builder.setTitle(LocaleController.getString("UpdateContactsTitle", C0505R.string.UpdateContactsTitle));
+                builder.setMessage(LocaleController.getString("UpdateContactsMessage", C0505R.string.UpdateContactsMessage));
                 final int i3 = account;
-                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ContactsController.getInstance(i3).syncPhoneBookByAlert(contactHashMap, first, schedule, false);
                     }
                 });
                 i3 = account;
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ContactsController.getInstance(i3).syncPhoneBookByAlert(contactHashMap, first, schedule, true);
                     }
@@ -2890,9 +2966,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (VERSION.SDK_INT < 26) {
             Utilities.globalQueue.postRunnable(new Runnable() {
 
-                /* renamed from: org.telegram.ui.LaunchActivity$29$1 */
-                class C19711 implements Runnable {
-                    C19711() {
+                /* renamed from: org.telegram.ui.LaunchActivity$31$1 */
+                class C19911 implements Runnable {
+                    C19911() {
                     }
 
                     public void run() {
@@ -2919,7 +2995,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                     }
                                     preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
                                     if (freeSpace < 104857600) {
-                                        AndroidUtilities.runOnUIThread(new C19711());
+                                        AndroidUtilities.runOnUIThread(new C19911());
                                     }
                                 }
                             }
@@ -2937,14 +3013,14 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.loadingLocaleDialog = false;
             boolean firstSystem = systemInfo.builtIn || LocaleController.getInstance().isCurrentLocalLocale();
             Builder builder = new Builder((Context) this);
-            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", C0501R.string.ChooseYourLanguage));
-            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", C0501R.string.ChooseYourLanguage));
+            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", C0505R.string.ChooseYourLanguage));
+            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", C0505R.string.ChooseYourLanguage));
             LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setOrientation(1);
             final LanguageCell[] cells = new LanguageCell[2];
             final LocaleInfo[] selectedLanguage = new LocaleInfo[1];
             LocaleInfo[] locales = new LocaleInfo[2];
-            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", C0501R.string.English);
+            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", C0505R.string.English);
             if (firstSystem) {
                 localeInfo = systemInfo;
             } else {
@@ -2988,7 +3064,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 a++;
             }
             LanguageCell cell = new LanguageCell(this, true);
-            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", C0501R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", C0501R.string.ChooseYourLanguageOther));
+            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", C0505R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", C0505R.string.ChooseYourLanguageOther));
             cell.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     LaunchActivity.this.localeDialog = null;
@@ -3002,7 +3078,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             });
             linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
             builder.setView(linearLayout);
-            builder.setNegativeButton(LocaleController.getString("OK", C0501R.string.OK), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("OK", C0505R.string.OK), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     LocaleController.getInstance().applyLanguage(selectedLanguage[0], true, false, LaunchActivity.this.currentAccount);
                     LaunchActivity.this.rebuildAllFragments(true);
@@ -3172,13 +3248,13 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             Runnable action = null;
             this.currentConnectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             if (this.currentConnectionState == 2) {
-                title = LocaleController.getString("WaitingForNetwork", C0501R.string.WaitingForNetwork);
+                title = LocaleController.getString("WaitingForNetwork", C0505R.string.WaitingForNetwork);
             } else if (this.currentConnectionState == 5) {
-                title = LocaleController.getString("Updating", C0501R.string.Updating);
+                title = LocaleController.getString("Updating", C0505R.string.Updating);
             } else if (this.currentConnectionState == 4) {
-                title = LocaleController.getString("ConnectingToProxy", C0501R.string.ConnectingToProxy);
+                title = LocaleController.getString("ConnectingToProxy", C0505R.string.ConnectingToProxy);
             } else if (this.currentConnectionState == 1) {
-                title = LocaleController.getString("Connecting", C0501R.string.Connecting);
+                title = LocaleController.getString("Connecting", C0505R.string.Connecting);
             }
             if (this.currentConnectionState == 1 || this.currentConnectionState == 4) {
                 action = new Runnable() {

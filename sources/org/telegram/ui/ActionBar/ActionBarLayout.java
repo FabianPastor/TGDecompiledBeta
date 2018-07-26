@@ -33,7 +33,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.MessagesController;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -95,8 +95,8 @@ public class ActionBarLayout extends FrameLayout {
     private Runnable waitingForKeyboardCloseRunnable;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$3 */
-    class C08793 extends ViewOutlineProvider {
-        C08793() {
+    class C08843 extends ViewOutlineProvider {
+        C08843() {
         }
 
         @TargetApi(21)
@@ -106,8 +106,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$5 */
-    class C08815 extends AnimatorListenerAdapter {
-        C08815() {
+    class C08865 extends AnimatorListenerAdapter {
+        C08865() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -116,8 +116,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$7 */
-    class C08837 implements Runnable {
-        C08837() {
+    class C08887 implements Runnable {
+        C08887() {
         }
 
         public void run() {
@@ -211,18 +211,14 @@ public class ActionBarLayout extends FrameLayout {
                 return false;
             }
         }
-
-        public boolean onInterceptTouchEvent(MotionEvent ev) {
-            return super.onInterceptTouchEvent(ev);
-        }
     }
 
     public ActionBarLayout(Context context) {
         super(context);
         this.parentActivity = (Activity) context;
         if (layerShadowDrawable == null) {
-            layerShadowDrawable = getResources().getDrawable(C0501R.drawable.layer_shadow);
-            headerShadowDrawable = getResources().getDrawable(C0501R.drawable.header_shadow).mutate();
+            layerShadowDrawable = getResources().getDrawable(C0505R.drawable.layer_shadow);
+            headerShadowDrawable = getResources().getDrawable(C0505R.drawable.header_shadow).mutate();
             scrimPaint = new Paint();
         }
     }
@@ -667,7 +663,7 @@ public class ActionBarLayout extends FrameLayout {
             this.animationProgress = 0.0f;
             this.lastFrameTime = System.nanoTime() / 1000000;
         }
-        Runnable c08782 = new Runnable() {
+        Runnable c08832 = new Runnable() {
             public void run() {
                 if (ActionBarLayout.this.animationRunnable == this) {
                     ActionBarLayout.this.animationRunnable = null;
@@ -718,8 +714,8 @@ public class ActionBarLayout extends FrameLayout {
                 }
             }
         };
-        this.animationRunnable = c08782;
-        AndroidUtilities.runOnUIThread(c08782);
+        this.animationRunnable = c08832;
+        AndroidUtilities.runOnUIThread(c08832);
     }
 
     public void resumeDelayedFragmentAnimation() {
@@ -796,7 +792,7 @@ public class ActionBarLayout extends FrameLayout {
         this.containerView.setTranslationY(0.0f);
         if (preview) {
             if (VERSION.SDK_INT >= 21) {
-                fragmentView.setOutlineProvider(new C08793());
+                fragmentView.setOutlineProvider(new C08843());
                 fragmentView.setClipToOutline(true);
                 fragmentView.setElevation((float) AndroidUtilities.dp(4.0f));
             }
@@ -843,7 +839,7 @@ public class ActionBarLayout extends FrameLayout {
             this.currentAnimation.playTogether(animators);
             this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
             this.currentAnimation.setDuration(200);
-            this.currentAnimation.addListener(new C08815());
+            this.currentAnimation.addListener(new C08865());
             this.currentAnimation.start();
         } else {
             this.transitionAnimationPreviewMode = preview;
@@ -870,7 +866,7 @@ public class ActionBarLayout extends FrameLayout {
             fragment.onTransitionAnimationStart(true, false);
             AnimatorSet animation = null;
             if (!preview) {
-                animation = fragment.onCustomTransitionAnimation(true, new C08837());
+                animation = fragment.onCustomTransitionAnimation(true, new C08887());
             }
             if (animation == null) {
                 this.containerView.setAlpha(0.0f);

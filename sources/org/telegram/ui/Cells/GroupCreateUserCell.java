@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -161,11 +161,11 @@ public class GroupCreateUserCell extends FrameLayout {
             } else if (this.currentUser.bot) {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
-                this.statusTextView.setText(LocaleController.getString("Bot", C0501R.string.Bot));
+                this.statusTextView.setText(LocaleController.getString("Bot", C0505R.string.Bot));
             } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_onlineText));
-                this.statusTextView.setText(LocaleController.getString("Online", C0501R.string.Online));
+                this.statusTextView.setText(LocaleController.getString("Online", C0505R.string.Online));
             } else {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));

@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.BaseRenderer;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
@@ -237,7 +237,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                 } catch (Throwable e2) {
                     throwDecoderInitError(new DecoderInitializationException(this.format, e2, drmSessionRequiresSecureDecoder, codecName));
                 }
-                this.codecHotswapDeadlineMs = getState() == 2 ? SystemClock.elapsedRealtime() + 1000 : C0616C.TIME_UNSET;
+                this.codecHotswapDeadlineMs = getState() == 2 ? SystemClock.elapsedRealtime() + 1000 : C0621C.TIME_UNSET;
                 resetInputBuffer();
                 resetOutputBuffer();
                 this.waitingForFirstSyncFrame = true;
@@ -304,7 +304,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     protected void releaseCodec() {
-        this.codecHotswapDeadlineMs = C0616C.TIME_UNSET;
+        this.codecHotswapDeadlineMs = C0621C.TIME_UNSET;
         resetInputBuffer();
         resetOutputBuffer();
         this.waitingForKeys = false;
@@ -414,7 +414,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     protected void flushCodec() throws ExoPlaybackException {
-        this.codecHotswapDeadlineMs = C0616C.TIME_UNSET;
+        this.codecHotswapDeadlineMs = C0621C.TIME_UNSET;
         resetInputBuffer();
         resetOutputBuffer();
         this.waitingForFirstSyncFrame = true;
@@ -694,7 +694,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     public boolean isReady() {
-        if (this.format == null || this.waitingForKeys || (!isSourceReady() && !hasOutputBuffer() && (this.codecHotswapDeadlineMs == C0616C.TIME_UNSET || SystemClock.elapsedRealtime() >= this.codecHotswapDeadlineMs))) {
+        if (this.format == null || this.waitingForKeys || (!isSourceReady() && !hasOutputBuffer() && (this.codecHotswapDeadlineMs == C0621C.TIME_UNSET || SystemClock.elapsedRealtime() >= this.codecHotswapDeadlineMs))) {
             return false;
         }
         return true;

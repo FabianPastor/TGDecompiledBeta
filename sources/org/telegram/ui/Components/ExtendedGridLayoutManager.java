@@ -2,16 +2,16 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.util.SparseIntArray;
-import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class ExtendedGridLayoutManager extends GridLayoutManager {
     private int calculatedWidth;
+    private int firstRowMax;
     private SparseIntArray itemSpans = new SparseIntArray();
     private SparseIntArray itemsToRow = new SparseIntArray();
-    private ArrayList<ArrayList<Integer>> rows;
+    private int rowsCount;
 
     public ExtendedGridLayoutManager(Context context, int spanCount) {
         super(context, spanCount);
@@ -22,140 +22,58 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
     }
 
     private void prepareLayout(float viewPortAvailableSize) {
-        int a;
+        if (viewPortAvailableSize == 0.0f) {
+            viewPortAvailableSize = 100.0f;
+        }
         this.itemSpans.clear();
         this.itemsToRow.clear();
+        this.rowsCount = 0;
+        this.firstRowMax = 0;
         int preferredRowSize = AndroidUtilities.dp(100.0f);
-        float totalItemSize = 0.0f;
         int itemsCount = getFlowItemCount();
-        int[] weights = new int[itemsCount];
-        for (a = 0; a < itemsCount; a++) {
+        int spanCount = getSpanCount();
+        int spanLeft = spanCount;
+        int currentItemsInRow = 0;
+        int currentItemsSpanAmount = 0;
+        for (int a = 0; a < itemsCount; a++) {
             Size size = sizeForItem(a);
-            totalItemSize += (size.width / size.height) * ((float) preferredRowSize);
-            weights[a] = Math.round((size.width / size.height) * 100.0f);
-        }
-        this.rows = getLinearPartitionForSequence(weights, Math.max(Math.round(totalItemSize / viewPortAvailableSize), 1));
-        int i = 0;
-        a = 0;
-        while (a < this.rows.size()) {
-            int j;
-            ArrayList<Integer> row = (ArrayList) this.rows.get(a);
-            float summedRatios = 0.0f;
-            int n = i + row.size();
-            for (j = i; j < n; j++) {
-                Size preferredSize = sizeForItem(j);
-                summedRatios += preferredSize.width / preferredSize.height;
-            }
-            float rowSize = viewPortAvailableSize;
-            if (this.rows.size() == 1 && a == this.rows.size() - 1) {
-                if (row.size() < 2) {
-                    rowSize = (float) Math.floor((double) (viewPortAvailableSize / 3.0f));
-                } else if (row.size() < 3) {
-                    rowSize = (float) Math.floor((double) ((2.0f * viewPortAvailableSize) / 3.0f));
-                }
-            }
-            int spanLeft = getSpanCount();
-            j = i;
-            n = i + row.size();
-            while (j < n) {
-                int itemSpan;
-                preferredSize = sizeForItem(j);
-                int width = Math.round((rowSize / summedRatios) * (preferredSize.width / preferredSize.height));
-                if (itemsCount < 3 || j != n - 1) {
-                    itemSpan = (int) ((((float) width) / viewPortAvailableSize) * ((float) getSpanCount()));
-                    spanLeft -= itemSpan;
-                } else {
-                    this.itemsToRow.put(j, a);
-                    itemSpan = spanLeft;
-                }
-                this.itemSpans.put(j, itemSpan);
-                j++;
-            }
-            i += row.size();
-            a++;
-        }
-    }
-
-    private int[] getLinearPartitionTable(int[] sequence, int numPartitions) {
-        int i;
-        int j;
-        int n = sequence.length;
-        int[] tmpTable = new int[(n * numPartitions)];
-        int[] solution = new int[((n - 1) * (numPartitions - 1))];
-        for (i = 0; i < n; i++) {
-            int i2;
-            int i3 = i * numPartitions;
-            int i4 = sequence[i];
-            if (i != 0) {
-                i2 = tmpTable[(i - 1) * numPartitions];
-            } else {
-                i2 = 0;
-            }
-            tmpTable[i3] = i2 + i4;
-        }
-        for (j = 0; j < numPartitions; j++) {
-            tmpTable[j] = sequence[0];
-        }
-        for (i = 1; i < n; i++) {
-            for (j = 1; j < numPartitions; j++) {
-                int currentMin = 0;
-                int minX = ConnectionsManager.DEFAULT_DATACENTER_ID;
-                for (int x = 0; x < i; x++) {
-                    int cost = Math.max(tmpTable[(x * numPartitions) + (j - 1)], tmpTable[i * numPartitions] - tmpTable[x * numPartitions]);
-                    if (x == 0 || cost < currentMin) {
-                        currentMin = cost;
-                        minX = x;
+            int requiredSpan = Math.min(spanCount, (int) Math.floor((double) (((float) spanCount) * (((size.width / size.height) * ((float) preferredRowSize)) / viewPortAvailableSize))));
+            boolean moveToNewRow = spanLeft < requiredSpan || (requiredSpan > 33 && spanLeft < requiredSpan - 15);
+            if (moveToNewRow) {
+                if (spanLeft != 0) {
+                    int spanPerItem = spanLeft / currentItemsInRow;
+                    int start = a - currentItemsInRow;
+                    for (int b = start; b < start + currentItemsInRow; b++) {
+                        if (b == (start + currentItemsInRow) - 1) {
+                            this.itemSpans.put(b, this.itemSpans.get(b) + spanLeft);
+                        } else {
+                            this.itemSpans.put(b, this.itemSpans.get(b) + spanPerItem);
+                        }
+                        spanLeft -= spanPerItem;
                     }
+                    this.itemsToRow.put(a - 1, this.rowsCount);
                 }
-                tmpTable[(i * numPartitions) + j] = currentMin;
-                solution[((i - 1) * (numPartitions - 1)) + (j - 1)] = minX;
+                this.rowsCount++;
+                currentItemsSpanAmount = 0;
+                currentItemsInRow = 0;
+                spanLeft = spanCount;
+            } else if (spanLeft < requiredSpan) {
+                requiredSpan = spanLeft;
             }
-        }
-        return solution;
-    }
-
-    private ArrayList<ArrayList<Integer>> getLinearPartitionForSequence(int[] sequence, int numberOfPartitions) {
-        int n = sequence.length;
-        int k = numberOfPartitions;
-        if (k <= 0) {
-            return new ArrayList();
-        }
-        int i;
-        if (k >= n || n == 1) {
-            ArrayList<ArrayList<Integer>> partition = new ArrayList(sequence.length);
-            for (int valueOf : sequence) {
-                ArrayList<Integer> arrayList = new ArrayList(1);
-                arrayList.add(Integer.valueOf(valueOf));
-                partition.add(arrayList);
+            if (this.rowsCount == 0) {
+                this.firstRowMax = Math.max(this.firstRowMax, a);
             }
-            return partition;
-        }
-        ArrayList<Integer> currentAnswer;
-        int range;
-        int[] solution = getLinearPartitionTable(sequence, numberOfPartitions);
-        int solutionRowSize = numberOfPartitions - 1;
-        n--;
-        ArrayList<ArrayList<Integer>> answer = new ArrayList();
-        for (k -= 2; k >= 0; k--) {
-            if (n < 1) {
-                answer.add(0, new ArrayList());
-            } else {
-                currentAnswer = new ArrayList();
-                range = n + 1;
-                for (i = solution[((n - 1) * solutionRowSize) + k] + 1; i < range; i++) {
-                    currentAnswer.add(Integer.valueOf(sequence[i]));
-                }
-                answer.add(0, currentAnswer);
-                n = solution[((n - 1) * solutionRowSize) + k];
+            if (a == itemsCount - 1) {
+                this.itemsToRow.put(a, this.rowsCount);
             }
+            currentItemsSpanAmount += requiredSpan;
+            currentItemsInRow++;
+            spanLeft -= requiredSpan;
+            this.itemSpans.put(a, requiredSpan);
         }
-        currentAnswer = new ArrayList();
-        range = n + 1;
-        for (i = 0; i < range; i++) {
-            currentAnswer.add(Integer.valueOf(sequence[i]));
+        if (itemsCount != 0) {
+            this.rowsCount++;
         }
-        answer.add(0, currentAnswer);
-        return answer;
     }
 
     private Size sizeForItem(int i) {
@@ -192,10 +110,10 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
     }
 
     public int getRowsCount(int width) {
-        if (this.rows == null) {
+        if (this.rowsCount == 0) {
             prepareLayout((float) width);
         }
-        return this.rows != null ? this.rows.size() : 0;
+        return this.rowsCount;
     }
 
     public boolean isLastInRow(int i) {
@@ -205,7 +123,7 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
 
     public boolean isFirstRow(int i) {
         checkLayout();
-        return (this.rows == null || this.rows.isEmpty() || i >= ((ArrayList) this.rows.get(0)).size()) ? false : true;
+        return i <= this.firstRowMax;
     }
 
     protected int getFlowItemCount() {

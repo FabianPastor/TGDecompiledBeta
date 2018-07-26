@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 
 public class ShareLocationDrawable extends Drawable {
     private Drawable drawable;
@@ -18,14 +18,14 @@ public class ShareLocationDrawable extends Drawable {
     public ShareLocationDrawable(Context context, boolean small) {
         this.isSmall = small;
         if (small) {
-            this.drawable = context.getResources().getDrawable(C0501R.drawable.smallanimationpin);
-            this.drawableLeft = context.getResources().getDrawable(C0501R.drawable.smallanimationpinleft);
-            this.drawableRight = context.getResources().getDrawable(C0501R.drawable.smallanimationpinright);
+            this.drawable = context.getResources().getDrawable(C0505R.drawable.smallanimationpin);
+            this.drawableLeft = context.getResources().getDrawable(C0505R.drawable.smallanimationpinleft);
+            this.drawableRight = context.getResources().getDrawable(C0505R.drawable.smallanimationpinright);
             return;
         }
-        this.drawable = context.getResources().getDrawable(C0501R.drawable.animationpin);
-        this.drawableLeft = context.getResources().getDrawable(C0501R.drawable.animationpinleft);
-        this.drawableRight = context.getResources().getDrawable(C0501R.drawable.animationpinright);
+        this.drawable = context.getResources().getDrawable(C0505R.drawable.animationpin);
+        this.drawableLeft = context.getResources().getDrawable(C0505R.drawable.animationpinleft);
+        this.drawableRight = context.getResources().getDrawable(C0505R.drawable.animationpinright);
     }
 
     private void update() {

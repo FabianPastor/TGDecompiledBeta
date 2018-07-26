@@ -10,7 +10,7 @@ import android.view.View.MeasureSpec;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -50,16 +50,16 @@ public class StickerCell extends FrameLayout {
         }
         this.sticker = document;
         if (side == -1) {
-            setBackgroundResource(C0501R.drawable.stickers_back_left);
+            setBackgroundResource(C0505R.drawable.stickers_back_left);
             setPadding(AndroidUtilities.dp(7.0f), 0, 0, 0);
         } else if (side == 0) {
-            setBackgroundResource(C0501R.drawable.stickers_back_center);
+            setBackgroundResource(C0505R.drawable.stickers_back_center);
             setPadding(0, 0, 0, 0);
         } else if (side == 1) {
-            setBackgroundResource(C0501R.drawable.stickers_back_right);
+            setBackgroundResource(C0505R.drawable.stickers_back_right);
             setPadding(0, 0, AndroidUtilities.dp(7.0f), 0);
         } else if (side == 2) {
-            setBackgroundResource(C0501R.drawable.stickers_back_all);
+            setBackgroundResource(C0505R.drawable.stickers_back_all);
             setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         }
         Drawable background = getBackground();

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -68,8 +68,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     private PasscodeView passcodeView;
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$1 */
-    class C18571 implements OnTouchListener {
-        C18571() {
+    class C18741 implements OnTouchListener {
+        C18741() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -98,8 +98,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$2 */
-    class C18582 implements OnClickListener {
-        C18582() {
+    class C18752 implements OnClickListener {
+        C18752() {
         }
 
         public void onClick(View v) {
@@ -107,8 +107,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$3 */
-    class C18593 implements PasscodeViewDelegate {
-        C18593() {
+    class C18763 implements PasscodeViewDelegate {
+        C18763() {
         }
 
         public void didAcceptedPassword() {
@@ -126,8 +126,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$5 */
-    class C18615 implements OnDismissListener {
-        C18615() {
+    class C18785 implements OnDismissListener {
+        C18785() {
         }
 
         public void onDismiss(DialogInterface dialog) {
@@ -137,8 +137,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$7 */
-    class C18677 implements OnGlobalLayoutListener {
-        C18677() {
+    class C18847 implements OnGlobalLayoutListener {
+        C18847() {
         }
 
         public void onGlobalLayout() {
@@ -150,8 +150,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$8 */
-    class C18688 implements Runnable {
-        C18688() {
+    class C18858 implements Runnable {
+        C18858() {
         }
 
         public void run() {
@@ -173,8 +173,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         boolean z = true;
         ApplicationLoader.postInitApplication();
         requestWindowFeature(1);
-        setTheme(C0501R.style.Theme.TMessages);
-        getWindow().setBackgroundDrawableResource(C0501R.drawable.transparent);
+        setTheme(C0505R.style.Theme.TMessages);
+        getWindow().setBackgroundDrawableResource(C0505R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(MessagesController.UPDATE_MASK_CHANNEL, MessagesController.UPDATE_MASK_CHANNEL);
@@ -207,7 +207,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             layoutParams1.height = -1;
             launchLayout.setLayoutParams(layoutParams1);
             this.backgroundTablet = new View(this);
-            drawable = (BitmapDrawable) getResources().getDrawable(C0501R.drawable.catstile);
+            drawable = (BitmapDrawable) getResources().getDrawable(C0505R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
@@ -215,13 +215,13 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             FrameLayout shadowTablet = new FrameLayout(this);
             shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             launchLayout.addView(shadowTablet, LayoutHelper.createRelative(-1, -1));
-            shadowTablet.setOnTouchListener(new C18571());
-            shadowTablet.setOnClickListener(new C18582());
+            shadowTablet.setOnTouchListener(new C18741());
+            shadowTablet.setOnClickListener(new C18752());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(C0501R.drawable.boxshadow);
+            this.layersActionBarLayout.setBackgroundResource(C0505R.drawable.boxshadow);
             launchLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, AndroidUtilities.isSmallTablet() ? 528 : 700));
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
@@ -230,7 +230,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             launchLayout = new RelativeLayout(this);
             this.drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
-            drawable = (BitmapDrawable) getResources().getDrawable(C0501R.drawable.catstile);
+            drawable = (BitmapDrawable) getResources().getDrawable(C0505R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
@@ -268,7 +268,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             this.passcodeView.onShow();
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new C18593());
+            this.passcodeView.setDelegate(new C18763());
         }
     }
 
@@ -308,9 +308,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                             this.layersActionBarLayout.showLastFragment();
                         }
                         Builder builder = new Builder((Context) this);
-                        builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-                        builder.setMessage(LocaleController.getString("PleaseLoginPassport", C0501R.string.PleaseLoginPassport));
-                        builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                        builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+                        builder.setMessage(LocaleController.getString("PleaseLoginPassport", C0505R.string.PleaseLoginPassport));
+                        builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
                         builder.show();
                         return true;
                     } else if (activatedAccountsCount >= 2) {
@@ -329,12 +329,12 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                         });
                         alertDialog.show();
                         alertDialog.setCanceledOnTouchOutside(false);
-                        alertDialog.setOnDismissListener(new C18615());
+                        alertDialog.setOnDismissListener(new C18785());
                         return true;
                     }
                 }
                 final AlertDialog progressDialog = new AlertDialog(this, 1);
-                progressDialog.setMessage(LocaleController.getString("Loading", C0501R.string.Loading));
+                progressDialog.setMessage(LocaleController.getString("Loading", C0505R.string.Loading));
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.setCancelable(false);
                 int bot_id = intent.getIntExtra("bot_id", 0);
@@ -390,8 +390,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.ExternalActionActivity$6$2$1 */
-                            class C18641 implements OnDismissListener {
-                                C18641() {
+                            class C18811 implements OnDismissListener {
+                                C18811() {
                                 }
 
                                 public void onDismiss(DialogInterface dialog) {
@@ -404,9 +404,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                                 try {
                                     progressDialog.dismiss();
                                     if ("APP_VERSION_OUTDATED".equals(error.text)) {
-                                        AlertDialog dialog = AlertsCreator.showUpdateAppAlert(ExternalActionActivity.this, LocaleController.getString("UpdateAppAlert", C0501R.string.UpdateAppAlert), true);
+                                        AlertDialog dialog = AlertsCreator.showUpdateAppAlert(ExternalActionActivity.this, LocaleController.getString("UpdateAppAlert", C0505R.string.UpdateAppAlert), true);
                                         if (dialog != null) {
-                                            dialog.setOnDismissListener(new C18641());
+                                            dialog.setOnDismissListener(new C18811());
                                             return;
                                         }
                                         ExternalActionActivity.this.setResult(1, new Intent().putExtra("error", error.text));
@@ -525,7 +525,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
 
     public void fixLayout() {
         if (AndroidUtilities.isTablet() && this.actionBarLayout != null) {
-            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C18677());
+            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C18847());
         }
     }
 
@@ -577,7 +577,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
-            this.lockRunnable = new C18688();
+            this.lockRunnable = new C18858();
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(this.lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {

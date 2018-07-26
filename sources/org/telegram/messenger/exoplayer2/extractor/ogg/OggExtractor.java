@@ -11,15 +11,15 @@ import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public class OggExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C06591();
+    public static final ExtractorsFactory FACTORY = new C06641();
     private static final int MAX_VERIFICATION_BYTES = 8;
     private ExtractorOutput output;
     private StreamReader streamReader;
     private boolean streamReaderInitialized;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.ogg.OggExtractor$1 */
-    static class C06591 implements ExtractorsFactory {
-        C06591() {
+    static class C06641 implements ExtractorsFactory {
+        C06641() {
         }
 
         public Extractor[] createExtractors() {

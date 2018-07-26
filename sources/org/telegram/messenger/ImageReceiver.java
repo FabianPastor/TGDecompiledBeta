@@ -974,6 +974,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return (this.currentImage == null && this.currentThumb == null && this.staticThumb == null) ? false : true;
     }
 
+    public boolean hasNotThumb() {
+        return this.currentImage != null;
+    }
+
     public void setAspectFit(boolean value) {
         this.isAspectFit = value;
     }

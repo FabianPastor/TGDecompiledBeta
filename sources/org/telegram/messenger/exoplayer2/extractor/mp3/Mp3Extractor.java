@@ -4,7 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -22,7 +22,7 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class Mp3Extractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C06541();
+    public static final ExtractorsFactory FACTORY = new C06591();
     public static final int FLAG_DISABLE_ID3_METADATA = 2;
     public static final int FLAG_ENABLE_CONSTANT_BITRATE_SEEKING = 1;
     private static final int MAX_SNIFF_BYTES = 16384;
@@ -53,8 +53,8 @@ public final class Mp3Extractor implements Extractor {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp3.Mp3Extractor$1 */
-    static class C06541 implements ExtractorsFactory {
-        C06541() {
+    static class C06591 implements ExtractorsFactory {
+        C06591() {
         }
 
         public Extractor[] createExtractors() {
@@ -71,7 +71,7 @@ public final class Mp3Extractor implements Extractor {
     }
 
     public Mp3Extractor(int flags) {
-        this(flags, C0616C.TIME_UNSET);
+        this(flags, C0621C.TIME_UNSET);
     }
 
     public Mp3Extractor(int flags, long forcedFirstSampleTimestampUs) {
@@ -80,7 +80,7 @@ public final class Mp3Extractor implements Extractor {
         this.scratch = new ParsableByteArray(10);
         this.synchronizedHeader = new MpegAudioHeader();
         this.gaplessInfoHolder = new GaplessInfoHolder();
-        this.basisTimeUs = C0616C.TIME_UNSET;
+        this.basisTimeUs = C0621C.TIME_UNSET;
         this.id3Peeker = new Id3Peeker();
     }
 
@@ -96,7 +96,7 @@ public final class Mp3Extractor implements Extractor {
 
     public void seek(long position, long timeUs) {
         this.synchronizedHeaderData = 0;
-        this.basisTimeUs = C0616C.TIME_UNSET;
+        this.basisTimeUs = C0621C.TIME_UNSET;
         this.samplesRead = 0;
         this.sampleBytesRemaining = 0;
     }
@@ -137,9 +137,9 @@ public final class Mp3Extractor implements Extractor {
                 return 0;
             }
             MpegAudioHeader.populateHeader(sampleHeaderData, this.synchronizedHeader);
-            if (this.basisTimeUs == C0616C.TIME_UNSET) {
+            if (this.basisTimeUs == C0621C.TIME_UNSET) {
                 this.basisTimeUs = this.seeker.getTimeUs(extractorInput.getPosition());
-                if (this.forcedFirstSampleTimestampUs != C0616C.TIME_UNSET) {
+                if (this.forcedFirstSampleTimestampUs != C0621C.TIME_UNSET) {
                     this.basisTimeUs += this.forcedFirstSampleTimestampUs - this.seeker.getTimeUs(0);
                 }
             }

@@ -62,7 +62,7 @@ public class StaticLayoutEx {
         }
         StaticLayout layout;
         if (VERSION.SDK_INT >= 23) {
-            layout = Builder.obtain(source, 0, source.length(), paint, outerWidth).setAlignment(align).setLineSpacing(spacingAdd, spacingMult).setIncludePad(includePad).setEllipsize(null).setEllipsizedWidth(ellipsisWidth).setBreakStrategy(1).setHyphenationFrequency(1).build();
+            layout = Builder.obtain(source, 0, source.length(), paint, outerWidth).setAlignment(align).setLineSpacing(spacingAdd, spacingMult).setIncludePad(includePad).setEllipsize(null).setEllipsizedWidth(ellipsisWidth).setBreakStrategy(1).setHyphenationFrequency(0).build();
         } else {
             layout = new StaticLayout(source, paint, outerWidth, align, spacingMult, spacingAdd, includePad);
         }

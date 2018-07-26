@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -53,8 +53,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$1 */
-    class C14641 implements OnClickListener {
-        C14641() {
+    class C14741 implements OnClickListener {
+        C14741() {
         }
 
         public void onClick(View v) {
@@ -63,8 +63,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$2 */
-    class C14652 implements OnClickListener {
-        C14652() {
+    class C14752 implements OnClickListener {
+        C14752() {
         }
 
         public void onClick(View v) {
@@ -76,7 +76,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 args = new Bundle();
                 if (UserObject.isUserSelf(user)) {
                     args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
-                    MediaActivity fragment2 = new MediaActivity(args);
+                    MediaActivity fragment2 = new MediaActivity(args, new int[]{-1, -1, -1, -1, -1});
                     fragment2.setChatInfo(ChatAvatarContainer.this.parentFragment.getCurrentChatInfo());
                     ChatAvatarContainer.this.parentFragment.presentFragment(fragment2);
                     return;
@@ -126,10 +126,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.timerDrawable = timerDrawable;
             imageView.setImageDrawable(timerDrawable);
             addView(this.timeItem);
-            this.timeItem.setOnClickListener(new C14641());
+            this.timeItem.setOnClickListener(new C14741());
         }
         if (this.parentFragment != null) {
-            setOnClickListener(new C14652());
+            setOnClickListener(new C14752());
             Chat chat = this.parentFragment.getCurrentChat();
             this.statusDrawables[0] = new TypingDotsDrawable();
             this.statusDrawables[1] = new RecordStatusDrawable();
@@ -279,11 +279,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                         if (ChatObject.isChannel(chat)) {
                             if (info == null || info.participants_count == 0) {
                                 if (chat.megagroup) {
-                                    newSubtitle = LocaleController.getString("Loading", C0501R.string.Loading).toLowerCase();
+                                    newSubtitle = LocaleController.getString("Loading", C0505R.string.Loading).toLowerCase();
                                 } else if ((chat.flags & 64) != 0) {
-                                    newSubtitle = LocaleController.getString("ChannelPublic", C0501R.string.ChannelPublic).toLowerCase();
+                                    newSubtitle = LocaleController.getString("ChannelPublic", C0505R.string.ChannelPublic).toLowerCase();
                                 } else {
-                                    newSubtitle = LocaleController.getString("ChannelPrivate", C0501R.string.ChannelPrivate).toLowerCase();
+                                    newSubtitle = LocaleController.getString("ChannelPrivate", C0505R.string.ChannelPrivate).toLowerCase();
                                 }
                             } else if (!chat.megagroup || info.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                                 int[] result = new int[1];
@@ -299,9 +299,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                                 newSubtitle = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)});
                             }
                         } else if (ChatObject.isKickedFromChat(chat)) {
-                            newSubtitle = LocaleController.getString("YouWereKicked", C0501R.string.YouWereKicked);
+                            newSubtitle = LocaleController.getString("YouWereKicked", C0505R.string.YouWereKicked);
                         } else if (ChatObject.isLeftFromChat(chat)) {
-                            newSubtitle = LocaleController.getString("YouLeft", C0501R.string.YouLeft);
+                            newSubtitle = LocaleController.getString("YouLeft", C0505R.string.YouLeft);
                         } else {
                             int count = chat.participants_count;
                             if (!(info == null || info.participants == null)) {
@@ -320,11 +320,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             user = newUser;
                         }
                         if (user.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                            newStatus = LocaleController.getString("ChatYourSelf", C0501R.string.ChatYourSelf);
+                            newStatus = LocaleController.getString("ChatYourSelf", C0505R.string.ChatYourSelf);
                         } else if (user.id == 333000 || user.id == 777000) {
-                            newStatus = LocaleController.getString("ServiceNotifications", C0501R.string.ServiceNotifications);
+                            newStatus = LocaleController.getString("ServiceNotifications", C0505R.string.ServiceNotifications);
                         } else if (user.bot) {
-                            newStatus = LocaleController.getString("Bot", C0501R.string.Bot);
+                            newStatus = LocaleController.getString("Bot", C0505R.string.Bot);
                         } else {
                             newStatus = LocaleController.formatUserStatus(this.currentAccount, user);
                         }
@@ -442,13 +442,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private void updateCurrentConnectionState() {
         String title = null;
         if (this.currentConnectionState == 2) {
-            title = LocaleController.getString("WaitingForNetwork", C0501R.string.WaitingForNetwork);
+            title = LocaleController.getString("WaitingForNetwork", C0505R.string.WaitingForNetwork);
         } else if (this.currentConnectionState == 1) {
-            title = LocaleController.getString("Connecting", C0501R.string.Connecting);
+            title = LocaleController.getString("Connecting", C0505R.string.Connecting);
         } else if (this.currentConnectionState == 5) {
-            title = LocaleController.getString("Updating", C0501R.string.Updating);
+            title = LocaleController.getString("Updating", C0505R.string.Updating);
         } else if (this.currentConnectionState == 4) {
-            title = LocaleController.getString("ConnectingToProxy", C0501R.string.ConnectingToProxy);
+            title = LocaleController.getString("ConnectingToProxy", C0505R.string.ConnectingToProxy);
         }
         if (title != null) {
             this.lastSubtitle = this.subtitleTextView.getText();

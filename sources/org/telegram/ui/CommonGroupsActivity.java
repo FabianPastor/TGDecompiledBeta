@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -53,8 +53,8 @@ public class CommonGroupsActivity extends BaseFragment {
     private int userId;
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$1 */
-    class C13921 extends ActionBarMenuOnItemClick {
-        C13921() {
+    class C13971 extends ActionBarMenuOnItemClick {
+        C13971() {
         }
 
         public void onItemClick(int id) {
@@ -65,8 +65,8 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$2 */
-    class C13932 implements OnItemClickListener {
-        C13932() {
+    class C13982 implements OnItemClickListener {
+        C13982() {
         }
 
         public void onItemClick(View view, int position) {
@@ -83,8 +83,8 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$3 */
-    class C13943 extends OnScrollListener {
-        C13943() {
+    class C13993 extends OnScrollListener {
+        C13993() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -100,8 +100,8 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$5 */
-    class C13975 implements ThemeDescriptionDelegate {
-        C13975() {
+    class C14025 implements ThemeDescriptionDelegate {
+        C14025() {
         }
 
         public void didSetColor() {
@@ -153,7 +153,7 @@ public class CommonGroupsActivity extends BaseFragment {
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0501R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0505R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             return new Holder(view);
@@ -194,15 +194,15 @@ public class CommonGroupsActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("GroupsInCommonTitle", C0501R.string.GroupsInCommonTitle));
-        this.actionBar.setActionBarMenuOnItemClick(new C13921());
+        this.actionBar.setTitle(LocaleController.getString("GroupsInCommonTitle", C0505R.string.GroupsInCommonTitle));
+        this.actionBar.setActionBarMenuOnItemClick(new C13971());
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoGroupsInCommon", C0501R.string.NoGroupsInCommon));
+        this.emptyView.setText(LocaleController.getString("NoGroupsInCommon", C0505R.string.NoGroupsInCommon));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -220,8 +220,8 @@ public class CommonGroupsActivity extends BaseFragment {
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C13932());
-        this.listView.setOnScrollListener(new C13943());
+        this.listView.setOnItemClickListener(new C13982());
+        this.listView.setOnScrollListener(new C13993());
         if (this.loading) {
             this.emptyView.showProgress();
         } else {
@@ -287,7 +287,7 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C13975();
+        ThemeDescriptionDelegate cellDelegate = new C14025();
         r10 = new ThemeDescription[23];
         r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LoadingCell.class, ProfileSearchCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         r10[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
@@ -305,13 +305,13 @@ public class CommonGroupsActivity extends BaseFragment {
         r10[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
         r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, Theme.key_chats_name);
         r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
-        r10[16] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        r10[19] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        r10[20] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        r10[21] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        r10[22] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        r10[16] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
+        r10[17] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[18] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[19] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[20] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[21] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[22] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         return r10;
     }
 }

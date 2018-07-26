@@ -94,7 +94,7 @@ import net.hockeyapp.android.UpdateManager;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
@@ -149,8 +149,8 @@ public class AndroidUtilities {
     private static boolean waitingForSms = false;
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C00765 extends CrashManagerListener {
-        C00765() {
+    static class C00775 extends CrashManagerListener {
+        C00775() {
         }
 
         public boolean includeDeviceData() {
@@ -200,7 +200,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0616C.UTF8_NAME;
+            String nameCharset = C0621C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -240,7 +240,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0616C.UTF8_NAME;
+            String nameCharset = C0621C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -323,7 +323,7 @@ public class AndroidUtilities {
 
         public String getType() {
             if (this.type == 5) {
-                return LocaleController.getString("ContactBirthday", C0501R.string.ContactBirthday);
+                return LocaleController.getString("ContactBirthday", C0505R.string.ContactBirthday);
             }
             if (this.type != 6) {
                 int idx = this.fullData.indexOf(58);
@@ -344,22 +344,22 @@ public class AndroidUtilities {
                         value = value.substring(2);
                     }
                     if ("PREF".equals(value)) {
-                        value = LocaleController.getString("PhoneMain", C0501R.string.PhoneMain);
+                        value = LocaleController.getString("PhoneMain", C0505R.string.PhoneMain);
                     } else if ("HOME".equals(value)) {
-                        value = LocaleController.getString("PhoneHome", C0501R.string.PhoneHome);
+                        value = LocaleController.getString("PhoneHome", C0505R.string.PhoneHome);
                     } else if ("MOBILE".equals(value) || "CELL".equals(value)) {
-                        value = LocaleController.getString("PhoneMobile", C0501R.string.PhoneMobile);
+                        value = LocaleController.getString("PhoneMobile", C0505R.string.PhoneMobile);
                     } else if ("OTHER".equals(value)) {
-                        value = LocaleController.getString("PhoneOther", C0501R.string.PhoneOther);
+                        value = LocaleController.getString("PhoneOther", C0505R.string.PhoneOther);
                     } else if ("WORK".equals(value)) {
-                        value = LocaleController.getString("PhoneWork", C0501R.string.PhoneWork);
+                        value = LocaleController.getString("PhoneWork", C0505R.string.PhoneWork);
                     }
                 }
                 return value.substring(0, 1).toUpperCase() + value.substring(1, value.length()).toLowerCase();
             } else if ("ORG".equalsIgnoreCase(getRawType(true))) {
-                return LocaleController.getString("ContactJob", C0501R.string.ContactJob);
+                return LocaleController.getString("ContactJob", C0505R.string.ContactJob);
             } else {
-                return LocaleController.getString("ContactJobTitle", C0501R.string.ContactJobTitle);
+                return LocaleController.getString("ContactJobTitle", C0505R.string.ContactJobTitle);
             }
         }
     }
@@ -602,7 +602,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             Builder builder = new Builder(fragment.getParentActivity());
             builder.setMessage("Install Google Maps?");
-            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), new OnClickListener() {
+            builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
                         fragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
@@ -611,7 +611,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
             fragment.showDialog(builder.create());
             return false;
         }
@@ -712,7 +712,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         ArrayList<VcardData> vcardDatas = new ArrayList();
         VcardData currentData = null;
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0616C.UTF8_NAME));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0621C.UTF8_NAME));
         String pendingLine = null;
         boolean currentIsPhoto = false;
         VcardItem currentItem = null;
@@ -885,7 +885,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         synchronized (typefaceCache) {
             if (!typefaceCache.containsKey(assetPath)) {
                 try {
-                    typefaceCache.put(assetPath, Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath));
+                    Typeface t;
+                    if (VERSION.SDK_INT >= 26) {
+                        Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                        if (assetPath.contains("medium")) {
+                            builder.setWeight(700);
+                        }
+                        if (assetPath.contains(TtmlNode.ITALIC)) {
+                            builder.setItalic(true);
+                        }
+                        t = builder.build();
+                    } else {
+                        t = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                    }
+                    typefaceCache.put(assetPath, t);
                 } catch (Exception e) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.m1e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
@@ -1069,6 +1082,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
+    public static double fixLocationCoord(double value) {
+        return ((double) ((long) (value * 1000000.0d))) / 1000000.0d;
+    }
+
     public static String formapMapUrl(int account, double lat, double lon, int width, int height, boolean marker, int zoom) {
         int scale = Math.min(2, (int) Math.ceil((double) density));
         int provider = MessagesController.getInstance(account).mapProvider;
@@ -1085,19 +1102,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 lang = "en_US";
             }
             if (marker) {
-                return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%f,%f&z=%d&size=%d,%d&l=map&scale=%d&pt=%f,%f,vkbkm&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), Double.valueOf(lon), Double.valueOf(lat), lang});
+                return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%.6f,%.6f&z=%d&size=%d,%d&l=map&scale=%d&pt=%.6f,%.6f,vkbkm&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), Double.valueOf(lon), Double.valueOf(lat), lang});
             }
-            return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%f,%f&z=%d&size=%d,%d&l=map&scale=%d&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), lang});
+            return String.format(Locale.US, "https://static-maps.yandex.ru/1.x/?ll=%.6f,%.6f&z=%d&size=%d,%d&l=map&scale=%d&lang=%s", new Object[]{Double.valueOf(lon), Double.valueOf(lat), Integer.valueOf(zoom), Integer.valueOf(width * scale), Integer.valueOf(height * scale), Integer.valueOf(scale), lang});
         }
         if (TextUtils.isEmpty(MessagesController.getInstance(account).mapKey)) {
             if (marker) {
-                return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon)});
+                return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%.6f,%.6f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon)});
             }
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale)});
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale)});
         } else if (marker) {
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%f,%f&sensor=false&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon), k});
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&markers=color:red%%7Csize:mid%%7C%.6f,%.6f&sensor=false&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), Double.valueOf(lat), Double.valueOf(lon), k});
         } else {
-            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), k});
+            return String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%.6f,%.6f&zoom=%d&size=%dx%d&maptype=roadmap&scale=%d&key=%s", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(zoom), Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(scale), k});
         }
     }
 
@@ -1143,7 +1160,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
     public static boolean isTablet() {
         if (isTablet == null) {
-            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(C0501R.bool.isTablet));
+            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext.getResources().getBoolean(C0505R.bool.isTablet));
         }
         return isTablet.booleanValue();
     }
@@ -1255,7 +1272,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (callLogContentObserver == null) {
                 ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
                 Uri uri = Calls.CONTENT_URI;
-                ContentObserver c00732 = new ContentObserver(new Handler()) {
+                ContentObserver c00742 = new ContentObserver(new Handler()) {
                     public boolean deliverSelfNotifications() {
                         return true;
                     }
@@ -1265,16 +1282,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         AndroidUtilities.removeLoginPhoneCall(number, false);
                     }
                 };
-                callLogContentObserver = c00732;
-                contentResolver.registerContentObserver(uri, true, c00732);
-                Runnable c00743 = new Runnable() {
+                callLogContentObserver = c00742;
+                contentResolver.registerContentObserver(uri, true, c00742);
+                Runnable c00753 = new Runnable() {
                     public void run() {
                         AndroidUtilities.unregisterRunnable = null;
                         AndroidUtilities.registerLoginContentObserver(false, number);
                     }
                 };
-                unregisterRunnable = c00743;
-                runOnUIThread(c00743, 10000);
+                unregisterRunnable = c00753;
+                runOnUIThread(c00753, 10000);
             }
         } else if (callLogContentObserver != null) {
             if (unregisterRunnable != null) {
@@ -1541,7 +1558,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C00765());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C00775());
     }
 
     public static void checkForUpdates(Activity context) {
@@ -1994,9 +2011,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return;
             }
             Builder builder = new Builder((Context) activity);
-            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-            builder.setMessage(LocaleController.getString("ApkRestricted", C0501R.string.ApkRestricted));
-            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0501R.string.PermissionOpenSettings), new OnClickListener() {
+            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+            builder.setMessage(LocaleController.getString("ApkRestricted", C0505R.string.ApkRestricted));
+            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0505R.string.PermissionOpenSettings), new OnClickListener() {
                 @TargetApi(26)
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
@@ -2006,7 +2023,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
             builder.show();
         }
     }
@@ -2165,7 +2182,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         linearLayout.setOrientation(1);
         if (!TextUtils.isEmpty(secret)) {
             textView = new TextView(activity);
-            textView.setText(LocaleController.getString("UseProxyTelegramInfo2", C0501R.string.UseProxyTelegramInfo2));
+            textView.setText(LocaleController.getString("UseProxyTelegramInfo2", C0505R.string.UseProxyTelegramInfo2));
             textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray4));
             textView.setTextSize(1, 14.0f);
             textView.setGravity(49);
@@ -2179,19 +2196,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             String detail = null;
             if (a == 0) {
                 text = address;
-                detail = LocaleController.getString("UseProxyAddress", C0501R.string.UseProxyAddress);
+                detail = LocaleController.getString("UseProxyAddress", C0505R.string.UseProxyAddress);
             } else if (a == 1) {
                 text = TtmlNode.ANONYMOUS_REGION_ID + port;
-                detail = LocaleController.getString("UseProxyPort", C0501R.string.UseProxyPort);
+                detail = LocaleController.getString("UseProxyPort", C0505R.string.UseProxyPort);
             } else if (a == 2) {
                 text = secret;
-                detail = LocaleController.getString("UseProxySecret", C0501R.string.UseProxySecret);
+                detail = LocaleController.getString("UseProxySecret", C0505R.string.UseProxySecret);
             } else if (a == 3) {
                 text = user;
-                detail = LocaleController.getString("UseProxyUsername", C0501R.string.UseProxyUsername);
+                detail = LocaleController.getString("UseProxyUsername", C0505R.string.UseProxyUsername);
             } else if (a == 4) {
                 text = password;
-                detail = LocaleController.getString("UseProxyPassword", C0501R.string.UseProxyPassword);
+                detail = LocaleController.getString("UseProxyPassword", C0505R.string.UseProxyPassword);
             }
             if (!TextUtils.isEmpty(text)) {
                 TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
@@ -2209,7 +2226,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         linearLayout.addView(textView, LayoutHelper.createFrame(-1, 48, 83));
         textView.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         textView.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        textView.cancelButton.setText(LocaleController.getString("Cancel", C0501R.string.Cancel).toUpperCase());
+        textView.cancelButton.setText(LocaleController.getString("Cancel", C0505R.string.Cancel).toUpperCase());
         textView.cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismissRunnable.run();
@@ -2218,7 +2235,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         textView.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         textView.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         textView.doneButtonBadgeTextView.setVisibility(8);
-        textView.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", C0501R.string.ConnectingConnectProxy).toUpperCase());
+        textView.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", C0505R.string.ConnectingConnectProxy).toUpperCase());
         final String str = address;
         final String str2 = port;
         final String str3 = secret;

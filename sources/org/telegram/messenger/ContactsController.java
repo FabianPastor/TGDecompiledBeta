@@ -9,11 +9,13 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 import android.text.TextUtils;
@@ -105,8 +107,23 @@ public class ContactsController {
     public HashMap<String, ArrayList<TL_contact>> usersSectionsDict = new HashMap();
 
     /* renamed from: org.telegram.messenger.ContactsController$1 */
-    class C01101 implements Runnable {
-        C01101() {
+    class C01111 implements Runnable {
+        C01111() {
+        }
+
+        public void run() {
+            try {
+                if (ContactsController.this.hasContactsPermission()) {
+                    ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Contacts.CONTENT_URI, true, new MyContentObserver());
+                }
+            } catch (Throwable th) {
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.ContactsController$2 */
+    class C01202 implements Runnable {
+        C01202() {
         }
 
         public void run() {
@@ -115,9 +132,9 @@ public class ContactsController {
         }
     }
 
-    /* renamed from: org.telegram.messenger.ContactsController$2 */
-    class C01212 implements RequestDelegate {
-        C01212() {
+    /* renamed from: org.telegram.messenger.ContactsController$3 */
+    class C01233 implements RequestDelegate {
+        C01233() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -138,9 +155,9 @@ public class ContactsController {
         }
     }
 
-    /* renamed from: org.telegram.messenger.ContactsController$3 */
-    class C01223 implements Runnable {
-        C01223() {
+    /* renamed from: org.telegram.messenger.ContactsController$4 */
+    class C01244 implements Runnable {
+        C01244() {
         }
 
         public void run() {
@@ -153,9 +170,9 @@ public class ContactsController {
         }
     }
 
-    /* renamed from: org.telegram.messenger.ContactsController$4 */
-    class C01234 implements Runnable {
-        C01234() {
+    /* renamed from: org.telegram.messenger.ContactsController$5 */
+    class C01255 implements Runnable {
+        C01255() {
         }
 
         public void run() {
@@ -166,18 +183,18 @@ public class ContactsController {
         }
     }
 
-    /* renamed from: org.telegram.messenger.ContactsController$7 */
-    class C01277 implements RequestDelegate {
-        C01277() {
+    /* renamed from: org.telegram.messenger.ContactsController$8 */
+    class C01298 implements RequestDelegate {
+        C01298() {
         }
 
         public void run(TLObject response, TL_error error) {
         }
     }
 
-    /* renamed from: org.telegram.messenger.ContactsController$8 */
-    class C01288 implements Runnable {
-        C01288() {
+    /* renamed from: org.telegram.messenger.ContactsController$9 */
+    class C01309 implements Runnable {
+        C01309() {
         }
 
         public void run() {
@@ -218,6 +235,44 @@ public class ContactsController {
                 return "#";
             }
             return last_name.substring(0, 1);
+        }
+    }
+
+    private class MyContentObserver extends ContentObserver {
+        private Runnable checkRunnable = new C01311();
+
+        /* renamed from: org.telegram.messenger.ContactsController$MyContentObserver$1 */
+        class C01311 implements Runnable {
+            C01311() {
+            }
+
+            public void run() {
+                for (int a = 0; a < 3; a++) {
+                    if (UserConfig.getInstance(a).isClientActivated()) {
+                        ConnectionsManager.getInstance(a).resumeNetworkMaybe();
+                        ContactsController.getInstance(a).checkContacts();
+                    }
+                }
+            }
+        }
+
+        public MyContentObserver() {
+            super(null);
+        }
+
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            synchronized (ContactsController.this.observerLock) {
+                if (ContactsController.this.ignoreChanges) {
+                    return;
+                }
+                Utilities.globalQueue.cancelRunnable(this.checkRunnable);
+                Utilities.globalQueue.postRunnable(this.checkRunnable, 500);
+            }
+        }
+
+        public boolean deliverSelfNotifications() {
+            return false;
         }
     }
 
@@ -274,6 +329,9 @@ public class ContactsController {
         this.sectionsToReplace.put("\u0178", "Y");
         this.sectionsToReplace.put("\u00dd", "Y");
         this.sectionsToReplace.put("\u0162", "Y");
+        if (instance == 0) {
+            Utilities.globalQueue.postRunnable(new C01111());
+        }
     }
 
     public void cleanup() {
@@ -301,7 +359,7 @@ public class ContactsController {
         this.loadingLastSeenInfo = 0;
         this.loadingGroupInfo = 0;
         this.loadingCallsInfo = 0;
-        Utilities.globalQueue.postRunnable(new C01101());
+        Utilities.globalQueue.postRunnable(new C01202());
         this.privacyRules = null;
     }
 
@@ -312,7 +370,7 @@ public class ContactsController {
         if (!this.updatingInviteLink) {
             if (this.inviteLink == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) time)) >= 86400) {
                 this.updatingInviteLink = true;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getInviteText(), new C01212(), 2);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getInviteText(), new C01233(), 2);
             }
         }
     }
@@ -320,12 +378,12 @@ public class ContactsController {
     public String getInviteText(int contacts) {
         String link = this.inviteLink == null ? "https://telegram.org/dl" : this.inviteLink;
         if (contacts <= 1) {
-            return LocaleController.formatString("InviteText2", C0501R.string.InviteText2, link);
+            return LocaleController.formatString("InviteText2", C0505R.string.InviteText2, link);
         }
         try {
             return String.format(LocaleController.getPluralString("InviteTextNum", contacts), new Object[]{Integer.valueOf(contacts), link});
         } catch (Exception e) {
-            return LocaleController.formatString("InviteText2", C0501R.string.InviteText2, link);
+            return LocaleController.formatString("InviteText2", C0505R.string.InviteText2, link);
         }
     }
 
@@ -401,11 +459,11 @@ public class ContactsController {
     }
 
     public void checkContacts() {
-        Utilities.globalQueue.postRunnable(new C01223());
+        Utilities.globalQueue.postRunnable(new C01244());
     }
 
     public void forceImportContacts() {
-        Utilities.globalQueue.postRunnable(new C01234());
+        Utilities.globalQueue.postRunnable(new C01255());
     }
 
     public void syncPhoneBookByAlert(HashMap<String, Contact> contacts, boolean first, boolean schedule, boolean cancel) {
@@ -432,9 +490,9 @@ public class ContactsController {
         }
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-            /* renamed from: org.telegram.messenger.ContactsController$6$1 */
-            class C01251 implements Runnable {
-                C01251() {
+            /* renamed from: org.telegram.messenger.ContactsController$7$1 */
+            class C01271 implements Runnable {
+                C01271() {
                 }
 
                 public void run() {
@@ -489,14 +547,14 @@ public class ContactsController {
                     ContactsController.this.loadingContacts = false;
                     ContactsController.this.contactsBookLoaded = false;
                     ContactsController.this.lastContactsVersions = TtmlNode.ANONYMOUS_REGION_ID;
-                    AndroidUtilities.runOnUIThread(new C01251());
+                    AndroidUtilities.runOnUIThread(new C01271());
                 }
             }
         });
     }
 
     public void resetImportedContacts() {
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_contacts_resetSaved(), new C01277());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_contacts_resetSaved(), new C01298());
     }
 
     private boolean checkContactsInternal() {
@@ -548,7 +606,7 @@ public class ContactsController {
                 return;
             }
             this.loadingContacts = true;
-            Utilities.stageQueue.postRunnable(new C01288());
+            Utilities.stageQueue.postRunnable(new C01309());
         }
     }
 
@@ -673,19 +731,19 @@ public class ContactsController {
                                         String custom = pCur.getString(3);
                                         ArrayList arrayList = contact.phoneTypes;
                                         if (custom == null) {
-                                            custom = LocaleController.getString("PhoneMobile", C0501R.string.PhoneMobile);
+                                            custom = LocaleController.getString("PhoneMobile", C0505R.string.PhoneMobile);
                                         }
                                         arrayList.add(custom);
                                     } else if (type == 1) {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneHome", C0501R.string.PhoneHome));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneHome", C0505R.string.PhoneHome));
                                     } else if (type == 2) {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneMobile", C0501R.string.PhoneMobile));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneMobile", C0505R.string.PhoneMobile));
                                     } else if (type == 3) {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneWork", C0501R.string.PhoneWork));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneWork", C0505R.string.PhoneWork));
                                     } else if (type == 12) {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneMain", C0501R.string.PhoneMain));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneMain", C0505R.string.PhoneMain));
                                     } else {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneOther", C0501R.string.PhoneOther));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneOther", C0505R.string.PhoneOther));
                                     }
                                     shortContacts.put(shortNumber, contact);
                                     lastContactId = lastContactId2;
@@ -869,9 +927,9 @@ public class ContactsController {
             final boolean z6 = canceled;
             Utilities.globalQueue.postRunnable(new Runnable() {
 
-                /* renamed from: org.telegram.messenger.ContactsController$10$1 */
-                class C00871 implements Runnable {
-                    C00871() {
+                /* renamed from: org.telegram.messenger.ContactsController$11$1 */
+                class C00881 implements Runnable {
+                    C00881() {
                     }
 
                     public void run() {
@@ -1093,7 +1151,7 @@ public class ContactsController {
                                 MessagesStorage.getInstance(ContactsController.this.currentAccount).putCachedPhoneBook(contactsMap, false, false);
                             }
                             if (!(true || hashMap.isEmpty())) {
-                                AndroidUtilities.runOnUIThread(new C00871());
+                                AndroidUtilities.runOnUIThread(new C00881());
                             }
                         }
                     } else if (z2) {
@@ -1138,9 +1196,9 @@ public class ContactsController {
                     if (!z2) {
                         Utilities.stageQueue.postRunnable(new Runnable() {
 
-                            /* renamed from: org.telegram.messenger.ContactsController$10$6$1 */
-                            class C00971 implements Runnable {
-                                C00971() {
+                            /* renamed from: org.telegram.messenger.ContactsController$11$6$1 */
+                            class C00981 implements Runnable {
+                                C00981() {
                                 }
 
                                 public void run() {
@@ -1160,7 +1218,7 @@ public class ContactsController {
                                     ContactsController.this.applyContactsUpdates(ContactsController.this.delayedContactsUpdate, null, null, null);
                                     ContactsController.this.delayedContactsUpdate.clear();
                                 }
-                                AndroidUtilities.runOnUIThread(new C00971());
+                                AndroidUtilities.runOnUIThread(new C00981());
                             }
                         });
                         if (!contactsMap.isEmpty()) {
@@ -1169,9 +1227,9 @@ public class ContactsController {
                     } else if (toImport.isEmpty()) {
                         Utilities.stageQueue.postRunnable(new Runnable() {
 
-                            /* renamed from: org.telegram.messenger.ContactsController$10$5$1 */
-                            class C00951 implements Runnable {
-                                C00951() {
+                            /* renamed from: org.telegram.messenger.ContactsController$11$5$1 */
+                            class C00961 implements Runnable {
+                                C00961() {
                                 }
 
                                 public void run() {
@@ -1194,7 +1252,7 @@ public class ContactsController {
                                     ContactsController.this.applyContactsUpdates(ContactsController.this.delayedContactsUpdate, null, null, null);
                                     ContactsController.this.delayedContactsUpdate.clear();
                                 }
-                                AndroidUtilities.runOnUIThread(new C00951());
+                                AndroidUtilities.runOnUIThread(new C00961());
                             }
                         });
                     } else {
@@ -1224,9 +1282,9 @@ public class ContactsController {
                         } else if (z6) {
                             Utilities.stageQueue.postRunnable(new Runnable() {
 
-                                /* renamed from: org.telegram.messenger.ContactsController$10$3$1 */
-                                class C00891 implements Runnable {
-                                    C00891() {
+                                /* renamed from: org.telegram.messenger.ContactsController$11$3$1 */
+                                class C00901 implements Runnable {
+                                    C00901() {
                                     }
 
                                     public void run() {
@@ -1250,7 +1308,7 @@ public class ContactsController {
                                         ContactsController.this.delayedContactsUpdate.clear();
                                     }
                                     MessagesStorage.getInstance(ContactsController.this.currentAccount).putCachedPhoneBook(contactsMap, false, false);
-                                    AndroidUtilities.runOnUIThread(new C00891());
+                                    AndroidUtilities.runOnUIThread(new C00901());
                                 }
                             });
                         } else {
@@ -1274,12 +1332,12 @@ public class ContactsController {
                                 final HashMap<String, Contact> hashMap4 = phoneBookByShortPhonesFinal;
                                 ConnectionsManager.getInstance(ContactsController.this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                                    /* renamed from: org.telegram.messenger.ContactsController$10$4$1 */
-                                    class C00931 implements Runnable {
+                                    /* renamed from: org.telegram.messenger.ContactsController$11$4$1 */
+                                    class C00941 implements Runnable {
 
-                                        /* renamed from: org.telegram.messenger.ContactsController$10$4$1$1 */
-                                        class C00911 implements Runnable {
-                                            C00911() {
+                                        /* renamed from: org.telegram.messenger.ContactsController$11$4$1$1 */
+                                        class C00921 implements Runnable {
+                                            C00921() {
                                             }
 
                                             public void run() {
@@ -1288,9 +1346,9 @@ public class ContactsController {
                                             }
                                         }
 
-                                        /* renamed from: org.telegram.messenger.ContactsController$10$4$1$2 */
-                                        class C00922 implements Runnable {
-                                            C00922() {
+                                        /* renamed from: org.telegram.messenger.ContactsController$11$4$1$2 */
+                                        class C00932 implements Runnable {
+                                            C00932() {
                                             }
 
                                             public void run() {
@@ -1298,7 +1356,7 @@ public class ContactsController {
                                             }
                                         }
 
-                                        C00931() {
+                                        C00941() {
                                         }
 
                                         public void run() {
@@ -1313,9 +1371,9 @@ public class ContactsController {
                                                 ContactsController.this.applyContactsUpdates(ContactsController.this.delayedContactsUpdate, null, null, null);
                                                 ContactsController.this.delayedContactsUpdate.clear();
                                             }
-                                            AndroidUtilities.runOnUIThread(new C00911());
+                                            AndroidUtilities.runOnUIThread(new C00921());
                                             if (hasErrors[0]) {
-                                                Utilities.globalQueue.postRunnable(new C00922(), 1800000);
+                                                Utilities.globalQueue.postRunnable(new C00932(), 1800000);
                                             }
                                         }
                                     }
@@ -1365,7 +1423,7 @@ public class ContactsController {
                                             if (!contactsMapToSave.isEmpty()) {
                                                 MessagesStorage.getInstance(ContactsController.this.currentAccount).putCachedPhoneBook(contactsMapToSave, false, false);
                                             }
-                                            Utilities.stageQueue.postRunnable(new C00931());
+                                            Utilities.stageQueue.postRunnable(new C00941());
                                         }
                                     }
                                 }, 6);
@@ -1428,9 +1486,9 @@ public class ContactsController {
         req.hash = hash;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-            /* renamed from: org.telegram.messenger.ContactsController$12$1 */
-            class C00991 implements Runnable {
-                C00991() {
+            /* renamed from: org.telegram.messenger.ContactsController$13$1 */
+            class C01001 implements Runnable {
+                C01001() {
                 }
 
                 public void run() {
@@ -1457,7 +1515,7 @@ public class ContactsController {
                     }
                     UserConfig.getInstance(ContactsController.this.currentAccount).lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000);
                     UserConfig.getInstance(ContactsController.this.currentAccount).saveConfig(false);
-                    AndroidUtilities.runOnUIThread(new C00991());
+                    AndroidUtilities.runOnUIThread(new C01001());
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.m0d("load contacts don't change");
                     }
@@ -1498,9 +1556,9 @@ public class ContactsController {
                 }
                 Utilities.stageQueue.postRunnable(new Runnable() {
 
-                    /* renamed from: org.telegram.messenger.ContactsController$13$1$1 */
-                    class C01001 implements Comparator<TL_contact> {
-                        C01001() {
+                    /* renamed from: org.telegram.messenger.ContactsController$14$1$1 */
+                    class C01011 implements Comparator<TL_contact> {
+                        C01011() {
                         }
 
                         public int compare(TL_contact tl_contact, TL_contact tl_contact2) {
@@ -1508,9 +1566,9 @@ public class ContactsController {
                         }
                     }
 
-                    /* renamed from: org.telegram.messenger.ContactsController$13$1$2 */
-                    class C01012 implements Comparator<String> {
-                        C01012() {
+                    /* renamed from: org.telegram.messenger.ContactsController$14$1$2 */
+                    class C01022 implements Comparator<String> {
+                        C01022() {
                         }
 
                         public int compare(String s, String s2) {
@@ -1526,9 +1584,9 @@ public class ContactsController {
                         }
                     }
 
-                    /* renamed from: org.telegram.messenger.ContactsController$13$1$3 */
-                    class C01023 implements Comparator<String> {
-                        C01023() {
+                    /* renamed from: org.telegram.messenger.ContactsController$14$1$3 */
+                    class C01033 implements Comparator<String> {
+                        C01033() {
                         }
 
                         public int compare(String s, String s2) {
@@ -1576,7 +1634,7 @@ public class ContactsController {
                             MessagesStorage.getInstance(ContactsController.this.currentAccount).putUsersAndChats(usersArr, null, true, true);
                             MessagesStorage.getInstance(ContactsController.this.currentAccount).putContacts(contactsArr, from != 2);
                         }
-                        Collections.sort(contactsArr, new C01001());
+                        Collections.sort(contactsArr, new C01011());
                         final ConcurrentHashMap<Integer, TL_contact> contactsDictionary = new ConcurrentHashMap(20, 1.0f, 2);
                         final HashMap<String, ArrayList<TL_contact>> sectionsDict = new HashMap();
                         final HashMap<String, ArrayList<TL_contact>> sectionsDictMutual = new HashMap();
@@ -1630,8 +1688,8 @@ public class ContactsController {
                                 }
                             }
                         }
-                        Collections.sort(sortedSectionsArray, new C01012());
-                        Collections.sort(sortedSectionsArrayMutual, new C01023());
+                        Collections.sort(sortedSectionsArray, new C01022());
+                        Collections.sort(sortedSectionsArrayMutual, new C01033());
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
                                 ContactsController.this.contacts = contactsArr;
@@ -1663,9 +1721,9 @@ public class ContactsController {
                             final HashMap<String, TL_contact> hashMap = contactsByPhonesShortDictFinal;
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
-                                /* renamed from: org.telegram.messenger.ContactsController$13$1$5$1 */
-                                class C01041 implements Runnable {
-                                    C01041() {
+                                /* renamed from: org.telegram.messenger.ContactsController$14$1$5$1 */
+                                class C01051 implements Runnable {
+                                    C01051() {
                                     }
 
                                     public void run() {
@@ -1675,7 +1733,7 @@ public class ContactsController {
                                 }
 
                                 public void run() {
-                                    Utilities.globalQueue.postRunnable(new C01041());
+                                    Utilities.globalQueue.postRunnable(new C01051());
                                     if (!ContactsController.this.contactsSyncInProgress) {
                                         ContactsController.this.contactsSyncInProgress = true;
                                         MessagesStorage.getInstance(ContactsController.this.currentAccount).getCachedPhoneBook(false);
@@ -1716,9 +1774,9 @@ public class ContactsController {
         final ArrayList<String> arrayList = phoneBookSectionsArrayFinal;
         Utilities.globalQueue.postRunnable(new Runnable() {
 
-            /* renamed from: org.telegram.messenger.ContactsController$14$1 */
-            class C01071 implements Comparator<Object> {
-                C01071() {
+            /* renamed from: org.telegram.messenger.ContactsController$15$1 */
+            class C01081 implements Comparator<Object> {
+                C01081() {
                 }
 
                 public int compare(Object o1, Object o2) {
@@ -1755,9 +1813,9 @@ public class ContactsController {
                 }
             }
 
-            /* renamed from: org.telegram.messenger.ContactsController$14$2 */
-            class C01082 implements Comparator<String> {
-                C01082() {
+            /* renamed from: org.telegram.messenger.ContactsController$15$2 */
+            class C01092 implements Comparator<String> {
+                C01092() {
                 }
 
                 public int compare(String s, String s2) {
@@ -1773,9 +1831,9 @@ public class ContactsController {
                 }
             }
 
-            /* renamed from: org.telegram.messenger.ContactsController$14$3 */
-            class C01093 implements Runnable {
-                C01093() {
+            /* renamed from: org.telegram.messenger.ContactsController$15$3 */
+            class C01103 implements Runnable {
+                C01103() {
                 }
 
                 public void run() {
@@ -1806,10 +1864,10 @@ public class ContactsController {
                     }
                 }
                 for (ArrayList<Object> arrayList2 : hashMap2.values()) {
-                    Collections.sort(arrayList2, new C01071());
+                    Collections.sort(arrayList2, new C01081());
                 }
-                Collections.sort(arrayList, new C01082());
-                AndroidUtilities.runOnUIThread(new C01093());
+                Collections.sort(arrayList, new C01092());
+                AndroidUtilities.runOnUIThread(new C01103());
             }
         });
     }
@@ -2317,7 +2375,7 @@ public class ContactsController {
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
-                /* renamed from: org.telegram.messenger.ContactsController$24$1 */
+                /* renamed from: org.telegram.messenger.ContactsController$25$1 */
                 class C01141 implements Runnable {
                     C01141() {
                     }
@@ -2330,7 +2388,7 @@ public class ContactsController {
                     }
                 }
 
-                /* renamed from: org.telegram.messenger.ContactsController$24$2 */
+                /* renamed from: org.telegram.messenger.ContactsController$25$2 */
                 class C01152 implements Runnable {
                     C01152() {
                     }

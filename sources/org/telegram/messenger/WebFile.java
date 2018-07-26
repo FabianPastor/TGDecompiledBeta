@@ -31,15 +31,19 @@ public class WebFile extends TLObject {
     public int zoom;
 
     public static WebFile createWithGeoPoint(GeoPoint point, int w, int h, int zoom, int scale) {
+        return createWithGeoPoint(point.lat, point._long, point.access_hash, w, h, zoom, scale);
+    }
+
+    public static WebFile createWithGeoPoint(double lat, double _long, long access_hash, int w, int h, int zoom, int scale) {
         WebFile webFile = new WebFile();
         TL_inputWebFileGeoPointLocation location = new TL_inputWebFileGeoPointLocation();
         webFile.location = location;
         InputGeoPoint tL_inputGeoPoint = new TL_inputGeoPoint();
         webFile.geo_point = tL_inputGeoPoint;
         location.geo_point = tL_inputGeoPoint;
-        location.access_hash = point.access_hash;
-        webFile.geo_point.lat = point.lat;
-        webFile.geo_point._long = point._long;
+        location.access_hash = access_hash;
+        webFile.geo_point.lat = lat;
+        webFile.geo_point._long = _long;
         webFile.f13w = w;
         location.f31w = w;
         webFile.f12h = h;
@@ -49,7 +53,7 @@ public class WebFile extends TLObject {
         webFile.scale = scale;
         location.scale = scale;
         webFile.mime_type = "image/png";
-        webFile.url = String.format(Locale.US, "maps_%f_%f_%d_%d_%d_%d.png", new Object[]{Double.valueOf(point.lat), Double.valueOf(point._long), Integer.valueOf(w), Integer.valueOf(h), Integer.valueOf(zoom), Integer.valueOf(scale)});
+        webFile.url = String.format(Locale.US, "maps_%.6f_%.6f_%d_%d_%d_%d.png", new Object[]{Double.valueOf(lat), Double.valueOf(_long), Integer.valueOf(w), Integer.valueOf(h), Integer.valueOf(zoom), Integer.valueOf(scale)});
         webFile.attributes = new ArrayList();
         return webFile;
     }

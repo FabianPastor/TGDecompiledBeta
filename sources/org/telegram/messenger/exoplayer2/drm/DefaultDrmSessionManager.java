@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.drm.DefaultDrmSession.ProvisioningManager;
 import org.telegram.messenger.exoplayer2.drm.DefaultDrmSessionEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
@@ -100,7 +100,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
     }
 
     public static DefaultDrmSessionManager<FrameworkMediaCrypto> newWidevineInstance(MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters) throws UnsupportedDrmException {
-        return newFrameworkInstance(C0616C.WIDEVINE_UUID, callback, optionalKeyRequestParameters);
+        return newFrameworkInstance(C0621C.WIDEVINE_UUID, callback, optionalKeyRequestParameters);
     }
 
     @Deprecated
@@ -120,7 +120,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
             optionalKeyRequestParameters = new HashMap();
             optionalKeyRequestParameters.put(PLAYREADY_CUSTOM_DATA_KEY, customData);
         }
-        return newFrameworkInstance(C0616C.PLAYREADY_UUID, callback, optionalKeyRequestParameters);
+        return newFrameworkInstance(C0621C.PLAYREADY_UUID, callback, optionalKeyRequestParameters);
     }
 
     @Deprecated
@@ -171,7 +171,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
     public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, boolean multiSession, int initialDrmRequestRetryCount) {
         Assertions.checkNotNull(uuid);
         Assertions.checkNotNull(mediaDrm);
-        Assertions.checkArgument(!C0616C.COMMON_PSSH_UUID.equals(uuid), "Use C.CLEARKEY_UUID instead");
+        Assertions.checkArgument(!C0621C.COMMON_PSSH_UUID.equals(uuid), "Use C.CLEARKEY_UUID instead");
         this.uuid = uuid;
         this.mediaDrm = mediaDrm;
         this.callback = callback;
@@ -226,7 +226,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
             return true;
         }
         if (getSchemeData(drmInitData, this.uuid, true) == null) {
-            if (drmInitData.schemeDataCount != 1 || !drmInitData.get(0).matches(C0616C.COMMON_PSSH_UUID)) {
+            if (drmInitData.schemeDataCount != 1 || !drmInitData.get(0).matches(C0621C.COMMON_PSSH_UUID)) {
                 return false;
             }
             Log.w(TAG, "DrmInitData only contains common PSSH SchemeData. Assuming support for: " + this.uuid);
@@ -235,7 +235,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
         if (schemeType == null || "cenc".equals(schemeType)) {
             return true;
         }
-        if ((C0616C.CENC_TYPE_cbc1.equals(schemeType) || C0616C.CENC_TYPE_cbcs.equals(schemeType) || C0616C.CENC_TYPE_cens.equals(schemeType)) && Util.SDK_INT < 25) {
+        if ((C0621C.CENC_TYPE_cbc1.equals(schemeType) || C0621C.CENC_TYPE_cbcs.equals(schemeType) || C0621C.CENC_TYPE_cens.equals(schemeType)) && Util.SDK_INT < 25) {
             return false;
         }
         return true;
@@ -325,7 +325,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
         for (i = 0; i < drmInitData.schemeDataCount; i++) {
             boolean uuidMatches;
             SchemeData schemeData = drmInitData.get(i);
-            if (schemeData.matches(uuid) || (C0616C.CLEARKEY_UUID.equals(uuid) && schemeData.matches(C0616C.COMMON_PSSH_UUID))) {
+            if (schemeData.matches(uuid) || (C0621C.CLEARKEY_UUID.equals(uuid) && schemeData.matches(C0621C.COMMON_PSSH_UUID))) {
                 uuidMatches = true;
             } else {
                 uuidMatches = false;
@@ -337,7 +337,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
         if (matchingSchemeDatas.isEmpty()) {
             return null;
         }
-        if (C0616C.WIDEVINE_UUID.equals(uuid)) {
+        if (C0621C.WIDEVINE_UUID.equals(uuid)) {
             for (i = 0; i < matchingSchemeDatas.size(); i++) {
                 SchemeData matchingSchemeData = (SchemeData) matchingSchemeDatas.get(i);
                 int version = matchingSchemeData.hasData() ? PsshAtomUtil.parseVersion(matchingSchemeData.data) : -1;
@@ -366,7 +366,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements Provi
 
     private static String getSchemeMimeType(SchemeData data, UUID uuid) {
         String schemeMimeType = data.mimeType;
-        if (Util.SDK_INT >= 26 || !C0616C.CLEARKEY_UUID.equals(uuid)) {
+        if (Util.SDK_INT >= 26 || !C0621C.CLEARKEY_UUID.equals(uuid)) {
             return schemeMimeType;
         }
         if (MimeTypes.VIDEO_MP4.equals(schemeMimeType) || MimeTypes.AUDIO_MP4.equals(schemeMimeType)) {

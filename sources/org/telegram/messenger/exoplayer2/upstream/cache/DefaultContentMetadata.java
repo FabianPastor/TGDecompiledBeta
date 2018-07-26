@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 
 public final class DefaultContentMetadata implements ContentMetadata {
     public static final DefaultContentMetadata EMPTY = new DefaultContentMetadata(Collections.emptyMap());
@@ -68,7 +68,7 @@ public final class DefaultContentMetadata implements ContentMetadata {
 
     public final String get(String name, String defaultValue) {
         if (this.metadata.containsKey(name)) {
-            return new String((byte[]) this.metadata.get(name), Charset.forName(C0616C.UTF8_NAME));
+            return new String((byte[]) this.metadata.get(name), Charset.forName(C0621C.UTF8_NAME));
         }
         return defaultValue;
     }
@@ -145,7 +145,7 @@ public final class DefaultContentMetadata implements ContentMetadata {
             return ByteBuffer.allocate(8).putLong(((Long) value).longValue()).array();
         }
         if (value instanceof String) {
-            return ((String) value).getBytes(Charset.forName(C0616C.UTF8_NAME));
+            return ((String) value).getBytes(Charset.forName(C0621C.UTF8_NAME));
         }
         if (value instanceof byte[]) {
             return (byte[]) value;

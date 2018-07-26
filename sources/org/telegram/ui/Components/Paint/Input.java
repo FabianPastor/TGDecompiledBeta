@@ -145,8 +145,8 @@ public class Input {
         this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable() {
 
             /* renamed from: org.telegram.ui.Components.Paint.Input$1$1 */
-            class C15791 implements Runnable {
-                C15791() {
+            class C15891 implements Runnable {
+                C15891() {
                 }
 
                 public void run() {
@@ -156,7 +156,7 @@ public class Input {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new C15791());
+                AndroidUtilities.runOnUIThread(new C15891());
             }
         });
     }

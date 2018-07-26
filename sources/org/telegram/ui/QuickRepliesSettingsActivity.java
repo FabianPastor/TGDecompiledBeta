@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -42,8 +42,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     private EditTextSettingsCell[] textCells = new EditTextSettingsCell[4];
 
     /* renamed from: org.telegram.ui.QuickRepliesSettingsActivity$1 */
-    class C24031 extends ActionBarMenuOnItemClick {
-        C24031() {
+    class C24291 extends ActionBarMenuOnItemClick {
+        C24291() {
         }
 
         public void onItemClick(int id) {
@@ -54,8 +54,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.QuickRepliesSettingsActivity$2 */
-    class C24042 implements OnItemClickListener {
-        C24042() {
+    class C24302 implements OnItemClickListener {
+        C24302() {
         }
 
         public void onItemClick(View view, int position) {
@@ -77,8 +77,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     TextInfoPrivacyCell cell = holder.itemView;
-                    cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0501R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                    cell.setText(LocaleController.getString("VoipQuickRepliesExplain", C0501R.string.VoipQuickRepliesExplain));
+                    cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0505R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    cell.setText(LocaleController.getString("VoipQuickRepliesExplain", C0505R.string.VoipQuickRepliesExplain));
                     return;
                 case 1:
                     TextSettingsCell textCell = holder.itemView;
@@ -86,12 +86,12 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 case 2:
                     HeaderCell headerCell = holder.itemView;
                     if (position == QuickRepliesSettingsActivity.this.sectionHeaderRow) {
-                        headerCell.setText(LocaleController.getString("VoipQuickReplies", C0501R.string.VoipQuickReplies));
+                        headerCell.setText(LocaleController.getString("VoipQuickReplies", C0505R.string.VoipQuickReplies));
                         return;
                     }
                     return;
                 case 4:
-                    holder.itemView.setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", C0501R.string.AllowCustomQuickReply), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getBoolean("quick_reply_allow_custom", true), false);
+                    holder.itemView.setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", C0505R.string.AllowCustomQuickReply), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getBoolean("quick_reply_allow_custom", true), false);
                     return;
                 case 9:
                 case 10:
@@ -102,16 +102,16 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                     String defValue = null;
                     if (position == QuickRepliesSettingsActivity.this.reply1Row) {
                         settingsKey = "quick_reply_msg1";
-                        defValue = LocaleController.getString("QuickReplyDefault1", C0501R.string.QuickReplyDefault1);
+                        defValue = LocaleController.getString("QuickReplyDefault1", C0505R.string.QuickReplyDefault1);
                     } else if (position == QuickRepliesSettingsActivity.this.reply2Row) {
                         settingsKey = "quick_reply_msg2";
-                        defValue = LocaleController.getString("QuickReplyDefault2", C0501R.string.QuickReplyDefault2);
+                        defValue = LocaleController.getString("QuickReplyDefault2", C0505R.string.QuickReplyDefault2);
                     } else if (position == QuickRepliesSettingsActivity.this.reply3Row) {
                         settingsKey = "quick_reply_msg3";
-                        defValue = LocaleController.getString("QuickReplyDefault3", C0501R.string.QuickReplyDefault3);
+                        defValue = LocaleController.getString("QuickReplyDefault3", C0505R.string.QuickReplyDefault3);
                     } else if (position == QuickRepliesSettingsActivity.this.reply4Row) {
                         settingsKey = "quick_reply_msg4";
-                        defValue = LocaleController.getString("QuickReplyDefault4", C0501R.string.QuickReplyDefault4);
+                        defValue = LocaleController.getString("QuickReplyDefault4", C0505R.string.QuickReplyDefault4);
                     }
                     textCell2.setTextAndHint(QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getString(settingsKey, TtmlNode.ANONYMOUS_REGION_ID), defValue, true);
                     return;
@@ -193,13 +193,13 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
-        this.actionBar.setTitle(LocaleController.getString("VoipQuickReplies", C0501R.string.VoipQuickReplies));
+        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
+        this.actionBar.setTitle(LocaleController.getString("VoipQuickReplies", C0505R.string.VoipQuickReplies));
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C24031());
+        this.actionBar.setActionBarMenuOnItemClick(new C24291());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -209,7 +209,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C24042());
+        this.listView.setOnItemClickListener(new C24302());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }

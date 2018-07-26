@@ -40,7 +40,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
@@ -63,7 +63,7 @@ public class BottomSheet extends Dialog {
     private View customView;
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private BottomSheetDelegateInterface delegate;
-    private Runnable dismissRunnable = new C09121();
+    private Runnable dismissRunnable = new C09171();
     private boolean dismissed;
     private boolean focusable;
     protected boolean fullWidth;
@@ -84,8 +84,8 @@ public class BottomSheet extends Dialog {
     private boolean useHardwareLayer = true;
 
     /* renamed from: org.telegram.ui.ActionBar.BottomSheet$1 */
-    class C09121 implements Runnable {
-        C09121() {
+    class C09171 implements Runnable {
+        C09171() {
         }
 
         public void run() {
@@ -104,8 +104,8 @@ public class BottomSheet extends Dialog {
         private VelocityTracker velocityTracker = null;
 
         /* renamed from: org.telegram.ui.ActionBar.BottomSheet$ContainerView$1 */
-        class C09221 extends AnimatorListenerAdapter {
-            C09221() {
+        class C09271 extends AnimatorListenerAdapter {
+            C09271() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -194,7 +194,7 @@ public class BottomSheet extends Dialog {
                 animatorSet.playTogether(animatorArr);
                 this.currentAnimation.setDuration((long) ((int) ((translationY / AndroidUtilities.getPixelsInCM(0.8f, false)) * 150.0f)));
                 this.currentAnimation.setInterpolator(new DecelerateInterpolator());
-                this.currentAnimation.addListener(new C09221());
+                this.currentAnimation.addListener(new C09271());
                 this.currentAnimation.start();
                 return;
             }
@@ -410,8 +410,8 @@ public class BottomSheet extends Dialog {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.BottomSheet$3 */
-    class C09143 implements OnApplyWindowInsetsListener {
-        C09143() {
+    class C09193 implements OnApplyWindowInsetsListener {
+        C09193() {
         }
 
         @SuppressLint({"NewApi"})
@@ -423,8 +423,8 @@ public class BottomSheet extends Dialog {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.BottomSheet$5 */
-    class C09165 implements OnTouchListener {
-        C09165() {
+    class C09215 implements OnTouchListener {
+        C09215() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -433,8 +433,8 @@ public class BottomSheet extends Dialog {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.BottomSheet$6 */
-    class C09176 implements View.OnClickListener {
-        C09176() {
+    class C09226 implements View.OnClickListener {
+        C09226() {
         }
 
         public void onClick(View v) {
@@ -443,8 +443,8 @@ public class BottomSheet extends Dialog {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.BottomSheet$7 */
-    class C09187 implements Runnable {
-        C09187() {
+    class C09237 implements Runnable {
+        C09237() {
         }
 
         public void run() {
@@ -456,8 +456,8 @@ public class BottomSheet extends Dialog {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.BottomSheet$8 */
-    class C09198 extends AnimatorListenerAdapter {
-        C09198() {
+    class C09248 extends AnimatorListenerAdapter {
+        C09248() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -649,13 +649,13 @@ public class BottomSheet extends Dialog {
     }
 
     public BottomSheet(Context context, boolean needFocus) {
-        super(context, C0501R.style.TransparentDialog);
+        super(context, C0505R.style.TransparentDialog);
         if (VERSION.SDK_INT >= 21) {
             getWindow().addFlags(-NUM);
         }
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         Rect padding = new Rect();
-        this.shadowDrawable = context.getResources().getDrawable(C0501R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable = context.getResources().getDrawable(C0505R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.shadowDrawable.getPadding(padding);
         backgroundPaddingLeft = padding.left;
@@ -674,7 +674,7 @@ public class BottomSheet extends Dialog {
         this.focusable = needFocus;
         if (VERSION.SDK_INT >= 21) {
             this.container.setFitsSystemWindows(true);
-            this.container.setOnApplyWindowInsetsListener(new C09143());
+            this.container.setOnApplyWindowInsetsListener(new C09193());
             this.container.setSystemUiVisibility(1280);
         }
         this.backDrawable.setAlpha(0);
@@ -683,7 +683,7 @@ public class BottomSheet extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Window window = getWindow();
-        window.setWindowAnimations(C0501R.style.DialogNoAnimation);
+        window.setWindowAnimations(C0505R.style.DialogNoAnimation);
         setContentView(this.container, new ViewGroup.LayoutParams(-1, -1));
         if (this.containerView == null) {
             int dp;
@@ -726,7 +726,7 @@ public class BottomSheet extends Dialog {
             titleView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), AndroidUtilities.dp(8.0f));
             titleView.setGravity(16);
             this.containerView.addView(titleView, LayoutHelper.createFrame(-1, 48.0f));
-            titleView.setOnTouchListener(new C09165());
+            titleView.setOnTouchListener(new C09215());
             topOffset = 0 + 48;
         }
         if (this.customView != null) {
@@ -743,7 +743,7 @@ public class BottomSheet extends Dialog {
                     this.containerView.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) topOffset, 0.0f, 0.0f));
                     topOffset += 48;
                     cell.setTag(Integer.valueOf(a));
-                    cell.setOnClickListener(new C09176());
+                    cell.setOnClickListener(new C09226());
                     this.itemViews.add(cell);
                 }
                 a++;
@@ -786,9 +786,9 @@ public class BottomSheet extends Dialog {
         if (VERSION.SDK_INT >= 18) {
             this.layoutCount = 2;
             this.containerView.setTranslationY((float) this.containerView.getMeasuredHeight());
-            Runnable c09187 = new C09187();
-            this.startAnimationRunnable = c09187;
-            AndroidUtilities.runOnUIThread(c09187, 150);
+            Runnable c09237 = new C09237();
+            this.startAnimationRunnable = c09237;
+            AndroidUtilities.runOnUIThread(c09237, 150);
             return;
         }
         startOpenAnimation();
@@ -864,7 +864,7 @@ public class BottomSheet extends Dialog {
                 animatorSet.setDuration(200);
                 animatorSet.setStartDelay(20);
                 animatorSet.setInterpolator(new DecelerateInterpolator());
-                animatorSet.addListener(new C09198());
+                animatorSet.addListener(new C09248());
                 animatorSet.start();
                 this.currentSheetAnimation = animatorSet;
             }
@@ -911,8 +911,8 @@ public class BottomSheet extends Dialog {
             animatorSet.addListener(new AnimatorListenerAdapter() {
 
                 /* renamed from: org.telegram.ui.ActionBar.BottomSheet$9$1 */
-                class C09201 implements Runnable {
-                    C09201() {
+                class C09251 implements Runnable {
+                    C09251() {
                     }
 
                     public void run() {
@@ -930,7 +930,7 @@ public class BottomSheet extends Dialog {
                         if (BottomSheet.this.onClickListener != null) {
                             BottomSheet.this.onClickListener.onClick(BottomSheet.this, item);
                         }
-                        AndroidUtilities.runOnUIThread(new C09201());
+                        AndroidUtilities.runOnUIThread(new C09251());
                     }
                 }
 
@@ -966,8 +966,8 @@ public class BottomSheet extends Dialog {
                 animatorSet.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.ActionBar.BottomSheet$10$1 */
-                    class C09111 implements Runnable {
-                        C09111() {
+                    class C09161 implements Runnable {
+                        C09161() {
                         }
 
                         public void run() {
@@ -982,7 +982,7 @@ public class BottomSheet extends Dialog {
                     public void onAnimationEnd(Animator animation) {
                         if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
                             BottomSheet.this.currentSheetAnimation = null;
-                            AndroidUtilities.runOnUIThread(new C09111());
+                            AndroidUtilities.runOnUIThread(new C09161());
                         }
                     }
 

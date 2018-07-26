@@ -61,7 +61,7 @@ public class RecyclerListView extends RecyclerView {
     private boolean interceptedByChild;
     private boolean isChildViewEnabled;
     private boolean longPressCalled;
-    private AdapterDataObserver observer = new C16761();
+    private AdapterDataObserver observer = new C16861();
     private OnInterceptTouchListener onInterceptTouchListener;
     private OnItemClickListener onItemClickListener;
     private OnItemClickListenerExtended onItemClickListenerExtended;
@@ -238,8 +238,8 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$1 */
-    class C16761 extends AdapterDataObserver {
-        C16761() {
+    class C16861 extends AdapterDataObserver {
+        C16861() {
         }
 
         public void onChanged() {
@@ -258,10 +258,10 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$2 */
-    class C16772 extends OnScrollListener {
+    class C16872 extends OnScrollListener {
         boolean scrollingByUser;
 
-        C16772() {
+        C16872() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -657,8 +657,8 @@ public class RecyclerListView extends RecyclerView {
     private class RecyclerListViewItemClickListener implements OnItemTouchListener {
 
         /* renamed from: org.telegram.ui.Components.RecyclerListView$RecyclerListViewItemClickListener$2 */
-        class C16802 implements Runnable {
-            C16802() {
+        class C16902 implements Runnable {
+            C16902() {
             }
 
             public void run() {
@@ -778,7 +778,7 @@ public class RecyclerListView extends RecyclerView {
             }
             if (action == 0 || action == 5) {
                 if (!(RecyclerListView.this.interceptedByChild || RecyclerListView.this.currentChildView == null)) {
-                    RecyclerListView.this.selectChildRunnable = new C16802();
+                    RecyclerListView.this.selectChildRunnable = new C16902();
                     AndroidUtilities.runOnUIThread(RecyclerListView.this.selectChildRunnable, (long) ViewConfiguration.getTapTimeout());
                     if (RecyclerListView.this.currentChildView.isEnabled()) {
                         RecyclerListView.this.positionSelector(RecyclerListView.this.currentChildPosition, RecyclerListView.this.currentChildView);
@@ -905,7 +905,7 @@ public class RecyclerListView extends RecyclerView {
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
-        super.setOnScrollListener(new C16772());
+        super.setOnScrollListener(new C16872());
         addOnItemTouchListener(new RecyclerListViewItemClickListener(context));
     }
 

@@ -30,8 +30,8 @@ public class ApplicationLoader extends Application {
     public static volatile long mainInterfacePausedStageQueueTime;
 
     /* renamed from: org.telegram.messenger.ApplicationLoader$1 */
-    class C00811 implements Runnable {
-        C00811() {
+    class C00821 implements Runnable {
+        C00821() {
         }
 
         public void run() {
@@ -40,11 +40,11 @@ public class ApplicationLoader extends Application {
     }
 
     /* renamed from: org.telegram.messenger.ApplicationLoader$2 */
-    class C00832 implements Runnable {
+    class C00842 implements Runnable {
 
         /* renamed from: org.telegram.messenger.ApplicationLoader$2$1 */
-        class C00821 implements Runnable {
-            C00821() {
+        class C00831 implements Runnable {
+            C00831() {
             }
 
             public void run() {
@@ -59,7 +59,7 @@ public class ApplicationLoader extends Application {
             }
         }
 
-        C00832() {
+        C00842() {
         }
 
         public void run() {
@@ -72,7 +72,7 @@ public class ApplicationLoader extends Application {
                 } else if (BuildVars.LOGS_ENABLED) {
                     FileLog.m0d("GCM regId = " + currentPushString);
                 }
-                Utilities.globalQueue.postRunnable(new C00821());
+                Utilities.globalQueue.postRunnable(new C00831());
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("No valid Google Play Services APK found.");
             }
@@ -152,7 +152,7 @@ public class ApplicationLoader extends Application {
         ConnectionsManager.native_setJava(false);
         ForegroundDetector foregroundDetector = new ForegroundDetector(this);
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread(new C00811());
+        AndroidUtilities.runOnUIThread(new C00821());
     }
 
     public static void startPushService() {
@@ -184,7 +184,7 @@ public class ApplicationLoader extends Application {
     }
 
     private void initPlayServices() {
-        AndroidUtilities.runOnUIThread(new C00832(), 1000);
+        AndroidUtilities.runOnUIThread(new C00842(), 1000);
     }
 
     private boolean checkPlayServices() {

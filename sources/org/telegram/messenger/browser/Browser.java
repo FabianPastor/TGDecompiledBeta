@@ -17,7 +17,7 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.CustomTabsCopyReceiver;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -54,8 +54,8 @@ public class Browser {
     private static CustomTabsSession customTabsSession;
 
     /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class C05941 implements ServiceConnectionCallback {
-        C05941() {
+    static class C05991 implements ServiceConnectionCallback {
+        C05991() {
         }
 
         public void onServiceConnected(CustomTabsClient client) {
@@ -117,7 +117,7 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new C05941());
+                customTabsServiceConnection = new ServiceConnection(new C05991());
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }
@@ -159,6 +159,10 @@ public class Browser {
 
     public static void openUrl(Context context, Uri uri, boolean allowCustom) {
         openUrl(context, uri, allowCustom, true);
+    }
+
+    public static void openUrl(Context context, String url, boolean allowCustom, boolean tryTelegraph) {
+        openUrl(context, Uri.parse(url), allowCustom, tryTelegraph);
     }
 
     public static void openUrl(Context context, Uri uri, boolean allowCustom, boolean tryTelegraph) {
@@ -203,8 +207,8 @@ public class Browser {
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.browser.Browser$3$1 */
-                            class C05971 implements OnClickListener {
-                                C05971() {
+                            class C06021 implements OnClickListener {
+                                C06021() {
                                 }
 
                                 public void onClick(DialogInterface dialog, int which) {
@@ -220,10 +224,10 @@ public class Browser {
                             public void run() {
                                 if (progressDialog[0] != null) {
                                     try {
-                                        progressDialog[0].setMessage(LocaleController.getString("Loading", C0501R.string.Loading));
+                                        progressDialog[0].setMessage(LocaleController.getString("Loading", C0505R.string.Loading));
                                         progressDialog[0].setCanceledOnTouchOutside(false);
                                         progressDialog[0].setCancelable(false);
-                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", C0501R.string.Cancel), new C05971());
+                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", C0505R.string.Cancel), new C06021());
                                         progressDialog[0].show();
                                     } catch (Exception e) {
                                     }
@@ -291,10 +295,10 @@ public class Browser {
                             intent.setAction("android.intent.action.SEND");
                             PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
                             Builder builder = new Builder(getSession());
-                            builder.addMenuItem(LocaleController.getString("CopyLink", C0501R.string.CopyLink), copy);
+                            builder.addMenuItem(LocaleController.getString("CopyLink", C0505R.string.CopyLink), copy);
                             builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
                             builder.setShowTitle(true);
-                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), C0501R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", C0501R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
+                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), C0505R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", C0505R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
                             CustomTabsIntent intent2 = builder.build();
                             intent2.setUseNewTask();
                             intent2.launchUrl(context, uri);

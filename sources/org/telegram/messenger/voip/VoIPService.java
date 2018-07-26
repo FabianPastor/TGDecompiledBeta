@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -109,8 +109,8 @@ public class VoIPService extends VoIPBaseService {
     private User user;
 
     /* renamed from: org.telegram.messenger.voip.VoIPService$1 */
-    class C08371 implements Runnable {
-        C08371() {
+    class C08421 implements Runnable {
+        C08421() {
         }
 
         public void run() {
@@ -120,8 +120,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPService$3 */
-    class C08393 implements RequestDelegate {
-        C08393() {
+    class C08443 implements RequestDelegate {
+        C08443() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -132,8 +132,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPService$4 */
-    class C08404 implements Runnable {
-        C08404() {
+    class C08454 implements Runnable {
+        C08454() {
         }
 
         public void run() {
@@ -142,8 +142,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPService$7 */
-    class C08497 implements Runnable {
-        C08497() {
+    class C08547 implements Runnable {
+        C08547() {
         }
 
         public void run() {
@@ -183,7 +183,7 @@ public class VoIPService extends VoIPBaseService {
                         extras.putBundle("android.telecom.extra.OUTGOING_CALL_EXTRAS", myExtras);
                         tm.placeCall(Uri.fromParts("sip", UserConfig.getInstance(this.currentAccount).getClientUserId() + ";user=" + this.user.id, null), extras);
                     } else {
-                        this.delayedStartOutgoingCall = new C08371();
+                        this.delayedStartOutgoingCall = new C08421();
                         AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                     }
                     if (intent.getBooleanExtra("start_incall_activity", false)) {
@@ -211,7 +211,7 @@ public class VoIPService extends VoIPBaseService {
     public void onCreate() {
         super.onCreate();
         if (callIShouldHavePutIntoIntent != null && VERSION.SDK_INT >= 26) {
-            startForeground(201, new Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(C0501R.drawable.notification).setContentTitle(LocaleController.getString("VoipOutgoingCall", C0501R.string.VoipOutgoingCall)).setShowWhen(false).build());
+            startForeground(201, new Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(C0505R.drawable.notification).setContentTitle(LocaleController.getString("VoipOutgoingCall", C0505R.string.VoipOutgoingCall)).setShowWhen(false).build());
         }
     }
 
@@ -238,7 +238,7 @@ public class VoIPService extends VoIPBaseService {
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
             req.peer.id = this.call.id;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C08393());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C08443());
         }
     }
 
@@ -268,7 +268,7 @@ public class VoIPService extends VoIPBaseService {
         showNotification();
         startConnectingSound();
         dispatchStateChanged(14);
-        AndroidUtilities.runOnUIThread(new C08404());
+        AndroidUtilities.runOnUIThread(new C08454());
         Utilities.random.nextBytes(new byte[256]);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
@@ -315,14 +315,14 @@ public class VoIPService extends VoIPBaseService {
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.voip.VoIPService$5$1$1$1 */
-                                class C08431 implements Runnable {
+                                class C08481 implements Runnable {
 
                                     /* renamed from: org.telegram.messenger.voip.VoIPService$5$1$1$1$1 */
-                                    class C08421 implements RequestDelegate {
+                                    class C08471 implements RequestDelegate {
 
                                         /* renamed from: org.telegram.messenger.voip.VoIPService$5$1$1$1$1$1 */
-                                        class C08411 implements Runnable {
-                                            C08411() {
+                                        class C08461 implements Runnable {
+                                            C08461() {
                                             }
 
                                             public void run() {
@@ -330,7 +330,7 @@ public class VoIPService extends VoIPBaseService {
                                             }
                                         }
 
-                                        C08421() {
+                                        C08471() {
                                         }
 
                                         public void run(TLObject response, TL_error error) {
@@ -341,11 +341,11 @@ public class VoIPService extends VoIPBaseService {
                                                     FileLog.m0d("phone.discardCall " + response);
                                                 }
                                             }
-                                            AndroidUtilities.runOnUIThread(new C08411());
+                                            AndroidUtilities.runOnUIThread(new C08461());
                                         }
                                     }
 
-                                    C08431() {
+                                    C08481() {
                                     }
 
                                     public void run() {
@@ -355,7 +355,7 @@ public class VoIPService extends VoIPBaseService {
                                         req.peer.access_hash = VoIPService.this.call.access_hash;
                                         req.peer.id = VoIPService.this.call.id;
                                         req.reason = new TL_phoneCallDiscardReasonMissed();
-                                        ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new C08421(), 2);
+                                        ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new C08471(), 2);
                                     }
                                 }
 
@@ -375,7 +375,7 @@ public class VoIPService extends VoIPBaseService {
                                             }
                                             VoIPService.this.pendingUpdates.clear();
                                         }
-                                        VoIPService.this.timeoutRunnable = new C08431();
+                                        VoIPService.this.timeoutRunnable = new C08481();
                                         AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance(VoIPService.this.currentAccount).callReceiveTimeout);
                                     } else if (error.code == 400 && "PARTICIPANT_VERSION_OUTDATED".equals(error.text)) {
                                         VoIPService.this.callFailed(-1);
@@ -486,7 +486,7 @@ public class VoIPService extends VoIPBaseService {
         configureDeviceForCall();
         startConnectingSound();
         dispatchStateChanged(12);
-        AndroidUtilities.runOnUIThread(new C08497());
+        AndroidUtilities.runOnUIThread(new C08547());
         final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
@@ -494,8 +494,8 @@ public class VoIPService extends VoIPBaseService {
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
             /* renamed from: org.telegram.messenger.voip.VoIPService$8$1 */
-            class C08511 implements RequestDelegate {
-                C08511() {
+            class C08561 implements RequestDelegate {
+                C08561() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -569,7 +569,7 @@ public class VoIPService extends VoIPBaseService {
                     tL_phoneCallProtocol.udp_p2p = true;
                     req.protocol.min_layer = 65;
                     req.protocol.max_layer = 74;
-                    ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new C08511(), 2);
+                    ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new C08561(), 2);
                     return;
                 }
                 VoIPService.this.callFailed();

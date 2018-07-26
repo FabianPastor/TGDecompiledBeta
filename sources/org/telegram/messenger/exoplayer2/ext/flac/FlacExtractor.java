@@ -26,7 +26,7 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class FlacExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C06481();
+    public static final ExtractorsFactory FACTORY = new C06531();
     private static final byte[] FLAC_SIGNATURE = new byte[]{(byte) 102, (byte) 76, (byte) 97, (byte) 67, (byte) 0, (byte) 0, (byte) 0, (byte) 34};
     public static final int FLAG_DISABLE_ID3_METADATA = 1;
     private FlacDecoderJni decoderJni;
@@ -42,8 +42,8 @@ public final class FlacExtractor implements Extractor {
     private TrackOutput trackOutput;
 
     /* renamed from: org.telegram.messenger.exoplayer2.ext.flac.FlacExtractor$1 */
-    static class C06481 implements ExtractorsFactory {
-        C06481() {
+    static class C06531 implements ExtractorsFactory {
+        C06531() {
         }
 
         public Extractor[] createExtractors() {

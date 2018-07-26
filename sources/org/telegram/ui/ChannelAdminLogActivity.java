@@ -55,7 +55,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -188,7 +188,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private RadialProgressView progressBar;
     private FrameLayout progressView;
     private View progressView2;
-    private PhotoViewerProvider provider = new C12051();
+    private PhotoViewerProvider provider = new C12101();
     private FrameLayout roundVideoContainer;
     private MessageObject scrollToMessage;
     private int scrollToOffsetOnRecreate = 0;
@@ -208,8 +208,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private boolean wasPaused = false;
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$1 */
-    class C12051 extends EmptyPhotoViewerProvider {
-        C12051() {
+    class C12101 extends EmptyPhotoViewerProvider {
+        C12101() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -264,8 +264,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$2 */
-    class C12082 implements RequestDelegate {
-        C12082() {
+    class C12132 implements RequestDelegate {
+        C12132() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -322,8 +322,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$3 */
-    class C12093 extends ActionBarMenuOnItemClick {
-        C12093() {
+    class C12143 extends ActionBarMenuOnItemClick {
+        C12143() {
         }
 
         public void onItemClick(int id) {
@@ -334,8 +334,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$4 */
-    class C12104 extends ActionBarMenuItemSearchListener {
-        C12104() {
+    class C12154 extends ActionBarMenuItemSearchListener {
+        C12154() {
         }
 
         public void onSearchCollapse() {
@@ -361,8 +361,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$6 */
-    class C12126 implements OnTouchListener {
-        C12126() {
+    class C12176 implements OnTouchListener {
+        C12176() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -371,8 +371,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$8 */
-    class C12148 implements OnItemClickListener {
-        C12148() {
+    class C12198 implements OnItemClickListener {
+        C12198() {
         }
 
         public void onItemClick(View view, int position) {
@@ -388,8 +388,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         private int rowCount;
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$1 */
-        class C12171 implements ChatMessageCellDelegate {
-            C12171() {
+        class C12221 implements ChatMessageCellDelegate {
+            C12221() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -458,7 +458,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 if (url != null) {
                     if (url instanceof URLSpanMono) {
                         ((URLSpanMono) url).copyToClipboard();
-                        Toast.makeText(ChannelAdminLogActivity.this.getParentActivity(), LocaleController.getString("TextCopied", C0501R.string.TextCopied), 0).show();
+                        Toast.makeText(ChannelAdminLogActivity.this.getParentActivity(), LocaleController.getString("TextCopied", C0505R.string.TextCopied), 0).show();
                     } else if (url instanceof URLSpanUserMention) {
                         User user = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getUser(Utilities.parseInt(((URLSpanUserMention) url).getURL()));
                         if (user != null) {
@@ -478,7 +478,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         if (longPress) {
                             Builder builder = new Builder(ChannelAdminLogActivity.this.getParentActivity());
                             builder.setTitle(urlFinal);
-                            builder.setItems(new CharSequence[]{LocaleController.getString("Open", C0501R.string.Open), LocaleController.getString("Copy", C0501R.string.Copy)}, new OnClickListener() {
+                            builder.setItems(new CharSequence[]{LocaleController.getString("Open", C0505R.string.Open), LocaleController.getString("Copy", C0505R.string.Copy)}, new OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (which == 0) {
                                         Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), urlFinal, true);
@@ -620,8 +620,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$2 */
-        class C12182 implements ChatActionCellDelegate {
-            C12182() {
+        class C12232 implements ChatActionCellDelegate {
+            C12232() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -665,8 +665,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3 */
-        class C12193 implements BotHelpCellDelegate {
-            C12193() {
+        class C12243 implements BotHelpCellDelegate {
+            C12243() {
             }
 
             public void didPressUrl(String url) {
@@ -722,16 +722,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     ChannelAdminLogActivity.this.chatMessageCellsCache.remove(0);
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                chatMessageCell.setDelegate(new C12171());
+                chatMessageCell.setDelegate(new C12221());
                 chatMessageCell.setAllowAssistant(true);
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C12182());
+                ((ChatActionCell) view).setDelegate(new C12232());
             } else if (viewType == 2) {
                 view = new ChatUnreadCell(this.mContext);
             } else if (viewType == 3) {
                 view = new BotHelpCell(this.mContext);
-                ((BotHelpCell) view).setDelegate(new C12193());
+                ((BotHelpCell) view).setDelegate(new C12243());
             } else if (viewType == 4) {
                 view = new ChatLoadingCell(this.mContext);
             }
@@ -938,17 +938,17 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         if (this.emptyView != null) {
             if (!TextUtils.isEmpty(this.searchQuery)) {
                 this.emptyView.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(5.0f));
-                this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EventLogEmptyTextSearch", C0501R.string.EventLogEmptyTextSearch, this.searchQuery)));
+                this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EventLogEmptyTextSearch", C0505R.string.EventLogEmptyTextSearch, this.searchQuery)));
             } else if (this.selectedAdmins == null && this.currentFilter == null) {
                 this.emptyView.setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
                 if (this.currentChat.megagroup) {
-                    this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmpty", C0501R.string.EventLogEmpty)));
+                    this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmpty", C0505R.string.EventLogEmpty)));
                 } else {
-                    this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmptyChannel", C0501R.string.EventLogEmptyChannel)));
+                    this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmptyChannel", C0505R.string.EventLogEmptyChannel)));
                 }
             } else {
                 this.emptyView.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(5.0f));
-                this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmptySearch", C0501R.string.EventLogEmptySearch)));
+                this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmptySearch", C0505R.string.EventLogEmptySearch)));
             }
         }
     }
@@ -988,7 +988,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
             }
             updateEmptyPlaceholder();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C12082());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C12132());
             if (reset && this.chatAdapter != null) {
                 this.chatAdapter.notifyDataSetChanged();
             }
@@ -1094,15 +1094,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         boolean z = VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet();
         actionBar.setOccupyStatusBar(z);
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
-        this.actionBar.setActionBarMenuOnItemClick(new C12093());
+        this.actionBar.setActionBarMenuOnItemClick(new C12143());
         this.avatarContainer = new ChatAvatarContainer(context, null, false);
         this.avatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet());
         this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0501R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C12104());
-        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0501R.string.Search));
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0505R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C12154());
+        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0505R.string.Search));
         this.avatarContainer.setEnabled(false);
         this.avatarContainer.setTitle(this.currentChat.title);
-        this.avatarContainer.setSubtitle(LocaleController.getString("EventLogAllEvents", C0501R.string.EventLogAllEvents));
+        this.avatarContainer.setSubtitle(LocaleController.getString("EventLogAllEvents", C0505R.string.EventLogAllEvents));
         this.avatarContainer.setChatAvatar(this.currentChat);
         this.fragmentView = new SizeNotifierFrameLayout(context) {
             protected void onAttachedToWindow() {
@@ -1212,7 +1212,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.emptyViewContainer = new FrameLayout(context);
         this.emptyViewContainer.setVisibility(4);
         this.contentView.addView(this.emptyViewContainer, LayoutHelper.createFrame(-1, -2, 17));
-        this.emptyViewContainer.setOnTouchListener(new C12126());
+        this.emptyViewContainer.setOnTouchListener(new C12176());
         this.emptyView = new TextView(context);
         this.emptyView.setTextSize(1, 14.0f);
         this.emptyView.setGravity(17);
@@ -1266,7 +1266,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 return result;
             }
         };
-        this.chatListView.setOnItemClickListener(new C12148());
+        this.chatListView.setOnItemClickListener(new C12198());
         this.chatListView.setTag(Integer.valueOf(1));
         this.chatListView.setVerticalScrollBarEnabled(true);
         RecyclerListView recyclerListView = this.chatListView;
@@ -1297,8 +1297,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             private float totalDy = 0.0f;
 
             /* renamed from: org.telegram.ui.ChannelAdminLogActivity$10$1 */
-            class C12001 extends AnimatorListenerAdapter {
-                C12001() {
+            class C12051 extends AnimatorListenerAdapter {
+                C12051() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -1332,7 +1332,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(ChannelAdminLogActivity.this.floatingDateView, "alpha", new float[]{1.0f});
                     access$4500.playTogether(animatorArr);
-                    ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new C12001());
+                    ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new C12051());
                     ChannelAdminLogActivity.this.floatingDateAnimation.start();
                 }
                 ChannelAdminLogActivity.this.checkScrollForLoad(true);
@@ -1347,7 +1347,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.progressView.setVisibility(4);
         this.contentView.addView(this.progressView, LayoutHelper.createFrame(-1, -1, 51));
         this.progressView2 = new View(context);
-        this.progressView2.setBackgroundResource(C0501R.drawable.system_loader);
+        this.progressView2.setBackgroundResource(C0505R.drawable.system_loader);
         this.progressView2.getBackground().setColorFilter(Theme.colorFilter);
         this.progressView.addView(this.progressView2, LayoutHelper.createFrame(36, 36, 17));
         this.progressBar = new RadialProgressView(context);
@@ -1372,17 +1372,17 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.bottomOverlayChat.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChannelAdminLogActivity$12$1 */
-            class C12011 implements AdminLogFilterAlertDelegate {
-                C12011() {
+            class C12061 implements AdminLogFilterAlertDelegate {
+                C12061() {
                 }
 
                 public void didSelectRights(TL_channelAdminLogEventsFilter filter, SparseArray<User> admins) {
                     ChannelAdminLogActivity.this.currentFilter = filter;
                     ChannelAdminLogActivity.this.selectedAdmins = admins;
                     if (ChannelAdminLogActivity.this.currentFilter == null && ChannelAdminLogActivity.this.selectedAdmins == null) {
-                        ChannelAdminLogActivity.this.avatarContainer.setSubtitle(LocaleController.getString("EventLogAllEvents", C0501R.string.EventLogAllEvents));
+                        ChannelAdminLogActivity.this.avatarContainer.setSubtitle(LocaleController.getString("EventLogAllEvents", C0505R.string.EventLogAllEvents));
                     } else {
-                        ChannelAdminLogActivity.this.avatarContainer.setSubtitle(LocaleController.getString("EventLogSelectedEvents", C0501R.string.EventLogSelectedEvents));
+                        ChannelAdminLogActivity.this.avatarContainer.setSubtitle(LocaleController.getString("EventLogSelectedEvents", C0505R.string.EventLogSelectedEvents));
                     }
                     ChannelAdminLogActivity.this.loadMessages(true);
                 }
@@ -1392,7 +1392,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 if (ChannelAdminLogActivity.this.getParentActivity() != null) {
                     AdminLogFilterAlert adminLogFilterAlert = new AdminLogFilterAlert(ChannelAdminLogActivity.this.getParentActivity(), ChannelAdminLogActivity.this.currentFilter, ChannelAdminLogActivity.this.selectedAdmins, ChannelAdminLogActivity.this.currentChat.megagroup);
                     adminLogFilterAlert.setCurrentAdmins(ChannelAdminLogActivity.this.admins);
-                    adminLogFilterAlert.setAdminLogFilterAlertDelegate(new C12011());
+                    adminLogFilterAlert.setAdminLogFilterAlertDelegate(new C12061());
                     ChannelAdminLogActivity.this.showDialog(adminLogFilterAlert);
                 }
             }
@@ -1401,10 +1401,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.bottomOverlayChatText.setTextSize(1, 15.0f);
         this.bottomOverlayChatText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.bottomOverlayChatText.setTextColor(Theme.getColor(Theme.key_chat_fieldOverlayText));
-        this.bottomOverlayChatText.setText(LocaleController.getString("SETTINGS", C0501R.string.SETTINGS).toUpperCase());
+        this.bottomOverlayChatText.setText(LocaleController.getString("SETTINGS", C0505R.string.SETTINGS).toUpperCase());
         this.bottomOverlayChat.addView(this.bottomOverlayChatText, LayoutHelper.createFrame(-2, -2, 17));
         this.bottomOverlayImage = new ImageView(context);
-        this.bottomOverlayImage.setImageResource(C0501R.drawable.log_info);
+        this.bottomOverlayImage.setImageResource(C0505R.drawable.log_info);
         this.bottomOverlayImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_fieldOverlayText), Mode.MULTIPLY));
         this.bottomOverlayImage.setScaleType(ScaleType.CENTER);
         this.bottomOverlayChat.addView(this.bottomOverlayImage, LayoutHelper.createFrame(48, 48.0f, 53, 3.0f, 0.0f, 0.0f, 0.0f));
@@ -1412,12 +1412,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ChannelAdminLogActivity.this.getParentActivity());
                 if (ChannelAdminLogActivity.this.currentChat.megagroup) {
-                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("EventLogInfoDetail", C0501R.string.EventLogInfoDetail)));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("EventLogInfoDetail", C0505R.string.EventLogInfoDetail)));
                 } else {
-                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("EventLogInfoDetailChannel", C0501R.string.EventLogInfoDetailChannel)));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("EventLogInfoDetailChannel", C0505R.string.EventLogInfoDetailChannel)));
                 }
-                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
-                builder.setTitle(LocaleController.getString("EventLogInfoTitle", C0501R.string.EventLogInfoTitle));
+                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
+                builder.setTitle(LocaleController.getString("EventLogInfoTitle", C0505R.string.EventLogInfoTitle));
                 ChannelAdminLogActivity.this.showDialog(builder.create());
             }
         });
@@ -1438,14 +1438,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.contentView.addView(this.searchContainer, LayoutHelper.createFrame(-1, 51, 80));
         this.searchCalendarButton = new ImageView(context);
         this.searchCalendarButton.setScaleType(ScaleType.CENTER);
-        this.searchCalendarButton.setImageResource(C0501R.drawable.search_calendar);
+        this.searchCalendarButton.setImageResource(C0505R.drawable.search_calendar);
         this.searchCalendarButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), Mode.MULTIPLY));
         this.searchContainer.addView(this.searchCalendarButton, LayoutHelper.createFrame(48, 48, 53));
         this.searchCalendarButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChannelAdminLogActivity$15$1 */
-            class C12021 implements OnDateSetListener {
-                C12021() {
+            class C12071 implements OnDateSetListener {
+                C12071() {
                 }
 
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -1458,8 +1458,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             /* renamed from: org.telegram.ui.ChannelAdminLogActivity$15$2 */
-            class C12032 implements OnClickListener {
-                C12032() {
+            class C12082 implements OnClickListener {
+                C12082() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
@@ -1471,12 +1471,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     AndroidUtilities.hideKeyboard(ChannelAdminLogActivity.this.searchItem.getSearchField());
                     Calendar calendar = Calendar.getInstance();
                     try {
-                        DatePickerDialog dialog = new DatePickerDialog(ChannelAdminLogActivity.this.getParentActivity(), new C12021(), calendar.get(1), calendar.get(2), calendar.get(5));
+                        DatePickerDialog dialog = new DatePickerDialog(ChannelAdminLogActivity.this.getParentActivity(), new C12071(), calendar.get(1), calendar.get(2), calendar.get(5));
                         final DatePicker datePicker = dialog.getDatePicker();
                         datePicker.setMinDate(1375315200000L);
                         datePicker.setMaxDate(System.currentTimeMillis());
-                        dialog.setButton(-1, LocaleController.getString("JumpToDate", C0501R.string.JumpToDate), dialog);
-                        dialog.setButton(-2, LocaleController.getString("Cancel", C0501R.string.Cancel), new C12032());
+                        dialog.setButton(-1, LocaleController.getString("JumpToDate", C0505R.string.JumpToDate), dialog);
+                        dialog.setButton(-2, LocaleController.getString("Cancel", C0505R.string.Cancel), new C12082());
                         if (VERSION.SDK_INT >= 21) {
                             dialog.setOnShowListener(new OnShowListener() {
                                 public void onShow(DialogInterface dialog) {
@@ -1529,7 +1529,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 ArrayList<CharSequence> items = new ArrayList();
                 final ArrayList<Integer> options = new ArrayList();
                 if (this.selectedObject.type == 0 || this.selectedObject.caption != null) {
-                    items.add(LocaleController.getString("Copy", C0501R.string.Copy));
+                    items.add(LocaleController.getString("Copy", C0505R.string.Copy));
                     options.add(Integer.valueOf(3));
                 }
                 if (type == 1) {
@@ -1545,71 +1545,71 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
                 } else if (type == 3) {
                     if ((this.selectedObject.messageOwner.media instanceof TL_messageMediaWebPage) && MessageObject.isNewGifDocument(this.selectedObject.messageOwner.media.webpage.document)) {
-                        items.add(LocaleController.getString("SaveToGIFs", C0501R.string.SaveToGIFs));
+                        items.add(LocaleController.getString("SaveToGIFs", C0505R.string.SaveToGIFs));
                         options.add(Integer.valueOf(11));
                     }
                 } else if (type == 4) {
                     if (this.selectedObject.isVideo()) {
-                        items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
+                        items.add(LocaleController.getString("SaveToGallery", C0505R.string.SaveToGallery));
                         options.add(Integer.valueOf(4));
-                        items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
+                        items.add(LocaleController.getString("ShareFile", C0505R.string.ShareFile));
                         options.add(Integer.valueOf(6));
                     } else if (this.selectedObject.isMusic()) {
-                        items.add(LocaleController.getString("SaveToMusic", C0501R.string.SaveToMusic));
+                        items.add(LocaleController.getString("SaveToMusic", C0505R.string.SaveToMusic));
                         options.add(Integer.valueOf(10));
-                        items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
+                        items.add(LocaleController.getString("ShareFile", C0505R.string.ShareFile));
                         options.add(Integer.valueOf(6));
                     } else if (this.selectedObject.getDocument() != null) {
                         if (MessageObject.isNewGifDocument(this.selectedObject.getDocument())) {
-                            items.add(LocaleController.getString("SaveToGIFs", C0501R.string.SaveToGIFs));
+                            items.add(LocaleController.getString("SaveToGIFs", C0505R.string.SaveToGIFs));
                             options.add(Integer.valueOf(11));
                         }
-                        items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
+                        items.add(LocaleController.getString("SaveToDownloads", C0505R.string.SaveToDownloads));
                         options.add(Integer.valueOf(10));
-                        items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
+                        items.add(LocaleController.getString("ShareFile", C0505R.string.ShareFile));
                         options.add(Integer.valueOf(6));
                     } else {
-                        items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
+                        items.add(LocaleController.getString("SaveToGallery", C0505R.string.SaveToGallery));
                         options.add(Integer.valueOf(4));
                     }
                 } else if (type == 5) {
-                    items.add(LocaleController.getString("ApplyLocalizationFile", C0501R.string.ApplyLocalizationFile));
+                    items.add(LocaleController.getString("ApplyLocalizationFile", C0505R.string.ApplyLocalizationFile));
                     options.add(Integer.valueOf(5));
-                    items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
+                    items.add(LocaleController.getString("SaveToDownloads", C0505R.string.SaveToDownloads));
                     options.add(Integer.valueOf(10));
-                    items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
+                    items.add(LocaleController.getString("ShareFile", C0505R.string.ShareFile));
                     options.add(Integer.valueOf(6));
                 } else if (type == 10) {
-                    items.add(LocaleController.getString("ApplyThemeFile", C0501R.string.ApplyThemeFile));
+                    items.add(LocaleController.getString("ApplyThemeFile", C0505R.string.ApplyThemeFile));
                     options.add(Integer.valueOf(5));
-                    items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
+                    items.add(LocaleController.getString("SaveToDownloads", C0505R.string.SaveToDownloads));
                     options.add(Integer.valueOf(10));
-                    items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
+                    items.add(LocaleController.getString("ShareFile", C0505R.string.ShareFile));
                     options.add(Integer.valueOf(6));
                 } else if (type == 6) {
-                    items.add(LocaleController.getString("SaveToGallery", C0501R.string.SaveToGallery));
+                    items.add(LocaleController.getString("SaveToGallery", C0505R.string.SaveToGallery));
                     options.add(Integer.valueOf(7));
-                    items.add(LocaleController.getString("SaveToDownloads", C0501R.string.SaveToDownloads));
+                    items.add(LocaleController.getString("SaveToDownloads", C0505R.string.SaveToDownloads));
                     options.add(Integer.valueOf(10));
-                    items.add(LocaleController.getString("ShareFile", C0501R.string.ShareFile));
+                    items.add(LocaleController.getString("ShareFile", C0505R.string.ShareFile));
                     options.add(Integer.valueOf(6));
                 } else if (type == 7) {
                     if (this.selectedObject.isMask()) {
-                        items.add(LocaleController.getString("AddToMasks", C0501R.string.AddToMasks));
+                        items.add(LocaleController.getString("AddToMasks", C0505R.string.AddToMasks));
                     } else {
-                        items.add(LocaleController.getString("AddToStickers", C0501R.string.AddToStickers));
+                        items.add(LocaleController.getString("AddToStickers", C0505R.string.AddToStickers));
                     }
                     options.add(Integer.valueOf(9));
                 } else if (type == 8) {
                     User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
                     if (!(user == null || user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.id)) != null)) {
-                        items.add(LocaleController.getString("AddContactTitle", C0501R.string.AddContactTitle));
+                        items.add(LocaleController.getString("AddContactTitle", C0505R.string.AddContactTitle));
                         options.add(Integer.valueOf(15));
                     }
                     if (!(this.selectedObject.messageOwner.media.phone_number == null && this.selectedObject.messageOwner.media.phone_number.length() == 0)) {
-                        items.add(LocaleController.getString("Copy", C0501R.string.Copy));
+                        items.add(LocaleController.getString("Copy", C0505R.string.Copy));
                         options.add(Integer.valueOf(16));
-                        items.add(LocaleController.getString("Call", C0501R.string.Call));
+                        items.add(LocaleController.getString("Call", C0505R.string.Call));
                         options.add(Integer.valueOf(17));
                     }
                 }
@@ -1621,7 +1621,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             }
                         }
                     });
-                    builder.setTitle(LocaleController.getString("Message", C0501R.string.Message));
+                    builder.setTitle(LocaleController.getString("Message", C0505R.string.Message));
                     showDialog(builder.create());
                 }
             }
@@ -1779,9 +1779,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             if (!LocaleController.getInstance().applyLanguageFile(locFile, this.currentAccount)) {
                                 if (getParentActivity() != null) {
                                     builder = new AlertDialog.Builder(getParentActivity());
-                                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-                                    builder.setMessage(LocaleController.getString("IncorrectLocalization", C0501R.string.IncorrectLocalization));
-                                    builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                                    builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+                                    builder.setMessage(LocaleController.getString("IncorrectLocalization", C0505R.string.IncorrectLocalization));
+                                    builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
                                     showDialog(builder.create());
                                     break;
                                 }
@@ -1809,9 +1809,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             this.scrollToPositionOnRecreate = -1;
                             if (getParentActivity() != null) {
                                 builder = new AlertDialog.Builder(getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-                                builder.setMessage(LocaleController.getString("IncorrectTheme", C0501R.string.IncorrectTheme));
-                                builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+                                builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+                                builder.setMessage(LocaleController.getString("IncorrectTheme", C0505R.string.IncorrectTheme));
+                                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
                                 showDialog(builder.create());
                                 break;
                             }
@@ -1842,7 +1842,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     } else {
                         intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(new File(path)));
                     }
-                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", C0501R.string.ShareFile)), 500);
+                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", C0505R.string.ShareFile)), 500);
                     break;
                 case 7:
                     path = this.selectedObject.messageOwner.attachPath;
@@ -2278,12 +2278,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private void alertUserOpenError(MessageObject message) {
         if (getParentActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", C0501R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
             if (message.type == 3) {
-                builder.setMessage(LocaleController.getString("NoPlayerInstalled", C0501R.string.NoPlayerInstalled));
+                builder.setMessage(LocaleController.getString("NoPlayerInstalled", C0505R.string.NoPlayerInstalled));
             } else {
-                builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", C0501R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+                builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", C0505R.string.NoHandleAppInstalled, message.getDocument().mime_type));
             }
             showDialog(builder.create());
         }
@@ -2314,14 +2314,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-        builder.setMessage(LocaleController.formatString("OpenUrlAlert", C0501R.string.OpenUrlAlert, url));
-        builder.setPositiveButton(LocaleController.getString("Open", C0501R.string.Open), new OnClickListener() {
+        builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+        builder.setMessage(LocaleController.formatString("OpenUrlAlert", C0505R.string.OpenUrlAlert, url));
+        builder.setPositiveButton(LocaleController.getString("Open", C0505R.string.Open), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), url, true);
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
         showDialog(builder.create());
     }
 
@@ -2336,7 +2336,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[207];
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[205];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, 0, null, null, null, null, Theme.key_chat_wallpaper);
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
         themeDescriptionArr[2] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
@@ -2489,61 +2489,59 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         themeDescriptionArr[149] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outFileBackground);
         themeDescriptionArr[150] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inFileBackgroundSelected);
         themeDescriptionArr[151] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outFileBackgroundSelected);
-        themeDescriptionArr[152] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inVenueNameText);
-        themeDescriptionArr[153] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outVenueNameText);
-        themeDescriptionArr[154] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inVenueInfoText);
-        themeDescriptionArr[155] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outVenueInfoText);
-        themeDescriptionArr[156] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inVenueInfoSelectedText);
-        themeDescriptionArr[157] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outVenueInfoSelectedText);
-        themeDescriptionArr[158] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_mediaInfoText);
-        themeDescriptionArr[159] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_urlPaint, null, null, Theme.key_chat_linkSelectBackground);
-        themeDescriptionArr[160] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_textSearchSelectionPaint, null, null, Theme.key_chat_textSelectBackground);
-        themeDescriptionArr[161] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[0][0], Theme.chat_fileStatesDrawable[1][0], Theme.chat_fileStatesDrawable[2][0], Theme.chat_fileStatesDrawable[3][0], Theme.chat_fileStatesDrawable[4][0]}, null, Theme.key_chat_outLoader);
-        themeDescriptionArr[162] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[0][0], Theme.chat_fileStatesDrawable[1][0], Theme.chat_fileStatesDrawable[2][0], Theme.chat_fileStatesDrawable[3][0], Theme.chat_fileStatesDrawable[4][0]}, null, Theme.key_chat_outBubble);
-        themeDescriptionArr[163] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[0][1], Theme.chat_fileStatesDrawable[1][1], Theme.chat_fileStatesDrawable[2][1], Theme.chat_fileStatesDrawable[3][1], Theme.chat_fileStatesDrawable[4][1]}, null, Theme.key_chat_outLoaderSelected);
-        themeDescriptionArr[164] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[0][1], Theme.chat_fileStatesDrawable[1][1], Theme.chat_fileStatesDrawable[2][1], Theme.chat_fileStatesDrawable[3][1], Theme.chat_fileStatesDrawable[4][1]}, null, Theme.key_chat_outBubbleSelected);
-        themeDescriptionArr[165] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[5][0], Theme.chat_fileStatesDrawable[6][0], Theme.chat_fileStatesDrawable[7][0], Theme.chat_fileStatesDrawable[8][0], Theme.chat_fileStatesDrawable[9][0]}, null, Theme.key_chat_inLoader);
-        themeDescriptionArr[166] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[5][0], Theme.chat_fileStatesDrawable[6][0], Theme.chat_fileStatesDrawable[7][0], Theme.chat_fileStatesDrawable[8][0], Theme.chat_fileStatesDrawable[9][0]}, null, Theme.key_chat_inBubble);
-        themeDescriptionArr[167] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[5][1], Theme.chat_fileStatesDrawable[6][1], Theme.chat_fileStatesDrawable[7][1], Theme.chat_fileStatesDrawable[8][1], Theme.chat_fileStatesDrawable[9][1]}, null, Theme.key_chat_inLoaderSelected);
-        themeDescriptionArr[168] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[5][1], Theme.chat_fileStatesDrawable[6][1], Theme.chat_fileStatesDrawable[7][1], Theme.chat_fileStatesDrawable[8][1], Theme.chat_fileStatesDrawable[9][1]}, null, Theme.key_chat_inBubbleSelected);
-        themeDescriptionArr[169] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[0][0], Theme.chat_photoStatesDrawables[1][0], Theme.chat_photoStatesDrawables[2][0], Theme.chat_photoStatesDrawables[3][0]}, null, Theme.key_chat_mediaLoaderPhoto);
-        themeDescriptionArr[170] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[0][0], Theme.chat_photoStatesDrawables[1][0], Theme.chat_photoStatesDrawables[2][0], Theme.chat_photoStatesDrawables[3][0]}, null, Theme.key_chat_mediaLoaderPhotoIcon);
-        themeDescriptionArr[171] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[0][1], Theme.chat_photoStatesDrawables[1][1], Theme.chat_photoStatesDrawables[2][1], Theme.chat_photoStatesDrawables[3][1]}, null, Theme.key_chat_mediaLoaderPhotoSelected);
-        themeDescriptionArr[172] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[0][1], Theme.chat_photoStatesDrawables[1][1], Theme.chat_photoStatesDrawables[2][1], Theme.chat_photoStatesDrawables[3][1]}, null, Theme.key_chat_mediaLoaderPhotoIconSelected);
-        themeDescriptionArr[173] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[7][0], Theme.chat_photoStatesDrawables[8][0]}, null, Theme.key_chat_outLoaderPhoto);
-        themeDescriptionArr[174] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[7][0], Theme.chat_photoStatesDrawables[8][0]}, null, Theme.key_chat_outLoaderPhotoIcon);
-        themeDescriptionArr[175] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[7][1], Theme.chat_photoStatesDrawables[8][1]}, null, Theme.key_chat_outLoaderPhotoSelected);
-        themeDescriptionArr[176] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[7][1], Theme.chat_photoStatesDrawables[8][1]}, null, Theme.key_chat_outLoaderPhotoIconSelected);
-        themeDescriptionArr[177] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[10][0], Theme.chat_photoStatesDrawables[11][0]}, null, Theme.key_chat_inLoaderPhoto);
-        themeDescriptionArr[178] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[10][0], Theme.chat_photoStatesDrawables[11][0]}, null, Theme.key_chat_inLoaderPhotoIcon);
-        themeDescriptionArr[179] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[10][1], Theme.chat_photoStatesDrawables[11][1]}, null, Theme.key_chat_inLoaderPhotoSelected);
-        themeDescriptionArr[180] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[10][1], Theme.chat_photoStatesDrawables[11][1]}, null, Theme.key_chat_inLoaderPhotoIconSelected);
-        themeDescriptionArr[181] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[9][0]}, null, Theme.key_chat_outFileIcon);
-        themeDescriptionArr[182] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[9][1]}, null, Theme.key_chat_outFileSelectedIcon);
-        themeDescriptionArr[183] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[12][0]}, null, Theme.key_chat_inFileIcon);
-        themeDescriptionArr[184] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[12][1]}, null, Theme.key_chat_inFileSelectedIcon);
-        themeDescriptionArr[185] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, Theme.key_chat_inContactBackground);
-        themeDescriptionArr[186] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, Theme.key_chat_inContactIcon);
-        themeDescriptionArr[187] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, Theme.key_chat_outContactBackground);
-        themeDescriptionArr[188] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, Theme.key_chat_outContactIcon);
-        themeDescriptionArr[PsExtractor.PRIVATE_STREAM_1] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, Theme.key_chat_inLocationBackground);
-        themeDescriptionArr[190] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, Theme.key_chat_inLocationIcon);
-        themeDescriptionArr[191] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, Theme.key_chat_outLocationBackground);
-        themeDescriptionArr[PsExtractor.AUDIO_STREAM] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, Theme.key_chat_outLocationIcon);
-        themeDescriptionArr[193] = new ThemeDescription(this.bottomOverlayChat, 0, null, Theme.chat_composeBackgroundPaint, null, null, Theme.key_chat_messagePanelBackground);
-        themeDescriptionArr[194] = new ThemeDescription(this.bottomOverlayChat, 0, null, null, new Drawable[]{Theme.chat_composeShadowDrawable}, null, Theme.key_chat_messagePanelShadow);
-        themeDescriptionArr[195] = new ThemeDescription(this.bottomOverlayChatText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_fieldOverlayText);
-        themeDescriptionArr[196] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_serviceText);
-        themeDescriptionArr[197] = new ThemeDescription(this.progressBar, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_chat_serviceText);
-        themeDescriptionArr[198] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{ChatUnreadCell.class}, new String[]{"backgroundLayout"}, null, null, null, Theme.key_chat_unreadMessagesStartBackground);
-        themeDescriptionArr[199] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_chat_unreadMessagesStartArrowIcon);
-        themeDescriptionArr[Callback.DEFAULT_DRAG_ANIMATION_DURATION] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chat_unreadMessagesStartText);
-        themeDescriptionArr[201] = new ThemeDescription(this.progressView2, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, Theme.key_chat_serviceBackground);
-        themeDescriptionArr[202] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, Theme.key_chat_serviceBackground);
-        themeDescriptionArr[203] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_SERVICEBACKGROUND, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chat_serviceBackground);
-        themeDescriptionArr[204] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chat_serviceText);
-        themeDescriptionArr[205] = new ThemeDescription(this.avatarContainer != null ? this.avatarContainer.getTimeItem() : null, 0, null, null, null, null, Theme.key_chat_secretTimerBackground);
-        themeDescriptionArr[206] = new ThemeDescription(this.avatarContainer != null ? this.avatarContainer.getTimeItem() : null, 0, null, null, null, null, Theme.key_chat_secretTimerText);
+        themeDescriptionArr[152] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inVenueInfoText);
+        themeDescriptionArr[153] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outVenueInfoText);
+        themeDescriptionArr[154] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inVenueInfoSelectedText);
+        themeDescriptionArr[155] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outVenueInfoSelectedText);
+        themeDescriptionArr[156] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_mediaInfoText);
+        themeDescriptionArr[157] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_urlPaint, null, null, Theme.key_chat_linkSelectBackground);
+        themeDescriptionArr[158] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_textSearchSelectionPaint, null, null, Theme.key_chat_textSelectBackground);
+        themeDescriptionArr[159] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[0][0], Theme.chat_fileStatesDrawable[1][0], Theme.chat_fileStatesDrawable[2][0], Theme.chat_fileStatesDrawable[3][0], Theme.chat_fileStatesDrawable[4][0]}, null, Theme.key_chat_outLoader);
+        themeDescriptionArr[160] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[0][0], Theme.chat_fileStatesDrawable[1][0], Theme.chat_fileStatesDrawable[2][0], Theme.chat_fileStatesDrawable[3][0], Theme.chat_fileStatesDrawable[4][0]}, null, Theme.key_chat_outBubble);
+        themeDescriptionArr[161] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[0][1], Theme.chat_fileStatesDrawable[1][1], Theme.chat_fileStatesDrawable[2][1], Theme.chat_fileStatesDrawable[3][1], Theme.chat_fileStatesDrawable[4][1]}, null, Theme.key_chat_outLoaderSelected);
+        themeDescriptionArr[162] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[0][1], Theme.chat_fileStatesDrawable[1][1], Theme.chat_fileStatesDrawable[2][1], Theme.chat_fileStatesDrawable[3][1], Theme.chat_fileStatesDrawable[4][1]}, null, Theme.key_chat_outBubbleSelected);
+        themeDescriptionArr[163] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[5][0], Theme.chat_fileStatesDrawable[6][0], Theme.chat_fileStatesDrawable[7][0], Theme.chat_fileStatesDrawable[8][0], Theme.chat_fileStatesDrawable[9][0]}, null, Theme.key_chat_inLoader);
+        themeDescriptionArr[164] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[5][0], Theme.chat_fileStatesDrawable[6][0], Theme.chat_fileStatesDrawable[7][0], Theme.chat_fileStatesDrawable[8][0], Theme.chat_fileStatesDrawable[9][0]}, null, Theme.key_chat_inBubble);
+        themeDescriptionArr[165] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[5][1], Theme.chat_fileStatesDrawable[6][1], Theme.chat_fileStatesDrawable[7][1], Theme.chat_fileStatesDrawable[8][1], Theme.chat_fileStatesDrawable[9][1]}, null, Theme.key_chat_inLoaderSelected);
+        themeDescriptionArr[166] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_fileStatesDrawable[5][1], Theme.chat_fileStatesDrawable[6][1], Theme.chat_fileStatesDrawable[7][1], Theme.chat_fileStatesDrawable[8][1], Theme.chat_fileStatesDrawable[9][1]}, null, Theme.key_chat_inBubbleSelected);
+        themeDescriptionArr[167] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[0][0], Theme.chat_photoStatesDrawables[1][0], Theme.chat_photoStatesDrawables[2][0], Theme.chat_photoStatesDrawables[3][0]}, null, Theme.key_chat_mediaLoaderPhoto);
+        themeDescriptionArr[168] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[0][0], Theme.chat_photoStatesDrawables[1][0], Theme.chat_photoStatesDrawables[2][0], Theme.chat_photoStatesDrawables[3][0]}, null, Theme.key_chat_mediaLoaderPhotoIcon);
+        themeDescriptionArr[169] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[0][1], Theme.chat_photoStatesDrawables[1][1], Theme.chat_photoStatesDrawables[2][1], Theme.chat_photoStatesDrawables[3][1]}, null, Theme.key_chat_mediaLoaderPhotoSelected);
+        themeDescriptionArr[170] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[0][1], Theme.chat_photoStatesDrawables[1][1], Theme.chat_photoStatesDrawables[2][1], Theme.chat_photoStatesDrawables[3][1]}, null, Theme.key_chat_mediaLoaderPhotoIconSelected);
+        themeDescriptionArr[171] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[7][0], Theme.chat_photoStatesDrawables[8][0]}, null, Theme.key_chat_outLoaderPhoto);
+        themeDescriptionArr[172] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[7][0], Theme.chat_photoStatesDrawables[8][0]}, null, Theme.key_chat_outLoaderPhotoIcon);
+        themeDescriptionArr[173] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[7][1], Theme.chat_photoStatesDrawables[8][1]}, null, Theme.key_chat_outLoaderPhotoSelected);
+        themeDescriptionArr[174] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[7][1], Theme.chat_photoStatesDrawables[8][1]}, null, Theme.key_chat_outLoaderPhotoIconSelected);
+        themeDescriptionArr[175] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[10][0], Theme.chat_photoStatesDrawables[11][0]}, null, Theme.key_chat_inLoaderPhoto);
+        themeDescriptionArr[176] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[10][0], Theme.chat_photoStatesDrawables[11][0]}, null, Theme.key_chat_inLoaderPhotoIcon);
+        themeDescriptionArr[177] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[10][1], Theme.chat_photoStatesDrawables[11][1]}, null, Theme.key_chat_inLoaderPhotoSelected);
+        themeDescriptionArr[178] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[10][1], Theme.chat_photoStatesDrawables[11][1]}, null, Theme.key_chat_inLoaderPhotoIconSelected);
+        themeDescriptionArr[179] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[9][0]}, null, Theme.key_chat_outFileIcon);
+        themeDescriptionArr[180] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[9][1]}, null, Theme.key_chat_outFileSelectedIcon);
+        themeDescriptionArr[181] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[12][0]}, null, Theme.key_chat_inFileIcon);
+        themeDescriptionArr[182] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[12][1]}, null, Theme.key_chat_inFileSelectedIcon);
+        themeDescriptionArr[183] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, Theme.key_chat_inContactBackground);
+        themeDescriptionArr[184] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, Theme.key_chat_inContactIcon);
+        themeDescriptionArr[185] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, Theme.key_chat_outContactBackground);
+        themeDescriptionArr[186] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, Theme.key_chat_outContactIcon);
+        themeDescriptionArr[187] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, Theme.key_chat_inLocationBackground);
+        themeDescriptionArr[188] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, Theme.key_chat_inLocationIcon);
+        themeDescriptionArr[PsExtractor.PRIVATE_STREAM_1] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, Theme.key_chat_outLocationBackground);
+        themeDescriptionArr[190] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, Theme.key_chat_outLocationIcon);
+        themeDescriptionArr[191] = new ThemeDescription(this.bottomOverlayChat, 0, null, Theme.chat_composeBackgroundPaint, null, null, Theme.key_chat_messagePanelBackground);
+        themeDescriptionArr[PsExtractor.AUDIO_STREAM] = new ThemeDescription(this.bottomOverlayChat, 0, null, null, new Drawable[]{Theme.chat_composeShadowDrawable}, null, Theme.key_chat_messagePanelShadow);
+        themeDescriptionArr[193] = new ThemeDescription(this.bottomOverlayChatText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_fieldOverlayText);
+        themeDescriptionArr[194] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_serviceText);
+        themeDescriptionArr[195] = new ThemeDescription(this.progressBar, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_chat_serviceText);
+        themeDescriptionArr[196] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{ChatUnreadCell.class}, new String[]{"backgroundLayout"}, null, null, null, Theme.key_chat_unreadMessagesStartBackground);
+        themeDescriptionArr[197] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_chat_unreadMessagesStartArrowIcon);
+        themeDescriptionArr[198] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chat_unreadMessagesStartText);
+        themeDescriptionArr[199] = new ThemeDescription(this.progressView2, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, Theme.key_chat_serviceBackground);
+        themeDescriptionArr[Callback.DEFAULT_DRAG_ANIMATION_DURATION] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, Theme.key_chat_serviceBackground);
+        themeDescriptionArr[201] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_SERVICEBACKGROUND, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chat_serviceBackground);
+        themeDescriptionArr[202] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chat_serviceText);
+        themeDescriptionArr[203] = new ThemeDescription(this.avatarContainer != null ? this.avatarContainer.getTimeItem() : null, 0, null, null, null, null, Theme.key_chat_secretTimerBackground);
+        themeDescriptionArr[204] = new ThemeDescription(this.avatarContainer != null ? this.avatarContainer.getTimeItem() : null, 0, null, null, null, null, Theme.key_chat_secretTimerText);
         return themeDescriptionArr;
     }
 }

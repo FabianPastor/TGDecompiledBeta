@@ -25,7 +25,7 @@ import android.widget.TextView.BufferType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.ConnectionsManager;
@@ -94,7 +94,7 @@ public class EditTextBoldCursor extends EditText {
             this.gradientDrawable = new GradientDrawable(Orientation.TOP_BOTTOM, new int[]{-11230757, -11230757});
             this.editor = mEditor.get(this);
             this.mCursorDrawable = (Drawable[]) mCursorDrawableField.get(this.editor);
-            mCursorDrawableResField.set(this, Integer.valueOf(C0501R.drawable.field_carret_empty));
+            mCursorDrawableResField.set(this, Integer.valueOf(C0505R.drawable.field_carret_empty));
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
@@ -349,18 +349,20 @@ public class EditTextBoldCursor extends EditText {
                 int rF = Color.red(this.headerHintColor);
                 int gF = Color.green(this.headerHintColor);
                 int bF = Color.blue(this.headerHintColor);
+                int aF = Color.alpha(this.headerHintColor);
                 int rS = Color.red(this.hintColor);
                 int gS = Color.green(this.hintColor);
                 int bS = Color.blue(this.hintColor);
+                int aS = Color.alpha(this.hintColor);
                 if (this.supportRtlHint && LocaleController.isRTL) {
                     canvas.translate((hintWidth + lineLeft) - ((hintWidth + lineLeft) * scale), 0.0f);
                 }
                 canvas.scale(scale, scale);
                 canvas.translate(0.0f, translation);
-                getPaint().setColor(Color.argb(255, (int) (((float) rS) + (((float) (rF - rS)) * this.headerAnimationProgress)), (int) (((float) gS) + (((float) (gF - gS)) * this.headerAnimationProgress)), (int) (((float) bS) + (((float) (bF - bS)) * this.headerAnimationProgress))));
+                getPaint().setColor(Color.argb((int) (((float) aS) + (((float) (aF - aS)) * this.headerAnimationProgress)), (int) (((float) rS) + (((float) (rF - rS)) * this.headerAnimationProgress)), (int) (((float) gS) + (((float) (gF - gS)) * this.headerAnimationProgress)), (int) (((float) bS) + (((float) (bF - bS)) * this.headerAnimationProgress))));
             } else {
                 getPaint().setColor(this.hintColor);
-                getPaint().setAlpha((int) (255.0f * this.hintAlpha));
+                getPaint().setAlpha((int) ((255.0f * this.hintAlpha) * (((float) Color.alpha(this.hintColor)) / 255.0f)));
             }
             this.hintLayout.draw(canvas);
             getPaint().setColor(oldColor);

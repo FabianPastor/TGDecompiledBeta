@@ -40,11 +40,11 @@ public class RenderView extends TextureView {
     private float weight;
 
     /* renamed from: org.telegram.ui.Components.Paint.RenderView$1 */
-    class C15891 implements SurfaceTextureListener {
+    class C15991 implements SurfaceTextureListener {
 
         /* renamed from: org.telegram.ui.Components.Paint.RenderView$1$1 */
-        class C15871 implements Runnable {
-            C15871() {
+        class C15971 implements Runnable {
+            C15971() {
             }
 
             public void run() {
@@ -55,8 +55,8 @@ public class RenderView extends TextureView {
         }
 
         /* renamed from: org.telegram.ui.Components.Paint.RenderView$1$2 */
-        class C15882 implements Runnable {
-            C15882() {
+        class C15982 implements Runnable {
+            C15982() {
             }
 
             public void run() {
@@ -65,7 +65,7 @@ public class RenderView extends TextureView {
             }
         }
 
-        C15891() {
+        C15991() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -85,13 +85,13 @@ public class RenderView extends TextureView {
                 RenderView.this.internal.setBufferSize(width, height);
                 RenderView.this.updateTransform();
                 RenderView.this.internal.requestRender();
-                RenderView.this.internal.postRunnable(new C15871());
+                RenderView.this.internal.postRunnable(new C15971());
             }
         }
 
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
             if (!(RenderView.this.internal == null || RenderView.this.shuttingDown)) {
-                RenderView.this.painting.onPause(new C15882());
+                RenderView.this.painting.onPause(new C15982());
             }
             return true;
         }
@@ -101,8 +101,8 @@ public class RenderView extends TextureView {
     }
 
     /* renamed from: org.telegram.ui.Components.Paint.RenderView$2 */
-    class C15902 implements PaintingDelegate {
-        C15902() {
+    class C16002 implements PaintingDelegate {
+        C16002() {
         }
 
         public void contentChanged(RectF rect) {
@@ -124,8 +124,8 @@ public class RenderView extends TextureView {
     }
 
     /* renamed from: org.telegram.ui.Components.Paint.RenderView$3 */
-    class C15913 implements Runnable {
-        C15913() {
+    class C16013 implements Runnable {
+        C16013() {
         }
 
         public void run() {
@@ -140,7 +140,7 @@ public class RenderView extends TextureView {
         private final int EGL_OPENGL_ES2_BIT = 4;
         private int bufferHeight;
         private int bufferWidth;
-        private Runnable drawRunnable = new C15941();
+        private Runnable drawRunnable = new C16041();
         private EGL10 egl10;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
@@ -153,11 +153,11 @@ public class RenderView extends TextureView {
         private SurfaceTexture surfaceTexture;
 
         /* renamed from: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1 */
-        class C15941 implements Runnable {
+        class C16041 implements Runnable {
 
             /* renamed from: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1$1 */
-            class C15931 implements Runnable {
-                C15931() {
+            class C16031 implements Runnable {
+                C16031() {
                 }
 
                 public void run() {
@@ -165,7 +165,7 @@ public class RenderView extends TextureView {
                 }
             }
 
-            C15941() {
+            C16041() {
             }
 
             public void run() {
@@ -179,15 +179,15 @@ public class RenderView extends TextureView {
                     GLES20.glBlendFunc(1, 771);
                     CanvasInternal.this.egl10.eglSwapBuffers(CanvasInternal.this.eglDisplay, CanvasInternal.this.eglSurface);
                     if (!CanvasInternal.this.ready) {
-                        RenderView.this.queue.postRunnable(new C15931(), 200);
+                        RenderView.this.queue.postRunnable(new C16031(), 200);
                     }
                 }
             }
         }
 
         /* renamed from: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$2 */
-        class C15952 implements Runnable {
-            C15952() {
+        class C16052 implements Runnable {
+            C16052() {
             }
 
             public void run() {
@@ -196,8 +196,8 @@ public class RenderView extends TextureView {
         }
 
         /* renamed from: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$3 */
-        class C15963 implements Runnable {
-            C15963() {
+        class C16063 implements Runnable {
+            C16063() {
             }
 
             public void run() {
@@ -207,8 +207,8 @@ public class RenderView extends TextureView {
         }
 
         /* renamed from: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$4 */
-        class C15974 implements Runnable {
-            C15974() {
+        class C16074 implements Runnable {
+            C16074() {
             }
 
             public void run() {
@@ -340,7 +340,7 @@ public class RenderView extends TextureView {
         }
 
         public void requestRender() {
-            postRunnable(new C15952());
+            postRunnable(new C16052());
         }
 
         public void scheduleRedraw() {
@@ -348,7 +348,7 @@ public class RenderView extends TextureView {
                 cancelRunnable(this.scheduledRunnable);
                 this.scheduledRunnable = null;
             }
-            this.scheduledRunnable = new C15963();
+            this.scheduledRunnable = new C16063();
             postRunnable(this.scheduledRunnable, 1);
         }
 
@@ -369,7 +369,7 @@ public class RenderView extends TextureView {
         }
 
         public void shutdown() {
-            postRunnable(new C15974());
+            postRunnable(new C16074());
         }
 
         public Bitmap getTexture() {
@@ -407,8 +407,8 @@ public class RenderView extends TextureView {
         this.orientation = rotation;
         this.painting = paint;
         this.painting.setRenderView(this);
-        setSurfaceTextureListener(new C15891());
-        this.painting.setDelegate(new C15902());
+        setSurfaceTextureListener(new C15991());
+        this.painting.setDelegate(new C16002());
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -511,7 +511,7 @@ public class RenderView extends TextureView {
     public void shutdown() {
         this.shuttingDown = true;
         if (this.internal != null) {
-            performInContext(new C15913());
+            performInContext(new C16013());
         }
         setVisibility(8);
     }

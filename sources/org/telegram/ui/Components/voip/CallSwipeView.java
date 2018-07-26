@@ -34,13 +34,13 @@ public class CallSwipeView extends View {
     private View viewToDrag;
 
     /* renamed from: org.telegram.ui.Components.voip.CallSwipeView$1 */
-    class C17821 extends AnimatorListenerAdapter {
-        private Runnable restarter = new C17811();
+    class C17981 extends AnimatorListenerAdapter {
+        private Runnable restarter = new C17971();
         private long startTime;
 
         /* renamed from: org.telegram.ui.Components.voip.CallSwipeView$1$1 */
-        class C17811 implements Runnable {
-            C17811() {
+        class C17971 implements Runnable {
+            C17971() {
             }
 
             public void run() {
@@ -50,7 +50,7 @@ public class CallSwipeView extends View {
             }
         }
 
-        C17821() {
+        C17981() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -116,7 +116,7 @@ public class CallSwipeView extends View {
         }
         this.arrowAnim = new AnimatorSet();
         this.arrowAnim.playTogether(anims);
-        this.arrowAnim.addListener(new C17821());
+        this.arrowAnim.addListener(new C17981());
     }
 
     protected void onDetachedFromWindow() {

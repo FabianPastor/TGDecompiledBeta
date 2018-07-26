@@ -44,8 +44,8 @@ public class Track {
     private int width;
 
     /* renamed from: org.telegram.messenger.video.Track$1 */
-    class C08251 implements Comparator<SamplePresentationTime> {
-        C08251() {
+    class C08301 implements Comparator<SamplePresentationTime> {
+        C08301() {
         }
 
         public int compare(SamplePresentationTime o1, SamplePresentationTime o2) {
@@ -260,7 +260,7 @@ public class Track {
     public void prepare() {
         int a;
         ArrayList<SamplePresentationTime> original = new ArrayList(this.samplePresentationTimes);
-        Collections.sort(this.samplePresentationTimes, new C08251());
+        Collections.sort(this.samplePresentationTimes, new C08301());
         long lastPresentationTimeUs = 0;
         this.sampleDurations = new long[this.samplePresentationTimes.size()];
         long minDelta = Long.MAX_VALUE;

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.drm.DefaultDrmSessionEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
@@ -324,7 +324,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     }
 
     private long getLicenseDurationRemainingSec() {
-        if (!C0616C.WIDEVINE_UUID.equals(this.uuid)) {
+        if (!C0621C.WIDEVINE_UUID.equals(this.uuid)) {
             return Long.MAX_VALUE;
         }
         Pair<Long, Long> pair = WidevineUtil.getLicenseDurationRemainingSec(this);
@@ -334,7 +334,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     private void postKeyRequest(int type, boolean allowRetry) {
         try {
             KeyRequest request = this.mediaDrm.getKeyRequest(type == 3 ? this.offlineLicenseKeySetId : this.sessionId, this.initData, this.mimeType, type, this.optionalKeyRequestParameters);
-            if (C0616C.CLEARKEY_UUID.equals(this.uuid)) {
+            if (C0621C.CLEARKEY_UUID.equals(this.uuid)) {
                 request = new DefaultKeyRequest(ClearKeyUtil.adjustRequestData(request.getData()), request.getDefaultUrl());
             }
             this.postRequestHandler.obtainMessage(1, request, allowRetry).sendToTarget();
@@ -353,7 +353,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
         }
         try {
             byte[] responseData = (byte[]) response;
-            if (C0616C.CLEARKEY_UUID.equals(this.uuid)) {
+            if (C0621C.CLEARKEY_UUID.equals(this.uuid)) {
                 responseData = ClearKeyUtil.adjustResponseData(responseData);
             }
             if (this.mode == 3) {

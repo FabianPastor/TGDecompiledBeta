@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
@@ -23,7 +23,7 @@ public final class SpliceInfoSectionReader implements SectionPayloadReader {
 
     public void consume(ParsableByteArray sectionData) {
         if (!this.formatDeclared) {
-            if (this.timestampAdjuster.getTimestampOffsetUs() != C0616C.TIME_UNSET) {
+            if (this.timestampAdjuster.getTimestampOffsetUs() != C0621C.TIME_UNSET) {
                 this.output.format(Format.createSampleFormat(null, MimeTypes.APPLICATION_SCTE35, this.timestampAdjuster.getTimestampOffsetUs()));
                 this.formatDeclared = true;
             } else {

@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.FileLoadOperation.FileLoadOperationDelegate;
@@ -62,15 +63,15 @@ public class FileLoader {
     private HashMap<String, Long> uploadSizes = new HashMap();
     private LinkedList<FileUploadOperation> uploadSmallOperationQueue = new LinkedList();
 
-    /* renamed from: org.telegram.messenger.FileLoader$5 */
-    class C01985 implements FileLoadOperationDelegate {
+    /* renamed from: org.telegram.messenger.FileLoader$6 */
+    class C02016 implements FileLoadOperationDelegate {
         final /* synthetic */ Document val$document;
         final /* synthetic */ String val$finalFileName;
         final /* synthetic */ int val$finalType;
         final /* synthetic */ FileLocation val$location;
         final /* synthetic */ WebFile val$webDocument;
 
-        C01985(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
+        C02016(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
             this.val$finalFileName = str;
             this.val$finalType = i;
             this.val$document = document;
@@ -210,6 +211,19 @@ public class FileLoader {
         });
     }
 
+    public void onNetworkChanged(final boolean slow) {
+        fileLoaderQueue.postRunnable(new Runnable() {
+            public void run() {
+                for (Entry<String, FileUploadOperation> entry : FileLoader.this.uploadOperationPaths.entrySet()) {
+                    ((FileUploadOperation) entry.getValue()).onNetworkChanged(slow);
+                }
+                for (Entry<String, FileUploadOperation> entry2 : FileLoader.this.uploadOperationPathsEnc.entrySet()) {
+                    ((FileUploadOperation) entry2.getValue()).onNetworkChanged(slow);
+                }
+            }
+        });
+    }
+
     public void uploadFile(String location, boolean encrypted, boolean small, int type) {
         uploadFile(location, encrypted, small, 0, type);
     }
@@ -223,12 +237,12 @@ public class FileLoader {
             final boolean z2 = small;
             fileLoaderQueue.postRunnable(new Runnable() {
 
-                /* renamed from: org.telegram.messenger.FileLoader$3$1 */
-                class C01951 implements FileUploadOperationDelegate {
+                /* renamed from: org.telegram.messenger.FileLoader$4$1 */
+                class C01981 implements FileUploadOperationDelegate {
 
-                    /* renamed from: org.telegram.messenger.FileLoader$3$1$2 */
-                    class C01942 implements Runnable {
-                        C01942() {
+                    /* renamed from: org.telegram.messenger.FileLoader$4$1$2 */
+                    class C01972 implements Runnable {
+                        C01972() {
                         }
 
                         public void run() {
@@ -265,7 +279,7 @@ public class FileLoader {
                         }
                     }
 
-                    C01951() {
+                    C01981() {
                     }
 
                     public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
@@ -309,7 +323,7 @@ public class FileLoader {
                     }
 
                     public void didFailedUploadingFile(FileUploadOperation operation) {
-                        FileLoader.fileLoaderQueue.postRunnable(new C01942());
+                        FileLoader.fileLoaderQueue.postRunnable(new C01972());
                     }
 
                     public void didChangedUploadProgress(FileUploadOperation operation, float progress) {
@@ -338,7 +352,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, operation);
                     }
-                    operation.setDelegate(new C01951());
+                    operation.setDelegate(new C01981());
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;
@@ -759,7 +773,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r0.setPaths(r5, r1, r2);
         r6 = r15;
         r7 = r23;
-        r4 = new org.telegram.messenger.FileLoader$5;
+        r4 = new org.telegram.messenger.FileLoader$6;
         r5 = r24;
         r8 = r25;
         r9 = r27;

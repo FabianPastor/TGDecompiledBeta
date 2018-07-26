@@ -81,13 +81,13 @@ public class VideoEncodingService extends Service implements NotificationCenterD
                 this.builder.setSmallIcon(17301640);
                 this.builder.setWhen(System.currentTimeMillis());
                 this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-                this.builder.setContentTitle(LocaleController.getString("AppName", C0501R.string.AppName));
+                this.builder.setContentTitle(LocaleController.getString("AppName", C0505R.string.AppName));
                 if (isGif) {
-                    this.builder.setTicker(LocaleController.getString("SendingGif", C0501R.string.SendingGif));
-                    this.builder.setContentText(LocaleController.getString("SendingGif", C0501R.string.SendingGif));
+                    this.builder.setTicker(LocaleController.getString("SendingGif", C0505R.string.SendingGif));
+                    this.builder.setContentText(LocaleController.getString("SendingGif", C0505R.string.SendingGif));
                 } else {
-                    this.builder.setTicker(LocaleController.getString("SendingVideo", C0501R.string.SendingVideo));
-                    this.builder.setContentText(LocaleController.getString("SendingVideo", C0501R.string.SendingVideo));
+                    this.builder.setTicker(LocaleController.getString("SendingVideo", C0505R.string.SendingVideo));
+                    this.builder.setContentText(LocaleController.getString("SendingVideo", C0505R.string.SendingVideo));
                 }
             }
             this.currentProgress = 0;

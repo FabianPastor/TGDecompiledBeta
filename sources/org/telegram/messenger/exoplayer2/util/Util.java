@@ -38,7 +38,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
@@ -181,11 +181,11 @@ public final class Util {
     }
 
     public static String fromUtf8Bytes(byte[] bytes) {
-        return new String(bytes, Charset.forName(C0616C.UTF8_NAME));
+        return new String(bytes, Charset.forName(C0621C.UTF8_NAME));
     }
 
     public static byte[] getUtf8Bytes(String value) {
-        return value.getBytes(Charset.forName(C0616C.UTF8_NAME));
+        return value.getBytes(Charset.forName(C0621C.UTF8_NAME));
     }
 
     public static boolean isLinebreak(int c) {
@@ -661,11 +661,11 @@ public final class Util {
         }
         switch (obj) {
             case null:
-                return C0616C.WIDEVINE_UUID;
+                return C0621C.WIDEVINE_UUID;
             case 1:
-                return C0616C.PLAYREADY_UUID;
+                return C0621C.PLAYREADY_UUID;
             case 2:
-                return C0616C.CLEARKEY_UUID;
+                return C0621C.CLEARKEY_UUID;
             default:
                 try {
                     return UUID.fromString(drmScheme);
@@ -702,7 +702,7 @@ public final class Util {
     }
 
     public static String getStringForTime(StringBuilder builder, Formatter formatter, long timeMs) {
-        if (timeMs == C0616C.TIME_UNSET) {
+        if (timeMs == C0621C.TIME_UNSET) {
             timeMs = 0;
         }
         long totalSeconds = (500 + timeMs) / 1000;
@@ -721,9 +721,9 @@ public final class Util {
             case 0:
                 return 16777216;
             case 1:
-                return C0616C.DEFAULT_AUDIO_BUFFER_SIZE;
+                return C0621C.DEFAULT_AUDIO_BUFFER_SIZE;
             case 2:
-                return C0616C.DEFAULT_VIDEO_BUFFER_SIZE;
+                return C0621C.DEFAULT_VIDEO_BUFFER_SIZE;
             case 3:
             case 4:
                 return 131072;

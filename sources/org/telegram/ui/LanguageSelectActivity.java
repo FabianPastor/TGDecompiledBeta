@@ -13,7 +13,7 @@ import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
@@ -51,8 +51,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     private ArrayList<LocaleInfo> sortedLanguages;
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$1 */
-    class C19491 extends ActionBarMenuOnItemClick {
-        C19491() {
+    class C19661 extends ActionBarMenuOnItemClick {
+        C19661() {
         }
 
         public void onItemClick(int id) {
@@ -63,8 +63,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$2 */
-    class C19502 extends ActionBarMenuItemSearchListener {
-        C19502() {
+    class C19672 extends ActionBarMenuItemSearchListener {
+        C19672() {
         }
 
         public void onSearchExpand() {
@@ -94,8 +94,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$3 */
-    class C19513 implements OnItemClickListener {
-        C19513() {
+    class C19683 implements OnItemClickListener {
+        C19683() {
         }
 
         public void onItemClick(View view, int position) {
@@ -118,8 +118,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$4 */
-    class C19534 implements OnItemLongClickListener {
-        C19534() {
+    class C19704 implements OnItemLongClickListener {
+        C19704() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -136,9 +136,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             }
             final LocaleInfo finalLocaleInfo = localeInfo;
             Builder builder = new Builder(LanguageSelectActivity.this.getParentActivity());
-            builder.setMessage(LocaleController.getString("DeleteLocalization", C0501R.string.DeleteLocalization));
-            builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("Delete", C0501R.string.Delete), new OnClickListener() {
+            builder.setMessage(LocaleController.getString("DeleteLocalization", C0505R.string.DeleteLocalization));
+            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("Delete", C0505R.string.Delete), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo, LanguageSelectActivity.this.currentAccount)) {
                         LanguageSelectActivity.this.fillLanguages();
@@ -154,15 +154,15 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
             LanguageSelectActivity.this.showDialog(builder.create());
             return true;
         }
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$5 */
-    class C19545 extends OnScrollListener {
-        C19545() {
+    class C19715 extends OnScrollListener {
+        C19715() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -217,7 +217,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             }
             if (localeInfo.isLocal()) {
                 boolean z2;
-                String format = String.format("%1$s (%2$s)", new Object[]{localeInfo.name, LocaleController.getString("LanguageCustom", C0501R.string.LanguageCustom)});
+                String format = String.format("%1$s (%2$s)", new Object[]{localeInfo.name, LocaleController.getString("LanguageCustom", C0505R.string.LanguageCustom)});
                 if (last) {
                     z2 = false;
                 } else {
@@ -253,17 +253,17 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     public View createView(Context context) {
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("Language", C0501R.string.Language));
-        this.actionBar.setActionBarMenuOnItemClick(new C19491());
-        this.actionBar.createMenu().addItem(0, (int) C0501R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C19502()).getSearchField().setHint(LocaleController.getString("Search", C0501R.string.Search));
+        this.actionBar.setTitle(LocaleController.getString("Language", C0505R.string.Language));
+        this.actionBar.setActionBarMenuOnItemClick(new C19661());
+        this.actionBar.createMenu().addItem(0, (int) C0505R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C19672()).getSearchField().setHint(LocaleController.getString("Search", C0505R.string.Search));
         this.listAdapter = new ListAdapter(context, false);
         this.searchListViewAdapter = new ListAdapter(context, true);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoResult", C0501R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", C0505R.string.NoResult));
         this.emptyView.showTextView();
         this.emptyView.setShowAtCenter(true);
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
@@ -273,9 +273,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setAdapter(this.listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C19513());
-        this.listView.setOnItemLongClickListener(new C19534());
-        this.listView.setOnScrollListener(new C19545());
+        this.listView.setOnItemClickListener(new C19683());
+        this.listView.setOnItemLongClickListener(new C19704());
+        this.listView.setOnScrollListener(new C19715());
         return this.fragmentView;
     }
 

@@ -17,7 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -32,7 +32,11 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_resetNotifySettings;
+import org.telegram.tgnet.TLRPC.TL_account_updateNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_inputNotifyChats;
+import org.telegram.tgnet.TLRPC.TL_inputNotifyUsers;
+import org.telegram.tgnet.TLRPC.TL_inputPeerNotifySettings;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -100,8 +104,8 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     private int rowCount = 0;
 
     /* renamed from: org.telegram.ui.NotificationsSettingsActivity$1 */
-    class C21081 extends ActionBarMenuOnItemClick {
-        C21081() {
+    class C21291 extends ActionBarMenuOnItemClick {
+        C21291() {
         }
 
         public void onItemClick(int id) {
@@ -112,17 +116,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     }
 
     /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3 */
-    class C21183 implements OnItemClickListener {
+    class C21393 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1 */
-        class C21121 implements OnClickListener {
+        class C21331 implements OnClickListener {
 
             /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1$1 */
-            class C21111 implements RequestDelegate {
+            class C21321 implements RequestDelegate {
 
                 /* renamed from: org.telegram.ui.NotificationsSettingsActivity$3$1$1$1 */
-                class C21101 implements Runnable {
-                    C21101() {
+                class C21311 implements Runnable {
+                    C21311() {
                     }
 
                     public void run() {
@@ -133,31 +137,31 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         editor.commit();
                         NotificationsSettingsActivity.this.adapter.notifyDataSetChanged();
                         if (NotificationsSettingsActivity.this.getParentActivity() != null) {
-                            Toast.makeText(NotificationsSettingsActivity.this.getParentActivity(), LocaleController.getString("ResetNotificationsText", C0501R.string.ResetNotificationsText), 0).show();
+                            Toast.makeText(NotificationsSettingsActivity.this.getParentActivity(), LocaleController.getString("ResetNotificationsText", C0505R.string.ResetNotificationsText), 0).show();
                         }
                     }
                 }
 
-                C21111() {
+                C21321() {
                 }
 
                 public void run(TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new C21101());
+                    AndroidUtilities.runOnUIThread(new C21311());
                 }
             }
 
-            C21121() {
+            C21331() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!NotificationsSettingsActivity.this.reseting) {
                     NotificationsSettingsActivity.this.reseting = true;
-                    ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).sendRequest(new TL_account_resetNotifySettings(), new C21111());
+                    ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).sendRequest(new TL_account_resetNotifySettings(), new C21321());
                 }
             }
         }
 
-        C21183() {
+        C21393() {
         }
 
         public void onItemClick(View view, int position) {
@@ -246,10 +250,10 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 } else if (position == NotificationsSettingsActivity.this.resetNotificationsRow) {
                     builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
-                    builder.setMessage(LocaleController.getString("ResetNotificationsAlert", C0501R.string.ResetNotificationsAlert));
-                    builder.setTitle(LocaleController.getString("AppName", C0501R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("Reset", C0501R.string.Reset), new C21121());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+                    builder.setMessage(LocaleController.getString("ResetNotificationsAlert", C0505R.string.ResetNotificationsAlert));
+                    builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("Reset", C0505R.string.Reset), new C21331());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
                     NotificationsSettingsActivity.this.showDialog(builder.create());
                 } else if (position == NotificationsSettingsActivity.this.inappSoundRow) {
                     preferences = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
@@ -380,9 +384,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }));
                 } else if (position == NotificationsSettingsActivity.this.repeatRow) {
                     builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("RepeatNotifications", C0501R.string.RepeatNotifications));
+                    builder.setTitle(LocaleController.getString("RepeatNotifications", C0505R.string.RepeatNotifications));
                     r1 = position;
-                    builder.setItems(new CharSequence[]{LocaleController.getString("RepeatDisabled", C0501R.string.RepeatDisabled), LocaleController.formatPluralString("Minutes", 5), LocaleController.formatPluralString("Minutes", 10), LocaleController.formatPluralString("Minutes", 30), LocaleController.formatPluralString("Hours", 1), LocaleController.formatPluralString("Hours", 2), LocaleController.formatPluralString("Hours", 4)}, new OnClickListener() {
+                    builder.setItems(new CharSequence[]{LocaleController.getString("RepeatDisabled", C0505R.string.RepeatDisabled), LocaleController.formatPluralString("Minutes", 5), LocaleController.formatPluralString("Minutes", 10), LocaleController.formatPluralString("Minutes", 30), LocaleController.formatPluralString("Hours", 1), LocaleController.formatPluralString("Hours", 2), LocaleController.formatPluralString("Hours", 4)}, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             int minutes = 0;
                             if (which == 1) {
@@ -402,7 +406,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             NotificationsSettingsActivity.this.adapter.notifyItemChanged(r1);
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0501R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
                     NotificationsSettingsActivity.this.showDialog(builder.create());
                 }
                 if (view instanceof TextCheckCell) {
@@ -415,6 +419,15 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     textCheckCell.setChecked(z);
                 }
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.NotificationsSettingsActivity$4 */
+    class C21404 implements RequestDelegate {
+        C21404() {
+        }
+
+        public void run(TLObject response, TL_error error) {
         }
     }
 
@@ -470,25 +483,25 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 case 0:
                     HeaderCell headerCell = holder.itemView;
                     if (position == NotificationsSettingsActivity.this.messageSectionRow) {
-                        headerCell.setText(LocaleController.getString("MessageNotifications", C0501R.string.MessageNotifications));
+                        headerCell.setText(LocaleController.getString("MessageNotifications", C0505R.string.MessageNotifications));
                         return;
                     } else if (position == NotificationsSettingsActivity.this.groupSectionRow) {
-                        headerCell.setText(LocaleController.getString("GroupNotifications", C0501R.string.GroupNotifications));
+                        headerCell.setText(LocaleController.getString("GroupNotifications", C0505R.string.GroupNotifications));
                         return;
                     } else if (position == NotificationsSettingsActivity.this.inappSectionRow) {
-                        headerCell.setText(LocaleController.getString("InAppNotifications", C0501R.string.InAppNotifications));
+                        headerCell.setText(LocaleController.getString("InAppNotifications", C0505R.string.InAppNotifications));
                         return;
                     } else if (position == NotificationsSettingsActivity.this.eventsSectionRow) {
-                        headerCell.setText(LocaleController.getString("Events", C0501R.string.Events));
+                        headerCell.setText(LocaleController.getString("Events", C0505R.string.Events));
                         return;
                     } else if (position == NotificationsSettingsActivity.this.otherSectionRow) {
-                        headerCell.setText(LocaleController.getString("NotificationsOther", C0501R.string.NotificationsOther));
+                        headerCell.setText(LocaleController.getString("NotificationsOther", C0505R.string.NotificationsOther));
                         return;
                     } else if (position == NotificationsSettingsActivity.this.resetSectionRow) {
-                        headerCell.setText(LocaleController.getString("Reset", C0501R.string.Reset));
+                        headerCell.setText(LocaleController.getString("Reset", C0505R.string.Reset));
                         return;
                     } else if (position == NotificationsSettingsActivity.this.callsSectionRow) {
-                        headerCell.setText(LocaleController.getString("VoipNotificationSettings", C0501R.string.VoipNotificationSettings));
+                        headerCell.setText(LocaleController.getString("VoipNotificationSettings", C0505R.string.VoipNotificationSettings));
                         return;
                     } else {
                         return;
@@ -497,52 +510,52 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     TextCheckCell checkCell = holder.itemView;
                     preferences = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
                     if (position == NotificationsSettingsActivity.this.messageAlertRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("Alert", C0501R.string.Alert), preferences.getBoolean("EnableAll", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("Alert", C0505R.string.Alert), preferences.getBoolean("EnableAll", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.groupAlertRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("Alert", C0501R.string.Alert), preferences.getBoolean("EnableGroup", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("Alert", C0505R.string.Alert), preferences.getBoolean("EnableGroup", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.messagePreviewRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("MessagePreview", C0501R.string.MessagePreview), preferences.getBoolean("EnablePreviewAll", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("MessagePreview", C0505R.string.MessagePreview), preferences.getBoolean("EnablePreviewAll", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.groupPreviewRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("MessagePreview", C0501R.string.MessagePreview), preferences.getBoolean("EnablePreviewGroup", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("MessagePreview", C0505R.string.MessagePreview), preferences.getBoolean("EnablePreviewGroup", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.inappSoundRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("InAppSounds", C0501R.string.InAppSounds), preferences.getBoolean("EnableInAppSounds", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("InAppSounds", C0505R.string.InAppSounds), preferences.getBoolean("EnableInAppSounds", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.inappVibrateRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("InAppVibrate", C0501R.string.InAppVibrate), preferences.getBoolean("EnableInAppVibrate", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("InAppVibrate", C0505R.string.InAppVibrate), preferences.getBoolean("EnableInAppVibrate", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.inappPreviewRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("InAppPreview", C0501R.string.InAppPreview), preferences.getBoolean("EnableInAppPreview", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("InAppPreview", C0505R.string.InAppPreview), preferences.getBoolean("EnableInAppPreview", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.inappPriorityRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("NotificationsImportance", C0501R.string.NotificationsImportance), preferences.getBoolean("EnableInAppPriority", false), false);
+                        checkCell.setTextAndCheck(LocaleController.getString("NotificationsImportance", C0505R.string.NotificationsImportance), preferences.getBoolean("EnableInAppPriority", false), false);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.contactJoinedRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("ContactJoined", C0501R.string.ContactJoined), preferences.getBoolean("EnableContactJoined", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("ContactJoined", C0505R.string.ContactJoined), preferences.getBoolean("EnableContactJoined", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.pinnedMessageRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("PinnedMessages", C0501R.string.PinnedMessages), preferences.getBoolean("PinnedMessages", true), false);
+                        checkCell.setTextAndCheck(LocaleController.getString("PinnedMessages", C0505R.string.PinnedMessages), preferences.getBoolean("PinnedMessages", true), false);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.androidAutoAlertRow) {
                         checkCell.setTextAndCheck("Android Auto", preferences.getBoolean("EnableAutoNotifications", false), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.notificationsServiceRow) {
-                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", C0501R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", C0501R.string.NotificationsServiceInfo), preferences.getBoolean("pushService", true), true, true);
+                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", C0505R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", C0505R.string.NotificationsServiceInfo), preferences.getBoolean("pushService", true), true, true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.notificationsServiceConnectionRow) {
-                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsServiceConnection", C0501R.string.NotificationsServiceConnection), LocaleController.getString("NotificationsServiceConnectionInfo", C0501R.string.NotificationsServiceConnectionInfo), preferences.getBoolean("pushConnection", true), true, true);
+                        checkCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsServiceConnection", C0505R.string.NotificationsServiceConnection), LocaleController.getString("NotificationsServiceConnectionInfo", C0505R.string.NotificationsServiceConnectionInfo), preferences.getBoolean("pushConnection", true), true, true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.badgeNumberRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("BadgeNumber", C0501R.string.BadgeNumber), NotificationsController.getInstance(NotificationsSettingsActivity.this.currentAccount).showBadgeNumber, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("BadgeNumber", C0505R.string.BadgeNumber), NotificationsController.getInstance(NotificationsSettingsActivity.this.currentAccount).showBadgeNumber, true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.inchatSoundRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("InChatSound", C0501R.string.InChatSound), preferences.getBoolean("EnableInChatSound", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("InChatSound", C0505R.string.InChatSound), preferences.getBoolean("EnableInChatSound", true), true);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.callsVibrateRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("Vibrate", C0501R.string.Vibrate), preferences.getBoolean("EnableCallVibrate", true), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("Vibrate", C0505R.string.Vibrate), preferences.getBoolean("EnableCallVibrate", true), true);
                         return;
                     } else {
                         return;
@@ -550,7 +563,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 case 2:
                     TextDetailSettingsCell settingsCell = holder.itemView;
                     settingsCell.setMultilineDetail(true);
-                    settingsCell.setTextAndValue(LocaleController.getString("ResetAllNotifications", C0501R.string.ResetAllNotifications), LocaleController.getString("UndoAllCustom", C0501R.string.UndoAllCustom), false);
+                    settingsCell.setTextAndValue(LocaleController.getString("ResetAllNotifications", C0505R.string.ResetAllNotifications), LocaleController.getString("UndoAllCustom", C0505R.string.UndoAllCustom), false);
                     return;
                 case 3:
                     int color;
@@ -564,11 +577,11 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     for (int a = 0; a < 9; a++) {
                         if (TextColorCell.colorsToSave[a] == color) {
                             color = TextColorCell.colors[a];
-                            textColorCell.setTextAndColor(LocaleController.getString("LedColor", C0501R.string.LedColor), color, true);
+                            textColorCell.setTextAndColor(LocaleController.getString("LedColor", C0505R.string.LedColor), color, true);
                             return;
                         }
                     }
-                    textColorCell.setTextAndColor(LocaleController.getString("LedColor", C0501R.string.LedColor), color, true);
+                    textColorCell.setTextAndColor(LocaleController.getString("LedColor", C0505R.string.LedColor), color, true);
                     return;
                 case 5:
                     TextSettingsCell textCell = holder.itemView;
@@ -577,20 +590,20 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     if (position == NotificationsSettingsActivity.this.messageSoundRow || position == NotificationsSettingsActivity.this.groupSoundRow || position == NotificationsSettingsActivity.this.callsRingtoneRow) {
                         value = null;
                         if (position == NotificationsSettingsActivity.this.messageSoundRow) {
-                            value = preferences.getString("GlobalSound", LocaleController.getString("SoundDefault", C0501R.string.SoundDefault));
+                            value = preferences.getString("GlobalSound", LocaleController.getString("SoundDefault", C0505R.string.SoundDefault));
                         } else if (position == NotificationsSettingsActivity.this.groupSoundRow) {
-                            value = preferences.getString("GroupSound", LocaleController.getString("SoundDefault", C0501R.string.SoundDefault));
+                            value = preferences.getString("GroupSound", LocaleController.getString("SoundDefault", C0505R.string.SoundDefault));
                         } else if (position == NotificationsSettingsActivity.this.callsRingtoneRow) {
-                            value = preferences.getString("CallsRingtone", LocaleController.getString("DefaultRingtone", C0501R.string.DefaultRingtone));
+                            value = preferences.getString("CallsRingtone", LocaleController.getString("DefaultRingtone", C0505R.string.DefaultRingtone));
                         }
                         if (value.equals("NoSound")) {
-                            value = LocaleController.getString("NoSound", C0501R.string.NoSound);
+                            value = LocaleController.getString("NoSound", C0505R.string.NoSound);
                         }
                         if (position == NotificationsSettingsActivity.this.callsRingtoneRow) {
-                            textCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", C0501R.string.VoipSettingsRingtone), value, true);
+                            textCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", C0505R.string.VoipSettingsRingtone), value, true);
                             return;
                         } else {
-                            textCell.setTextAndValue(LocaleController.getString("Sound", C0501R.string.Sound), value, true);
+                            textCell.setTextAndValue(LocaleController.getString("Sound", C0505R.string.Sound), value, true);
                             return;
                         }
                     } else if (position == NotificationsSettingsActivity.this.messageVibrateRow || position == NotificationsSettingsActivity.this.groupVibrateRow || position == NotificationsSettingsActivity.this.callsVibrateRow) {
@@ -603,19 +616,19 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             value = preferences.getInt("vibrate_calls", 0);
                         }
                         if (value == 0) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0501R.string.Vibrate), LocaleController.getString("VibrationDefault", C0501R.string.VibrationDefault), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0505R.string.Vibrate), LocaleController.getString("VibrationDefault", C0505R.string.VibrationDefault), true);
                             return;
                         } else if (value == 1) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0501R.string.Vibrate), LocaleController.getString("Short", C0501R.string.Short), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0505R.string.Vibrate), LocaleController.getString("Short", C0505R.string.Short), true);
                             return;
                         } else if (value == 2) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0501R.string.Vibrate), LocaleController.getString("VibrationDisabled", C0501R.string.VibrationDisabled), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0505R.string.Vibrate), LocaleController.getString("VibrationDisabled", C0505R.string.VibrationDisabled), true);
                             return;
                         } else if (value == 3) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0501R.string.Vibrate), LocaleController.getString("Long", C0501R.string.Long), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0505R.string.Vibrate), LocaleController.getString("Long", C0505R.string.Long), true);
                             return;
                         } else if (value == 4) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0501R.string.Vibrate), LocaleController.getString("OnlyIfSilent", C0501R.string.OnlyIfSilent), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", C0505R.string.Vibrate), LocaleController.getString("OnlyIfSilent", C0505R.string.OnlyIfSilent), true);
                             return;
                         } else {
                             return;
@@ -623,13 +636,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else if (position == NotificationsSettingsActivity.this.repeatRow) {
                         int minutes = preferences.getInt("repeat_messages", 60);
                         if (minutes == 0) {
-                            value = LocaleController.getString("RepeatNotificationsNever", C0501R.string.RepeatNotificationsNever);
+                            value = LocaleController.getString("RepeatNotificationsNever", C0505R.string.RepeatNotificationsNever);
                         } else if (minutes < 60) {
                             value = LocaleController.formatPluralString("Minutes", minutes);
                         } else {
                             value = LocaleController.formatPluralString("Hours", minutes / 60);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("RepeatNotifications", C0501R.string.RepeatNotifications), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("RepeatNotifications", C0505R.string.RepeatNotifications), value, false);
                         return;
                     } else if (position == NotificationsSettingsActivity.this.messagePriorityRow || position == NotificationsSettingsActivity.this.groupPriorityRow) {
                         value = 0;
@@ -639,16 +652,16 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             value = preferences.getInt("priority_group", 1);
                         }
                         if (value == 0) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", C0501R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityHigh", C0501R.string.NotificationsPriorityHigh), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", C0505R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityHigh", C0505R.string.NotificationsPriorityHigh), false);
                             return;
                         } else if (value == 1 || value == 2) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", C0501R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityUrgent", C0501R.string.NotificationsPriorityUrgent), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", C0505R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityUrgent", C0505R.string.NotificationsPriorityUrgent), false);
                             return;
                         } else if (value == 4) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", C0501R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityLow", C0501R.string.NotificationsPriorityLow), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", C0505R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityLow", C0505R.string.NotificationsPriorityLow), false);
                             return;
                         } else if (value == 5) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", C0501R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityMedium", C0501R.string.NotificationsPriorityMedium), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", C0505R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityMedium", C0505R.string.NotificationsPriorityMedium), false);
                             return;
                         } else {
                             return;
@@ -661,15 +674,15 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             option = preferences.getInt("popupGroup", 0);
                         }
                         if (option == 0) {
-                            value = LocaleController.getString("NoPopup", C0501R.string.NoPopup);
+                            value = LocaleController.getString("NoPopup", C0505R.string.NoPopup);
                         } else if (option == 1) {
-                            value = LocaleController.getString("OnlyWhenScreenOn", C0501R.string.OnlyWhenScreenOn);
+                            value = LocaleController.getString("OnlyWhenScreenOn", C0505R.string.OnlyWhenScreenOn);
                         } else if (option == 2) {
-                            value = LocaleController.getString("OnlyWhenScreenOff", C0501R.string.OnlyWhenScreenOff);
+                            value = LocaleController.getString("OnlyWhenScreenOff", C0505R.string.OnlyWhenScreenOff);
                         } else {
-                            value = LocaleController.getString("AlwaysShowPopup", C0501R.string.AlwaysShowPopup);
+                            value = LocaleController.getString("AlwaysShowPopup", C0505R.string.AlwaysShowPopup);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("PopupNotification", C0501R.string.PopupNotification), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("PopupNotification", C0505R.string.PopupNotification), value, true);
                         return;
                     } else {
                         return;
@@ -846,10 +859,10 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("NotificationsAndSounds", C0501R.string.NotificationsAndSounds));
-        this.actionBar.setActionBarMenuOnItemClick(new C21081());
+        this.actionBar.setTitle(LocaleController.getString("NotificationsAndSounds", C0505R.string.NotificationsAndSounds));
+        this.actionBar.setActionBarMenuOnItemClick(new C21291());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -867,11 +880,35 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         Adapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        this.listView.setOnItemClickListener(new C21183());
+        this.listView.setOnItemClickListener(new C21393());
         return this.fragmentView;
     }
 
     public void updateServerNotificationsSettings(boolean group) {
+        int i = 0;
+        SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
+        TL_account_updateNotifySettings req = new TL_account_updateNotifySettings();
+        req.settings = new TL_inputPeerNotifySettings();
+        req.settings.flags = 5;
+        TL_inputPeerNotifySettings tL_inputPeerNotifySettings;
+        if (group) {
+            req.peer = new TL_inputNotifyChats();
+            tL_inputPeerNotifySettings = req.settings;
+            if (!preferences.getBoolean("EnableGroup", true)) {
+                i = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            }
+            tL_inputPeerNotifySettings.mute_until = i;
+            req.settings.show_previews = preferences.getBoolean("EnablePreviewGroup", true);
+        } else {
+            req.peer = new TL_inputNotifyUsers();
+            tL_inputPeerNotifySettings = req.settings;
+            if (!preferences.getBoolean("EnableAll", true)) {
+                i = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            }
+            tL_inputPeerNotifySettings.mute_until = i;
+            req.settings.show_previews = preferences.getBoolean("EnablePreviewAll", true);
+        }
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C21404());
     }
 
     public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
@@ -883,12 +920,12 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 if (rng != null) {
                     if (requestCode == this.callsRingtoneRow) {
                         if (ringtone.equals(System.DEFAULT_RINGTONE_URI)) {
-                            name = LocaleController.getString("DefaultRingtone", C0501R.string.DefaultRingtone);
+                            name = LocaleController.getString("DefaultRingtone", C0505R.string.DefaultRingtone);
                         } else {
                             name = rng.getTitle(getParentActivity());
                         }
                     } else if (ringtone.equals(System.DEFAULT_NOTIFICATION_URI)) {
-                        name = LocaleController.getString("SoundDefault", C0501R.string.SoundDefault);
+                        name = LocaleController.getString("SoundDefault", C0505R.string.SoundDefault);
                     } else {
                         name = rng.getTitle(getParentActivity());
                     }
@@ -922,6 +959,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
             }
             editor.commit();
+            if (requestCode == this.messageSoundRow || requestCode == this.groupSoundRow) {
+                updateServerNotificationsSettings(requestCode == this.groupSoundRow);
+            }
             this.adapter.notifyItemChanged(requestCode);
         }
     }

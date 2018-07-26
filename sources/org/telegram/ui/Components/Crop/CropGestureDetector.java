@@ -23,8 +23,8 @@ public class CropGestureDetector {
     private boolean started;
 
     /* renamed from: org.telegram.ui.Components.Crop.CropGestureDetector$1 */
-    class C14791 implements OnScaleGestureListener {
-        C14791() {
+    class C14891 implements OnScaleGestureListener {
+        C14891() {
         }
 
         public boolean onScale(ScaleGestureDetector detector) {
@@ -54,7 +54,7 @@ public class CropGestureDetector {
 
     public CropGestureDetector(Context context) {
         this.mMinimumVelocity = (float) ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
-        this.mDetector = new ScaleGestureDetector(context, new C14791());
+        this.mDetector = new ScaleGestureDetector(context, new C14891());
     }
 
     float getActiveX(MotionEvent ev) {

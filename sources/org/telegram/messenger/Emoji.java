@@ -44,8 +44,8 @@ public class Emoji {
     private static final int splitCount = 4;
 
     /* renamed from: org.telegram.messenger.Emoji$2 */
-    static class C01792 implements Comparator<String> {
-        C01792() {
+    static class C01812 implements Comparator<String> {
+        C01812() {
         }
 
         public int compare(String lhs, String rhs) {
@@ -89,8 +89,8 @@ public class Emoji {
         private DrawableInfo info;
 
         /* renamed from: org.telegram.messenger.Emoji$EmojiDrawable$1 */
-        class C01801 implements Runnable {
-            C01801() {
+        class C01821 implements Runnable {
+            C01821() {
             }
 
             public void run() {
@@ -129,7 +129,7 @@ public class Emoji {
                 canvas.drawBitmap(Emoji.emojiBmp[this.info.page][this.info.page2], this.info.rect, b, paint);
             } else if (!Emoji.loadingEmoji[this.info.page][this.info.page2]) {
                 Emoji.loadingEmoji[this.info.page][this.info.page2] = true;
-                Utilities.globalQueue.postRunnable(new C01801());
+                Utilities.globalQueue.postRunnable(new C01821());
                 canvas.drawRect(getBounds(), Emoji.placeholderPaint);
             }
         }
@@ -296,25 +296,25 @@ public class Emoji {
     }
 
     public static String fixEmoji(String emoji) {
-        int lenght = emoji.length();
+        int length = emoji.length();
         int a = 0;
-        while (a < lenght) {
+        while (a < length) {
             char ch = emoji.charAt(a);
             if (ch < '\ud83c' || ch > '\ud83e') {
                 if (ch == '\u20e3') {
                     break;
                 } else if (ch >= '\u203c' && ch <= '\u3299' && EmojiData.emojiToFE0FMap.containsKey(Character.valueOf(ch))) {
                     emoji = emoji.substring(0, a + 1) + "\ufe0f" + emoji.substring(a + 1);
-                    lenght++;
+                    length++;
                     a++;
                 }
-            } else if (ch != '\ud83c' || a >= lenght - 1) {
+            } else if (ch != '\ud83c' || a >= length - 1) {
                 a++;
             } else {
                 ch = emoji.charAt(a + 1);
                 if (ch == '\ude2f' || ch == '\udc04' || ch == '\ude1a' || ch == '\udd7f') {
                     emoji = emoji.substring(0, a + 2) + "\ufe0f" + emoji.substring(a + 2);
-                    lenght++;
+                    length++;
                     a += 2;
                 } else {
                     a++;
@@ -485,7 +485,7 @@ public class Emoji {
                                 startLength++;
                                 doneEmoji = false;
                             }
-                        } else if (c >= '\ufe00' && c <= '\ufe0f') {
+                        } else if (startIndex != -1 && c >= '\ufe00' && c <= '\ufe0f') {
                             i++;
                             startLength++;
                         }
@@ -547,7 +547,7 @@ public class Emoji {
         for (Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
             recentEmoji.add(entry.getKey());
         }
-        Collections.sort(recentEmoji, new C01792());
+        Collections.sort(recentEmoji, new C01812());
         while (recentEmoji.size() > 50) {
             recentEmoji.remove(recentEmoji.size() - 1);
         }

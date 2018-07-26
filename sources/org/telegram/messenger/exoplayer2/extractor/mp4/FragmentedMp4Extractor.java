@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -40,7 +40,7 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public final class FragmentedMp4Extractor implements Extractor {
     private static final Format EMSG_FORMAT = Format.createSampleFormat(null, MimeTypes.APPLICATION_EMSG, Long.MAX_VALUE);
-    public static final ExtractorsFactory FACTORY = new C06561();
+    public static final ExtractorsFactory FACTORY = new C06611();
     public static final int FLAG_ENABLE_EMSG_TRACK = 4;
     private static final int FLAG_SIDELOADED = 8;
     public static final int FLAG_WORKAROUND_EVERY_VIDEO_FRAME_IS_SYNC_FRAME = 1;
@@ -89,8 +89,8 @@ public final class FragmentedMp4Extractor implements Extractor {
     private final SparseArray<TrackBundle> trackBundles;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor$1 */
-    static class C06561 implements ExtractorsFactory {
-        C06561() {
+    static class C06611 implements ExtractorsFactory {
+        C06611() {
         }
 
         public Extractor[] createExtractors() {
@@ -149,7 +149,7 @@ public final class FragmentedMp4Extractor implements Extractor {
         }
 
         public void seek(long timeUs) {
-            long timeMs = C0616C.usToMs(timeUs);
+            long timeMs = C0621C.usToMs(timeUs);
             int searchIndex = this.currentSampleIndex;
             while (searchIndex < this.fragment.sampleCount && this.fragment.getSamplePresentationTime(searchIndex) < timeMs) {
                 if (this.fragment.sampleIsSyncFrameTable[searchIndex]) {
@@ -266,9 +266,9 @@ public final class FragmentedMp4Extractor implements Extractor {
         this.containerAtoms = new Stack();
         this.pendingMetadataSampleInfos = new ArrayDeque();
         this.trackBundles = new SparseArray();
-        this.durationUs = C0616C.TIME_UNSET;
-        this.pendingSeekTimeUs = C0616C.TIME_UNSET;
-        this.segmentIndexEarliestPresentationTimeUs = C0616C.TIME_UNSET;
+        this.durationUs = C0621C.TIME_UNSET;
+        this.pendingSeekTimeUs = C0621C.TIME_UNSET;
+        this.segmentIndexEarliestPresentationTimeUs = C0621C.TIME_UNSET;
         enterReadingAtomHeaderState();
     }
 
@@ -456,7 +456,7 @@ public final class FragmentedMp4Extractor implements Extractor {
         }
         ContainerAtom mvex = moov.getContainerAtomOfType(Atom.TYPE_mvex);
         SparseArray<DefaultSampleValues> defaultSampleValuesArray = new SparseArray();
-        long duration = C0616C.TIME_UNSET;
+        long duration = C0621C.TIME_UNSET;
         int mvexChildrenSize = mvex.leafChildren.size();
         for (i = 0; i < mvexChildrenSize; i++) {
             LeafAtom atom = (LeafAtom) mvex.leafChildren.get(i);
@@ -515,12 +515,12 @@ public final class FragmentedMp4Extractor implements Extractor {
                 ((TrackBundle) this.trackBundles.valueAt(i)).updateDrmInitData(drmInitData);
             }
         }
-        if (this.pendingSeekTimeUs != C0616C.TIME_UNSET) {
+        if (this.pendingSeekTimeUs != C0621C.TIME_UNSET) {
             trackCount = this.trackBundles.size();
             for (i = 0; i < trackCount; i++) {
                 ((TrackBundle) this.trackBundles.valueAt(i)).seek(this.pendingSeekTimeUs);
             }
-            this.pendingSeekTimeUs = C0616C.TIME_UNSET;
+            this.pendingSeekTimeUs = C0621C.TIME_UNSET;
         }
     }
 
@@ -565,7 +565,7 @@ public final class FragmentedMp4Extractor implements Extractor {
                 atom.setPosition(12);
                 emsgTrackOutput.sampleData(atom, sampleSize);
             }
-            if (this.segmentIndexEarliestPresentationTimeUs != C0616C.TIME_UNSET) {
+            if (this.segmentIndexEarliestPresentationTimeUs != C0621C.TIME_UNSET) {
                 for (TrackOutput emsgTrackOutput2 : this.emsgTrackOutputs) {
                     emsgTrackOutput2.sampleMetadata(this.segmentIndexEarliestPresentationTimeUs + presentationTimeDeltaUs, 1, sampleSize, 0, null);
                 }

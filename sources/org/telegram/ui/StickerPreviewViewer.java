@@ -25,7 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -64,7 +64,7 @@ public class StickerPreviewViewer {
     private Runnable openStickerPreviewRunnable;
     private Activity parentActivity;
     private float showProgress;
-    private Runnable showSheetRunnable = new C24721();
+    private Runnable showSheetRunnable = new C24981();
     private int startX;
     private int startY;
     private StaticLayout stickerEmojiLayout;
@@ -81,11 +81,11 @@ public class StickerPreviewViewer {
     }
 
     /* renamed from: org.telegram.ui.StickerPreviewViewer$1 */
-    class C24721 implements Runnable {
+    class C24981 implements Runnable {
 
         /* renamed from: org.telegram.ui.StickerPreviewViewer$1$2 */
-        class C24712 implements OnDismissListener {
-            C24712() {
+        class C24972 implements OnDismissListener {
+            C24972() {
             }
 
             public void onDismiss(DialogInterface dialog) {
@@ -94,7 +94,7 @@ public class StickerPreviewViewer {
             }
         }
 
-        C24721() {
+        C24981() {
         }
 
         public void run() {
@@ -106,17 +106,17 @@ public class StickerPreviewViewer {
                 ArrayList<Integer> icons = new ArrayList();
                 if (StickerPreviewViewer.this.delegate != null) {
                     if (StickerPreviewViewer.this.delegate.needSend()) {
-                        items.add(LocaleController.getString("SendStickerPreview", C0501R.string.SendStickerPreview));
-                        icons.add(Integer.valueOf(C0501R.drawable.stickers_send));
+                        items.add(LocaleController.getString("SendStickerPreview", C0505R.string.SendStickerPreview));
+                        icons.add(Integer.valueOf(C0505R.drawable.stickers_send));
                         actions.add(Integer.valueOf(0));
                     }
-                    items.add(LocaleController.formatString("ViewPackPreview", C0501R.string.ViewPackPreview, new Object[0]));
-                    icons.add(Integer.valueOf(C0501R.drawable.stickers_pack));
+                    items.add(LocaleController.formatString("ViewPackPreview", C0505R.string.ViewPackPreview, new Object[0]));
+                    icons.add(Integer.valueOf(C0505R.drawable.stickers_pack));
                     actions.add(Integer.valueOf(1));
                 }
                 if (!MessageObject.isMaskDocument(StickerPreviewViewer.this.currentSticker) && (inFavs || DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).canAddStickerToFavorites())) {
-                    items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", C0501R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", C0501R.string.AddToFavorites));
-                    icons.add(Integer.valueOf(inFavs ? C0501R.drawable.stickers_unfavorite : C0501R.drawable.stickers_favorite));
+                    items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", C0505R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", C0505R.string.AddToFavorites));
+                    icons.add(Integer.valueOf(inFavs ? C0505R.drawable.stickers_unfavorite : C0505R.drawable.stickers_favorite));
                     actions.add(Integer.valueOf(2));
                 }
                 if (!items.isEmpty()) {
@@ -142,7 +142,7 @@ public class StickerPreviewViewer {
                         }
                     });
                     StickerPreviewViewer.this.visibleDialog = builder.create();
-                    StickerPreviewViewer.this.visibleDialog.setOnDismissListener(new C24712());
+                    StickerPreviewViewer.this.visibleDialog.setOnDismissListener(new C24972());
                     StickerPreviewViewer.this.visibleDialog.show();
                     StickerPreviewViewer.this.containerView.performHapticFeedback(0);
                 }
@@ -151,8 +151,8 @@ public class StickerPreviewViewer {
     }
 
     /* renamed from: org.telegram.ui.StickerPreviewViewer$4 */
-    class C24754 implements OnTouchListener {
-        C24754() {
+    class C25014 implements OnTouchListener {
+        C25014() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -164,8 +164,8 @@ public class StickerPreviewViewer {
     }
 
     /* renamed from: org.telegram.ui.StickerPreviewViewer$5 */
-    class C24765 implements Runnable {
-        C24765() {
+    class C25025 implements Runnable {
+        C25025() {
         }
 
         public void run() {
@@ -437,7 +437,7 @@ public class StickerPreviewViewer {
             this.containerView = new FrameLayoutDrawer(activity);
             this.containerView.setFocusable(false);
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
-            this.containerView.setOnTouchListener(new C24754());
+            this.containerView.setOnTouchListener(new C25014());
             this.windowLayoutParams = new LayoutParams();
             this.windowLayoutParams.height = -1;
             this.windowLayoutParams.format = -3;
@@ -614,7 +614,7 @@ public class StickerPreviewViewer {
                 }
                 if (this.showProgress == 0.0f) {
                     AndroidUtilities.unlockOrientation(this.parentActivity);
-                    AndroidUtilities.runOnUIThread(new C24765());
+                    AndroidUtilities.runOnUIThread(new C25025());
                     try {
                         if (this.windowView.getParent() != null) {
                             ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);

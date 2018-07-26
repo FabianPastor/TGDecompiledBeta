@@ -22,12 +22,12 @@ public abstract class CustomTabsService extends Service {
     public static final int RESULT_FAILURE_MESSAGING_ERROR = -3;
     public static final int RESULT_FAILURE_REMOTE_ERROR = -2;
     public static final int RESULT_SUCCESS = 0;
-    private Stub mBinder = new C07691();
+    private Stub mBinder = new C07741();
     private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
 
     /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsService$1 */
-    class C07691 extends Stub {
-        C07691() {
+    class C07741 extends Stub {
+        C07741() {
         }
 
         public boolean warmup(long flags) {

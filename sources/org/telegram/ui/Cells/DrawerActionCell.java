@@ -41,7 +41,7 @@ public class DrawerActionCell extends FrameLayout {
     public void setTextAndIcon(String text, int resId) {
         try {
             this.textView.setText(text);
-            Drawable drawable = getResources().getDrawable(resId);
+            Drawable drawable = getResources().getDrawable(resId).mutate();
             if (drawable != null) {
                 drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), Mode.MULTIPLY));
             }

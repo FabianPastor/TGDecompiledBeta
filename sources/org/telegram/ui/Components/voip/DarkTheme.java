@@ -431,7 +431,7 @@ public class DarkTheme {
                     break;
                 }
             case -652337344:
-                if (key.equals(Theme.key_chat_outVenueNameText)) {
+                if (key.equals("chat_outVenueNameText")) {
                     obj = PsExtractor.VIDEO_STREAM_MASK;
                     break;
                 }

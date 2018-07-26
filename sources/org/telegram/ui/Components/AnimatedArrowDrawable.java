@@ -48,14 +48,14 @@ public class AnimatedArrowDrawable extends Drawable {
     public void setAnimationProgressAnimated(float progress) {
         if (this.animateToProgress != progress) {
             this.animateToProgress = progress;
-            this.lastUpdateTime = SystemClock.uptimeMillis();
+            this.lastUpdateTime = SystemClock.elapsedRealtime();
             invalidateSelf();
         }
     }
 
     private void checkAnimation() {
         if (this.animateToProgress != this.animProgress) {
-            long newTime = SystemClock.uptimeMillis();
+            long newTime = SystemClock.elapsedRealtime();
             long dt = newTime - this.lastUpdateTime;
             this.lastUpdateTime = newTime;
             if (this.animProgress < this.animateToProgress) {

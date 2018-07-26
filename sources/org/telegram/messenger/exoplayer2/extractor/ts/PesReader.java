@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
 import android.util.Log;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
@@ -158,7 +158,7 @@ public final class PesReader implements TsPayloadReader {
 
     private void parseHeaderExtension() {
         this.pesScratch.setPosition(0);
-        this.timeUs = C0616C.TIME_UNSET;
+        this.timeUs = C0621C.TIME_UNSET;
         if (this.ptsFlag) {
             this.pesScratch.skipBits(4);
             long pts = ((long) this.pesScratch.readBits(3)) << 30;

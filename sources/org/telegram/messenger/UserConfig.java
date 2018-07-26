@@ -2,12 +2,16 @@ package org.telegram.messenger;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.os.SystemClock;
 import android.util.Base64;
 import java.io.File;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC.TL_account_tmpPassword;
+import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
 import org.telegram.tgnet.TLRPC.TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.help_AppUpdate;
 
 public class UserConfig {
     private static volatile UserConfig[] Instance = new UserConfig[3];
@@ -33,6 +37,7 @@ public class UserConfig {
     public int lastContactsSyncTime;
     public int lastHintsSyncTime;
     public int lastSendMessageId = -210000;
+    public long lastUpdateCheckTime;
     public int loginTime;
     public long migrateOffsetAccess = -1;
     public int migrateOffsetChannelId = -1;
@@ -40,9 +45,16 @@ public class UserConfig {
     public int migrateOffsetDate = -1;
     public int migrateOffsetId = -1;
     public int migrateOffsetUserId = -1;
+    public boolean notificationsSettingsLoaded;
+    public TL_help_appUpdate pendingAppUpdate;
+    public int pendingAppUpdateBuildVersion;
+    public long pendingAppUpdateInstallTime;
     public boolean pinnedDialogsLoaded = true;
     public int ratingLoadTime;
     public boolean registeredForPush;
+    public volatile byte[] savedPasswordHash;
+    public volatile long savedPasswordTime;
+    public volatile byte[] savedSaltedPassword;
     public boolean suggestContacts = true;
     private final Object sync = new Object();
     public boolean syncContacts = true;
@@ -50,6 +62,16 @@ public class UserConfig {
     public int totalDialogsLoadCount = 0;
     public TL_help_termsOfService unacceptedTermsOfService;
     public boolean unreadDialogsLoaded = true;
+
+    /* renamed from: org.telegram.messenger.UserConfig$1 */
+    class C05871 implements Runnable {
+        C05871() {
+        }
+
+        public void run() {
+            UserConfig.this.saveConfig(false);
+        }
+    }
 
     public static UserConfig getInstance(int num) {
         UserConfig localInstance = Instance[num];
@@ -107,53 +129,69 @@ public class UserConfig {
 
     public void saveConfig(boolean withFile, File oldFile) {
         synchronized (this.sync) {
+            SharedPreferences preferences;
+            if (this.currentAccount == 0) {
+                preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
+            } else {
+                preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + this.currentAccount, 0);
+            }
+            Editor editor = preferences.edit();
+            if (this.currentAccount == 0) {
+                editor.putInt("selectedAccount", selectedAccount);
+            }
+            editor.putBoolean("registeredForPush", this.registeredForPush);
+            editor.putInt("lastSendMessageId", this.lastSendMessageId);
+            editor.putInt("contactsSavedCount", this.contactsSavedCount);
+            editor.putInt("lastBroadcastId", this.lastBroadcastId);
+            editor.putBoolean("blockedUsersLoaded", this.blockedUsersLoaded);
+            editor.putInt("lastContactsSyncTime", this.lastContactsSyncTime);
+            editor.putInt("lastHintsSyncTime", this.lastHintsSyncTime);
+            editor.putBoolean("draftsLoaded", this.draftsLoaded);
+            editor.putBoolean("pinnedDialogsLoaded", this.pinnedDialogsLoaded);
+            editor.putBoolean("unreadDialogsLoaded", this.unreadDialogsLoaded);
+            editor.putInt("ratingLoadTime", this.ratingLoadTime);
+            editor.putInt("botRatingLoadTime", this.botRatingLoadTime);
+            editor.putBoolean("contactsReimported", this.contactsReimported);
+            editor.putInt("loginTime", this.loginTime);
+            editor.putBoolean("syncContacts", this.syncContacts);
+            editor.putBoolean("suggestContacts", this.suggestContacts);
+            editor.putBoolean("hasSecureData", this.hasSecureData);
+            editor.putBoolean("notificationsSettingsLoaded", this.notificationsSettingsLoaded);
+            editor.putInt("3migrateOffsetId", this.migrateOffsetId);
+            if (this.migrateOffsetId != -1) {
+                editor.putInt("3migrateOffsetDate", this.migrateOffsetDate);
+                editor.putInt("3migrateOffsetUserId", this.migrateOffsetUserId);
+                editor.putInt("3migrateOffsetChatId", this.migrateOffsetChatId);
+                editor.putInt("3migrateOffsetChannelId", this.migrateOffsetChannelId);
+                editor.putLong("3migrateOffsetAccess", this.migrateOffsetAccess);
+            }
+            if (this.unacceptedTermsOfService != null) {
+                try {
+                    SerializedData data = new SerializedData(this.unacceptedTermsOfService.getObjectSize());
+                    this.unacceptedTermsOfService.serializeToStream(data);
+                    editor.putString("terms", Base64.encodeToString(data.toByteArray(), 0));
+                    data.cleanup();
+                } catch (Exception e) {
+                }
+            } else {
+                editor.remove("terms");
+            }
             try {
-                SharedPreferences preferences;
-                SerializedData data;
                 if (this.currentAccount == 0) {
-                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
-                } else {
-                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + this.currentAccount, 0);
-                }
-                Editor editor = preferences.edit();
-                if (this.currentAccount == 0) {
-                    editor.putInt("selectedAccount", selectedAccount);
-                }
-                editor.putBoolean("registeredForPush", this.registeredForPush);
-                editor.putInt("lastSendMessageId", this.lastSendMessageId);
-                editor.putInt("contactsSavedCount", this.contactsSavedCount);
-                editor.putInt("lastBroadcastId", this.lastBroadcastId);
-                editor.putBoolean("blockedUsersLoaded", this.blockedUsersLoaded);
-                editor.putInt("lastContactsSyncTime", this.lastContactsSyncTime);
-                editor.putInt("lastHintsSyncTime", this.lastHintsSyncTime);
-                editor.putBoolean("draftsLoaded", this.draftsLoaded);
-                editor.putBoolean("pinnedDialogsLoaded", this.pinnedDialogsLoaded);
-                editor.putBoolean("unreadDialogsLoaded", this.unreadDialogsLoaded);
-                editor.putInt("ratingLoadTime", this.ratingLoadTime);
-                editor.putInt("botRatingLoadTime", this.botRatingLoadTime);
-                editor.putBoolean("contactsReimported", this.contactsReimported);
-                editor.putInt("loginTime", this.loginTime);
-                editor.putBoolean("syncContacts", this.syncContacts);
-                editor.putBoolean("suggestContacts", this.suggestContacts);
-                editor.putBoolean("hasSecureData", this.hasSecureData);
-                editor.putInt("3migrateOffsetId", this.migrateOffsetId);
-                if (this.migrateOffsetId != -1) {
-                    editor.putInt("3migrateOffsetDate", this.migrateOffsetDate);
-                    editor.putInt("3migrateOffsetUserId", this.migrateOffsetUserId);
-                    editor.putInt("3migrateOffsetChatId", this.migrateOffsetChatId);
-                    editor.putInt("3migrateOffsetChannelId", this.migrateOffsetChannelId);
-                    editor.putLong("3migrateOffsetAccess", this.migrateOffsetAccess);
-                }
-                if (this.unacceptedTermsOfService != null) {
-                    try {
-                        data = new SerializedData(this.unacceptedTermsOfService.getObjectSize());
-                        this.unacceptedTermsOfService.serializeToStream(data);
-                        editor.putString("terms", Base64.encodeToString(data.toByteArray(), 0));
-                        data.cleanup();
-                    } catch (Exception e) {
+                    if (this.pendingAppUpdate != null) {
+                        try {
+                            data = new SerializedData(this.pendingAppUpdate.getObjectSize());
+                            this.pendingAppUpdate.serializeToStream(data);
+                            editor.putString("appUpdate", Base64.encodeToString(data.toByteArray(), 0));
+                            editor.putInt("appUpdateBuild", this.pendingAppUpdateBuildVersion);
+                            editor.putLong("appUpdateTime", this.pendingAppUpdateInstallTime);
+                            editor.putLong("appUpdateCheckTime", this.lastUpdateCheckTime);
+                            data.cleanup();
+                        } catch (Exception e2) {
+                        }
+                    } else {
+                        editor.remove("appUpdate");
                     }
-                } else {
-                    editor.remove("terms");
                 }
                 editor.putInt("2totalDialogsLoadCount", this.totalDialogsLoadCount);
                 editor.putInt("2dialogsLoadOffsetId", this.dialogsLoadOffsetId);
@@ -183,8 +221,8 @@ public class UserConfig {
                 if (oldFile != null) {
                     oldFile.delete();
                 }
-            } catch (Throwable e2) {
-                FileLog.m3e(e2);
+            } catch (Throwable e3) {
+                FileLog.m3e(e3);
             }
         }
     }
@@ -234,6 +272,7 @@ public class UserConfig {
                 return;
             }
             SharedPreferences preferences;
+            byte[] arr;
             byte[] bytes;
             if (this.currentAccount == 0) {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
@@ -258,10 +297,11 @@ public class UserConfig {
             this.syncContacts = preferences.getBoolean("syncContacts", true);
             this.suggestContacts = preferences.getBoolean("suggestContacts", true);
             this.hasSecureData = preferences.getBoolean("hasSecureData", false);
+            this.notificationsSettingsLoaded = preferences.getBoolean("notificationsSettingsLoaded", false);
             try {
                 String terms = preferences.getString("terms", null);
                 if (terms != null) {
-                    byte[] arr = Base64.decode(terms, 0);
+                    arr = Base64.decode(terms, 0);
                     if (arr != null) {
                         SerializedData data = new SerializedData(arr);
                         this.unacceptedTermsOfService = TL_help_termsOfService.TLdeserialize(data, data.readInt32(false), false);
@@ -270,6 +310,37 @@ public class UserConfig {
                 }
             } catch (Throwable e) {
                 FileLog.m3e(e);
+            }
+            if (this.currentAccount == 0) {
+                this.lastUpdateCheckTime = preferences.getLong("appUpdateCheckTime", System.currentTimeMillis());
+                try {
+                    String update = preferences.getString("appUpdate", null);
+                    if (update != null) {
+                        this.pendingAppUpdateBuildVersion = preferences.getInt("appUpdateBuild", BuildVars.BUILD_VERSION);
+                        this.pendingAppUpdateInstallTime = preferences.getLong("appUpdateTime", System.currentTimeMillis());
+                        arr = Base64.decode(update, 0);
+                        if (arr != null) {
+                            data = new SerializedData(arr);
+                            this.pendingAppUpdate = (TL_help_appUpdate) help_AppUpdate.TLdeserialize(data, data.readInt32(false), false);
+                            data.cleanup();
+                        }
+                    }
+                    if (this.pendingAppUpdate != null) {
+                        long updateTime = 0;
+                        try {
+                            PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
+                            updateTime = Math.max(packageInfo.lastUpdateTime, packageInfo.firstInstallTime);
+                        } catch (Throwable e2) {
+                            FileLog.m3e(e2);
+                        }
+                        if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
+                            this.pendingAppUpdate = null;
+                            AndroidUtilities.runOnUIThread(new C05871());
+                        }
+                    }
+                } catch (Throwable e22) {
+                    FileLog.m3e(e22);
+                }
             }
             this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
             if (this.migrateOffsetId != -1) {
@@ -311,6 +382,35 @@ public class UserConfig {
         }
     }
 
+    public void savePassword(byte[] hash, byte[] salted) {
+        this.savedPasswordTime = SystemClock.elapsedRealtime();
+        this.savedPasswordHash = hash;
+        this.savedSaltedPassword = salted;
+    }
+
+    public void checkSavedPassword() {
+        if (!(this.savedSaltedPassword == null && this.savedPasswordHash == null) && Math.abs(SystemClock.elapsedRealtime() - this.savedPasswordTime) >= 1800000) {
+            resetSavedPassword();
+        }
+    }
+
+    public void resetSavedPassword() {
+        int a;
+        this.savedPasswordTime = 0;
+        if (this.savedPasswordHash != null) {
+            for (a = 0; a < this.savedPasswordHash.length; a++) {
+                this.savedPasswordHash[a] = (byte) 0;
+            }
+            this.savedPasswordHash = null;
+        }
+        if (this.savedSaltedPassword != null) {
+            for (a = 0; a < this.savedSaltedPassword.length; a++) {
+                this.savedSaltedPassword[a] = (byte) 0;
+            }
+            this.savedSaltedPassword = null;
+        }
+    }
+
     public void clearConfig() {
         this.currentUser = null;
         this.clientUserId = 0;
@@ -319,6 +419,7 @@ public class UserConfig {
         this.lastSendMessageId = -210000;
         this.lastBroadcastId = -1;
         this.blockedUsersLoaded = false;
+        this.notificationsSettingsLoaded = false;
         this.migrateOffsetId = -1;
         this.migrateOffsetDate = -1;
         this.migrateOffsetUserId = -1;
@@ -341,10 +442,12 @@ public class UserConfig {
         this.pinnedDialogsLoaded = false;
         this.unreadDialogsLoaded = true;
         this.unacceptedTermsOfService = null;
+        this.pendingAppUpdate = null;
         this.hasSecureData = false;
         this.loginTime = (int) (System.currentTimeMillis() / 1000);
         this.lastContactsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 82800;
         this.lastHintsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 90000;
+        resetSavedPassword();
         boolean hasActivated = false;
         for (int a = 0; a < 3; a++) {
             if (getInstance(a).isClientActivated()) {

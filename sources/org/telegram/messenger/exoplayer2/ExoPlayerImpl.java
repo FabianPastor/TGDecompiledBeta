@@ -172,7 +172,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     }
 
     public void seekToDefaultPosition(int windowIndex) {
-        seekTo(windowIndex, C0616C.TIME_UNSET);
+        seekTo(windowIndex, C0621C.TIME_UNSET);
     }
 
     public void seekTo(long positionMs) {
@@ -194,7 +194,7 @@ final class ExoPlayerImpl implements ExoPlayer {
         this.maskingWindowIndex = windowIndex;
         if (timeline.isEmpty()) {
             long j;
-            if (positionMs == C0616C.TIME_UNSET) {
+            if (positionMs == C0621C.TIME_UNSET) {
                 j = 0;
             } else {
                 j = positionMs;
@@ -202,12 +202,12 @@ final class ExoPlayerImpl implements ExoPlayer {
             this.maskingWindowPositionMs = j;
             this.maskingPeriodIndex = 0;
         } else {
-            long windowPositionUs = positionMs == C0616C.TIME_UNSET ? timeline.getWindow(windowIndex, this.window).getDefaultPositionUs() : C0616C.msToUs(positionMs);
+            long windowPositionUs = positionMs == C0621C.TIME_UNSET ? timeline.getWindow(windowIndex, this.window).getDefaultPositionUs() : C0621C.msToUs(positionMs);
             Pair<Integer, Long> periodIndexAndPositon = timeline.getPeriodPosition(this.window, this.period, windowIndex, windowPositionUs);
-            this.maskingWindowPositionMs = C0616C.usToMs(windowPositionUs);
+            this.maskingWindowPositionMs = C0621C.usToMs(windowPositionUs);
             this.maskingPeriodIndex = ((Integer) periodIndexAndPositon.first).intValue();
         }
-        this.internalPlayer.seekTo(timeline, windowIndex, C0616C.msToUs(positionMs));
+        this.internalPlayer.seekTo(timeline, windowIndex, C0621C.msToUs(positionMs));
         Iterator it = this.listeners.iterator();
         while (it.hasNext()) {
             ((EventListener) it.next()).onPositionDiscontinuity(1);
@@ -325,14 +325,14 @@ final class ExoPlayerImpl implements ExoPlayer {
     public long getDuration() {
         Timeline timeline = this.playbackInfo.timeline;
         if (timeline.isEmpty()) {
-            return C0616C.TIME_UNSET;
+            return C0621C.TIME_UNSET;
         }
         if (!isPlayingAd()) {
             return timeline.getWindow(getCurrentWindowIndex(), this.window).getDurationMs();
         }
         MediaPeriodId periodId = this.playbackInfo.periodId;
         timeline.getPeriod(periodId.periodIndex, this.period);
-        return C0616C.usToMs(this.period.getAdDurationUs(periodId.adGroupIndex, periodId.adIndexInAdGroup));
+        return C0621C.usToMs(this.period.getAdDurationUs(periodId.adGroupIndex, periodId.adIndexInAdGroup));
     }
 
     public long getCurrentPosition() {
@@ -352,7 +352,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     public int getBufferedPercentage() {
         long position = getBufferedPosition();
         long duration = getDuration();
-        if (position == C0616C.TIME_UNSET || duration == C0616C.TIME_UNSET) {
+        if (position == C0621C.TIME_UNSET || duration == C0621C.TIME_UNSET) {
             return 0;
         }
         if (duration != 0) {
@@ -388,7 +388,7 @@ final class ExoPlayerImpl implements ExoPlayer {
             return getCurrentPosition();
         }
         this.playbackInfo.timeline.getPeriod(this.playbackInfo.periodId.periodIndex, this.period);
-        return this.period.getPositionInWindowMs() + C0616C.usToMs(this.playbackInfo.contentPositionUs);
+        return this.period.getPositionInWindowMs() + C0621C.usToMs(this.playbackInfo.contentPositionUs);
     }
 
     public int getRendererCount() {
@@ -456,7 +456,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     private void handlePlaybackInfo(PlaybackInfo playbackInfo, int operationAcks, boolean positionDiscontinuity, int positionDiscontinuityReason) {
         this.pendingOperationAcks -= operationAcks;
         if (this.pendingOperationAcks == 0) {
-            if (playbackInfo.startPositionUs == C0616C.TIME_UNSET) {
+            if (playbackInfo.startPositionUs == C0621C.TIME_UNSET) {
                 playbackInfo = playbackInfo.fromNewPosition(playbackInfo.periodId, 0, playbackInfo.contentPositionUs);
             }
             if ((!this.playbackInfo.timeline.isEmpty() || this.hasPendingPrepare) && playbackInfo.timeline.isEmpty()) {
@@ -552,7 +552,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     }
 
     private long playbackInfoPositionUsToWindowPositionMs(long positionUs) {
-        long positionMs = C0616C.usToMs(positionUs);
+        long positionMs = C0621C.usToMs(positionUs);
         if (this.playbackInfo.periodId.isAd()) {
             return positionMs;
         }

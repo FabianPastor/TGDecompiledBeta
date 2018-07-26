@@ -39,7 +39,7 @@ import android.widget.FrameLayout;
 import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -151,8 +151,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     private boolean zooming;
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
-    class C24111 implements VideoPlayerDelegate {
-        C24111() {
+    class C24371 implements VideoPlayerDelegate {
+        C24371() {
         }
 
         public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -243,8 +243,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
-    class C24144 implements OnApplyWindowInsetsListener {
-        C24144() {
+    class C24404 implements OnApplyWindowInsetsListener {
+        C24404() {
         }
 
         @SuppressLint({"NewApi"})
@@ -259,8 +259,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
-    class C24155 extends ActionBarMenuOnItemClick {
-        C24155() {
+    class C24415 extends ActionBarMenuOnItemClick {
+        C24415() {
         }
 
         public void onItemClick(int id) {
@@ -271,8 +271,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$6 */
-    class C24166 implements Runnable {
-        C24166() {
+    class C24426 implements Runnable {
+        C24426() {
         }
 
         public void run() {
@@ -288,8 +288,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$7 */
-    class C24177 extends AnimatorListenerAdapter {
-        C24177() {
+    class C24437 extends AnimatorListenerAdapter {
+        C24437() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -301,8 +301,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$9 */
-    class C24199 extends AnimatorListenerAdapter {
-        C24199() {
+    class C24459 extends AnimatorListenerAdapter {
+        C24459() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -392,7 +392,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.afterDeleteProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
             this.circlePaint = new Paint(1);
             this.circlePaint.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            this.drawable = context.getResources().getDrawable(C0501R.drawable.flame_small);
+            this.drawable = context.getResources().getDrawable(C0505R.drawable.flame_small);
             for (int a = 0; a < 40; a++) {
                 this.freeParticles.add(new Particle());
             }
@@ -851,7 +851,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (this.videoPlayer == null) {
                 this.videoPlayer = new VideoPlayer();
                 this.videoPlayer.setTextureView(this.videoTextureView);
-                this.videoPlayer.setDelegate(new C24111());
+                this.videoPlayer.setDelegate(new C24371());
             }
             this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
             this.videoPlayer.setPlayWhenReady(true);
@@ -947,7 +947,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.containerView.setLayoutParams(layoutParams);
             if (VERSION.SDK_INT >= 21) {
                 this.containerView.setFitsSystemWindows(true);
-                this.containerView.setOnApplyWindowInsetsListener(new C24144());
+                this.containerView.setOnApplyWindowInsetsListener(new C24404());
                 this.containerView.setSystemUiVisibility(1280);
             }
             this.gestureDetector = new GestureDetector(this.containerView.getContext(), this);
@@ -958,10 +958,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
             this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
-            this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
+            this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
             this.actionBar.setTitleRightMargin(AndroidUtilities.dp(70.0f));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-            this.actionBar.setActionBarMenuOnItemClick(new C24155());
+            this.actionBar.setActionBarMenuOnItemClick(new C24415());
             this.secretDeleteTimer = new SecretDeleteTimer(activity);
             this.containerView.addView(this.secretDeleteTimer, LayoutHelper.createFrame(119, 48.0f, 53, 0.0f, 0.0f, 0.0f, 0.0f));
             this.windowLayoutParams = new LayoutParams();
@@ -1060,15 +1060,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 this.currentThumb = object.imageReceiver.getThumbBitmapSafe();
                 if (document == null) {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", C0501R.string.DisappearingPhoto));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", C0505R.string.DisappearingPhoto));
                     this.centerImage.setImage(FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize()).location, null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, 2);
                     this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);
                 } else if (MessageObject.isGifDocument((Document) document)) {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingGif", C0501R.string.DisappearingGif));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingGif", C0505R.string.DisappearingGif));
                     this.centerImage.setImage(document, null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, 1);
                     this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);
                 } else {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", C0501R.string.DisappearingVideo));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", C0505R.string.DisappearingVideo));
                     File file = new File(messageObject.messageOwner.attachPath);
                     if (file.exists()) {
                         preparePlayer(file);
@@ -1101,9 +1101,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.imageMoveAnimation = new AnimatorSet();
                 this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.secretDeleteTimer, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0, 255}), ObjectAnimator.ofFloat(this.secretDeleteTimer, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f})});
                 this.photoAnimationInProgress = 3;
-                this.photoAnimationEndRunnable = new C24166();
+                this.photoAnimationEndRunnable = new C24426();
                 this.imageMoveAnimation.setDuration(250);
-                this.imageMoveAnimation.addListener(new C24177());
+                this.imageMoveAnimation.addListener(new C24437());
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();
                 if (VERSION.SDK_INT >= 18) {
                     this.containerView.setLayerType(2, null);
@@ -1146,7 +1146,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.currentActionBarAnimation = new AnimatorSet();
             this.currentActionBarAnimation.playTogether(arrayList);
             if (!show) {
-                this.currentActionBarAnimation.addListener(new C24199());
+                this.currentActionBarAnimation.addListener(new C24459());
             }
             this.currentActionBarAnimation.setDuration(200);
             this.currentActionBarAnimation.start();
@@ -1462,8 +1462,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
 
                     /* renamed from: org.telegram.ui.SecretMediaViewer$11$1 */
-                    class C24101 implements Runnable {
-                        C24101() {
+                    class C24361 implements Runnable {
+                        C24361() {
                         }
 
                         public void run() {
@@ -1479,7 +1479,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             object.imageReceiver.setVisible(true, true);
                         }
                         SecretMediaViewer.this.isVisible = false;
-                        AndroidUtilities.runOnUIThread(new C24101());
+                        AndroidUtilities.runOnUIThread(new C24361());
                     }
                 });
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();

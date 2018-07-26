@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
@@ -69,8 +69,8 @@ public class ActionBarMenuItem extends FrameLayout {
     private int subMenuOpenSide;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$1 */
-    class C08871 implements Runnable {
-        C08871() {
+    class C08921 implements Runnable {
+        C08921() {
         }
 
         public void run() {
@@ -82,8 +82,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$2 */
-    class C08882 implements OnTouchListener {
-        C08882() {
+    class C08932 implements OnTouchListener {
+        C08932() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -98,8 +98,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$3 */
-    class C08893 implements OnDispatchKeyEventListener {
-        C08893() {
+    class C08943 implements OnDispatchKeyEventListener {
+        C08943() {
         }
 
         public void onDispatchKeyEvent(KeyEvent keyEvent) {
@@ -110,8 +110,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$4 */
-    class C08904 implements OnClickListener {
-        C08904() {
+    class C08954 implements OnClickListener {
+        C08954() {
         }
 
         public void onClick(View view) {
@@ -132,8 +132,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$5 */
-    class C08915 implements OnClickListener {
-        C08915() {
+    class C08965 implements OnClickListener {
+        C08965() {
         }
 
         public void onClick(View view) {
@@ -154,8 +154,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$6 */
-    class C08926 implements OnKeyListener {
-        C08926() {
+    class C08976 implements OnKeyListener {
+        C08976() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -168,8 +168,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$9 */
-    class C08959 implements Callback {
-        C08959() {
+    class C09009 implements Callback {
+        C09009() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -234,7 +234,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getActionMasked() == 0) {
             if (this.longClickEnabled && hasSubMenu() && (this.popupWindow == null || !(this.popupWindow == null || this.popupWindow.isShowing()))) {
-                this.showMenuRunnable = new C08871();
+                this.showMenuRunnable = new C08921();
                 AndroidUtilities.runOnUIThread(this.showMenuRunnable, 200);
             }
         } else if (event.getActionMasked() == 2) {
@@ -321,8 +321,8 @@ public class ActionBarMenuItem extends FrameLayout {
             this.rect = new Rect();
             this.location = new int[2];
             this.popupLayout = new ActionBarPopupWindowLayout(getContext());
-            this.popupLayout.setOnTouchListener(new C08882());
-            this.popupLayout.setDispatchKeyEventListener(new C08893());
+            this.popupLayout.setOnTouchListener(new C08932());
+            this.popupLayout.setDispatchKeyEventListener(new C08943());
         }
     }
 
@@ -336,7 +336,7 @@ public class ActionBarMenuItem extends FrameLayout {
         view.setLayoutParams(new LayoutParams(width, height));
         this.popupLayout.addView(view);
         view.setTag(Integer.valueOf(id));
-        view.setOnClickListener(new C08904());
+        view.setOnClickListener(new C08954());
         view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
     }
 
@@ -363,7 +363,7 @@ public class ActionBarMenuItem extends FrameLayout {
         layoutParams.width = -1;
         layoutParams.height = AndroidUtilities.dp(48.0f);
         textView.setLayoutParams(layoutParams);
-        textView.setOnClickListener(new C08915());
+        textView.setOnClickListener(new C08965());
         return textView;
     }
 
@@ -400,7 +400,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 if (this.popupWindow == null) {
                     this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                     if (!this.animationEnabled || VERSION.SDK_INT < 19) {
-                        this.popupWindow.setAnimationStyle(C0501R.style.PopupAnimation);
+                        this.popupWindow.setAnimationStyle(C0505R.style.PopupAnimation);
                     } else {
                         this.popupWindow.setAnimationStyle(0);
                     }
@@ -424,7 +424,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     this.popupWindow.setSoftInputMode(0);
                     this.popupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
                     this.popupWindow.getContentView().setFocusableInTouchMode(true);
-                    this.popupWindow.getContentView().setOnKeyListener(new C08926());
+                    this.popupWindow.getContentView().setOnKeyListener(new C08976());
                 }
                 this.processedPopupClick = false;
                 this.popupWindow.setFocusable(true);
@@ -570,7 +570,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchField.setPadding(0, 0, 0, 0);
                 this.searchField.setInputType(this.searchField.getInputType() | 524288);
                 if (VERSION.SDK_INT < 23) {
-                    this.searchField.setCustomSelectionActionModeCallback(new C08959());
+                    this.searchField.setCustomSelectionActionModeCallback(new C09009());
                 }
                 this.searchField.setOnEditorActionListener(new OnEditorActionListener() {
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

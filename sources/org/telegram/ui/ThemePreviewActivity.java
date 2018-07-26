@@ -29,7 +29,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
@@ -93,8 +93,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     private File themeFile;
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$1 */
-    class C25001 extends ActionBarMenuItemSearchListener {
-        C25001() {
+    class C25261 extends ActionBarMenuItemSearchListener {
+        C25261() {
         }
 
         public void onSearchExpand() {
@@ -112,8 +112,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$3 */
-    class C25023 extends ViewOutlineProvider {
-        C25023() {
+    class C25283 extends ViewOutlineProvider {
+        C25283() {
         }
 
         @SuppressLint({"NewApi"})
@@ -123,8 +123,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$5 */
-    class C25045 implements OnPageChangeListener {
-        C25045() {
+    class C25305 implements OnPageChangeListener {
+        C25305() {
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -139,8 +139,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$6 */
-    class C25056 extends PagerAdapter {
-        C25056() {
+    class C25316 extends PagerAdapter {
+        C25316() {
         }
 
         public int getCount() {
@@ -173,8 +173,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$8 */
-    class C25078 implements OnClickListener {
-        C25078() {
+    class C25338 implements OnClickListener {
+        C25338() {
         }
 
         public void onClick(View v) {
@@ -185,8 +185,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$9 */
-    class C25089 implements OnClickListener {
-        C25089() {
+    class C25349 implements OnClickListener {
+        C25349() {
         }
 
         public void onClick(View v) {
@@ -350,8 +350,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         private ArrayList<MessageObject> messages = new ArrayList();
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1 */
-        class C25091 implements ChatMessageCellDelegate {
-            C25091() {
+        class C25351 implements ChatMessageCellDelegate {
+            C25351() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -407,8 +407,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$2 */
-        class C25102 implements ChatActionCellDelegate {
-            C25102() {
+        class C25362 implements ChatActionCellDelegate {
+            C25362() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -571,10 +571,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             View view = null;
             if (viewType == 0) {
                 view = new ChatMessageCell(this.mContext);
-                ((ChatMessageCell) view).setDelegate(new C25091());
+                ((ChatMessageCell) view).setDelegate(new C25351());
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C25102());
+                ((ChatActionCell) view).setDelegate(new C25362());
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
@@ -631,10 +631,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         float f2;
         float f3;
         this.page1 = new FrameLayout(context);
-        this.actionBar.createMenu().addItem(0, (int) C0501R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C25001()).getSearchField().setHint(LocaleController.getString("Search", C0501R.string.Search));
+        this.actionBar.createMenu().addItem(0, (int) C0505R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C25261()).getSearchField().setHint(LocaleController.getString("Search", C0505R.string.Search));
         this.actionBar.setBackButtonDrawable(new MenuDrawable());
         this.actionBar.setAddToContainer(false);
-        this.actionBar.setTitle(LocaleController.getString("ThemePreview", C0501R.string.ThemePreview));
+        this.actionBar.setTitle(LocaleController.getString("ThemePreview", C0505R.string.ThemePreview));
         this.page1 = new FrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -670,7 +670,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.floatingButton.setScaleType(ScaleType.CENTER);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(C0501R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(C0505R.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -678,13 +678,13 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
         this.floatingButton.setBackgroundDrawable(drawable);
         this.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
-        this.floatingButton.setImageResource(C0501R.drawable.floating_pencil);
+        this.floatingButton.setImageResource(C0505R.drawable.floating_pencil);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(animator);
-            this.floatingButton.setOutlineProvider(new C25023());
+            this.floatingButton.setOutlineProvider(new C25283());
         }
         FrameLayout frameLayout = this.page1;
         View view = this.floatingButton;
@@ -755,12 +755,12 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
         View viewPager = new ViewPager(context);
-        viewPager.addOnPageChangeListener(new C25045());
-        viewPager.setAdapter(new C25056());
+        viewPager.addOnPageChangeListener(new C25305());
+        viewPager.setAdapter(new C25316());
         AndroidUtilities.setViewPagerEdgeEffectColor(viewPager, Theme.getColor(Theme.key_actionBarDefault));
         frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         viewPager = new View(context);
-        viewPager.setBackgroundResource(C0501R.drawable.header_shadow_reverse);
+        viewPager.setBackgroundResource(C0505R.drawable.header_shadow_reverse);
         frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         FrameLayout bottomLayout = new FrameLayout(context);
         bottomLayout.setBackgroundColor(-1);
@@ -786,20 +786,20 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         cancelButton.setGravity(17);
         cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         cancelButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
-        cancelButton.setText(LocaleController.getString("Cancel", C0501R.string.Cancel).toUpperCase());
+        cancelButton.setText(LocaleController.getString("Cancel", C0505R.string.Cancel).toUpperCase());
         cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(cancelButton, LayoutHelper.createFrame(-2, -1, 51));
-        cancelButton.setOnClickListener(new C25078());
+        cancelButton.setOnClickListener(new C25338());
         TextView doneButton = new TextView(context);
         doneButton.setTextSize(1, 14.0f);
         doneButton.setTextColor(-15095832);
         doneButton.setGravity(17);
         doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         doneButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
-        doneButton.setText(LocaleController.getString("ApplyTheme", C0501R.string.ApplyTheme).toUpperCase());
+        doneButton.setText(LocaleController.getString("ApplyTheme", C0505R.string.ApplyTheme).toUpperCase());
         doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(doneButton, LayoutHelper.createFrame(-2, -1, 53));
-        doneButton.setOnClickListener(new C25089());
+        doneButton.setOnClickListener(new C25349());
         return this.fragmentView;
     }
 

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
@@ -6824,7 +6824,7 @@ public class TLRPC {
             this.id = stream.readInt32(exception);
             this.access_hash = stream.readInt64(exception);
             this.title = stream.readString(exception);
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.until_date = stream.readInt32(exception);
             }
         }
@@ -6837,7 +6837,7 @@ public class TLRPC {
             stream.writeInt32(this.id);
             stream.writeInt64(this.access_hash);
             stream.writeString(this.title);
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeInt32(this.until_date);
             }
         }
@@ -13563,19 +13563,14 @@ public class TLRPC {
     }
 
     public static abstract class help_AppUpdate extends TLObject {
-        public boolean critical;
-        public int id;
-        public String text;
-        public String url;
-
         public static help_AppUpdate TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             help_AppUpdate result = null;
             switch (constructor) {
-                case -1987579119:
-                    result = new TL_help_appUpdate();
-                    break;
                 case -1000708810:
                     result = new TL_help_noAppUpdate();
+                    break;
+                case 497489295:
+                    result = new TL_help_appUpdate();
                     break;
             }
             if (result == null && exception) {
@@ -13589,21 +13584,76 @@ public class TLRPC {
     }
 
     public static class TL_help_appUpdate extends help_AppUpdate {
-        public static int constructor = -NUM;
+        public static int constructor = 497489295;
+        public Document document;
+        public ArrayList<MessageEntity> entities = new ArrayList();
+        public int flags;
+        public int id;
+        public boolean popup;
+        public String text;
+        public String url;
+        public String version;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
+            boolean z;
+            this.flags = stream.readInt32(exception);
+            if ((this.flags & 1) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.popup = z;
             this.id = stream.readInt32(exception);
-            this.critical = stream.readBool(exception);
-            this.url = stream.readString(exception);
+            this.version = stream.readString(exception);
             this.text = stream.readString(exception);
+            if (stream.readInt32(exception) == 481674261) {
+                int count = stream.readInt32(exception);
+                int a = 0;
+                while (a < count) {
+                    MessageEntity object = MessageEntity.TLdeserialize(stream, stream.readInt32(exception), exception);
+                    if (object != null) {
+                        this.entities.add(object);
+                        a++;
+                    } else {
+                        return;
+                    }
+                }
+                if ((this.flags & 2) != 0) {
+                    this.document = Document.TLdeserialize(stream, stream.readInt32(exception), exception);
+                }
+                if ((this.flags & 4) != 0) {
+                    this.url = stream.readString(exception);
+                }
+            } else if (exception) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
+            }
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
+            int i;
             stream.writeInt32(constructor);
+            if (this.popup) {
+                i = this.flags | 1;
+            } else {
+                i = this.flags & -2;
+            }
+            this.flags = i;
+            stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
-            stream.writeBool(this.critical);
-            stream.writeString(this.url);
+            stream.writeString(this.version);
             stream.writeString(this.text);
+            stream.writeInt32(481674261);
+            int count = this.entities.size();
+            stream.writeInt32(count);
+            for (int a = 0; a < count; a++) {
+                ((MessageEntity) this.entities.get(a)).serializeToStream(stream);
+            }
+            if ((this.flags & 2) != 0) {
+                this.document.serializeToStream(stream);
+            }
+            if ((this.flags & 4) != 0) {
+                stream.writeString(this.url);
+            }
         }
     }
 
@@ -13709,7 +13759,8 @@ public class TLRPC {
     }
 
     public static class TL_help_getAppUpdate extends TLObject {
-        public static int constructor = -NUM;
+        public static int constructor = NUM;
+        public String source;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return help_AppUpdate.TLdeserialize(stream, constructor, exception);
@@ -13717,6 +13768,7 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
+            stream.writeString(this.source);
         }
     }
 
@@ -16737,7 +16789,7 @@ public class TLRPC {
             if ((this.flags & 32768) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.post_author = stream.readString(exception);
             }
             if ((this.flags & 131072) != 0) {
@@ -16795,7 +16847,7 @@ public class TLRPC {
             if ((this.flags & 32768) != 0) {
                 stream.writeInt32(this.edit_date);
             }
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeString(this.post_author);
             }
             if ((this.flags & 131072) != 0) {
@@ -18747,7 +18799,7 @@ public class TLRPC {
             if ((this.flags & 32768) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 this.post_author = stream.readString(exception);
             }
         }
@@ -18802,7 +18854,7 @@ public class TLRPC {
             if ((this.flags & 32768) != 0) {
                 stream.writeInt32(this.edit_date);
             }
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 stream.writeString(this.post_author);
             }
             writeAttachPath(stream);
@@ -20418,6 +20470,18 @@ public class TLRPC {
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             stream.writeString(this.hash);
+        }
+    }
+
+    public static class TL_messages_clearAllDrafts extends TLObject {
+        public static int constructor = NUM;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Bool.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
         }
     }
 
@@ -31292,7 +31356,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -31364,7 +31428,7 @@ public class TLRPC {
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | C0616C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
+            this.flags = this.bot_nochats ? this.flags | C0621C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
             this.flags = this.min ? this.flags | ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES : this.flags & -1048577;
@@ -31962,7 +32026,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -32031,7 +32095,7 @@ public class TLRPC {
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | C0616C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
+            this.flags = this.bot_nochats ? this.flags | C0621C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
             this.flags = this.min ? this.flags | ExtractorMediaSource.DEFAULT_LOADING_CHECK_INTERVAL_BYTES : this.flags & -1048577;
@@ -32109,7 +32173,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot_chat_history = z;
-            if ((this.flags & C0616C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
+            if ((this.flags & C0621C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -32160,7 +32224,7 @@ public class TLRPC {
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
             this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
-            this.flags = this.bot_nochats ? this.flags | C0616C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
+            this.flags = this.bot_nochats ? this.flags | C0621C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.explicit_content ? this.flags | 262144 : this.flags & -262145;
             stream.writeInt32(this.flags);

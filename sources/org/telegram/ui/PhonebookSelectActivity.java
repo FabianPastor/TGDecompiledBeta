@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0501R;
+import org.telegram.messenger.C0505R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.LocaleController;
@@ -47,8 +47,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.PhonebookSelectActivity$1 */
-    class C22291 extends ActionBarMenuOnItemClick {
-        C22291() {
+    class C22511 extends ActionBarMenuOnItemClick {
+        C22511() {
         }
 
         public void onItemClick(int id) {
@@ -59,8 +59,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.PhonebookSelectActivity$2 */
-    class C22302 extends ActionBarMenuItemSearchListener {
-        C22302() {
+    class C22522 extends ActionBarMenuItemSearchListener {
+        C22522() {
         }
 
         public void onSearchExpand() {
@@ -76,7 +76,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
             PhonebookSelectActivity.this.listViewAdapter.notifyDataSetChanged();
             PhonebookSelectActivity.this.listView.setFastScrollVisible(true);
             PhonebookSelectActivity.this.listView.setVerticalScrollBarEnabled(false);
-            PhonebookSelectActivity.this.emptyView.setText(LocaleController.getString("NoContacts", C0501R.string.NoContacts));
+            PhonebookSelectActivity.this.emptyView.setText(LocaleController.getString("NoContacts", C0505R.string.NoContacts));
         }
 
         public void onTextChanged(EditText editText) {
@@ -91,11 +91,11 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.PhonebookSelectActivity$6 */
-    class C22356 implements OnItemClickListener {
+    class C22576 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.PhonebookSelectActivity$6$1 */
-        class C22341 implements PhonebookSelectActivityDelegate {
-            C22341() {
+        class C22561 implements PhonebookSelectActivityDelegate {
+            C22561() {
             }
 
             public void didSelectContact(User user) {
@@ -104,7 +104,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
             }
         }
 
-        C22356() {
+        C22576() {
         }
 
         public void onItemClick(View view, int position) {
@@ -140,15 +140,15 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
                     name = ContactsController.formatName(contact.first_name, contact.last_name);
                 }
                 PhonebookShareActivity activity = new PhonebookShareActivity(contact, null, null, name);
-                activity.setDelegate(new C22341());
+                activity.setDelegate(new C22561());
                 PhonebookSelectActivity.this.presentFragment(activity);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PhonebookSelectActivity$7 */
-    class C22367 extends OnScrollListener {
-        C22367() {
+    class C22587 extends OnScrollListener {
+        C22587() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -163,8 +163,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.PhonebookSelectActivity$8 */
-    class C22378 implements ThemeDescriptionDelegate {
-        C22378() {
+    class C22598 implements ThemeDescriptionDelegate {
+        C22598() {
         }
 
         public void didSetColor() {
@@ -196,11 +196,11 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     public View createView(Context context) {
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(C0501R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("SelectContact", C0501R.string.SelectContact));
-        this.actionBar.setActionBarMenuOnItemClick(new C22291());
-        this.actionBar.createMenu().addItem(0, (int) C0501R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22302()).getSearchField().setHint(LocaleController.getString("Search", C0501R.string.Search));
+        this.actionBar.setTitle(LocaleController.getString("SelectContact", C0505R.string.SelectContact));
+        this.actionBar.setActionBarMenuOnItemClick(new C22511());
+        this.actionBar.createMenu().addItem(0, (int) C0505R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22522()).getSearchField().setHint(LocaleController.getString("Search", C0505R.string.Search));
         this.searchListViewAdapter = new PhonebookSearchAdapter(context) {
             protected void onUpdateSearchResults(String query) {
                 if (!TextUtils.isEmpty(query) && PhonebookSelectActivity.this.listView != null && PhonebookSelectActivity.this.listView.getAdapter() != PhonebookSelectActivity.this.searchListViewAdapter) {
@@ -209,7 +209,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
                     PhonebookSelectActivity.this.searchListViewAdapter.notifyDataSetChanged();
                     PhonebookSelectActivity.this.listView.setFastScrollVisible(false);
                     PhonebookSelectActivity.this.listView.setVerticalScrollBarEnabled(true);
-                    PhonebookSelectActivity.this.emptyView.setText(LocaleController.getString("NoResult", C0501R.string.NoResult));
+                    PhonebookSelectActivity.this.emptyView.setText(LocaleController.getString("NoResult", C0505R.string.NoResult));
                 }
             }
         };
@@ -234,7 +234,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoContacts", C0501R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", C0505R.string.NoContacts));
         this.emptyView.showTextView();
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
@@ -245,8 +245,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setAdapter(this.listViewAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C22356());
-        this.listView.setOnScrollListener(new C22367());
+        this.listView.setOnItemClickListener(new C22576());
+        this.listView.setOnScrollListener(new C22587());
         return this.fragmentView;
     }
 
@@ -279,7 +279,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new C22378();
+        ThemeDescriptionDelegate cellDelegate = new C22598();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[26];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);

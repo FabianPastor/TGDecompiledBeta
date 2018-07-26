@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0616C;
+import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -92,19 +92,19 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     }
 
     protected DashManifest parseMediaPresentationDescription(XmlPullParser xpp, String baseUrl) throws XmlPullParserException, IOException {
-        long availabilityStartTime = parseDateTime(xpp, "availabilityStartTime", C0616C.TIME_UNSET);
-        long durationMs = parseDuration(xpp, "mediaPresentationDuration", C0616C.TIME_UNSET);
-        long minBufferTimeMs = parseDuration(xpp, "minBufferTime", C0616C.TIME_UNSET);
+        long availabilityStartTime = parseDateTime(xpp, "availabilityStartTime", C0621C.TIME_UNSET);
+        long durationMs = parseDuration(xpp, "mediaPresentationDuration", C0621C.TIME_UNSET);
+        long minBufferTimeMs = parseDuration(xpp, "minBufferTime", C0621C.TIME_UNSET);
         String typeString = xpp.getAttributeValue(null, "type");
         boolean dynamic = typeString != null && "dynamic".equals(typeString);
-        long minUpdateTimeMs = dynamic ? parseDuration(xpp, "minimumUpdatePeriod", C0616C.TIME_UNSET) : C0616C.TIME_UNSET;
-        long timeShiftBufferDepthMs = dynamic ? parseDuration(xpp, "timeShiftBufferDepth", C0616C.TIME_UNSET) : C0616C.TIME_UNSET;
-        long suggestedPresentationDelayMs = dynamic ? parseDuration(xpp, "suggestedPresentationDelay", C0616C.TIME_UNSET) : C0616C.TIME_UNSET;
-        long publishTimeMs = parseDateTime(xpp, "publishTime", C0616C.TIME_UNSET);
+        long minUpdateTimeMs = dynamic ? parseDuration(xpp, "minimumUpdatePeriod", C0621C.TIME_UNSET) : C0621C.TIME_UNSET;
+        long timeShiftBufferDepthMs = dynamic ? parseDuration(xpp, "timeShiftBufferDepth", C0621C.TIME_UNSET) : C0621C.TIME_UNSET;
+        long suggestedPresentationDelayMs = dynamic ? parseDuration(xpp, "suggestedPresentationDelay", C0621C.TIME_UNSET) : C0621C.TIME_UNSET;
+        long publishTimeMs = parseDateTime(xpp, "publishTime", C0621C.TIME_UNSET);
         UtcTimingElement utcTiming = null;
         Uri location = null;
         List<Period> periods = new ArrayList();
-        long nextPeriodStartMs = dynamic ? C0616C.TIME_UNSET : 0;
+        long nextPeriodStartMs = dynamic ? C0621C.TIME_UNSET : 0;
         boolean seenEarlyAccessPeriod = false;
         boolean seenFirstBaseUrl = false;
         do {
@@ -119,10 +119,10 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                         if (XmlPullParserUtil.isStartTag(xpp, "Period") && !seenEarlyAccessPeriod) {
                             Pair<Period, Long> periodWithDurationMs = parsePeriod(xpp, baseUrl, nextPeriodStartMs);
                             Period period = periodWithDurationMs.first;
-                            if (period.startMs != C0616C.TIME_UNSET) {
+                            if (period.startMs != C0621C.TIME_UNSET) {
                                 long periodDurationMs = ((Long) periodWithDurationMs.second).longValue();
-                                if (periodDurationMs == C0616C.TIME_UNSET) {
-                                    nextPeriodStartMs = C0616C.TIME_UNSET;
+                                if (periodDurationMs == C0621C.TIME_UNSET) {
+                                    nextPeriodStartMs = C0621C.TIME_UNSET;
                                 } else {
                                     nextPeriodStartMs = period.startMs + periodDurationMs;
                                 }
@@ -140,8 +140,8 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                 seenFirstBaseUrl = true;
             }
         } while (!XmlPullParserUtil.isEndTag(xpp, "MPD"));
-        if (durationMs == C0616C.TIME_UNSET) {
-            if (nextPeriodStartMs != C0616C.TIME_UNSET) {
+        if (durationMs == C0621C.TIME_UNSET) {
+            if (nextPeriodStartMs != C0621C.TIME_UNSET) {
                 durationMs = nextPeriodStartMs;
             } else if (!dynamic) {
                 throw new ParserException("Unable to determine duration of static manifest.");
@@ -168,7 +168,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     protected Pair<Period, Long> parsePeriod(XmlPullParser xpp, String baseUrl, long defaultStartMs) throws XmlPullParserException, IOException {
         String id = xpp.getAttributeValue(null, TtmlNode.ATTR_ID);
         long startMs = parseDuration(xpp, TtmlNode.START, defaultStartMs);
-        long durationMs = parseDuration(xpp, "duration", C0616C.TIME_UNSET);
+        long durationMs = parseDuration(xpp, "duration", C0621C.TIME_UNSET);
         SegmentBase segmentBase = null;
         List<AdaptationSet> adaptationSets = new ArrayList();
         List<EventStream> eventStreams = new ArrayList();
@@ -372,15 +372,15 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                         for (int i = 0; i < defaultKidStrings.length; i++) {
                             defaultKids[i] = UUID.fromString(defaultKidStrings[i]);
                         }
-                        data = PsshAtomUtil.buildPsshAtom(C0616C.COMMON_PSSH_UUID, defaultKids, null);
-                        uuid = C0616C.COMMON_PSSH_UUID;
+                        data = PsshAtomUtil.buildPsshAtom(C0621C.COMMON_PSSH_UUID, defaultKids, null);
+                        uuid = C0621C.COMMON_PSSH_UUID;
                         break;
                     }
                 case 1:
-                    uuid = C0616C.PLAYREADY_UUID;
+                    uuid = C0621C.PLAYREADY_UUID;
                     break;
                 case 2:
-                    uuid = C0616C.WIDEVINE_UUID;
+                    uuid = C0621C.WIDEVINE_UUID;
                     break;
             }
         }
@@ -401,8 +401,8 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                         Log.w(TAG, "Skipping malformed cenc:pssh data");
                         data = null;
                     }
-                } else if (C0616C.PLAYREADY_UUID.equals(uuid) && XmlPullParserUtil.isStartTag(xpp, "mspr:pro") && xpp.next() == 4) {
-                    data = PsshAtomUtil.buildPsshAtom(C0616C.PLAYREADY_UUID, Base64.decode(xpp.getText(), 0));
+                } else if (C0621C.PLAYREADY_UUID.equals(uuid) && XmlPullParserUtil.isStartTag(xpp, "mspr:pro") && xpp.next() == 4) {
+                    data = PsshAtomUtil.buildPsshAtom(C0621C.PLAYREADY_UUID, Base64.decode(xpp.getText(), 0));
                 }
             }
         } while (!XmlPullParserUtil.isEndTag(xpp, "ContentProtection"));
@@ -558,7 +558,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     protected SegmentList parseSegmentList(XmlPullParser xpp, SegmentList parent) throws XmlPullParserException, IOException {
         long timescale = parseLong(xpp, "timescale", parent != null ? parent.timescale : 1);
         long presentationTimeOffset = parseLong(xpp, "presentationTimeOffset", parent != null ? parent.presentationTimeOffset : 0);
-        long duration = parseLong(xpp, "duration", parent != null ? parent.duration : C0616C.TIME_UNSET);
+        long duration = parseLong(xpp, "duration", parent != null ? parent.duration : C0621C.TIME_UNSET);
         long startNumber = parseLong(xpp, "startNumber", parent != null ? parent.startNumber : 1);
         RangedUri initialization = null;
         List<SegmentTimelineElement> timeline = null;
@@ -601,7 +601,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     protected SegmentTemplate parseSegmentTemplate(XmlPullParser xpp, SegmentTemplate parent) throws XmlPullParserException, IOException {
         long timescale = parseLong(xpp, "timescale", parent != null ? parent.timescale : 1);
         long presentationTimeOffset = parseLong(xpp, "presentationTimeOffset", parent != null ? parent.presentationTimeOffset : 0);
-        long duration = parseLong(xpp, "duration", parent != null ? parent.duration : C0616C.TIME_UNSET);
+        long duration = parseLong(xpp, "duration", parent != null ? parent.duration : C0621C.TIME_UNSET);
         long startNumber = parseLong(xpp, "startNumber", parent != null ? parent.startNumber : 1);
         UrlTemplate mediaTemplate = parseUrlTemplate(xpp, "media", parent != null ? parent.mediaTemplate : null);
         UrlTemplate initializationTemplate = parseUrlTemplate(xpp, "initialization", parent != null ? parent.initializationTemplate : null);
@@ -660,7 +660,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
 
     protected EventMessage parseEvent(XmlPullParser xpp, String schemeIdUri, String value, long timescale, ByteArrayOutputStream scratchOutputStream) throws IOException, XmlPullParserException {
         long id = parseLong(xpp, TtmlNode.ATTR_ID, 0);
-        long duration = parseLong(xpp, "duration", C0616C.TIME_UNSET);
+        long duration = parseLong(xpp, "duration", C0621C.TIME_UNSET);
         long presentationTime = parseLong(xpp, "presentationTime", 0);
         return buildEvent(schemeIdUri, value, id, Util.scaleLargeTimestamp(duration, 1000, timescale), parseEventObject(xpp, scratchOutputStream), Util.scaleLargeTimestamp(presentationTime, 1000000, timescale));
     }
@@ -728,7 +728,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
             xpp.next();
             if (XmlPullParserUtil.isStartTag(xpp, "S")) {
                 elapsedTime = parseLong(xpp, "t", elapsedTime);
-                long duration = parseLong(xpp, "d", C0616C.TIME_UNSET);
+                long duration = parseLong(xpp, "d", C0621C.TIME_UNSET);
                 int count = parseInt(xpp, "r", 0) + 1;
                 for (int i = 0; i < count; i++) {
                     segmentTimeline.add(buildSegmentTimelineElement(elapsedTime, duration));

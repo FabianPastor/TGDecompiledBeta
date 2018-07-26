@@ -6,7 +6,7 @@ import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class GeobFrame extends Id3Frame {
-    public static final Creator<GeobFrame> CREATOR = new C06771();
+    public static final Creator<GeobFrame> CREATOR = new C06821();
     public static final String ID = "GEOB";
     public final byte[] data;
     public final String description;
@@ -14,8 +14,8 @@ public final class GeobFrame extends Id3Frame {
     public final String mimeType;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.GeobFrame$1 */
-    static class C06771 implements Creator<GeobFrame> {
-        C06771() {
+    static class C06821 implements Creator<GeobFrame> {
+        C06821() {
         }
 
         public GeobFrame createFromParcel(Parcel in) {

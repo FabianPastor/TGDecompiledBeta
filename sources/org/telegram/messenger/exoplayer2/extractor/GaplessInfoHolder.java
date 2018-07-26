@@ -10,13 +10,13 @@ import org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder.FramePredicate;
 public final class GaplessInfoHolder {
     private static final String GAPLESS_COMMENT_ID = "iTunSMPB";
     private static final Pattern GAPLESS_COMMENT_PATTERN = Pattern.compile("^ [0-9a-fA-F]{8} ([0-9a-fA-F]{8}) ([0-9a-fA-F]{8})");
-    public static final FramePredicate GAPLESS_INFO_ID3_FRAME_PREDICATE = new C06491();
+    public static final FramePredicate GAPLESS_INFO_ID3_FRAME_PREDICATE = new C06541();
     public int encoderDelay = -1;
     public int encoderPadding = -1;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder$1 */
-    static class C06491 implements FramePredicate {
-        C06491() {
+    static class C06541 implements FramePredicate {
+        C06541() {
         }
 
         public boolean evaluate(int majorVersion, int id0, int id1, int id2, int id3) {
