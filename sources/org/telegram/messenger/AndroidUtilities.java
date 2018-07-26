@@ -215,7 +215,7 @@ public class AndroidUtilities {
             String[] args = value.split(";");
             for (a = 0; a < args.length; a++) {
                 if (!(TextUtils.isEmpty(args[a]) || nameEncoding == null || !nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE"))) {
-                    byte[] bytes = AndroidUtilities.decodeQuotedPrintable(args[a].getBytes());
+                    byte[] bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(args[a]));
                     if (!(bytes == null || bytes.length == 0)) {
                         try {
                             args[a] = new String(bytes, nameCharset);
@@ -257,7 +257,7 @@ public class AndroidUtilities {
             for (a = 0; a < args.length; a++) {
                 if (!TextUtils.isEmpty(args[a])) {
                     if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                        byte[] bytes = AndroidUtilities.decodeQuotedPrintable(args[a].getBytes());
+                        byte[] bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(args[a]));
                         if (!(bytes == null || bytes.length == 0)) {
                             try {
                                 args[a] = new String(bytes, nameCharset);
@@ -701,6 +701,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
+    public static byte[] getStringBytes(String src) {
+        try {
+            return src.getBytes(C0621C.UTF8_NAME);
+        } catch (Exception e) {
+            return new byte[0];
+        }
+    }
+
     public static ArrayList<User> loadVCardFromStream(Uri uri, int currentAccount, boolean asset, ArrayList<VcardItem> items, String name) {
         InputStream stream;
         Throwable e;
@@ -822,7 +830,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             }
                             currentData.name = args[1];
                             if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                                byte[] bytes = decodeQuotedPrintable(currentData.name.getBytes());
+                                byte[] bytes = decodeQuotedPrintable(getStringBytes(currentData.name));
                                 if (!(bytes == null || bytes.length == 0)) {
                                     String decodedName = new String(bytes, nameCharset);
                                     if (decodedName != null) {

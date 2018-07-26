@@ -439,7 +439,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                     try {
                                         FileOutputStream stream2 = new FileOutputStream(currentFile);
                                         try {
-                                            stream2.write(result.toString().getBytes());
+                                            stream2.write(AndroidUtilities.getStringBytes(result.toString()));
                                             if (stream2 != null) {
                                                 try {
                                                     stream2.close();

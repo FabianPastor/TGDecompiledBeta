@@ -704,7 +704,7 @@ public class MessageObject {
                                         }
                                         currentData2.company = args[1];
                                         if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
-                                            bytes = AndroidUtilities.decodeQuotedPrintable(currentData2.company.getBytes());
+                                            bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(currentData2.company));
                                             if (!(bytes == null || bytes.length == 0)) {
                                                 decodedName = new String(bytes, nameCharset);
                                                 if (decodedName != null) {
@@ -762,7 +762,7 @@ public class MessageObject {
                                     }
                                 }
                                 currentData2.company = args[1];
-                                bytes = AndroidUtilities.decodeQuotedPrintable(currentData2.company.getBytes());
+                                bytes = AndroidUtilities.decodeQuotedPrintable(AndroidUtilities.getStringBytes(currentData2.company));
                                 decodedName = new String(bytes, nameCharset);
                                 if (decodedName != null) {
                                     currentData2.company = decodedName;

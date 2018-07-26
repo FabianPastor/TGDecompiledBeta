@@ -217,6 +217,10 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         this.tabsContainer.addView(tab, LayoutHelper.createLinear(0, -1));
     }
 
+    public int getCurrentTabId() {
+        return this.selectedTabId;
+    }
+
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (child == this.tabsContainer) {

@@ -886,28 +886,32 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.mapProvider = 0;
                 MessagesController.this.availableMapProviders = 0;
                 String[] providers = config.static_maps_provider.split(",");
-                for (String split : providers) {
-                    String[] mapArgs = split.split("\\+");
+                for (int a = 0; a < providers.length; a++) {
+                    String[] mapArgs = providers[a].split("\\+");
                     if (mapArgs.length > 0) {
                         String[] typeAndKey = mapArgs[0].split(":");
                         if (typeAndKey.length > 0) {
                             MessagesController messagesController;
                             if ("yandex".equals(typeAndKey[0])) {
-                                if (mapArgs.length > 1) {
-                                    MessagesController.this.mapProvider = 3;
-                                } else {
-                                    MessagesController.this.mapProvider = 1;
+                                if (a == 0) {
+                                    if (mapArgs.length > 1) {
+                                        MessagesController.this.mapProvider = 3;
+                                    } else {
+                                        MessagesController.this.mapProvider = 1;
+                                    }
                                 }
                                 messagesController = MessagesController.this;
                                 messagesController.availableMapProviders |= 4;
                             } else if ("google".equals(typeAndKey[0])) {
-                                if (mapArgs.length > 1) {
+                                if (a == 0 && mapArgs.length > 1) {
                                     MessagesController.this.mapProvider = 4;
                                 }
                                 messagesController = MessagesController.this;
                                 messagesController.availableMapProviders |= 1;
                             } else if ("telegram".equals(typeAndKey[0])) {
-                                MessagesController.this.mapProvider = 2;
+                                if (a == 0) {
+                                    MessagesController.this.mapProvider = 2;
+                                }
                                 messagesController = MessagesController.this;
                                 messagesController.availableMapProviders |= 2;
                             }
@@ -3207,7 +3211,6 @@ public class MessagesController implements NotificationCenterDelegate {
             GcmInstanceIDListenerService.sendRegistrationToServer(SharedConfig.pushString);
         }
         LocationController.getInstance(this.currentAccount).update();
-        UserConfig.getInstance(this.currentAccount).checkSavedPassword();
         checkProxyInfoInternal(false);
         checkTosUpdate();
     }

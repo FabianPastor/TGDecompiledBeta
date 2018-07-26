@@ -78,8 +78,8 @@ import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterDocument;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterEmpty;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterMusic;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterPhotoVideo;
+import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterRoundVoice;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterUrl;
-import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterVoice;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
@@ -1978,7 +1978,7 @@ public class DataQuery {
         } else if (type == 1) {
             req.filter = new TL_inputMessagesFilterDocument();
         } else if (type == 2) {
-            req.filter = new TL_inputMessagesFilterVoice();
+            req.filter = new TL_inputMessagesFilterRoundVoice();
         } else if (type == 3) {
             req.filter = new TL_inputMessagesFilterUrl();
         } else if (type == 4) {
@@ -2024,7 +2024,7 @@ public class DataQuery {
         } else if (type == 1) {
             req.filter = new TL_inputMessagesFilterDocument();
         } else if (type == 2) {
-            req.filter = new TL_inputMessagesFilterVoice();
+            req.filter = new TL_inputMessagesFilterRoundVoice();
         } else if (type == 3) {
             req.filter = new TL_inputMessagesFilterUrl();
         } else if (type == 4) {
@@ -2163,24 +2163,24 @@ public class DataQuery {
             public void run() {
                 int i = 0;
                 int lower_part = (int) j;
-                if (z && i == -1 && lower_part != 0) {
-                    DataQuery.this.getMediaCount(j, i2, i3, false);
+                if (!z || (!(i == -1 || (i == 0 && i2 == 2)) || lower_part == 0)) {
+                    if (!z) {
+                        DataQuery.this.putMediaCountDatabase(j, i2, i);
+                    }
+                    NotificationCenter instance = NotificationCenter.getInstance(DataQuery.this.currentAccount);
+                    int i2 = NotificationCenter.mediaCountDidLoaded;
+                    Object[] objArr = new Object[4];
+                    objArr[0] = Long.valueOf(j);
+                    if (!(z && i == -1)) {
+                        i = i;
+                    }
+                    objArr[1] = Integer.valueOf(i);
+                    objArr[2] = Boolean.valueOf(z);
+                    objArr[3] = Integer.valueOf(i2);
+                    instance.postNotificationName(i2, objArr);
                     return;
                 }
-                if (!z) {
-                    DataQuery.this.putMediaCountDatabase(j, i2, i);
-                }
-                NotificationCenter instance = NotificationCenter.getInstance(DataQuery.this.currentAccount);
-                int i2 = NotificationCenter.mediaCountDidLoaded;
-                Object[] objArr = new Object[4];
-                objArr[0] = Long.valueOf(j);
-                if (!(z && i == -1)) {
-                    i = i;
-                }
-                objArr[1] = Integer.valueOf(i);
-                objArr[2] = Boolean.valueOf(z);
-                objArr[3] = Integer.valueOf(i2);
-                instance.postNotificationName(i2, objArr);
+                DataQuery.this.getMediaCount(j, i2, i3, false);
             }
         });
     }

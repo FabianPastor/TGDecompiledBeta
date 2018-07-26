@@ -475,6 +475,7 @@ public class Emoji {
                     }
                 }
                 previousGoodIndex = i;
+                char prevCh = c;
                 for (int a = 0; a < 3; a++) {
                     if (i + 1 < length) {
                         c = cs.charAt(i + 1);
@@ -485,7 +486,7 @@ public class Emoji {
                                 startLength++;
                                 doneEmoji = false;
                             }
-                        } else if (startIndex != -1 && c >= '\ufe00' && c <= '\ufe0f') {
+                        } else if ((startIndex != -1 || prevCh == '*' || (prevCh >= '1' && prevCh <= '9')) && c >= '\ufe00' && c <= '\ufe0f') {
                             i++;
                             startLength++;
                         }

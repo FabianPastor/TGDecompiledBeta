@@ -1518,7 +1518,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.actionBar.setActionBarMenuOnItemClick(new C20892());
         this.scrollSlidingTextTabStrip = new ScrollSlidingTextTabStrip(context);
         this.scrollSlidingTextTabStrip.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
-        updateTabs();
         this.actionBar.addView(this.scrollSlidingTextTabStrip, LayoutHelper.createFrame(-1, 44, 83));
         this.scrollSlidingTextTabStrip.setDelegate(new C20903());
         for (a = 1; a >= 0; a--) {
@@ -1894,6 +1893,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         for (a = 0; a < 6; a++) {
             this.cellCache.add(new SharedPhotoVideoCell(context));
         }
+        updateTabs();
         switchToCurrentSelectedMode(false);
         if (!AndroidUtilities.isTablet()) {
             c20957 = new FragmentContextView(context, this, false);
@@ -2187,10 +2187,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             if (this.scrollSlidingTextTabStrip.getTabsCount() <= 1) {
                 this.scrollSlidingTextTabStrip.setVisibility(8);
                 this.actionBar.setExtraHeight(0);
-                return;
+            } else {
+                this.scrollSlidingTextTabStrip.setVisibility(0);
+                this.actionBar.setExtraHeight(AndroidUtilities.dp(44.0f));
             }
-            this.scrollSlidingTextTabStrip.setVisibility(0);
-            this.actionBar.setExtraHeight(AndroidUtilities.dp(44.0f));
+            this.mediaPages[0].selectedType = this.scrollSlidingTextTabStrip.getCurrentTabId();
         }
     }
 

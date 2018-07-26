@@ -87,7 +87,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         }
 
         public void run() {
-            if (MrzCameraActivity.this.cameraView != null && !MrzCameraActivity.this.recognized) {
+            if (MrzCameraActivity.this.cameraView != null && !MrzCameraActivity.this.recognized && MrzCameraActivity.this.cameraView.getCameraSession() != null) {
                 MrzCameraActivity.this.cameraView.getCameraSession().setOneShotPreviewCallback(MrzCameraActivity.this);
                 AndroidUtilities.runOnUIThread(this, 500);
             }

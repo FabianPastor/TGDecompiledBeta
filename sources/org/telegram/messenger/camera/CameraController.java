@@ -119,7 +119,6 @@ public class CameraController implements OnInfoListener {
 
         public void run() {
             try {
-                long time = System.currentTimeMillis();
                 if (CameraController.this.cameraInfos == null) {
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     String cache = preferences.getString("cameraCache", null);
@@ -215,7 +214,6 @@ public class CameraController implements OnInfoListener {
                     }
                     CameraController.this.cameraInfos = result;
                 }
-                FileLog.m0d("init time = " + (System.currentTimeMillis() - time));
                 AndroidUtilities.runOnUIThread(new C06052());
             } catch (Exception e) {
                 AndroidUtilities.runOnUIThread(new C06063());

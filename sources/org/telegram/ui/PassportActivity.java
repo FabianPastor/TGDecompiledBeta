@@ -340,6 +340,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     private ArrayList<String> permissionsItems;
     private HashMap<String, String> phoneFormatMap;
     private TextView plusTextView;
+    private PassportActivity presentAfterAnimation;
     private AlertDialog progressDialog;
     private ContextProgressView progressView;
     private ContextProgressView progressViewButton;
@@ -2155,7 +2156,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 return;
             }
             showEditDoneProgress(true, true);
-            byte[] passwordBytes = textPassword.getBytes();
+            byte[] passwordBytes = AndroidUtilities.getStringBytes(textPassword);
             byte[] hash = new byte[((this.currentPassword.current_salt.length * 2) + passwordBytes.length)];
             System.arraycopy(this.currentPassword.current_salt, 0, hash, 0, this.currentPassword.current_salt.length);
             System.arraycopy(passwordBytes, 0, hash, this.currentPassword.current_salt.length, passwordBytes.length);
@@ -2229,7 +2230,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 activity.secureSecret = PassportActivity.this.secureSecret;
                 activity.secureSecretId = PassportActivity.this.secureSecretId;
                 activity.needActivityResult = PassportActivity.this.needActivityResult;
-                PassportActivity.this.presentFragment(activity, true);
+                if (PassportActivity.this.parentLayout.checkTransitionAnimation()) {
+                    PassportActivity.this.presentAfterAnimation = activity;
+                } else {
+                    PassportActivity.this.presentFragment(activity, true);
+                }
             }
 
             private void resetSecret() {
@@ -2249,7 +2254,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 byte[] secureSalt = new byte[(PassportActivity.this.currentPassword.new_secure_salt.length + 8)];
                 Utilities.random.nextBytes(secureSalt);
                 System.arraycopy(PassportActivity.this.currentPassword.new_secure_salt, 0, secureSalt, 0, PassportActivity.this.currentPassword.new_secure_salt.length);
-                PassportActivity.this.saltedPassword = Utilities.computeSHA512(secureSalt, textPassword.getBytes(), secureSalt);
+                PassportActivity.this.saltedPassword = Utilities.computeSHA512(secureSalt, AndroidUtilities.getStringBytes(textPassword), secureSalt);
                 byte[] key = new byte[32];
                 System.arraycopy(PassportActivity.this.saltedPassword, 0, key, 0, 32);
                 byte[] iv = new byte[16];
@@ -2305,7 +2310,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             if (saved) {
                                 PassportActivity.this.saltedPassword = PassportActivity.this.savedSaltedPassword;
                             } else {
-                                PassportActivity.this.saltedPassword = Utilities.computeSHA512(settings.secure_salt, textPassword.getBytes(), settings.secure_salt);
+                                PassportActivity.this.saltedPassword = Utilities.computeSHA512(settings.secure_salt, AndroidUtilities.getStringBytes(textPassword), settings.secure_salt);
                             }
                             if (!PassportActivity.this.checkSecret(PassportActivity.this.decryptSecret(PassportActivity.this.secureSecret, PassportActivity.this.saltedPassword), Long.valueOf(PassportActivity.this.secureSecretId)) || settings.secure_salt.length == 0 || PassportActivity.this.secureSecretId == 0) {
                                 if (saved) {
@@ -2631,7 +2636,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     } catch (Exception e3) {
                     }
                 }
-                EncryptionResult encryptionResult = PassportActivity.this.encryptData(result.toString().getBytes());
+                EncryptionResult encryptionResult = PassportActivity.this.encryptData(AndroidUtilities.getStringBytes(result.toString()));
                 req.credentials = new TL_secureCredentialsEncrypted();
                 req.credentials.hash = encryptionResult.fileHash;
                 req.credentials.data = encryptionResult.encryptedData;
@@ -5170,7 +5175,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         inputSecureValue = new TL_inputSecureValue();
                         inputSecureValue.type = type;
                         inputSecureValue.flags |= 1;
-                        EncryptionResult result = PassportActivity.this.encryptData(json.getBytes());
+                        EncryptionResult result = PassportActivity.this.encryptData(AndroidUtilities.getStringBytes(json));
                         inputSecureValue.data = new TL_secureData();
                         inputSecureValue.data.data = result.encryptedData;
                         inputSecureValue.data.data_hash = result.fileHash;
@@ -5200,7 +5205,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             fileInputSecureValue.type = documentsType;
                             if (!TextUtils.isEmpty(documentsJson)) {
                                 fileInputSecureValue.flags |= 1;
-                                result = PassportActivity.this.encryptData(documentsJson.getBytes());
+                                result = PassportActivity.this.encryptData(AndroidUtilities.getStringBytes(documentsJson));
                                 fileInputSecureValue.data = new TL_secureData();
                                 fileInputSecureValue.data.data = result.encryptedData;
                                 fileInputSecureValue.data.data_hash = result.fileHash;
@@ -6193,6 +6198,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+        if (this.presentAfterAnimation != null) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    PassportActivity.this.presentFragment(PassportActivity.this.presentAfterAnimation, true);
+                    PassportActivity.this.presentAfterAnimation = null;
+                }
+            });
+        }
         if (this.currentActivityType == 5) {
             if (isOpen) {
                 if (this.inputFieldContainers[0].getVisibility() == 0) {

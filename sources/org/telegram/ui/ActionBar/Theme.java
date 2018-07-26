@@ -2464,7 +2464,7 @@ public class Theme {
         try {
             FileOutputStream stream2 = new FileOutputStream(file);
             try {
-                stream2.write(result.toString().getBytes());
+                stream2.write(AndroidUtilities.getStringBytes(result.toString()));
                 if (themedWallpaper instanceof BitmapDrawable) {
                     Bitmap bitmap = ((BitmapDrawable) themedWallpaper).getBitmap();
                     if (bitmap != null) {
@@ -3189,13 +3189,13 @@ public class Theme {
             }
             for (a = 0; a < 5; a++) {
                 setCombinedDrawableColor(chat_fileStatesDrawable[a][0], getColor(key_chat_outLoader), false);
-                setCombinedDrawableColor(chat_fileStatesDrawable[a][0], getColor(key_chat_outBubble), true);
+                setCombinedDrawableColor(chat_fileStatesDrawable[a][0], getColor(key_chat_outMediaIcon), true);
                 setCombinedDrawableColor(chat_fileStatesDrawable[a][1], getColor(key_chat_outLoaderSelected), false);
-                setCombinedDrawableColor(chat_fileStatesDrawable[a][1], getColor(key_chat_outBubbleSelected), true);
+                setCombinedDrawableColor(chat_fileStatesDrawable[a][1], getColor(key_chat_outMediaIconSelected), true);
                 setCombinedDrawableColor(chat_fileStatesDrawable[a + 5][0], getColor(key_chat_inLoader), false);
-                setCombinedDrawableColor(chat_fileStatesDrawable[a + 5][0], getColor(key_chat_inBubble), true);
+                setCombinedDrawableColor(chat_fileStatesDrawable[a + 5][0], getColor(key_chat_inMediaIcon), true);
                 setCombinedDrawableColor(chat_fileStatesDrawable[a + 5][1], getColor(key_chat_inLoaderSelected), false);
-                setCombinedDrawableColor(chat_fileStatesDrawable[a + 5][1], getColor(key_chat_inBubbleSelected), true);
+                setCombinedDrawableColor(chat_fileStatesDrawable[a + 5][1], getColor(key_chat_inMediaIconSelected), true);
             }
             for (a = 0; a < 4; a++) {
                 setCombinedDrawableColor(chat_photoStatesDrawables[a][0], getColor(key_chat_mediaLoaderPhoto), false);

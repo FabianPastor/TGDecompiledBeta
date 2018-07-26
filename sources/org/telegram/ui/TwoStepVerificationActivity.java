@@ -908,7 +908,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         } else {
             TL_account_passwordInputSettings tL_account_passwordInputSettings;
             if (this.firstPassword != null && this.firstPassword.length() > 0) {
-                byte[] newPasswordBytes = this.firstPassword.getBytes();
+                byte[] newPasswordBytes = AndroidUtilities.getStringBytes(this.firstPassword);
                 byte[] new_salt = this.currentPassword.new_salt;
                 byte[] hash = new byte[((new_salt.length * 2) + newPasswordBytes.length)];
                 System.arraycopy(new_salt, 0, hash, 0, new_salt.length);
@@ -1054,7 +1054,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                     onPasscodeError(false);
                     return;
                 }
-                final byte[] oldPasswordBytes = oldPassword.getBytes();
+                final byte[] oldPasswordBytes = AndroidUtilities.getStringBytes(oldPassword);
                 needShowProgress();
                 byte[] hash = new byte[((this.currentPassword.current_salt.length * 2) + oldPasswordBytes.length)];
                 System.arraycopy(this.currentPassword.current_salt, 0, hash, 0, this.currentPassword.current_salt.length);
