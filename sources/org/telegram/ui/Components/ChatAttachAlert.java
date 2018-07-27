@@ -120,6 +120,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private boolean cameraAnimationInProgress;
     private PhotoAttachAdapter cameraAttachAdapter;
     private FrameLayout cameraIcon;
+    private ImageView cameraImageView;
     private boolean cameraInitied;
     private float cameraOpenProgress;
     private boolean cameraOpened;
@@ -1780,6 +1781,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     public void checkColors() {
+        ViewHolder holder;
         int count = this.attachButtons.size();
         for (int a = 0; a < count; a++) {
             ((AttachButton) this.attachButtons.get(a)).textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
@@ -1791,7 +1793,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
         if (this.listView != null) {
             this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-            ViewHolder holder = this.listView.findViewHolderForAdapterPosition(1);
+            holder = this.listView.findViewHolderForAdapterPosition(1);
             if (holder != null) {
                 holder.itemView.setBackgroundColor(Theme.getColor(Theme.key_dialogBackgroundGray));
             }
@@ -1800,6 +1802,15 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.ciclePaint.setColor(Theme.getColor(Theme.key_dialogBackground));
         }
         Theme.setDrawableColor(this.shadowDrawable, Theme.getColor(Theme.key_dialogBackground));
+        if (this.cameraImageView != null) {
+            this.cameraImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogCameraIcon), Mode.MULTIPLY));
+        }
+        if (this.attachPhotoRecyclerView != null) {
+            holder = this.attachPhotoRecyclerView.findViewHolderForAdapterPosition(0);
+            if (holder != null && (holder.itemView instanceof PhotoAttachCameraCell)) {
+                ((PhotoAttachCameraCell) holder.itemView).getImageView().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogCameraIcon), Mode.MULTIPLY));
+            }
+        }
     }
 
     private void resetRecordState() {
@@ -2511,10 +2522,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 });
                 if (this.cameraIcon == null) {
                     this.cameraIcon = new FrameLayout(this.baseFragment.getParentActivity());
-                    ImageView cameraImageView = new ImageView(this.baseFragment.getParentActivity());
-                    cameraImageView.setScaleType(ScaleType.CENTER);
-                    cameraImageView.setImageResource(R.drawable.instant_camera);
-                    this.cameraIcon.addView(cameraImageView, LayoutHelper.createFrame(80, 80, 85));
+                    this.cameraImageView = new ImageView(this.baseFragment.getParentActivity());
+                    this.cameraImageView.setScaleType(ScaleType.CENTER);
+                    this.cameraImageView.setImageResource(R.drawable.instant_camera);
+                    this.cameraImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogCameraIcon), Mode.MULTIPLY));
+                    this.cameraIcon.addView(this.cameraImageView, LayoutHelper.createFrame(80, 80, 85));
                 }
                 this.container.addView(this.cameraIcon, 2, LayoutHelper.createFrame(80, 80.0f));
                 this.cameraView.setAlpha(this.mediaEnabled ? 1.0f : 0.2f);

@@ -29,7 +29,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -275,6 +274,120 @@ public class ContactsController {
 
         public void run(TLObject response, TL_error error) {
         }
+    }
+
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void performWriteContactsToPhoneBookInternal(java.util.ArrayList<org.telegram.tgnet.TLRPC.TL_contact> r13) {
+        /* JADX: method processing error */
+/*
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x000c in list [B:6:0x0009]
+	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
+	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
+	at jadx.core.ProcessClass.process(ProcessClass.java:34)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
+*/
+        /*
+        r12 = this;
+        r8 = 0;
+        r0 = r12.hasContactsPermission();	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        if (r0 != 0) goto L_0x000d;
+    L_0x0007:
+        if (r8 == 0) goto L_0x000c;
+    L_0x0009:
+        r8.close();
+    L_0x000c:
+        return;
+    L_0x000d:
+        r0 = android.provider.ContactsContract.RawContacts.CONTENT_URI;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = r0.buildUpon();	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2 = "account_name";	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r3 = r12.systemAccount;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r3 = r3.name;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = r0.appendQueryParameter(r2, r3);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2 = "account_type";	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r3 = r12.systemAccount;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r3 = r3.type;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = r0.appendQueryParameter(r2, r3);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r1 = r0.build();	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = r0.getContentResolver();	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2 = 2;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2 = new java.lang.String[r2];	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r3 = 0;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r4 = "_id";	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2[r3] = r4;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r3 = 1;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r4 = "sync2";	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2[r3] = r4;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r3 = 0;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r4 = 0;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r5 = 0;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r8 = r0.query(r1, r2, r3, r4, r5);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r7 = new org.telegram.messenger.support.SparseLongArray;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r7.<init>();	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        if (r8 == 0) goto L_0x009e;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+    L_0x0050:
+        r0 = r8.moveToNext();	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        if (r0 == 0) goto L_0x006e;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+    L_0x0056:
+        r0 = 1;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = r8.getInt(r0);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2 = 0;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2 = r8.getLong(r2);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r7.put(r0, r2);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        goto L_0x0050;
+    L_0x0064:
+        r9 = move-exception;
+        org.telegram.messenger.FileLog.m3e(r9);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        if (r8 == 0) goto L_0x000c;
+    L_0x006a:
+        r8.close();
+        goto L_0x000c;
+    L_0x006e:
+        r8.close();	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r8 = 0;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r6 = 0;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+    L_0x0073:
+        r0 = r13.size();	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        if (r6 >= r0) goto L_0x009e;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+    L_0x0079:
+        r10 = r13.get(r6);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r10 = (org.telegram.tgnet.TLRPC.TL_contact) r10;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = r10.user_id;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = r7.indexOfKey(r0);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        if (r0 >= 0) goto L_0x009b;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+    L_0x0087:
+        r0 = r12.currentAccount;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = org.telegram.messenger.MessagesController.getInstance(r0);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2 = r10.user_id;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r2 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r11 = r0.getUser(r2);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r0 = 0;	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        r12.addContactToPhoneBook(r11, r0);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+    L_0x009b:
+        r6 = r6 + 1;
+        goto L_0x0073;
+    L_0x009e:
+        if (r8 == 0) goto L_0x000c;
+    L_0x00a0:
+        r8.close();
+        goto L_0x000c;
+    L_0x00a5:
+        r0 = move-exception;
+        if (r8 == 0) goto L_0x00ab;
+    L_0x00a8:
+        r8.close();
+    L_0x00ab:
+        throw r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.performWriteContactsToPhoneBookInternal(java.util.ArrayList):void");
     }
 
     public static ContactsController getInstance(int num) {
@@ -2005,30 +2118,6 @@ public class ContactsController {
             return true;
         } else {
             return false;
-        }
-    }
-
-    private void performWriteContactsToPhoneBookInternal(ArrayList<TL_contact> contactsArray) {
-        try {
-            if (hasContactsPermission()) {
-                Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon().appendQueryParameter("account_name", this.systemAccount.name).appendQueryParameter("account_type", this.systemAccount.type).build();
-                Cursor c1 = ApplicationLoader.applicationContext.getContentResolver().query(rawContactUri, new String[]{"_id", "sync2"}, null, null, null);
-                SparseLongArray bookContacts = new SparseLongArray();
-                if (c1 != null) {
-                    while (c1.moveToNext()) {
-                        bookContacts.put(c1.getInt(1), c1.getLong(0));
-                    }
-                    c1.close();
-                    for (int a = 0; a < contactsArray.size(); a++) {
-                        TL_contact u = (TL_contact) contactsArray.get(a);
-                        if (bookContacts.indexOfKey(u.user_id) < 0) {
-                            addContactToPhoneBook(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(u.user_id)), false);
-                        }
-                    }
-                }
-            }
-        } catch (Throwable e) {
-            FileLog.m3e(e);
         }
     }
 
