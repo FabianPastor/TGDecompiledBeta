@@ -2191,7 +2191,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 this.scrollSlidingTextTabStrip.setVisibility(0);
                 this.actionBar.setExtraHeight(AndroidUtilities.dp(44.0f));
             }
-            this.mediaPages[0].selectedType = this.scrollSlidingTextTabStrip.getCurrentTabId();
+            int id = this.scrollSlidingTextTabStrip.getCurrentTabId();
+            if (id >= 0) {
+                this.mediaPages[0].selectedType = id;
+            }
         }
     }
 
