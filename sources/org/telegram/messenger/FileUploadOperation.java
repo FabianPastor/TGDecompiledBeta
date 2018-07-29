@@ -312,7 +312,7 @@ public class FileUploadOperation {
                         }
                         this.uploadChunkSize = chunkSize;
                     }
-                    this.maxRequestsCount = Math.min(1, (this.slowNetwork ? 32 : 2048) / this.uploadChunkSize);
+                    this.maxRequestsCount = Math.max(1, (this.slowNetwork ? 32 : 2048) / this.uploadChunkSize);
                     if (this.isEncrypted) {
                         this.freeRequestIvs = new ArrayList(this.maxRequestsCount);
                         for (a = 0; a < this.maxRequestsCount; a++) {

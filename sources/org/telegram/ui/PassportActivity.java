@@ -2216,28 +2216,30 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             private void openRequestInterface() {
-                int type;
-                if (!saved) {
-                    UserConfig.getInstance(PassportActivity.this.currentAccount).savePassword(currentPasswordHash, PassportActivity.this.saltedPassword);
-                }
-                AndroidUtilities.hideKeyboard(PassportActivity.this.inputFields[0]);
-                PassportActivity.this.ignoreOnFailure = true;
-                if (PassportActivity.this.currentBotId == 0) {
-                    type = 8;
-                } else {
-                    type = 0;
-                }
-                PassportActivity activity = new PassportActivity(type, PassportActivity.this.currentBotId, PassportActivity.this.currentScope, PassportActivity.this.currentPublicKey, PassportActivity.this.currentPayload, PassportActivity.this.currentCallbackUrl, PassportActivity.this.currentForm, PassportActivity.this.currentPassword);
-                activity.currentEmail = PassportActivity.this.currentEmail;
-                activity.currentAccount = PassportActivity.this.currentAccount;
-                activity.saltedPassword = PassportActivity.this.saltedPassword;
-                activity.secureSecret = PassportActivity.this.secureSecret;
-                activity.secureSecretId = PassportActivity.this.secureSecretId;
-                activity.needActivityResult = PassportActivity.this.needActivityResult;
-                if (PassportActivity.this.parentLayout.checkTransitionAnimation()) {
-                    PassportActivity.this.presentAfterAnimation = activity;
-                } else {
-                    PassportActivity.this.presentFragment(activity, true);
+                if (PassportActivity.this.inputFields != null) {
+                    int type;
+                    if (!saved) {
+                        UserConfig.getInstance(PassportActivity.this.currentAccount).savePassword(currentPasswordHash, PassportActivity.this.saltedPassword);
+                    }
+                    AndroidUtilities.hideKeyboard(PassportActivity.this.inputFields[0]);
+                    PassportActivity.this.ignoreOnFailure = true;
+                    if (PassportActivity.this.currentBotId == 0) {
+                        type = 8;
+                    } else {
+                        type = 0;
+                    }
+                    PassportActivity activity = new PassportActivity(type, PassportActivity.this.currentBotId, PassportActivity.this.currentScope, PassportActivity.this.currentPublicKey, PassportActivity.this.currentPayload, PassportActivity.this.currentCallbackUrl, PassportActivity.this.currentForm, PassportActivity.this.currentPassword);
+                    activity.currentEmail = PassportActivity.this.currentEmail;
+                    activity.currentAccount = PassportActivity.this.currentAccount;
+                    activity.saltedPassword = PassportActivity.this.saltedPassword;
+                    activity.secureSecret = PassportActivity.this.secureSecret;
+                    activity.secureSecretId = PassportActivity.this.secureSecretId;
+                    activity.needActivityResult = PassportActivity.this.needActivityResult;
+                    if (PassportActivity.this.parentLayout == null || !PassportActivity.this.parentLayout.checkTransitionAnimation()) {
+                        PassportActivity.this.presentFragment(activity, true);
+                    } else {
+                        PassportActivity.this.presentAfterAnimation = activity;
+                    }
                 }
             }
 

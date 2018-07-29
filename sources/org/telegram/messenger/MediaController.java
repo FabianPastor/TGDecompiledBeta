@@ -1105,9 +1105,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     private void processMediaObserver(Uri uri) {
+        Cursor cursor = null;
         try {
             android.graphics.Point size = AndroidUtilities.getRealScreenSize();
-            Cursor cursor = ApplicationLoader.applicationContext.getContentResolver().query(uri, this.mediaProjections, null, null, "date_added DESC LIMIT 1");
+            cursor = ApplicationLoader.applicationContext.getContentResolver().query(uri, this.mediaProjections, null, null, "date_added DESC LIMIT 1");
             ArrayList<Long> screenshotDates = new ArrayList();
             if (cursor != null) {
                 while (cursor.moveToNext()) {
@@ -1147,8 +1148,27 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     }
                 });
             }
-        } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            if (cursor != null) {
+                try {
+                    cursor.close();
+                } catch (Exception e2) {
+                }
+            }
+        } catch (Throwable e3) {
+            FileLog.m3e(e3);
+            if (cursor != null) {
+                try {
+                    cursor.close();
+                } catch (Exception e4) {
+                }
+            }
+        } catch (Throwable th) {
+            if (cursor != null) {
+                try {
+                    cursor.close();
+                } catch (Exception e5) {
+                }
+            }
         }
     }
 

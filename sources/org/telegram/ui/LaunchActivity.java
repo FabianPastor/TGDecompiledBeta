@@ -1595,26 +1595,34 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                 }
                             });
                         } else if (username == null && group == null && sticker == null && message == null && game == null && instantView == null && auth == null && unsupportedUrl == null) {
+                            Cursor cursor = null;
                             try {
-                                Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null);
-                                if (cursor != null) {
-                                    if (cursor.moveToFirst()) {
-                                        int accountId = Utilities.parseInt(cursor.getString(cursor.getColumnIndex("account_name"))).intValue();
-                                        for (a = 0; a < 3; a++) {
-                                            if (UserConfig.getInstance(a).getClientUserId() == accountId) {
-                                                intentAccount[0] = a;
-                                                switchToAccount(intentAccount[0], true);
-                                                break;
-                                            }
+                                cursor = getContentResolver().query(intent.getData(), null, null, null, null);
+                                if (cursor != null && cursor.moveToFirst()) {
+                                    int accountId = Utilities.parseInt(cursor.getString(cursor.getColumnIndex("account_name"))).intValue();
+                                    for (a = 0; a < 3; a++) {
+                                        if (UserConfig.getInstance(a).getClientUserId() == accountId) {
+                                            intentAccount[0] = a;
+                                            switchToAccount(intentAccount[0], true);
+                                            break;
                                         }
-                                        userId = cursor.getInt(cursor.getColumnIndex("DATA4"));
-                                        NotificationCenter.getInstance(intentAccount[0]).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                                        push_user_id = Integer.valueOf(userId);
                                     }
+                                    userId = cursor.getInt(cursor.getColumnIndex("DATA4"));
+                                    NotificationCenter.getInstance(intentAccount[0]).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                                    push_user_id = Integer.valueOf(userId);
+                                }
+                                if (cursor != null) {
                                     cursor.close();
                                 }
                             } catch (Throwable e22) {
                                 FileLog.m3e(e22);
+                                if (cursor != null) {
+                                    cursor.close();
+                                }
+                            } catch (Throwable th) {
+                                if (cursor != null) {
+                                    cursor.close();
+                                }
                             }
                         } else {
                             runLinkRequest(intentAccount[0], username, group, sticker, botUser, botChat, message, hasUrl, messageId, game, instantView, auth, unsupportedUrl, 0);

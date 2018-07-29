@@ -491,7 +491,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             if (MediaActivity.this.mediaPages[0].selectedType != id) {
                 boolean z;
                 MediaActivity mediaActivity = MediaActivity.this;
-                if (id == 0) {
+                if (id == MediaActivity.this.scrollSlidingTextTabStrip.getFirstTabId()) {
                     z = true;
                 } else {
                     z = false;
@@ -526,6 +526,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     if (MediaActivity.this.searchItemState == 2) {
                         MediaActivity.this.searchItem.setVisibility(8);
                     }
+                    MediaActivity.this.searchItemState = 0;
                 }
             }
         }
@@ -1596,7 +1597,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
 
             public boolean onInterceptTouchEvent(MotionEvent ev) {
-                return MediaActivity.this.tabsAnimationInProgress || onTouchEvent(ev);
+                return MediaActivity.this.tabsAnimationInProgress || MediaActivity.this.scrollSlidingTextTabStrip.isAnimatingIndicator() || onTouchEvent(ev);
             }
 
             public boolean onTouchEvent(MotionEvent ev) {
@@ -1716,7 +1717,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     }
                                     MediaActivity.this.searchItemState = 0;
                                     MediaActivity mediaActivity = MediaActivity.this;
-                                    if (MediaActivity.this.mediaPages[0].selectedType == 0) {
+                                    if (MediaActivity.this.mediaPages[0].selectedType == MediaActivity.this.scrollSlidingTextTabStrip.getFirstTabId()) {
                                         z = true;
                                     } else {
                                         z = false;
@@ -2200,6 +2201,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
 
     private void switchToCurrentSelectedMode(boolean animated) {
         int a;
+        for (MediaPage access$200 : this.mediaPages) {
+            access$200.listView.stopScroll();
+        }
         if (animated) {
             a = 1;
         } else {
@@ -2373,7 +2377,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     private boolean onItemLongClick(MessageObject item, View view, int a) {
-        if (this.actionBar.isActionModeShowed()) {
+        if (this.actionBar.isActionModeShowed() || getParentActivity() == null) {
             return false;
         }
         int i;

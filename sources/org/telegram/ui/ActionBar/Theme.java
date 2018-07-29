@@ -656,6 +656,9 @@ public class Theme {
     public static final String key_chats_actionIcon = "chats_actionIcon";
     public static final String key_chats_actionMessage = "chats_actionMessage";
     public static final String key_chats_actionPressedBackground = "chats_actionPressedBackground";
+    public static final String key_chats_actionUnreadBackground = "chats_actionUnreadBackground";
+    public static final String key_chats_actionUnreadIcon = "chats_actionUnreadIcon";
+    public static final String key_chats_actionUnreadPressedBackground = "chats_actionUnreadPressedBackground";
     public static final String key_chats_attachMessage = "chats_attachMessage";
     public static final String key_chats_date = "chats_date";
     public static final String key_chats_draft = "chats_draft";
@@ -709,6 +712,7 @@ public class Theme {
     public static final String key_dialogBadgeText = "dialogBadgeText";
     public static final String key_dialogButton = "dialogButton";
     public static final String key_dialogButtonSelector = "dialogButtonSelector";
+    public static final String key_dialogCameraIcon = "dialogCameraIcon";
     public static final String key_dialogCheckboxSquareBackground = "dialogCheckboxSquareBackground";
     public static final String key_dialogCheckboxSquareCheck = "dialogCheckboxSquareCheck";
     public static final String key_dialogCheckboxSquareDisabled = "dialogCheckboxSquareDisabled";
@@ -1237,6 +1241,7 @@ public class Theme {
         defaultColors.put(key_dialogRoundCheckBoxCheck, Integer.valueOf(-1));
         defaultColors.put(key_dialogBadgeBackground, Integer.valueOf(-12664327));
         defaultColors.put(key_dialogBadgeText, Integer.valueOf(-1));
+        defaultColors.put(key_dialogCameraIcon, Integer.valueOf(-1));
         defaultColors.put(key_windowBackgroundWhite, Integer.valueOf(-1));
         defaultColors.put(key_progressCircle, Integer.valueOf(-11371101));
         defaultColors.put(key_windowBackgroundWhiteGrayIcon, Integer.valueOf(-9211021));
@@ -1405,6 +1410,9 @@ public class Theme {
         defaultColors.put(key_chats_actionIcon, Integer.valueOf(-1));
         defaultColors.put(key_chats_actionBackground, Integer.valueOf(-9788978));
         defaultColors.put(key_chats_actionPressedBackground, Integer.valueOf(-11038014));
+        defaultColors.put(key_chats_actionUnreadIcon, Integer.valueOf(-9211021));
+        defaultColors.put(key_chats_actionUnreadBackground, Integer.valueOf(-1));
+        defaultColors.put(key_chats_actionUnreadPressedBackground, Integer.valueOf(-855310));
         defaultColors.put(key_chat_attachCameraIcon1, Integer.valueOf(-33488));
         defaultColors.put(key_chat_attachCameraIcon2, Integer.valueOf(-1353648));
         defaultColors.put(key_chat_attachCameraIcon3, Integer.valueOf(-12342798));
@@ -1770,6 +1778,9 @@ public class Theme {
         fallbackKeys.put(key_chat_outMediaIcon, key_chat_outBubble);
         fallbackKeys.put(key_chat_inMediaIconSelected, key_chat_inBubbleSelected);
         fallbackKeys.put(key_chat_outMediaIconSelected, key_chat_outBubbleSelected);
+        fallbackKeys.put(key_chats_actionUnreadIcon, key_profile_actionIcon);
+        fallbackKeys.put(key_chats_actionUnreadBackground, key_profile_actionBackground);
+        fallbackKeys.put(key_chats_actionUnreadPressedBackground, key_profile_actionPressedBackground);
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         ArrayList arrayList = themes;
