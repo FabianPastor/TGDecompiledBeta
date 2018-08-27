@@ -44,6 +44,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import com.google.android.exoplayer2.C0012C;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,8 +92,8 @@ public class ThemeEditorView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.ThemeEditorView$3 */
-    class C13863 extends AnimatorListenerAdapter {
-        C13863() {
+    class C09543 extends AnimatorListenerAdapter {
+        C09543() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -103,8 +104,8 @@ public class ThemeEditorView {
     }
 
     /* renamed from: org.telegram.ui.Components.ThemeEditorView$4 */
-    class C13874 extends AnimatorListenerAdapter {
-        C13874() {
+    class C09554 extends AnimatorListenerAdapter {
+        C09554() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -134,8 +135,8 @@ public class ThemeEditorView {
         private int topBeforeSwitch;
 
         /* renamed from: org.telegram.ui.Components.ThemeEditorView$EditorAlert$9 */
-        class C13949 extends AnimatorListenerAdapter {
-            C13949() {
+        class C09629 extends AnimatorListenerAdapter {
+            C09629() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -201,7 +202,7 @@ public class ThemeEditorView {
                     } else if (a == 3) {
                         this.colorEditText[a].setHint("alpha");
                     }
-                    this.colorEditText[a].setImeOptions((a == 3 ? 6 : 5) | 268435456);
+                    this.colorEditText[a].setImeOptions((a == 3 ? 6 : 5) | C0012C.ENCODING_PCM_MU_LAW);
                     this.colorEditText[a].setFilters(new InputFilter[]{new LengthFilter(3)});
                     final int num = a;
                     this.linearLayout.addView(this.colorEditText[a], LayoutHelper.createLinear(55, 36, 0.0f, 0.0f, a != 3 ? 16.0f : 0.0f, 0.0f));
@@ -723,7 +724,7 @@ public class ThemeEditorView {
                 animatorSet.playTogether(r1);
                 animatorSet.setDuration(150);
                 animatorSet.setInterpolator(ThemeEditorView.this.decelerateInterpolator);
-                animatorSet.addListener(new C13949());
+                animatorSet.addListener(new C09629());
                 animatorSet.start();
                 this.previousScrollPosition = this.scrollOffsetY;
                 return;
@@ -824,7 +825,7 @@ public class ThemeEditorView {
                 this.windowManager.removeViewImmediate(this.windowView);
                 this.windowView = null;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             try {
                 if (this.editorAlert != null) {
@@ -832,7 +833,7 @@ public class ThemeEditorView {
                     this.editorAlert = null;
                 }
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
             this.parentActivity = null;
             Instance = null;
@@ -851,8 +852,8 @@ public class ThemeEditorView {
             private float startY;
 
             /* renamed from: org.telegram.ui.Components.ThemeEditorView$1$1 */
-            class C13831 implements OnDismissListener {
-                C13831() {
+            class C09511 implements OnDismissListener {
+                C09511() {
                 }
 
                 public void onDismiss(DialogInterface dialog) {
@@ -860,8 +861,8 @@ public class ThemeEditorView {
             }
 
             /* renamed from: org.telegram.ui.Components.ThemeEditorView$1$2 */
-            class C13842 implements OnDismissListener {
-                C13842() {
+            class C09522 implements OnDismissListener {
+                C09522() {
                 }
 
                 public void onDismiss(DialogInterface dialog) {
@@ -910,8 +911,8 @@ public class ThemeEditorView {
                                 ThemeDescription[] items = fragment.getThemeDescriptions();
                                 if (items != null) {
                                     ThemeEditorView.this.editorAlert = new EditorAlert(ThemeEditorView.this.parentActivity, items);
-                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C13831());
-                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C13842());
+                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C09511());
+                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C09522());
                                     ThemeEditorView.this.editorAlert.show();
                                     ThemeEditorView.this.hide();
                                 }
@@ -1000,7 +1001,7 @@ public class ThemeEditorView {
             this.parentActivity = activity;
             showWithAnimation();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -1040,7 +1041,7 @@ public class ThemeEditorView {
                 animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleX", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleY", new float[]{1.0f, 0.0f})});
                 animatorSet.setInterpolator(this.decelerateInterpolator);
                 animatorSet.setDuration(150);
-                animatorSet.addListener(new C13863());
+                animatorSet.addListener(new C09543());
                 animatorSet.start();
                 this.hidden = true;
             } catch (Exception e) {
@@ -1079,7 +1080,7 @@ public class ThemeEditorView {
                 this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -1158,7 +1159,7 @@ public class ThemeEditorView {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C13874());
+                animatorSet.addListener(new C09554());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

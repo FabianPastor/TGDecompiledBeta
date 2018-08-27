@@ -2,11 +2,9 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -30,34 +28,6 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     private ArrayList<Item> items = new ArrayList(11);
     private Context mContext;
     private DrawerProfileCell profileCell;
-
-    /* renamed from: org.telegram.ui.Adapters.DrawerLayoutAdapter$1 */
-    class C08261 implements OnClickListener {
-        C08261() {
-        }
-
-        public void onClick(View v) {
-            DrawerLayoutAdapter.this.setAccountsShowed(((DrawerProfileCell) v).isAccountsShowed(), true);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Adapters.DrawerLayoutAdapter$2 */
-    class C08272 implements Comparator<Integer> {
-        C08272() {
-        }
-
-        public int compare(Integer o1, Integer o2) {
-            long l1 = (long) UserConfig.getInstance(o1.intValue()).loginTime;
-            long l2 = (long) UserConfig.getInstance(o2.intValue()).loginTime;
-            if (l1 > l2) {
-                return 1;
-            }
-            if (l1 < l2) {
-                return -1;
-            }
-            return 0;
-        }
-    }
 
     private class Item {
         public int icon;
@@ -138,7 +108,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         switch (viewType) {
             case 0:
                 this.profileCell = new DrawerProfileCell(this.mContext);
-                this.profileCell.setOnArrowClickListener(new C08261());
+                this.profileCell.setOnArrowClickListener(new DrawerLayoutAdapter$$Lambda$0(this));
                 view = this.profileCell;
                 break;
             case 2:
@@ -159,6 +129,10 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         }
         view.setLayoutParams(new LayoutParams(-1, -2));
         return new Holder(view);
+    }
+
+    final /* synthetic */ void lambda$onCreateViewHolder$0$DrawerLayoutAdapter(View v) {
+        setAccountsShowed(((DrawerProfileCell) v).isAccountsShowed(), true);
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
@@ -221,7 +195,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
                 this.accountNumbers.add(Integer.valueOf(a));
             }
         }
-        Collections.sort(this.accountNumbers, new C08272());
+        Collections.sort(this.accountNumbers, DrawerLayoutAdapter$$Lambda$1.$instance);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             this.items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup));
@@ -235,6 +209,18 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
             this.items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), R.drawable.menu_settings));
             this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), R.drawable.menu_help));
         }
+    }
+
+    static final /* synthetic */ int lambda$resetItems$1$DrawerLayoutAdapter(Integer o1, Integer o2) {
+        long l1 = (long) UserConfig.getInstance(o1.intValue()).loginTime;
+        long l2 = (long) UserConfig.getInstance(o2.intValue()).loginTime;
+        if (l1 > l2) {
+            return 1;
+        }
+        if (l1 < l2) {
+            return -1;
+        }
+        return 0;
     }
 
     public int getId(int position) {

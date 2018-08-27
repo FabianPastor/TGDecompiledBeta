@@ -123,7 +123,7 @@ public class AboutLinkCell extends FrameLayout {
                                     this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
                                     this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
                                 } catch (Throwable e) {
-                                    FileLog.m3e(e);
+                                    FileLog.m8e(e);
                                 }
                             } else {
                                 resetPressedLink();
@@ -131,7 +131,7 @@ public class AboutLinkCell extends FrameLayout {
                         }
                     } catch (Throwable e2) {
                         resetPressedLink();
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 } else if (this.pressedLink != null) {
                     try {
@@ -146,7 +146,7 @@ public class AboutLinkCell extends FrameLayout {
                             this.pressedLink.onClick(this);
                         }
                     } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                     resetPressedLink();
                     result = true;
@@ -190,7 +190,7 @@ public class AboutLinkCell extends FrameLayout {
                 this.textLayout.draw(canvas);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         canvas.restore();
     }

@@ -19,5 +19,5 @@
     <string name="common_signin_button_text">سائن ان کریں</string>
     <string name="common_signin_button_text_long">‏Google کے ساتھ سائن ان کریں</string>
     <string name="fcm_fallback_notification_channel_label">متفرقات</string>
-    <string name="status_bar_notification_info_overflow">‎999+‎</string>
+    <string name="status_bar_notification_info_overflow">+999</string>
 </resources>

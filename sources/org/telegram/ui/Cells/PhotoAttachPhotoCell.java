@@ -39,8 +39,8 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     private TextView videoTextView;
 
     /* renamed from: org.telegram.ui.Cells.PhotoAttachPhotoCell$1 */
-    class C09291 extends AnimatorListenerAdapter {
-        C09291() {
+    class C05841 extends AnimatorListenerAdapter {
+        C05841() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -215,7 +215,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 fArr2[0] = f;
                 animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str2, fArr2);
                 animatorSet.playTogether(animatorArr);
-                this.animatorSet.addListener(new C09291());
+                this.animatorSet.addListener(new C05841());
                 this.animatorSet.start();
             }
         }

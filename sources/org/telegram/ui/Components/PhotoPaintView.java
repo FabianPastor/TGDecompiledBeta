@@ -111,8 +111,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private UndoStore undoStore;
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$4 */
-    class C13134 implements OnClickListener {
-        C13134() {
+    class C08824 implements OnClickListener {
+        C08824() {
         }
 
         public void onClick(View v) {
@@ -121,8 +121,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$7 */
-    class C13157 implements OnClickListener {
-        C13157() {
+    class C08847 implements OnClickListener {
+        C08847() {
         }
 
         public void onClick(View v) {
@@ -131,8 +131,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$8 */
-    class C13168 implements OnClickListener {
-        C13168() {
+    class C08858 implements OnClickListener {
+        C08858() {
         }
 
         public void onClick(View v) {
@@ -141,8 +141,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$9 */
-    class C13179 implements OnClickListener {
-        C13179() {
+    class C08869 implements OnClickListener {
+        C08869() {
         }
 
         public void onClick(View v) {
@@ -163,8 +163,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$1 */
-    class C22401 implements UndoStoreDelegate {
-        C22401() {
+    class C15241 implements UndoStoreDelegate {
+        C15241() {
         }
 
         public void historyChanged() {
@@ -173,8 +173,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$2 */
-    class C22412 implements RenderViewDelegate {
-        C22412() {
+    class C15252 implements RenderViewDelegate {
+        C15252() {
         }
 
         public void onBeganDrawing() {
@@ -197,8 +197,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$3 */
-    class C22423 implements EntitiesContainerViewDelegate {
-        C22423() {
+    class C15263 implements EntitiesContainerViewDelegate {
+        C15263() {
         }
 
         public boolean shouldReceiveTouches() {
@@ -215,8 +215,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$6 */
-    class C22436 implements ColorPickerDelegate {
-        C22436() {
+    class C15276 implements ColorPickerDelegate {
+        C15276() {
         }
 
         public void onBeganColorPicking() {
@@ -256,19 +256,19 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.bitmapToEdit = bitmap;
         this.orientation = rotation;
         this.undoStore = new UndoStore();
-        this.undoStore.setDelegate(new C22401());
+        this.undoStore.setDelegate(new C15241());
         this.curtainView = new FrameLayout(context);
         this.curtainView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.curtainView.setVisibility(4);
         addView(this.curtainView);
         this.renderView = new RenderView(context, new Painting(getPaintingSize()), bitmap, this.orientation);
-        this.renderView.setDelegate(new C22412());
+        this.renderView.setDelegate(new C15252());
         this.renderView.setUndoStore(this.undoStore);
         this.renderView.setQueue(this.queue);
         this.renderView.setVisibility(4);
         this.renderView.setBrush(this.brushes[0]);
         addView(this.renderView, LayoutHelper.createFrame(-1, -1, 51));
-        this.entitiesView = new EntitiesContainerView(context, new C22423());
+        this.entitiesView = new EntitiesContainerView(context, new C15263());
         this.entitiesView.setPivotX(0.0f);
         this.entitiesView.setPivotY(0.0f);
         addView(this.entitiesView);
@@ -281,7 +281,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.textDimView.setAlpha(0.0f);
         this.textDimView.setBackgroundColor(NUM);
         this.textDimView.setVisibility(8);
-        this.textDimView.setOnClickListener(new C13134());
+        this.textDimView.setOnClickListener(new C08824());
         this.selectionContainerView = new FrameLayout(context) {
             public boolean onTouchEvent(MotionEvent event) {
                 return false;
@@ -290,7 +290,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         addView(this.selectionContainerView);
         this.colorPicker = new ColorPicker(context);
         addView(this.colorPicker);
-        this.colorPicker.setDelegate(new C22436());
+        this.colorPicker.setDelegate(new C15276());
         this.toolsView = new FrameLayout(context);
         this.toolsView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         addView(this.toolsView, LayoutHelper.createFrame(-1, 48, 83));
@@ -317,19 +317,19 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.paintButton.setImageResource(R.drawable.photo_paint);
         this.paintButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.toolsView.addView(this.paintButton, LayoutHelper.createFrame(54, -1.0f, 17, 0.0f, 0.0f, 56.0f, 0.0f));
-        this.paintButton.setOnClickListener(new C13157());
+        this.paintButton.setOnClickListener(new C08847());
         ImageView stickerButton = new ImageView(context);
         stickerButton.setScaleType(ScaleType.CENTER);
         stickerButton.setImageResource(R.drawable.photo_sticker);
         stickerButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.toolsView.addView(stickerButton, LayoutHelper.createFrame(54, -1, 17));
-        stickerButton.setOnClickListener(new C13168());
+        stickerButton.setOnClickListener(new C08858());
         ImageView textButton = new ImageView(context);
         textButton.setScaleType(ScaleType.CENTER);
         textButton.setImageResource(R.drawable.photo_paint_text);
         textButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.toolsView.addView(textButton, LayoutHelper.createFrame(54, -1.0f, 17, 56.0f, 0.0f, 0.0f, 0.0f));
-        textButton.setOnClickListener(new C13179());
+        textButton.setOnClickListener(new C08869());
         this.colorPicker.setUndoEnabled(false);
         setCurrentSwatch(this.colorPicker.getSwatch(), false);
         updateSettingsButton();
@@ -432,7 +432,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 canvas.save();
                 if (v instanceof EntityView) {
                     EntityView entity = (EntityView) v;
-                    canvas.translate(entity.getPosition().f24x, entity.getPosition().f25y);
+                    canvas.translate(entity.getPosition().f27x, entity.getPosition().f28y);
                     canvas.scale(v.getScaleX(), v.getScaleY());
                     canvas.rotate(v.getRotation());
                     canvas.translate((float) ((-entity.getWidth()) / 2), (float) ((-entity.getHeight()) / 2));
@@ -444,7 +444,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                         try {
                             c.setBitmap(null);
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                         b.recycle();
                     } else {
@@ -637,7 +637,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private Point startPositionRelativeToEntity(EntityView entityView) {
         if (entityView != null) {
             Point position = entityView.getPosition();
-            return new Point(position.f24x + 200.0f, position.f25y + 200.0f);
+            return new Point(position.f27x + 200.0f, position.f28y + 200.0f);
         }
         position = centerPositionForEntity();
         while (true) {
@@ -646,7 +646,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 View view = this.entitiesView.getChildAt(index);
                 if (view instanceof EntityView) {
                     Point location = ((EntityView) view).getPosition();
-                    if (((float) Math.sqrt(Math.pow((double) (location.f24x - position.f24x), 2.0d) + Math.pow((double) (location.f25y - position.f25y), 2.0d))) < 100.0f) {
+                    if (((float) Math.sqrt(Math.pow((double) (location.f27x - position.f27x), 2.0d) + Math.pow((double) (location.f28y - position.f28y), 2.0d))) < 100.0f) {
                         occupied = true;
                     }
                 }
@@ -654,7 +654,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             if (!occupied) {
                 return position;
             }
-            position = new Point(position.f24x + 200.0f, position.f25y + 200.0f);
+            position = new Point(position.f27x + 200.0f, position.f28y + 200.0f);
         }
     }
 
@@ -897,8 +897,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         showPopup(new Runnable() {
 
             /* renamed from: org.telegram.ui.Components.PhotoPaintView$17$1 */
-            class C13101 implements OnClickListener {
-                C13101() {
+            class C08791 implements OnClickListener {
+                C08791() {
                 }
 
                 public void onClick(View v) {
@@ -910,8 +910,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
 
             /* renamed from: org.telegram.ui.Components.PhotoPaintView$17$2 */
-            class C13112 implements OnClickListener {
-                C13112() {
+            class C08802 implements OnClickListener {
+                C08802() {
                 }
 
                 public void onClick(View v) {
@@ -923,8 +923,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
 
             /* renamed from: org.telegram.ui.Components.PhotoPaintView$17$3 */
-            class C13123 implements OnClickListener {
-                C13123() {
+            class C08813 implements OnClickListener {
+                C08813() {
                 }
 
                 public void onClick(View v) {
@@ -946,7 +946,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 deleteView.setTextSize(1, 18.0f);
                 deleteView.setTag(Integer.valueOf(0));
                 deleteView.setText(LocaleController.getString("PaintDelete", R.string.PaintDelete));
-                deleteView.setOnClickListener(new C13101());
+                deleteView.setOnClickListener(new C08791());
                 parent.addView(deleteView, LayoutHelper.createLinear(-2, 48));
                 if (entityView instanceof TextPaintView) {
                     TextView editView = new TextView(PhotoPaintView.this.getContext());
@@ -957,7 +957,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                     editView.setTextSize(1, 18.0f);
                     editView.setTag(Integer.valueOf(1));
                     editView.setText(LocaleController.getString("PaintEdit", R.string.PaintEdit));
-                    editView.setOnClickListener(new C13112());
+                    editView.setOnClickListener(new C08802());
                     parent.addView(editView, LayoutHelper.createLinear(-2, 48));
                 }
                 TextView duplicateView = new TextView(PhotoPaintView.this.getContext());
@@ -968,7 +968,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 duplicateView.setTextSize(1, 18.0f);
                 duplicateView.setTag(Integer.valueOf(2));
                 duplicateView.setText(LocaleController.getString("PaintDuplicate", R.string.PaintDuplicate));
-                duplicateView.setOnClickListener(new C13123());
+                duplicateView.setOnClickListener(new C08813());
                 parent.addView(duplicateView, LayoutHelper.createLinear(-2, 48));
                 PhotoPaintView.this.popupLayout.addView(parent);
                 LayoutParams params = (LayoutParams) parent.getLayoutParams();
@@ -976,7 +976,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 params.height = -2;
                 parent.setLayoutParams(params);
             }
-        }, entityView, 17, (int) ((entityView.getPosition().f24x - ((float) (this.entitiesView.getWidth() / 2))) * this.entitiesView.getScaleX()), ((int) (((entityView.getPosition().f25y - ((((float) entityView.getHeight()) * entityView.getScale()) / 2.0f)) - ((float) (this.entitiesView.getHeight() / 2))) * this.entitiesView.getScaleY())) - AndroidUtilities.dp(32.0f));
+        }, entityView, 17, (int) ((entityView.getPosition().f27x - ((float) (this.entitiesView.getWidth() / 2))) * this.entitiesView.getScaleX()), ((int) (((entityView.getPosition().f28y - ((((float) entityView.getHeight()) * entityView.getScale()) / 2.0f)) - ((float) (this.entitiesView.getHeight() / 2))) * this.entitiesView.getScaleY())) - AndroidUtilities.dp(32.0f));
     }
 
     private FrameLayout buttonForBrush(final int brush, int resource, boolean selected) {
@@ -1216,7 +1216,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 if (r10 == 0) goto L_0x002f;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
             L_0x0029:
                 r10 = "face detection is not operational";	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
-                org.telegram.messenger.FileLog.m1e(r10);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                org.telegram.messenger.FileLog.m6e(r10);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
             L_0x002f:
                 if (r3 == 0) goto L_0x0034;
             L_0x0031:
@@ -1261,7 +1261,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 goto L_0x0062;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
             L_0x008f:
                 r0 = move-exception;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
-                org.telegram.messenger.FileLog.m3e(r0);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                org.telegram.messenger.FileLog.m8e(r0);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
                 if (r3 == 0) goto L_0x0034;
             L_0x0095:
                 r3.release();
@@ -1275,7 +1275,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 goto L_0x0034;
             L_0x00a4:
                 r0 = move-exception;
-                org.telegram.messenger.FileLog.m3e(r0);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                org.telegram.messenger.FileLog.m8e(r0);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
                 if (r3 == 0) goto L_0x0034;
             L_0x00aa:
                 r3.release();
@@ -1306,7 +1306,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         if (maskCoords == null || this.faces == null || this.faces.size() == 0) {
             return defaultPosition;
         }
-        int anchor = maskCoords.f48n;
+        int anchor = maskCoords.f51n;
         PhotoFace face = getRandomFaceWithVacantAnchor(anchor, document.id, maskCoords);
         if (face == null) {
             return defaultPosition;
@@ -1316,10 +1316,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         float angle = face.getAngle();
         float scale = (float) (((double) (referenceWidth / baseStickerSize().width)) * maskCoords.zoom);
         float radAngle = (float) Math.toRadians((double) angle);
-        float yCompX = (float) ((Math.cos(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f50y);
-        float yCompY = (float) ((Math.sin(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f50y);
-        float x = (referencePoint.f24x + ((float) ((Math.sin(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f49x))) + yCompX;
-        return new StickerPosition(new Point(x, (referencePoint.f25y + ((float) ((Math.cos(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f49x))) + yCompY), scale, angle);
+        float yCompX = (float) ((Math.cos(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f53y);
+        float yCompY = (float) ((Math.sin(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f53y);
+        float x = (referencePoint.f27x + ((float) ((Math.sin(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f52x))) + yCompX;
+        return new StickerPosition(new Point(x, (referencePoint.f28y + ((float) ((Math.cos(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f52x))) + yCompY), scale, angle);
     }
 
     private PhotoFace getRandomFaceWithVacantAnchor(int anchor, long documentId, TL_maskCoords maskCoords) {
@@ -1350,7 +1350,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 StickerView stickerView = (StickerView) view;
                 if (stickerView.getAnchor() == anchor) {
                     Point location = stickerView.getPosition();
-                    float distance = (float) Math.hypot((double) (location.f24x - anchorPoint.f24x), (double) (location.f25y - anchorPoint.f25y));
+                    float distance = (float) Math.hypot((double) (location.f27x - anchorPoint.f27x), (double) (location.f28y - anchorPoint.f28y));
                     if ((documentId == stickerView.getSticker().id || this.faces.size() > 1) && distance < minDistance) {
                         return true;
                     }

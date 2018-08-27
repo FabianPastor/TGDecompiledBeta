@@ -244,7 +244,7 @@ public class DialogMeUrlCell extends BaseCell {
         try {
             this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString.replace('\n', ' '), currentNamePaint, (float) (nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, nameWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         int messageWidth = getMeasuredWidth() - AndroidUtilities.dp((float) (AndroidUtilities.leftBaseline + 16));
         if (LocaleController.isRTL) {
@@ -259,7 +259,7 @@ public class DialogMeUrlCell extends BaseCell {
         try {
             this.messageLayout = new StaticLayout(TextUtils.ellipsize(messageString, currentMessagePaint, (float) (messageWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentMessagePaint, messageWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
         float left;
         double widthpx;
@@ -340,7 +340,7 @@ public class DialogMeUrlCell extends BaseCell {
             try {
                 this.messageLayout.draw(canvas);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             canvas.restore();
         }

@@ -5,7 +5,6 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -42,16 +41,6 @@ public class ManageChatUserCell extends FrameLayout {
     private int statusColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText);
     private int statusOnlineColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlueText);
     private SimpleTextView statusTextView;
-
-    /* renamed from: org.telegram.ui.Cells.ManageChatUserCell$1 */
-    class C09281 implements OnClickListener {
-        C09281() {
-        }
-
-        public void onClick(View v) {
-            ManageChatUserCell.this.delegate.onOptionsButtonCheck(ManageChatUserCell.this, true);
-        }
-    }
 
     public interface ManageChatUserCellDelegate {
         boolean onOptionsButtonCheck(ManageChatUserCell manageChatUserCell, boolean z);
@@ -111,8 +100,12 @@ public class ManageChatUserCell extends FrameLayout {
                 i3 = 5;
             }
             addView(view2, LayoutHelper.createFrame(48, 64, i3 | 48));
-            this.optionsButton.setOnClickListener(new C09281());
+            this.optionsButton.setOnClickListener(new ManageChatUserCell$$Lambda$0(this));
         }
+    }
+
+    final /* synthetic */ void lambda$new$0$ManageChatUserCell(View v) {
+        this.delegate.onOptionsButtonCheck(this, true);
     }
 
     public void setData(User user, CharSequence name, CharSequence status) {

@@ -2,7 +2,6 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -42,14 +41,11 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.ManageChatUserCell;
-import org.telegram.ui.Cells.ManageChatUserCell.ManageChatUserCellDelegate;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
-import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class ChatUsersActivity extends BaseFragment implements NotificationCenterDelegate {
@@ -73,8 +69,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private boolean searching;
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$1 */
-    class C21831 extends ActionBarMenuOnItemClick {
-        C21831() {
+    class C14861 extends ActionBarMenuOnItemClick {
+        C14861() {
         }
 
         public void onItemClick(int id) {
@@ -85,8 +81,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$2 */
-    class C21842 extends ActionBarMenuItemSearchListener {
-        C21842() {
+    class C14872 extends ActionBarMenuItemSearchListener {
+        C14872() {
         }
 
         public void onSearchExpand() {
@@ -123,50 +119,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$3 */
-    class C21853 implements OnItemClickListener {
-        C21853() {
-        }
-
-        public void onItemClick(View view, int position) {
-            int user_id = 0;
-            ChatParticipant participant;
-            if (ChatUsersActivity.this.listView.getAdapter() == ChatUsersActivity.this.listViewAdapter) {
-                participant = ChatUsersActivity.this.listViewAdapter.getItem(position);
-                if (participant != null) {
-                    user_id = participant.user_id;
-                }
-            } else {
-                TLObject object = ChatUsersActivity.this.searchListViewAdapter.getItem(position);
-                if (object instanceof ChatParticipant) {
-                    participant = (ChatParticipant) object;
-                } else {
-                    participant = null;
-                }
-                if (participant != null) {
-                    user_id = participant.user_id;
-                }
-            }
-            if (user_id != 0) {
-                Bundle args = new Bundle();
-                args.putInt("user_id", user_id);
-                ChatUsersActivity.this.presentFragment(new ProfileActivity(args));
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChatUsersActivity$4 */
-    class C21864 implements OnItemLongClickListener {
-        C21864() {
-        }
-
-        public boolean onItemClick(View view, int position) {
-            return ChatUsersActivity.this.getParentActivity() != null && ChatUsersActivity.this.listView.getAdapter() == ChatUsersActivity.this.listViewAdapter && ChatUsersActivity.this.createMenuForParticipant(ChatUsersActivity.this.listViewAdapter.getItem(position), false);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChatUsersActivity$5 */
-    class C21875 extends OnScrollListener {
-        C21875() {
+    class C14883 extends OnScrollListener {
+        C14883() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -180,36 +134,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    /* renamed from: org.telegram.ui.ChatUsersActivity$7 */
-    class C21887 implements ThemeDescriptionDelegate {
-        C21887() {
-        }
-
-        public void didSetColor() {
-            if (ChatUsersActivity.this.listView != null) {
-                int count = ChatUsersActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = ChatUsersActivity.this.listView.getChildAt(a);
-                    if (child instanceof ManageChatUserCell) {
-                        ((ManageChatUserCell) child).update(0);
-                    }
-                }
-            }
-        }
-    }
-
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
-
-        /* renamed from: org.telegram.ui.ChatUsersActivity$ListAdapter$1 */
-        class C21891 implements ManageChatUserCellDelegate {
-            C21891() {
-            }
-
-            public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
-                return ChatUsersActivity.this.createMenuForParticipant(ChatUsersActivity.this.listViewAdapter.getItem(((Integer) cell.getTag()).intValue()), !click);
-            }
-        }
 
         public ListAdapter(Context context) {
             this.mContext = context;
@@ -233,7 +159,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 case 0:
                     view = new ManageChatUserCell(this.mContext, 1, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ManageChatUserCell) view).setDelegate(new C21891());
+                    ((ManageChatUserCell) view).setDelegate(new ChatUsersActivity$ListAdapter$$Lambda$0(this));
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
@@ -241,6 +167,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     break;
             }
             return new Holder(view);
+        }
+
+        final /* synthetic */ boolean lambda$onCreateViewHolder$0$ChatUsersActivity$ListAdapter(ManageChatUserCell cell, boolean click) {
+            return ChatUsersActivity.this.createMenuForParticipant(ChatUsersActivity.this.listViewAdapter.getItem(((Integer) cell.getTag()).intValue()), !click);
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
@@ -293,27 +223,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         private ArrayList<CharSequence> searchResultNames = new ArrayList();
         private Timer searchTimer;
 
-        /* renamed from: org.telegram.ui.ChatUsersActivity$SearchAdapter$4 */
-        class C21904 implements ManageChatUserCellDelegate {
-            C21904() {
-            }
-
-            public boolean onOptionsButtonCheck(ManageChatUserCell cell, boolean click) {
-                if (!(SearchAdapter.this.getItem(((Integer) cell.getTag()).intValue()) instanceof ChatParticipant)) {
-                    return false;
-                }
-                boolean z;
-                ChatParticipant participant = (ChatParticipant) SearchAdapter.this.getItem(((Integer) cell.getTag()).intValue());
-                ChatUsersActivity chatUsersActivity = ChatUsersActivity.this;
-                if (click) {
-                    z = false;
-                } else {
-                    z = true;
-                }
-                return chatUsersActivity.createMenuForParticipant(participant, z);
-            }
-        }
-
         public SearchAdapter(Context context) {
             this.mContext = context;
         }
@@ -324,7 +233,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             if (query == null) {
                 this.searchResult.clear();
@@ -339,81 +248,79 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         SearchAdapter.this.searchTimer.cancel();
                         SearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                     SearchAdapter.this.processSearch(query);
                 }
             }, 200, 300);
         }
 
-        private void processSearch(final String query) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    final ArrayList<ChatParticipant> contactsCopy = new ArrayList();
-                    contactsCopy.addAll(ChatUsersActivity.this.participants);
-                    Utilities.searchQueue.postRunnable(new Runnable() {
-                        public void run() {
-                            String search1 = query.trim().toLowerCase();
-                            if (search1.length() == 0) {
-                                SearchAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
-                                return;
-                            }
-                            String search2 = LocaleController.getInstance().getTranslitString(search1);
-                            if (search1.equals(search2) || search2.length() == 0) {
-                                search2 = null;
-                            }
-                            String[] search = new String[((search2 != null ? 1 : 0) + 1)];
-                            search[0] = search1;
-                            if (search2 != null) {
-                                search[1] = search2;
-                            }
-                            ArrayList<ChatParticipant> resultArray = new ArrayList();
-                            ArrayList<CharSequence> resultArrayNames = new ArrayList();
-                            for (int a = 0; a < contactsCopy.size(); a++) {
-                                ChatParticipant participant = (ChatParticipant) contactsCopy.get(a);
-                                User user = MessagesController.getInstance(ChatUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id));
-                                String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
-                                String tName = LocaleController.getInstance().getTranslitString(name);
-                                if (name.equals(tName)) {
-                                    tName = null;
-                                }
-                                int found = 0;
-                                int length = search.length;
-                                int i = 0;
-                                while (i < length) {
-                                    String q = search[i];
-                                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
-                                        found = 1;
-                                    } else if (user.username != null && user.username.startsWith(q)) {
-                                        found = 2;
-                                    }
-                                    if (found != 0) {
-                                        if (found == 1) {
-                                            resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
-                                        } else {
-                                            resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
-                                        }
-                                        resultArray.add(participant);
-                                    } else {
-                                        i++;
-                                    }
-                                }
-                            }
-                            SearchAdapter.this.updateSearchResults(resultArray, resultArrayNames);
-                        }
-                    });
-                }
-            });
+        private void processSearch(String query) {
+            AndroidUtilities.runOnUIThread(new ChatUsersActivity$SearchAdapter$$Lambda$0(this, query));
         }
 
-        private void updateSearchResults(final ArrayList<ChatParticipant> users, final ArrayList<CharSequence> names) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    SearchAdapter.this.searchResult = users;
-                    SearchAdapter.this.searchResultNames = names;
-                    SearchAdapter.this.notifyDataSetChanged();
+        final /* synthetic */ void lambda$processSearch$1$ChatUsersActivity$SearchAdapter(String query) {
+            Utilities.searchQueue.postRunnable(new ChatUsersActivity$SearchAdapter$$Lambda$3(this, query, new ArrayList(ChatUsersActivity.this.participants)));
+        }
+
+        final /* synthetic */ void lambda$null$0$ChatUsersActivity$SearchAdapter(String query, ArrayList contactsCopy) {
+            String search1 = query.trim().toLowerCase();
+            if (search1.length() == 0) {
+                updateSearchResults(new ArrayList(), new ArrayList());
+                return;
+            }
+            String search2 = LocaleController.getInstance().getTranslitString(search1);
+            if (search1.equals(search2) || search2.length() == 0) {
+                search2 = null;
+            }
+            String[] search = new String[((search2 != null ? 1 : 0) + 1)];
+            search[0] = search1;
+            if (search2 != null) {
+                search[1] = search2;
+            }
+            ArrayList<ChatParticipant> resultArray = new ArrayList();
+            ArrayList<CharSequence> resultArrayNames = new ArrayList();
+            for (int a = 0; a < contactsCopy.size(); a++) {
+                ChatParticipant participant = (ChatParticipant) contactsCopy.get(a);
+                User user = MessagesController.getInstance(ChatUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id));
+                String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
+                String tName = LocaleController.getInstance().getTranslitString(name);
+                if (name.equals(tName)) {
+                    tName = null;
                 }
-            });
+                int found = 0;
+                int length = search.length;
+                int i = 0;
+                while (i < length) {
+                    String q = search[i];
+                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
+                        found = 1;
+                    } else if (user.username != null && user.username.startsWith(q)) {
+                        found = 2;
+                    }
+                    if (found != 0) {
+                        if (found == 1) {
+                            resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
+                        } else {
+                            resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
+                        }
+                        resultArray.add(participant);
+                    } else {
+                        i++;
+                    }
+                }
+            }
+            updateSearchResults(resultArray, resultArrayNames);
+        }
+
+        private void updateSearchResults(ArrayList<ChatParticipant> users, ArrayList<CharSequence> names) {
+            AndroidUtilities.runOnUIThread(new ChatUsersActivity$SearchAdapter$$Lambda$1(this, users, names));
+        }
+
+        final /* synthetic */ void lambda$updateSearchResults$2$ChatUsersActivity$SearchAdapter(ArrayList users, ArrayList names) {
+            this.searchResult = users;
+            this.searchResultNames = names;
+            notifyDataSetChanged();
         }
 
         public boolean isEnabled(ViewHolder holder) {
@@ -431,8 +338,23 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new ManageChatUserCell(this.mContext, 2, true);
             view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            ((ManageChatUserCell) view).setDelegate(new C21904());
+            ((ManageChatUserCell) view).setDelegate(new ChatUsersActivity$SearchAdapter$$Lambda$2(this));
             return new Holder(view);
+        }
+
+        final /* synthetic */ boolean lambda$onCreateViewHolder$3$ChatUsersActivity$SearchAdapter(ManageChatUserCell cell, boolean click) {
+            if (!(getItem(((Integer) cell.getTag()).intValue()) instanceof ChatParticipant)) {
+                return false;
+            }
+            boolean z;
+            ChatParticipant participant = (ChatParticipant) getItem(((Integer) cell.getTag()).intValue());
+            ChatUsersActivity chatUsersActivity = ChatUsersActivity.this;
+            if (click) {
+                z = false;
+            } else {
+                z = true;
+            }
+            return chatUsersActivity.createMenuForParticipant(participant, z);
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
@@ -524,9 +446,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("GroupMembers", R.string.GroupMembers));
-        this.actionBar.setActionBarMenuOnItemClick(new C21831());
+        this.actionBar.setActionBarMenuOnItemClick(new C14861());
         this.searchListViewAdapter = new SearchAdapter(context);
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21842());
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C14872());
         this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -547,9 +469,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C21853());
-        this.listView.setOnItemLongClickListener(new C21864());
-        this.listView.setOnScrollListener(new C21875());
+        this.listView.setOnItemClickListener(new ChatUsersActivity$$Lambda$0(this));
+        this.listView.setOnItemLongClickListener(new ChatUsersActivity$$Lambda$1(this));
+        this.listView.setOnScrollListener(new C14883());
         if (this.loadingUsers) {
             this.emptyView.showProgress();
         } else {
@@ -559,7 +481,37 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         return this.fragmentView;
     }
 
-    private boolean createMenuForParticipant(final ChatParticipant participant, boolean resultOnly) {
+    final /* synthetic */ void lambda$createView$0$ChatUsersActivity(View view, int position) {
+        int user_id = 0;
+        ChatParticipant participant;
+        if (this.listView.getAdapter() == this.listViewAdapter) {
+            participant = this.listViewAdapter.getItem(position);
+            if (participant != null) {
+                user_id = participant.user_id;
+            }
+        } else {
+            TLObject object = this.searchListViewAdapter.getItem(position);
+            if (object instanceof ChatParticipant) {
+                participant = (ChatParticipant) object;
+            } else {
+                participant = null;
+            }
+            if (participant != null) {
+                user_id = participant.user_id;
+            }
+        }
+        if (user_id != 0) {
+            Bundle args = new Bundle();
+            args.putInt("user_id", user_id);
+            presentFragment(new ProfileActivity(args));
+        }
+    }
+
+    final /* synthetic */ boolean lambda$createView$1$ChatUsersActivity(View view, int position) {
+        return getParentActivity() != null && this.listView.getAdapter() == this.listViewAdapter && createMenuForParticipant(this.listViewAdapter.getItem(position), false);
+    }
+
+    private boolean createMenuForParticipant(ChatParticipant participant, boolean resultOnly) {
         if (participant == null) {
             return false;
         }
@@ -580,19 +532,19 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             return true;
         }
         ArrayList<String> items = new ArrayList();
-        final ArrayList<Integer> actions = new ArrayList();
+        ArrayList<Integer> actions = new ArrayList();
         items.add(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));
         actions.add(Integer.valueOf(0));
         Builder builder = new Builder(getParentActivity());
-        builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (((Integer) actions.get(i)).intValue() == 0) {
-                    MessagesController.getInstance(ChatUsersActivity.this.currentAccount).deleteUserFromChat(ChatUsersActivity.this.chatId, MessagesController.getInstance(ChatUsersActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id)), ChatUsersActivity.this.info);
-                }
-            }
-        });
+        builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), new ChatUsersActivity$$Lambda$2(this, actions, participant));
         showDialog(builder.create());
         return true;
+    }
+
+    final /* synthetic */ void lambda$createMenuForParticipant$2$ChatUsersActivity(ArrayList actions, ChatParticipant participant, DialogInterface dialogInterface, int i) {
+        if (((Integer) actions.get(i)).intValue() == 0) {
+            MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(participant.user_id)), this.info);
+        }
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -625,7 +577,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new C21887();
+        ThemeDescriptionDelegate cellDelegate = new ChatUsersActivity$$Lambda$3(this);
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[22];
         themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
@@ -650,5 +602,17 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
         themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         return themeDescriptionArr;
+    }
+
+    final /* synthetic */ void lambda$getThemeDescriptions$3$ChatUsersActivity() {
+        if (this.listView != null) {
+            int count = this.listView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = this.listView.getChildAt(a);
+                if (child instanceof ManageChatUserCell) {
+                    ((ManageChatUserCell) child).update(0);
+                }
+            }
+        }
     }
 }

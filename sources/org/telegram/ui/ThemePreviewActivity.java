@@ -26,6 +26,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -35,8 +37,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -93,8 +93,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     private File themeFile;
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$3 */
-    class C18833 extends ViewOutlineProvider {
-        C18833() {
+    class C12583 extends ViewOutlineProvider {
+        C12583() {
         }
 
         @SuppressLint({"NewApi"})
@@ -104,8 +104,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$8 */
-    class C18858 implements OnClickListener {
-        C18858() {
+    class C12608 implements OnClickListener {
+        C12608() {
         }
 
         public void onClick(View v) {
@@ -116,8 +116,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$9 */
-    class C18869 implements OnClickListener {
-        C18869() {
+    class C12619 implements OnClickListener {
+        C12619() {
         }
 
         public void onClick(View v) {
@@ -129,8 +129,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$1 */
-    class C25171 extends ActionBarMenuItemSearchListener {
-        C25171() {
+    class C17291 extends ActionBarMenuItemSearchListener {
+        C17291() {
         }
 
         public void onSearchExpand() {
@@ -148,8 +148,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$5 */
-    class C25195 implements OnPageChangeListener {
-        C25195() {
+    class C17315 implements OnPageChangeListener {
+        C17315() {
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -164,8 +164,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$6 */
-    class C25206 extends PagerAdapter {
-        C25206() {
+    class C17326 extends PagerAdapter {
+        C17326() {
         }
 
         public int getCount() {
@@ -218,8 +218,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = true;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Alexandra Smith";
-            customDialog.message = "Reminds me of a Chinese prove...";
+            customDialog.name = "Your inner Competition";
+            customDialog.message = "hey, I've updated the source code.";
             customDialog.id = 1;
             customDialog.unread_count = 2;
             customDialog.pinned = false;
@@ -231,7 +231,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog.sent = false;
             this.dialogs.add(customDialog);
             customDialog = new CustomDialog();
-            customDialog.name = "Make Apple";
+            customDialog.name = "Mike Apple";
             customDialog.message = "\ud83e\udd37\u200d\u2642\ufe0f Sticker";
             customDialog.id = 2;
             customDialog.unread_count = 3;
@@ -350,8 +350,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         private ArrayList<MessageObject> messages = new ArrayList();
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1 */
-        class C25211 implements ChatMessageCellDelegate {
-            C25211() {
+        class C17331 implements ChatMessageCellDelegate {
+            C17331() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -407,8 +407,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$2 */
-        class C25222 implements ChatActionCellDelegate {
-            C25222() {
+        class C17342 implements ChatActionCellDelegate {
+            C17342() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -571,10 +571,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             View view = null;
             if (viewType == 0) {
                 view = new ChatMessageCell(this.mContext);
-                ((ChatMessageCell) view).setDelegate(new C25211());
+                ((ChatMessageCell) view).setDelegate(new C17331());
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C25222());
+                ((ChatActionCell) view).setDelegate(new C17342());
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
@@ -631,7 +631,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         float f2;
         float f3;
         this.page1 = new FrameLayout(context);
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C25171()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C17291()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.actionBar.setBackButtonDrawable(new MenuDrawable());
         this.actionBar.setAddToContainer(false);
         this.actionBar.setTitle(LocaleController.getString("ThemePreview", R.string.ThemePreview));
@@ -684,7 +684,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(animator);
-            this.floatingButton.setOutlineProvider(new C18833());
+            this.floatingButton.setOutlineProvider(new C12583());
         }
         FrameLayout frameLayout = this.page1;
         View view = this.floatingButton;
@@ -755,8 +755,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
         View viewPager = new ViewPager(context);
-        viewPager.addOnPageChangeListener(new C25195());
-        viewPager.setAdapter(new C25206());
+        viewPager.addOnPageChangeListener(new C17315());
+        viewPager.setAdapter(new C17326());
         AndroidUtilities.setViewPagerEdgeEffectColor(viewPager, Theme.getColor(Theme.key_actionBarDefault));
         frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         viewPager = new View(context);
@@ -789,7 +789,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(cancelButton, LayoutHelper.createFrame(-2, -1, 51));
-        cancelButton.setOnClickListener(new C18858());
+        cancelButton.setOnClickListener(new C12608());
         TextView doneButton = new TextView(context);
         doneButton.setTextSize(1, 14.0f);
         doneButton.setTextColor(-15095832);
@@ -799,7 +799,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         doneButton.setText(LocaleController.getString("ApplyTheme", R.string.ApplyTheme).toUpperCase());
         doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(doneButton, LayoutHelper.createFrame(-2, -1, 53));
-        doneButton.setOnClickListener(new C18869());
+        doneButton.setOnClickListener(new C12619());
         return this.fragmentView;
     }
 

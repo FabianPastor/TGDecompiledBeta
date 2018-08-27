@@ -17,7 +17,6 @@ import com.mp4parser.iso14496.part15.AvcConfigurationBox;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -29,35 +28,19 @@ public class Track {
     private long duration = 0;
     private boolean first = true;
     private String handler;
-    private AbstractMediaHeaderBox headerBox = null;
+    private AbstractMediaHeaderBox headerBox;
     private int height;
-    private boolean isAudio = false;
+    private boolean isAudio;
     private int[] sampleCompositions;
-    private SampleDescriptionBox sampleDescriptionBox = null;
+    private SampleDescriptionBox sampleDescriptionBox;
     private long[] sampleDurations;
     private ArrayList<SamplePresentationTime> samplePresentationTimes = new ArrayList();
     private ArrayList<Sample> samples = new ArrayList();
     private LinkedList<Integer> syncSamples = null;
     private int timeScale;
-    private long trackId = 0;
+    private long trackId;
     private float volume = 0.0f;
     private int width;
-
-    /* renamed from: org.telegram.messenger.video.Track$1 */
-    class C07111 implements Comparator<SamplePresentationTime> {
-        C07111() {
-        }
-
-        public int compare(SamplePresentationTime o1, SamplePresentationTime o2) {
-            if (o1.presentationTime > o2.presentationTime) {
-                return 1;
-            }
-            if (o1.presentationTime < o2.presentationTime) {
-                return -1;
-            }
-            return 0;
-        }
-    }
 
     private class SamplePresentationTime {
         private long dt;
@@ -260,7 +243,7 @@ public class Track {
     public void prepare() {
         int a;
         ArrayList<SamplePresentationTime> original = new ArrayList(this.samplePresentationTimes);
-        Collections.sort(this.samplePresentationTimes, new C07111());
+        Collections.sort(this.samplePresentationTimes, Track$$Lambda$0.$instance);
         long lastPresentationTimeUs = 0;
         this.sampleDurations = new long[this.samplePresentationTimes.size()];
         long minDelta = Long.MAX_VALUE;
@@ -294,6 +277,16 @@ public class Track {
                 this.sampleCompositions[presentationTime.index] = (int) (presentationTime.presentationTime - presentationTime.dt);
             }
         }
+    }
+
+    static final /* synthetic */ int lambda$prepare$0$Track(SamplePresentationTime o1, SamplePresentationTime o2) {
+        if (o1.presentationTime > o2.presentationTime) {
+            return 1;
+        }
+        if (o1.presentationTime < o2.presentationTime) {
+            return -1;
+        }
+        return 0;
     }
 
     public ArrayList<Sample> getSamples() {

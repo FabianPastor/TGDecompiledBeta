@@ -3,7 +3,6 @@ package org.telegram.ui.Adapters;
 import android.util.SparseArray;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +14,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.ChannelParticipant;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -53,67 +51,6 @@ public class SearchAdapterHelper {
     private ArrayList<TLObject> localServerSearch = new ArrayList();
     private int reqId = 0;
 
-    /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4 */
-    class C08504 implements Runnable {
-
-        /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$4$1 */
-        class C08481 implements Comparator<HashtagObject> {
-            C08481() {
-            }
-
-            public int compare(HashtagObject lhs, HashtagObject rhs) {
-                if (lhs.date < rhs.date) {
-                    return 1;
-                }
-                if (lhs.date > rhs.date) {
-                    return -1;
-                }
-                return 0;
-            }
-        }
-
-        C08504() {
-        }
-
-        public void run() {
-            try {
-                SQLiteCursor cursor = MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).getDatabase().queryFinalized("SELECT id, date FROM hashtag_recent_v2 WHERE 1", new Object[0]);
-                final ArrayList<HashtagObject> arrayList = new ArrayList();
-                final HashMap<String, HashtagObject> hashMap = new HashMap();
-                while (cursor.next()) {
-                    HashtagObject hashtagObject = new HashtagObject();
-                    hashtagObject.hashtag = cursor.stringValue(0);
-                    hashtagObject.date = cursor.intValue(1);
-                    arrayList.add(hashtagObject);
-                    hashMap.put(hashtagObject.hashtag, hashtagObject);
-                }
-                cursor.dispose();
-                Collections.sort(arrayList, new C08481());
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        SearchAdapterHelper.this.setHashtags(arrayList, hashMap);
-                    }
-                });
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$6 */
-    class C08526 implements Runnable {
-        C08526() {
-        }
-
-        public void run() {
-            try {
-                MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-            }
-        }
-    }
-
     protected static final class DialogSearchResult {
         public int date;
         public CharSequence name;
@@ -138,7 +75,7 @@ public class SearchAdapterHelper {
         this.allResultsAreGlobal = global;
     }
 
-    public void queryServerSearch(final String query, boolean allowUsername, boolean allowChats, boolean allowBots, boolean allowSelf, int channelId, boolean kicked) {
+    public void queryServerSearch(String query, boolean allowUsername, boolean allowChats, boolean allowBots, boolean allowSelf, int channelId, boolean kicked) {
         if (this.reqId != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.reqId, true);
             this.reqId = 0;
@@ -176,53 +113,23 @@ public class SearchAdapterHelper {
             } else {
                 req.filter = new TL_channelParticipantsSearch();
             }
-            req.filter.f34q = query;
+            req.filter.f37q = query;
             req.limit = 50;
             req.offset = 0;
             req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-            final int currentReqId = this.channelLastReqId + 1;
+            int currentReqId = this.channelLastReqId + 1;
             this.channelLastReqId = currentReqId;
-            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, final TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (currentReqId == SearchAdapterHelper.this.channelLastReqId && error == null) {
-                                TL_channels_channelParticipants res = response;
-                                SearchAdapterHelper.this.lastFoundChannel = query.toLowerCase();
-                                MessagesController.getInstance(SearchAdapterHelper.this.currentAccount).putUsers(res.users, false);
-                                SearchAdapterHelper.this.groupSearch = res.participants;
-                                SearchAdapterHelper.this.delegate.onDataSetChanged();
-                            }
-                            SearchAdapterHelper.this.channelReqId = 0;
-                        }
-                    });
-                }
-            }, 2);
+            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SearchAdapterHelper$$Lambda$0(this, currentReqId, query), 2);
             if (kicked) {
                 req = new TL_channels_getParticipants();
                 req.filter = new TL_channelParticipantsKicked();
-                req.filter.f34q = query;
+                req.filter.f37q = query;
                 req.limit = 50;
                 req.offset = 0;
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-                final int currentReqId2 = this.channelLastReqId2 + 1;
+                int currentReqId2 = this.channelLastReqId2 + 1;
                 this.channelLastReqId2 = currentReqId2;
-                this.channelReqId2 = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                    public void run(final TLObject response, final TL_error error) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (currentReqId2 == SearchAdapterHelper.this.channelLastReqId2 && error == null) {
-                                    TL_channels_channelParticipants res = response;
-                                    SearchAdapterHelper.this.lastFoundChannel2 = query.toLowerCase();
-                                    MessagesController.getInstance(SearchAdapterHelper.this.currentAccount).putUsers(res.users, false);
-                                    SearchAdapterHelper.this.groupSearch2 = res.participants;
-                                    SearchAdapterHelper.this.delegate.onDataSetChanged();
-                                }
-                                SearchAdapterHelper.this.channelReqId2 = 0;
-                            }
-                        });
-                    }
-                }, 2);
+                this.channelReqId2 = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SearchAdapterHelper$$Lambda$1(this, currentReqId2, query), 2);
             }
         }
         if (!allowUsername) {
@@ -230,120 +137,11 @@ public class SearchAdapterHelper {
         }
         if (query.length() > 0) {
             req = new TL_contacts_search();
-            req.f47q = query;
+            req.f50q = query;
             req.limit = 50;
             currentReqId = this.lastReqId + 1;
             this.lastReqId = currentReqId;
-            final boolean z = allowChats;
-            final boolean z2 = allowBots;
-            final boolean z3 = allowSelf;
-            final String str = query;
-            this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, final TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (currentReqId == SearchAdapterHelper.this.lastReqId && error == null) {
-                                int a;
-                                Chat chat;
-                                User user;
-                                Peer peer;
-                                TL_contacts_found res = response;
-                                SearchAdapterHelper.this.globalSearch.clear();
-                                SearchAdapterHelper.this.globalSearchMap.clear();
-                                SearchAdapterHelper.this.localServerSearch.clear();
-                                MessagesController.getInstance(SearchAdapterHelper.this.currentAccount).putChats(res.chats, false);
-                                MessagesController.getInstance(SearchAdapterHelper.this.currentAccount).putUsers(res.users, false);
-                                MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
-                                SparseArray<Chat> chatsMap = new SparseArray();
-                                SparseArray<User> usersMap = new SparseArray();
-                                for (a = 0; a < res.chats.size(); a++) {
-                                    chat = (Chat) res.chats.get(a);
-                                    chatsMap.put(chat.id, chat);
-                                }
-                                for (a = 0; a < res.users.size(); a++) {
-                                    user = (User) res.users.get(a);
-                                    usersMap.put(user.id, user);
-                                }
-                                for (int b = 0; b < 2; b++) {
-                                    ArrayList<Peer> arrayList;
-                                    if (b != 0) {
-                                        arrayList = res.results;
-                                        for (a = 0; a < arrayList.size(); a++) {
-                                            peer = (Peer) arrayList.get(a);
-                                            user = null;
-                                            chat = null;
-                                            if (peer.user_id != 0) {
-                                                user = (User) usersMap.get(peer.user_id);
-                                            } else if (peer.chat_id != 0) {
-                                                chat = (Chat) chatsMap.get(peer.chat_id);
-                                            } else if (peer.channel_id != 0) {
-                                                chat = (Chat) chatsMap.get(peer.channel_id);
-                                            }
-                                            if (chat == null) {
-                                                SearchAdapterHelper.this.globalSearch.add(user);
-                                                SearchAdapterHelper.this.globalSearchMap.put(user.id, user);
-                                            } else if (!z) {
-                                                SearchAdapterHelper.this.globalSearch.add(chat);
-                                                SearchAdapterHelper.this.globalSearchMap.put(-chat.id, chat);
-                                            }
-                                        }
-                                    } else if (SearchAdapterHelper.this.allResultsAreGlobal) {
-                                        arrayList = res.my_results;
-                                        for (a = 0; a < arrayList.size(); a++) {
-                                            peer = (Peer) arrayList.get(a);
-                                            user = null;
-                                            chat = null;
-                                            if (peer.user_id != 0) {
-                                                user = (User) usersMap.get(peer.user_id);
-                                            } else if (peer.chat_id != 0) {
-                                                chat = (Chat) chatsMap.get(peer.chat_id);
-                                            } else if (peer.channel_id != 0) {
-                                                chat = (Chat) chatsMap.get(peer.channel_id);
-                                            }
-                                            if (chat == null) {
-                                                if (!z) {
-                                                    SearchAdapterHelper.this.globalSearch.add(chat);
-                                                    SearchAdapterHelper.this.globalSearchMap.put(-chat.id, chat);
-                                                }
-                                            } else if (user != null && ((z2 || !user.bot) && (z3 || !user.self))) {
-                                                SearchAdapterHelper.this.globalSearch.add(user);
-                                                SearchAdapterHelper.this.globalSearchMap.put(user.id, user);
-                                            }
-                                        }
-                                    }
-                                }
-                                if (!SearchAdapterHelper.this.allResultsAreGlobal) {
-                                    for (a = 0; a < res.my_results.size(); a++) {
-                                        peer = (Peer) res.my_results.get(a);
-                                        user = null;
-                                        chat = null;
-                                        if (peer.user_id != 0) {
-                                            user = (User) usersMap.get(peer.user_id);
-                                        } else if (peer.chat_id != 0) {
-                                            chat = (Chat) chatsMap.get(peer.chat_id);
-                                        } else if (peer.channel_id != 0) {
-                                            chat = (Chat) chatsMap.get(peer.channel_id);
-                                        }
-                                        if (chat != null) {
-                                            SearchAdapterHelper.this.localServerSearch.add(chat);
-                                            SearchAdapterHelper.this.globalSearchMap.put(-chat.id, chat);
-                                        } else if (user != null) {
-                                            SearchAdapterHelper.this.localServerSearch.add(user);
-                                            SearchAdapterHelper.this.globalSearchMap.put(user.id, user);
-                                        }
-                                    }
-                                }
-                                SearchAdapterHelper.this.lastFoundUsername = str.toLowerCase();
-                                if (SearchAdapterHelper.this.localSearchResults != null) {
-                                    SearchAdapterHelper.this.mergeResults(SearchAdapterHelper.this.localSearchResults);
-                                }
-                                SearchAdapterHelper.this.delegate.onDataSetChanged();
-                            }
-                            SearchAdapterHelper.this.reqId = 0;
-                        }
-                    });
-                }
-            }, 2);
+            this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SearchAdapterHelper$$Lambda$2(this, currentReqId, allowChats, allowBots, allowSelf, query), 2);
             return;
         }
         this.globalSearch.clear();
@@ -351,6 +149,141 @@ public class SearchAdapterHelper {
         this.localServerSearch.clear();
         this.lastReqId = 0;
         this.delegate.onDataSetChanged();
+    }
+
+    final /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int currentReqId, String query, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$10(this, currentReqId, error, response, query));
+    }
+
+    final /* synthetic */ void lambda$null$0$SearchAdapterHelper(int currentReqId, TL_error error, TLObject response, String query) {
+        if (currentReqId == this.channelLastReqId && error == null) {
+            TL_channels_channelParticipants res = (TL_channels_channelParticipants) response;
+            this.lastFoundChannel = query.toLowerCase();
+            MessagesController.getInstance(this.currentAccount).putUsers(res.users, false);
+            this.groupSearch = res.participants;
+            this.delegate.onDataSetChanged();
+        }
+        this.channelReqId = 0;
+    }
+
+    final /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int currentReqId2, String query, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$9(this, currentReqId2, error, response, query));
+    }
+
+    final /* synthetic */ void lambda$null$2$SearchAdapterHelper(int currentReqId2, TL_error error, TLObject response, String query) {
+        if (currentReqId2 == this.channelLastReqId2 && error == null) {
+            TL_channels_channelParticipants res = (TL_channels_channelParticipants) response;
+            this.lastFoundChannel2 = query.toLowerCase();
+            MessagesController.getInstance(this.currentAccount).putUsers(res.users, false);
+            this.groupSearch2 = res.participants;
+            this.delegate.onDataSetChanged();
+        }
+        this.channelReqId2 = 0;
+    }
+
+    final /* synthetic */ void lambda$queryServerSearch$5$SearchAdapterHelper(int currentReqId, boolean allowChats, boolean allowBots, boolean allowSelf, String query, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$8(this, currentReqId, error, response, allowChats, allowBots, allowSelf, query));
+    }
+
+    final /* synthetic */ void lambda$null$4$SearchAdapterHelper(int currentReqId, TL_error error, TLObject response, boolean allowChats, boolean allowBots, boolean allowSelf, String query) {
+        if (currentReqId == this.lastReqId && error == null) {
+            int a;
+            Chat chat;
+            User user;
+            Peer peer;
+            TL_contacts_found res = (TL_contacts_found) response;
+            this.globalSearch.clear();
+            this.globalSearchMap.clear();
+            this.localServerSearch.clear();
+            MessagesController.getInstance(this.currentAccount).putChats(res.chats, false);
+            MessagesController.getInstance(this.currentAccount).putUsers(res.users, false);
+            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
+            SparseArray<Chat> chatsMap = new SparseArray();
+            SparseArray<User> usersMap = new SparseArray();
+            for (a = 0; a < res.chats.size(); a++) {
+                chat = (Chat) res.chats.get(a);
+                chatsMap.put(chat.id, chat);
+            }
+            for (a = 0; a < res.users.size(); a++) {
+                user = (User) res.users.get(a);
+                usersMap.put(user.id, user);
+            }
+            for (int b = 0; b < 2; b++) {
+                ArrayList<Peer> arrayList;
+                if (b != 0) {
+                    arrayList = res.results;
+                    for (a = 0; a < arrayList.size(); a++) {
+                        peer = (Peer) arrayList.get(a);
+                        user = null;
+                        chat = null;
+                        if (peer.user_id != 0) {
+                            user = (User) usersMap.get(peer.user_id);
+                        } else if (peer.chat_id != 0) {
+                            chat = (Chat) chatsMap.get(peer.chat_id);
+                        } else if (peer.channel_id != 0) {
+                            chat = (Chat) chatsMap.get(peer.channel_id);
+                        }
+                        if (chat == null) {
+                            this.globalSearch.add(user);
+                            this.globalSearchMap.put(user.id, user);
+                        } else if (!allowChats) {
+                            this.globalSearch.add(chat);
+                            this.globalSearchMap.put(-chat.id, chat);
+                        }
+                    }
+                } else if (this.allResultsAreGlobal) {
+                    arrayList = res.my_results;
+                    for (a = 0; a < arrayList.size(); a++) {
+                        peer = (Peer) arrayList.get(a);
+                        user = null;
+                        chat = null;
+                        if (peer.user_id != 0) {
+                            user = (User) usersMap.get(peer.user_id);
+                        } else if (peer.chat_id != 0) {
+                            chat = (Chat) chatsMap.get(peer.chat_id);
+                        } else if (peer.channel_id != 0) {
+                            chat = (Chat) chatsMap.get(peer.channel_id);
+                        }
+                        if (chat == null) {
+                            if (!allowChats) {
+                                this.globalSearch.add(chat);
+                                this.globalSearchMap.put(-chat.id, chat);
+                            }
+                        } else if (user != null && ((allowBots || !user.bot) && (allowSelf || !user.self))) {
+                            this.globalSearch.add(user);
+                            this.globalSearchMap.put(user.id, user);
+                        }
+                    }
+                }
+            }
+            if (!this.allResultsAreGlobal) {
+                for (a = 0; a < res.my_results.size(); a++) {
+                    peer = (Peer) res.my_results.get(a);
+                    user = null;
+                    chat = null;
+                    if (peer.user_id != 0) {
+                        user = (User) usersMap.get(peer.user_id);
+                    } else if (peer.chat_id != 0) {
+                        chat = (Chat) chatsMap.get(peer.chat_id);
+                    } else if (peer.channel_id != 0) {
+                        chat = (Chat) chatsMap.get(peer.channel_id);
+                    }
+                    if (chat != null) {
+                        this.localServerSearch.add(chat);
+                        this.globalSearchMap.put(-chat.id, chat);
+                    } else if (user != null) {
+                        this.localServerSearch.add(user);
+                        this.globalSearchMap.put(user.id, user);
+                    }
+                }
+            }
+            this.lastFoundUsername = query.toLowerCase();
+            if (this.localSearchResults != null) {
+                mergeResults(this.localSearchResults);
+            }
+            this.delegate.onDataSetChanged();
+        }
+        this.reqId = 0;
     }
 
     public void unloadRecentHashtags() {
@@ -361,8 +294,42 @@ public class SearchAdapterHelper {
         if (this.hashtagsLoadedFromDb) {
             return true;
         }
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08504());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SearchAdapterHelper$$Lambda$3(this));
         return false;
+    }
+
+    final /* synthetic */ void lambda$loadRecentHashtags$8$SearchAdapterHelper() {
+        try {
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT id, date FROM hashtag_recent_v2 WHERE 1", new Object[0]);
+            ArrayList<HashtagObject> arrayList = new ArrayList();
+            HashMap<String, HashtagObject> hashMap = new HashMap();
+            while (cursor.next()) {
+                HashtagObject hashtagObject = new HashtagObject();
+                hashtagObject.hashtag = cursor.stringValue(0);
+                hashtagObject.date = cursor.intValue(1);
+                arrayList.add(hashtagObject);
+                hashMap.put(hashtagObject.hashtag, hashtagObject);
+            }
+            cursor.dispose();
+            Collections.sort(arrayList, SearchAdapterHelper$$Lambda$6.$instance);
+            AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$7(this, arrayList, hashMap));
+        } catch (Throwable e) {
+            FileLog.m8e(e);
+        }
+    }
+
+    static final /* synthetic */ int lambda$null$6$SearchAdapterHelper(HashtagObject lhs, HashtagObject rhs) {
+        if (lhs.date < rhs.date) {
+            return 1;
+        }
+        if (lhs.date > rhs.date) {
+            return -1;
+        }
+        return 0;
+    }
+
+    final /* synthetic */ void lambda$null$7$SearchAdapterHelper(ArrayList arrayList, HashMap hashMap) {
+        setHashtags(arrayList, hashMap);
     }
 
     public void mergeResults(ArrayList<TLObject> localResults) {
@@ -397,7 +364,7 @@ public class SearchAdapterHelper {
     public void addHashtagsFromMessage(CharSequence message) {
         if (message != null) {
             boolean changed = false;
-            Matcher matcher = Pattern.compile("(^|\\s)#[\\w@\\.]+").matcher(message);
+            Matcher matcher = Pattern.compile("(^|\\s)#[\\w@.]+").matcher(message);
             while (matcher.find()) {
                 int start = matcher.start();
                 int end = matcher.end();
@@ -427,35 +394,35 @@ public class SearchAdapterHelper {
         }
     }
 
-    private void putRecentHashtags(final ArrayList<HashtagObject> arrayList) {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).getDatabase().beginTransaction();
-                    SQLitePreparedStatement state = MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).getDatabase().executeFast("REPLACE INTO hashtag_recent_v2 VALUES(?, ?)");
-                    int a = 0;
-                    while (a < arrayList.size() && a != 100) {
-                        HashtagObject hashtagObject = (HashtagObject) arrayList.get(a);
-                        state.requery();
-                        state.bindString(1, hashtagObject.hashtag);
-                        state.bindInteger(2, hashtagObject.date);
-                        state.step();
-                        a++;
-                    }
-                    state.dispose();
-                    MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).getDatabase().commitTransaction();
-                    if (arrayList.size() >= 100) {
-                        MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).getDatabase().beginTransaction();
-                        for (a = 100; a < arrayList.size(); a++) {
-                            MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE id = '" + ((HashtagObject) arrayList.get(a)).hashtag + "'").stepThis().dispose();
-                        }
-                        MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).getDatabase().commitTransaction();
-                    }
-                } catch (Throwable e) {
-                    FileLog.m3e(e);
-                }
+    private void putRecentHashtags(ArrayList<HashtagObject> arrayList) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SearchAdapterHelper$$Lambda$4(this, arrayList));
+    }
+
+    final /* synthetic */ void lambda$putRecentHashtags$9$SearchAdapterHelper(ArrayList arrayList) {
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
+            SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO hashtag_recent_v2 VALUES(?, ?)");
+            int a = 0;
+            while (a < arrayList.size() && a != 100) {
+                HashtagObject hashtagObject = (HashtagObject) arrayList.get(a);
+                state.requery();
+                state.bindString(1, hashtagObject.hashtag);
+                state.bindInteger(2, hashtagObject.date);
+                state.step();
+                a++;
             }
-        });
+            state.dispose();
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
+            if (arrayList.size() >= 100) {
+                MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
+                for (a = 100; a < arrayList.size(); a++) {
+                    MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE id = '" + ((HashtagObject) arrayList.get(a)).hashtag + "'").stepThis().dispose();
+                }
+                MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
+            }
+        } catch (Throwable e) {
+            FileLog.m8e(e);
+        }
     }
 
     public ArrayList<TLObject> getGlobalSearch() {
@@ -493,7 +460,15 @@ public class SearchAdapterHelper {
     public void clearRecentHashtags() {
         this.hashtags = new ArrayList();
         this.hashtagsByText = new HashMap();
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C08526());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SearchAdapterHelper$$Lambda$5(this));
+    }
+
+    final /* synthetic */ void lambda$clearRecentHashtags$10$SearchAdapterHelper() {
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
+        } catch (Throwable e) {
+            FileLog.m8e(e);
+        }
     }
 
     public void setHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {

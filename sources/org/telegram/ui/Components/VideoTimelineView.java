@@ -41,10 +41,10 @@ public class VideoTimelineView extends View {
     private long videoLength;
 
     /* renamed from: org.telegram.ui.Components.VideoTimelineView$1 */
-    class C14031 extends AsyncTask<Integer, Integer, Bitmap> {
+    class C09711 extends AsyncTask<Integer, Integer, Bitmap> {
         private int frameNum = 0;
 
-        C14031() {
+        C09711() {
         }
 
         protected Bitmap doInBackground(Integer... objects) {
@@ -80,7 +80,7 @@ public class VideoTimelineView extends View {
                 bitmap2 = bitmap;
                 return bitmap;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -254,7 +254,7 @@ public class VideoTimelineView extends View {
             this.mediaMetadataRetriever.setDataSource(path);
             this.videoLength = Long.parseLong(this.mediaMetadataRetriever.extractMetadata(9));
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         invalidate();
     }
@@ -278,7 +278,7 @@ public class VideoTimelineView extends View {
                 }
                 this.frameTimeOffset = this.videoLength / ((long) this.framesToLoad);
             }
-            this.currentTask = new C14031();
+            this.currentTask = new C09711();
             this.currentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(frameNum), null, null});
         }
     }
@@ -291,7 +291,7 @@ public class VideoTimelineView extends View {
                     this.mediaMetadataRetriever = null;
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         for (int a = 0; a < this.frames.size(); a++) {

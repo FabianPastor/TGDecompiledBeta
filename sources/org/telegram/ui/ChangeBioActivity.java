@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import com.google.android.exoplayer2.C0012C;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -49,8 +50,8 @@ public class ChangeBioActivity extends BaseFragment {
     private TextView helpTextView;
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$2 */
-    class C09452 implements OnTouchListener {
-        C09452() {
+    class C06002 implements OnTouchListener {
+        C06002() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -59,8 +60,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$4 */
-    class C09474 implements OnEditorActionListener {
-        C09474() {
+    class C06024 implements OnEditorActionListener {
+        C06024() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -73,8 +74,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$5 */
-    class C09485 implements TextWatcher {
-        C09485() {
+    class C06035 implements TextWatcher {
+        C06035() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,8 +90,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$1 */
-    class C21101 extends ActionBarMenuOnItemClick {
-        C21101() {
+    class C14351 extends ActionBarMenuOnItemClick {
+        C14351() {
         }
 
         public void onItemClick(int id) {
@@ -106,12 +107,12 @@ public class ChangeBioActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("UserBio", R.string.UserBio));
-        this.actionBar.setActionBarMenuOnItemClick(new C21101());
+        this.actionBar.setActionBarMenuOnItemClick(new C14351());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C09452());
+        this.fragmentView.setOnTouchListener(new C06002());
         FrameLayout fieldContainer = new FrameLayout(context);
         linearLayout.addView(fieldContainer, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
         this.firstNameField = new EditTextBoldCursor(context);
@@ -122,7 +123,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.firstNameField.setMaxLines(4);
         this.firstNameField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24.0f : 0.0f), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0.0f : 24.0f), AndroidUtilities.dp(6.0f));
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.firstNameField.setImeOptions(268435456);
+        this.firstNameField.setImeOptions(C0012C.ENCODING_PCM_MU_LAW);
         this.firstNameField.setInputType(147457);
         this.firstNameField.setImeOptions(6);
         this.firstNameField.setFilters(new InputFilter[]{new LengthFilter(70) {
@@ -148,8 +149,8 @@ public class ChangeBioActivity extends BaseFragment {
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new C09474());
-        this.firstNameField.addTextChangedListener(new C09485());
+        this.firstNameField.setOnEditorActionListener(new C06024());
+        this.firstNameField.addTextChangedListener(new C06035());
         fieldContainer.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
         this.checkTextView = new TextView(context);
         this.checkTextView.setTextSize(1, 15.0f);
@@ -206,7 +207,7 @@ public class ChangeBioActivity extends BaseFragment {
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.m3e(e);
+                                    FileLog.m8e(e);
                                 }
                                 userFull.about = newName;
                                 NotificationCenter.getInstance(ChangeBioActivity.this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoaded, Integer.valueOf(user.id), userFull);
@@ -220,7 +221,7 @@ public class ChangeBioActivity extends BaseFragment {
                             try {
                                 progressDialog.dismiss();
                             } catch (Throwable e) {
-                                FileLog.m3e(e);
+                                FileLog.m8e(e);
                             }
                             AlertsCreator.processError(ChangeBioActivity.this.currentAccount, error, ChangeBioActivity.this, req, new Object[0]);
                         }
@@ -234,7 +235,7 @@ public class ChangeBioActivity extends BaseFragment {
                     try {
                         dialog.dismiss();
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });

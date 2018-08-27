@@ -5,6 +5,10 @@ public final class Conversions {
         return new Integer(i);
     }
 
+    public static Object shortObject(short i) {
+        return new Short(i);
+    }
+
     public static Object byteObject(byte i) {
         return new Byte(i);
     }

@@ -33,8 +33,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     private FrameLayout radialProgressView;
 
     /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$1 */
-    class C13981 implements OnClickListener {
-        C13981() {
+    class C09661 implements OnClickListener {
+        C09661() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -54,8 +54,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$2 */
-    class C13992 implements OnClickListener {
-        C13992() {
+    class C09672 implements OnClickListener {
+        C09672() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -82,8 +82,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         }
         setDismissDialogByButtons(false);
         setTitle(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
-        setPositiveButton(LocaleController.getString("UpdateNow", R.string.UpdateNow), new C13981());
-        setNeutralButton(LocaleController.getString("Later", R.string.Later), new C13992());
+        setPositiveButton(LocaleController.getString("UpdateNow", R.string.UpdateNow), new C09661());
+        setNeutralButton(LocaleController.getString("Later", R.string.Later), new C09672());
         this.radialProgressView = new FrameLayout(this.parentActivity) {
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);

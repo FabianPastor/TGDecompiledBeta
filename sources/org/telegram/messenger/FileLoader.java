@@ -3,6 +3,8 @@ package org.telegram.messenger;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
+import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.FileLoadOperation.FileLoadOperationDelegate;
 import org.telegram.messenger.FileUploadOperation.FileUploadOperationDelegate;
-import org.telegram.messenger.exoplayer2.upstream.DataSource;
-import org.telegram.messenger.exoplayer2.upstream.TransferListener;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -78,14 +77,14 @@ public class FileLoader {
     }
 
     /* renamed from: org.telegram.messenger.FileLoader$6 */
-    class C19626 implements FileLoadOperationDelegate {
+    class C13446 implements FileLoadOperationDelegate {
         final /* synthetic */ Document val$document;
         final /* synthetic */ String val$finalFileName;
         final /* synthetic */ int val$finalType;
         final /* synthetic */ FileLocation val$location;
         final /* synthetic */ WebFile val$webDocument;
 
-        C19626(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
+        C13446(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
             this.val$finalFileName = str;
             this.val$finalType = i;
             this.val$document = document;
@@ -238,11 +237,11 @@ public class FileLoader {
             fileLoaderQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.FileLoader$4$1 */
-                class C19611 implements FileUploadOperationDelegate {
+                class C13431 implements FileUploadOperationDelegate {
 
                     /* renamed from: org.telegram.messenger.FileLoader$4$1$2 */
-                    class C01692 implements Runnable {
-                        C01692() {
+                    class C02752 implements Runnable {
+                        C02752() {
                         }
 
                         public void run() {
@@ -279,7 +278,7 @@ public class FileLoader {
                         }
                     }
 
-                    C19611() {
+                    C13431() {
                     }
 
                     public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
@@ -323,7 +322,7 @@ public class FileLoader {
                     }
 
                     public void didFailedUploadingFile(FileUploadOperation operation) {
-                        FileLoader.fileLoaderQueue.postRunnable(new C01692());
+                        FileLoader.fileLoaderQueue.postRunnable(new C02752());
                     }
 
                     public void didChangedUploadProgress(FileUploadOperation operation, float progress) {
@@ -352,7 +351,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, operation);
                     }
-                    operation.setDelegate(new C19611());
+                    operation.setDelegate(new C13431());
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;
@@ -1035,7 +1034,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         try {
             semaphore.await();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return result[0];
     }
@@ -1308,7 +1307,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         return new File(dir, getAttachFileName(attach, ext));
     }
 
-    public static FileStreamLoadOperation getStreamLoadOperation(TransferListener<? super DataSource> listener) {
+    public static FileStreamLoadOperation getStreamLoadOperation(TransferListener listener) {
         return new FileStreamLoadOperation(listener);
     }
 
@@ -1327,13 +1326,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (obj != null) {
                 int currentSide;
                 if (byMinSide) {
-                    currentSide = obj.f44h >= obj.f45w ? obj.f45w : obj.f44h;
+                    currentSide = obj.f47h >= obj.f48w ? obj.f48w : obj.f47h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (side > lastSide && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
                     }
                 } else {
-                    currentSide = obj.f45w >= obj.f44h ? obj.f45w : obj.f44h;
+                    currentSide = obj.f48w >= obj.f47h ? obj.f48w : obj.f47h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (currentSide <= side && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
@@ -1520,7 +1519,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     encrypted.deleteOnExit();
                                 }
                             } catch (Throwable e) {
-                                FileLog.m3e(e);
+                                FileLog.m8e(e);
                             }
                             try {
                                 File key = new File(FileLoader.getInternalCacheDir(), file.getName() + ".enc.key");
@@ -1528,7 +1527,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     key.deleteOnExit();
                                 }
                             } catch (Throwable e2) {
-                                FileLog.m3e(e2);
+                                FileLog.m8e(e2);
                             }
                         } else if (file.exists()) {
                             try {
@@ -1536,7 +1535,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     file.deleteOnExit();
                                 }
                             } catch (Throwable e22) {
-                                FileLog.m3e(e22);
+                                FileLog.m8e(e22);
                             }
                         }
                         try {
@@ -1545,7 +1544,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 qFile.deleteOnExit();
                             }
                         } catch (Throwable e222) {
-                            FileLog.m3e(e222);
+                            FileLog.m8e(e222);
                         }
                     }
                     if (type == 2) {

@@ -80,6 +80,7 @@ public class InputSurface {
         return this.mSurface;
     }
 
+    @TargetApi(18)
     public void setPresentationTime(long nsecs) {
         EGLExt.eglPresentationTimeANDROID(this.mEGLDisplay, this.mEGLSurface, nsecs);
     }

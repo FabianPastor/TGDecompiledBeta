@@ -39,8 +39,8 @@ public class JoinGroupAlert extends BottomSheet {
     private String hash;
 
     /* renamed from: org.telegram.ui.Components.JoinGroupAlert$1 */
-    class C12491 implements OnClickListener {
-        C12491() {
+    class C08181 implements OnClickListener {
+        C08181() {
         }
 
         public void onClick(View view) {
@@ -49,8 +49,8 @@ public class JoinGroupAlert extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.JoinGroupAlert$2 */
-    class C12512 implements OnClickListener {
-        C12512() {
+    class C08202 implements OnClickListener {
+        C08202() {
         }
 
         public void onClick(View v) {
@@ -219,12 +219,12 @@ public class JoinGroupAlert extends BottomSheet {
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new C12491());
+        pickerBottomLayout.cancelButton.setOnClickListener(new C08181());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", R.string.JoinGroup));
-        pickerBottomLayout.doneButton.setOnClickListener(new C12512());
+        pickerBottomLayout.doneButton.setOnClickListener(new C08202());
     }
 }

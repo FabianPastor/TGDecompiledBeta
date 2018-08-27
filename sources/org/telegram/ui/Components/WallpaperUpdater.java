@@ -2,7 +2,6 @@ package org.telegram.ui.Components;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -40,47 +39,47 @@ public class WallpaperUpdater {
         this.currentWallpaperPath = new File(FileLoader.getDirectory(4), Utilities.random.nextInt() + ".jpg");
     }
 
-    public void showAlert(final boolean fromTheme) {
+    public void showAlert(boolean fromTheme) {
         Builder builder = new Builder(this.parentActivity);
-        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default), LocaleController.getString("Cancel", R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)}, new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == 0) {
-                    try {
-                        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-                        File image = AndroidUtilities.generatePicturePath();
-                        if (image != null) {
-                            if (VERSION.SDK_INT >= 24) {
-                                takePictureIntent.putExtra("output", FileProvider.getUriForFile(WallpaperUpdater.this.parentActivity, "org.telegram.messenger.beta.provider", image));
-                                takePictureIntent.addFlags(2);
-                                takePictureIntent.addFlags(1);
-                            } else {
-                                takePictureIntent.putExtra("output", Uri.fromFile(image));
-                            }
-                            WallpaperUpdater.this.currentPicturePath = image.getAbsolutePath();
-                        }
-                        WallpaperUpdater.this.parentActivity.startActivityForResult(takePictureIntent, 10);
-                    } catch (Throwable e) {
-                        try {
-                            FileLog.m3e(e);
-                        } catch (Throwable e2) {
-                            FileLog.m3e(e2);
-                        }
+        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default), LocaleController.getString("Cancel", R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)}, new WallpaperUpdater$$Lambda$0(this, fromTheme));
+        builder.show();
+    }
+
+    final /* synthetic */ void lambda$showAlert$0$WallpaperUpdater(boolean fromTheme, DialogInterface dialogInterface, int i) {
+        if (i == 0) {
+            try {
+                Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+                File image = AndroidUtilities.generatePicturePath();
+                if (image != null) {
+                    if (VERSION.SDK_INT >= 24) {
+                        takePictureIntent.putExtra("output", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", image));
+                        takePictureIntent.addFlags(2);
+                        takePictureIntent.addFlags(1);
+                    } else {
+                        takePictureIntent.putExtra("output", Uri.fromFile(image));
                     }
-                } else if (i == 1) {
-                    Intent photoPickerIntent = new Intent("android.intent.action.PICK");
-                    photoPickerIntent.setType("image/*");
-                    WallpaperUpdater.this.parentActivity.startActivityForResult(photoPickerIntent, 11);
-                } else if (!fromTheme) {
-                } else {
-                    if (i == 2) {
-                        WallpaperUpdater.this.delegate.needOpenColorPicker();
-                    } else if (i == 3) {
-                        WallpaperUpdater.this.delegate.didSelectWallpaper(null, null);
-                    }
+                    this.currentPicturePath = image.getAbsolutePath();
+                }
+                this.parentActivity.startActivityForResult(takePictureIntent, 10);
+            } catch (Throwable e) {
+                try {
+                    FileLog.m8e(e);
+                } catch (Throwable e2) {
+                    FileLog.m8e(e2);
                 }
             }
-        });
-        builder.show();
+        } else if (i == 1) {
+            Intent photoPickerIntent = new Intent("android.intent.action.PICK");
+            photoPickerIntent.setType("image/*");
+            this.parentActivity.startActivityForResult(photoPickerIntent, 11);
+        } else if (!fromTheme) {
+        } else {
+            if (i == 2) {
+                this.delegate.needOpenColorPicker();
+            } else if (i == 3) {
+                this.delegate.didSelectWallpaper(null, null);
+            }
+        }
     }
 
     public void cleanup() {
@@ -121,7 +120,7 @@ public class WallpaperUpdater {
                         try {
                             stream2.close();
                         } catch (Throwable e2) {
-                            FileLog.m3e(e2);
+                            FileLog.m8e(e2);
                             stream = stream2;
                         }
                     }
@@ -130,12 +129,12 @@ public class WallpaperUpdater {
                     e2 = e3;
                     stream = stream2;
                     try {
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                         if (stream != null) {
                             try {
                                 stream.close();
                             } catch (Throwable e22) {
-                                FileLog.m3e(e22);
+                                FileLog.m8e(e22);
                             }
                         }
                         this.currentPicturePath = null;
@@ -145,7 +144,7 @@ public class WallpaperUpdater {
                             try {
                                 stream.close();
                             } catch (Throwable e222) {
-                                FileLog.m3e(e222);
+                                FileLog.m8e(e222);
                             }
                         }
                         throw th;
@@ -160,7 +159,7 @@ public class WallpaperUpdater {
                 }
             } catch (Exception e4) {
                 e222 = e4;
-                FileLog.m3e(e222);
+                FileLog.m8e(e222);
                 if (stream != null) {
                     stream.close();
                 }
@@ -174,7 +173,7 @@ public class WallpaperUpdater {
                 bitmap.compress(CompressFormat.JPEG, 87, new FileOutputStream(this.currentWallpaperPath));
                 this.delegate.didSelectWallpaper(this.currentWallpaperPath, bitmap);
             } catch (Throwable e2222) {
-                FileLog.m3e(e2222);
+                FileLog.m8e(e2222);
             }
         }
     }

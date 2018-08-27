@@ -5,39 +5,39 @@ import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.os.Handler;
 import android.view.TextureView;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer.EventListener;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.SimpleExoPlayer.VideoListener;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.LoopingMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.upstream.DataSource.Factory;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.exoplayer2.DefaultLoadControl;
-import org.telegram.messenger.exoplayer2.ExoPlaybackException;
-import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
-import org.telegram.messenger.exoplayer2.PlaybackParameters;
-import org.telegram.messenger.exoplayer2.Player;
-import org.telegram.messenger.exoplayer2.SimpleExoPlayer;
-import org.telegram.messenger.exoplayer2.SimpleExoPlayer.VideoListener;
-import org.telegram.messenger.exoplayer2.Timeline;
-import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorsFactory;
-import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
-import org.telegram.messenger.exoplayer2.source.LoopingMediaSource;
-import org.telegram.messenger.exoplayer2.source.MediaSource;
-import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
-import org.telegram.messenger.exoplayer2.source.dash.DashMediaSource;
-import org.telegram.messenger.exoplayer2.source.dash.DefaultDashChunkSource;
-import org.telegram.messenger.exoplayer2.source.hls.HlsMediaSource;
-import org.telegram.messenger.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
-import org.telegram.messenger.exoplayer2.source.smoothstreaming.SsMediaSource;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
-import org.telegram.messenger.exoplayer2.trackselection.DefaultTrackSelector;
-import org.telegram.messenger.exoplayer2.trackselection.MappingTrackSelector;
-import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
-import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
-import org.telegram.messenger.exoplayer2.upstream.DefaultBandwidthMeter;
-import org.telegram.messenger.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import org.telegram.messenger.secretmedia.ExtendedDefaultDataSourceFactory;
 
 @SuppressLint({"NewApi"})
-public class VideoPlayer implements NotificationCenterDelegate, EventListener, VideoListener {
+public class VideoPlayer implements EventListener, VideoListener, NotificationCenterDelegate {
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static final int RENDERER_BUILDING_STATE_BUILDING = 2;
     private static final int RENDERER_BUILDING_STATE_BUILT = 3;
@@ -79,8 +79,8 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
     }
 
     /* renamed from: org.telegram.ui.Components.VideoPlayer$1 */
-    class C22731 implements Player.EventListener {
-        C22731() {
+    class C15571 implements Player.EventListener {
+        C15571() {
         }
 
         public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
@@ -138,7 +138,7 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
         }
         if (this.mixedAudio && this.audioPlayer == null) {
             this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 2);
-            this.audioPlayer.addListener(new C22731());
+            this.audioPlayer.addListener(new C15571());
             this.audioPlayer.setPlayWhenReady(this.autoplay);
         }
     }
@@ -373,6 +373,9 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
     }
 
     public void onRepeatModeChanged(int repeatMode) {
+    }
+
+    public void onSurfaceSizeChanged(int width, int height) {
     }
 
     public void setVolume(float volume) {

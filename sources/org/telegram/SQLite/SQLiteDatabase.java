@@ -5,8 +5,8 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class SQLiteDatabase {
-    private boolean inTransaction = false;
-    private boolean isOpen = false;
+    private boolean inTransaction;
+    private boolean isOpen = true;
     private final long sqliteHandle;
 
     native void beginTransaction(long j);
@@ -23,7 +23,6 @@ public class SQLiteDatabase {
 
     public SQLiteDatabase(String fileName) throws SQLiteException {
         this.sqliteHandle = opendb(fileName, ApplicationLoader.getFilesDirFixed().getPath());
-        this.isOpen = true;
     }
 
     public boolean tableExists(String tableName) throws SQLiteException {
@@ -65,7 +64,7 @@ public class SQLiteDatabase {
                 closedb(this.sqliteHandle);
             } catch (SQLiteException e) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m2e(e.getMessage(), e);
+                    FileLog.m7e(e.getMessage(), e);
                 }
             }
             this.isOpen = false;

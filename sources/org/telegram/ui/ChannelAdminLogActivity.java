@@ -47,6 +47,11 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.exoplayer2.C0012C;
+import com.google.android.exoplayer2.extractor.ts.PsExtractor;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -72,10 +77,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.LinearSmoothScrollerMiddle;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -188,7 +189,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private RadialProgressView progressBar;
     private FrameLayout progressView;
     private View progressView2;
-    private PhotoViewerProvider provider = new C25501();
+    private PhotoViewerProvider provider = new C17601();
     private FrameLayout roundVideoContainer;
     private MessageObject scrollToMessage;
     private int scrollToOffsetOnRecreate = 0;
@@ -208,8 +209,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private boolean wasPaused = false;
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$6 */
-    class C10026 implements OnTouchListener {
-        C10026() {
+    class C06576 implements OnTouchListener {
+        C06576() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -218,8 +219,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$2 */
-    class C21272 implements RequestDelegate {
-        C21272() {
+    class C14522 implements RequestDelegate {
+        C14522() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -276,8 +277,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$3 */
-    class C21283 extends ActionBarMenuOnItemClick {
-        C21283() {
+    class C14533 extends ActionBarMenuOnItemClick {
+        C14533() {
         }
 
         public void onItemClick(int id) {
@@ -288,8 +289,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$4 */
-    class C21294 extends ActionBarMenuItemSearchListener {
-        C21294() {
+    class C14544 extends ActionBarMenuItemSearchListener {
+        C14544() {
         }
 
         public void onSearchCollapse() {
@@ -315,8 +316,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$8 */
-    class C21318 implements OnItemClickListener {
-        C21318() {
+    class C14568 implements OnItemClickListener {
+        C14568() {
         }
 
         public void onItemClick(View view, int position) {
@@ -332,8 +333,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         private int rowCount;
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$1 */
-        class C21321 implements ChatMessageCellDelegate {
-            C21321() {
+        class C14571 implements ChatMessageCellDelegate {
+            C14571() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -564,8 +565,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$2 */
-        class C21332 implements ChatActionCellDelegate {
-            C21332() {
+        class C14582 implements ChatActionCellDelegate {
+            C14582() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -609,8 +610,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3 */
-        class C21343 implements BotHelpCellDelegate {
-            C21343() {
+        class C14593 implements BotHelpCellDelegate {
+            C14593() {
             }
 
             public void didPressUrl(String url) {
@@ -666,16 +667,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     ChannelAdminLogActivity.this.chatMessageCellsCache.remove(0);
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                chatMessageCell.setDelegate(new C21321());
+                chatMessageCell.setDelegate(new C14571());
                 chatMessageCell.setAllowAssistant(true);
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C21332());
+                ((ChatActionCell) view).setDelegate(new C14582());
             } else if (viewType == 2) {
                 view = new ChatUnreadCell(this.mContext);
             } else if (viewType == 3) {
                 view = new BotHelpCell(this.mContext);
-                ((BotHelpCell) view).setDelegate(new C21343());
+                ((BotHelpCell) view).setDelegate(new C14593());
             } else if (viewType == 4) {
                 view = new ChatLoadingCell(this.mContext);
             }
@@ -783,7 +784,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             try {
                 super.notifyDataSetChanged();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -792,7 +793,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             try {
                 super.notifyItemChanged(position);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -801,7 +802,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             try {
                 super.notifyItemRangeChanged(positionStart, itemCount);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -810,7 +811,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             try {
                 super.notifyItemInserted(position);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -819,7 +820,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             try {
                 super.notifyItemMoved(fromPosition, toPosition);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -828,7 +829,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             try {
                 super.notifyItemRangeInserted(positionStart, itemCount);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -837,7 +838,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             try {
                 super.notifyItemRemoved(position);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -846,14 +847,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             try {
                 super.notifyItemRangeRemoved(positionStart, itemCount);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$1 */
-    class C25501 extends EmptyPhotoViewerProvider {
-        C25501() {
+    class C17601 extends EmptyPhotoViewerProvider {
+        C17601() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -969,7 +970,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             this.loading = true;
             TL_channels_getAdminLog req = new TL_channels_getAdminLog();
             req.channel = MessagesController.getInputChannel(this.currentChat);
-            req.f46q = this.searchQuery;
+            req.f49q = this.searchQuery;
             req.limit = 50;
             if (reset || this.messages.isEmpty()) {
                 req.max_id = 0;
@@ -988,7 +989,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
             }
             updateEmptyPlaceholder();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C21272());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C14522());
             if (reset && this.chatAdapter != null) {
                 this.chatAdapter.notifyDataSetChanged();
             }
@@ -1094,11 +1095,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         boolean z = VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet();
         actionBar.setOccupyStatusBar(z);
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
-        this.actionBar.setActionBarMenuOnItemClick(new C21283());
+        this.actionBar.setActionBarMenuOnItemClick(new C14533());
         this.avatarContainer = new ChatAvatarContainer(context, null, false);
         this.avatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet());
         this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21294());
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C14544());
         this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.avatarContainer.setEnabled(false);
         this.avatarContainer.setTitle(this.currentChat.title);
@@ -1212,7 +1213,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.emptyViewContainer = new FrameLayout(context);
         this.emptyViewContainer.setVisibility(4);
         this.contentView.addView(this.emptyViewContainer, LayoutHelper.createFrame(-1, -2, 17));
-        this.emptyViewContainer.setOnTouchListener(new C10026());
+        this.emptyViewContainer.setOnTouchListener(new C06576());
         this.emptyView = new TextView(context);
         this.emptyView.setTextSize(1, 14.0f);
         this.emptyView.setGravity(17);
@@ -1266,7 +1267,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 return result;
             }
         };
-        this.chatListView.setOnItemClickListener(new C21318());
+        this.chatListView.setOnItemClickListener(new C14568());
         this.chatListView.setTag(Integer.valueOf(1));
         this.chatListView.setVerticalScrollBarEnabled(true);
         RecyclerListView recyclerListView = this.chatListView;
@@ -1297,8 +1298,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             private float totalDy = 0.0f;
 
             /* renamed from: org.telegram.ui.ChannelAdminLogActivity$10$1 */
-            class C09961 extends AnimatorListenerAdapter {
-                C09961() {
+            class C06511 extends AnimatorListenerAdapter {
+                C06511() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -1332,7 +1333,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(ChannelAdminLogActivity.this.floatingDateView, "alpha", new float[]{1.0f});
                     access$4500.playTogether(animatorArr);
-                    ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new C09961());
+                    ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new C06511());
                     ChannelAdminLogActivity.this.floatingDateAnimation.start();
                 }
                 ChannelAdminLogActivity.this.checkScrollForLoad(true);
@@ -1372,8 +1373,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.bottomOverlayChat.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChannelAdminLogActivity$12$1 */
-            class C21261 implements AdminLogFilterAlertDelegate {
-                C21261() {
+            class C14511 implements AdminLogFilterAlertDelegate {
+                C14511() {
                 }
 
                 public void didSelectRights(TL_channelAdminLogEventsFilter filter, SparseArray<User> admins) {
@@ -1392,7 +1393,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 if (ChannelAdminLogActivity.this.getParentActivity() != null) {
                     AdminLogFilterAlert adminLogFilterAlert = new AdminLogFilterAlert(ChannelAdminLogActivity.this.getParentActivity(), ChannelAdminLogActivity.this.currentFilter, ChannelAdminLogActivity.this.selectedAdmins, ChannelAdminLogActivity.this.currentChat.megagroup);
                     adminLogFilterAlert.setCurrentAdmins(ChannelAdminLogActivity.this.admins);
-                    adminLogFilterAlert.setAdminLogFilterAlertDelegate(new C21261());
+                    adminLogFilterAlert.setAdminLogFilterAlertDelegate(new C14511());
                     ChannelAdminLogActivity.this.showDialog(adminLogFilterAlert);
                 }
             }
@@ -1444,8 +1445,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.searchCalendarButton.setOnClickListener(new View.OnClickListener() {
 
             /* renamed from: org.telegram.ui.ChannelAdminLogActivity$15$1 */
-            class C09971 implements OnDateSetListener {
-                C09971() {
+            class C06521 implements OnDateSetListener {
+                C06521() {
                 }
 
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -1458,8 +1459,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             /* renamed from: org.telegram.ui.ChannelAdminLogActivity$15$2 */
-            class C09982 implements OnClickListener {
-                C09982() {
+            class C06532 implements OnClickListener {
+                C06532() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
@@ -1471,12 +1472,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     AndroidUtilities.hideKeyboard(ChannelAdminLogActivity.this.searchItem.getSearchField());
                     Calendar calendar = Calendar.getInstance();
                     try {
-                        DatePickerDialog dialog = new DatePickerDialog(ChannelAdminLogActivity.this.getParentActivity(), new C09971(), calendar.get(1), calendar.get(2), calendar.get(5));
+                        DatePickerDialog dialog = new DatePickerDialog(ChannelAdminLogActivity.this.getParentActivity(), new C06521(), calendar.get(1), calendar.get(2), calendar.get(5));
                         final DatePicker datePicker = dialog.getDatePicker();
                         datePicker.setMinDate(1375315200000L);
                         datePicker.setMaxDate(System.currentTimeMillis());
                         dialog.setButton(-1, LocaleController.getString("JumpToDate", R.string.JumpToDate), dialog);
-                        dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C09982());
+                        dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C06532());
                         if (VERSION.SDK_INT >= 21) {
                             dialog.setOnShowListener(new OnShowListener() {
                                 public void onShow(DialogInterface dialog) {
@@ -1492,7 +1493,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         }
                         ChannelAdminLogActivity.this.showDialog(dialog);
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             }
@@ -1898,11 +1899,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 case 17:
                     try {
                         intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:" + this.selectedObject.messageOwner.media.phone_number));
-                        intent.addFlags(268435456);
+                        intent.addFlags(C0012C.ENCODING_PCM_MU_LAW);
                         getParentActivity().startActivityForResult(intent, 500);
                         break;
                     } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                         break;
                     }
             }
@@ -2251,7 +2252,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             writer.close();
             presentFragment(new PhonebookShareActivity(null, null, f2, ContactsController.formatName(first_name, last_name)));
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -2442,7 +2443,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         themeDescriptionArr[102] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inContactNameText);
         themeDescriptionArr[103] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outContactNameText);
         themeDescriptionArr[104] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inContactPhoneText);
-        themeDescriptionArr[105] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outContactPhoneText);
+        themeDescriptionArr[105] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outContactPhoneText");
         themeDescriptionArr[106] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_mediaProgress);
         themeDescriptionArr[107] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_inAudioProgress);
         themeDescriptionArr[108] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, Theme.key_chat_outAudioProgress);
@@ -2525,7 +2526,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         themeDescriptionArr[185] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, Theme.key_chat_outContactBackground);
         themeDescriptionArr[186] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, Theme.key_chat_outContactIcon);
         themeDescriptionArr[187] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, Theme.key_chat_inLocationBackground);
-        themeDescriptionArr[188] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, Theme.key_chat_inLocationIcon);
+        themeDescriptionArr[TsExtractor.TS_PACKET_SIZE] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, Theme.key_chat_inLocationIcon);
         themeDescriptionArr[PsExtractor.PRIVATE_STREAM_1] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, Theme.key_chat_outLocationBackground);
         themeDescriptionArr[190] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, Theme.key_chat_outLocationIcon);
         themeDescriptionArr[191] = new ThemeDescription(this.bottomOverlayChat, 0, null, Theme.chat_composeBackgroundPaint, null, null, Theme.key_chat_messagePanelBackground);

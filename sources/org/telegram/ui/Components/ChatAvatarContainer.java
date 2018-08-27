@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -52,53 +51,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private TimerDrawable timerDrawable;
     private SimpleTextView titleTextView;
 
-    /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$1 */
-    class C11591 implements OnClickListener {
-        C11591() {
-        }
-
-        public void onClick(View v) {
-            ChatAvatarContainer.this.parentFragment.showDialog(AlertsCreator.createTTLAlert(ChatAvatarContainer.this.getContext(), ChatAvatarContainer.this.parentFragment.getCurrentEncryptedChat()).create());
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$2 */
-    class C11602 implements OnClickListener {
-        C11602() {
-        }
-
-        public void onClick(View v) {
-            User user = ChatAvatarContainer.this.parentFragment.getCurrentUser();
-            Chat chat = ChatAvatarContainer.this.parentFragment.getCurrentChat();
-            Bundle args;
-            ProfileActivity fragment;
-            if (user != null) {
-                args = new Bundle();
-                if (UserObject.isUserSelf(user)) {
-                    args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
-                    MediaActivity fragment2 = new MediaActivity(args, new int[]{-1, -1, -1, -1, -1});
-                    fragment2.setChatInfo(ChatAvatarContainer.this.parentFragment.getCurrentChatInfo());
-                    ChatAvatarContainer.this.parentFragment.presentFragment(fragment2);
-                    return;
-                }
-                args.putInt("user_id", user.id);
-                if (ChatAvatarContainer.this.timeItem != null) {
-                    args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
-                }
-                fragment = new ProfileActivity(args);
-                fragment.setPlayProfileAnimation(true);
-                ChatAvatarContainer.this.parentFragment.presentFragment(fragment);
-            } else if (chat != null) {
-                args = new Bundle();
-                args.putInt("chat_id", chat.id);
-                fragment = new ProfileActivity(args);
-                fragment.setChatInfo(ChatAvatarContainer.this.parentFragment.getCurrentChatInfo());
-                fragment.setPlayProfileAnimation(true);
-                ChatAvatarContainer.this.parentFragment.presentFragment(fragment);
-            }
-        }
-    }
-
     public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean needTime) {
         super(context);
         this.parentFragment = chatActivity;
@@ -126,10 +78,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.timerDrawable = timerDrawable;
             imageView.setImageDrawable(timerDrawable);
             addView(this.timeItem);
-            this.timeItem.setOnClickListener(new C11591());
+            this.timeItem.setOnClickListener(new ChatAvatarContainer$$Lambda$0(this));
         }
         if (this.parentFragment != null) {
-            setOnClickListener(new C11602());
+            setOnClickListener(new ChatAvatarContainer$$Lambda$1(this));
             Chat chat = this.parentFragment.getCurrentChat();
             this.statusDrawables[0] = new TypingDotsDrawable();
             this.statusDrawables[1] = new RecordStatusDrawable();
@@ -145,6 +97,41 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
                 statusDrawable.setIsChat(z);
             }
+        }
+    }
+
+    final /* synthetic */ void lambda$new$0$ChatAvatarContainer(View v) {
+        this.parentFragment.showDialog(AlertsCreator.createTTLAlert(getContext(), this.parentFragment.getCurrentEncryptedChat()).create());
+    }
+
+    final /* synthetic */ void lambda$new$1$ChatAvatarContainer(View v) {
+        User user = this.parentFragment.getCurrentUser();
+        Chat chat = this.parentFragment.getCurrentChat();
+        Bundle args;
+        ProfileActivity fragment;
+        if (user != null) {
+            args = new Bundle();
+            if (UserObject.isUserSelf(user)) {
+                args.putLong("dialog_id", this.parentFragment.getDialogId());
+                MediaActivity fragment2 = new MediaActivity(args, new int[]{-1, -1, -1, -1, -1});
+                fragment2.setChatInfo(this.parentFragment.getCurrentChatInfo());
+                this.parentFragment.presentFragment(fragment2);
+                return;
+            }
+            args.putInt("user_id", user.id);
+            if (this.timeItem != null) {
+                args.putLong("dialog_id", this.parentFragment.getDialogId());
+            }
+            fragment = new ProfileActivity(args);
+            fragment.setPlayProfileAnimation(true);
+            this.parentFragment.presentFragment(fragment);
+        } else if (chat != null) {
+            args = new Bundle();
+            args.putInt("chat_id", chat.id);
+            fragment = new ProfileActivity(args);
+            fragment.setChatInfo(this.parentFragment.getCurrentChatInfo());
+            fragment.setPlayProfileAnimation(true);
+            this.parentFragment.presentFragment(fragment);
         }
     }
 
@@ -252,7 +239,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
                 return;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return;
             }
         }

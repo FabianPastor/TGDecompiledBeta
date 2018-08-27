@@ -15,9 +15,9 @@ import android.os.Build.VERSION;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import com.google.android.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
 public abstract class JobIntentService extends Service {
     static final boolean DEBUG = false;

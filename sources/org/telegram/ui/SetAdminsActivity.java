@@ -67,8 +67,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     private int usersStartRow;
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$4 */
-    class C18384 implements Comparator<ChatParticipant> {
-        C18384() {
+    class C12254 implements Comparator<ChatParticipant> {
+        C12254() {
         }
 
         public int compare(ChatParticipant lhs, ChatParticipant rhs) {
@@ -124,8 +124,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$1 */
-    class C25001 extends ActionBarMenuOnItemClick {
-        C25001() {
+    class C17131 extends ActionBarMenuOnItemClick {
+        C17131() {
         }
 
         public void onItemClick(int id) {
@@ -136,8 +136,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$2 */
-    class C25012 extends ActionBarMenuItemSearchListener {
-        C25012() {
+    class C17142 extends ActionBarMenuItemSearchListener {
+        C17142() {
         }
 
         public void onSearchExpand() {
@@ -180,8 +180,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$3 */
-    class C25023 implements OnItemClickListener {
-        C25023() {
+    class C17153 implements OnItemClickListener {
+        C17153() {
         }
 
         public void onItemClick(View view, int position) {
@@ -260,8 +260,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.SetAdminsActivity$5 */
-    class C25035 implements ThemeDescriptionDelegate {
-        C25035() {
+    class C17165 implements ThemeDescriptionDelegate {
+        C17165() {
         }
 
         public void didSetColor() {
@@ -401,7 +401,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             if (query == null) {
                 this.searchResult.clear();
@@ -416,7 +416,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                         SearchAdapter.this.searchTimer.cancel();
                         SearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                     SearchAdapter.this.processSearch(query);
                 }
@@ -570,8 +570,8 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SetAdminsTitle", R.string.SetAdminsTitle));
-        this.actionBar.setActionBarMenuOnItemClick(new C25001());
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C25012());
+        this.actionBar.setActionBarMenuOnItemClick(new C17131());
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C17142());
         this.searchItem.getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.listAdapter = new ListAdapter(context);
         this.searchAdapter = new SearchAdapter(context);
@@ -583,7 +583,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C25023());
+        this.listView.setOnItemClickListener(new C17153());
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setVisibility(8);
         this.emptyView.setShowAtCenter(true);
@@ -643,9 +643,9 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             this.participants.clear();
             this.participants.addAll(this.info.participants.participants);
             try {
-                Collections.sort(this.participants, new C18384());
+                Collections.sort(this.participants, new C12254());
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -680,7 +680,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new C25035();
+        ThemeDescriptionDelegate cellDelegate = new C17165();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[34];
         themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell.class, UserCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);

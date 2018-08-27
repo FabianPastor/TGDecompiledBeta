@@ -87,8 +87,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     private TextView textView2;
 
     /* renamed from: org.telegram.ui.SessionsActivity$1 */
-    class C24921 extends ActionBarMenuOnItemClick {
-        C24921() {
+    class C17051 extends ActionBarMenuOnItemClick {
+        C17051() {
         }
 
         public void onItemClick(int id) {
@@ -99,14 +99,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$2 */
-    class C24972 implements OnItemClickListener {
+    class C17102 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.SessionsActivity$2$1 */
-        class C18311 implements OnClickListener {
+        class C12181 implements OnClickListener {
 
             /* renamed from: org.telegram.ui.SessionsActivity$2$1$1 */
-            class C24931 implements RequestDelegate {
-                C24931() {
+            class C17061 implements RequestDelegate {
+                C17061() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -135,8 +135,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             /* renamed from: org.telegram.ui.SessionsActivity$2$1$2 */
-            class C24942 implements RequestDelegate {
-                C24942() {
+            class C17072 implements RequestDelegate {
+                C17072() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -155,19 +155,19 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            C18311() {
+            C12181() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (SessionsActivity.this.currentType == 0) {
-                    ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_auth_resetAuthorizations(), new C24931());
+                    ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_auth_resetAuthorizations(), new C17061());
                     return;
                 }
-                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_account_resetWebAuthorizations(), new C24942());
+                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_account_resetWebAuthorizations(), new C17072());
             }
         }
 
-        C24972() {
+        C17102() {
         }
 
         public void onItemClick(View view, int position) {
@@ -181,7 +181,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         builder.setMessage(LocaleController.getString("AreYouSureWebSessions", R.string.AreYouSureWebSessions));
                     }
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18311());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C12181());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     SessionsActivity.this.showDialog(builder.create());
                 }
@@ -245,7 +245,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                                 try {
                                                     progressDialog.dismiss();
                                                 } catch (Throwable e) {
-                                                    FileLog.m3e(e);
+                                                    FileLog.m8e(e);
                                                 }
                                                 if (error == null) {
                                                     SessionsActivity.this.sessions.remove(authorization);
@@ -270,7 +270,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                             try {
                                                 progressDialog.dismiss();
                                             } catch (Throwable e) {
-                                                FileLog.m3e(e);
+                                                FileLog.m8e(e);
                                             }
                                             if (error == null) {
                                                 SessionsActivity.this.sessions.remove(authorization2);
@@ -296,8 +296,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$3 */
-    class C24983 implements RequestDelegate {
-        C24983() {
+    class C17113 implements RequestDelegate {
+        C17113() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -326,8 +326,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$4 */
-    class C24994 implements RequestDelegate {
-        C24994() {
+    class C17124 implements RequestDelegate {
+        C17124() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -525,7 +525,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         } else {
             this.actionBar.setTitle(LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C24921());
+        this.actionBar.setActionBarMenuOnItemClick(new C17051());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -574,7 +574,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.listView.setEmptyView(this.emptyView);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C24972());
+        this.listView.setOnItemClickListener(new C17102());
         return this.fragmentView;
     }
 
@@ -597,10 +597,10 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 this.loading = true;
             }
             if (this.currentType == 0) {
-                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAuthorizations(), new C24983()), this.classGuid);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAuthorizations(), new C17113()), this.classGuid);
                 return;
             }
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWebAuthorizations(), new C24994()), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWebAuthorizations(), new C17124()), this.classGuid);
         }
     }
 

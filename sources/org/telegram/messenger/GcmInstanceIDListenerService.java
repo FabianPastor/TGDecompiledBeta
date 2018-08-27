@@ -6,39 +6,33 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 public class GcmInstanceIDListenerService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         try {
-            final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("Refreshed token: " + refreshedToken);
-                    }
-                    ApplicationLoader.postInitApplication();
-                    GcmInstanceIDListenerService.sendRegistrationToServer(refreshedToken);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new GcmInstanceIDListenerService$$Lambda$0(FirebaseInstanceId.getInstance().getToken()));
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
-    public static void sendRegistrationToServer(final String token) {
-        Utilities.stageQueue.postRunnable(new Runnable() {
-            public void run() {
-                SharedConfig.pushString = token;
-                for (int a = 0; a < 3; a++) {
-                    UserConfig userConfig = UserConfig.getInstance(a);
-                    userConfig.registeredForPush = false;
-                    userConfig.saveConfig(false);
-                    if (userConfig.getClientUserId() != 0) {
-                        final int currentAccount = a;
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                MessagesController.getInstance(currentAccount).registerForPush(token);
-                            }
-                        });
-                    }
-                }
+    static final /* synthetic */ void lambda$onTokenRefresh$0$GcmInstanceIDListenerService(String refreshedToken) {
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.m5d("Refreshed token: " + refreshedToken);
+        }
+        ApplicationLoader.postInitApplication();
+        sendRegistrationToServer(refreshedToken);
+    }
+
+    public static void sendRegistrationToServer(String token) {
+        Utilities.stageQueue.postRunnable(new GcmInstanceIDListenerService$$Lambda$1(token));
+    }
+
+    static final /* synthetic */ void lambda$sendRegistrationToServer$2$GcmInstanceIDListenerService(String token) {
+        SharedConfig.pushString = token;
+        for (int a = 0; a < 3; a++) {
+            UserConfig userConfig = UserConfig.getInstance(a);
+            userConfig.registeredForPush = false;
+            userConfig.saveConfig(false);
+            if (userConfig.getClientUserId() != 0) {
+                AndroidUtilities.runOnUIThread(new GcmInstanceIDListenerService$$Lambda$2(a, token));
             }
-        });
+        }
     }
 }

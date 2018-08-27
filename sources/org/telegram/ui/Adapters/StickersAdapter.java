@@ -17,7 +17,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -283,52 +282,52 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         }
     }
 
-    private void searchServerStickers(final String emoji) {
+    private void searchServerStickers(String emoji) {
         if (this.lastReqId != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.lastReqId, true);
         }
         TL_messages_getStickers req = new TL_messages_getStickers();
         req.emoticon = emoji;
         req.hash = 0;
-        this.lastReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-            public void run(final TLObject response, TL_error error) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        boolean z = false;
-                        StickersAdapter.this.lastReqId = 0;
-                        if (emoji.equals(StickersAdapter.this.lastSticker) && (response instanceof TL_messages_stickers)) {
-                            int oldCount;
-                            int newCount;
-                            StickersAdapter.this.delayLocalResults = false;
-                            TL_messages_stickers res = response;
-                            if (StickersAdapter.this.stickers != null) {
-                                oldCount = StickersAdapter.this.stickers.size();
-                            } else {
-                                oldCount = 0;
-                            }
-                            StickersAdapter.this.addStickersToResult(res.stickers);
-                            if (StickersAdapter.this.stickers != null) {
-                                newCount = StickersAdapter.this.stickers.size();
-                            } else {
-                                newCount = 0;
-                            }
-                            if (!(StickersAdapter.this.visible || StickersAdapter.this.stickers == null || StickersAdapter.this.stickers.isEmpty())) {
-                                StickersAdapter.this.checkStickerFilesExistAndDownload();
-                                StickersAdapterDelegate access$800 = StickersAdapter.this.delegate;
-                                if (!(StickersAdapter.this.stickers == null || StickersAdapter.this.stickers.isEmpty() || !StickersAdapter.this.stickersToLoad.isEmpty())) {
-                                    z = true;
-                                }
-                                access$800.needChangePanelVisibility(z);
-                                StickersAdapter.this.visible = true;
-                            }
-                            if (oldCount != newCount) {
-                                StickersAdapter.this.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                });
+        this.lastReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new StickersAdapter$$Lambda$0(this, emoji));
+    }
+
+    final /* synthetic */ void lambda$searchServerStickers$1$StickersAdapter(String emoji, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new StickersAdapter$$Lambda$1(this, emoji, response));
+    }
+
+    final /* synthetic */ void lambda$null$0$StickersAdapter(String emoji, TLObject response) {
+        boolean z = false;
+        this.lastReqId = 0;
+        if (emoji.equals(this.lastSticker) && (response instanceof TL_messages_stickers)) {
+            int oldCount;
+            int newCount;
+            this.delayLocalResults = false;
+            TL_messages_stickers res = (TL_messages_stickers) response;
+            if (this.stickers != null) {
+                oldCount = this.stickers.size();
+            } else {
+                oldCount = 0;
             }
-        });
+            addStickersToResult(res.stickers);
+            if (this.stickers != null) {
+                newCount = this.stickers.size();
+            } else {
+                newCount = 0;
+            }
+            if (!(this.visible || this.stickers == null || this.stickers.isEmpty())) {
+                checkStickerFilesExistAndDownload();
+                StickersAdapterDelegate stickersAdapterDelegate = this.delegate;
+                if (!(this.stickers == null || this.stickers.isEmpty() || !this.stickersToLoad.isEmpty())) {
+                    z = true;
+                }
+                stickersAdapterDelegate.needChangePanelVisibility(z);
+                this.visible = true;
+            }
+            if (oldCount != newCount) {
+                notifyDataSetChanged();
+            }
+        }
     }
 
     public void clearStickers() {

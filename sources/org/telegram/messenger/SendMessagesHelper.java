@@ -21,11 +21,14 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.Container;
 import com.coremedia.iso.boxes.MediaBox;
 import com.coremedia.iso.boxes.MediaHeaderBox;
 import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.coremedia.iso.boxes.TrackBox;
 import com.coremedia.iso.boxes.TrackHeaderBox;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.googlecode.mp4parser.util.Matrix;
 import com.googlecode.mp4parser.util.Path;
 import java.io.File;
@@ -44,8 +47,6 @@ import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -193,29 +194,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     private int currentAccount;
     private ChatFull currentChatInfo = null;
     private HashMap<String, ArrayList<DelayedMessage>> delayedMessages = new HashMap();
-    private LocationProvider locationProvider = new LocationProvider(new C19821());
+    private LocationProvider locationProvider = new LocationProvider(new C13521());
     private SparseArray<Message> sendingMessages = new SparseArray();
     private SparseArray<MessageObject> unsentMessages = new SparseArray();
     private HashMap<String, Boolean> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
-
-    /* renamed from: org.telegram.messenger.SendMessagesHelper$2 */
-    class C05132 implements Runnable {
-        C05132() {
-        }
-
-        public void run() {
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileDidUpload);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileDidFailUpload);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FilePreparingStarted);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileNewChunkAvailable);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FilePreparingFailed);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.httpFileDidFailedLoad);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.httpFileDidLoaded);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileDidLoaded);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileDidFailedLoad);
-        }
-    }
 
     protected class DelayedMessage {
         public EncryptedChat encryptedChat;
@@ -323,8 +306,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         private GpsLocationListener networkLocationListener = new GpsLocationListener();
 
         /* renamed from: org.telegram.messenger.SendMessagesHelper$LocationProvider$1 */
-        class C05271 implements Runnable {
-            C05271() {
+        class C03681 implements Runnable {
+            C03681() {
             }
 
             public void run() {
@@ -348,7 +331,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             public void onLocationChanged(Location location) {
                 if (location != null && LocationProvider.this.locationQueryCancelRunnable != null) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("found location " + location);
+                        FileLog.m5d("found location " + location);
                     }
                     LocationProvider.this.lastKnownLocation = location;
                     if (location.getAccuracy() < 100.0f) {
@@ -401,12 +384,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             try {
                 this.locationManager.requestLocationUpdates("gps", 1, 0.0f, this.gpsLocationListener);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             try {
                 this.locationManager.requestLocationUpdates("network", 1, 0.0f, this.networkLocationListener);
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
             try {
                 this.lastKnownLocation = this.locationManager.getLastKnownLocation("gps");
@@ -414,12 +397,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     this.lastKnownLocation = this.locationManager.getLastKnownLocation("network");
                 }
             } catch (Throwable e22) {
-                FileLog.m3e(e22);
+                FileLog.m8e(e22);
             }
             if (this.locationQueryCancelRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.locationQueryCancelRunnable);
             }
-            this.locationQueryCancelRunnable = new C05271();
+            this.locationQueryCancelRunnable = new C03681();
             AndroidUtilities.runOnUIThread(this.locationQueryCancelRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         }
 
@@ -454,8 +437,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
-    class C19821 implements LocationProviderDelegate {
-        C19821() {
+    class C13521 implements LocationProviderDelegate {
+        C13521() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -509,7 +492,19 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public SendMessagesHelper(int instance) {
         this.currentAccount = instance;
-        AndroidUtilities.runOnUIThread(new C05132());
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$0(this));
+    }
+
+    final /* synthetic */ void lambda$new$0$SendMessagesHelper() {
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidUpload);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailUpload);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FilePreparingStarted);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileNewChunkAvailable);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FilePreparingFailed);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailedLoad);
     }
 
     public void cleanup() {
@@ -787,78 +782,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     } else {
                         messageObject = null;
                     }
-                    final File cacheFile;
                     if (fileType == 0) {
-                        cacheFile = new File(FileLoader.getDirectory(4), Utilities.MD5(path) + "." + ImageLoader.getHttpUrlExtension(path, "file"));
-                        Utilities.globalQueue.postRunnable(new Runnable() {
-                            public void run() {
-                                final TL_photo photo = SendMessagesHelper.this.generatePhotoSizes(cacheFile.toString(), null);
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        if (photo != null) {
-                                            messageObject.messageOwner.media.photo = photo;
-                                            messageObject.messageOwner.attachPath = cacheFile.toString();
-                                            ArrayList messages = new ArrayList();
-                                            messages.add(messageObject.messageOwner);
-                                            MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(messages, false, true, false, 0);
-                                            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.updateMessageMedia, messageObject.messageOwner);
-                                            message.location = ((PhotoSize) photo.sizes.get(photo.sizes.size() - 1)).location;
-                                            message.httpLocation = null;
-                                            if (message.type == 4) {
-                                                SendMessagesHelper.this.performSendDelayedMessage(message, message.messageObjects.indexOf(messageObject));
-                                                return;
-                                            } else {
-                                                SendMessagesHelper.this.performSendDelayedMessage(message);
-                                                return;
-                                            }
-                                        }
-                                        if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.m1e("can't load image " + path + " to file " + cacheFile.toString());
-                                        }
-                                        message.markAsError();
-                                    }
-                                });
-                            }
-                        });
+                        Utilities.globalQueue.postRunnable(new SendMessagesHelper$$Lambda$1(this, new File(FileLoader.getDirectory(4), Utilities.MD5(path) + "." + ImageLoader.getHttpUrlExtension(path, "file")), messageObject, message, path));
                     } else if (fileType == 1) {
-                        cacheFile = new File(FileLoader.getDirectory(4), Utilities.MD5(path) + ".gif");
-                        Utilities.globalQueue.postRunnable(new Runnable() {
-                            public void run() {
-                                boolean z = true;
-                                final Document document = message.obj.getDocument();
-                                if (document.thumb.location instanceof TL_fileLocationUnavailable) {
-                                    try {
-                                        Bitmap bitmap = ImageLoader.loadBitmap(cacheFile.getAbsolutePath(), null, 90.0f, 90.0f, true);
-                                        if (bitmap != null) {
-                                            if (message.sendEncryptedRequest == null) {
-                                                z = false;
-                                            }
-                                            document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, z);
-                                            bitmap.recycle();
-                                        }
-                                    } catch (Throwable e) {
-                                        document.thumb = null;
-                                        FileLog.m3e(e);
-                                    }
-                                    if (document.thumb == null) {
-                                        document.thumb = new TL_photoSizeEmpty();
-                                        document.thumb.type = "s";
-                                    }
-                                }
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        message.httpLocation = null;
-                                        message.obj.messageOwner.attachPath = cacheFile.toString();
-                                        message.location = document.thumb.location;
-                                        ArrayList messages = new ArrayList();
-                                        messages.add(messageObject.messageOwner);
-                                        MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(messages, false, true, false, 0);
-                                        SendMessagesHelper.this.performSendDelayedMessage(message);
-                                        NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.updateMessageMedia, message.obj.messageOwner);
-                                    }
-                                });
-                            }
-                        });
+                        Utilities.globalQueue.postRunnable(new SendMessagesHelper$$Lambda$2(this, message, new File(FileLoader.getDirectory(4), Utilities.MD5(path) + ".gif"), messageObject));
                     }
                 }
                 this.delayedMessages.remove(path);
@@ -882,6 +809,70 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 this.delayedMessages.remove(path);
             }
         }
+    }
+
+    final /* synthetic */ void lambda$didReceivedNotification$2$SendMessagesHelper(File cacheFile, MessageObject messageObject, DelayedMessage message, String path) {
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$61(this, generatePhotoSizes(cacheFile.toString(), null), messageObject, cacheFile, message, path));
+    }
+
+    final /* synthetic */ void lambda$null$1$SendMessagesHelper(TL_photo photo, MessageObject messageObject, File cacheFile, DelayedMessage message, String path) {
+        if (photo != null) {
+            messageObject.messageOwner.media.photo = photo;
+            messageObject.messageOwner.attachPath = cacheFile.toString();
+            ArrayList messages = new ArrayList();
+            messages.add(messageObject.messageOwner);
+            MessagesStorage.getInstance(this.currentAccount).putMessages(messages, false, true, false, 0);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateMessageMedia, messageObject.messageOwner);
+            message.location = ((PhotoSize) photo.sizes.get(photo.sizes.size() - 1)).location;
+            message.httpLocation = null;
+            if (message.type == 4) {
+                performSendDelayedMessage(message, message.messageObjects.indexOf(messageObject));
+                return;
+            } else {
+                performSendDelayedMessage(message);
+                return;
+            }
+        }
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.m6e("can't load image " + path + " to file " + cacheFile.toString());
+        }
+        message.markAsError();
+    }
+
+    final /* synthetic */ void lambda$didReceivedNotification$4$SendMessagesHelper(DelayedMessage message, File cacheFile, MessageObject messageObject) {
+        boolean z = true;
+        Document document = message.obj.getDocument();
+        if (document.thumb.location instanceof TL_fileLocationUnavailable) {
+            try {
+                Bitmap bitmap = ImageLoader.loadBitmap(cacheFile.getAbsolutePath(), null, 90.0f, 90.0f, true);
+                if (bitmap != null) {
+                    if (message.sendEncryptedRequest == null) {
+                        z = false;
+                    }
+                    document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, z);
+                    bitmap.recycle();
+                }
+            } catch (Throwable e) {
+                document.thumb = null;
+                FileLog.m8e(e);
+            }
+            if (document.thumb == null) {
+                document.thumb = new TL_photoSizeEmpty();
+                document.thumb.type = "s";
+            }
+        }
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$60(this, message, cacheFile, document, messageObject));
+    }
+
+    final /* synthetic */ void lambda$null$3$SendMessagesHelper(DelayedMessage message, File cacheFile, Document document, MessageObject messageObject) {
+        message.httpLocation = null;
+        message.obj.messageOwner.attachPath = cacheFile.toString();
+        message.location = document.thumb.location;
+        ArrayList messages = new ArrayList();
+        messages.add(messageObject.messageOwner);
+        MessagesStorage.getInstance(this.currentAccount).putMessages(messages, false, true, false, 0);
+        performSendDelayedMessage(message);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateMessageMedia, message.obj.messageOwner);
     }
 
     private void revertEditingMessageObject(MessageObject object) {
@@ -1188,12 +1179,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 newDocument.thumb = new TL_photoCachedSize();
                                 newDocument.thumb.location = document.thumb.location;
                                 newDocument.thumb.size = document.thumb.size;
-                                newDocument.thumb.f45w = document.thumb.f45w;
-                                newDocument.thumb.f44h = document.thumb.f44h;
+                                newDocument.thumb.f48w = document.thumb.f48w;
+                                newDocument.thumb.f47h = document.thumb.f47h;
                                 newDocument.thumb.type = document.thumb.type;
                                 newDocument.thumb.bytes = arr;
                             } catch (Throwable e) {
-                                FileLog.m3e(e);
+                                FileLog.m8e(e);
                             }
                         }
                     }
@@ -1221,7 +1212,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         int a;
         if (lower_id != 0) {
             Chat chat;
-            final Peer to_id = MessagesController.getInstance(this.currentAccount).getPeer((int) peer);
+            Peer to_id = MessagesController.getInstance(this.currentAccount).getPeer((int) peer);
             boolean isMegagroup = false;
             boolean isSignature = false;
             boolean canSendStickers = true;
@@ -1395,7 +1386,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             arr.add(newMsg);
                             putToSendingMessages(newMsg);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
+                                FileLog.m5d("forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
                             }
                             if (!((groupedIdChanged && arr.size() > 0) || arr.size() == 100 || a == messages.size() - 1)) {
                                 if (a != messages.size() - 1) {
@@ -1407,7 +1398,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             MessagesController.getInstance(this.currentAccount).updateInterfaceWithMessages(peer, objArr);
                             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                             UserConfig.getInstance(this.currentAccount).saveConfig(false);
-                            final TL_messages_forwardMessages req = new TL_messages_forwardMessages();
+                            TL_messages_forwardMessages req = new TL_messages_forwardMessages();
                             req.to_peer = inputPeer;
                             req.grouped = lastGroupedId != 0;
                             if (req.to_peer instanceof TL_inputPeerChannel) {
@@ -1427,132 +1418,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             req.id = ids;
                             boolean z = messages.size() == 1 && ((MessageObject) messages.get(0)).messageOwner.with_my_score;
                             req.with_my_score = z;
-                            final ArrayList<Message> newMsgObjArr = arr;
-                            final ArrayList<MessageObject> newMsgArr = objArr;
-                            final LongSparseArray<Message> messagesByRandomIdsFinal = messagesByRandomIds;
-                            final boolean isMegagroupFinal = isMegagroup;
-                            final long j = peer;
-                            final boolean z2 = toMyself;
-                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                                public void run(TLObject response, TL_error error) {
-                                    int a;
-                                    final Message newMsgObj;
-                                    if (error == null) {
-                                        Update update;
-                                        SparseLongArray newMessagesByIds = new SparseLongArray();
-                                        Updates updates = (Updates) response;
-                                        a = 0;
-                                        while (a < updates.updates.size()) {
-                                            update = (Update) updates.updates.get(a);
-                                            if (update instanceof TL_updateMessageID) {
-                                                TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
-                                                newMessagesByIds.put(updateMessageID.id, updateMessageID.random_id);
-                                                updates.updates.remove(a);
-                                                a--;
-                                            }
-                                            a++;
-                                        }
-                                        Integer value = (Integer) MessagesController.getInstance(SendMessagesHelper.this.currentAccount).dialogs_read_outbox_max.get(Long.valueOf(j));
-                                        if (value == null) {
-                                            value = Integer.valueOf(MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getDialogReadMax(true, j));
-                                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).dialogs_read_outbox_max.put(Long.valueOf(j), value);
-                                        }
-                                        int sentCount = 0;
-                                        a = 0;
-                                        while (a < updates.updates.size()) {
-                                            update = (Update) updates.updates.get(a);
-                                            if ((update instanceof TL_updateNewMessage) || (update instanceof TL_updateNewChannelMessage)) {
-                                                Message message;
-                                                updates.updates.remove(a);
-                                                a--;
-                                                if (update instanceof TL_updateNewMessage) {
-                                                    TL_updateNewMessage updateNewMessage = (TL_updateNewMessage) update;
-                                                    message = updateNewMessage.message;
-                                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewDifferenceParams(-1, updateNewMessage.pts, -1, updateNewMessage.pts_count);
-                                                } else {
-                                                    TL_updateNewChannelMessage updateNewChannelMessage = (TL_updateNewChannelMessage) update;
-                                                    message = updateNewChannelMessage.message;
-                                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewChannelDifferenceParams(updateNewChannelMessage.pts, updateNewChannelMessage.pts_count, message.to_id.channel_id);
-                                                    if (isMegagroupFinal) {
-                                                        message.flags |= Integer.MIN_VALUE;
-                                                    }
-                                                }
-                                                ImageLoader.saveMessageThumbs(message);
-                                                message.unread = value.intValue() < message.id;
-                                                if (z2) {
-                                                    message.out = true;
-                                                    message.unread = false;
-                                                    message.media_unread = false;
-                                                }
-                                                long random_id = newMessagesByIds.get(message.id);
-                                                if (random_id != 0) {
-                                                    newMsgObj = (Message) messagesByRandomIdsFinal.get(random_id);
-                                                    if (newMsgObj != null) {
-                                                        int index = newMsgObjArr.indexOf(newMsgObj);
-                                                        if (index != -1) {
-                                                            MessageObject msgObj = (MessageObject) newMsgArr.get(index);
-                                                            newMsgObjArr.remove(index);
-                                                            newMsgArr.remove(index);
-                                                            final int oldId = newMsgObj.id;
-                                                            final ArrayList<Message> sentMessages = new ArrayList();
-                                                            sentMessages.add(message);
-                                                            newMsgObj.id = message.id;
-                                                            sentCount++;
-                                                            SendMessagesHelper.this.updateMediaPaths(msgObj, message, null, true);
-                                                            MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-
-                                                                /* renamed from: org.telegram.messenger.SendMessagesHelper$5$1$1 */
-                                                                class C05181 implements Runnable {
-                                                                    C05181() {
-                                                                    }
-
-                                                                    public void run() {
-                                                                        newMsgObj.send_state = 0;
-                                                                        DataQuery.getInstance(SendMessagesHelper.this.currentAccount).increasePeerRaiting(j);
-                                                                        NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(message.id), message, Long.valueOf(j), Long.valueOf(0));
-                                                                        SendMessagesHelper.this.processSentMessage(oldId);
-                                                                        SendMessagesHelper.this.removeFromSendingMessages(oldId);
-                                                                    }
-                                                                }
-
-                                                                public void run() {
-                                                                    MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, to_id.channel_id);
-                                                                    MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(sentMessages, true, false, false, 0);
-                                                                    AndroidUtilities.runOnUIThread(new C05181());
-                                                                }
-                                                            });
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            a++;
-                                        }
-                                        if (!updates.updates.isEmpty()) {
-                                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processUpdates(updates, false);
-                                        }
-                                        StatsController.getInstance(SendMessagesHelper.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, sentCount);
-                                    } else {
-                                        final TL_error tL_error = error;
-                                        AndroidUtilities.runOnUIThread(new Runnable() {
-                                            public void run() {
-                                                AlertsCreator.processError(SendMessagesHelper.this.currentAccount, tL_error, null, req, new Object[0]);
-                                            }
-                                        });
-                                    }
-                                    for (a = 0; a < newMsgObjArr.size(); a++) {
-                                        newMsgObj = (Message) newMsgObjArr.get(a);
-                                        MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).markMessageAsSendError(newMsgObj);
-                                        AndroidUtilities.runOnUIThread(new Runnable() {
-                                            public void run() {
-                                                newMsgObj.send_state = 2;
-                                                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.id));
-                                                SendMessagesHelper.this.processSentMessage(newMsgObj.id);
-                                                SendMessagesHelper.this.removeFromSendingMessages(newMsgObj.id);
-                                            }
-                                        });
-                                    }
-                                }
-                            }, 68);
+                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$3(this, peer, isMegagroup, toMyself, messagesByRandomIds, arr, objArr, to_id, req), 68);
                             if (a != messages.size() - 1) {
                                 objArr = new ArrayList();
                                 arr = new ArrayList();
@@ -1575,6 +1441,117 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             processForwardFromMyName((MessageObject) messages.get(a), peer);
         }
         return 0;
+    }
+
+    final /* synthetic */ void lambda$sendMessage$9$SendMessagesHelper(long peer, boolean isMegagroupFinal, boolean toMyself, LongSparseArray messagesByRandomIdsFinal, ArrayList newMsgObjArr, ArrayList newMsgArr, Peer to_id, TL_messages_forwardMessages req, TLObject response, TL_error error) {
+        int a1;
+        Message newMsgObj1;
+        if (error == null) {
+            Update update;
+            SparseLongArray newMessagesByIds = new SparseLongArray();
+            Updates updates = (Updates) response;
+            a1 = 0;
+            while (a1 < updates.updates.size()) {
+                update = (Update) updates.updates.get(a1);
+                if (update instanceof TL_updateMessageID) {
+                    TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
+                    newMessagesByIds.put(updateMessageID.id, updateMessageID.random_id);
+                    updates.updates.remove(a1);
+                    a1--;
+                }
+                a1++;
+            }
+            Integer value = (Integer) MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max.get(Long.valueOf(peer));
+            if (value == null) {
+                value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(true, peer));
+                MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max.put(Long.valueOf(peer), value);
+            }
+            int sentCount = 0;
+            a1 = 0;
+            while (a1 < updates.updates.size()) {
+                update = (Update) updates.updates.get(a1);
+                if ((update instanceof TL_updateNewMessage) || (update instanceof TL_updateNewChannelMessage)) {
+                    Message message;
+                    updates.updates.remove(a1);
+                    a1--;
+                    if (update instanceof TL_updateNewMessage) {
+                        TL_updateNewMessage updateNewMessage = (TL_updateNewMessage) update;
+                        message = updateNewMessage.message;
+                        MessagesController.getInstance(this.currentAccount).processNewDifferenceParams(-1, updateNewMessage.pts, -1, updateNewMessage.pts_count);
+                    } else {
+                        TL_updateNewChannelMessage updateNewChannelMessage = (TL_updateNewChannelMessage) update;
+                        message = updateNewChannelMessage.message;
+                        MessagesController.getInstance(this.currentAccount).processNewChannelDifferenceParams(updateNewChannelMessage.pts, updateNewChannelMessage.pts_count, message.to_id.channel_id);
+                        if (isMegagroupFinal) {
+                            message.flags |= Integer.MIN_VALUE;
+                        }
+                    }
+                    ImageLoader.saveMessageThumbs(message);
+                    message.unread = value.intValue() < message.id;
+                    if (toMyself) {
+                        message.out = true;
+                        message.unread = false;
+                        message.media_unread = false;
+                    }
+                    long random_id = newMessagesByIds.get(message.id);
+                    if (random_id != 0) {
+                        newMsgObj1 = (Message) messagesByRandomIdsFinal.get(random_id);
+                        if (newMsgObj1 != null) {
+                            int index = newMsgObjArr.indexOf(newMsgObj1);
+                            if (index != -1) {
+                                MessageObject msgObj1 = (MessageObject) newMsgArr.get(index);
+                                newMsgObjArr.remove(index);
+                                newMsgArr.remove(index);
+                                int oldId = newMsgObj1.id;
+                                ArrayList<Message> sentMessages = new ArrayList();
+                                sentMessages.add(message);
+                                newMsgObj1.id = message.id;
+                                sentCount++;
+                                updateMediaPaths(msgObj1, message, null, true);
+                                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$56(this, newMsgObj1, oldId, to_id, sentMessages, peer, message));
+                            }
+                        }
+                    }
+                }
+                a1++;
+            }
+            if (!updates.updates.isEmpty()) {
+                MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
+            }
+            StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, sentCount);
+        } else {
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$57(this, error, req));
+        }
+        for (a1 = 0; a1 < newMsgObjArr.size(); a1++) {
+            newMsgObj1 = (Message) newMsgObjArr.get(a1);
+            MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsgObj1);
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$58(this, newMsgObj1));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$6$SendMessagesHelper(Message newMsgObj1, int oldId, Peer to_id, ArrayList sentMessages, long peer, Message message) {
+        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj1.random_id, Integer.valueOf(oldId), newMsgObj1.id, 0, false, to_id.channel_id);
+        MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, false, 0);
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$59(this, newMsgObj1, peer, oldId, message));
+    }
+
+    final /* synthetic */ void lambda$null$5$SendMessagesHelper(Message newMsgObj1, long peer, int oldId, Message message) {
+        newMsgObj1.send_state = 0;
+        DataQuery.getInstance(this.currentAccount).increasePeerRaiting(peer);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(message.id), message, Long.valueOf(peer), Long.valueOf(0));
+        processSentMessage(oldId);
+        removeFromSendingMessages(oldId);
+    }
+
+    final /* synthetic */ void lambda$null$7$SendMessagesHelper(TL_error error, TL_messages_forwardMessages req) {
+        AlertsCreator.processError(this.currentAccount, error, null, req, new Object[0]);
+    }
+
+    final /* synthetic */ void lambda$null$8$SendMessagesHelper(Message newMsgObj1) {
+        newMsgObj1.send_state = 2;
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj1.id));
+        processSentMessage(newMsgObj1.id);
+        removeFromSendingMessages(newMsgObj1.id);
     }
 
     private void writePreviousMessageData(Message message, SerializedData data) {
@@ -1933,7 +1910,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x0248:
         r18 = move-exception;
     L_0x0249:
-        org.telegram.messenger.FileLog.m3e(r18);
+        org.telegram.messenger.FileLog.m8e(r18);
         r36.revertEditingMessageObject(r37);
         goto L_0x0002;
     L_0x0251:
@@ -2282,7 +2259,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = 1;	 Catch:{ Exception -> 0x0248 }
         r4 = r13[r4];	 Catch:{ Exception -> 0x0248 }
         r0 = r20;	 Catch:{ Exception -> 0x0248 }
-        r0.f41q = r4;	 Catch:{ Exception -> 0x0248 }
+        r0.f44q = r4;	 Catch:{ Exception -> 0x0248 }
     L_0x04d2:
         r0 = r40;	 Catch:{ Exception -> 0x0248 }
         r4 = r0.mime_type;	 Catch:{ Exception -> 0x0248 }
@@ -2469,12 +2446,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.editMessageMedia(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$TL_photo, org.telegram.messenger.VideoEditedInfo, org.telegram.tgnet.TLRPC$TL_document, java.lang.String, java.util.HashMap, boolean):void");
     }
 
-    public int editMessage(MessageObject messageObject, String message, boolean searchLinks, final BaseFragment fragment, ArrayList<MessageEntity> entities, final Runnable callback) {
+    public int editMessage(MessageObject messageObject, String message, boolean searchLinks, BaseFragment fragment, ArrayList<MessageEntity> entities, Runnable callback) {
         boolean z = false;
         if (fragment == null || fragment.getParentActivity() == null || callback == null) {
             return 0;
         }
-        final TL_messages_editMessage req = new TL_messages_editMessage();
+        TL_messages_editMessage req = new TL_messages_editMessage();
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) messageObject.getDialogId());
         req.message = message;
         req.flags |= 2048;
@@ -2487,31 +2464,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             req.entities = entities;
             req.flags |= 8;
         }
-        return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+        return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$4(this, fragment, req, callback));
+    }
 
-            /* renamed from: org.telegram.messenger.SendMessagesHelper$6$2 */
-            class C05232 implements Runnable {
-                C05232() {
-                }
+    final /* synthetic */ void lambda$editMessage$11$SendMessagesHelper(BaseFragment fragment, TL_messages_editMessage req, Runnable callback, TLObject response, TL_error error) {
+        if (error == null) {
+            MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
+        } else {
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$55(this, error, fragment, req));
+        }
+        AndroidUtilities.runOnUIThread(callback);
+    }
 
-                public void run() {
-                    callback.run();
-                }
-            }
-
-            public void run(TLObject response, final TL_error error) {
-                if (error == null) {
-                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processUpdates((Updates) response, false);
-                } else {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            AlertsCreator.processError(SendMessagesHelper.this.currentAccount, error, fragment, req, new Object[0]);
-                        }
-                    });
-                }
-                AndroidUtilities.runOnUIThread(new C05232());
-            }
-        });
+    final /* synthetic */ void lambda$null$10$SendMessagesHelper(TL_error error, BaseFragment fragment, TL_messages_editMessage req) {
+        AlertsCreator.processError(this.currentAccount, error, fragment, req, new Object[0]);
     }
 
     private void sendLocation(Location location) {
@@ -2540,54 +2506,44 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public void sendNotificationCallback(long dialogId, int msgId, byte[] data) {
-        final long j = dialogId;
-        final int i = msgId;
-        final byte[] bArr = data;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                int lowerId = (int) j;
-                final String key = j + "_" + i + "_" + Utilities.bytesToHex(bArr) + "_" + 0;
-                SendMessagesHelper.this.waitingForCallback.put(key, Boolean.valueOf(true));
-                if (lowerId > 0) {
-                    if (MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getUser(Integer.valueOf(lowerId)) == null) {
-                        User user = MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getUserSync(lowerId);
-                        if (user != null) {
-                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putUser(user, true);
-                        }
-                    }
-                } else if (MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getChat(Integer.valueOf(-lowerId)) == null) {
-                    Chat chat = MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getChatSync(-lowerId);
-                    if (chat != null) {
-                        MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putChat(chat, true);
-                    }
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$5(this, dialogId, msgId, data));
+    }
+
+    final /* synthetic */ void lambda$sendNotificationCallback$14$SendMessagesHelper(long dialogId, int msgId, byte[] data) {
+        int lowerId = (int) dialogId;
+        String key = dialogId + "_" + msgId + "_" + Utilities.bytesToHex(data) + "_" + 0;
+        this.waitingForCallback.put(key, Boolean.valueOf(true));
+        if (lowerId > 0) {
+            if (MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lowerId)) == null) {
+                User user = MessagesStorage.getInstance(this.currentAccount).getUserSync(lowerId);
+                if (user != null) {
+                    MessagesController.getInstance(this.currentAccount).putUser(user, true);
                 }
-                TL_messages_getBotCallbackAnswer req = new TL_messages_getBotCallbackAnswer();
-                req.peer = MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getInputPeer(lowerId);
-                req.msg_id = i;
-                req.game = false;
-                if (bArr != null) {
-                    req.flags |= 1;
-                    req.data = bArr;
-                }
-                ConnectionsManager.getInstance(SendMessagesHelper.this.currentAccount).sendRequest(req, new RequestDelegate() {
-
-                    /* renamed from: org.telegram.messenger.SendMessagesHelper$7$1$1 */
-                    class C05241 implements Runnable {
-                        C05241() {
-                        }
-
-                        public void run() {
-                            SendMessagesHelper.this.waitingForCallback.remove(key);
-                        }
-                    }
-
-                    public void run(TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new C05241());
-                    }
-                }, 2);
-                MessagesController.getInstance(SendMessagesHelper.this.currentAccount).markDialogAsRead(j, i, i, 0, false, 0, true);
             }
-        });
+        } else if (MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lowerId)) == null) {
+            Chat chat = MessagesStorage.getInstance(this.currentAccount).getChatSync(-lowerId);
+            if (chat != null) {
+                MessagesController.getInstance(this.currentAccount).putChat(chat, true);
+            }
+        }
+        TL_messages_getBotCallbackAnswer req = new TL_messages_getBotCallbackAnswer();
+        req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lowerId);
+        req.msg_id = msgId;
+        req.game = false;
+        if (data != null) {
+            req.flags |= 1;
+            req.data = data;
+        }
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$53(this, key), 2);
+        MessagesController.getInstance(this.currentAccount).markDialogAsRead(dialogId, msgId, msgId, 0, false, 0, true);
+    }
+
+    final /* synthetic */ void lambda$null$12$SendMessagesHelper(String key) {
+        Boolean bool = (Boolean) this.waitingForCallback.remove(key);
+    }
+
+    final /* synthetic */ void lambda$null$13$SendMessagesHelper(String key, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$54(this, key));
     }
 
     public void sendCallback(boolean cache, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment) {
@@ -2605,94 +2561,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     type = 0;
                 }
             }
-            final String key = messageObject.getDialogId() + "_" + messageObject.getId() + "_" + Utilities.bytesToHex(button.data) + "_" + type;
+            String key = messageObject.getDialogId() + "_" + messageObject.getId() + "_" + Utilities.bytesToHex(button.data) + "_" + type;
             this.waitingForCallback.put(key, Boolean.valueOf(true));
-            final MessageObject messageObject2 = messageObject;
-            final KeyboardButton keyboardButton = button;
-            final ChatActivity chatActivity = parentFragment;
-            RequestDelegate requestDelegate = new RequestDelegate() {
-                public void run(final TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            SendMessagesHelper.this.waitingForCallback.remove(key);
-                            if (cacheFinal && response == null) {
-                                SendMessagesHelper.this.sendCallback(false, messageObject2, keyboardButton, chatActivity);
-                            } else if (response == null) {
-                            } else {
-                                if (!(keyboardButton instanceof TL_keyboardButtonBuy)) {
-                                    TL_messages_botCallbackAnswer res = response;
-                                    if (!(cacheFinal || res.cache_time == 0)) {
-                                        MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).saveBotCache(key, res);
-                                    }
-                                    int uid;
-                                    User user;
-                                    if (res.message != null) {
-                                        if (!res.alert) {
-                                            uid = messageObject2.messageOwner.from_id;
-                                            if (messageObject2.messageOwner.via_bot_id != 0) {
-                                                uid = messageObject2.messageOwner.via_bot_id;
-                                            }
-                                            String name = null;
-                                            if (uid > 0) {
-                                                user = MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getUser(Integer.valueOf(uid));
-                                                if (user != null) {
-                                                    name = ContactsController.formatName(user.first_name, user.last_name);
-                                                }
-                                            } else {
-                                                Chat chat = MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getChat(Integer.valueOf(-uid));
-                                                if (chat != null) {
-                                                    name = chat.title;
-                                                }
-                                            }
-                                            if (name == null) {
-                                                name = "bot";
-                                            }
-                                            chatActivity.showAlert(name, res.message);
-                                        } else if (chatActivity.getParentActivity() != null) {
-                                            Builder builder = new Builder(chatActivity.getParentActivity());
-                                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                                            builder.setMessage(res.message);
-                                            chatActivity.showDialog(builder.create());
-                                        }
-                                    } else if (res.url != null && chatActivity.getParentActivity() != null) {
-                                        uid = messageObject2.messageOwner.from_id;
-                                        if (messageObject2.messageOwner.via_bot_id != 0) {
-                                            uid = messageObject2.messageOwner.via_bot_id;
-                                        }
-                                        user = MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getUser(Integer.valueOf(uid));
-                                        boolean verified = user != null && user.verified;
-                                        if (keyboardButton instanceof TL_keyboardButtonGame) {
-                                            TL_game game = messageObject2.messageOwner.media instanceof TL_messageMediaGame ? messageObject2.messageOwner.media.game : null;
-                                            if (game != null) {
-                                                boolean z;
-                                                ChatActivity chatActivity = chatActivity;
-                                                MessageObject messageObject = messageObject2;
-                                                String str = res.url;
-                                                if (verified || !MessagesController.getNotificationsSettings(SendMessagesHelper.this.currentAccount).getBoolean("askgame_" + uid, true)) {
-                                                    z = false;
-                                                } else {
-                                                    z = true;
-                                                }
-                                                chatActivity.showOpenGameAlert(game, messageObject, str, z, uid);
-                                                return;
-                                            }
-                                            return;
-                                        }
-                                        chatActivity.showOpenUrlAlert(res.url, false);
-                                    }
-                                } else if (response instanceof TL_payments_paymentForm) {
-                                    TL_payments_paymentForm form = response;
-                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putUsers(form.users, false);
-                                    chatActivity.presentFragment(new PaymentFormActivity(form, messageObject2));
-                                } else if (response instanceof TL_payments_paymentReceipt) {
-                                    chatActivity.presentFragment(new PaymentFormActivity(messageObject2, (TL_payments_paymentReceipt) response));
-                                }
-                            }
-                        }
-                    });
-                }
-            };
+            RequestDelegate requestDelegate = new SendMessagesHelper$$Lambda$6(this, key, cacheFinal, messageObject, button, parentFragment);
             if (cacheFinal) {
                 MessagesStorage.getInstance(this.currentAccount).getBotCache(key, requestDelegate);
             } else if (!(button instanceof TL_keyboardButtonBuy)) {
@@ -2713,6 +2584,86 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 TL_payments_getPaymentReceipt req3 = new TL_payments_getPaymentReceipt();
                 req3.msg_id = messageObject.messageOwner.media.receipt_msg_id;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, requestDelegate, 2);
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$sendCallback$16$SendMessagesHelper(String key, boolean cacheFinal, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$52(this, key, cacheFinal, response, messageObject, button, parentFragment));
+    }
+
+    final /* synthetic */ void lambda$null$15$SendMessagesHelper(String key, boolean cacheFinal, TLObject response, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment) {
+        this.waitingForCallback.remove(key);
+        if (cacheFinal && response == null) {
+            sendCallback(false, messageObject, button, parentFragment);
+        } else if (response == null) {
+        } else {
+            if (!(button instanceof TL_keyboardButtonBuy)) {
+                TL_messages_botCallbackAnswer res = (TL_messages_botCallbackAnswer) response;
+                if (!(cacheFinal || res.cache_time == 0)) {
+                    MessagesStorage.getInstance(this.currentAccount).saveBotCache(key, res);
+                }
+                int uid;
+                User user;
+                if (res.message != null) {
+                    if (!res.alert) {
+                        uid = messageObject.messageOwner.from_id;
+                        if (messageObject.messageOwner.via_bot_id != 0) {
+                            uid = messageObject.messageOwner.via_bot_id;
+                        }
+                        String name = null;
+                        if (uid > 0) {
+                            user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
+                            if (user != null) {
+                                name = ContactsController.formatName(user.first_name, user.last_name);
+                            }
+                        } else {
+                            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-uid));
+                            if (chat != null) {
+                                name = chat.title;
+                            }
+                        }
+                        if (name == null) {
+                            name = "bot";
+                        }
+                        parentFragment.showAlert(name, res.message);
+                    } else if (parentFragment.getParentActivity() != null) {
+                        Builder builder = new Builder(parentFragment.getParentActivity());
+                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.setMessage(res.message);
+                        parentFragment.showDialog(builder.create());
+                    }
+                } else if (res.url != null && parentFragment.getParentActivity() != null) {
+                    uid = messageObject.messageOwner.from_id;
+                    if (messageObject.messageOwner.via_bot_id != 0) {
+                        uid = messageObject.messageOwner.via_bot_id;
+                    }
+                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
+                    boolean verified = user != null && user.verified;
+                    if (button instanceof TL_keyboardButtonGame) {
+                        TL_game game = messageObject.messageOwner.media instanceof TL_messageMediaGame ? messageObject.messageOwner.media.game : null;
+                        if (game != null) {
+                            boolean z;
+                            String str = res.url;
+                            if (verified || !MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("askgame_" + uid, true)) {
+                                z = false;
+                            } else {
+                                z = true;
+                            }
+                            parentFragment.showOpenGameAlert(game, messageObject, str, z, uid);
+                            return;
+                        }
+                        return;
+                    }
+                    parentFragment.showOpenUrlAlert(res.url, false);
+                }
+            } else if (response instanceof TL_payments_paymentForm) {
+                TL_payments_paymentForm form = (TL_payments_paymentForm) response;
+                MessagesController.getInstance(this.currentAccount).putUsers(form.users, false);
+                parentFragment.presentFragment(new PaymentFormActivity(form, messageObject));
+            } else if (response instanceof TL_payments_paymentReceipt) {
+                parentFragment.presentFragment(new PaymentFormActivity(messageObject, (TL_payments_paymentReceipt) response));
             }
         }
     }
@@ -2757,30 +2708,30 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     } catch (Exception e2) {
                         e = e2;
                         data = data2;
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                         newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                if (error == null) {
-                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processUpdates((Updates) response, false);
-                                }
-                                if (newTaskId != 0) {
-                                    MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).removePendingTask(newTaskId);
-                                }
-                            }
-                        });
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new SendMessagesHelper$$Lambda$7(this, newTaskId));
                     }
                 } catch (Exception e3) {
                     e = e3;
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                     newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, /* anonymous class already generated */);
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new SendMessagesHelper$$Lambda$7(this, newTaskId));
                 }
                 newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
             } else {
                 newTaskId = taskId;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, /* anonymous class already generated */);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new SendMessagesHelper$$Lambda$7(this, newTaskId));
+        }
+    }
+
+    final /* synthetic */ void lambda$sendGame$17$SendMessagesHelper(long newTaskId, TLObject response, TL_error error) {
+        if (error == null) {
+            MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
+        }
+        if (newTaskId != 0) {
+            MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
         }
     }
 
@@ -3128,7 +3079,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r31 = move-exception;
         r12 = r48;
     L_0x021e:
-        org.telegram.messenger.FileLog.m3e(r31);
+        org.telegram.messenger.FileLog.m8e(r31);
         r0 = r67;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.MessagesStorage.getInstance(r4);
@@ -4118,7 +4069,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r8 = r0.access_hash;	 Catch:{ Exception -> 0x0c82 }
         r4 = r4.append(r8);	 Catch:{ Exception -> 0x0c82 }
         r4 = r4.toString();	 Catch:{ Exception -> 0x0c82 }
-        org.telegram.messenger.FileLog.m0d(r4);	 Catch:{ Exception -> 0x0c82 }
+        org.telegram.messenger.FileLog.m5d(r4);	 Catch:{ Exception -> 0x0c82 }
     L_0x091f:
         if (r63 == 0) goto L_0x092b;	 Catch:{ Exception -> 0x0c82 }
     L_0x0921:
@@ -5034,7 +4985,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = 1;	 Catch:{ Exception -> 0x0c82 }
         r4 = r21[r4];	 Catch:{ Exception -> 0x0c82 }
         r0 = r36;	 Catch:{ Exception -> 0x0c82 }
-        r0.f41q = r4;	 Catch:{ Exception -> 0x0c82 }
+        r0.f44q = r4;	 Catch:{ Exception -> 0x0c82 }
     L_0x0f95:
         r28 = r29;
     L_0x0f97:
@@ -5708,20 +5659,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x145c:
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r62;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r0.f44h;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r0.f47h;	 Catch:{ Exception -> 0x0c82 }
         r4.thumb_h = r6;	 Catch:{ Exception -> 0x0c82 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r62;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r0.f45w;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r0.f48w;	 Catch:{ Exception -> 0x0c82 }
         r4.thumb_w = r6;	 Catch:{ Exception -> 0x0c82 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r25;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r0.f45w;	 Catch:{ Exception -> 0x0c82 }
-        r4.f36w = r6;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r0.f48w;	 Catch:{ Exception -> 0x0c82 }
+        r4.f39w = r6;	 Catch:{ Exception -> 0x0c82 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r25;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r0.f44h;	 Catch:{ Exception -> 0x0c82 }
-        r4.f35h = r6;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r0.f47h;	 Catch:{ Exception -> 0x0c82 }
+        r4.f38h = r6;	 Catch:{ Exception -> 0x0c82 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r25;	 Catch:{ Exception -> 0x0c82 }
         r6 = r0.size;	 Catch:{ Exception -> 0x0c82 }
@@ -5893,12 +5844,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x15b7:
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r23;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r0.f38w;	 Catch:{ Exception -> 0x0c82 }
-        r4.f36w = r6;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r0.f41w;	 Catch:{ Exception -> 0x0c82 }
+        r4.f39w = r6;	 Catch:{ Exception -> 0x0c82 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r23;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r0.f37h;	 Catch:{ Exception -> 0x0c82 }
-        r4.f35h = r6;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r0.f40h;	 Catch:{ Exception -> 0x0c82 }
+        r4.f38h = r6;	 Catch:{ Exception -> 0x0c82 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r23;	 Catch:{ Exception -> 0x0c82 }
         r6 = r0.duration;	 Catch:{ Exception -> 0x0c82 }
@@ -5907,12 +5858,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r74;	 Catch:{ Exception -> 0x0c82 }
         r6 = r0.thumb;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r6.f44h;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r6.f47h;	 Catch:{ Exception -> 0x0c82 }
         r4.thumb_h = r6;	 Catch:{ Exception -> 0x0c82 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r74;	 Catch:{ Exception -> 0x0c82 }
         r6 = r0.thumb;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r6.f45w;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r6.f48w;	 Catch:{ Exception -> 0x0c82 }
         r4.thumb_w = r6;	 Catch:{ Exception -> 0x0c82 }
         r0 = r74;	 Catch:{ Exception -> 0x0c82 }
         r4 = r0.key;	 Catch:{ Exception -> 0x0c82 }
@@ -6162,12 +6113,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r74;	 Catch:{ Exception -> 0x0c82 }
         r6 = r0.thumb;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r6.f44h;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r6.f47h;	 Catch:{ Exception -> 0x0c82 }
         r4.thumb_h = r6;	 Catch:{ Exception -> 0x0c82 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
         r0 = r74;	 Catch:{ Exception -> 0x0c82 }
         r6 = r0.thumb;	 Catch:{ Exception -> 0x0c82 }
-        r6 = r6.f45w;	 Catch:{ Exception -> 0x0c82 }
+        r6 = r6.f48w;	 Catch:{ Exception -> 0x0c82 }
         r4.thumb_w = r6;	 Catch:{ Exception -> 0x0c82 }
     L_0x17bb:
         r4 = r7.media;	 Catch:{ Exception -> 0x0c82 }
@@ -6305,12 +6256,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         r4 = r7.media;	 Catch:{ Exception -> 0x0dfd }
         r0 = r74;	 Catch:{ Exception -> 0x0dfd }
         r6 = r0.thumb;	 Catch:{ Exception -> 0x0dfd }
-        r6 = r6.f44h;	 Catch:{ Exception -> 0x0dfd }
+        r6 = r6.f47h;	 Catch:{ Exception -> 0x0dfd }
         r4.thumb_h = r6;	 Catch:{ Exception -> 0x0dfd }
         r4 = r7.media;	 Catch:{ Exception -> 0x0dfd }
         r0 = r74;	 Catch:{ Exception -> 0x0dfd }
         r6 = r0.thumb;	 Catch:{ Exception -> 0x0dfd }
-        r6 = r6.f45w;	 Catch:{ Exception -> 0x0dfd }
+        r6 = r6.f48w;	 Catch:{ Exception -> 0x0dfd }
         r4.thumb_w = r6;	 Catch:{ Exception -> 0x0dfd }
     L_0x18c7:
         r4 = r7.media;	 Catch:{ Exception -> 0x0dfd }
@@ -6820,7 +6771,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
     }
 
-    private void uploadMultiMedia(final DelayedMessage message, final InputMedia inputMedia, InputEncryptedFile inputEncryptedFile, String key) {
+    private void uploadMultiMedia(DelayedMessage message, InputMedia inputMedia, InputEncryptedFile inputEncryptedFile, String key) {
         int a;
         if (inputMedia != null) {
             TL_messages_sendMultiMedia multiMedia = message.sendRequest;
@@ -6834,47 +6785,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             TL_messages_uploadMedia req = new TL_messages_uploadMedia();
             req.media = inputMedia;
             req.peer = ((TL_messages_sendMultiMedia) message.sendRequest).peer;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            InputMedia newInputMedia = null;
-                            if (response != null) {
-                                MessageMedia messageMedia = response;
-                                if ((inputMedia instanceof TL_inputMediaUploadedPhoto) && (messageMedia instanceof TL_messageMediaPhoto)) {
-                                    InputMedia inputMediaPhoto = new TL_inputMediaPhoto();
-                                    inputMediaPhoto.id = new TL_inputPhoto();
-                                    inputMediaPhoto.id.id = messageMedia.photo.id;
-                                    inputMediaPhoto.id.access_hash = messageMedia.photo.access_hash;
-                                    newInputMedia = inputMediaPhoto;
-                                } else if ((inputMedia instanceof TL_inputMediaUploadedDocument) && (messageMedia instanceof TL_messageMediaDocument)) {
-                                    InputMedia inputMediaDocument = new TL_inputMediaDocument();
-                                    inputMediaDocument.id = new TL_inputDocument();
-                                    inputMediaDocument.id.id = messageMedia.document.id;
-                                    inputMediaDocument.id.access_hash = messageMedia.document.access_hash;
-                                    newInputMedia = inputMediaDocument;
-                                }
-                            }
-                            if (newInputMedia != null) {
-                                if (inputMedia.ttl_seconds != 0) {
-                                    newInputMedia.ttl_seconds = inputMedia.ttl_seconds;
-                                    newInputMedia.flags |= 1;
-                                }
-                                TL_messages_sendMultiMedia req = message.sendRequest;
-                                for (int a = 0; a < req.multi_media.size(); a++) {
-                                    if (((TL_inputSingleMedia) req.multi_media.get(a)).media == inputMedia) {
-                                        ((TL_inputSingleMedia) req.multi_media.get(a)).media = newInputMedia;
-                                        break;
-                                    }
-                                }
-                                SendMessagesHelper.this.sendReadyToSendGroup(message, false, true);
-                                return;
-                            }
-                            message.markAsError();
-                        }
-                    });
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$8(this, inputMedia, message));
         } else if (inputEncryptedFile != null) {
             TL_messages_sendEncryptedMultiMedia multiMedia2 = message.sendEncryptedRequest;
             for (a = 0; a < multiMedia2.files.size(); a++) {
@@ -6886,6 +6797,46 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             sendReadyToSendGroup(message, false, true);
         }
+    }
+
+    final /* synthetic */ void lambda$uploadMultiMedia$19$SendMessagesHelper(InputMedia inputMedia, DelayedMessage message, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$51(this, response, inputMedia, message));
+    }
+
+    final /* synthetic */ void lambda$null$18$SendMessagesHelper(TLObject response, InputMedia inputMedia, DelayedMessage message) {
+        InputMedia newInputMedia = null;
+        if (response != null) {
+            MessageMedia messageMedia = (MessageMedia) response;
+            if ((inputMedia instanceof TL_inputMediaUploadedPhoto) && (messageMedia instanceof TL_messageMediaPhoto)) {
+                InputMedia inputMediaPhoto = new TL_inputMediaPhoto();
+                inputMediaPhoto.id = new TL_inputPhoto();
+                inputMediaPhoto.id.id = messageMedia.photo.id;
+                inputMediaPhoto.id.access_hash = messageMedia.photo.access_hash;
+                newInputMedia = inputMediaPhoto;
+            } else if ((inputMedia instanceof TL_inputMediaUploadedDocument) && (messageMedia instanceof TL_messageMediaDocument)) {
+                InputMedia inputMediaDocument = new TL_inputMediaDocument();
+                inputMediaDocument.id = new TL_inputDocument();
+                inputMediaDocument.id.id = messageMedia.document.id;
+                inputMediaDocument.id.access_hash = messageMedia.document.access_hash;
+                newInputMedia = inputMediaDocument;
+            }
+        }
+        if (newInputMedia != null) {
+            if (inputMedia.ttl_seconds != 0) {
+                newInputMedia.ttl_seconds = inputMedia.ttl_seconds;
+                newInputMedia.flags |= 1;
+            }
+            TL_messages_sendMultiMedia req1 = message.sendRequest;
+            for (int a = 0; a < req1.multi_media.size(); a++) {
+                if (((TL_inputSingleMedia) req1.multi_media.get(a)).media == inputMedia) {
+                    ((TL_inputSingleMedia) req1.multi_media.get(a)).media = newInputMedia;
+                    break;
+                }
+            }
+            sendReadyToSendGroup(message, false, true);
+            return;
+        }
+        message.markAsError();
     }
 
     private void sendReadyToSendGroup(DelayedMessage message, boolean add, boolean check) {
@@ -6945,23 +6896,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
     }
 
-    protected void stopVideoService(final String path) {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
+    final /* synthetic */ void lambda$null$20$SendMessagesHelper(String path) {
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopEncodingService, path, Integer.valueOf(this.currentAccount));
+    }
 
-            /* renamed from: org.telegram.messenger.SendMessagesHelper$11$1 */
-            class C04831 implements Runnable {
-                C04831() {
-                }
+    final /* synthetic */ void lambda$stopVideoService$21$SendMessagesHelper(String path) {
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$50(this, path));
+    }
 
-                public void run() {
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopEncodingService, path, Integer.valueOf(SendMessagesHelper.this.currentAccount));
-                }
-            }
-
-            public void run() {
-                AndroidUtilities.runOnUIThread(new C04831());
-            }
-        });
+    protected void stopVideoService(String path) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$9(this, path));
     }
 
     protected void putToSendingMessages(Message message) {
@@ -6980,136 +6924,126 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         return this.sendingMessages.indexOfKey(mid) >= 0;
     }
 
-    private void performSendMessageRequestMulti(final TL_messages_sendMultiMedia req, final ArrayList<MessageObject> msgObjs, final ArrayList<String> originalPaths) {
+    private void performSendMessageRequestMulti(TL_messages_sendMultiMedia req, ArrayList<MessageObject> msgObjs, ArrayList<String> originalPaths) {
         for (int a = 0; a < msgObjs.size(); a++) {
             putToSendingMessages(((MessageObject) msgObjs.get(a)).messageOwner);
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest((TLObject) req, new RequestDelegate() {
-            public void run(final TLObject response, final TL_error error) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        int i;
-                        final Message newMsgObj;
-                        boolean isSentError = false;
-                        if (error == null) {
-                            SparseArray<Message> newMessages = new SparseArray();
-                            LongSparseArray<Integer> newIds = new LongSparseArray();
-                            Updates updates = (Updates) response;
-                            ArrayList<Update> updatesArr = ((Updates) response).updates;
-                            int a = 0;
-                            while (a < updatesArr.size()) {
-                                Update update = (Update) updatesArr.get(a);
-                                if (update instanceof TL_updateMessageID) {
-                                    TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
-                                    newIds.put(updateMessageID.random_id, Integer.valueOf(updateMessageID.id));
-                                    updatesArr.remove(a);
-                                    a--;
-                                } else if (update instanceof TL_updateNewMessage) {
-                                    TL_updateNewMessage newMessage = (TL_updateNewMessage) update;
-                                    newMessages.put(newMessage.message.id, newMessage.message);
-                                    final TL_updateNewMessage tL_updateNewMessage = newMessage;
-                                    Utilities.stageQueue.postRunnable(new Runnable() {
-                                        public void run() {
-                                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewDifferenceParams(-1, tL_updateNewMessage.pts, -1, tL_updateNewMessage.pts_count);
-                                        }
-                                    });
-                                    updatesArr.remove(a);
-                                    a--;
-                                } else if (update instanceof TL_updateNewChannelMessage) {
-                                    TL_updateNewChannelMessage newMessage2 = (TL_updateNewChannelMessage) update;
-                                    newMessages.put(newMessage2.message.id, newMessage2.message);
-                                    final TL_updateNewChannelMessage tL_updateNewChannelMessage = newMessage2;
-                                    Utilities.stageQueue.postRunnable(new Runnable() {
-                                        public void run() {
-                                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewChannelDifferenceParams(tL_updateNewChannelMessage.pts, tL_updateNewChannelMessage.pts_count, tL_updateNewChannelMessage.message.to_id.channel_id);
-                                        }
-                                    });
-                                    updatesArr.remove(a);
-                                    a--;
-                                }
-                                a++;
-                            }
-                            for (i = 0; i < msgObjs.size(); i++) {
-                                MessageObject msgObj = (MessageObject) msgObjs.get(i);
-                                String originalPath = (String) originalPaths.get(i);
-                                newMsgObj = msgObj.messageOwner;
-                                final int oldId = newMsgObj.id;
-                                final ArrayList<Message> sentMessages = new ArrayList();
-                                String attachPath = newMsgObj.attachPath;
-                                Integer id = (Integer) newIds.get(newMsgObj.random_id);
-                                if (id == null) {
-                                    isSentError = true;
-                                    break;
-                                }
-                                Message message = (Message) newMessages.get(id.intValue());
-                                if (message == null) {
-                                    isSentError = true;
-                                    break;
-                                }
-                                sentMessages.add(message);
-                                newMsgObj.id = message.id;
-                                if ((newMsgObj.flags & Integer.MIN_VALUE) != 0) {
-                                    message.flags |= Integer.MIN_VALUE;
-                                }
-                                final long grouped_id = message.grouped_id;
-                                Integer value = (Integer) MessagesController.getInstance(SendMessagesHelper.this.currentAccount).dialogs_read_outbox_max.get(Long.valueOf(message.dialog_id));
-                                if (value == null) {
-                                    value = Integer.valueOf(MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getDialogReadMax(message.out, message.dialog_id));
-                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).dialogs_read_outbox_max.put(Long.valueOf(message.dialog_id), value);
-                                }
-                                message.unread = value.intValue() < message.id;
-                                SendMessagesHelper.this.updateMediaPaths(msgObj, message, originalPath, false);
-                                if (null == null) {
-                                    StatsController.getInstance(SendMessagesHelper.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
-                                    newMsgObj.send_state = 0;
-                                    NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
-                                    MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest((TLObject) req, new SendMessagesHelper$$Lambda$10(this, msgObjs, originalPaths, req), null, 68);
+    }
 
-                                        /* renamed from: org.telegram.messenger.SendMessagesHelper$12$1$3$1 */
-                                        class C04861 implements Runnable {
-                                            C04861() {
-                                            }
+    final /* synthetic */ void lambda$performSendMessageRequestMulti$28$SendMessagesHelper(ArrayList msgObjs, ArrayList originalPaths, TL_messages_sendMultiMedia req, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$44(this, error, response, msgObjs, originalPaths, req));
+    }
 
-                                            public void run() {
-                                                DataQuery.getInstance(SendMessagesHelper.this.currentAccount).increasePeerRaiting(newMsgObj.dialog_id);
-                                                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
-                                                SendMessagesHelper.this.processSentMessage(oldId);
-                                                SendMessagesHelper.this.removeFromSendingMessages(oldId);
-                                            }
-                                        }
-
-                                        public void run() {
-                                            MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
-                                            MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(sentMessages, true, false, false, 0);
-                                            AndroidUtilities.runOnUIThread(new C04861());
-                                        }
-                                    });
-                                }
-                            }
-                            final Updates updates2 = updates;
-                            Utilities.stageQueue.postRunnable(new Runnable() {
-                                public void run() {
-                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processUpdates(updates2, false);
-                                }
-                            });
-                        } else {
-                            AlertsCreator.processError(SendMessagesHelper.this.currentAccount, error, null, req, new Object[0]);
-                            isSentError = true;
-                        }
-                        if (isSentError) {
-                            for (i = 0; i < msgObjs.size(); i++) {
-                                newMsgObj = ((MessageObject) msgObjs.get(i)).messageOwner;
-                                MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).markMessageAsSendError(newMsgObj);
-                                newMsgObj.send_state = 2;
-                                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.id));
-                                SendMessagesHelper.this.processSentMessage(newMsgObj.id);
-                                SendMessagesHelper.this.removeFromSendingMessages(newMsgObj.id);
-                            }
-                        }
-                    }
-                });
+    final /* synthetic */ void lambda$null$27$SendMessagesHelper(TL_error error, TLObject response, ArrayList msgObjs, ArrayList originalPaths, TL_messages_sendMultiMedia req) {
+        int i;
+        Message newMsgObj;
+        boolean isSentError = false;
+        if (error == null) {
+            SparseArray<Message> newMessages = new SparseArray();
+            LongSparseArray<Integer> newIds = new LongSparseArray();
+            Updates updates = (Updates) response;
+            ArrayList<Update> updatesArr = ((Updates) response).updates;
+            int a = 0;
+            while (a < updatesArr.size()) {
+                Update update = (Update) updatesArr.get(a);
+                if (update instanceof TL_updateMessageID) {
+                    TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
+                    newIds.put(updateMessageID.random_id, Integer.valueOf(updateMessageID.id));
+                    updatesArr.remove(a);
+                    a--;
+                } else if (update instanceof TL_updateNewMessage) {
+                    TL_updateNewMessage newMessage = (TL_updateNewMessage) update;
+                    newMessages.put(newMessage.message.id, newMessage.message);
+                    Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$45(this, newMessage));
+                    updatesArr.remove(a);
+                    a--;
+                } else if (update instanceof TL_updateNewChannelMessage) {
+                    TL_updateNewChannelMessage newMessage2 = (TL_updateNewChannelMessage) update;
+                    newMessages.put(newMessage2.message.id, newMessage2.message);
+                    Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$46(this, newMessage2));
+                    updatesArr.remove(a);
+                    a--;
+                }
+                a++;
             }
-        }, null, 68);
+            for (i = 0; i < msgObjs.size(); i++) {
+                MessageObject msgObj = (MessageObject) msgObjs.get(i);
+                String originalPath = (String) originalPaths.get(i);
+                newMsgObj = msgObj.messageOwner;
+                int oldId = newMsgObj.id;
+                ArrayList<Message> sentMessages = new ArrayList();
+                String attachPath = newMsgObj.attachPath;
+                Integer id = (Integer) newIds.get(newMsgObj.random_id);
+                if (id == null) {
+                    isSentError = true;
+                    break;
+                }
+                Message message = (Message) newMessages.get(id.intValue());
+                if (message == null) {
+                    isSentError = true;
+                    break;
+                }
+                sentMessages.add(message);
+                newMsgObj.id = message.id;
+                if ((newMsgObj.flags & Integer.MIN_VALUE) != 0) {
+                    message.flags |= Integer.MIN_VALUE;
+                }
+                long grouped_id = message.grouped_id;
+                Integer value = (Integer) MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max.get(Long.valueOf(message.dialog_id));
+                if (value == null) {
+                    value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(message.out, message.dialog_id));
+                    MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max.put(Long.valueOf(message.dialog_id), value);
+                }
+                message.unread = value.intValue() < message.id;
+                updateMediaPaths(msgObj, message, originalPath, false);
+                if (null == null) {
+                    StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
+                    newMsgObj.send_state = 0;
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
+                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$47(this, newMsgObj, oldId, sentMessages, grouped_id));
+                }
+            }
+            Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$48(this, updates));
+        } else {
+            AlertsCreator.processError(this.currentAccount, error, null, req, new Object[0]);
+            isSentError = true;
+        }
+        if (isSentError) {
+            for (i = 0; i < msgObjs.size(); i++) {
+                newMsgObj = ((MessageObject) msgObjs.get(i)).messageOwner;
+                MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsgObj);
+                newMsgObj.send_state = 2;
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.id));
+                processSentMessage(newMsgObj.id);
+                removeFromSendingMessages(newMsgObj.id);
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$null$22$SendMessagesHelper(TL_updateNewMessage newMessage) {
+        MessagesController.getInstance(this.currentAccount).processNewDifferenceParams(-1, newMessage.pts, -1, newMessage.pts_count);
+    }
+
+    final /* synthetic */ void lambda$null$23$SendMessagesHelper(TL_updateNewChannelMessage newMessage) {
+        MessagesController.getInstance(this.currentAccount).processNewChannelDifferenceParams(newMessage.pts, newMessage.pts_count, newMessage.message.to_id.channel_id);
+    }
+
+    final /* synthetic */ void lambda$null$25$SendMessagesHelper(Message newMsgObj, int oldId, ArrayList sentMessages, long grouped_id) {
+        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
+        MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, false, 0);
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$49(this, newMsgObj, oldId, grouped_id));
+    }
+
+    final /* synthetic */ void lambda$null$24$SendMessagesHelper(Message newMsgObj, int oldId, long grouped_id) {
+        DataQuery.getInstance(this.currentAccount).increasePeerRaiting(newMsgObj.dialog_id);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
+        processSentMessage(oldId);
+        removeFromSendingMessages(oldId);
+    }
+
+    final /* synthetic */ void lambda$null$26$SendMessagesHelper(Updates updates) {
+        MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
     }
 
     private void performSendMessageRequest(TLObject req, MessageObject msgObj, String originalPath) {
@@ -7154,280 +7088,250 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 return;
             }
         }
-        final Message newMsgObj = msgObj.messageOwner;
+        Message newMsgObj = msgObj.messageOwner;
         putToSendingMessages(newMsgObj);
         ConnectionsManager instance = ConnectionsManager.getInstance(this.currentAccount);
-        final TLObject tLObject = req;
-        final MessageObject messageObject = msgObj;
-        final String str = originalPath;
-        RequestDelegate anonymousClass13 = new RequestDelegate() {
-            public void run(final TLObject response, final TL_error error) {
-                if (tLObject instanceof TL_messages_editMessage) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (error == null) {
-                                String attachPath = newMsgObj.attachPath;
-                                final Updates updates = response;
-                                ArrayList<Update> updatesArr = ((Updates) response).updates;
-                                Message message = null;
-                                int a = 0;
-                                while (a < updatesArr.size()) {
-                                    Update update = (Update) updatesArr.get(a);
-                                    if (update instanceof TL_updateEditMessage) {
-                                        message = ((TL_updateEditMessage) update).message;
-                                        break;
-                                    } else if (update instanceof TL_updateEditChannelMessage) {
-                                        message = ((TL_updateEditChannelMessage) update).message;
-                                        break;
-                                    } else {
-                                        a++;
-                                    }
-                                }
-                                if (message != null) {
-                                    ImageLoader.saveMessageThumbs(message);
-                                    SendMessagesHelper.this.updateMediaPaths(messageObject, message, str, false);
-                                }
-                                Utilities.stageQueue.postRunnable(new Runnable() {
-
-                                    /* renamed from: org.telegram.messenger.SendMessagesHelper$13$1$1$1 */
-                                    class C04901 implements Runnable {
-                                        C04901() {
-                                        }
-
-                                        public void run() {
-                                            SendMessagesHelper.this.processSentMessage(newMsgObj.id);
-                                            SendMessagesHelper.this.removeFromSendingMessages(newMsgObj.id);
-                                        }
-                                    }
-
-                                    public void run() {
-                                        MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processUpdates(updates, false);
-                                        AndroidUtilities.runOnUIThread(new C04901());
-                                    }
-                                });
-                                if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
-                                    SendMessagesHelper.this.stopVideoService(attachPath);
-                                    return;
-                                }
-                                return;
-                            }
-                            AlertsCreator.processError(SendMessagesHelper.this.currentAccount, error, null, tLObject, new Object[0]);
-                            if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
-                                SendMessagesHelper.this.stopVideoService(newMsgObj.attachPath);
-                            }
-                            SendMessagesHelper.this.removeFromSendingMessages(newMsgObj.id);
-                            SendMessagesHelper.this.revertEditingMessageObject(messageObject);
-                        }
-                    });
-                } else {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            boolean isSentError = false;
-                            if (error == null) {
-                                int i;
-                                int oldId = newMsgObj.id;
-                                boolean isBroadcast = tLObject instanceof TL_messages_sendBroadcast;
-                                ArrayList<Message> sentMessages = new ArrayList();
-                                String attachPath = newMsgObj.attachPath;
-                                Message message;
-                                if (response instanceof TL_updateShortSentMessage) {
-                                    TL_updateShortSentMessage res = (TL_updateShortSentMessage) response;
-                                    message = newMsgObj;
-                                    Message message2 = newMsgObj;
-                                    i = res.id;
-                                    message2.id = i;
-                                    message.local_id = i;
-                                    newMsgObj.date = res.date;
-                                    newMsgObj.entities = res.entities;
-                                    newMsgObj.out = res.out;
-                                    if (res.media != null) {
-                                        newMsgObj.media = res.media;
-                                        message = newMsgObj;
-                                        message.flags |= 512;
-                                        ImageLoader.saveMessageThumbs(newMsgObj);
-                                    }
-                                    if ((res.media instanceof TL_messageMediaGame) && !TextUtils.isEmpty(res.message)) {
-                                        newMsgObj.message = res.message;
-                                    }
-                                    if (!newMsgObj.entities.isEmpty()) {
-                                        message = newMsgObj;
-                                        message.flags |= 128;
-                                    }
-                                    final TL_updateShortSentMessage tL_updateShortSentMessage = res;
-                                    Utilities.stageQueue.postRunnable(new Runnable() {
-                                        public void run() {
-                                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewDifferenceParams(-1, tL_updateShortSentMessage.pts, tL_updateShortSentMessage.date, tL_updateShortSentMessage.pts_count);
-                                        }
-                                    });
-                                    sentMessages.add(newMsgObj);
-                                } else if (response instanceof Updates) {
-                                    Updates updates = (Updates) response;
-                                    ArrayList<Update> updatesArr = ((Updates) response).updates;
-                                    Message message3 = null;
-                                    int a = 0;
-                                    while (a < updatesArr.size()) {
-                                        Update update = (Update) updatesArr.get(a);
-                                        if (update instanceof TL_updateNewMessage) {
-                                            final TL_updateNewMessage newMessage = (TL_updateNewMessage) update;
-                                            message3 = newMessage.message;
-                                            sentMessages.add(message3);
-                                            Utilities.stageQueue.postRunnable(new Runnable() {
-                                                public void run() {
-                                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewDifferenceParams(-1, newMessage.pts, -1, newMessage.pts_count);
-                                                }
-                                            });
-                                            updatesArr.remove(a);
-                                            break;
-                                        } else if (update instanceof TL_updateNewChannelMessage) {
-                                            final TL_updateNewChannelMessage newMessage2 = (TL_updateNewChannelMessage) update;
-                                            message3 = newMessage2.message;
-                                            sentMessages.add(message3);
-                                            if ((newMsgObj.flags & Integer.MIN_VALUE) != 0) {
-                                                message = newMessage2.message;
-                                                message.flags |= Integer.MIN_VALUE;
-                                            }
-                                            Utilities.stageQueue.postRunnable(new Runnable() {
-                                                public void run() {
-                                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewChannelDifferenceParams(newMessage2.pts, newMessage2.pts_count, newMessage2.message.to_id.channel_id);
-                                                }
-                                            });
-                                            updatesArr.remove(a);
-                                        } else {
-                                            a++;
-                                        }
-                                    }
-                                    if (message3 != null) {
-                                        ImageLoader.saveMessageThumbs(message3);
-                                        Integer value = (Integer) MessagesController.getInstance(SendMessagesHelper.this.currentAccount).dialogs_read_outbox_max.get(Long.valueOf(message3.dialog_id));
-                                        if (value == null) {
-                                            value = Integer.valueOf(MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getDialogReadMax(message3.out, message3.dialog_id));
-                                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).dialogs_read_outbox_max.put(Long.valueOf(message3.dialog_id), value);
-                                        }
-                                        message3.unread = value.intValue() < message3.id;
-                                        newMsgObj.id = message3.id;
-                                        SendMessagesHelper.this.updateMediaPaths(messageObject, message3, str, false);
-                                    } else {
-                                        isSentError = true;
-                                    }
-                                    final Updates updates2 = updates;
-                                    Utilities.stageQueue.postRunnable(new Runnable() {
-                                        public void run() {
-                                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processUpdates(updates2, false);
-                                        }
-                                    });
-                                }
-                                if (MessageObject.isLiveLocationMessage(newMsgObj)) {
-                                    LocationController.getInstance(SendMessagesHelper.this.currentAccount).addSharingLocation(newMsgObj.dialog_id, newMsgObj.id, newMsgObj.media.period, newMsgObj);
-                                }
-                                if (!isSentError) {
-                                    int i2;
-                                    StatsController.getInstance(SendMessagesHelper.this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
-                                    newMsgObj.send_state = 0;
-                                    NotificationCenter instance = NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount);
-                                    i = NotificationCenter.messageReceivedByServer;
-                                    Object[] objArr = new Object[5];
-                                    objArr[0] = Integer.valueOf(oldId);
-                                    if (isBroadcast) {
-                                        i2 = oldId;
-                                    } else {
-                                        i2 = newMsgObj.id;
-                                    }
-                                    objArr[1] = Integer.valueOf(i2);
-                                    objArr[2] = newMsgObj;
-                                    objArr[3] = Long.valueOf(newMsgObj.dialog_id);
-                                    objArr[4] = Long.valueOf(0);
-                                    instance.postNotificationName(i, objArr);
-                                    i = oldId;
-                                    final boolean z = isBroadcast;
-                                    final ArrayList<Message> arrayList = sentMessages;
-                                    final String str = attachPath;
-                                    MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-
-                                        /* renamed from: org.telegram.messenger.SendMessagesHelper$13$2$5$1 */
-                                        class C04971 implements Runnable {
-                                            C04971() {
-                                            }
-
-                                            public void run() {
-                                                if (z) {
-                                                    for (int a = 0; a < arrayList.size(); a++) {
-                                                        Message message = (Message) arrayList.get(a);
-                                                        ArrayList<MessageObject> arr = new ArrayList();
-                                                        MessageObject messageObject = new MessageObject(SendMessagesHelper.this.currentAccount, message, false);
-                                                        arr.add(messageObject);
-                                                        MessagesController.getInstance(SendMessagesHelper.this.currentAccount).updateInterfaceWithMessages(messageObject.getDialogId(), arr, true);
-                                                    }
-                                                    NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-                                                }
-                                                DataQuery.getInstance(SendMessagesHelper.this.currentAccount).increasePeerRaiting(newMsgObj.dialog_id);
-                                                NotificationCenter instance = NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount);
-                                                int i = NotificationCenter.messageReceivedByServer;
-                                                Object[] objArr = new Object[5];
-                                                objArr[0] = Integer.valueOf(i);
-                                                objArr[1] = Integer.valueOf(z ? i : newMsgObj.id);
-                                                objArr[2] = newMsgObj;
-                                                objArr[3] = Long.valueOf(newMsgObj.dialog_id);
-                                                objArr[4] = Long.valueOf(0);
-                                                instance.postNotificationName(i, objArr);
-                                                SendMessagesHelper.this.processSentMessage(i);
-                                                SendMessagesHelper.this.removeFromSendingMessages(i);
-                                            }
-                                        }
-
-                                        public void run() {
-                                            MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(i), z ? i : newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
-                                            MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(arrayList, true, false, z, 0);
-                                            if (z) {
-                                                ArrayList currentMessage = new ArrayList();
-                                                currentMessage.add(newMsgObj);
-                                                MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(currentMessage, true, false, false, 0);
-                                            }
-                                            AndroidUtilities.runOnUIThread(new C04971());
-                                            if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
-                                                SendMessagesHelper.this.stopVideoService(str);
-                                            }
-                                        }
-                                    });
-                                }
-                            } else {
-                                AlertsCreator.processError(SendMessagesHelper.this.currentAccount, error, null, tLObject, new Object[0]);
-                                isSentError = true;
-                            }
-                            if (isSentError) {
-                                MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).markMessageAsSendError(newMsgObj);
-                                newMsgObj.send_state = 2;
-                                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.id));
-                                SendMessagesHelper.this.processSentMessage(newMsgObj.id);
-                                if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
-                                    SendMessagesHelper.this.stopVideoService(newMsgObj.attachPath);
-                                }
-                                SendMessagesHelper.this.removeFromSendingMessages(newMsgObj.id);
-                            }
-                        }
-                    });
-                }
-            }
-        };
-        QuickAckDelegate anonymousClass14 = new QuickAckDelegate() {
-            public void run() {
-                final int msg_id = newMsgObj.id;
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        newMsgObj.send_state = 0;
-                        NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByAck, Integer.valueOf(msg_id));
-                    }
-                });
-            }
-        };
+        RequestDelegate sendMessagesHelper$$Lambda$11 = new SendMessagesHelper$$Lambda$11(this, req, newMsgObj, msgObj, originalPath);
+        QuickAckDelegate sendMessagesHelper$$Lambda$12 = new SendMessagesHelper$$Lambda$12(this, newMsgObj);
         if (req instanceof TL_messages_sendMessage) {
             i = 128;
         } else {
             i = 0;
         }
-        newMsgObj.reqId = instance.sendRequest(req, anonymousClass13, anonymousClass14, i | 68);
+        newMsgObj.reqId = instance.sendRequest(req, sendMessagesHelper$$Lambda$11, sendMessagesHelper$$Lambda$12, i | 68);
         if (parentMessage != null) {
             parentMessage.sendDelayedRequests();
         }
+    }
+
+    final /* synthetic */ void lambda$performSendMessageRequest$39$SendMessagesHelper(TLObject req, Message newMsgObj, MessageObject msgObj, String originalPath, TLObject response, TL_error error) {
+        if (req instanceof TL_messages_editMessage) {
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$34(this, error, newMsgObj, response, msgObj, originalPath, req));
+        } else {
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$35(this, error, newMsgObj, req, response, msgObj, originalPath));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$31$SendMessagesHelper(TL_error error, Message newMsgObj, TLObject response, MessageObject msgObj, String originalPath, TLObject req) {
+        if (error == null) {
+            String attachPath = newMsgObj.attachPath;
+            Updates updates = (Updates) response;
+            ArrayList<Update> updatesArr = ((Updates) response).updates;
+            Message message = null;
+            int a = 0;
+            while (a < updatesArr.size()) {
+                Update update = (Update) updatesArr.get(a);
+                if (update instanceof TL_updateEditMessage) {
+                    message = ((TL_updateEditMessage) update).message;
+                    break;
+                } else if (update instanceof TL_updateEditChannelMessage) {
+                    message = ((TL_updateEditChannelMessage) update).message;
+                    break;
+                } else {
+                    a++;
+                }
+            }
+            if (message != null) {
+                ImageLoader.saveMessageThumbs(message);
+                updateMediaPaths(msgObj, message, originalPath, false);
+            }
+            Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$42(this, updates, newMsgObj));
+            if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
+                stopVideoService(attachPath);
+                return;
+            }
+            return;
+        }
+        AlertsCreator.processError(this.currentAccount, error, null, req, new Object[0]);
+        if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
+            stopVideoService(newMsgObj.attachPath);
+        }
+        removeFromSendingMessages(newMsgObj.id);
+        revertEditingMessageObject(msgObj);
+    }
+
+    final /* synthetic */ void lambda$null$30$SendMessagesHelper(Updates updates, Message newMsgObj) {
+        MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$43(this, newMsgObj));
+    }
+
+    final /* synthetic */ void lambda$null$29$SendMessagesHelper(Message newMsgObj) {
+        processSentMessage(newMsgObj.id);
+        removeFromSendingMessages(newMsgObj.id);
+    }
+
+    final /* synthetic */ void lambda$null$38$SendMessagesHelper(TL_error error, Message newMsgObj, TLObject req, TLObject response, MessageObject msgObj, String originalPath) {
+        boolean isSentError = false;
+        if (error == null) {
+            int i;
+            int oldId = newMsgObj.id;
+            boolean isBroadcast = req instanceof TL_messages_sendBroadcast;
+            ArrayList<Message> sentMessages = new ArrayList();
+            String attachPath = newMsgObj.attachPath;
+            if (response instanceof TL_updateShortSentMessage) {
+                TL_updateShortSentMessage res = (TL_updateShortSentMessage) response;
+                i = res.id;
+                newMsgObj.id = i;
+                newMsgObj.local_id = i;
+                newMsgObj.date = res.date;
+                newMsgObj.entities = res.entities;
+                newMsgObj.out = res.out;
+                if (res.media != null) {
+                    newMsgObj.media = res.media;
+                    newMsgObj.flags |= 512;
+                    ImageLoader.saveMessageThumbs(newMsgObj);
+                }
+                if ((res.media instanceof TL_messageMediaGame) && !TextUtils.isEmpty(res.message)) {
+                    newMsgObj.message = res.message;
+                }
+                if (!newMsgObj.entities.isEmpty()) {
+                    newMsgObj.flags |= 128;
+                }
+                Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$36(this, res));
+                sentMessages.add(newMsgObj);
+            } else if (response instanceof Updates) {
+                Updates updates = (Updates) response;
+                ArrayList<Update> updatesArr = ((Updates) response).updates;
+                Message message = null;
+                int a = 0;
+                while (a < updatesArr.size()) {
+                    Update update = (Update) updatesArr.get(a);
+                    if (update instanceof TL_updateNewMessage) {
+                        TL_updateNewMessage newMessage = (TL_updateNewMessage) update;
+                        message = newMessage.message;
+                        sentMessages.add(message);
+                        Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$37(this, newMessage));
+                        updatesArr.remove(a);
+                        break;
+                    } else if (update instanceof TL_updateNewChannelMessage) {
+                        TL_updateNewChannelMessage newMessage2 = (TL_updateNewChannelMessage) update;
+                        message = newMessage2.message;
+                        sentMessages.add(message);
+                        if ((newMsgObj.flags & Integer.MIN_VALUE) != 0) {
+                            Message message2 = newMessage2.message;
+                            message2.flags |= Integer.MIN_VALUE;
+                        }
+                        Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$38(this, newMessage2));
+                        updatesArr.remove(a);
+                    } else {
+                        a++;
+                    }
+                }
+                if (message != null) {
+                    ImageLoader.saveMessageThumbs(message);
+                    Integer value = (Integer) MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max.get(Long.valueOf(message.dialog_id));
+                    if (value == null) {
+                        value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(message.out, message.dialog_id));
+                        MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max.put(Long.valueOf(message.dialog_id), value);
+                    }
+                    message.unread = value.intValue() < message.id;
+                    newMsgObj.id = message.id;
+                    updateMediaPaths(msgObj, message, originalPath, false);
+                } else {
+                    isSentError = true;
+                }
+                Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$39(this, updates));
+            }
+            if (MessageObject.isLiveLocationMessage(newMsgObj)) {
+                LocationController.getInstance(this.currentAccount).addSharingLocation(newMsgObj.dialog_id, newMsgObj.id, newMsgObj.media.period, newMsgObj);
+            }
+            if (!isSentError) {
+                StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
+                newMsgObj.send_state = 0;
+                NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
+                int i2 = NotificationCenter.messageReceivedByServer;
+                Object[] objArr = new Object[5];
+                objArr[0] = Integer.valueOf(oldId);
+                if (isBroadcast) {
+                    i = oldId;
+                } else {
+                    i = newMsgObj.id;
+                }
+                objArr[1] = Integer.valueOf(i);
+                objArr[2] = newMsgObj;
+                objArr[3] = Long.valueOf(newMsgObj.dialog_id);
+                objArr[4] = Long.valueOf(0);
+                instance.postNotificationName(i2, objArr);
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$40(this, newMsgObj, oldId, isBroadcast, sentMessages, attachPath));
+            }
+        } else {
+            AlertsCreator.processError(this.currentAccount, error, null, req, new Object[0]);
+            isSentError = true;
+        }
+        if (isSentError) {
+            MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsgObj);
+            newMsgObj.send_state = 2;
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.id));
+            processSentMessage(newMsgObj.id);
+            if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
+                stopVideoService(newMsgObj.attachPath);
+            }
+            removeFromSendingMessages(newMsgObj.id);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$32$SendMessagesHelper(TL_updateShortSentMessage res) {
+        MessagesController.getInstance(this.currentAccount).processNewDifferenceParams(-1, res.pts, res.date, res.pts_count);
+    }
+
+    final /* synthetic */ void lambda$null$33$SendMessagesHelper(TL_updateNewMessage newMessage) {
+        MessagesController.getInstance(this.currentAccount).processNewDifferenceParams(-1, newMessage.pts, -1, newMessage.pts_count);
+    }
+
+    final /* synthetic */ void lambda$null$34$SendMessagesHelper(TL_updateNewChannelMessage newMessage) {
+        MessagesController.getInstance(this.currentAccount).processNewChannelDifferenceParams(newMessage.pts, newMessage.pts_count, newMessage.message.to_id.channel_id);
+    }
+
+    final /* synthetic */ void lambda$null$35$SendMessagesHelper(Updates updates) {
+        MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
+    }
+
+    final /* synthetic */ void lambda$null$37$SendMessagesHelper(Message newMsgObj, int oldId, boolean isBroadcast, ArrayList sentMessages, String attachPath) {
+        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), isBroadcast ? oldId : newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
+        MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, isBroadcast, 0);
+        if (isBroadcast) {
+            ArrayList currentMessage = new ArrayList();
+            currentMessage.add(newMsgObj);
+            MessagesStorage.getInstance(this.currentAccount).putMessages(currentMessage, true, false, false, 0);
+        }
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$41(this, isBroadcast, sentMessages, newMsgObj, oldId));
+        if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
+            stopVideoService(attachPath);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$36$SendMessagesHelper(boolean isBroadcast, ArrayList sentMessages, Message newMsgObj, int oldId) {
+        if (isBroadcast) {
+            for (int a = 0; a < sentMessages.size(); a++) {
+                Message message = (Message) sentMessages.get(a);
+                ArrayList<MessageObject> arr = new ArrayList();
+                MessageObject messageObject = new MessageObject(this.currentAccount, message, false);
+                arr.add(messageObject);
+                MessagesController.getInstance(this.currentAccount).updateInterfaceWithMessages(messageObject.getDialogId(), arr, true);
+            }
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
+        }
+        DataQuery.getInstance(this.currentAccount).increasePeerRaiting(newMsgObj.dialog_id);
+        NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
+        int i = NotificationCenter.messageReceivedByServer;
+        Object[] objArr = new Object[5];
+        objArr[0] = Integer.valueOf(oldId);
+        objArr[1] = Integer.valueOf(isBroadcast ? oldId : newMsgObj.id);
+        objArr[2] = newMsgObj;
+        objArr[3] = Long.valueOf(newMsgObj.dialog_id);
+        objArr[4] = Long.valueOf(0);
+        instance.postNotificationName(i, objArr);
+        processSentMessage(oldId);
+        removeFromSendingMessages(oldId);
+    }
+
+    final /* synthetic */ void lambda$performSendMessageRequest$41$SendMessagesHelper(Message newMsgObj) {
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$33(this, newMsgObj, newMsgObj.id));
+    }
+
+    final /* synthetic */ void lambda$null$40$SendMessagesHelper(Message newMsgObj, int msg_id) {
+        newMsgObj.send_state = 0;
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByAck, Integer.valueOf(msg_id));
     }
 
     private void updateMediaPaths(MessageObject newMsgObj, Message sentMessage, String originalPath, boolean post) {
@@ -7453,14 +7357,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             int b = 0;
                             while (b < newMsg.media.photo.sizes.size()) {
                                 size2 = (PhotoSize) newMsg.media.photo.sizes.get(b);
-                                if (size2 == null || size2.location == null || size2.type == null || !((size2.location.volume_id == -2147483648L && size.type.equals(size2.type)) || (size.f45w == size2.f45w && size.f44h == size2.f44h))) {
+                                if (size2 == null || size2.location == null || size2.type == null || !((size2.location.volume_id == -2147483648L && size.type.equals(size2.type)) || (size.f48w == size2.f48w && size.f47h == size2.f47h))) {
                                     b++;
                                 } else {
                                     fileName = size2.location.volume_id + "_" + size2.location.local_id;
                                     fileName2 = size.location.volume_id + "_" + size.location.local_id;
                                     if (!fileName.equals(fileName2)) {
                                         cacheFile = new File(FileLoader.getDirectory(4), fileName + ".jpg");
-                                        if (sentMessage.media.ttl_seconds != 0 || (sentMessage.media.photo.sizes.size() != 1 && size.f45w <= 90 && size.f44h <= 90)) {
+                                        if (sentMessage.media.ttl_seconds != 0 || (sentMessage.media.photo.sizes.size() != 1 && size.f48w <= 90 && size.f47h <= 90)) {
                                             cacheFile2 = new File(FileLoader.getDirectory(4), fileName2 + ".jpg");
                                         } else {
                                             cacheFile2 = FileLoader.getPathToAttach(size);
@@ -7600,20 +7504,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     protected void processUnsentMessages(ArrayList<Message> messages, ArrayList<User> users, ArrayList<Chat> chats, ArrayList<EncryptedChat> encryptedChats) {
-        final ArrayList<User> arrayList = users;
-        final ArrayList<Chat> arrayList2 = chats;
-        final ArrayList<EncryptedChat> arrayList3 = encryptedChats;
-        final ArrayList<Message> arrayList4 = messages;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putUsers(arrayList, true);
-                MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putChats(arrayList2, true);
-                MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putEncryptedChats(arrayList3, true);
-                for (int a = 0; a < arrayList4.size(); a++) {
-                    SendMessagesHelper.this.retrySendMessage(new MessageObject(SendMessagesHelper.this.currentAccount, (Message) arrayList4.get(a), false), true);
-                }
-            }
-        });
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$13(this, users, chats, encryptedChats, messages));
+    }
+
+    final /* synthetic */ void lambda$processUnsentMessages$42$SendMessagesHelper(ArrayList users, ArrayList chats, ArrayList encryptedChats, ArrayList messages) {
+        MessagesController.getInstance(this.currentAccount).putUsers(users, true);
+        MessagesController.getInstance(this.currentAccount).putChats(chats, true);
+        MessagesController.getInstance(this.currentAccount).putEncryptedChats(encryptedChats, true);
+        for (int a = 0; a < messages.size(); a++) {
+            retrySendMessage(new MessageObject(this.currentAccount, (Message) messages.get(a), false), true);
+        }
     }
 
     public TL_photo generatePhotoSizes(String path, Uri imageUri) {
@@ -7657,15 +7557,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         ByteBuffer buffer;
         TL_documentAttributeSticker attributeSticker;
         TL_documentAttributeImageSize attributeImageSize;
-        final String captionFinal;
-        final HashMap<String, String> params;
-        final TL_document documentFinal;
-        final String pathFinal;
-        final MessageObject messageObject;
-        final int i;
-        final long j;
-        final MessageObject messageObject2;
-        final ArrayList<MessageEntity> arrayList;
+        String captionFinal;
+        HashMap<String, String> params;
         Throwable th;
         if ((path == null || path.length() == 0) && uri == null) {
             return false;
@@ -7745,19 +7638,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             try {
                                 mediaMetadataRetriever2.release();
                             } catch (Throwable e2) {
-                                FileLog.m3e(e2);
+                                FileLog.m8e(e2);
                             }
                         }
                     } catch (Exception e3) {
                         e2 = e3;
                         mediaMetadataRetriever = mediaMetadataRetriever2;
                         try {
-                            FileLog.m3e(e2);
+                            FileLog.m8e(e2);
                             if (mediaMetadataRetriever != null) {
                                 try {
                                     mediaMetadataRetriever.release();
                                 } catch (Throwable e22) {
-                                    FileLog.m3e(e22);
+                                    FileLog.m8e(e22);
                                 }
                             }
                             if (duration != 0) {
@@ -7863,7 +7756,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         bitmap.recycle();
                                     }
                                 } catch (Throwable e222) {
-                                    FileLog.m3e(e222);
+                                    FileLog.m8e(e222);
                                 }
                                 bmOptions = new Options();
                                 try {
@@ -7873,7 +7766,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     Utilities.loadWebpImage(null, buffer, buffer.limit(), bmOptions, true);
                                     randomAccessFile.close();
                                 } catch (Throwable e2222) {
-                                    FileLog.m3e(e2222);
+                                    FileLog.m8e(e2222);
                                 }
                                 attributeSticker = new TL_documentAttributeSticker();
                                 attributeSticker.alt = TtmlNode.ANONYMOUS_REGION_ID;
@@ -7893,22 +7786,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             if (originalPath != null) {
                                 params.put("originalPath", originalPath);
                             }
-                            documentFinal = tL_document;
-                            pathFinal = path;
-                            messageObject = editingMessageObject;
-                            i = currentAccount;
-                            j = dialog_id;
-                            messageObject2 = reply_to_msg;
-                            arrayList = entities;
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    if (messageObject != null) {
-                                        SendMessagesHelper.getInstance(i).editMessageMedia(messageObject, null, null, documentFinal, pathFinal, params, false);
-                                    } else {
-                                        SendMessagesHelper.getInstance(i).sendMessage(documentFinal, null, pathFinal, j, messageObject2, captionFinal, arrayList, null, params, 0);
-                                    }
-                                }
-                            });
+                            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$14(editingMessageObject, currentAccount, tL_document, path, params, dialog_id, reply_to_msg, captionFinal, entities));
                             return true;
                         } catch (Throwable th2) {
                             th = th2;
@@ -7916,7 +7794,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 try {
                                     mediaMetadataRetriever.release();
                                 } catch (Throwable e22222) {
-                                    FileLog.m3e(e22222);
+                                    FileLog.m8e(e22222);
                                 }
                             }
                             throw th;
@@ -7931,7 +7809,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                 } catch (Exception e4) {
                     e22222 = e4;
-                    FileLog.m3e(e22222);
+                    FileLog.m8e(e22222);
                     if (mediaMetadataRetriever != null) {
                         mediaMetadataRetriever.release();
                     }
@@ -8065,14 +7943,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     if (originalPath != null) {
                         params.put("originalPath", originalPath);
                     }
-                    documentFinal = tL_document;
-                    pathFinal = path;
-                    messageObject = editingMessageObject;
-                    i = currentAccount;
-                    j = dialog_id;
-                    messageObject2 = reply_to_msg;
-                    arrayList = entities;
-                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+                    AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$14(editingMessageObject, currentAccount, tL_document, path, params, dialog_id, reply_to_msg, captionFinal, entities));
                     return true;
                 }
                 if (duration != 0) {
@@ -8215,14 +8086,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (originalPath != null) {
                     params.put("originalPath", originalPath);
                 }
-                documentFinal = tL_document;
-                pathFinal = path;
-                messageObject = editingMessageObject;
-                i = currentAccount;
-                j = dialog_id;
-                messageObject2 = reply_to_msg;
-                arrayList = entities;
-                AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+                AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$14(editingMessageObject, currentAccount, tL_document, path, params, dialog_id, reply_to_msg, captionFinal, entities));
                 return true;
             }
         }
@@ -8361,15 +8225,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (originalPath != null) {
             params.put("originalPath", originalPath);
         }
-        documentFinal = tL_document;
-        pathFinal = path;
-        messageObject = editingMessageObject;
-        i = currentAccount;
-        j = dialog_id;
-        messageObject2 = reply_to_msg;
-        arrayList = entities;
-        AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$14(editingMessageObject, currentAccount, tL_document, path, params, dialog_id, reply_to_msg, captionFinal, entities));
         return true;
+    }
+
+    static final /* synthetic */ void lambda$prepareSendingDocumentInternal$43$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, String pathFinal, HashMap params, long dialog_id, MessageObject reply_to_msg, String captionFinal, ArrayList entities) {
+        if (editingMessageObject != null) {
+            getInstance(currentAccount).editMessageMedia(editingMessageObject, null, null, documentFinal, pathFinal, params, false);
+        } else {
+            getInstance(currentAccount).sendMessage(documentFinal, null, pathFinal, dialog_id, reply_to_msg, captionFinal, entities, null, params, 0);
+        }
     }
 
     public static void prepareSendingDocument(String path, String originalPath, Uri uri, String mine, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent, MessageObject editingMessageObject) {
@@ -8390,107 +8255,85 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public static void prepareSendingAudioDocuments(ArrayList<MessageObject> messageObjects, long dialog_id, MessageObject reply_to_msg, MessageObject editingMessageObject) {
-        final int currentAccount = UserConfig.selectedAccount;
-        final ArrayList<MessageObject> arrayList = messageObjects;
-        final long j = dialog_id;
-        final MessageObject messageObject = editingMessageObject;
-        final MessageObject messageObject2 = reply_to_msg;
-        new Thread(new Runnable() {
-            public void run() {
-                int size = arrayList.size();
-                for (int a = 0; a < size; a++) {
-                    final MessageObject messageObject = (MessageObject) arrayList.get(a);
-                    String originalPath = messageObject.messageOwner.attachPath;
-                    File f = new File(originalPath);
-                    boolean isEncrypted = ((int) j) == 0;
-                    if (originalPath != null) {
-                        originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + f.length();
-                    }
-                    TL_document tL_document = null;
-                    if (!isEncrypted) {
-                        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, !isEncrypted ? 1 : 4);
-                    }
-                    if (tL_document == null) {
-                        tL_document = messageObject.messageOwner.media.document;
-                    }
-                    if (isEncrypted) {
-                        if (MessagesController.getInstance(currentAccount).getEncryptedChat(Integer.valueOf((int) (j >> 32))) == null) {
-                            return;
-                        }
-                    }
-                    final HashMap<String, String> params = new HashMap();
-                    if (originalPath != null) {
-                        params.put("originalPath", originalPath);
-                    }
-                    final TL_document documentFinal = tL_document;
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (messageObject != null) {
-                                SendMessagesHelper.getInstance(currentAccount).editMessageMedia(messageObject, null, null, documentFinal, messageObject.messageOwner.attachPath, params, false);
-                            } else {
-                                SendMessagesHelper.getInstance(currentAccount).sendMessage(documentFinal, null, messageObject.messageOwner.attachPath, j, messageObject2, null, null, null, params, 0);
-                            }
-                        }
-                    });
+        new Thread(new SendMessagesHelper$$Lambda$15(messageObjects, dialog_id, UserConfig.selectedAccount, editingMessageObject, reply_to_msg)).start();
+    }
+
+    static final /* synthetic */ void lambda$prepareSendingAudioDocuments$45$SendMessagesHelper(ArrayList messageObjects, long dialog_id, int currentAccount, MessageObject editingMessageObject, MessageObject reply_to_msg) {
+        int size = messageObjects.size();
+        for (int a = 0; a < size; a++) {
+            MessageObject messageObject = (MessageObject) messageObjects.get(a);
+            String originalPath = messageObject.messageOwner.attachPath;
+            File f = new File(originalPath);
+            boolean isEncrypted = ((int) dialog_id) == 0;
+            if (originalPath != null) {
+                originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + f.length();
+            }
+            TL_document tL_document = null;
+            if (!isEncrypted) {
+                tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, !isEncrypted ? 1 : 4);
+            }
+            if (tL_document == null) {
+                tL_document = messageObject.messageOwner.media.document;
+            }
+            if (isEncrypted) {
+                if (MessagesController.getInstance(currentAccount).getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32))) == null) {
+                    return;
                 }
             }
-        }).start();
+            HashMap<String, String> params = new HashMap();
+            if (originalPath != null) {
+                params.put("originalPath", originalPath);
+            }
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$32(editingMessageObject, currentAccount, tL_document, messageObject, params, dialog_id, reply_to_msg));
+        }
+    }
+
+    static final /* synthetic */ void lambda$null$44$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, MessageObject messageObject, HashMap params, long dialog_id, MessageObject reply_to_msg) {
+        if (editingMessageObject != null) {
+            getInstance(currentAccount).editMessageMedia(editingMessageObject, null, null, documentFinal, messageObject.messageOwner.attachPath, params, false);
+            return;
+        }
+        getInstance(currentAccount).sendMessage(documentFinal, null, messageObject.messageOwner.attachPath, dialog_id, reply_to_msg, null, null, null, params, 0);
     }
 
     public static void prepareSendingDocuments(ArrayList<String> paths, ArrayList<String> originalPaths, ArrayList<Uri> uris, String mime, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent, MessageObject editingMessageObject) {
         if (paths != null || originalPaths != null || uris != null) {
             if (paths == null || originalPaths == null || paths.size() == originalPaths.size()) {
-                final int currentAccount = UserConfig.selectedAccount;
-                final ArrayList<String> arrayList = paths;
-                final ArrayList<String> arrayList2 = originalPaths;
-                final String str = mime;
-                final long j = dialog_id;
-                final MessageObject messageObject = reply_to_msg;
-                final MessageObject messageObject2 = editingMessageObject;
-                final ArrayList<Uri> arrayList3 = uris;
-                final InputContentInfoCompat inputContentInfoCompat = inputContent;
-                new Thread(new Runnable() {
-
-                    /* renamed from: org.telegram.messenger.SendMessagesHelper$18$1 */
-                    class C05021 implements Runnable {
-                        C05021() {
-                        }
-
-                        public void run() {
-                            try {
-                                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("UnsupportedAttachment", R.string.UnsupportedAttachment), 0).show();
-                            } catch (Throwable e) {
-                                FileLog.m3e(e);
-                            }
-                        }
-                    }
-
-                    public void run() {
-                        int a;
-                        boolean error = false;
-                        if (arrayList != null) {
-                            for (a = 0; a < arrayList.size(); a++) {
-                                if (!SendMessagesHelper.prepareSendingDocumentInternal(currentAccount, (String) arrayList.get(a), (String) arrayList2.get(a), null, str, j, messageObject, null, null, messageObject2)) {
-                                    error = true;
-                                }
-                            }
-                        }
-                        if (arrayList3 != null) {
-                            for (a = 0; a < arrayList3.size(); a++) {
-                                if (!SendMessagesHelper.prepareSendingDocumentInternal(currentAccount, null, null, (Uri) arrayList3.get(a), str, j, messageObject, null, null, messageObject2)) {
-                                    error = true;
-                                }
-                            }
-                        }
-                        if (inputContentInfoCompat != null) {
-                            inputContentInfoCompat.releasePermission();
-                        }
-                        if (error) {
-                            AndroidUtilities.runOnUIThread(new C05021());
-                        }
-                    }
-                }).start();
+                new Thread(new SendMessagesHelper$$Lambda$16(paths, UserConfig.selectedAccount, originalPaths, mime, dialog_id, reply_to_msg, editingMessageObject, uris, inputContent)).start();
             }
+        }
+    }
+
+    static final /* synthetic */ void lambda$prepareSendingDocuments$47$SendMessagesHelper(ArrayList paths, int currentAccount, ArrayList originalPaths, String mime, long dialog_id, MessageObject reply_to_msg, MessageObject editingMessageObject, ArrayList uris, InputContentInfoCompat inputContent) {
+        int a;
+        boolean error = false;
+        if (paths != null) {
+            for (a = 0; a < paths.size(); a++) {
+                if (!prepareSendingDocumentInternal(currentAccount, (String) paths.get(a), (String) originalPaths.get(a), null, mime, dialog_id, reply_to_msg, null, null, editingMessageObject)) {
+                    error = true;
+                }
+            }
+        }
+        if (uris != null) {
+            for (a = 0; a < uris.size(); a++) {
+                if (!prepareSendingDocumentInternal(currentAccount, null, null, (Uri) uris.get(a), mime, dialog_id, reply_to_msg, null, null, editingMessageObject)) {
+                    error = true;
+                }
+            }
+        }
+        if (inputContent != null) {
+            inputContent.releasePermission();
+        }
+        if (error) {
+            AndroidUtilities.runOnUIThread(SendMessagesHelper$$Lambda$31.$instance);
+        }
+    }
+
+    static final /* synthetic */ void lambda$null$46$SendMessagesHelper() {
+        try {
+            Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("UnsupportedAttachment", R.string.UnsupportedAttachment), 0).show();
+        } catch (Throwable e) {
+            FileLog.m8e(e);
         }
     }
 
@@ -8513,316 +8356,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     public static void prepareSendingBotContextResult(BotInlineResult result, HashMap<String, String> params, long dialog_id, MessageObject reply_to_msg) {
         if (result != null) {
-            final int currentAccount = UserConfig.selectedAccount;
+            int currentAccount = UserConfig.selectedAccount;
             if (result.send_message instanceof TL_botInlineMessageMediaAuto) {
-                final BotInlineResult botInlineResult = result;
-                final long j = dialog_id;
-                final HashMap<String, String> hashMap = params;
-                final MessageObject messageObject = reply_to_msg;
-                new Thread(new Runnable() {
-                    public void run() {
-                        String finalPath = null;
-                        TL_document document = null;
-                        TL_photo photo = null;
-                        TL_game game = null;
-                        if (!(botInlineResult instanceof TL_botInlineMediaResult)) {
-                            if (botInlineResult.content != null) {
-                                File file = new File(FileLoader.getDirectory(4), Utilities.MD5(botInlineResult.content.url) + "." + ImageLoader.getHttpUrlExtension(botInlineResult.content.url, "file"));
-                                if (file.exists()) {
-                                    finalPath = file.getAbsolutePath();
-                                } else {
-                                    finalPath = botInlineResult.content.url;
-                                }
-                                String str = botInlineResult.type;
-                                Object obj = -1;
-                                switch (str.hashCode()) {
-                                    case -1890252483:
-                                        if (str.equals("sticker")) {
-                                            obj = 4;
-                                            break;
-                                        }
-                                        break;
-                                    case 102340:
-                                        if (str.equals("gif")) {
-                                            obj = 5;
-                                            break;
-                                        }
-                                        break;
-                                    case 3143036:
-                                        if (str.equals("file")) {
-                                            obj = 2;
-                                            break;
-                                        }
-                                        break;
-                                    case 93166550:
-                                        if (str.equals(MimeTypes.BASE_TYPE_AUDIO)) {
-                                            obj = null;
-                                            break;
-                                        }
-                                        break;
-                                    case 106642994:
-                                        if (str.equals("photo")) {
-                                            obj = 6;
-                                            break;
-                                        }
-                                        break;
-                                    case 112202875:
-                                        if (str.equals(MimeTypes.BASE_TYPE_VIDEO)) {
-                                            obj = 3;
-                                            break;
-                                        }
-                                        break;
-                                    case 112386354:
-                                        if (str.equals("voice")) {
-                                            obj = 1;
-                                            break;
-                                        }
-                                        break;
-                                }
-                                int[] wh;
-                                switch (obj) {
-                                    case null:
-                                    case 1:
-                                    case 2:
-                                    case 3:
-                                    case 4:
-                                    case 5:
-                                        document = new TL_document();
-                                        document.id = 0;
-                                        document.size = 0;
-                                        document.dc_id = 0;
-                                        document.mime_type = botInlineResult.content.mime_type;
-                                        document.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
-                                        TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
-                                        document.attributes.add(fileName);
-                                        str = botInlineResult.type;
-                                        obj = -1;
-                                        switch (str.hashCode()) {
-                                            case -1890252483:
-                                                if (str.equals("sticker")) {
-                                                    obj = 5;
-                                                    break;
-                                                }
-                                                break;
-                                            case 102340:
-                                                if (str.equals("gif")) {
-                                                    obj = null;
-                                                    break;
-                                                }
-                                                break;
-                                            case 3143036:
-                                                if (str.equals("file")) {
-                                                    obj = 3;
-                                                    break;
-                                                }
-                                                break;
-                                            case 93166550:
-                                                if (str.equals(MimeTypes.BASE_TYPE_AUDIO)) {
-                                                    obj = 2;
-                                                    break;
-                                                }
-                                                break;
-                                            case 112202875:
-                                                if (str.equals(MimeTypes.BASE_TYPE_VIDEO)) {
-                                                    obj = 4;
-                                                    break;
-                                                }
-                                                break;
-                                            case 112386354:
-                                                if (str.equals("voice")) {
-                                                    obj = 1;
-                                                    break;
-                                                }
-                                                break;
-                                        }
-                                        Bitmap bitmap;
-                                        TL_documentAttributeAudio audio;
-                                        switch (obj) {
-                                            case null:
-                                                fileName.file_name = "animation.gif";
-                                                if (finalPath.endsWith("mp4")) {
-                                                    document.mime_type = MimeTypes.VIDEO_MP4;
-                                                    document.attributes.add(new TL_documentAttributeAnimated());
-                                                } else {
-                                                    document.mime_type = "image/gif";
-                                                }
-                                                try {
-                                                    if (finalPath.endsWith("mp4")) {
-                                                        bitmap = ThumbnailUtils.createVideoThumbnail(finalPath, 1);
-                                                    } else {
-                                                        bitmap = ImageLoader.loadBitmap(finalPath, null, 90.0f, 90.0f, true);
-                                                    }
-                                                    if (bitmap != null) {
-                                                        document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, false);
-                                                        bitmap.recycle();
-                                                        break;
-                                                    }
-                                                } catch (Throwable e) {
-                                                    FileLog.m3e(e);
-                                                    break;
-                                                }
-                                                break;
-                                            case 1:
-                                                audio = new TL_documentAttributeAudio();
-                                                audio.duration = MessageObject.getInlineResultDuration(botInlineResult);
-                                                audio.voice = true;
-                                                fileName.file_name = "audio.ogg";
-                                                document.attributes.add(audio);
-                                                document.thumb = new TL_photoSizeEmpty();
-                                                document.thumb.type = "s";
-                                                break;
-                                            case 2:
-                                                audio = new TL_documentAttributeAudio();
-                                                audio.duration = MessageObject.getInlineResultDuration(botInlineResult);
-                                                audio.title = botInlineResult.title;
-                                                audio.flags |= 1;
-                                                if (botInlineResult.description != null) {
-                                                    audio.performer = botInlineResult.description;
-                                                    audio.flags |= 2;
-                                                }
-                                                fileName.file_name = "audio.mp3";
-                                                document.attributes.add(audio);
-                                                document.thumb = new TL_photoSizeEmpty();
-                                                document.thumb.type = "s";
-                                                break;
-                                            case 3:
-                                                int idx = botInlineResult.content.mime_type.lastIndexOf(47);
-                                                if (idx == -1) {
-                                                    fileName.file_name = "file";
-                                                    break;
-                                                } else {
-                                                    fileName.file_name = "file." + botInlineResult.content.mime_type.substring(idx + 1);
-                                                    break;
-                                                }
-                                            case 4:
-                                                fileName.file_name = "video.mp4";
-                                                TL_documentAttributeVideo attributeVideo = new TL_documentAttributeVideo();
-                                                wh = MessageObject.getInlineResultWidthAndHeight(botInlineResult);
-                                                attributeVideo.w = wh[0];
-                                                attributeVideo.h = wh[1];
-                                                attributeVideo.duration = MessageObject.getInlineResultDuration(botInlineResult);
-                                                attributeVideo.supports_streaming = true;
-                                                document.attributes.add(attributeVideo);
-                                                try {
-                                                    if (botInlineResult.thumb != null) {
-                                                        bitmap = ImageLoader.loadBitmap(new File(FileLoader.getDirectory(4), Utilities.MD5(botInlineResult.thumb.url) + "." + ImageLoader.getHttpUrlExtension(botInlineResult.thumb.url, "jpg")).getAbsolutePath(), null, 90.0f, 90.0f, true);
-                                                        if (bitmap != null) {
-                                                            document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, false);
-                                                            bitmap.recycle();
-                                                            break;
-                                                        }
-                                                    }
-                                                } catch (Throwable e2) {
-                                                    FileLog.m3e(e2);
-                                                    break;
-                                                }
-                                                break;
-                                            case 5:
-                                                TL_documentAttributeSticker attributeSticker = new TL_documentAttributeSticker();
-                                                attributeSticker.alt = TtmlNode.ANONYMOUS_REGION_ID;
-                                                attributeSticker.stickerset = new TL_inputStickerSetEmpty();
-                                                document.attributes.add(attributeSticker);
-                                                TL_documentAttributeImageSize attributeImageSize = new TL_documentAttributeImageSize();
-                                                wh = MessageObject.getInlineResultWidthAndHeight(botInlineResult);
-                                                attributeImageSize.w = wh[0];
-                                                attributeImageSize.h = wh[1];
-                                                document.attributes.add(attributeImageSize);
-                                                fileName.file_name = "sticker.webp";
-                                                try {
-                                                    if (botInlineResult.thumb != null) {
-                                                        bitmap = ImageLoader.loadBitmap(new File(FileLoader.getDirectory(4), Utilities.MD5(botInlineResult.thumb.url) + "." + ImageLoader.getHttpUrlExtension(botInlineResult.thumb.url, "webp")).getAbsolutePath(), null, 90.0f, 90.0f, true);
-                                                        if (bitmap != null) {
-                                                            document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, false);
-                                                            bitmap.recycle();
-                                                            break;
-                                                        }
-                                                    }
-                                                } catch (Throwable e22) {
-                                                    FileLog.m3e(e22);
-                                                    break;
-                                                }
-                                                break;
-                                        }
-                                        if (fileName.file_name == null) {
-                                            fileName.file_name = "file";
-                                        }
-                                        if (document.mime_type == null) {
-                                            document.mime_type = "application/octet-stream";
-                                        }
-                                        if (document.thumb == null) {
-                                            document.thumb = new TL_photoSize();
-                                            wh = MessageObject.getInlineResultWidthAndHeight(botInlineResult);
-                                            document.thumb.f45w = wh[0];
-                                            document.thumb.f44h = wh[1];
-                                            document.thumb.size = 0;
-                                            document.thumb.location = new TL_fileLocationUnavailable();
-                                            document.thumb.type = "x";
-                                            break;
-                                        }
-                                        break;
-                                    case 6:
-                                        if (file.exists()) {
-                                            photo = SendMessagesHelper.getInstance(currentAccount).generatePhotoSizes(finalPath, null);
-                                        }
-                                        if (photo == null) {
-                                            photo = new TL_photo();
-                                            photo.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
-                                            TL_photoSize photoSize = new TL_photoSize();
-                                            wh = MessageObject.getInlineResultWidthAndHeight(botInlineResult);
-                                            photoSize.w = wh[0];
-                                            photoSize.h = wh[1];
-                                            photoSize.size = 1;
-                                            photoSize.location = new TL_fileLocationUnavailable();
-                                            photoSize.type = "x";
-                                            photo.sizes.add(photoSize);
-                                            break;
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        } else if (botInlineResult.type.equals("game")) {
-                            if (((int) j) != 0) {
-                                game = new TL_game();
-                                game.title = botInlineResult.title;
-                                game.description = botInlineResult.description;
-                                game.short_name = botInlineResult.id;
-                                game.photo = botInlineResult.photo;
-                                if (botInlineResult.document instanceof TL_document) {
-                                    game.document = botInlineResult.document;
-                                    game.flags |= 1;
-                                }
-                            } else {
-                                return;
-                            }
-                        } else if (botInlineResult.document != null) {
-                            if (botInlineResult.document instanceof TL_document) {
-                                document = botInlineResult.document;
-                            }
-                        } else if (botInlineResult.photo != null && (botInlineResult.photo instanceof TL_photo)) {
-                            photo = (TL_photo) botInlineResult.photo;
-                        }
-                        final String finalPathFinal = finalPath;
-                        final TL_document finalDocument = document;
-                        final TL_photo finalPhoto = photo;
-                        final TL_game finalGame = game;
-                        if (!(hashMap == null || botInlineResult.content == null)) {
-                            hashMap.put("originalPath", botInlineResult.content.url);
-                        }
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (finalDocument != null) {
-                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(finalDocument, null, finalPathFinal, j, messageObject, botInlineResult.send_message.message, botInlineResult.send_message.entities, botInlineResult.send_message.reply_markup, hashMap, 0);
-                                } else if (finalPhoto != null) {
-                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(finalPhoto, botInlineResult.content != null ? botInlineResult.content.url : null, j, messageObject, botInlineResult.send_message.message, botInlineResult.send_message.entities, botInlineResult.send_message.reply_markup, hashMap, 0);
-                                } else if (finalGame != null) {
-                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(finalGame, j, botInlineResult.send_message.reply_markup, hashMap);
-                                }
-                            }
-                        });
-                    }
-                }).run();
+                new Thread(new SendMessagesHelper$$Lambda$17(result, dialog_id, currentAccount, params, reply_to_msg)).run();
             } else if (result.send_message instanceof TL_botInlineMessageText) {
                 boolean z;
                 WebPage webPage = null;
@@ -8880,6 +8416,309 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
     }
 
+    static final /* synthetic */ void lambda$prepareSendingBotContextResult$49$SendMessagesHelper(BotInlineResult result, long dialog_id, int currentAccount, HashMap params, MessageObject reply_to_msg) {
+        String finalPath = null;
+        TL_document document = null;
+        TL_photo photo = null;
+        TL_game game = null;
+        if (!(result instanceof TL_botInlineMediaResult)) {
+            if (result.content != null) {
+                File file = new File(FileLoader.getDirectory(4), Utilities.MD5(result.content.url) + "." + ImageLoader.getHttpUrlExtension(result.content.url, "file"));
+                if (file.exists()) {
+                    finalPath = file.getAbsolutePath();
+                } else {
+                    finalPath = result.content.url;
+                }
+                String str = result.type;
+                Object obj = -1;
+                switch (str.hashCode()) {
+                    case -1890252483:
+                        if (str.equals("sticker")) {
+                            obj = 4;
+                            break;
+                        }
+                        break;
+                    case 102340:
+                        if (str.equals("gif")) {
+                            obj = 5;
+                            break;
+                        }
+                        break;
+                    case 3143036:
+                        if (str.equals("file")) {
+                            obj = 2;
+                            break;
+                        }
+                        break;
+                    case 93166550:
+                        if (str.equals(MimeTypes.BASE_TYPE_AUDIO)) {
+                            obj = null;
+                            break;
+                        }
+                        break;
+                    case 106642994:
+                        if (str.equals("photo")) {
+                            obj = 6;
+                            break;
+                        }
+                        break;
+                    case 112202875:
+                        if (str.equals(MimeTypes.BASE_TYPE_VIDEO)) {
+                            obj = 3;
+                            break;
+                        }
+                        break;
+                    case 112386354:
+                        if (str.equals("voice")) {
+                            obj = 1;
+                            break;
+                        }
+                        break;
+                }
+                int[] wh;
+                switch (obj) {
+                    case null:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        document = new TL_document();
+                        document.id = 0;
+                        document.size = 0;
+                        document.dc_id = 0;
+                        document.mime_type = result.content.mime_type;
+                        document.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+                        TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
+                        document.attributes.add(fileName);
+                        str = result.type;
+                        obj = -1;
+                        switch (str.hashCode()) {
+                            case -1890252483:
+                                if (str.equals("sticker")) {
+                                    obj = 5;
+                                    break;
+                                }
+                                break;
+                            case 102340:
+                                if (str.equals("gif")) {
+                                    obj = null;
+                                    break;
+                                }
+                                break;
+                            case 3143036:
+                                if (str.equals("file")) {
+                                    obj = 3;
+                                    break;
+                                }
+                                break;
+                            case 93166550:
+                                if (str.equals(MimeTypes.BASE_TYPE_AUDIO)) {
+                                    obj = 2;
+                                    break;
+                                }
+                                break;
+                            case 112202875:
+                                if (str.equals(MimeTypes.BASE_TYPE_VIDEO)) {
+                                    obj = 4;
+                                    break;
+                                }
+                                break;
+                            case 112386354:
+                                if (str.equals("voice")) {
+                                    obj = 1;
+                                    break;
+                                }
+                                break;
+                        }
+                        Bitmap bitmap;
+                        TL_documentAttributeAudio audio;
+                        switch (obj) {
+                            case null:
+                                fileName.file_name = "animation.gif";
+                                if (finalPath.endsWith("mp4")) {
+                                    document.mime_type = MimeTypes.VIDEO_MP4;
+                                    document.attributes.add(new TL_documentAttributeAnimated());
+                                } else {
+                                    document.mime_type = "image/gif";
+                                }
+                                try {
+                                    if (finalPath.endsWith("mp4")) {
+                                        bitmap = ThumbnailUtils.createVideoThumbnail(finalPath, 1);
+                                    } else {
+                                        bitmap = ImageLoader.loadBitmap(finalPath, null, 90.0f, 90.0f, true);
+                                    }
+                                    if (bitmap != null) {
+                                        document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, false);
+                                        bitmap.recycle();
+                                        break;
+                                    }
+                                } catch (Throwable e) {
+                                    FileLog.m8e(e);
+                                    break;
+                                }
+                                break;
+                            case 1:
+                                audio = new TL_documentAttributeAudio();
+                                audio.duration = MessageObject.getInlineResultDuration(result);
+                                audio.voice = true;
+                                fileName.file_name = "audio.ogg";
+                                document.attributes.add(audio);
+                                document.thumb = new TL_photoSizeEmpty();
+                                document.thumb.type = "s";
+                                break;
+                            case 2:
+                                audio = new TL_documentAttributeAudio();
+                                audio.duration = MessageObject.getInlineResultDuration(result);
+                                audio.title = result.title;
+                                audio.flags |= 1;
+                                if (result.description != null) {
+                                    audio.performer = result.description;
+                                    audio.flags |= 2;
+                                }
+                                fileName.file_name = "audio.mp3";
+                                document.attributes.add(audio);
+                                document.thumb = new TL_photoSizeEmpty();
+                                document.thumb.type = "s";
+                                break;
+                            case 3:
+                                int idx = result.content.mime_type.lastIndexOf(47);
+                                if (idx == -1) {
+                                    fileName.file_name = "file";
+                                    break;
+                                } else {
+                                    fileName.file_name = "file." + result.content.mime_type.substring(idx + 1);
+                                    break;
+                                }
+                            case 4:
+                                fileName.file_name = "video.mp4";
+                                TL_documentAttributeVideo attributeVideo = new TL_documentAttributeVideo();
+                                wh = MessageObject.getInlineResultWidthAndHeight(result);
+                                attributeVideo.w = wh[0];
+                                attributeVideo.h = wh[1];
+                                attributeVideo.duration = MessageObject.getInlineResultDuration(result);
+                                attributeVideo.supports_streaming = true;
+                                document.attributes.add(attributeVideo);
+                                try {
+                                    if (result.thumb != null) {
+                                        bitmap = ImageLoader.loadBitmap(new File(FileLoader.getDirectory(4), Utilities.MD5(result.thumb.url) + "." + ImageLoader.getHttpUrlExtension(result.thumb.url, "jpg")).getAbsolutePath(), null, 90.0f, 90.0f, true);
+                                        if (bitmap != null) {
+                                            document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, false);
+                                            bitmap.recycle();
+                                            break;
+                                        }
+                                    }
+                                } catch (Throwable e2) {
+                                    FileLog.m8e(e2);
+                                    break;
+                                }
+                                break;
+                            case 5:
+                                TL_documentAttributeSticker attributeSticker = new TL_documentAttributeSticker();
+                                attributeSticker.alt = TtmlNode.ANONYMOUS_REGION_ID;
+                                attributeSticker.stickerset = new TL_inputStickerSetEmpty();
+                                document.attributes.add(attributeSticker);
+                                TL_documentAttributeImageSize attributeImageSize = new TL_documentAttributeImageSize();
+                                wh = MessageObject.getInlineResultWidthAndHeight(result);
+                                attributeImageSize.w = wh[0];
+                                attributeImageSize.h = wh[1];
+                                document.attributes.add(attributeImageSize);
+                                fileName.file_name = "sticker.webp";
+                                try {
+                                    if (result.thumb != null) {
+                                        bitmap = ImageLoader.loadBitmap(new File(FileLoader.getDirectory(4), Utilities.MD5(result.thumb.url) + "." + ImageLoader.getHttpUrlExtension(result.thumb.url, "webp")).getAbsolutePath(), null, 90.0f, 90.0f, true);
+                                        if (bitmap != null) {
+                                            document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, false);
+                                            bitmap.recycle();
+                                            break;
+                                        }
+                                    }
+                                } catch (Throwable e22) {
+                                    FileLog.m8e(e22);
+                                    break;
+                                }
+                                break;
+                        }
+                        if (fileName.file_name == null) {
+                            fileName.file_name = "file";
+                        }
+                        if (document.mime_type == null) {
+                            document.mime_type = "application/octet-stream";
+                        }
+                        if (document.thumb == null) {
+                            document.thumb = new TL_photoSize();
+                            wh = MessageObject.getInlineResultWidthAndHeight(result);
+                            document.thumb.f48w = wh[0];
+                            document.thumb.f47h = wh[1];
+                            document.thumb.size = 0;
+                            document.thumb.location = new TL_fileLocationUnavailable();
+                            document.thumb.type = "x";
+                            break;
+                        }
+                        break;
+                    case 6:
+                        if (file.exists()) {
+                            photo = getInstance(currentAccount).generatePhotoSizes(finalPath, null);
+                        }
+                        if (photo == null) {
+                            photo = new TL_photo();
+                            photo.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+                            TL_photoSize photoSize = new TL_photoSize();
+                            wh = MessageObject.getInlineResultWidthAndHeight(result);
+                            photoSize.w = wh[0];
+                            photoSize.h = wh[1];
+                            photoSize.size = 1;
+                            photoSize.location = new TL_fileLocationUnavailable();
+                            photoSize.type = "x";
+                            photo.sizes.add(photoSize);
+                            break;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } else if (result.type.equals("game")) {
+            if (((int) dialog_id) != 0) {
+                game = new TL_game();
+                game.title = result.title;
+                game.description = result.description;
+                game.short_name = result.id;
+                game.photo = result.photo;
+                if (result.document instanceof TL_document) {
+                    game.document = result.document;
+                    game.flags |= 1;
+                }
+            } else {
+                return;
+            }
+        } else if (result.document != null) {
+            if (result.document instanceof TL_document) {
+                document = (TL_document) result.document;
+            }
+        } else if (result.photo != null && (result.photo instanceof TL_photo)) {
+            photo = (TL_photo) result.photo;
+        }
+        String finalPathFinal = finalPath;
+        TL_document finalDocument = document;
+        TL_photo finalPhoto = photo;
+        TL_game finalGame = game;
+        if (!(params == null || result.content == null)) {
+            params.put("originalPath", result.content.url);
+        }
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$30(finalDocument, currentAccount, finalPathFinal, dialog_id, reply_to_msg, result, params, finalPhoto, finalGame));
+    }
+
+    static final /* synthetic */ void lambda$null$48$SendMessagesHelper(TL_document finalDocument, int currentAccount, String finalPathFinal, long dialog_id, MessageObject reply_to_msg, BotInlineResult result, HashMap params, TL_photo finalPhoto, TL_game finalGame) {
+        if (finalDocument != null) {
+            getInstance(currentAccount).sendMessage(finalDocument, null, finalPathFinal, dialog_id, reply_to_msg, result.send_message.message, result.send_message.entities, result.send_message.reply_markup, params, 0);
+        } else if (finalPhoto != null) {
+            getInstance(currentAccount).sendMessage(finalPhoto, result.content != null ? result.content.url : null, dialog_id, reply_to_msg, result.send_message.message, result.send_message.entities, result.send_message.reply_markup, params, 0);
+        } else if (finalGame != null) {
+            getInstance(currentAccount).sendMessage(finalGame, dialog_id, result.send_message.reply_markup, params);
+        }
+    }
+
     private static String getTrimmedString(String src) {
         String result = src.trim();
         if (result.length() == 0) {
@@ -8894,189 +8733,37 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         return src;
     }
 
-    public static void prepareSendingText(final String text, final long dialog_id) {
-        final int currentAccount = UserConfig.selectedAccount;
-        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new Runnable() {
+    public static void prepareSendingText(String text, long dialog_id) {
+        int currentAccount = UserConfig.selectedAccount;
+        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$18(text, currentAccount, dialog_id));
+    }
 
-            /* renamed from: org.telegram.messenger.SendMessagesHelper$20$1 */
-            class C05051 implements Runnable {
-
-                /* renamed from: org.telegram.messenger.SendMessagesHelper$20$1$1 */
-                class C05041 implements Runnable {
-                    C05041() {
-                    }
-
-                    public void run() {
-                        String textFinal = SendMessagesHelper.getTrimmedString(text);
-                        if (textFinal.length() != 0) {
-                            int count = (int) Math.ceil((double) (((float) textFinal.length()) / 4096.0f));
-                            for (int a = 0; a < count; a++) {
-                                SendMessagesHelper.getInstance(currentAccount).sendMessage(textFinal.substring(a * 4096, Math.min((a + 1) * 4096, textFinal.length())), dialog_id, null, null, true, null, null, null);
-                            }
-                        }
-                    }
-                }
-
-                C05051() {
-                }
-
-                public void run() {
-                    AndroidUtilities.runOnUIThread(new C05041());
-                }
+    static final /* synthetic */ void lambda$null$50$SendMessagesHelper(String text, int currentAccount, long dialog_id) {
+        String textFinal = getTrimmedString(text);
+        if (textFinal.length() != 0) {
+            int count = (int) Math.ceil((double) (((float) textFinal.length()) / 4096.0f));
+            for (int a = 0; a < count; a++) {
+                getInstance(currentAccount).sendMessage(textFinal.substring(a * 4096, Math.min((a + 1) * 4096, textFinal.length())), dialog_id, null, null, true, null, null, null);
             }
-
-            public void run() {
-                Utilities.stageQueue.postRunnable(new C05051());
-            }
-        });
+        }
     }
 
     public static void prepareSendingMedia(ArrayList<SendingMediaInfo> media, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent, boolean forceDocument, boolean groupPhotos, MessageObject editingMessageObject) {
         if (!media.isEmpty()) {
-            final int currentAccount = UserConfig.selectedAccount;
-            final ArrayList<SendingMediaInfo> arrayList = media;
-            final long j = dialog_id;
-            final boolean z = forceDocument;
-            final boolean z2 = groupPhotos;
-            final MessageObject messageObject = editingMessageObject;
-            final MessageObject messageObject2 = reply_to_msg;
-            final InputContentInfoCompat inputContentInfoCompat = inputContent;
-            mediaSendQueue.postRunnable(new Runnable() {
+            mediaSendQueue.postRunnable(new SendMessagesHelper$$Lambda$19(media, dialog_id, UserConfig.selectedAccount, forceDocument, groupPhotos, editingMessageObject, reply_to_msg, inputContent));
+        }
+    }
 
-                /* renamed from: org.telegram.messenger.SendMessagesHelper$21$2 */
-                class C05072 implements Runnable {
-                    final /* synthetic */ TL_document val$documentFinal;
-                    final /* synthetic */ SendingMediaInfo val$info;
-                    final /* synthetic */ HashMap val$params;
-                    final /* synthetic */ String val$pathFinal;
-
-                    C05072(TL_document tL_document, String str, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
-                        this.val$documentFinal = tL_document;
-                        this.val$pathFinal = str;
-                        this.val$params = hashMap;
-                        this.val$info = sendingMediaInfo;
-                    }
-
-                    public void run() {
-                        if (messageObject != null) {
-                            SendMessagesHelper.getInstance(currentAccount).editMessageMedia(messageObject, null, null, this.val$documentFinal, this.val$pathFinal, this.val$params, false);
-                        } else {
-                            SendMessagesHelper.getInstance(currentAccount).sendMessage(this.val$documentFinal, null, this.val$pathFinal, j, messageObject2, this.val$info.caption, this.val$info.entities, null, this.val$params, 0);
-                        }
-                    }
-                }
-
-                /* renamed from: org.telegram.messenger.SendMessagesHelper$21$3 */
-                class C05083 implements Runnable {
-                    final /* synthetic */ SendingMediaInfo val$info;
-                    final /* synthetic */ boolean val$needDownloadHttpFinal;
-                    final /* synthetic */ HashMap val$params;
-                    final /* synthetic */ TL_photo val$photoFinal;
-
-                    C05083(TL_photo tL_photo, boolean z, SendingMediaInfo sendingMediaInfo, HashMap hashMap) {
-                        this.val$photoFinal = tL_photo;
-                        this.val$needDownloadHttpFinal = z;
-                        this.val$info = sendingMediaInfo;
-                        this.val$params = hashMap;
-                    }
-
-                    public void run() {
-                        if (messageObject != null) {
-                            SendMessagesHelper.getInstance(currentAccount).editMessageMedia(messageObject, this.val$photoFinal, null, null, this.val$needDownloadHttpFinal ? this.val$info.searchImage.imageUrl : null, this.val$params, false);
-                        } else {
-                            SendMessagesHelper.getInstance(currentAccount).sendMessage(this.val$photoFinal, this.val$needDownloadHttpFinal ? this.val$info.searchImage.imageUrl : null, j, messageObject2, this.val$info.caption, this.val$info.entities, null, this.val$params, this.val$info.ttl);
-                        }
-                    }
-                }
-
-                /* renamed from: org.telegram.messenger.SendMessagesHelper$21$4 */
-                class C05094 implements Runnable {
-                    final /* synthetic */ String val$finalPath;
-                    final /* synthetic */ SendingMediaInfo val$info;
-                    final /* synthetic */ HashMap val$params;
-                    final /* synthetic */ Bitmap val$thumbFinal;
-                    final /* synthetic */ String val$thumbKeyFinal;
-                    final /* synthetic */ VideoEditedInfo val$videoEditedInfo;
-                    final /* synthetic */ TL_document val$videoFinal;
-
-                    C05094(Bitmap bitmap, String str, VideoEditedInfo videoEditedInfo, TL_document tL_document, String str2, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
-                        this.val$thumbFinal = bitmap;
-                        this.val$thumbKeyFinal = str;
-                        this.val$videoEditedInfo = videoEditedInfo;
-                        this.val$videoFinal = tL_document;
-                        this.val$finalPath = str2;
-                        this.val$params = hashMap;
-                        this.val$info = sendingMediaInfo;
-                    }
-
-                    public void run() {
-                        if (!(this.val$thumbFinal == null || this.val$thumbKeyFinal == null)) {
-                            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(this.val$thumbFinal), this.val$thumbKeyFinal);
-                        }
-                        if (messageObject != null) {
-                            SendMessagesHelper.getInstance(currentAccount).editMessageMedia(messageObject, null, this.val$videoEditedInfo, this.val$videoFinal, this.val$finalPath, this.val$params, false);
-                        } else {
-                            SendMessagesHelper.getInstance(currentAccount).sendMessage(this.val$videoFinal, this.val$videoEditedInfo, this.val$finalPath, j, messageObject2, this.val$info.caption, this.val$info.entities, null, this.val$params, this.val$info.ttl);
-                        }
-                    }
-                }
-
-                /* renamed from: org.telegram.messenger.SendMessagesHelper$21$5 */
-                class C05105 implements Runnable {
-                    final /* synthetic */ SendingMediaInfo val$info;
-                    final /* synthetic */ HashMap val$params;
-                    final /* synthetic */ TL_photo val$photoFinal;
-
-                    C05105(TL_photo tL_photo, HashMap hashMap, SendingMediaInfo sendingMediaInfo) {
-                        this.val$photoFinal = tL_photo;
-                        this.val$params = hashMap;
-                        this.val$info = sendingMediaInfo;
-                    }
-
-                    public void run() {
-                        if (messageObject != null) {
-                            SendMessagesHelper.getInstance(currentAccount).editMessageMedia(messageObject, this.val$photoFinal, null, null, null, this.val$params, false);
-                            return;
-                        }
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(this.val$photoFinal, null, j, messageObject2, this.val$info.caption, this.val$info.entities, null, this.val$params, this.val$info.ttl);
-                    }
-                }
-
-                /* renamed from: org.telegram.messenger.SendMessagesHelper$21$6 */
-                class C05116 implements Runnable {
-                    final /* synthetic */ long val$lastGroupIdFinal;
-
-                    C05116(long j) {
-                        this.val$lastGroupIdFinal = j;
-                    }
-
-                    public void run() {
-                        SendMessagesHelper instance = SendMessagesHelper.getInstance(currentAccount);
-                        ArrayList<DelayedMessage> arrayList = (ArrayList) instance.delayedMessages.get("group_" + this.val$lastGroupIdFinal);
-                        if (arrayList != null && !arrayList.isEmpty()) {
-                            DelayedMessage message = (DelayedMessage) arrayList.get(0);
-                            MessageObject prevMessage = (MessageObject) message.messageObjects.get(message.messageObjects.size() - 1);
-                            message.finalGroupMessage = prevMessage.getId();
-                            prevMessage.messageOwner.params.put("final", "1");
-                            messages_Messages messagesRes = new TL_messages_messages();
-                            messagesRes.messages.add(prevMessage.messageOwner);
-                            MessagesStorage.getInstance(currentAccount).putMessages(messagesRes, message.peer, -2, 0, false);
-                            instance.sendReadyToSendGroup(message, true, true);
-                        }
-                    }
-                }
-
-                public void run() {
-                    /* JADX: method processing error */
+    static final /* synthetic */ void lambda$prepareSendingMedia$59$SendMessagesHelper(java.util.ArrayList r87, long r88, int r90, boolean r91, boolean r92, org.telegram.messenger.MessageObject r93, org.telegram.messenger.MessageObject r94, android.support.v13.view.inputmethod.InputContentInfoCompat r95) {
+        /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r76_3 'thumbFile' java.io.File) in PHI: PHI: (r76_5 'thumbFile' java.io.File) = (r76_2 'thumbFile' java.io.File), (r76_3 'thumbFile' java.io.File), (r76_4 'thumbFile' java.io.File) binds: {(r76_2 'thumbFile' java.io.File)=B:96:0x024f, (r76_3 'thumbFile' java.io.File)=B:98:0x028e, (r76_4 'thumbFile' java.io.File)=B:99:0x0290}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r83_3 'thumbFile' java.io.File) in PHI: PHI: (r83_5 'thumbFile' java.io.File) = (r83_2 'thumbFile' java.io.File), (r83_3 'thumbFile' java.io.File), (r83_4 'thumbFile' java.io.File) binds: {(r83_2 'thumbFile' java.io.File)=B:94:0x0215, (r83_3 'thumbFile' java.io.File)=B:96:0x0254, (r83_4 'thumbFile' java.io.File)=B:97:0x0256}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
 	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
 	at jadx.core.ProcessClass.process(ProcessClass.java:34)
 	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
 	at jadx.core.ProcessClass.process(ProcessClass.java:39)
@@ -9084,1498 +8771,1475 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.api.JavaClass.decompile(JavaClass.java:62)
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
-                    /*
-                    r80 = this;
-                    r36 = java.lang.System.currentTimeMillis();
-                    r0 = r80;
-                    r4 = r1;
-                    r39 = r4.size();
-                    r0 = r80;
-                    r4 = r2;
-                    r4 = (int) r4;
-                    if (r4 != 0) goto L_0x00a7;
-                L_0x0013:
-                    r51 = 1;
-                L_0x0015:
-                    r44 = 0;
-                    if (r51 == 0) goto L_0x003d;
-                L_0x0019:
-                    r0 = r80;
-                    r4 = r2;
-                    r10 = 32;
-                    r4 = r4 >> r10;
-                    r0 = (int) r4;
-                    r47 = r0;
-                    r0 = r80;
-                    r4 = r4;
-                    r4 = org.telegram.messenger.MessagesController.getInstance(r4);
-                    r5 = java.lang.Integer.valueOf(r47);
-                    r43 = r4.getEncryptedChat(r5);
-                    if (r43 == 0) goto L_0x003d;
-                L_0x0035:
-                    r0 = r43;
-                    r4 = r0.layer;
-                    r44 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r4);
-                L_0x003d:
-                    if (r51 == 0) goto L_0x0045;
-                L_0x003f:
-                    r4 = 73;
-                    r0 = r44;
-                    if (r0 < r4) goto L_0x0166;
-                L_0x0045:
-                    r0 = r80;
-                    r4 = r5;
-                    if (r4 != 0) goto L_0x0166;
-                L_0x004b:
-                    r0 = r80;
-                    r4 = r6;
-                    if (r4 == 0) goto L_0x0166;
-                L_0x0051:
-                    r79 = new java.util.HashMap;
-                    r79.<init>();
-                    r32 = 0;
-                L_0x0058:
-                    r0 = r32;
-                    r1 = r39;
-                    if (r0 >= r1) goto L_0x0168;
-                L_0x005e:
-                    r0 = r80;
-                    r4 = r1;
-                    r0 = r32;
-                    r9 = r4.get(r0);
-                    r9 = (org.telegram.messenger.SendMessagesHelper.SendingMediaInfo) r9;
-                    r4 = r9.searchImage;
-                    if (r4 != 0) goto L_0x00a4;
-                L_0x006e:
-                    r4 = r9.isVideo;
-                    if (r4 != 0) goto L_0x00a4;
-                L_0x0072:
-                    r0 = r9.path;
-                    r59 = r0;
-                    r0 = r9.path;
-                    r74 = r0;
-                    if (r74 != 0) goto L_0x008c;
-                L_0x007c:
-                    r4 = r9.uri;
-                    if (r4 == 0) goto L_0x008c;
-                L_0x0080:
-                    r4 = r9.uri;
-                    r74 = org.telegram.messenger.AndroidUtilities.getPath(r4);
-                    r4 = r9.uri;
-                    r59 = r4.toString();
-                L_0x008c:
-                    if (r74 == 0) goto L_0x00ab;
-                L_0x008e:
-                    r4 = ".gif";
-                    r0 = r74;
-                    r4 = r0.endsWith(r4);
-                    if (r4 != 0) goto L_0x00a4;
-                L_0x0099:
-                    r4 = ".webp";
-                    r0 = r74;
-                    r4 = r0.endsWith(r4);
-                    if (r4 == 0) goto L_0x00ab;
-                L_0x00a4:
-                    r32 = r32 + 1;
-                    goto L_0x0058;
-                L_0x00a7:
-                    r51 = 0;
-                    goto L_0x0015;
-                L_0x00ab:
-                    if (r74 != 0) goto L_0x00c1;
-                L_0x00ad:
-                    r4 = r9.uri;
-                    if (r4 == 0) goto L_0x00c1;
-                L_0x00b1:
-                    r4 = r9.uri;
-                    r4 = org.telegram.messenger.MediaController.isGif(r4);
-                    if (r4 != 0) goto L_0x00a4;
-                L_0x00b9:
-                    r4 = r9.uri;
-                    r4 = org.telegram.messenger.MediaController.isWebp(r4);
-                    if (r4 != 0) goto L_0x00a4;
-                L_0x00c1:
-                    if (r74 == 0) goto L_0x0143;
-                L_0x00c3:
-                    r71 = new java.io.File;
-                    r0 = r71;
-                    r1 = r74;
-                    r0.<init>(r1);
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r0 = r59;
-                    r4 = r4.append(r0);
-                    r10 = r71.length();
-                    r4 = r4.append(r10);
-                    r5 = "_";
-                    r4 = r4.append(r5);
-                    r10 = r71.lastModified();
-                    r4 = r4.append(r10);
-                    r59 = r4.toString();
-                L_0x00f2:
-                    r62 = 0;
-                    if (r51 != 0) goto L_0x012a;
-                L_0x00f6:
-                    r4 = r9.ttl;
-                    if (r4 != 0) goto L_0x012a;
-                L_0x00fa:
-                    r0 = r80;
-                    r4 = r4;
-                    r5 = org.telegram.messenger.MessagesStorage.getInstance(r4);
-                    if (r51 != 0) goto L_0x0146;
-                L_0x0104:
-                    r4 = 0;
-                L_0x0105:
-                    r0 = r59;
-                    r62 = r5.getSentFile(r0, r4);
-                    r62 = (org.telegram.tgnet.TLRPC.TL_photo) r62;
-                    if (r62 != 0) goto L_0x012a;
-                L_0x010f:
-                    r4 = r9.uri;
-                    if (r4 == 0) goto L_0x012a;
-                L_0x0113:
-                    r0 = r80;
-                    r4 = r4;
-                    r5 = org.telegram.messenger.MessagesStorage.getInstance(r4);
-                    r4 = r9.uri;
-                    r10 = org.telegram.messenger.AndroidUtilities.getPath(r4);
-                    if (r51 != 0) goto L_0x0148;
-                L_0x0123:
-                    r4 = 0;
-                L_0x0124:
-                    r62 = r5.getSentFile(r10, r4);
-                    r62 = (org.telegram.tgnet.TLRPC.TL_photo) r62;
-                L_0x012a:
-                    r78 = new org.telegram.messenger.SendMessagesHelper$MediaSendPrepareWorker;
-                    r4 = 0;
-                    r0 = r78;
-                    r0.<init>();
-                    r0 = r79;
-                    r1 = r78;
-                    r0.put(r9, r1);
-                    if (r62 == 0) goto L_0x014a;
-                L_0x013b:
-                    r0 = r62;
-                    r1 = r78;
-                    r1.photo = r0;
-                    goto L_0x00a4;
-                L_0x0143:
-                    r59 = 0;
-                    goto L_0x00f2;
-                L_0x0146:
-                    r4 = 3;
-                    goto L_0x0105;
-                L_0x0148:
-                    r4 = 3;
-                    goto L_0x0124;
-                L_0x014a:
-                    r4 = new java.util.concurrent.CountDownLatch;
-                    r5 = 1;
-                    r4.<init>(r5);
-                    r0 = r78;
-                    r0.sync = r4;
-                    r4 = org.telegram.messenger.SendMessagesHelper.mediaSendThreadPool;
-                    r5 = new org.telegram.messenger.SendMessagesHelper$21$1;
-                    r0 = r80;
-                    r1 = r78;
-                    r5.<init>(r1, r9);
-                    r4.execute(r5);
-                    goto L_0x00a4;
-                L_0x0166:
-                    r79 = 0;
-                L_0x0168:
-                    r48 = 0;
-                    r52 = 0;
-                    r65 = 0;
-                    r68 = 0;
-                    r66 = 0;
-                    r67 = 0;
-                    r45 = 0;
-                    r64 = 0;
-                    r32 = 0;
-                L_0x017a:
-                    r0 = r32;
-                    r1 = r39;
-                    if (r0 >= r1) goto L_0x0acb;
-                L_0x0180:
-                    r0 = r80;
-                    r4 = r1;
-                    r0 = r32;
-                    r9 = r4.get(r0);
-                    r9 = (org.telegram.messenger.SendMessagesHelper.SendingMediaInfo) r9;
-                    r0 = r80;
-                    r4 = r6;
-                    if (r4 == 0) goto L_0x01ad;
-                L_0x0192:
-                    if (r51 == 0) goto L_0x019a;
-                L_0x0194:
-                    r4 = 73;
-                    r0 = r44;
-                    if (r0 < r4) goto L_0x01ad;
-                L_0x019a:
-                    r4 = 1;
-                    r0 = r39;
-                    if (r0 <= r4) goto L_0x01ad;
-                L_0x019f:
-                    r4 = r64 % 10;
-                    if (r4 != 0) goto L_0x01ad;
-                L_0x01a3:
-                    r4 = org.telegram.messenger.Utilities.random;
-                    r48 = r4.nextLong();
-                    r52 = r48;
-                    r64 = 0;
-                L_0x01ad:
-                    r4 = r9.searchImage;
-                    if (r4 == 0) goto L_0x0547;
-                L_0x01b1:
-                    r4 = r9.searchImage;
-                    r4 = r4.type;
-                    r5 = 1;
-                    if (r4 != r5) goto L_0x03b4;
-                L_0x01b8:
-                    r8 = new java.util.HashMap;
-                    r8.<init>();
-                    r41 = 0;
-                    r4 = r9.searchImage;
-                    r4 = r4.document;
-                    r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_document;
-                    if (r4 == 0) goto L_0x032d;
-                L_0x01c7:
-                    r4 = r9.searchImage;
-                    r0 = r4.document;
-                    r41 = r0;
-                    r41 = (org.telegram.tgnet.TLRPC.TL_document) r41;
-                    r4 = 1;
-                    r0 = r41;
-                    r38 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r4);
-                L_0x01d6:
-                    if (r41 != 0) goto L_0x02ff;
-                L_0x01d8:
-                    r4 = r9.searchImage;
-                    r4 = r4.localUrl;
-                    if (r4 == 0) goto L_0x01e8;
-                L_0x01de:
-                    r4 = "url";
-                    r5 = r9.searchImage;
-                    r5 = r5.localUrl;
-                    r8.put(r4, r5);
-                L_0x01e8:
-                    r76 = 0;
-                    r41 = new org.telegram.tgnet.TLRPC$TL_document;
-                    r41.<init>();
-                    r4 = 0;
-                    r0 = r41;
-                    r0.id = r4;
-                    r0 = r80;
-                    r4 = r4;
-                    r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4);
-                    r4 = r4.getCurrentTime();
-                    r0 = r41;
-                    r0.date = r4;
-                    r46 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;
-                    r46.<init>();
-                    r4 = "animation.gif";
-                    r0 = r46;
-                    r0.file_name = r4;
-                    r0 = r41;
-                    r4 = r0.attributes;
-                    r0 = r46;
-                    r4.add(r0);
-                    r4 = r9.searchImage;
-                    r4 = r4.size;
-                    r0 = r41;
-                    r0.size = r4;
-                    r4 = 0;
-                    r0 = r41;
-                    r0.dc_id = r4;
-                    r4 = r38.toString();
-                    r5 = "mp4";
-                    r4 = r4.endsWith(r5);
-                    if (r4 == 0) goto L_0x038b;
-                L_0x0234:
-                    r4 = "video/mp4";
-                    r0 = r41;
-                    r0.mime_type = r4;
-                    r0 = r41;
-                    r4 = r0.attributes;
-                    r5 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
-                    r5.<init>();
-                    r4.add(r5);
-                L_0x0247:
-                    r4 = r38.exists();
-                    if (r4 == 0) goto L_0x0394;
-                L_0x024d:
-                    r76 = r38;
-                L_0x024f:
-                    if (r76 != 0) goto L_0x0292;
-                L_0x0251:
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r5 = r9.searchImage;
-                    r5 = r5.thumbUrl;
-                    r5 = org.telegram.messenger.Utilities.MD5(r5);
-                    r4 = r4.append(r5);
-                    r5 = ".";
-                    r4 = r4.append(r5);
-                    r5 = r9.searchImage;
-                    r5 = r5.thumbUrl;
-                    r10 = "jpg";
-                    r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r10);
-                    r4 = r4.append(r5);
-                    r75 = r4.toString();
-                    r76 = new java.io.File;
-                    r4 = 4;
-                    r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
-                    r0 = r76;
-                    r1 = r75;
-                    r0.<init>(r4, r1);
-                    r4 = r76.exists();
-                    if (r4 != 0) goto L_0x0292;
-                L_0x0290:
-                    r76 = 0;
-                L_0x0292:
-                    if (r76 == 0) goto L_0x02c1;
-                L_0x0294:
-                    r4 = r76.getAbsolutePath();	 Catch:{ Exception -> 0x03a8 }
-                    r5 = "mp4";	 Catch:{ Exception -> 0x03a8 }
-                    r4 = r4.endsWith(r5);	 Catch:{ Exception -> 0x03a8 }
-                    if (r4 == 0) goto L_0x0398;	 Catch:{ Exception -> 0x03a8 }
-                L_0x02a1:
-                    r4 = r76.getAbsolutePath();	 Catch:{ Exception -> 0x03a8 }
-                    r5 = 1;	 Catch:{ Exception -> 0x03a8 }
-                    r35 = android.media.ThumbnailUtils.createVideoThumbnail(r4, r5);	 Catch:{ Exception -> 0x03a8 }
-                L_0x02aa:
-                    if (r35 == 0) goto L_0x02c1;	 Catch:{ Exception -> 0x03a8 }
-                L_0x02ac:
-                    r4 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;	 Catch:{ Exception -> 0x03a8 }
-                    r5 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;	 Catch:{ Exception -> 0x03a8 }
-                    r10 = 55;	 Catch:{ Exception -> 0x03a8 }
-                    r0 = r35;	 Catch:{ Exception -> 0x03a8 }
-                    r1 = r51;	 Catch:{ Exception -> 0x03a8 }
-                    r4 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r4, r5, r10, r1);	 Catch:{ Exception -> 0x03a8 }
-                    r0 = r41;	 Catch:{ Exception -> 0x03a8 }
-                    r0.thumb = r4;	 Catch:{ Exception -> 0x03a8 }
-                    r35.recycle();	 Catch:{ Exception -> 0x03a8 }
-                L_0x02c1:
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    if (r4 != 0) goto L_0x02ff;
-                L_0x02c7:
-                    r4 = new org.telegram.tgnet.TLRPC$TL_photoSize;
-                    r4.<init>();
-                    r0 = r41;
-                    r0.thumb = r4;
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    r5 = r9.searchImage;
-                    r5 = r5.width;
-                    r4.f45w = r5;
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    r5 = r9.searchImage;
-                    r5 = r5.height;
-                    r4.f44h = r5;
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    r5 = 0;
-                    r4.size = r5;
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    r5 = new org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable;
-                    r5.<init>();
-                    r4.location = r5;
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    r5 = "x";
-                    r4.type = r5;
-                L_0x02ff:
-                    r6 = r41;
-                    r4 = r9.searchImage;
-                    r0 = r4.imageUrl;
-                    r60 = r0;
-                    if (r38 != 0) goto L_0x03ae;
-                L_0x0309:
-                    r4 = r9.searchImage;
-                    r7 = r4.imageUrl;
-                L_0x030d:
-                    if (r8 == 0) goto L_0x031f;
-                L_0x030f:
-                    r4 = r9.searchImage;
-                    r4 = r4.imageUrl;
-                    if (r4 == 0) goto L_0x031f;
-                L_0x0315:
-                    r4 = "originalPath";
-                    r5 = r9.searchImage;
-                    r5 = r5.imageUrl;
-                    r8.put(r4, r5);
-                L_0x031f:
-                    r4 = new org.telegram.messenger.SendMessagesHelper$21$2;
-                    r5 = r80;
-                    r4.<init>(r6, r7, r8, r9);
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-                L_0x0329:
-                    r32 = r32 + 1;
-                    goto L_0x017a;
-                L_0x032d:
-                    if (r51 != 0) goto L_0x034e;
-                L_0x032f:
-                    r0 = r80;
-                    r4 = r4;
-                    r5 = org.telegram.messenger.MessagesStorage.getInstance(r4);
-                    r4 = r9.searchImage;
-                    r10 = r4.imageUrl;
-                    if (r51 != 0) goto L_0x0389;
-                L_0x033d:
-                    r4 = 1;
-                L_0x033e:
-                    r40 = r5.getSentFile(r10, r4);
-                    r40 = (org.telegram.tgnet.TLRPC.Document) r40;
-                    r0 = r40;
-                    r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_document;
-                    if (r4 == 0) goto L_0x034e;
-                L_0x034a:
-                    r41 = r40;
-                    r41 = (org.telegram.tgnet.TLRPC.TL_document) r41;
-                L_0x034e:
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r5 = r9.searchImage;
-                    r5 = r5.imageUrl;
-                    r5 = org.telegram.messenger.Utilities.MD5(r5);
-                    r4 = r4.append(r5);
-                    r5 = ".";
-                    r4 = r4.append(r5);
-                    r5 = r9.searchImage;
-                    r5 = r5.imageUrl;
-                    r10 = "jpg";
-                    r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r10);
-                    r4 = r4.append(r5);
-                    r56 = r4.toString();
-                    r38 = new java.io.File;
-                    r4 = 4;
-                    r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
-                    r0 = r38;
-                    r1 = r56;
-                    r0.<init>(r4, r1);
-                    goto L_0x01d6;
-                L_0x0389:
-                    r4 = 4;
-                    goto L_0x033e;
-                L_0x038b:
-                    r4 = "image/gif";
-                    r0 = r41;
-                    r0.mime_type = r4;
-                    goto L_0x0247;
-                L_0x0394:
-                    r38 = 0;
-                    goto L_0x024f;
-                L_0x0398:
-                    r4 = r76.getAbsolutePath();	 Catch:{ Exception -> 0x03a8 }
-                    r5 = 0;	 Catch:{ Exception -> 0x03a8 }
-                    r10 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;	 Catch:{ Exception -> 0x03a8 }
-                    r11 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;	 Catch:{ Exception -> 0x03a8 }
-                    r14 = 1;	 Catch:{ Exception -> 0x03a8 }
-                    r35 = org.telegram.messenger.ImageLoader.loadBitmap(r4, r5, r10, r11, r14);	 Catch:{ Exception -> 0x03a8 }
-                    goto L_0x02aa;
-                L_0x03a8:
-                    r42 = move-exception;
-                    org.telegram.messenger.FileLog.m3e(r42);
-                    goto L_0x02c1;
-                L_0x03ae:
-                    r7 = r38.toString();
-                    goto L_0x030d;
-                L_0x03b4:
-                    r58 = 1;
-                    r62 = 0;
-                    r4 = r9.searchImage;
-                    r4 = r4.photo;
-                    r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_photo;
-                    if (r4 == 0) goto L_0x0528;
-                L_0x03c0:
-                    r4 = r9.searchImage;
-                    r0 = r4.photo;
-                    r62 = r0;
-                    r62 = (org.telegram.tgnet.TLRPC.TL_photo) r62;
-                L_0x03c8:
-                    if (r62 != 0) goto L_0x04c4;
-                L_0x03ca:
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r5 = r9.searchImage;
-                    r5 = r5.imageUrl;
-                    r5 = org.telegram.messenger.Utilities.MD5(r5);
-                    r4 = r4.append(r5);
-                    r5 = ".";
-                    r4 = r4.append(r5);
-                    r5 = r9.searchImage;
-                    r5 = r5.imageUrl;
-                    r10 = "jpg";
-                    r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r10);
-                    r4 = r4.append(r5);
-                    r56 = r4.toString();
-                    r38 = new java.io.File;
-                    r4 = 4;
-                    r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
-                    r0 = r38;
-                    r1 = r56;
-                    r0.<init>(r4, r1);
-                    r4 = r38.exists();
-                    if (r4 == 0) goto L_0x0428;
-                L_0x0409:
-                    r4 = r38.length();
-                    r10 = 0;
-                    r4 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
-                    if (r4 == 0) goto L_0x0428;
-                L_0x0413:
-                    r0 = r80;
-                    r4 = r4;
-                    r4 = org.telegram.messenger.SendMessagesHelper.getInstance(r4);
-                    r5 = r38.toString();
-                    r10 = 0;
-                    r62 = r4.generatePhotoSizes(r5, r10);
-                    if (r62 == 0) goto L_0x0428;
-                L_0x0426:
-                    r58 = 0;
-                L_0x0428:
-                    if (r62 != 0) goto L_0x04c4;
-                L_0x042a:
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r5 = r9.searchImage;
-                    r5 = r5.thumbUrl;
-                    r5 = org.telegram.messenger.Utilities.MD5(r5);
-                    r4 = r4.append(r5);
-                    r5 = ".";
-                    r4 = r4.append(r5);
-                    r5 = r9.searchImage;
-                    r5 = r5.thumbUrl;
-                    r10 = "jpg";
-                    r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r10);
-                    r4 = r4.append(r5);
-                    r56 = r4.toString();
-                    r38 = new java.io.File;
-                    r4 = 4;
-                    r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
-                    r0 = r38;
-                    r1 = r56;
-                    r0.<init>(r4, r1);
-                    r4 = r38.exists();
-                    if (r4 == 0) goto L_0x047a;
-                L_0x0469:
-                    r0 = r80;
-                    r4 = r4;
-                    r4 = org.telegram.messenger.SendMessagesHelper.getInstance(r4);
-                    r5 = r38.toString();
-                    r10 = 0;
-                    r62 = r4.generatePhotoSizes(r5, r10);
-                L_0x047a:
-                    if (r62 != 0) goto L_0x04c4;
-                L_0x047c:
-                    r62 = new org.telegram.tgnet.TLRPC$TL_photo;
-                    r62.<init>();
-                    r0 = r80;
-                    r4 = r4;
-                    r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4);
-                    r4 = r4.getCurrentTime();
-                    r0 = r62;
-                    r0.date = r4;
-                    r63 = new org.telegram.tgnet.TLRPC$TL_photoSize;
-                    r63.<init>();
-                    r4 = r9.searchImage;
-                    r4 = r4.width;
-                    r0 = r63;
-                    r0.w = r4;
-                    r4 = r9.searchImage;
-                    r4 = r4.height;
-                    r0 = r63;
-                    r0.h = r4;
-                    r4 = 0;
-                    r0 = r63;
-                    r0.size = r4;
-                    r4 = new org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable;
-                    r4.<init>();
-                    r0 = r63;
-                    r0.location = r4;
-                    r4 = "x";
-                    r0 = r63;
-                    r0.type = r4;
-                    r0 = r62;
-                    r4 = r0.sizes;
-                    r0 = r63;
-                    r4.add(r0);
-                L_0x04c4:
-                    if (r62 == 0) goto L_0x0329;
-                L_0x04c6:
-                    r12 = r62;
-                    r13 = r58;
-                    r8 = new java.util.HashMap;
-                    r8.<init>();
-                    r4 = r9.searchImage;
-                    r4 = r4.imageUrl;
-                    if (r4 == 0) goto L_0x04df;
-                L_0x04d5:
-                    r4 = "originalPath";
-                    r5 = r9.searchImage;
-                    r5 = r5.imageUrl;
-                    r8.put(r4, r5);
-                L_0x04df:
-                    r0 = r80;
-                    r4 = r6;
-                    if (r4 == 0) goto L_0x051a;
-                L_0x04e5:
-                    r64 = r64 + 1;
-                    r4 = "groupId";
-                    r5 = new java.lang.StringBuilder;
-                    r5.<init>();
-                    r10 = "";
-                    r5 = r5.append(r10);
-                    r0 = r48;
-                    r5 = r5.append(r0);
-                    r5 = r5.toString();
-                    r8.put(r4, r5);
-                    r4 = 10;
-                    r0 = r64;
-                    if (r0 == r4) goto L_0x050f;
-                L_0x0509:
-                    r4 = r39 + -1;
-                    r0 = r32;
-                    if (r0 != r4) goto L_0x051a;
-                L_0x050f:
-                    r4 = "final";
-                    r5 = "1";
-                    r8.put(r4, r5);
-                    r52 = 0;
-                L_0x051a:
-                    r10 = new org.telegram.messenger.SendMessagesHelper$21$3;
-                    r11 = r80;
-                    r14 = r9;
-                    r15 = r8;
-                    r10.<init>(r12, r13, r14, r15);
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);
-                    goto L_0x0329;
-                L_0x0528:
-                    if (r51 != 0) goto L_0x03c8;
-                L_0x052a:
-                    r4 = r9.ttl;
-                    if (r4 != 0) goto L_0x03c8;
-                L_0x052e:
-                    r0 = r80;
-                    r4 = r4;
-                    r5 = org.telegram.messenger.MessagesStorage.getInstance(r4);
-                    r4 = r9.searchImage;
-                    r10 = r4.imageUrl;
-                    if (r51 != 0) goto L_0x0545;
-                L_0x053c:
-                    r4 = 0;
-                L_0x053d:
-                    r62 = r5.getSentFile(r10, r4);
-                    r62 = (org.telegram.tgnet.TLRPC.TL_photo) r62;
-                    goto L_0x03c8;
-                L_0x0545:
-                    r4 = 3;
-                    goto L_0x053d;
-                L_0x0547:
-                    r4 = r9.isVideo;
-                    if (r4 == 0) goto L_0x0860;
-                L_0x054b:
-                    r75 = 0;
-                    r77 = 0;
-                    r0 = r80;
-                    r4 = r5;
-                    if (r4 == 0) goto L_0x079b;
-                L_0x0555:
-                    r18 = 0;
-                L_0x0557:
-                    r0 = r80;
-                    r4 = r5;
-                    if (r4 != 0) goto L_0x082f;
-                L_0x055d:
-                    if (r18 != 0) goto L_0x056a;
-                L_0x055f:
-                    r4 = r9.path;
-                    r5 = "mp4";
-                    r4 = r4.endsWith(r5);
-                    if (r4 == 0) goto L_0x082f;
-                L_0x056a:
-                    r0 = r9.path;
-                    r61 = r0;
-                    r0 = r9.path;
-                    r59 = r0;
-                    r71 = new java.io.File;
-                    r0 = r71;
-                    r1 = r59;
-                    r0.<init>(r1);
-                    r72 = 0;
-                    r57 = 0;
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r0 = r59;
-                    r4 = r4.append(r0);
-                    r10 = r71.length();
-                    r4 = r4.append(r10);
-                    r5 = "_";
-                    r4 = r4.append(r5);
-                    r10 = r71.lastModified();
-                    r4 = r4.append(r10);
-                    r59 = r4.toString();
-                    if (r18 == 0) goto L_0x0627;
-                L_0x05a7:
-                    r0 = r18;
-                    r0 = r0.muted;
-                    r57 = r0;
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r0 = r59;
-                    r4 = r4.append(r0);
-                    r0 = r18;
-                    r10 = r0.estimatedDuration;
-                    r4 = r4.append(r10);
-                    r5 = "_";
-                    r4 = r4.append(r5);
-                    r0 = r18;
-                    r10 = r0.startTime;
-                    r4 = r4.append(r10);
-                    r5 = "_";
-                    r4 = r4.append(r5);
-                    r0 = r18;
-                    r10 = r0.endTime;
-                    r5 = r4.append(r10);
-                    r0 = r18;
-                    r4 = r0.muted;
-                    if (r4 == 0) goto L_0x07ac;
-                L_0x05e4:
-                    r4 = "_m";
-                L_0x05e7:
-                    r4 = r5.append(r4);
-                    r59 = r4.toString();
-                    r0 = r18;
-                    r4 = r0.resultWidth;
-                    r0 = r18;
-                    r5 = r0.originalWidth;
-                    if (r4 == r5) goto L_0x0617;
-                L_0x05f9:
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r0 = r59;
-                    r4 = r4.append(r0);
-                    r5 = "_";
-                    r4 = r4.append(r5);
-                    r0 = r18;
-                    r5 = r0.resultWidth;
-                    r4 = r4.append(r5);
-                    r59 = r4.toString();
-                L_0x0617:
-                    r0 = r18;
-                    r4 = r0.startTime;
-                    r10 = 0;
-                    r4 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
-                    if (r4 < 0) goto L_0x07b1;
-                L_0x0621:
-                    r0 = r18;
-                    r0 = r0.startTime;
-                    r72 = r0;
-                L_0x0627:
-                    r41 = 0;
-                    if (r51 != 0) goto L_0x0642;
-                L_0x062b:
-                    r4 = r9.ttl;
-                    if (r4 != 0) goto L_0x0642;
-                L_0x062f:
-                    r0 = r80;
-                    r4 = r4;
-                    r5 = org.telegram.messenger.MessagesStorage.getInstance(r4);
-                    if (r51 != 0) goto L_0x07b5;
-                L_0x0639:
-                    r4 = 2;
-                L_0x063a:
-                    r0 = r59;
-                    r41 = r5.getSentFile(r0, r4);
-                    r41 = (org.telegram.tgnet.TLRPC.TL_document) r41;
-                L_0x0642:
-                    if (r41 != 0) goto L_0x0735;
-                L_0x0644:
-                    r4 = r9.path;
-                    r0 = r72;
-                    r75 = org.telegram.messenger.SendMessagesHelper.createVideoThumbnail(r4, r0);
-                    if (r75 != 0) goto L_0x0655;
-                L_0x064e:
-                    r4 = r9.path;
-                    r5 = 1;
-                    r75 = android.media.ThumbnailUtils.createVideoThumbnail(r4, r5);
-                L_0x0655:
-                    r4 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
-                    r5 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
-                    r10 = 55;
-                    r0 = r75;
-                    r1 = r51;
-                    r70 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r4, r5, r10, r1);
-                    if (r75 == 0) goto L_0x0669;
-                L_0x0665:
-                    if (r70 == 0) goto L_0x0669;
-                L_0x0667:
-                    r75 = 0;
-                L_0x0669:
-                    r41 = new org.telegram.tgnet.TLRPC$TL_document;
-                    r41.<init>();
-                    r0 = r70;
-                    r1 = r41;
-                    r1.thumb = r0;
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    if (r4 != 0) goto L_0x07b8;
-                L_0x067a:
-                    r4 = new org.telegram.tgnet.TLRPC$TL_photoSizeEmpty;
-                    r4.<init>();
-                    r0 = r41;
-                    r0.thumb = r4;
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    r5 = "s";
-                    r4.type = r5;
-                L_0x068c:
-                    r4 = "video/mp4";
-                    r0 = r41;
-                    r0.mime_type = r4;
-                    r0 = r80;
-                    r4 = r4;
-                    r4 = org.telegram.messenger.UserConfig.getInstance(r4);
-                    r5 = 0;
-                    r4.saveConfig(r5);
-                    if (r51 == 0) goto L_0x07ca;
-                L_0x06a1:
-                    r4 = 66;
-                    r0 = r44;
-                    if (r0 < r4) goto L_0x07c3;
-                L_0x06a7:
-                    r33 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
-                    r33.<init>();
-                L_0x06ac:
-                    r0 = r41;
-                    r4 = r0.attributes;
-                    r0 = r33;
-                    r4.add(r0);
-                    if (r18 == 0) goto L_0x0816;
-                L_0x06b7:
-                    r4 = r18.needConvert();
-                    if (r4 == 0) goto L_0x0816;
-                L_0x06bd:
-                    r0 = r18;
-                    r4 = r0.muted;
-                    if (r4 == 0) goto L_0x07d6;
-                L_0x06c3:
-                    r0 = r41;
-                    r4 = r0.attributes;
-                    r5 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
-                    r5.<init>();
-                    r4.add(r5);
-                    r4 = r9.path;
-                    r0 = r33;
-                    r1 = r18;
-                    org.telegram.messenger.SendMessagesHelper.fillVideoAttribute(r4, r0, r1);
-                    r0 = r33;
-                    r4 = r0.w;
-                    r0 = r18;
-                    r0.originalWidth = r4;
-                    r0 = r33;
-                    r4 = r0.h;
-                    r0 = r18;
-                    r0.originalHeight = r4;
-                    r0 = r18;
-                    r4 = r0.resultWidth;
-                    r0 = r33;
-                    r0.w = r4;
-                    r0 = r18;
-                    r4 = r0.resultHeight;
-                    r0 = r33;
-                    r0.h = r4;
-                L_0x06f8:
-                    r0 = r18;
-                    r4 = r0.estimatedSize;
-                    r4 = (int) r4;
-                    r0 = r41;
-                    r0.size = r4;
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r5 = "-2147483648_";
-                    r4 = r4.append(r5);
-                    r5 = org.telegram.messenger.SharedConfig.getLastLocalId();
-                    r4 = r4.append(r5);
-                    r5 = ".mp4";
-                    r4 = r4.append(r5);
-                    r46 = r4.toString();
-                    r38 = new java.io.File;
-                    r4 = 4;
-                    r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
-                    r0 = r38;
-                    r1 = r46;
-                    r0.<init>(r4, r1);
-                    org.telegram.messenger.SharedConfig.saveConfig();
-                    r61 = r38.getAbsolutePath();
-                L_0x0735:
-                    r19 = r41;
-                    r60 = r59;
-                    r20 = r61;
-                    r8 = new java.util.HashMap;
-                    r8.<init>();
-                    r16 = r75;
-                    r17 = r77;
-                    if (r59 == 0) goto L_0x074e;
-                L_0x0746:
-                    r4 = "originalPath";
-                    r0 = r59;
-                    r8.put(r4, r0);
-                L_0x074e:
-                    if (r57 != 0) goto L_0x078b;
-                L_0x0750:
-                    r0 = r80;
-                    r4 = r6;
-                    if (r4 == 0) goto L_0x078b;
-                L_0x0756:
-                    r64 = r64 + 1;
-                    r4 = "groupId";
-                    r5 = new java.lang.StringBuilder;
-                    r5.<init>();
-                    r10 = "";
-                    r5 = r5.append(r10);
-                    r0 = r48;
-                    r5 = r5.append(r0);
-                    r5 = r5.toString();
-                    r8.put(r4, r5);
-                    r4 = 10;
-                    r0 = r64;
-                    if (r0 == r4) goto L_0x0780;
-                L_0x077a:
-                    r4 = r39 + -1;
-                    r0 = r32;
-                    if (r0 != r4) goto L_0x078b;
-                L_0x0780:
-                    r4 = "final";
-                    r5 = "1";
-                    r8.put(r4, r5);
-                    r52 = 0;
-                L_0x078b:
-                    r14 = new org.telegram.messenger.SendMessagesHelper$21$4;
-                    r15 = r80;
-                    r21 = r8;
-                    r22 = r9;
-                    r14.<init>(r16, r17, r18, r19, r20, r21, r22);
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r14);
-                    goto L_0x0329;
-                L_0x079b:
-                    r4 = r9.videoEditedInfo;
-                    if (r4 == 0) goto L_0x07a5;
-                L_0x079f:
-                    r0 = r9.videoEditedInfo;
-                    r18 = r0;
-                L_0x07a3:
-                    goto L_0x0557;
-                L_0x07a5:
-                    r4 = r9.path;
-                    r18 = org.telegram.messenger.SendMessagesHelper.createCompressionSettings(r4);
-                    goto L_0x07a3;
-                L_0x07ac:
-                    r4 = "";
-                    goto L_0x05e7;
-                L_0x07b1:
-                    r72 = 0;
-                    goto L_0x0627;
-                L_0x07b5:
-                    r4 = 5;
-                    goto L_0x063a;
-                L_0x07b8:
-                    r0 = r41;
-                    r4 = r0.thumb;
-                    r5 = "s";
-                    r4.type = r5;
-                    goto L_0x068c;
-                L_0x07c3:
-                    r33 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo_layer65;
-                    r33.<init>();
-                    goto L_0x06ac;
-                L_0x07ca:
-                    r33 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
-                    r33.<init>();
-                    r4 = 1;
-                    r0 = r33;
-                    r0.supports_streaming = r4;
-                    goto L_0x06ac;
-                L_0x07d6:
-                    r0 = r18;
-                    r4 = r0.estimatedDuration;
-                    r10 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-                    r4 = r4 / r10;
-                    r4 = (int) r4;
-                    r0 = r33;
-                    r0.duration = r4;
-                    r0 = r18;
-                    r4 = r0.rotationValue;
-                    r5 = 90;
-                    if (r4 == r5) goto L_0x07f2;
-                L_0x07ea:
-                    r0 = r18;
-                    r4 = r0.rotationValue;
-                    r5 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
-                    if (r4 != r5) goto L_0x0804;
-                L_0x07f2:
-                    r0 = r18;
-                    r4 = r0.resultHeight;
-                    r0 = r33;
-                    r0.w = r4;
-                    r0 = r18;
-                    r4 = r0.resultWidth;
-                    r0 = r33;
-                    r0.h = r4;
-                    goto L_0x06f8;
-                L_0x0804:
-                    r0 = r18;
-                    r4 = r0.resultWidth;
-                    r0 = r33;
-                    r0.w = r4;
-                    r0 = r18;
-                    r4 = r0.resultHeight;
-                    r0 = r33;
-                    r0.h = r4;
-                    goto L_0x06f8;
-                L_0x0816:
-                    r4 = r71.exists();
-                    if (r4 == 0) goto L_0x0825;
-                L_0x081c:
-                    r4 = r71.length();
-                    r4 = (int) r4;
-                    r0 = r41;
-                    r0.size = r4;
-                L_0x0825:
-                    r4 = r9.path;
-                    r5 = 0;
-                    r0 = r33;
-                    org.telegram.messenger.SendMessagesHelper.fillVideoAttribute(r4, r0, r5);
-                    goto L_0x0735;
-                L_0x082f:
-                    r0 = r80;
-                    r0 = r4;
-                    r21 = r0;
-                    r0 = r9.path;
-                    r22 = r0;
-                    r0 = r9.path;
-                    r23 = r0;
-                    r24 = 0;
-                    r25 = 0;
-                    r0 = r80;
-                    r0 = r2;
-                    r26 = r0;
-                    r0 = r80;
-                    r0 = r8;
-                    r28 = r0;
-                    r0 = r9.caption;
-                    r29 = r0;
-                    r0 = r9.entities;
-                    r30 = r0;
-                    r0 = r80;
-                    r0 = r7;
-                    r31 = r0;
-                    org.telegram.messenger.SendMessagesHelper.prepareSendingDocumentInternal(r21, r22, r23, r24, r25, r26, r28, r29, r30, r31);
-                    goto L_0x0329;
-                L_0x0860:
-                    r0 = r9.path;
-                    r59 = r0;
-                    r0 = r9.path;
-                    r74 = r0;
-                    if (r74 != 0) goto L_0x087a;
-                L_0x086a:
-                    r4 = r9.uri;
-                    if (r4 == 0) goto L_0x087a;
-                L_0x086e:
-                    r4 = r9.uri;
-                    r74 = org.telegram.messenger.AndroidUtilities.getPath(r4);
-                    r4 = r9.uri;
-                    r59 = r4.toString();
-                L_0x087a:
-                    r50 = 0;
-                    r0 = r80;
-                    r4 = r5;
-                    if (r4 == 0) goto L_0x08c5;
-                L_0x0882:
-                    r50 = 1;
-                    r4 = new java.io.File;
-                    r0 = r74;
-                    r4.<init>(r0);
-                    r45 = org.telegram.messenger.FileLoader.getFileExtension(r4);
-                L_0x088f:
-                    if (r50 == 0) goto L_0x0934;
-                L_0x0891:
-                    if (r65 != 0) goto L_0x08a7;
-                L_0x0893:
-                    r65 = new java.util.ArrayList;
-                    r65.<init>();
-                    r68 = new java.util.ArrayList;
-                    r68.<init>();
-                    r66 = new java.util.ArrayList;
-                    r66.<init>();
-                    r67 = new java.util.ArrayList;
-                    r67.<init>();
-                L_0x08a7:
-                    r0 = r65;
-                    r1 = r74;
-                    r0.add(r1);
-                    r0 = r68;
-                    r1 = r59;
-                    r0.add(r1);
-                    r4 = r9.caption;
-                    r0 = r66;
-                    r0.add(r4);
-                    r4 = r9.entities;
-                    r0 = r67;
-                    r0.add(r4);
-                    goto L_0x0329;
-                L_0x08c5:
-                    if (r74 == 0) goto L_0x08f2;
-                L_0x08c7:
-                    r4 = ".gif";
-                    r0 = r74;
-                    r4 = r0.endsWith(r4);
-                    if (r4 != 0) goto L_0x08dd;
-                L_0x08d2:
-                    r4 = ".webp";
-                    r0 = r74;
-                    r4 = r0.endsWith(r4);
-                    if (r4 == 0) goto L_0x08f2;
-                L_0x08dd:
-                    r4 = ".gif";
-                    r0 = r74;
-                    r4 = r0.endsWith(r4);
-                    if (r4 == 0) goto L_0x08ee;
-                L_0x08e8:
-                    r45 = "gif";
-                L_0x08eb:
-                    r50 = 1;
-                    goto L_0x088f;
-                L_0x08ee:
-                    r45 = "webp";
-                    goto L_0x08eb;
-                L_0x08f2:
-                    if (r74 != 0) goto L_0x088f;
-                L_0x08f4:
-                    r4 = r9.uri;
-                    if (r4 == 0) goto L_0x088f;
-                L_0x08f8:
-                    r4 = r9.uri;
-                    r4 = org.telegram.messenger.MediaController.isGif(r4);
-                    if (r4 == 0) goto L_0x0916;
-                L_0x0900:
-                    r50 = 1;
-                    r4 = r9.uri;
-                    r59 = r4.toString();
-                    r4 = r9.uri;
-                    r5 = "gif";
-                    r74 = org.telegram.messenger.MediaController.copyFileToCache(r4, r5);
-                    r45 = "gif";
-                    goto L_0x088f;
-                L_0x0916:
-                    r4 = r9.uri;
-                    r4 = org.telegram.messenger.MediaController.isWebp(r4);
-                    if (r4 == 0) goto L_0x088f;
-                L_0x091e:
-                    r50 = 1;
-                    r4 = r9.uri;
-                    r59 = r4.toString();
-                    r4 = r9.uri;
-                    r5 = "webp";
-                    r74 = org.telegram.messenger.MediaController.copyFileToCache(r4, r5);
-                    r45 = "webp";
-                    goto L_0x088f;
-                L_0x0934:
-                    if (r74 == 0) goto L_0x09dc;
-                L_0x0936:
-                    r71 = new java.io.File;
-                    r0 = r71;
-                    r1 = r74;
-                    r0.<init>(r1);
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r0 = r59;
-                    r4 = r4.append(r0);
-                    r10 = r71.length();
-                    r4 = r4.append(r10);
-                    r5 = "_";
-                    r4 = r4.append(r5);
-                    r10 = r71.lastModified();
-                    r4 = r4.append(r10);
-                    r59 = r4.toString();
-                L_0x0965:
-                    r62 = 0;
-                    if (r79 == 0) goto L_0x09e4;
-                L_0x0969:
-                    r0 = r79;
-                    r78 = r0.get(r9);
-                    r78 = (org.telegram.messenger.SendMessagesHelper.MediaSendPrepareWorker) r78;
-                    r0 = r78;
-                    r0 = r0.photo;
-                    r62 = r0;
-                    if (r62 != 0) goto L_0x0986;
-                L_0x0979:
-                    r0 = r78;	 Catch:{ Exception -> 0x09df }
-                    r4 = r0.sync;	 Catch:{ Exception -> 0x09df }
-                    r4.await();	 Catch:{ Exception -> 0x09df }
-                L_0x0980:
-                    r0 = r78;
-                    r0 = r0.photo;
-                    r62 = r0;
-                L_0x0986:
-                    if (r62 == 0) goto L_0x0a97;
-                L_0x0988:
-                    r12 = r62;
-                    r8 = new java.util.HashMap;
-                    r8.<init>();
-                    r4 = r9.masks;
-                    if (r4 == 0) goto L_0x0a32;
-                L_0x0993:
-                    r4 = r9.masks;
-                    r4 = r4.isEmpty();
-                    if (r4 != 0) goto L_0x0a32;
-                L_0x099b:
-                    r4 = 1;
-                L_0x099c:
-                    r0 = r62;
-                    r0.has_stickers = r4;
-                    if (r4 == 0) goto L_0x0a46;
-                L_0x09a2:
-                    r69 = new org.telegram.tgnet.SerializedData;
-                    r4 = r9.masks;
-                    r4 = r4.size();
-                    r4 = r4 * 20;
-                    r4 = r4 + 4;
-                    r0 = r69;
-                    r0.<init>(r4);
-                    r4 = r9.masks;
-                    r4 = r4.size();
-                    r0 = r69;
-                    r0.writeInt32(r4);
-                    r34 = 0;
-                L_0x09c0:
-                    r4 = r9.masks;
-                    r4 = r4.size();
-                    r0 = r34;
-                    if (r0 >= r4) goto L_0x0a35;
-                L_0x09ca:
-                    r4 = r9.masks;
-                    r0 = r34;
-                    r4 = r4.get(r0);
-                    r4 = (org.telegram.tgnet.TLRPC.InputDocument) r4;
-                    r0 = r69;
-                    r4.serializeToStream(r0);
-                    r34 = r34 + 1;
-                    goto L_0x09c0;
-                L_0x09dc:
-                    r59 = 0;
-                    goto L_0x0965;
-                L_0x09df:
-                    r42 = move-exception;
-                    org.telegram.messenger.FileLog.m3e(r42);
-                    goto L_0x0980;
-                L_0x09e4:
-                    if (r51 != 0) goto L_0x0a1a;
-                L_0x09e6:
-                    r4 = r9.ttl;
-                    if (r4 != 0) goto L_0x0a1a;
-                L_0x09ea:
-                    r0 = r80;
-                    r4 = r4;
-                    r5 = org.telegram.messenger.MessagesStorage.getInstance(r4);
-                    if (r51 != 0) goto L_0x0a2e;
-                L_0x09f4:
-                    r4 = 0;
-                L_0x09f5:
-                    r0 = r59;
-                    r62 = r5.getSentFile(r0, r4);
-                    r62 = (org.telegram.tgnet.TLRPC.TL_photo) r62;
-                    if (r62 != 0) goto L_0x0a1a;
-                L_0x09ff:
-                    r4 = r9.uri;
-                    if (r4 == 0) goto L_0x0a1a;
-                L_0x0a03:
-                    r0 = r80;
-                    r4 = r4;
-                    r5 = org.telegram.messenger.MessagesStorage.getInstance(r4);
-                    r4 = r9.uri;
-                    r10 = org.telegram.messenger.AndroidUtilities.getPath(r4);
-                    if (r51 != 0) goto L_0x0a30;
-                L_0x0a13:
-                    r4 = 0;
-                L_0x0a14:
-                    r62 = r5.getSentFile(r10, r4);
-                    r62 = (org.telegram.tgnet.TLRPC.TL_photo) r62;
-                L_0x0a1a:
-                    if (r62 != 0) goto L_0x0986;
-                L_0x0a1c:
-                    r0 = r80;
-                    r4 = r4;
-                    r4 = org.telegram.messenger.SendMessagesHelper.getInstance(r4);
-                    r5 = r9.path;
-                    r10 = r9.uri;
-                    r62 = r4.generatePhotoSizes(r5, r10);
-                    goto L_0x0986;
-                L_0x0a2e:
-                    r4 = 3;
-                    goto L_0x09f5;
-                L_0x0a30:
-                    r4 = 3;
-                    goto L_0x0a14;
-                L_0x0a32:
-                    r4 = 0;
-                    goto L_0x099c;
-                L_0x0a35:
-                    r4 = "masks";
-                    r5 = r69.toByteArray();
-                    r5 = org.telegram.messenger.Utilities.bytesToHex(r5);
-                    r8.put(r4, r5);
-                    r69.cleanup();
-                L_0x0a46:
-                    if (r59 == 0) goto L_0x0a50;
-                L_0x0a48:
-                    r4 = "originalPath";
-                    r0 = r59;
-                    r8.put(r4, r0);
-                L_0x0a50:
-                    r0 = r80;
-                    r4 = r6;
-                    if (r4 == 0) goto L_0x0a8b;
-                L_0x0a56:
-                    r64 = r64 + 1;
-                    r4 = "groupId";
-                    r5 = new java.lang.StringBuilder;
-                    r5.<init>();
-                    r10 = "";
-                    r5 = r5.append(r10);
-                    r0 = r48;
-                    r5 = r5.append(r0);
-                    r5 = r5.toString();
-                    r8.put(r4, r5);
-                    r4 = 10;
-                    r0 = r64;
-                    if (r0 == r4) goto L_0x0a80;
-                L_0x0a7a:
-                    r4 = r39 + -1;
-                    r0 = r32;
-                    if (r0 != r4) goto L_0x0a8b;
-                L_0x0a80:
-                    r4 = "final";
-                    r5 = "1";
-                    r8.put(r4, r5);
-                    r52 = 0;
-                L_0x0a8b:
-                    r4 = new org.telegram.messenger.SendMessagesHelper$21$5;
-                    r0 = r80;
-                    r4.<init>(r12, r8, r9);
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-                    goto L_0x0329;
-                L_0x0a97:
-                    if (r65 != 0) goto L_0x0aad;
-                L_0x0a99:
-                    r65 = new java.util.ArrayList;
-                    r65.<init>();
-                    r68 = new java.util.ArrayList;
-                    r68.<init>();
-                    r66 = new java.util.ArrayList;
-                    r66.<init>();
-                    r67 = new java.util.ArrayList;
-                    r67.<init>();
-                L_0x0aad:
-                    r0 = r65;
-                    r1 = r74;
-                    r0.add(r1);
-                    r0 = r68;
-                    r1 = r59;
-                    r0.add(r1);
-                    r4 = r9.caption;
-                    r0 = r66;
-                    r0.add(r4);
-                    r4 = r9.entities;
-                    r0 = r67;
-                    r0.add(r4);
-                    goto L_0x0329;
-                L_0x0acb:
-                    r4 = 0;
-                    r4 = (r52 > r4 ? 1 : (r52 == r4 ? 0 : -1));
-                    if (r4 == 0) goto L_0x0adf;
-                L_0x0ad1:
-                    r54 = r52;
-                    r4 = new org.telegram.messenger.SendMessagesHelper$21$6;
-                    r0 = r80;
-                    r1 = r54;
-                    r4.<init>(r1);
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-                L_0x0adf:
-                    r0 = r80;
-                    r4 = r9;
-                    if (r4 == 0) goto L_0x0aec;
-                L_0x0ae5:
-                    r0 = r80;
-                    r4 = r9;
-                    r4.releasePermission();
-                L_0x0aec:
-                    if (r65 == 0) goto L_0x0b48;
-                L_0x0aee:
-                    r4 = r65.isEmpty();
-                    if (r4 != 0) goto L_0x0b48;
-                L_0x0af4:
-                    r32 = 0;
-                L_0x0af6:
-                    r4 = r65.size();
-                    r0 = r32;
-                    if (r0 >= r4) goto L_0x0b48;
-                L_0x0afe:
-                    r0 = r80;
-                    r0 = r4;
-                    r21 = r0;
-                    r0 = r65;
-                    r1 = r32;
-                    r22 = r0.get(r1);
-                    r22 = (java.lang.String) r22;
-                    r0 = r68;
-                    r1 = r32;
-                    r23 = r0.get(r1);
-                    r23 = (java.lang.String) r23;
-                    r24 = 0;
-                    r0 = r80;
-                    r0 = r2;
-                    r26 = r0;
-                    r0 = r80;
-                    r0 = r8;
-                    r28 = r0;
-                    r0 = r66;
-                    r1 = r32;
-                    r29 = r0.get(r1);
-                    r29 = (java.lang.CharSequence) r29;
-                    r0 = r67;
-                    r1 = r32;
-                    r30 = r0.get(r1);
-                    r30 = (java.util.ArrayList) r30;
-                    r0 = r80;
-                    r0 = r7;
-                    r31 = r0;
-                    r25 = r45;
-                    org.telegram.messenger.SendMessagesHelper.prepareSendingDocumentInternal(r21, r22, r23, r24, r25, r26, r28, r29, r30, r31);
-                    r32 = r32 + 1;
-                    goto L_0x0af6;
-                L_0x0b48:
-                    r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-                    if (r4 == 0) goto L_0x0b69;
-                L_0x0b4c:
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r5 = "total send time = ";
-                    r4 = r4.append(r5);
-                    r10 = java.lang.System.currentTimeMillis();
-                    r10 = r10 - r36;
-                    r4 = r4.append(r10);
-                    r4 = r4.toString();
-                    org.telegram.messenger.FileLog.m0d(r4);
-                L_0x0b69:
-                    return;
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.21.run():void");
-                }
-            });
+        /*
+        r42 = java.lang.System.currentTimeMillis();
+        r46 = r87.size();
+        r0 = r88;
+        r4 = (int) r0;
+        if (r4 != 0) goto L_0x008b;
+    L_0x000d:
+        r58 = 1;
+    L_0x000f:
+        r51 = 0;
+        if (r58 == 0) goto L_0x0030;
+    L_0x0013:
+        r4 = 32;
+        r4 = r88 >> r4;
+        r0 = (int) r4;
+        r56 = r0;
+        r4 = org.telegram.messenger.MessagesController.getInstance(r90);
+        r5 = java.lang.Integer.valueOf(r56);
+        r50 = r4.getEncryptedChat(r5);
+        if (r50 == 0) goto L_0x0030;
+    L_0x0028:
+        r0 = r50;
+        r4 = r0.layer;
+        r51 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r4);
+    L_0x0030:
+        if (r58 == 0) goto L_0x0038;
+    L_0x0032:
+        r4 = 73;
+        r0 = r51;
+        if (r0 < r4) goto L_0x013b;
+    L_0x0038:
+        if (r91 != 0) goto L_0x013b;
+    L_0x003a:
+        if (r92 == 0) goto L_0x013b;
+    L_0x003c:
+        r86 = new java.util.HashMap;
+        r86.<init>();
+        r14 = 0;
+    L_0x0042:
+        r0 = r46;
+        if (r14 >= r0) goto L_0x013d;
+    L_0x0046:
+        r0 = r87;
+        r13 = r0.get(r14);
+        r13 = (org.telegram.messenger.SendMessagesHelper.SendingMediaInfo) r13;
+        r4 = r13.searchImage;
+        if (r4 != 0) goto L_0x0088;
+    L_0x0052:
+        r4 = r13.isVideo;
+        if (r4 != 0) goto L_0x0088;
+    L_0x0056:
+        r0 = r13.path;
+        r66 = r0;
+        r0 = r13.path;
+        r81 = r0;
+        if (r81 != 0) goto L_0x0070;
+    L_0x0060:
+        r4 = r13.uri;
+        if (r4 == 0) goto L_0x0070;
+    L_0x0064:
+        r4 = r13.uri;
+        r81 = org.telegram.messenger.AndroidUtilities.getPath(r4);
+        r4 = r13.uri;
+        r66 = r4.toString();
+    L_0x0070:
+        if (r81 == 0) goto L_0x008e;
+    L_0x0072:
+        r4 = ".gif";
+        r0 = r81;
+        r4 = r0.endsWith(r4);
+        if (r4 != 0) goto L_0x0088;
+    L_0x007d:
+        r4 = ".webp";
+        r0 = r81;
+        r4 = r0.endsWith(r4);
+        if (r4 == 0) goto L_0x008e;
+    L_0x0088:
+        r14 = r14 + 1;
+        goto L_0x0042;
+    L_0x008b:
+        r58 = 0;
+        goto L_0x000f;
+    L_0x008e:
+        if (r81 != 0) goto L_0x00a4;
+    L_0x0090:
+        r4 = r13.uri;
+        if (r4 == 0) goto L_0x00a4;
+    L_0x0094:
+        r4 = r13.uri;
+        r4 = org.telegram.messenger.MediaController.isGif(r4);
+        if (r4 != 0) goto L_0x0088;
+    L_0x009c:
+        r4 = r13.uri;
+        r4 = org.telegram.messenger.MediaController.isWebp(r4);
+        if (r4 != 0) goto L_0x0088;
+    L_0x00a4:
+        if (r81 == 0) goto L_0x011a;
+    L_0x00a6:
+        r80 = new java.io.File;
+        r80.<init>(r81);
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r0 = r66;
+        r4 = r4.append(r0);
+        r10 = r80.length();
+        r4 = r4.append(r10);
+        r5 = "_";
+        r4 = r4.append(r5);
+        r10 = r80.lastModified();
+        r4 = r4.append(r10);
+        r66 = r4.toString();
+    L_0x00d1:
+        r69 = 0;
+        if (r58 != 0) goto L_0x0101;
+    L_0x00d5:
+        r4 = r13.ttl;
+        if (r4 != 0) goto L_0x0101;
+    L_0x00d9:
+        r5 = org.telegram.messenger.MessagesStorage.getInstance(r90);
+        if (r58 != 0) goto L_0x011d;
+    L_0x00df:
+        r4 = 0;
+    L_0x00e0:
+        r0 = r66;
+        r69 = r5.getSentFile(r0, r4);
+        r69 = (org.telegram.tgnet.TLRPC.TL_photo) r69;
+        if (r69 != 0) goto L_0x0101;
+    L_0x00ea:
+        r4 = r13.uri;
+        if (r4 == 0) goto L_0x0101;
+    L_0x00ee:
+        r5 = org.telegram.messenger.MessagesStorage.getInstance(r90);
+        r4 = r13.uri;
+        r6 = org.telegram.messenger.AndroidUtilities.getPath(r4);
+        if (r58 != 0) goto L_0x011f;
+    L_0x00fa:
+        r4 = 0;
+    L_0x00fb:
+        r69 = r5.getSentFile(r6, r4);
+        r69 = (org.telegram.tgnet.TLRPC.TL_photo) r69;
+    L_0x0101:
+        r85 = new org.telegram.messenger.SendMessagesHelper$MediaSendPrepareWorker;
+        r4 = 0;
+        r0 = r85;
+        r0.<init>();
+        r0 = r86;
+        r1 = r85;
+        r0.put(r13, r1);
+        if (r69 == 0) goto L_0x0121;
+    L_0x0112:
+        r0 = r69;
+        r1 = r85;
+        r1.photo = r0;
+        goto L_0x0088;
+    L_0x011a:
+        r66 = 0;
+        goto L_0x00d1;
+    L_0x011d:
+        r4 = 3;
+        goto L_0x00e0;
+    L_0x011f:
+        r4 = 3;
+        goto L_0x00fb;
+    L_0x0121:
+        r4 = new java.util.concurrent.CountDownLatch;
+        r5 = 1;
+        r4.<init>(r5);
+        r0 = r85;
+        r0.sync = r4;
+        r4 = mediaSendThreadPool;
+        r5 = new org.telegram.messenger.SendMessagesHelper$$Lambda$22;
+        r0 = r85;
+        r1 = r90;
+        r5.<init>(r0, r1, r13);
+        r4.execute(r5);
+        goto L_0x0088;
+    L_0x013b:
+        r86 = 0;
+    L_0x013d:
+        r54 = 0;
+        r60 = 0;
+        r72 = 0;
+        r75 = 0;
+        r73 = 0;
+        r74 = 0;
+        r52 = 0;
+        r71 = 0;
+        r14 = 0;
+    L_0x014e:
+        r0 = r46;
+        if (r14 >= r0) goto L_0x0a57;
+    L_0x0152:
+        r0 = r87;
+        r13 = r0.get(r14);
+        r13 = (org.telegram.messenger.SendMessagesHelper.SendingMediaInfo) r13;
+        if (r92 == 0) goto L_0x0177;
+    L_0x015c:
+        if (r58 == 0) goto L_0x0164;
+    L_0x015e:
+        r4 = 73;
+        r0 = r51;
+        if (r0 < r4) goto L_0x0177;
+    L_0x0164:
+        r4 = 1;
+        r0 = r46;
+        if (r0 <= r4) goto L_0x0177;
+    L_0x0169:
+        r4 = r71 % 10;
+        if (r4 != 0) goto L_0x0177;
+    L_0x016d:
+        r4 = org.telegram.messenger.Utilities.random;
+        r54 = r4.nextLong();
+        r60 = r54;
+        r71 = 0;
+    L_0x0177:
+        r4 = r13.searchImage;
+        if (r4 == 0) goto L_0x0501;
+    L_0x017b:
+        r4 = r13.searchImage;
+        r4 = r4.type;
+        r5 = 1;
+        if (r4 != r5) goto L_0x037c;
+    L_0x0182:
+        r9 = new java.util.HashMap;
+        r9.<init>();
+        r48 = 0;
+        r4 = r13.searchImage;
+        r4 = r4.document;
+        r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_document;
+        if (r4 == 0) goto L_0x02f9;
+    L_0x0191:
+        r4 = r13.searchImage;
+        r0 = r4.document;
+        r48 = r0;
+        r48 = (org.telegram.tgnet.TLRPC.TL_document) r48;
+        r4 = 1;
+        r0 = r48;
+        r45 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r4);
+    L_0x01a0:
+        if (r48 != 0) goto L_0x02c5;
+    L_0x01a2:
+        r4 = r13.searchImage;
+        r4 = r4.localUrl;
+        if (r4 == 0) goto L_0x01b2;
+    L_0x01a8:
+        r4 = "url";
+        r5 = r13.searchImage;
+        r5 = r5.localUrl;
+        r9.put(r4, r5);
+    L_0x01b2:
+        r83 = 0;
+        r48 = new org.telegram.tgnet.TLRPC$TL_document;
+        r48.<init>();
+        r4 = 0;
+        r0 = r48;
+        r0.id = r4;
+        r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r90);
+        r4 = r4.getCurrentTime();
+        r0 = r48;
+        r0.date = r4;
+        r53 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;
+        r53.<init>();
+        r4 = "animation.gif";
+        r0 = r53;
+        r0.file_name = r4;
+        r0 = r48;
+        r4 = r0.attributes;
+        r0 = r53;
+        r4.add(r0);
+        r4 = r13.searchImage;
+        r4 = r4.size;
+        r0 = r48;
+        r0.size = r4;
+        r4 = 0;
+        r0 = r48;
+        r0.dc_id = r4;
+        r4 = r45.toString();
+        r5 = "mp4";
+        r4 = r4.endsWith(r5);
+        if (r4 == 0) goto L_0x0353;
+    L_0x01fa:
+        r4 = "video/mp4";
+        r0 = r48;
+        r0.mime_type = r4;
+        r0 = r48;
+        r4 = r0.attributes;
+        r5 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
+        r5.<init>();
+        r4.add(r5);
+    L_0x020d:
+        r4 = r45.exists();
+        if (r4 == 0) goto L_0x035c;
+    L_0x0213:
+        r83 = r45;
+    L_0x0215:
+        if (r83 != 0) goto L_0x0258;
+    L_0x0217:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r5 = r13.searchImage;
+        r5 = r5.thumbUrl;
+        r5 = org.telegram.messenger.Utilities.MD5(r5);
+        r4 = r4.append(r5);
+        r5 = ".";
+        r4 = r4.append(r5);
+        r5 = r13.searchImage;
+        r5 = r5.thumbUrl;
+        r6 = "jpg";
+        r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r6);
+        r4 = r4.append(r5);
+        r82 = r4.toString();
+        r83 = new java.io.File;
+        r4 = 4;
+        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
+        r0 = r83;
+        r1 = r82;
+        r0.<init>(r4, r1);
+        r4 = r83.exists();
+        if (r4 != 0) goto L_0x0258;
+    L_0x0256:
+        r83 = 0;
+    L_0x0258:
+        if (r83 == 0) goto L_0x0287;
+    L_0x025a:
+        r4 = r83.getAbsolutePath();	 Catch:{ Exception -> 0x0370 }
+        r5 = "mp4";	 Catch:{ Exception -> 0x0370 }
+        r4 = r4.endsWith(r5);	 Catch:{ Exception -> 0x0370 }
+        if (r4 == 0) goto L_0x0360;	 Catch:{ Exception -> 0x0370 }
+    L_0x0267:
+        r4 = r83.getAbsolutePath();	 Catch:{ Exception -> 0x0370 }
+        r5 = 1;	 Catch:{ Exception -> 0x0370 }
+        r44 = android.media.ThumbnailUtils.createVideoThumbnail(r4, r5);	 Catch:{ Exception -> 0x0370 }
+    L_0x0270:
+        if (r44 == 0) goto L_0x0287;	 Catch:{ Exception -> 0x0370 }
+    L_0x0272:
+        r4 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;	 Catch:{ Exception -> 0x0370 }
+        r5 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;	 Catch:{ Exception -> 0x0370 }
+        r6 = 55;	 Catch:{ Exception -> 0x0370 }
+        r0 = r44;	 Catch:{ Exception -> 0x0370 }
+        r1 = r58;	 Catch:{ Exception -> 0x0370 }
+        r4 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r4, r5, r6, r1);	 Catch:{ Exception -> 0x0370 }
+        r0 = r48;	 Catch:{ Exception -> 0x0370 }
+        r0.thumb = r4;	 Catch:{ Exception -> 0x0370 }
+        r44.recycle();	 Catch:{ Exception -> 0x0370 }
+    L_0x0287:
+        r0 = r48;
+        r4 = r0.thumb;
+        if (r4 != 0) goto L_0x02c5;
+    L_0x028d:
+        r4 = new org.telegram.tgnet.TLRPC$TL_photoSize;
+        r4.<init>();
+        r0 = r48;
+        r0.thumb = r4;
+        r0 = r48;
+        r4 = r0.thumb;
+        r5 = r13.searchImage;
+        r5 = r5.width;
+        r4.f48w = r5;
+        r0 = r48;
+        r4 = r0.thumb;
+        r5 = r13.searchImage;
+        r5 = r5.height;
+        r4.f47h = r5;
+        r0 = r48;
+        r4 = r0.thumb;
+        r5 = 0;
+        r4.size = r5;
+        r0 = r48;
+        r4 = r0.thumb;
+        r5 = new org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable;
+        r5.<init>();
+        r4.location = r5;
+        r0 = r48;
+        r4 = r0.thumb;
+        r5 = "x";
+        r4.type = r5;
+    L_0x02c5:
+        r7 = r48;
+        r4 = r13.searchImage;
+        r0 = r4.imageUrl;
+        r67 = r0;
+        if (r45 != 0) goto L_0x0376;
+    L_0x02cf:
+        r4 = r13.searchImage;
+        r8 = r4.imageUrl;
+    L_0x02d3:
+        if (r9 == 0) goto L_0x02e5;
+    L_0x02d5:
+        r4 = r13.searchImage;
+        r4 = r4.imageUrl;
+        if (r4 == 0) goto L_0x02e5;
+    L_0x02db:
+        r4 = "originalPath";
+        r5 = r13.searchImage;
+        r5 = r5.imageUrl;
+        r9.put(r4, r5);
+    L_0x02e5:
+        r4 = new org.telegram.messenger.SendMessagesHelper$$Lambda$23;
+        r5 = r93;
+        r6 = r90;
+        r10 = r88;
+        r12 = r94;
+        r4.<init>(r5, r6, r7, r8, r9, r10, r12, r13);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
+    L_0x02f5:
+        r14 = r14 + 1;
+        goto L_0x014e;
+    L_0x02f9:
+        if (r58 != 0) goto L_0x0316;
+    L_0x02fb:
+        r5 = org.telegram.messenger.MessagesStorage.getInstance(r90);
+        r4 = r13.searchImage;
+        r6 = r4.imageUrl;
+        if (r58 != 0) goto L_0x0351;
+    L_0x0305:
+        r4 = 1;
+    L_0x0306:
+        r47 = r5.getSentFile(r6, r4);
+        r47 = (org.telegram.tgnet.TLRPC.Document) r47;
+        r0 = r47;
+        r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_document;
+        if (r4 == 0) goto L_0x0316;
+    L_0x0312:
+        r48 = r47;
+        r48 = (org.telegram.tgnet.TLRPC.TL_document) r48;
+    L_0x0316:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r5 = r13.searchImage;
+        r5 = r5.imageUrl;
+        r5 = org.telegram.messenger.Utilities.MD5(r5);
+        r4 = r4.append(r5);
+        r5 = ".";
+        r4 = r4.append(r5);
+        r5 = r13.searchImage;
+        r5 = r5.imageUrl;
+        r6 = "jpg";
+        r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r6);
+        r4 = r4.append(r5);
+        r59 = r4.toString();
+        r45 = new java.io.File;
+        r4 = 4;
+        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
+        r0 = r45;
+        r1 = r59;
+        r0.<init>(r4, r1);
+        goto L_0x01a0;
+    L_0x0351:
+        r4 = 4;
+        goto L_0x0306;
+    L_0x0353:
+        r4 = "image/gif";
+        r0 = r48;
+        r0.mime_type = r4;
+        goto L_0x020d;
+    L_0x035c:
+        r45 = 0;
+        goto L_0x0215;
+    L_0x0360:
+        r4 = r83.getAbsolutePath();	 Catch:{ Exception -> 0x0370 }
+        r5 = 0;	 Catch:{ Exception -> 0x0370 }
+        r6 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;	 Catch:{ Exception -> 0x0370 }
+        r10 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;	 Catch:{ Exception -> 0x0370 }
+        r11 = 1;	 Catch:{ Exception -> 0x0370 }
+        r44 = org.telegram.messenger.ImageLoader.loadBitmap(r4, r5, r6, r10, r11);	 Catch:{ Exception -> 0x0370 }
+        goto L_0x0270;
+    L_0x0370:
+        r49 = move-exception;
+        org.telegram.messenger.FileLog.m8e(r49);
+        goto L_0x0287;
+    L_0x0376:
+        r8 = r45.toString();
+        goto L_0x02d3;
+    L_0x037c:
+        r65 = 1;
+        r69 = 0;
+        r4 = r13.searchImage;
+        r4 = r4.photo;
+        r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_photo;
+        if (r4 == 0) goto L_0x04e6;
+    L_0x0388:
+        r4 = r13.searchImage;
+        r0 = r4.photo;
+        r69 = r0;
+        r69 = (org.telegram.tgnet.TLRPC.TL_photo) r69;
+    L_0x0390:
+        if (r69 != 0) goto L_0x0480;
+    L_0x0392:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r5 = r13.searchImage;
+        r5 = r5.imageUrl;
+        r5 = org.telegram.messenger.Utilities.MD5(r5);
+        r4 = r4.append(r5);
+        r5 = ".";
+        r4 = r4.append(r5);
+        r5 = r13.searchImage;
+        r5 = r5.imageUrl;
+        r6 = "jpg";
+        r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r6);
+        r4 = r4.append(r5);
+        r59 = r4.toString();
+        r45 = new java.io.File;
+        r4 = 4;
+        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
+        r0 = r45;
+        r1 = r59;
+        r0.<init>(r4, r1);
+        r4 = r45.exists();
+        if (r4 == 0) goto L_0x03ec;
+    L_0x03d1:
+        r4 = r45.length();
+        r10 = 0;
+        r4 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
+        if (r4 == 0) goto L_0x03ec;
+    L_0x03db:
+        r4 = getInstance(r90);
+        r5 = r45.toString();
+        r6 = 0;
+        r69 = r4.generatePhotoSizes(r5, r6);
+        if (r69 == 0) goto L_0x03ec;
+    L_0x03ea:
+        r65 = 0;
+    L_0x03ec:
+        if (r69 != 0) goto L_0x0480;
+    L_0x03ee:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r5 = r13.searchImage;
+        r5 = r5.thumbUrl;
+        r5 = org.telegram.messenger.Utilities.MD5(r5);
+        r4 = r4.append(r5);
+        r5 = ".";
+        r4 = r4.append(r5);
+        r5 = r13.searchImage;
+        r5 = r5.thumbUrl;
+        r6 = "jpg";
+        r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r6);
+        r4 = r4.append(r5);
+        r59 = r4.toString();
+        r45 = new java.io.File;
+        r4 = 4;
+        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
+        r0 = r45;
+        r1 = r59;
+        r0.<init>(r4, r1);
+        r4 = r45.exists();
+        if (r4 == 0) goto L_0x043a;
+    L_0x042d:
+        r4 = getInstance(r90);
+        r5 = r45.toString();
+        r6 = 0;
+        r69 = r4.generatePhotoSizes(r5, r6);
+    L_0x043a:
+        if (r69 != 0) goto L_0x0480;
+    L_0x043c:
+        r69 = new org.telegram.tgnet.TLRPC$TL_photo;
+        r69.<init>();
+        r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r90);
+        r4 = r4.getCurrentTime();
+        r0 = r69;
+        r0.date = r4;
+        r70 = new org.telegram.tgnet.TLRPC$TL_photoSize;
+        r70.<init>();
+        r4 = r13.searchImage;
+        r4 = r4.width;
+        r0 = r70;
+        r0.w = r4;
+        r4 = r13.searchImage;
+        r4 = r4.height;
+        r0 = r70;
+        r0.h = r4;
+        r4 = 0;
+        r0 = r70;
+        r0.size = r4;
+        r4 = new org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable;
+        r4.<init>();
+        r0 = r70;
+        r0.location = r4;
+        r4 = "x";
+        r0 = r70;
+        r0.type = r4;
+        r0 = r69;
+        r4 = r0.sizes;
+        r0 = r70;
+        r4.add(r0);
+    L_0x0480:
+        if (r69 == 0) goto L_0x02f5;
+    L_0x0482:
+        r18 = r69;
+        r19 = r65;
+        r9 = new java.util.HashMap;
+        r9.<init>();
+        r4 = r13.searchImage;
+        r4 = r4.imageUrl;
+        if (r4 == 0) goto L_0x049b;
+    L_0x0491:
+        r4 = "originalPath";
+        r5 = r13.searchImage;
+        r5 = r5.imageUrl;
+        r9.put(r4, r5);
+    L_0x049b:
+        if (r92 == 0) goto L_0x04d0;
+    L_0x049d:
+        r71 = r71 + 1;
+        r4 = "groupId";
+        r5 = new java.lang.StringBuilder;
+        r5.<init>();
+        r6 = "";
+        r5 = r5.append(r6);
+        r0 = r54;
+        r5 = r5.append(r0);
+        r5 = r5.toString();
+        r9.put(r4, r5);
+        r4 = 10;
+        r0 = r71;
+        if (r0 == r4) goto L_0x04c5;
+    L_0x04c1:
+        r4 = r46 + -1;
+        if (r14 != r4) goto L_0x04d0;
+    L_0x04c5:
+        r4 = "final";
+        r5 = "1";
+        r9.put(r4, r5);
+        r60 = 0;
+    L_0x04d0:
+        r15 = new org.telegram.messenger.SendMessagesHelper$$Lambda$24;
+        r16 = r93;
+        r17 = r90;
+        r20 = r13;
+        r21 = r9;
+        r22 = r88;
+        r24 = r94;
+        r15.<init>(r16, r17, r18, r19, r20, r21, r22, r24);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r15);
+        goto L_0x02f5;
+    L_0x04e6:
+        if (r58 != 0) goto L_0x0390;
+    L_0x04e8:
+        r4 = r13.ttl;
+        if (r4 != 0) goto L_0x0390;
+    L_0x04ec:
+        r5 = org.telegram.messenger.MessagesStorage.getInstance(r90);
+        r4 = r13.searchImage;
+        r6 = r4.imageUrl;
+        if (r58 != 0) goto L_0x04ff;
+    L_0x04f6:
+        r4 = 0;
+    L_0x04f7:
+        r69 = r5.getSentFile(r6, r4);
+        r69 = (org.telegram.tgnet.TLRPC.TL_photo) r69;
+        goto L_0x0390;
+    L_0x04ff:
+        r4 = 3;
+        goto L_0x04f7;
+    L_0x0501:
+        r4 = r13.isVideo;
+        if (r4 == 0) goto L_0x07fa;
+    L_0x0505:
+        r82 = 0;
+        r84 = 0;
+        if (r91 == 0) goto L_0x0745;
+    L_0x050b:
+        r26 = 0;
+    L_0x050d:
+        if (r91 != 0) goto L_0x07d9;
+    L_0x050f:
+        if (r26 != 0) goto L_0x051c;
+    L_0x0511:
+        r4 = r13.path;
+        r5 = "mp4";
+        r4 = r4.endsWith(r5);
+        if (r4 == 0) goto L_0x07d9;
+    L_0x051c:
+        r0 = r13.path;
+        r68 = r0;
+        r0 = r13.path;
+        r66 = r0;
+        r80 = new java.io.File;
+        r0 = r80;
+        r1 = r66;
+        r0.<init>(r1);
+        r78 = 0;
+        r64 = 0;
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r0 = r66;
+        r4 = r4.append(r0);
+        r10 = r80.length();
+        r4 = r4.append(r10);
+        r5 = "_";
+        r4 = r4.append(r5);
+        r10 = r80.lastModified();
+        r4 = r4.append(r10);
+        r66 = r4.toString();
+        if (r26 == 0) goto L_0x05d9;
+    L_0x0559:
+        r0 = r26;
+        r0 = r0.muted;
+        r64 = r0;
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r0 = r66;
+        r4 = r4.append(r0);
+        r0 = r26;
+        r10 = r0.estimatedDuration;
+        r4 = r4.append(r10);
+        r5 = "_";
+        r4 = r4.append(r5);
+        r0 = r26;
+        r10 = r0.startTime;
+        r4 = r4.append(r10);
+        r5 = "_";
+        r4 = r4.append(r5);
+        r0 = r26;
+        r10 = r0.endTime;
+        r5 = r4.append(r10);
+        r0 = r26;
+        r4 = r0.muted;
+        if (r4 == 0) goto L_0x0756;
+    L_0x0596:
+        r4 = "_m";
+    L_0x0599:
+        r4 = r5.append(r4);
+        r66 = r4.toString();
+        r0 = r26;
+        r4 = r0.resultWidth;
+        r0 = r26;
+        r5 = r0.originalWidth;
+        if (r4 == r5) goto L_0x05c9;
+    L_0x05ab:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r0 = r66;
+        r4 = r4.append(r0);
+        r5 = "_";
+        r4 = r4.append(r5);
+        r0 = r26;
+        r5 = r0.resultWidth;
+        r4 = r4.append(r5);
+        r66 = r4.toString();
+    L_0x05c9:
+        r0 = r26;
+        r4 = r0.startTime;
+        r10 = 0;
+        r4 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
+        if (r4 < 0) goto L_0x075b;
+    L_0x05d3:
+        r0 = r26;
+        r0 = r0.startTime;
+        r78 = r0;
+    L_0x05d9:
+        r48 = 0;
+        if (r58 != 0) goto L_0x05f0;
+    L_0x05dd:
+        r4 = r13.ttl;
+        if (r4 != 0) goto L_0x05f0;
+    L_0x05e1:
+        r5 = org.telegram.messenger.MessagesStorage.getInstance(r90);
+        if (r58 != 0) goto L_0x075f;
+    L_0x05e7:
+        r4 = 2;
+    L_0x05e8:
+        r0 = r66;
+        r48 = r5.getSentFile(r0, r4);
+        r48 = (org.telegram.tgnet.TLRPC.TL_document) r48;
+    L_0x05f0:
+        if (r48 != 0) goto L_0x06df;
+    L_0x05f2:
+        r4 = r13.path;
+        r0 = r78;
+        r82 = createVideoThumbnail(r4, r0);
+        if (r82 != 0) goto L_0x0603;
+    L_0x05fc:
+        r4 = r13.path;
+        r5 = 1;
+        r82 = android.media.ThumbnailUtils.createVideoThumbnail(r4, r5);
+    L_0x0603:
+        r4 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
+        r5 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
+        r6 = 55;
+        r0 = r82;
+        r1 = r58;
+        r77 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r4, r5, r6, r1);
+        if (r82 == 0) goto L_0x0617;
+    L_0x0613:
+        if (r77 == 0) goto L_0x0617;
+    L_0x0615:
+        r82 = 0;
+    L_0x0617:
+        r48 = new org.telegram.tgnet.TLRPC$TL_document;
+        r48.<init>();
+        r0 = r77;
+        r1 = r48;
+        r1.thumb = r0;
+        r0 = r48;
+        r4 = r0.thumb;
+        if (r4 != 0) goto L_0x0762;
+    L_0x0628:
+        r4 = new org.telegram.tgnet.TLRPC$TL_photoSizeEmpty;
+        r4.<init>();
+        r0 = r48;
+        r0.thumb = r4;
+        r0 = r48;
+        r4 = r0.thumb;
+        r5 = "s";
+        r4.type = r5;
+    L_0x063a:
+        r4 = "video/mp4";
+        r0 = r48;
+        r0.mime_type = r4;
+        r4 = org.telegram.messenger.UserConfig.getInstance(r90);
+        r5 = 0;
+        r4.saveConfig(r5);
+        if (r58 == 0) goto L_0x0774;
+    L_0x064b:
+        r4 = 66;
+        r0 = r51;
+        if (r0 < r4) goto L_0x076d;
+    L_0x0651:
+        r40 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
+        r40.<init>();
+    L_0x0656:
+        r0 = r48;
+        r4 = r0.attributes;
+        r0 = r40;
+        r4.add(r0);
+        if (r26 == 0) goto L_0x07c0;
+    L_0x0661:
+        r4 = r26.needConvert();
+        if (r4 == 0) goto L_0x07c0;
+    L_0x0667:
+        r0 = r26;
+        r4 = r0.muted;
+        if (r4 == 0) goto L_0x0780;
+    L_0x066d:
+        r0 = r48;
+        r4 = r0.attributes;
+        r5 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
+        r5.<init>();
+        r4.add(r5);
+        r4 = r13.path;
+        r0 = r40;
+        r1 = r26;
+        fillVideoAttribute(r4, r0, r1);
+        r0 = r40;
+        r4 = r0.w;
+        r0 = r26;
+        r0.originalWidth = r4;
+        r0 = r40;
+        r4 = r0.h;
+        r0 = r26;
+        r0.originalHeight = r4;
+        r0 = r26;
+        r4 = r0.resultWidth;
+        r0 = r40;
+        r0.w = r4;
+        r0 = r26;
+        r4 = r0.resultHeight;
+        r0 = r40;
+        r0.h = r4;
+    L_0x06a2:
+        r0 = r26;
+        r4 = r0.estimatedSize;
+        r4 = (int) r4;
+        r0 = r48;
+        r0.size = r4;
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r5 = "-2147483648_";
+        r4 = r4.append(r5);
+        r5 = org.telegram.messenger.SharedConfig.getLastLocalId();
+        r4 = r4.append(r5);
+        r5 = ".mp4";
+        r4 = r4.append(r5);
+        r53 = r4.toString();
+        r45 = new java.io.File;
+        r4 = 4;
+        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);
+        r0 = r45;
+        r1 = r53;
+        r0.<init>(r4, r1);
+        org.telegram.messenger.SharedConfig.saveConfig();
+        r68 = r45.getAbsolutePath();
+    L_0x06df:
+        r27 = r48;
+        r67 = r66;
+        r28 = r68;
+        r9 = new java.util.HashMap;
+        r9.<init>();
+        r22 = r82;
+        r23 = r84;
+        if (r66 == 0) goto L_0x06f8;
+    L_0x06f0:
+        r4 = "originalPath";
+        r0 = r66;
+        r9.put(r4, r0);
+    L_0x06f8:
+        if (r64 != 0) goto L_0x072f;
+    L_0x06fa:
+        if (r92 == 0) goto L_0x072f;
+    L_0x06fc:
+        r71 = r71 + 1;
+        r4 = "groupId";
+        r5 = new java.lang.StringBuilder;
+        r5.<init>();
+        r6 = "";
+        r5 = r5.append(r6);
+        r0 = r54;
+        r5 = r5.append(r0);
+        r5 = r5.toString();
+        r9.put(r4, r5);
+        r4 = 10;
+        r0 = r71;
+        if (r0 == r4) goto L_0x0724;
+    L_0x0720:
+        r4 = r46 + -1;
+        if (r14 != r4) goto L_0x072f;
+    L_0x0724:
+        r4 = "final";
+        r5 = "1";
+        r9.put(r4, r5);
+        r60 = 0;
+    L_0x072f:
+        r21 = new org.telegram.messenger.SendMessagesHelper$$Lambda$25;
+        r24 = r93;
+        r25 = r90;
+        r29 = r9;
+        r30 = r88;
+        r32 = r94;
+        r33 = r13;
+        r21.<init>(r22, r23, r24, r25, r26, r27, r28, r29, r30, r32, r33);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r21);
+        goto L_0x02f5;
+    L_0x0745:
+        r4 = r13.videoEditedInfo;
+        if (r4 == 0) goto L_0x074f;
+    L_0x0749:
+        r0 = r13.videoEditedInfo;
+        r26 = r0;
+    L_0x074d:
+        goto L_0x050d;
+    L_0x074f:
+        r4 = r13.path;
+        r26 = createCompressionSettings(r4);
+        goto L_0x074d;
+    L_0x0756:
+        r4 = "";
+        goto L_0x0599;
+    L_0x075b:
+        r78 = 0;
+        goto L_0x05d9;
+    L_0x075f:
+        r4 = 5;
+        goto L_0x05e8;
+    L_0x0762:
+        r0 = r48;
+        r4 = r0.thumb;
+        r5 = "s";
+        r4.type = r5;
+        goto L_0x063a;
+    L_0x076d:
+        r40 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo_layer65;
+        r40.<init>();
+        goto L_0x0656;
+    L_0x0774:
+        r40 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
+        r40.<init>();
+        r4 = 1;
+        r0 = r40;
+        r0.supports_streaming = r4;
+        goto L_0x0656;
+    L_0x0780:
+        r0 = r26;
+        r4 = r0.estimatedDuration;
+        r10 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r4 = r4 / r10;
+        r4 = (int) r4;
+        r0 = r40;
+        r0.duration = r4;
+        r0 = r26;
+        r4 = r0.rotationValue;
+        r5 = 90;
+        if (r4 == r5) goto L_0x079c;
+    L_0x0794:
+        r0 = r26;
+        r4 = r0.rotationValue;
+        r5 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        if (r4 != r5) goto L_0x07ae;
+    L_0x079c:
+        r0 = r26;
+        r4 = r0.resultHeight;
+        r0 = r40;
+        r0.w = r4;
+        r0 = r26;
+        r4 = r0.resultWidth;
+        r0 = r40;
+        r0.h = r4;
+        goto L_0x06a2;
+    L_0x07ae:
+        r0 = r26;
+        r4 = r0.resultWidth;
+        r0 = r40;
+        r0.w = r4;
+        r0 = r26;
+        r4 = r0.resultHeight;
+        r0 = r40;
+        r0.h = r4;
+        goto L_0x06a2;
+    L_0x07c0:
+        r4 = r80.exists();
+        if (r4 == 0) goto L_0x07cf;
+    L_0x07c6:
+        r4 = r80.length();
+        r4 = (int) r4;
+        r0 = r48;
+        r0.size = r4;
+    L_0x07cf:
+        r4 = r13.path;
+        r5 = 0;
+        r0 = r40;
+        fillVideoAttribute(r4, r0, r5);
+        goto L_0x06df;
+    L_0x07d9:
+        r0 = r13.path;
+        r30 = r0;
+        r0 = r13.path;
+        r31 = r0;
+        r32 = 0;
+        r33 = 0;
+        r0 = r13.caption;
+        r37 = r0;
+        r0 = r13.entities;
+        r38 = r0;
+        r29 = r90;
+        r34 = r88;
+        r36 = r94;
+        r39 = r93;
+        prepareSendingDocumentInternal(r29, r30, r31, r32, r33, r34, r36, r37, r38, r39);
+        goto L_0x02f5;
+    L_0x07fa:
+        r0 = r13.path;
+        r66 = r0;
+        r0 = r13.path;
+        r81 = r0;
+        if (r81 != 0) goto L_0x0814;
+    L_0x0804:
+        r4 = r13.uri;
+        if (r4 == 0) goto L_0x0814;
+    L_0x0808:
+        r4 = r13.uri;
+        r81 = org.telegram.messenger.AndroidUtilities.getPath(r4);
+        r4 = r13.uri;
+        r66 = r4.toString();
+    L_0x0814:
+        r57 = 0;
+        if (r91 == 0) goto L_0x085b;
+    L_0x0818:
+        r57 = 1;
+        r4 = new java.io.File;
+        r0 = r81;
+        r4.<init>(r0);
+        r52 = org.telegram.messenger.FileLoader.getFileExtension(r4);
+    L_0x0825:
+        if (r57 == 0) goto L_0x08ca;
+    L_0x0827:
+        if (r72 != 0) goto L_0x083d;
+    L_0x0829:
+        r72 = new java.util.ArrayList;
+        r72.<init>();
+        r75 = new java.util.ArrayList;
+        r75.<init>();
+        r73 = new java.util.ArrayList;
+        r73.<init>();
+        r74 = new java.util.ArrayList;
+        r74.<init>();
+    L_0x083d:
+        r0 = r72;
+        r1 = r81;
+        r0.add(r1);
+        r0 = r75;
+        r1 = r66;
+        r0.add(r1);
+        r4 = r13.caption;
+        r0 = r73;
+        r0.add(r4);
+        r4 = r13.entities;
+        r0 = r74;
+        r0.add(r4);
+        goto L_0x02f5;
+    L_0x085b:
+        if (r81 == 0) goto L_0x0888;
+    L_0x085d:
+        r4 = ".gif";
+        r0 = r81;
+        r4 = r0.endsWith(r4);
+        if (r4 != 0) goto L_0x0873;
+    L_0x0868:
+        r4 = ".webp";
+        r0 = r81;
+        r4 = r0.endsWith(r4);
+        if (r4 == 0) goto L_0x0888;
+    L_0x0873:
+        r4 = ".gif";
+        r0 = r81;
+        r4 = r0.endsWith(r4);
+        if (r4 == 0) goto L_0x0884;
+    L_0x087e:
+        r52 = "gif";
+    L_0x0881:
+        r57 = 1;
+        goto L_0x0825;
+    L_0x0884:
+        r52 = "webp";
+        goto L_0x0881;
+    L_0x0888:
+        if (r81 != 0) goto L_0x0825;
+    L_0x088a:
+        r4 = r13.uri;
+        if (r4 == 0) goto L_0x0825;
+    L_0x088e:
+        r4 = r13.uri;
+        r4 = org.telegram.messenger.MediaController.isGif(r4);
+        if (r4 == 0) goto L_0x08ac;
+    L_0x0896:
+        r57 = 1;
+        r4 = r13.uri;
+        r66 = r4.toString();
+        r4 = r13.uri;
+        r5 = "gif";
+        r81 = org.telegram.messenger.MediaController.copyFileToCache(r4, r5);
+        r52 = "gif";
+        goto L_0x0825;
+    L_0x08ac:
+        r4 = r13.uri;
+        r4 = org.telegram.messenger.MediaController.isWebp(r4);
+        if (r4 == 0) goto L_0x0825;
+    L_0x08b4:
+        r57 = 1;
+        r4 = r13.uri;
+        r66 = r4.toString();
+        r4 = r13.uri;
+        r5 = "webp";
+        r81 = org.telegram.messenger.MediaController.copyFileToCache(r4, r5);
+        r52 = "webp";
+        goto L_0x0825;
+    L_0x08ca:
+        if (r81 == 0) goto L_0x096e;
+    L_0x08cc:
+        r80 = new java.io.File;
+        r80.<init>(r81);
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r0 = r66;
+        r4 = r4.append(r0);
+        r10 = r80.length();
+        r4 = r4.append(r10);
+        r5 = "_";
+        r4 = r4.append(r5);
+        r10 = r80.lastModified();
+        r4 = r4.append(r10);
+        r66 = r4.toString();
+    L_0x08f7:
+        r69 = 0;
+        if (r86 == 0) goto L_0x0976;
+    L_0x08fb:
+        r0 = r86;
+        r85 = r0.get(r13);
+        r85 = (org.telegram.messenger.SendMessagesHelper.MediaSendPrepareWorker) r85;
+        r0 = r85;
+        r0 = r0.photo;
+        r69 = r0;
+        if (r69 != 0) goto L_0x0918;
+    L_0x090b:
+        r0 = r85;	 Catch:{ Exception -> 0x0971 }
+        r4 = r0.sync;	 Catch:{ Exception -> 0x0971 }
+        r4.await();	 Catch:{ Exception -> 0x0971 }
+    L_0x0912:
+        r0 = r85;
+        r0 = r0.photo;
+        r69 = r0;
+    L_0x0918:
+        if (r69 == 0) goto L_0x0a23;
+    L_0x091a:
+        r18 = r69;
+        r9 = new java.util.HashMap;
+        r9.<init>();
+        r4 = r13.masks;
+        if (r4 == 0) goto L_0x09b8;
+    L_0x0925:
+        r4 = r13.masks;
+        r4 = r4.isEmpty();
+        if (r4 != 0) goto L_0x09b8;
+    L_0x092d:
+        r4 = 1;
+    L_0x092e:
+        r0 = r69;
+        r0.has_stickers = r4;
+        if (r4 == 0) goto L_0x09cc;
+    L_0x0934:
+        r76 = new org.telegram.tgnet.SerializedData;
+        r4 = r13.masks;
+        r4 = r4.size();
+        r4 = r4 * 20;
+        r4 = r4 + 4;
+        r0 = r76;
+        r0.<init>(r4);
+        r4 = r13.masks;
+        r4 = r4.size();
+        r0 = r76;
+        r0.writeInt32(r4);
+        r41 = 0;
+    L_0x0952:
+        r4 = r13.masks;
+        r4 = r4.size();
+        r0 = r41;
+        if (r0 >= r4) goto L_0x09bb;
+    L_0x095c:
+        r4 = r13.masks;
+        r0 = r41;
+        r4 = r4.get(r0);
+        r4 = (org.telegram.tgnet.TLRPC.InputDocument) r4;
+        r0 = r76;
+        r4.serializeToStream(r0);
+        r41 = r41 + 1;
+        goto L_0x0952;
+    L_0x096e:
+        r66 = 0;
+        goto L_0x08f7;
+    L_0x0971:
+        r49 = move-exception;
+        org.telegram.messenger.FileLog.m8e(r49);
+        goto L_0x0912;
+    L_0x0976:
+        if (r58 != 0) goto L_0x09a4;
+    L_0x0978:
+        r4 = r13.ttl;
+        if (r4 != 0) goto L_0x09a4;
+    L_0x097c:
+        r5 = org.telegram.messenger.MessagesStorage.getInstance(r90);
+        if (r58 != 0) goto L_0x09b4;
+    L_0x0982:
+        r4 = 0;
+    L_0x0983:
+        r0 = r66;
+        r69 = r5.getSentFile(r0, r4);
+        r69 = (org.telegram.tgnet.TLRPC.TL_photo) r69;
+        if (r69 != 0) goto L_0x09a4;
+    L_0x098d:
+        r4 = r13.uri;
+        if (r4 == 0) goto L_0x09a4;
+    L_0x0991:
+        r5 = org.telegram.messenger.MessagesStorage.getInstance(r90);
+        r4 = r13.uri;
+        r6 = org.telegram.messenger.AndroidUtilities.getPath(r4);
+        if (r58 != 0) goto L_0x09b6;
+    L_0x099d:
+        r4 = 0;
+    L_0x099e:
+        r69 = r5.getSentFile(r6, r4);
+        r69 = (org.telegram.tgnet.TLRPC.TL_photo) r69;
+    L_0x09a4:
+        if (r69 != 0) goto L_0x0918;
+    L_0x09a6:
+        r4 = getInstance(r90);
+        r5 = r13.path;
+        r6 = r13.uri;
+        r69 = r4.generatePhotoSizes(r5, r6);
+        goto L_0x0918;
+    L_0x09b4:
+        r4 = 3;
+        goto L_0x0983;
+    L_0x09b6:
+        r4 = 3;
+        goto L_0x099e;
+    L_0x09b8:
+        r4 = 0;
+        goto L_0x092e;
+    L_0x09bb:
+        r4 = "masks";
+        r5 = r76.toByteArray();
+        r5 = org.telegram.messenger.Utilities.bytesToHex(r5);
+        r9.put(r4, r5);
+        r76.cleanup();
+    L_0x09cc:
+        if (r66 == 0) goto L_0x09d6;
+    L_0x09ce:
+        r4 = "originalPath";
+        r0 = r66;
+        r9.put(r4, r0);
+    L_0x09d6:
+        if (r92 == 0) goto L_0x0a0b;
+    L_0x09d8:
+        r71 = r71 + 1;
+        r4 = "groupId";
+        r5 = new java.lang.StringBuilder;
+        r5.<init>();
+        r6 = "";
+        r5 = r5.append(r6);
+        r0 = r54;
+        r5 = r5.append(r0);
+        r5 = r5.toString();
+        r9.put(r4, r5);
+        r4 = 10;
+        r0 = r71;
+        if (r0 == r4) goto L_0x0a00;
+    L_0x09fc:
+        r4 = r46 + -1;
+        if (r14 != r4) goto L_0x0a0b;
+    L_0x0a00:
+        r4 = "final";
+        r5 = "1";
+        r9.put(r4, r5);
+        r60 = 0;
+    L_0x0a0b:
+        r29 = new org.telegram.messenger.SendMessagesHelper$$Lambda$26;
+        r30 = r93;
+        r31 = r90;
+        r32 = r18;
+        r33 = r9;
+        r34 = r88;
+        r36 = r94;
+        r37 = r13;
+        r29.<init>(r30, r31, r32, r33, r34, r36, r37);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r29);
+        goto L_0x02f5;
+    L_0x0a23:
+        if (r72 != 0) goto L_0x0a39;
+    L_0x0a25:
+        r72 = new java.util.ArrayList;
+        r72.<init>();
+        r75 = new java.util.ArrayList;
+        r75.<init>();
+        r73 = new java.util.ArrayList;
+        r73.<init>();
+        r74 = new java.util.ArrayList;
+        r74.<init>();
+    L_0x0a39:
+        r0 = r72;
+        r1 = r81;
+        r0.add(r1);
+        r0 = r75;
+        r1 = r66;
+        r0.add(r1);
+        r4 = r13.caption;
+        r0 = r73;
+        r0.add(r4);
+        r4 = r13.entities;
+        r0 = r74;
+        r0.add(r4);
+        goto L_0x02f5;
+    L_0x0a57:
+        r4 = 0;
+        r4 = (r60 > r4 ? 1 : (r60 == r4 ? 0 : -1));
+        if (r4 == 0) goto L_0x0a6b;
+    L_0x0a5d:
+        r62 = r60;
+        r4 = new org.telegram.messenger.SendMessagesHelper$$Lambda$27;
+        r0 = r90;
+        r1 = r62;
+        r4.<init>(r0, r1);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
+    L_0x0a6b:
+        if (r95 == 0) goto L_0x0a70;
+    L_0x0a6d:
+        r95.releasePermission();
+    L_0x0a70:
+        if (r72 == 0) goto L_0x0ab1;
+    L_0x0a72:
+        r4 = r72.isEmpty();
+        if (r4 != 0) goto L_0x0ab1;
+    L_0x0a78:
+        r14 = 0;
+    L_0x0a79:
+        r4 = r72.size();
+        if (r14 >= r4) goto L_0x0ab1;
+    L_0x0a7f:
+        r0 = r72;
+        r30 = r0.get(r14);
+        r30 = (java.lang.String) r30;
+        r0 = r75;
+        r31 = r0.get(r14);
+        r31 = (java.lang.String) r31;
+        r32 = 0;
+        r0 = r73;
+        r37 = r0.get(r14);
+        r37 = (java.lang.CharSequence) r37;
+        r0 = r74;
+        r38 = r0.get(r14);
+        r38 = (java.util.ArrayList) r38;
+        r29 = r90;
+        r33 = r52;
+        r34 = r88;
+        r36 = r94;
+        r39 = r93;
+        prepareSendingDocumentInternal(r29, r30, r31, r32, r33, r34, r36, r37, r38, r39);
+        r14 = r14 + 1;
+        goto L_0x0a79;
+    L_0x0ab1:
+        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r4 == 0) goto L_0x0ad2;
+    L_0x0ab5:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r5 = "total send time = ";
+        r4 = r4.append(r5);
+        r10 = java.lang.System.currentTimeMillis();
+        r10 = r10 - r42;
+        r4 = r4.append(r10);
+        r4 = r4.toString();
+        org.telegram.messenger.FileLog.m5d(r4);
+    L_0x0ad2:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$59$SendMessagesHelper(java.util.ArrayList, long, int, boolean, boolean, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, android.support.v13.view.inputmethod.InputContentInfoCompat):void");
+    }
+
+    static final /* synthetic */ void lambda$null$53$SendMessagesHelper(MediaSendPrepareWorker worker, int currentAccount, SendingMediaInfo info) {
+        worker.photo = getInstance(currentAccount).generatePhotoSizes(info.path, info.uri);
+        worker.sync.countDown();
+    }
+
+    static final /* synthetic */ void lambda$null$54$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, String pathFinal, HashMap params, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
+        if (editingMessageObject != null) {
+            getInstance(currentAccount).editMessageMedia(editingMessageObject, null, null, documentFinal, pathFinal, params, false);
+            return;
+        }
+        getInstance(currentAccount).sendMessage(documentFinal, null, pathFinal, dialog_id, reply_to_msg, info.caption, info.entities, null, params, 0);
+    }
+
+    static final /* synthetic */ void lambda$null$55$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_photo photoFinal, boolean needDownloadHttpFinal, SendingMediaInfo info, HashMap params, long dialog_id, MessageObject reply_to_msg) {
+        if (editingMessageObject != null) {
+            getInstance(currentAccount).editMessageMedia(editingMessageObject, photoFinal, null, null, needDownloadHttpFinal ? info.searchImage.imageUrl : null, params, false);
+        } else {
+            getInstance(currentAccount).sendMessage(photoFinal, needDownloadHttpFinal ? info.searchImage.imageUrl : null, dialog_id, reply_to_msg, info.caption, info.entities, null, params, info.ttl);
+        }
+    }
+
+    static final /* synthetic */ void lambda$null$56$SendMessagesHelper(Bitmap thumbFinal, String thumbKeyFinal, MessageObject editingMessageObject, int currentAccount, VideoEditedInfo videoEditedInfo, TL_document videoFinal, String finalPath, HashMap params, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
+        if (!(thumbFinal == null || thumbKeyFinal == null)) {
+            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
+        }
+        if (editingMessageObject != null) {
+            getInstance(currentAccount).editMessageMedia(editingMessageObject, null, videoEditedInfo, videoFinal, finalPath, params, false);
+            return;
+        }
+        getInstance(currentAccount).sendMessage(videoFinal, videoEditedInfo, finalPath, dialog_id, reply_to_msg, info.caption, info.entities, null, params, info.ttl);
+    }
+
+    static final /* synthetic */ void lambda$null$57$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_photo photoFinal, HashMap params, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
+        if (editingMessageObject != null) {
+            getInstance(currentAccount).editMessageMedia(editingMessageObject, photoFinal, null, null, null, params, false);
+            return;
+        }
+        getInstance(currentAccount).sendMessage(photoFinal, null, dialog_id, reply_to_msg, info.caption, info.entities, null, params, info.ttl);
+    }
+
+    static final /* synthetic */ void lambda$null$58$SendMessagesHelper(int currentAccount, long lastGroupIdFinal) {
+        SendMessagesHelper instance = getInstance(currentAccount);
+        ArrayList<DelayedMessage> arrayList = (ArrayList) instance.delayedMessages.get("group_" + lastGroupIdFinal);
+        if (arrayList != null && !arrayList.isEmpty()) {
+            DelayedMessage message = (DelayedMessage) arrayList.get(0);
+            MessageObject prevMessage = (MessageObject) message.messageObjects.get(message.messageObjects.size() - 1);
+            message.finalGroupMessage = prevMessage.getId();
+            prevMessage.messageOwner.params.put("final", "1");
+            messages_Messages messagesRes = new TL_messages_messages();
+            messagesRes.messages.add(prevMessage.messageOwner);
+            MessagesStorage.getInstance(currentAccount).putMessages(messagesRes, message.peer, -2, 0, false);
+            instance.sendReadyToSendGroup(message, true, true);
         }
     }
 
@@ -10619,7 +10283,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     try {
                         mediaMetadataRetriever2.release();
                     } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                         mediaMetadataRetriever = mediaMetadataRetriever2;
                     }
                 }
@@ -10628,12 +10292,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 e2 = e3;
                 mediaMetadataRetriever = mediaMetadataRetriever2;
                 try {
-                    FileLog.m3e(e2);
+                    FileLog.m8e(e2);
                     if (mediaMetadataRetriever != null) {
                         try {
                             mediaMetadataRetriever.release();
                         } catch (Throwable e22) {
-                            FileLog.m3e(e22);
+                            FileLog.m8e(e22);
                         }
                     }
                     if (infoObtained) {
@@ -10646,7 +10310,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 mp.release();
                             }
                         } catch (Throwable e222) {
-                            FileLog.m3e(e222);
+                            FileLog.m8e(e222);
                             return;
                         }
                     }
@@ -10656,7 +10320,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         try {
                             mediaMetadataRetriever.release();
                         } catch (Throwable e2222) {
-                            FileLog.m3e(e2222);
+                            FileLog.m8e(e2222);
                         }
                     }
                     throw th;
@@ -10671,7 +10335,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
         } catch (Exception e4) {
             e2222 = e4;
-            FileLog.m3e(e2222);
+            FileLog.m8e(e2222);
             if (mediaMetadataRetriever != null) {
                 mediaMetadataRetriever.release();
             }
@@ -10745,13 +10409,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         long audioFramesSize = 0;
         int videoFramerate = 25;
         IsoFile isoFile = new IsoFile(videoPath);
-        List<Box> boxes = Path.getPaths(isoFile, "/moov/trak/");
-        if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null && BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("video hasn't mp4a atom");
+        List<Box> boxes = Path.getPaths((Container) isoFile, "/moov/trak/");
+        if (Path.getPath((Container) isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null && BuildVars.LOGS_ENABLED) {
+            FileLog.m5d("video hasn't mp4a atom");
         }
-        if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
+        if (Path.getPath((Container) isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("video hasn't avc1 atom");
+                FileLog.m5d("video hasn't avc1 atom");
             }
             return null;
         }
@@ -10772,7 +10436,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 videoDuration = ((float) mediaHeaderBox.getDuration()) / ((float) mediaHeaderBox.getTimescale());
                 trackBitrate = (long) ((int) (((float) (8 * sampleSizes)) / videoDuration));
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             try {
                 TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
@@ -10807,13 +10471,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
                 b++;
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
                 return null;
             }
         }
         if (trackHeaderBox == null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("video hasn't trackHeaderBox atom");
+                FileLog.m5d("video hasn't trackHeaderBox atom");
             }
             return null;
         }
@@ -10823,19 +10487,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 MediaCodecInfo codecInfo = MediaController.selectCodec("video/avc");
                 if (codecInfo == null) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("no codec info for video/avc");
+                        FileLog.m5d("no codec info for video/avc");
                     }
                     return null;
                 }
                 String name = codecInfo.getName();
                 if (name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc") || name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("unsupported encoder = " + name);
+                        FileLog.m5d("unsupported encoder = " + name);
                     }
                     return null;
                 } else if (MediaController.selectColorFormat(codecInfo, "video/avc") == 0) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("no color format for video/avc");
+                        FileLog.m5d("no color format for video/avc");
                     }
                     return null;
                 }
@@ -10931,146 +10595,134 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     public static void prepareSendingVideo(String videoPath, long estimatedSize, long duration, int width, int height, VideoEditedInfo info, long dialog_id, MessageObject reply_to_msg, CharSequence caption, ArrayList<MessageEntity> entities, int ttl, MessageObject editingMessageObject) {
         if (videoPath != null && videoPath.length() != 0) {
-            final int currentAccount = UserConfig.selectedAccount;
-            final VideoEditedInfo videoEditedInfo = info;
-            final String str = videoPath;
-            final long j = dialog_id;
-            final long j2 = duration;
-            final int i = ttl;
-            final int i2 = height;
-            final int i3 = width;
-            final long j3 = estimatedSize;
-            final CharSequence charSequence = caption;
-            final MessageObject messageObject = editingMessageObject;
-            final MessageObject messageObject2 = reply_to_msg;
-            final ArrayList<MessageEntity> arrayList = entities;
-            new Thread(new Runnable() {
-                public void run() {
-                    VideoEditedInfo videoEditedInfo = videoEditedInfo != null ? videoEditedInfo : SendMessagesHelper.createCompressionSettings(str);
-                    boolean isEncrypted = ((int) j) == 0;
-                    boolean isRound = videoEditedInfo != null && videoEditedInfo.roundVideo;
-                    Bitmap thumb = null;
-                    String thumbKey = null;
-                    if (videoEditedInfo != null || str.endsWith("mp4") || isRound) {
-                        String path = str;
-                        String originalPath = str;
-                        File file = new File(originalPath);
-                        long startTime = 0;
-                        originalPath = originalPath + file.length() + "_" + file.lastModified();
-                        if (videoEditedInfo != null) {
-                            if (!isRound) {
-                                originalPath = originalPath + j2 + "_" + videoEditedInfo.startTime + "_" + videoEditedInfo.endTime + (videoEditedInfo.muted ? "_m" : TtmlNode.ANONYMOUS_REGION_ID);
-                                if (videoEditedInfo.resultWidth != videoEditedInfo.originalWidth) {
-                                    originalPath = originalPath + "_" + videoEditedInfo.resultWidth;
-                                }
-                            }
-                            startTime = videoEditedInfo.startTime >= 0 ? videoEditedInfo.startTime : 0;
-                        }
-                        TL_document tL_document = null;
-                        if (!isEncrypted && i == 0) {
-                            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, !isEncrypted ? 2 : 5);
-                        }
-                        if (tL_document == null) {
-                            TL_documentAttributeVideo attributeVideo;
-                            thumb = SendMessagesHelper.createVideoThumbnail(str, startTime);
-                            if (thumb == null) {
-                                thumb = ThumbnailUtils.createVideoThumbnail(str, 1);
-                            }
-                            PhotoSize size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
-                            if (!(thumb == null || size == null)) {
-                                if (!isRound) {
-                                    thumb = null;
-                                } else if (isEncrypted) {
-                                    Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT < 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
-                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
-                                } else {
-                                    Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT < 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
-                                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
-                                }
-                            }
-                            tL_document = new TL_document();
-                            tL_document.thumb = size;
-                            if (tL_document.thumb == null) {
-                                tL_document.thumb = new TL_photoSizeEmpty();
-                                tL_document.thumb.type = "s";
-                            } else {
-                                tL_document.thumb.type = "s";
-                            }
-                            tL_document.mime_type = MimeTypes.VIDEO_MP4;
-                            UserConfig.getInstance(currentAccount).saveConfig(false);
-                            if (isEncrypted) {
-                                EncryptedChat encryptedChat = MessagesController.getInstance(currentAccount).getEncryptedChat(Integer.valueOf((int) (j >> 32)));
-                                if (encryptedChat != null) {
-                                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 66) {
-                                        attributeVideo = new TL_documentAttributeVideo();
-                                    } else {
-                                        attributeVideo = new TL_documentAttributeVideo_layer65();
-                                    }
-                                } else {
-                                    return;
-                                }
-                            }
-                            attributeVideo = new TL_documentAttributeVideo();
-                            attributeVideo.supports_streaming = true;
-                            attributeVideo.round_message = isRound;
-                            tL_document.attributes.add(attributeVideo);
-                            if (videoEditedInfo == null || !videoEditedInfo.needConvert()) {
-                                if (file.exists()) {
-                                    tL_document.size = (int) file.length();
-                                }
-                                SendMessagesHelper.fillVideoAttribute(str, attributeVideo, null);
-                            } else {
-                                if (videoEditedInfo.muted) {
-                                    tL_document.attributes.add(new TL_documentAttributeAnimated());
-                                    SendMessagesHelper.fillVideoAttribute(str, attributeVideo, videoEditedInfo);
-                                    videoEditedInfo.originalWidth = attributeVideo.w;
-                                    videoEditedInfo.originalHeight = attributeVideo.h;
-                                    attributeVideo.w = videoEditedInfo.resultWidth;
-                                    attributeVideo.h = videoEditedInfo.resultHeight;
-                                } else {
-                                    attributeVideo.duration = (int) (j2 / 1000);
-                                    if (videoEditedInfo.rotationValue == 90 || videoEditedInfo.rotationValue == 270) {
-                                        attributeVideo.w = i2;
-                                        attributeVideo.h = i3;
-                                    } else {
-                                        attributeVideo.w = i3;
-                                        attributeVideo.h = i2;
-                                    }
-                                }
-                                tL_document.size = (int) j3;
-                                file = new File(FileLoader.getDirectory(4), "-2147483648_" + SharedConfig.getLastLocalId() + ".mp4");
-                                SharedConfig.saveConfig();
-                                path = file.getAbsolutePath();
-                            }
-                        }
-                        final TL_document videoFinal = tL_document;
-                        String originalPathFinal = originalPath;
-                        final String finalPath = path;
-                        final HashMap<String, String> params = new HashMap();
-                        final Bitmap thumbFinal = thumb;
-                        final String thumbKeyFinal = thumbKey;
-                        final String captionFinal = charSequence != null ? charSequence.toString() : TtmlNode.ANONYMOUS_REGION_ID;
-                        if (originalPath != null) {
-                            params.put("originalPath", originalPath);
-                        }
-                        final VideoEditedInfo videoEditedInfo2 = videoEditedInfo;
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (!(thumbFinal == null || thumbKeyFinal == null)) {
-                                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
-                                }
-                                if (messageObject != null) {
-                                    SendMessagesHelper.getInstance(currentAccount).editMessageMedia(messageObject, null, videoEditedInfo2, videoFinal, finalPath, params, false);
-                                } else {
-                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(videoFinal, videoEditedInfo2, finalPath, j, messageObject2, captionFinal, arrayList, null, params, i);
-                                }
-                            }
-                        });
-                        return;
-                    }
-                    SendMessagesHelper.prepareSendingDocumentInternal(currentAccount, str, str, null, null, j, messageObject2, charSequence, arrayList, messageObject);
+            new Thread(new SendMessagesHelper$$Lambda$20(info, videoPath, dialog_id, duration, ttl, UserConfig.selectedAccount, height, width, estimatedSize, caption, editingMessageObject, reply_to_msg, entities)).start();
+        }
+    }
+
+    static final /* synthetic */ void lambda$prepareSendingVideo$61$SendMessagesHelper(VideoEditedInfo info, String videoPath, long dialog_id, long duration, int ttl, int currentAccount, int height, int width, long estimatedSize, CharSequence caption, MessageObject editingMessageObject, MessageObject reply_to_msg, ArrayList entities) {
+        VideoEditedInfo videoEditedInfo = info != null ? info : createCompressionSettings(videoPath);
+        boolean isEncrypted = ((int) dialog_id) == 0;
+        boolean isRound = videoEditedInfo != null && videoEditedInfo.roundVideo;
+        Bitmap thumb = null;
+        String thumbKey = null;
+        if (videoEditedInfo == null) {
+            if (!(videoPath.endsWith("mp4") || isRound)) {
+                prepareSendingDocumentInternal(currentAccount, videoPath, videoPath, null, null, dialog_id, reply_to_msg, caption, entities, editingMessageObject);
+                return;
+            }
+        }
+        String path = videoPath;
+        String originalPath = videoPath;
+        File file = new File(originalPath);
+        long startTime = 0;
+        originalPath = originalPath + file.length() + "_" + file.lastModified();
+        if (videoEditedInfo != null) {
+            if (!isRound) {
+                originalPath = originalPath + duration + "_" + videoEditedInfo.startTime + "_" + videoEditedInfo.endTime + (videoEditedInfo.muted ? "_m" : TtmlNode.ANONYMOUS_REGION_ID);
+                if (videoEditedInfo.resultWidth != videoEditedInfo.originalWidth) {
+                    originalPath = originalPath + "_" + videoEditedInfo.resultWidth;
                 }
-            }).start();
+            }
+            startTime = videoEditedInfo.startTime >= 0 ? videoEditedInfo.startTime : 0;
+        }
+        TL_document tL_document = null;
+        if (!isEncrypted && ttl == 0) {
+            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, !isEncrypted ? 2 : 5);
+        }
+        if (tL_document == null) {
+            TL_documentAttributeVideo attributeVideo;
+            thumb = createVideoThumbnail(videoPath, startTime);
+            if (thumb == null) {
+                thumb = ThumbnailUtils.createVideoThumbnail(videoPath, 1);
+            }
+            PhotoSize size = ImageLoader.scaleAndSaveImage(thumb, 90.0f, 90.0f, 55, isEncrypted);
+            if (!(thumb == null || size == null)) {
+                if (!isRound) {
+                    thumb = null;
+                } else if (isEncrypted) {
+                    Utilities.blurBitmap(thumb, 7, VERSION.SDK_INT < 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b2", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                } else {
+                    Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT < 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
+                    thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                }
+            }
+            tL_document = new TL_document();
+            tL_document.thumb = size;
+            if (tL_document.thumb == null) {
+                tL_document.thumb = new TL_photoSizeEmpty();
+                tL_document.thumb.type = "s";
+            } else {
+                tL_document.thumb.type = "s";
+            }
+            tL_document.mime_type = MimeTypes.VIDEO_MP4;
+            UserConfig.getInstance(currentAccount).saveConfig(false);
+            if (isEncrypted) {
+                EncryptedChat encryptedChat = MessagesController.getInstance(currentAccount).getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32)));
+                if (encryptedChat != null) {
+                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 66) {
+                        attributeVideo = new TL_documentAttributeVideo();
+                    } else {
+                        attributeVideo = new TL_documentAttributeVideo_layer65();
+                    }
+                } else {
+                    return;
+                }
+            }
+            attributeVideo = new TL_documentAttributeVideo();
+            attributeVideo.supports_streaming = true;
+            attributeVideo.round_message = isRound;
+            tL_document.attributes.add(attributeVideo);
+            if (videoEditedInfo == null || !videoEditedInfo.needConvert()) {
+                if (file.exists()) {
+                    tL_document.size = (int) file.length();
+                }
+                fillVideoAttribute(videoPath, attributeVideo, null);
+            } else {
+                if (videoEditedInfo.muted) {
+                    tL_document.attributes.add(new TL_documentAttributeAnimated());
+                    fillVideoAttribute(videoPath, attributeVideo, videoEditedInfo);
+                    videoEditedInfo.originalWidth = attributeVideo.w;
+                    videoEditedInfo.originalHeight = attributeVideo.h;
+                    attributeVideo.w = videoEditedInfo.resultWidth;
+                    attributeVideo.h = videoEditedInfo.resultHeight;
+                } else {
+                    attributeVideo.duration = (int) (duration / 1000);
+                    if (videoEditedInfo.rotationValue == 90 || videoEditedInfo.rotationValue == 270) {
+                        attributeVideo.w = height;
+                        attributeVideo.h = width;
+                    } else {
+                        attributeVideo.w = width;
+                        attributeVideo.h = height;
+                    }
+                }
+                tL_document.size = (int) estimatedSize;
+                file = new File(FileLoader.getDirectory(4), "-2147483648_" + SharedConfig.getLastLocalId() + ".mp4");
+                SharedConfig.saveConfig();
+                path = file.getAbsolutePath();
+            }
+        }
+        TL_document videoFinal = tL_document;
+        String originalPathFinal = originalPath;
+        String finalPath = path;
+        HashMap<String, String> params = new HashMap();
+        Bitmap thumbFinal = thumb;
+        String thumbKeyFinal = thumbKey;
+        String captionFinal = caption != null ? caption.toString() : TtmlNode.ANONYMOUS_REGION_ID;
+        if (originalPath != null) {
+            params.put("originalPath", originalPath);
+        }
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$21(thumbFinal, thumbKeyFinal, editingMessageObject, currentAccount, videoEditedInfo, videoFinal, finalPath, params, dialog_id, reply_to_msg, captionFinal, entities, ttl));
+    }
+
+    static final /* synthetic */ void lambda$null$60$SendMessagesHelper(Bitmap thumbFinal, String thumbKeyFinal, MessageObject editingMessageObject, int currentAccount, VideoEditedInfo videoEditedInfo, TL_document videoFinal, String finalPath, HashMap params, long dialog_id, MessageObject reply_to_msg, String captionFinal, ArrayList entities, int ttl) {
+        if (!(thumbFinal == null || thumbKeyFinal == null)) {
+            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
+        }
+        if (editingMessageObject != null) {
+            getInstance(currentAccount).editMessageMedia(editingMessageObject, null, videoEditedInfo, videoFinal, finalPath, params, false);
+        } else {
+            getInstance(currentAccount).sendMessage(videoFinal, videoEditedInfo, finalPath, dialog_id, reply_to_msg, captionFinal, entities, null, params, ttl);
         }
     }
 }

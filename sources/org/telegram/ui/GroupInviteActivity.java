@@ -62,8 +62,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     private int shareLinkRow;
 
     /* renamed from: org.telegram.ui.GroupInviteActivity$1 */
-    class C23201 extends ActionBarMenuOnItemClick {
-        C23201() {
+    class C15951 extends ActionBarMenuOnItemClick {
+        C15951() {
         }
 
         public void onItemClick(int id) {
@@ -74,11 +74,11 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.GroupInviteActivity$2 */
-    class C23212 implements OnItemClickListener {
+    class C15962 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.GroupInviteActivity$2$1 */
-        class C14921 implements OnClickListener {
-            C14921() {
+        class C10311 implements OnClickListener {
+            C10311() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -86,7 +86,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        C23212() {
+        C15962() {
         }
 
         public void onItemClick(View view, int position) {
@@ -97,7 +97,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", GroupInviteActivity.this.invite.link));
                             Toast.makeText(GroupInviteActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                 } else if (position == GroupInviteActivity.this.shareLinkRow) {
@@ -108,14 +108,14 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                             intent.putExtra("android.intent.extra.TEXT", GroupInviteActivity.this.invite.link);
                             GroupInviteActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink)), 500);
                         } catch (Throwable e2) {
-                            FileLog.m3e(e2);
+                            FileLog.m8e(e2);
                         }
                     }
                 } else if (position == GroupInviteActivity.this.revokeLinkRow) {
                     Builder builder = new Builder(GroupInviteActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("RevokeAlert", R.string.RevokeAlert));
                     builder.setTitle(LocaleController.getString("RevokeLink", R.string.RevokeLink));
-                    builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new C14921());
+                    builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new C10311());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     GroupInviteActivity.this.showDialog(builder.create());
                 }
@@ -252,7 +252,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("InviteLink", R.string.InviteLink));
-        this.actionBar.setActionBarMenuOnItemClick(new C23201());
+        this.actionBar.setActionBarMenuOnItemClick(new C15951());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -266,7 +266,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C23212());
+        this.listView.setOnItemClickListener(new C15962());
         return this.fragmentView;
     }
 

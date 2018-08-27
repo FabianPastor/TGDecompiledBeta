@@ -221,8 +221,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$1 */
-    class C24801 extends ActionBarMenuOnItemClick {
-        C24801() {
+    class C16931 extends ActionBarMenuOnItemClick {
+        C16931() {
         }
 
         public void onItemClick(int id) {
@@ -233,8 +233,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$2 */
-    class C24812 implements OnItemClickListener {
-        C24812() {
+    class C16942 implements OnItemClickListener {
+        C16942() {
         }
 
         public void onItemClick(View view, int position) {
@@ -326,8 +326,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ProxyListActivity$3 */
-    class C24823 implements OnItemLongClickListener {
-        C24823() {
+    class C16953 implements OnItemLongClickListener {
+        C16953() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -524,7 +524,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C24801());
+        this.actionBar.setActionBarMenuOnItemClick(new C16931());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -535,8 +535,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C24812());
-        this.listView.setOnItemLongClickListener(new C24823());
+        this.listView.setOnItemClickListener(new C16942());
+        this.listView.setOnItemLongClickListener(new C16953());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }

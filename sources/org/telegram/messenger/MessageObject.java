@@ -15,6 +15,8 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Base64;
 import android.util.SparseArray;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSink;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
@@ -29,8 +31,7 @@ import java.util.regex.Pattern;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.Emoji.EmojiSpan;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
@@ -342,7 +343,7 @@ public class MessageObject {
                     PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
                     GroupedMessagePosition position = new GroupedMessagePosition();
                     position.last = a == count + -1;
-                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.f45w) / ((float) photoSize.f44h);
+                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.f48w) / ((float) photoSize.f47h);
                     if (position.aspectRatio > 1.2f) {
                         proportions.append("w");
                     } else if (position.aspectRatio < 0.8f) {
@@ -785,7 +786,7 @@ public class MessageObject {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 } catch (Throwable th2) {
                     currentData2 = currentData;
                 }
@@ -2320,8 +2321,8 @@ public class MessageObject {
             for (int a = 0; a < document.attributes.size(); a++) {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f38w;
-                    height = attribute.f38w;
+                    width = attribute.f41w;
+                    height = attribute.f41w;
                     round = attribute.round_message;
                 }
             }
@@ -2340,8 +2341,8 @@ public class MessageObject {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (!(attribute instanceof TL_documentAttributeAnimated)) {
                     if (attribute instanceof TL_documentAttributeVideo) {
-                        width = attribute.f38w;
-                        height = attribute.f38w;
+                        width = attribute.f41w;
+                        height = attribute.f41w;
                     }
                 }
             }
@@ -2362,8 +2363,8 @@ public class MessageObject {
                 if (attribute instanceof TL_documentAttributeAnimated) {
                     animated = true;
                 } else if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f38w;
-                    height = attribute.f38w;
+                    width = attribute.f41w;
+                    height = attribute.f41w;
                 }
             }
             if (animated && width <= 1280 && height <= 1280) {
@@ -2414,14 +2415,14 @@ public class MessageObject {
                 }
             } else if (this.messageOwner.media instanceof TL_messageMediaDocument) {
                 if (!(this.messageOwner.media.document.thumb instanceof TL_photoSizeEmpty)) {
-                    if (!update) {
+                    if (!update || this.photoThumbs == null) {
                         this.photoThumbs = new ArrayList();
                         this.photoThumbs.add(this.messageOwner.media.document.thumb);
                     } else if (this.photoThumbs != null && !this.photoThumbs.isEmpty() && this.messageOwner.media.document.thumb != null) {
                         photoObject = (PhotoSize) this.photoThumbs.get(0);
                         photoObject.location = this.messageOwner.media.document.thumb.location;
-                        photoObject.f45w = this.messageOwner.media.document.thumb.f45w;
-                        photoObject.f44h = this.messageOwner.media.document.thumb.f44h;
+                        photoObject.f48w = this.messageOwner.media.document.thumb.f48w;
+                        photoObject.f47h = this.messageOwner.media.document.thumb.f47h;
                     }
                 }
             } else if (this.messageOwner.media instanceof TL_messageMediaGame) {
@@ -2659,7 +2660,7 @@ public class MessageObject {
                     try {
                         Linkify.addLinks((Spannable) this.linkDescription, 1);
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
                 this.linkDescription = Emoji.replaceEmoji(this.linkDescription, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
@@ -2693,7 +2694,7 @@ public class MessageObject {
                     try {
                         Linkify.addLinks((Spannable) this.caption, 5);
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
                 addUsernamesAndHashtags(isOutOwner(), this.caption, true);
@@ -2701,7 +2702,7 @@ public class MessageObject {
                 try {
                     Linkify.addLinks((Spannable) this.caption, 4);
                 } catch (Throwable e2) {
-                    FileLog.m3e(e2);
+                    FileLog.m8e(e2);
                 }
             }
             addEntitiesToText(this.caption, useManualParse);
@@ -2739,7 +2740,7 @@ public class MessageObject {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -2752,9 +2753,9 @@ public class MessageObject {
         while (a < size) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeImageSize) {
-                return new int[]{attribute.f38w, attribute.f37h};
+                return new int[]{attribute.f41w, attribute.f40h};
             } else if (attribute instanceof TL_documentAttributeVideo) {
-                return new int[]{attribute.f38w, attribute.f37h};
+                return new int[]{attribute.f41w, attribute.f40h};
             } else {
                 a++;
             }
@@ -2821,13 +2822,13 @@ public class MessageObject {
                 try {
                     Linkify.addLinks((Spannable) messageText, 5);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             } else {
                 try {
                     Linkify.addLinks((Spannable) messageText, 1);
                 } catch (Throwable e2) {
-                    FileLog.m3e(e2);
+                    FileLog.m8e(e2);
                 }
             }
             addUsernamesAndHashtags(isOut, messageText, botCommands);
@@ -2921,11 +2922,15 @@ public class MessageObject {
                             spannable.setSpan(new URLSpanReplacement("mailto:" + url), entity.offset, entity.offset + entity.length, 33);
                             hasUrls = hasUrls2;
                         } else if (entity instanceof TL_messageEntityUrl) {
-                            hasUrls = true;
-                            if (url.toLowerCase().startsWith("http") || url.toLowerCase().startsWith("tg://")) {
-                                spannable.setSpan(new URLSpanBrowser(url), entity.offset, entity.offset + entity.length, 33);
+                            if (Browser.isPassportUrl(entity.url)) {
+                                hasUrls = hasUrls2;
                             } else {
-                                spannable.setSpan(new URLSpanBrowser("http://" + url), entity.offset, entity.offset + entity.length, 33);
+                                hasUrls = true;
+                                if (url.toLowerCase().startsWith("http") || url.toLowerCase().startsWith("tg://")) {
+                                    spannable.setSpan(new URLSpanBrowser(url), entity.offset, entity.offset + entity.length, 33);
+                                } else {
+                                    spannable.setSpan(new URLSpanBrowser("http://" + url), entity.offset, entity.offset + entity.length, 33);
+                                }
                             }
                         } else if (entity instanceof TL_messageEntityPhone) {
                             hasUrls = true;
@@ -2933,9 +2938,13 @@ public class MessageObject {
                             if (url.startsWith("+")) {
                                 tel = "+" + tel;
                             }
-                            spannable.setSpan(new URLSpanBrowser("tel://" + tel), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanBrowser("tel:" + tel), entity.offset, entity.offset + entity.length, 33);
                         } else if (entity instanceof TL_messageEntityTextUrl) {
-                            spannable.setSpan(new URLSpanReplacement(entity.url), entity.offset, entity.offset + entity.length, 33);
+                            if (Browser.isPassportUrl(entity.url)) {
+                                hasUrls = hasUrls2;
+                            } else {
+                                spannable.setSpan(new URLSpanReplacement(entity.url), entity.offset, entity.offset + entity.length, 33);
+                            }
                         }
                     }
                 }
@@ -2975,7 +2984,7 @@ public class MessageObject {
                 try {
                     Linkify.addLinks((Spannable) this.messageText, 4);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
             boolean hasUrls = addEntitiesToText(this.messageText, useManualParse);
@@ -3048,12 +3057,12 @@ public class MessageObject {
                                             try {
                                                 this.textHeight = Math.max(this.textHeight, (int) (block.textYOffset + ((float) block.textLayout.getHeight())));
                                             } catch (Throwable e2) {
-                                                FileLog.m3e(e2);
+                                                FileLog.m8e(e2);
                                             }
                                         }
                                     }
                                 } catch (Throwable e22) {
-                                    FileLog.m3e(e22);
+                                    FileLog.m8e(e22);
                                 }
                             }
                             block.textLayout = new StaticLayout(this.messageText, startCharacter, endCharacter, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -3080,13 +3089,13 @@ public class MessageObject {
                         if (a == 0) {
                             this.textXOffset = 0.0f;
                         }
-                        FileLog.m3e(e222);
+                        FileLog.m8e(e222);
                     }
                     try {
                         lastLine = block.textLayout.getLineWidth(currentBlockLinesCount - 1);
                     } catch (Throwable e2222) {
                         lastLine = 0.0f;
-                        FileLog.m3e(e2222);
+                        FileLog.m8e(e2222);
                     }
                     int linesMaxWidth = (int) Math.ceil((double) lastLine);
                     if (a == blocksCount - 1) {
@@ -3104,7 +3113,7 @@ public class MessageObject {
                             try {
                                 lineWidth = block.textLayout.getLineWidth(n);
                             } catch (Throwable e22222) {
-                                FileLog.m3e(e22222);
+                                FileLog.m8e(e22222);
                                 lineWidth = 0.0f;
                             }
                             if (lineWidth > ((float) (maxWidth + 20))) {
@@ -3113,7 +3122,7 @@ public class MessageObject {
                             try {
                                 lineLeft = block.textLayout.getLineLeft(n);
                             } catch (Throwable e222222) {
-                                FileLog.m3e(e222222);
+                                FileLog.m8e(e222222);
                                 lineLeft = 0.0f;
                             }
                             if (lineLeft > 0.0f) {
@@ -3162,7 +3171,7 @@ public class MessageObject {
                     linesOffset += currentBlockLinesCount;
                 }
             } catch (Throwable e2222222) {
-                FileLog.m3e(e2222222);
+                FileLog.m8e(e2222222);
             }
         }
     }
@@ -3542,8 +3551,8 @@ public class MessageObject {
                     return false;
                 }
                 isVideo = true;
-                width = attribute.f38w;
-                height = attribute.f37h;
+                width = attribute.f41w;
+                height = attribute.f40h;
             } else if (attribute instanceof TL_documentAttributeAnimated) {
                 isAnimated = true;
             }
@@ -3724,8 +3733,8 @@ public class MessageObject {
                 while (it.hasNext()) {
                     DocumentAttribute attribute = (DocumentAttribute) it.next();
                     if (attribute instanceof TL_documentAttributeImageSize) {
-                        photoWidth = attribute.f38w;
-                        photoHeight = attribute.f37h;
+                        photoWidth = attribute.f41w;
+                        photoHeight = attribute.f40h;
                         break;
                     }
                 }
@@ -3756,7 +3765,7 @@ public class MessageObject {
             }
             PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.photoThumbs, AndroidUtilities.getPhotoSize());
             if (currentPhotoObject != null) {
-                int h = (int) (((float) currentPhotoObject.f44h) / (((float) currentPhotoObject.f45w) / ((float) photoWidth)));
+                int h = (int) (((float) currentPhotoObject.f47h) / (((float) currentPhotoObject.f48w) / ((float) photoWidth)));
                 if (h == 0) {
                     h = AndroidUtilities.dp(100.0f);
                 }

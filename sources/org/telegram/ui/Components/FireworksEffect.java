@@ -29,9 +29,9 @@ public class FireworksEffect {
         float vx;
         float vy;
         /* renamed from: x */
-        float f18x;
+        float f21x;
         /* renamed from: y */
-        float f19y;
+        float f22y;
 
         private Particle() {
         }
@@ -42,7 +42,7 @@ public class FireworksEffect {
                     FireworksEffect.this.particlePaint.setColor(this.color);
                     FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.dp(1.5f)) * this.scale);
                     FireworksEffect.this.particlePaint.setAlpha((int) (255.0f * this.alpha));
-                    canvas.drawPoint(this.f18x, this.f19y, FireworksEffect.this.particlePaint);
+                    canvas.drawPoint(this.f21x, this.f22y, FireworksEffect.this.particlePaint);
                     return;
                 default:
                     return;
@@ -74,8 +74,8 @@ public class FireworksEffect {
                 count--;
             } else {
                 particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(particle.currentTime / particle.lifeTime);
-                particle.f18x += ((particle.vx * particle.velocity) * ((float) dt)) / 500.0f;
-                particle.f19y += ((particle.vy * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.f21x += ((particle.vx * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.f22y += ((particle.vy * particle.velocity) * ((float) dt)) / 500.0f;
                 particle.vy += ((float) dt) / 100.0f;
                 particle.currentTime += (float) dt;
             }
@@ -123,8 +123,8 @@ public class FireworksEffect {
                         newParticle = (Particle) this.freeParticles.get(0);
                         this.freeParticles.remove(0);
                     }
-                    newParticle.f18x = cx;
-                    newParticle.f19y = cy;
+                    newParticle.f21x = cx;
+                    newParticle.f22y = cy;
                     newParticle.vx = 1.5f * vx;
                     newParticle.vy = vy;
                     newParticle.color = color;

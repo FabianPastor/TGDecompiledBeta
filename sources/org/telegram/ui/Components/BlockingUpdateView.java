@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,7 +15,6 @@ import android.os.Build.VERSION;
 import android.support.v4.content.FileProvider;
 import android.text.SpannableStringBuilder;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -55,41 +53,6 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     private FrameLayout radialProgressView;
     private TextView textView;
 
-    /* renamed from: org.telegram.ui.Components.BlockingUpdateView$1 */
-    class C11341 implements OnClickListener {
-        C11341() {
-        }
-
-        public void onClick(View v) {
-            BlockingUpdateView.this.pressCount = BlockingUpdateView.this.pressCount + 1;
-            if (BlockingUpdateView.this.pressCount >= 10) {
-                BlockingUpdateView.this.setVisibility(8);
-                UserConfig.getInstance(0).pendingAppUpdate = null;
-                UserConfig.getInstance(0).saveConfig(false);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.BlockingUpdateView$2 */
-    class C11352 implements OnClickListener {
-        C11352() {
-        }
-
-        public void onClick(View view) {
-            if (!BlockingUpdateView.checkApkInstallPermissions(BlockingUpdateView.this.getContext())) {
-                return;
-            }
-            if (BlockingUpdateView.this.appUpdate.document instanceof TL_document) {
-                if (!BlockingUpdateView.openApkInstall((Activity) BlockingUpdateView.this.getContext(), BlockingUpdateView.this.appUpdate.document)) {
-                    FileLoader.getInstance(BlockingUpdateView.this.accountNum).loadFile(BlockingUpdateView.this.appUpdate.document, true, 1);
-                    BlockingUpdateView.this.showProgress(true);
-                }
-            } else if (BlockingUpdateView.this.appUpdate.url != null) {
-                Browser.openUrl(BlockingUpdateView.this.getContext(), BlockingUpdateView.this.appUpdate.url);
-            }
-        }
-    }
-
     public BlockingUpdateView(Context context) {
         super(context);
         setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -102,7 +65,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
         view.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) top, 0.0f, 0.0f));
-        imageView.setOnClickListener(new C11341());
+        imageView.setOnClickListener(new BlockingUpdateView$$Lambda$0(this));
         ScrollView scrollView = new ScrollView(context);
         AndroidUtilities.setScrollViewEdgeEffectColor(scrollView, Theme.getColor(Theme.key_actionBarDefault));
         addView(scrollView, LayoutHelper.createFrame(-1, -1.0f, 51, 27.0f, (float) (top + 206), 27.0f, 130.0f));
@@ -133,7 +96,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
         this.acceptButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         addView(this.acceptButton, LayoutHelper.createFrame(-2, 56.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
-        this.acceptButton.setOnClickListener(new C11352());
+        this.acceptButton.setOnClickListener(new BlockingUpdateView$$Lambda$1(this));
         this.acceptTextView = new TextView(context);
         this.acceptTextView.setGravity(17);
         this.acceptTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -166,6 +129,29 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.acceptButton.addView(this.radialProgressView, LayoutHelper.createFrame(36, 36, 17));
     }
 
+    final /* synthetic */ void lambda$new$0$BlockingUpdateView(View v) {
+        this.pressCount++;
+        if (this.pressCount >= 10) {
+            setVisibility(8);
+            UserConfig.getInstance(0).pendingAppUpdate = null;
+            UserConfig.getInstance(0).saveConfig(false);
+        }
+    }
+
+    final /* synthetic */ void lambda$new$1$BlockingUpdateView(View view1) {
+        if (!checkApkInstallPermissions(getContext())) {
+            return;
+        }
+        if (this.appUpdate.document instanceof TL_document) {
+            if (!openApkInstall((Activity) getContext(), this.appUpdate.document)) {
+                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, true, 1);
+                showProgress(true);
+            }
+        } else if (this.appUpdate.url != null) {
+            Browser.openUrl(getContext(), this.appUpdate.url);
+        }
+    }
+
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
         if (visibility == 8) {
@@ -196,26 +182,25 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
     }
 
-    public static boolean checkApkInstallPermissions(final Context context) {
+    public static boolean checkApkInstallPermissions(Context context) {
         if (VERSION.SDK_INT < 26 || ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
             return true;
         }
         Builder builder = new Builder(context);
         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
-        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
-            @TargetApi(26)
-            public void onClick(DialogInterface dialogInterface, int i) {
-                try {
-                    context.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName())));
-                } catch (Throwable e) {
-                    FileLog.m3e(e);
-                }
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new BlockingUpdateView$$Lambda$2(context));
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         builder.show();
         return false;
+    }
+
+    static final /* synthetic */ void lambda$checkApkInstallPermissions$2$BlockingUpdateView(Context context, DialogInterface dialogInterface, int i) {
+        try {
+            context.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName())));
+        } catch (Throwable e) {
+            FileLog.m8e(e);
+        }
     }
 
     public static boolean openApkInstall(Activity activity, Document document) {
@@ -235,11 +220,11 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 try {
                     activity.startActivityForResult(intent, 500);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
         return exists;
     }

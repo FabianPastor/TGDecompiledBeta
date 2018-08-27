@@ -11,12 +11,12 @@ public class AsyncListUtil<T> {
     static final boolean DEBUG = false;
     static final String TAG = "AsyncListUtil";
     boolean mAllowScrollHints;
-    private final BackgroundCallback<T> mBackgroundCallback = new C20242();
+    private final BackgroundCallback<T> mBackgroundCallback = new C13642();
     final BackgroundCallback<T> mBackgroundProxy;
     final DataCallback<T> mDataCallback;
     int mDisplayedGeneration = 0;
     int mItemCount = 0;
-    private final MainThreadCallback<T> mMainThreadCallback = new C20231();
+    private final MainThreadCallback<T> mMainThreadCallback = new C13631();
     final MainThreadCallback<T> mMainThreadProxy;
     final SparseIntArray mMissingPositions = new SparseIntArray();
     final int[] mPrevRange = new int[2];
@@ -73,8 +73,8 @@ public class AsyncListUtil<T> {
     }
 
     /* renamed from: org.telegram.messenger.support.util.AsyncListUtil$1 */
-    class C20231 implements MainThreadCallback<T> {
-        C20231() {
+    class C13631 implements MainThreadCallback<T> {
+        C13631() {
         }
 
         public void updateItemCount(int generation, int itemCount) {
@@ -135,7 +135,7 @@ public class AsyncListUtil<T> {
     }
 
     /* renamed from: org.telegram.messenger.support.util.AsyncListUtil$2 */
-    class C20242 implements BackgroundCallback<T> {
+    class C13642 implements BackgroundCallback<T> {
         private int mFirstRequiredTileStart;
         private int mGeneration;
         private int mItemCount;
@@ -143,7 +143,7 @@ public class AsyncListUtil<T> {
         final SparseBooleanArray mLoadedTiles = new SparseBooleanArray();
         private Tile<T> mRecycledRoot;
 
-        C20242() {
+        C13642() {
         }
 
         public void refresh(int generation) {

@@ -83,7 +83,7 @@ public class DrawerProfileCell extends FrameLayout {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
         } catch (Throwable e) {
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(148.0f));
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -130,7 +130,7 @@ public class DrawerProfileCell extends FrameLayout {
             try {
                 canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }

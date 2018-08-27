@@ -19,10 +19,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.exoplayer2.C0012C;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import java.io.File;
 import java.util.Collections;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -30,7 +33,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -48,9 +50,11 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.CheckBoxCell;
+import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Components.BetterRatingView;
 import org.telegram.ui.Components.BetterRatingView.OnRatingChangeListener;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.VoIPActivity;
 
 public class VoIPHelper {
@@ -98,8 +102,8 @@ public class VoIPHelper {
                     new Builder((Context) activity).setTitle(LocaleController.getString("VoipOngoingAlertTitle", R.string.VoipOngoingAlertTitle)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", R.string.VoipOngoingAlert, ContactsController.formatName(callUser.first_name, callUser.last_name), ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.Components.voip.VoIPHelper$2$1 */
-                        class C14221 implements Runnable {
-                            C14221() {
+                        class C09821 implements Runnable {
+                            C09821() {
                             }
 
                             public void run() {
@@ -109,7 +113,7 @@ public class VoIPHelper {
 
                         public void onClick(DialogInterface dialog, int which) {
                             if (VoIPService.getSharedInstance() != null) {
-                                VoIPService.getSharedInstance().hangUp(new C14221());
+                                VoIPService.getSharedInstance().hangUp(new C09821());
                             } else {
                                 VoIPHelper.doInitiateCall(user, activity);
                             }
@@ -117,7 +121,7 @@ public class VoIPHelper {
                     }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show();
                     return;
                 }
-                activity.startActivity(new Intent(activity, VoIPActivity.class).addFlags(268435456));
+                activity.startActivity(new Intent(activity, VoIPActivity.class).addFlags(C0012C.ENCODING_PCM_MU_LAW));
             } else if (VoIPService.callIShouldHavePutIntoIntent == null) {
                 doInitiateCall(user, activity);
             }
@@ -135,7 +139,7 @@ public class VoIPHelper {
             try {
                 activity.startService(intent);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -196,7 +200,7 @@ public class VoIPHelper {
     }
 
     public static void showRateAlert(Context context, Runnable onDismiss, long callID, long accessHash, int account) {
-        final File log = new File(getLogsDir(), callID + ".log");
+        final File log = getLogFile(callID);
         View linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
         int pad = AndroidUtilities.dp(16.0f);
@@ -222,7 +226,7 @@ public class VoIPHelper {
         final boolean[] includeLogs = new boolean[]{true};
         linearLayout = new CheckBoxCell(context, 1);
         final View view = linearLayout;
-        View.OnClickListener c14265 = new View.OnClickListener() {
+        View.OnClickListener c09865 = new View.OnClickListener() {
             public void onClick(View v) {
                 boolean z;
                 boolean[] zArr = includeLogs;
@@ -237,14 +241,14 @@ public class VoIPHelper {
         };
         linearLayout.setText(LocaleController.getString("CallReportIncludeLogs", R.string.CallReportIncludeLogs), null, true, false);
         linearLayout.setClipToPadding(false);
-        linearLayout.setOnClickListener(c14265);
+        linearLayout.setOnClickListener(c09865);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
         linearLayout = new TextView(context);
         linearLayout.setTextSize(2, 14.0f);
         linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
         linearLayout.setText(LocaleController.getString("CallReportLogsExplain", R.string.CallReportLogsExplain));
         linearLayout.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
-        linearLayout.setOnClickListener(c14265);
+        linearLayout.setOnClickListener(c09865);
         linearLayout.addView(linearLayout);
         linearLayout.setVisibility(8);
         linearLayout.setVisibility(8);
@@ -290,6 +294,18 @@ public class VoIPHelper {
                 }
             }
         }).create();
+        if (BuildVars.DEBUG_VERSION && log.exists()) {
+            final Context context3 = context;
+            OnClickListener c09898 = new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(context3, LaunchActivity.class);
+                    intent.setAction("android.intent.action.SEND");
+                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(log));
+                    context3.startActivity(intent);
+                }
+            };
+            alert.setNeutralButton("Send log", c09898);
+        }
         final AlertDialog alertDialog = alert;
         alert.setOnShowListener(new OnShowListener() {
             public void onShow(DialogInterface dialog) {
@@ -300,7 +316,7 @@ public class VoIPHelper {
         final View btn = alert.getButton(-1);
         btn.setEnabled(false);
         view2 = linearLayout;
-        final Context context3 = context;
+        final Context context4 = context;
         final File file = log;
         final View view4 = linearLayout;
         final View view5 = linearLayout;
@@ -318,7 +334,7 @@ public class VoIPHelper {
                 }
                 editText.setVisibility(i);
                 if (view2.getVisibility() == 8) {
-                    ((InputMethodManager) context3.getSystemService("input_method")).hideSoftInputFromWindow(view2.getWindowToken(), 0);
+                    ((InputMethodManager) context4.getSystemService("input_method")).hideSoftInputFromWindow(view2.getWindowToken(), 0);
                 }
                 if (file.exists()) {
                     CheckBoxCell checkBoxCell = view4;
@@ -338,6 +354,18 @@ public class VoIPHelper {
         });
     }
 
+    private static File getLogFile(long callID) {
+        if (BuildVars.DEBUG_VERSION) {
+            File debugLogsDir = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), "logs");
+            for (String log : debugLogsDir.list()) {
+                if (log.endsWith("voip" + callID + ".txt")) {
+                    return new File(debugLogsDir, log);
+                }
+            }
+        }
+        return new File(getLogsDir(), callID + ".log");
+    }
+
     public static void upgradeP2pSetting(int account) {
         SharedPreferences prefs = MessagesController.getMainSettings(account);
         if (prefs.contains("calls_p2p")) {
@@ -347,5 +375,93 @@ public class VoIPHelper {
             }
             e.remove("calls_p2p").commit();
         }
+    }
+
+    public static void showCallDebugSettings(Context context) {
+        final SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        LinearLayout ll = new LinearLayout(context);
+        ll.setOrientation(1);
+        TextView warning = new TextView(context);
+        warning.setTextSize(1, 15.0f);
+        warning.setText("Please only change these settings if you know exactly what they do.");
+        warning.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        ll.addView(warning, LayoutHelper.createLinear(-1, -2, 16.0f, 8.0f, 16.0f, 8.0f));
+        final TextCheckCell tcpCell = new TextCheckCell(context);
+        tcpCell.setTextAndCheck("Force TCP", preferences.getBoolean("dbg_force_tcp_in_calls", false), false);
+        tcpCell.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                boolean z;
+                boolean z2 = true;
+                boolean force = preferences.getBoolean("dbg_force_tcp_in_calls", false);
+                Editor editor = preferences.edit();
+                String str = "dbg_force_tcp_in_calls";
+                if (force) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                editor.putBoolean(str, z);
+                editor.commit();
+                TextCheckCell textCheckCell = tcpCell;
+                if (force) {
+                    z2 = false;
+                }
+                textCheckCell.setChecked(z2);
+            }
+        });
+        ll.addView(tcpCell);
+        if (BuildVars.DEBUG_VERSION && BuildVars.LOGS_ENABLED) {
+            final TextCheckCell dumpCell = new TextCheckCell(context);
+            dumpCell.setTextAndCheck("Dump detailed stats", preferences.getBoolean("dbg_dump_call_stats", false), false);
+            dumpCell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    boolean z;
+                    boolean z2 = true;
+                    boolean force = preferences.getBoolean("dbg_dump_call_stats", false);
+                    Editor editor = preferences.edit();
+                    String str = "dbg_dump_call_stats";
+                    if (force) {
+                        z = false;
+                    } else {
+                        z = true;
+                    }
+                    editor.putBoolean(str, z);
+                    editor.commit();
+                    TextCheckCell textCheckCell = dumpCell;
+                    if (force) {
+                        z2 = false;
+                    }
+                    textCheckCell.setChecked(z2);
+                }
+            });
+            ll.addView(dumpCell);
+        }
+        if (VERSION.SDK_INT >= 26) {
+            final TextCheckCell connectionServiceCell = new TextCheckCell(context);
+            connectionServiceCell.setTextAndCheck("Enable ConnectionService", preferences.getBoolean("dbg_force_connection_service", false), false);
+            connectionServiceCell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    boolean z;
+                    boolean z2 = true;
+                    boolean force = preferences.getBoolean("dbg_force_connection_service", false);
+                    Editor editor = preferences.edit();
+                    String str = "dbg_force_connection_service";
+                    if (force) {
+                        z = false;
+                    } else {
+                        z = true;
+                    }
+                    editor.putBoolean(str, z);
+                    editor.commit();
+                    TextCheckCell textCheckCell = connectionServiceCell;
+                    if (force) {
+                        z2 = false;
+                    }
+                    textCheckCell.setChecked(z2);
+                }
+            });
+            ll.addView(connectionServiceCell);
+        }
+        new Builder(context).setTitle(LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings)).setView(ll).show();
     }
 }

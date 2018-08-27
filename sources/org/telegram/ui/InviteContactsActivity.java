@@ -92,8 +92,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     private TextView textView;
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$5 */
-    class C15165 implements Callback {
-        C15165() {
+    class C10555 implements Callback {
+        C10555() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -113,10 +113,10 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$6 */
-    class C15176 implements OnKeyListener {
+    class C10566 implements OnKeyListener {
         private boolean wasEmpty;
 
-        C15176() {
+        C10566() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -133,8 +133,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$7 */
-    class C15187 implements TextWatcher {
-        C15187() {
+    class C10577 implements TextWatcher {
+        C10577() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -166,8 +166,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         private View removingSpan;
 
         /* renamed from: org.telegram.ui.InviteContactsActivity$SpansContainer$1 */
-        class C15231 extends AnimatorListenerAdapter {
-            C15231() {
+        class C10621 extends AnimatorListenerAdapter {
+            C10621() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -286,7 +286,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             }
             this.animationStarted = false;
             this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C15231());
+            this.currentAnimation.addListener(new C10621());
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
@@ -330,8 +330,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$1 */
-    class C23311 extends ActionBarMenuOnItemClick {
-        C23311() {
+    class C16061 extends ActionBarMenuOnItemClick {
+        C16061() {
         }
 
         public void onItemClick(int id) {
@@ -342,8 +342,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$8 */
-    class C23338 implements OnItemClickListener {
-        C23338() {
+    class C16088 implements OnItemClickListener {
+        C16088() {
         }
 
         public void onItemClick(View view, int position) {
@@ -356,7 +356,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     intent.putExtra("android.intent.extra.TEXT", text);
                     InviteContactsActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, text), 500);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             } else if (view instanceof InviteUserCell) {
                 InviteUserCell cell = (InviteUserCell) view;
@@ -388,8 +388,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$9 */
-    class C23349 extends OnScrollListener {
-        C23349() {
+    class C16099 extends OnScrollListener {
+        C16099() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -482,7 +482,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             if (query == null) {
                 this.searchResult.clear();
@@ -494,11 +494,11 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             this.searchTimer.schedule(new TimerTask() {
 
                 /* renamed from: org.telegram.ui.InviteContactsActivity$InviteAdapter$1$1 */
-                class C15201 implements Runnable {
+                class C10591 implements Runnable {
 
                     /* renamed from: org.telegram.ui.InviteContactsActivity$InviteAdapter$1$1$1 */
-                    class C15191 implements Runnable {
-                        C15191() {
+                    class C10581 implements Runnable {
+                        C10581() {
                         }
 
                         public void run() {
@@ -541,11 +541,11 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                         }
                     }
 
-                    C15201() {
+                    C10591() {
                     }
 
                     public void run() {
-                        Utilities.searchQueue.postRunnable(new C15191());
+                        Utilities.searchQueue.postRunnable(new C10581());
                     }
                 }
 
@@ -554,9 +554,9 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                         InviteAdapter.this.searchTimer.cancel();
                         InviteAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C15201());
+                    AndroidUtilities.runOnUIThread(new C10591());
                 }
             }, 200, 300);
         }
@@ -625,7 +625,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("InviteFriends", R.string.InviteFriends));
-        this.actionBar.setActionBarMenuOnItemClick(new C23311());
+        this.actionBar.setActionBarMenuOnItemClick(new C16061());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int maxSize;
@@ -711,9 +711,9 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         this.editText.setHintText(LocaleController.getString("SearchFriends", R.string.SearchFriends));
-        this.editText.setCustomSelectionActionModeCallback(new C15165());
-        this.editText.setOnKeyListener(new C15176());
-        this.editText.addTextChangedListener(new C15187());
+        this.editText.setCustomSelectionActionModeCallback(new C10555());
+        this.editText.setOnKeyListener(new C10566());
+        this.editText.addTextChangedListener(new C10577());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -737,8 +737,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.decoration = groupCreateDividerItemDecoration;
         recyclerListView.addItemDecoration(groupCreateDividerItemDecoration);
         frameLayout.addView(this.listView);
-        this.listView.setOnItemClickListener(new C23338());
-        this.listView.setOnScrollListener(new C23349());
+        this.listView.setOnItemClickListener(new C16088());
+        this.listView.setOnScrollListener(new C16099());
         this.infoTextView = new TextView(context);
         this.infoTextView.setBackgroundColor(Theme.getColor(Theme.key_contacts_inviteBackground));
         this.infoTextView.setTextColor(Theme.getColor(Theme.key_contacts_inviteText));
@@ -772,7 +772,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     InviteContactsActivity.this.getParentActivity().startActivityForResult(intent, 500);
                     MediaController.getInstance().startSmsObserver();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 InviteContactsActivity.this.finishFragment();
             }

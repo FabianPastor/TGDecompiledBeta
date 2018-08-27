@@ -115,8 +115,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private Pattern urlPattern;
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$7 */
-    class C13747 implements OnTouchListener {
-        C13747() {
+    class C09427 implements OnTouchListener {
+        C09427() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -137,7 +137,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 Selection.removeSelection(buffer);
                 return result;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return false;
             }
         }
@@ -154,8 +154,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$2 */
-    class C22622 implements RequestDelegate {
-        C22622() {
+    class C15462 implements RequestDelegate {
+        C15462() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -178,8 +178,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$5 */
-    class C22635 extends SpanSizeLookup {
-        C22635() {
+    class C15475 extends SpanSizeLookup {
+        C15475() {
         }
 
         public int getSpanSize(int position) {
@@ -191,8 +191,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$6 */
-    class C22646 extends ItemDecoration {
-        C22646() {
+    class C15486 extends ItemDecoration {
+        C15486() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -204,8 +204,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$8 */
-    class C22658 extends OnScrollListener {
-        C22658() {
+    class C15498 extends OnScrollListener {
+        C15498() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -214,8 +214,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$9 */
-    class C22669 implements OnItemClickListener {
-        C22669() {
+    class C15509 implements OnItemClickListener {
+        C15509() {
         }
 
         public void onItemClick(View view, int position) {
@@ -491,7 +491,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             if (this.stickerSet == null) {
                 TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                 req.stickerset = this.inputStickerSet;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C22622());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C15462());
             } else if (this.adapter != null) {
                 updateSendButton();
                 updateFields();
@@ -603,20 +603,20 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
         this.layoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.layoutManager.setSpanSizeLookup(new C22635());
+        this.layoutManager.setSpanSizeLookup(new C15475());
         recyclerListView = this.gridView;
         Adapter gridAdapter = new GridAdapter(context);
         this.adapter = gridAdapter;
         recyclerListView.setAdapter(gridAdapter);
         this.gridView.setVerticalScrollBarEnabled(false);
-        this.gridView.addItemDecoration(new C22646());
+        this.gridView.addItemDecoration(new C15486());
         this.gridView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
         this.gridView.setClipToPadding(false);
         this.gridView.setEnabled(true);
         this.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.gridView.setOnTouchListener(new C13747());
-        this.gridView.setOnScrollListener(new C22658());
-        this.stickersOnItemClickListener = new C22669();
+        this.gridView.setOnTouchListener(new C09427());
+        this.gridView.setOnScrollListener(new C15498());
+        this.stickersOnItemClickListener = new C15509();
         this.gridView.setOnItemClickListener(this.stickersOnItemClickListener);
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 48.0f));
         this.emptyView = new FrameLayout(context) {
@@ -804,8 +804,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     OnClickListener anonymousClass18 = new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.Components.StickersAlert$18$1 */
-                        class C22601 implements RequestDelegate {
-                            C22601() {
+                        class C15441 implements RequestDelegate {
+                            C15441() {
                             }
 
                             public void run(final TLObject response, final TL_error error) {
@@ -843,7 +843,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                                             }
                                             instance.loadStickers(i, false, true);
                                         } catch (Throwable e) {
-                                            FileLog.m3e(e);
+                                            FileLog.m8e(e);
                                         }
                                     }
                                 });
@@ -857,7 +857,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             }
                             TL_messages_installStickerSet req = new TL_messages_installStickerSet();
                             req.stickerset = StickersAlert.this.inputStickerSet;
-                            ConnectionsManager.getInstance(StickersAlert.this.currentAccount).sendRequest(req, new C22601());
+                            ConnectionsManager.getInstance(StickersAlert.this.currentAccount).sendRequest(req, new C15441());
                         }
                     };
                     String string = (this.stickerSet == null && this.stickerSet.set.masks) ? LocaleController.getString("AddMasks", R.string.AddMasks) : LocaleController.getString("AddStickers", R.string.AddStickers);
@@ -889,7 +889,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             return;
         }
         return;
-        FileLog.m3e(e);
+        FileLog.m8e(e);
         TextView textView2 = this.titleTextView;
         if (spannableStringBuilder == null) {
             spannableStringBuilder = this.stickerSet.set.title;

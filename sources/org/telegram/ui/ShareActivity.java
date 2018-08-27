@@ -26,8 +26,8 @@ public class ShareActivity extends Activity {
     private Dialog visibleDialog;
 
     /* renamed from: org.telegram.ui.ShareActivity$1 */
-    class C18581 implements OnDismissListener {
-        C18581() {
+    class C12331 implements OnDismissListener {
+        C12331() {
         }
 
         public void onDismiss(DialogInterface dialog) {
@@ -75,11 +75,11 @@ public class ShareActivity extends Activity {
             try {
                 this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, null, false, link, false);
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new C18581());
+                this.visibleDialog.setOnDismissListener(new C12331());
                 this.visibleDialog.show();
                 return;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 finish();
                 return;
             }
@@ -95,7 +95,7 @@ public class ShareActivity extends Activity {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 }

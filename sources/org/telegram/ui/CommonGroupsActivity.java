@@ -53,8 +53,8 @@ public class CommonGroupsActivity extends BaseFragment {
     private int userId;
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$1 */
-    class C21911 extends ActionBarMenuOnItemClick {
-        C21911() {
+    class C14891 extends ActionBarMenuOnItemClick {
+        C14891() {
         }
 
         public void onItemClick(int id) {
@@ -65,8 +65,8 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$2 */
-    class C21922 implements OnItemClickListener {
-        C21922() {
+    class C14902 implements OnItemClickListener {
+        C14902() {
         }
 
         public void onItemClick(View view, int position) {
@@ -83,8 +83,8 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$3 */
-    class C21933 extends OnScrollListener {
-        C21933() {
+    class C14913 extends OnScrollListener {
+        C14913() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -100,8 +100,8 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$5 */
-    class C21955 implements ThemeDescriptionDelegate {
-        C21955() {
+    class C14935 implements ThemeDescriptionDelegate {
+        C14935() {
         }
 
         public void didSetColor() {
@@ -197,7 +197,7 @@ public class CommonGroupsActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("GroupsInCommonTitle", R.string.GroupsInCommonTitle));
-        this.actionBar.setActionBarMenuOnItemClick(new C21911());
+        this.actionBar.setActionBarMenuOnItemClick(new C14891());
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
@@ -220,8 +220,8 @@ public class CommonGroupsActivity extends BaseFragment {
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C21922());
-        this.listView.setOnScrollListener(new C21933());
+        this.listView.setOnItemClickListener(new C14902());
+        this.listView.setOnScrollListener(new C14913());
         if (this.loading) {
             this.emptyView.showProgress();
         } else {
@@ -287,7 +287,7 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new C21955();
+        ThemeDescriptionDelegate cellDelegate = new C14935();
         r10 = new ThemeDescription[23];
         r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LoadingCell.class, ProfileSearchCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         r10[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);

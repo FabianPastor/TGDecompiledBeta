@@ -120,8 +120,8 @@ public class UserCell extends FrameLayout {
         }
     }
 
-    public void setData(TLObject user, CharSequence name, CharSequence status, int resId) {
-        if (user == null && name == null && status == null) {
+    public void setData(TLObject object, CharSequence name, CharSequence status, int resId) {
+        if (object == null && name == null && status == null) {
             this.currrntStatus = null;
             this.currentName = null;
             this.currentObject = null;
@@ -132,7 +132,7 @@ public class UserCell extends FrameLayout {
         }
         this.currrntStatus = status;
         this.currentName = name;
-        this.currentObject = user;
+        this.currentObject = object;
         this.currentDrawable = resId;
         update(0);
     }

@@ -8,8 +8,8 @@ import android.os.Parcelable.Creator;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -232,14 +232,14 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new C06971();
+        public static final Creator<SavedState> CREATOR = new C04171();
         boolean mAnchorLayoutFromEnd;
         int mAnchorOffset;
         int mAnchorPosition;
 
         /* renamed from: org.telegram.messenger.support.widget.LinearLayoutManager$SavedState$1 */
-        static class C06971 implements Creator<SavedState> {
-            C06971() {
+        static class C04171 implements Creator<SavedState> {
+            C04171() {
             }
 
             public SavedState createFromParcel(Parcel in) {

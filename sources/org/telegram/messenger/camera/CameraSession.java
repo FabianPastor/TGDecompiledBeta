@@ -19,7 +19,7 @@ import org.telegram.messenger.FileLog;
 
 public class CameraSession {
     public static final int ORIENTATION_HYSTERESIS = 5;
-    private AutoFocusCallback autoFocusCallback = new C05551();
+    private AutoFocusCallback autoFocusCallback = new C03931();
     protected CameraInfo cameraInfo;
     private String currentFlashMode;
     private int currentOrientation;
@@ -38,8 +38,8 @@ public class CameraSession {
     private boolean sameTakePictureOrientation;
 
     /* renamed from: org.telegram.messenger.camera.CameraSession$1 */
-    class C05551 implements AutoFocusCallback {
-        C05551() {
+    class C03931 implements AutoFocusCallback {
+        C03931() {
         }
 
         public void onAutoFocus(boolean success, Camera camera) {
@@ -163,9 +163,9 @@ public class CameraSession {
             try {
                 params = camera.getParameters();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
                 return;
             }
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
@@ -204,11 +204,11 @@ public class CameraSession {
             this.diffOrientation = this.currentOrientation - displayOrientation;
             if (params != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
+                    FileLog.m5d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
                 }
                 params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
+                    FileLog.m5d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
                 }
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
@@ -267,9 +267,9 @@ public class CameraSession {
             try {
                 params = camera.getParameters();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
                 return;
             }
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
@@ -357,7 +357,7 @@ public class CameraSession {
                 try {
                     parameters = camera.getParameters();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 if (parameters != null) {
                     parameters.setFocusMode("auto");
@@ -373,12 +373,12 @@ public class CameraSession {
                         camera.setParameters(parameters);
                         camera.autoFocus(this.autoFocusCallback);
                     } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 }
             }
         } catch (Throwable e22) {
-            FileLog.m3e(e22);
+            FileLog.m8e(e22);
         }
     }
 
@@ -455,7 +455,7 @@ public class CameraSession {
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
             return getDisplayOrientation(info, true);
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return 0;
         }
     }
@@ -465,7 +465,9 @@ public class CameraSession {
     }
 
     public void setOneShotPreviewCallback(PreviewCallback callback) {
-        this.cameraInfo.camera.setOneShotPreviewCallback(callback);
+        if (this.cameraInfo != null && this.cameraInfo.camera != null) {
+            this.cameraInfo.camera.setOneShotPreviewCallback(callback);
+        }
     }
 
     public void destroy() {

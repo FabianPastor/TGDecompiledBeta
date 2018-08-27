@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -15,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
@@ -70,6 +72,9 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.android.internal.telephony.ITelephony;
+import com.google.android.exoplayer2.C0012C;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -95,9 +100,6 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0559C;
-import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_document;
@@ -125,6 +127,7 @@ public class AndroidUtilities {
     private static RectF bitmapRect;
     private static final Object callLock = new Object();
     private static ContentObserver callLogContentObserver;
+    private static CallReceiver callReceiver;
     public static DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     public static float density = 1.0f;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -159,7 +162,7 @@ public class AndroidUtilities {
                 Selection.removeSelection(buffer);
                 return result;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return false;
             }
         }
@@ -191,7 +194,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0559C.UTF8_NAME;
+            String nameCharset = C0012C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -231,7 +234,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0559C.UTF8_NAME;
+            String nameCharset = C0012C.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -356,8 +359,8 @@ public class AndroidUtilities {
     }
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C19475 extends CrashManagerListener {
-        C19475() {
+    static class C13295 extends CrashManagerListener {
+        C13295() {
         }
 
         public boolean includeDeviceData() {
@@ -444,7 +447,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         goto L_0x0004;
     L_0x006c:
         r7 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r7);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        org.telegram.messenger.FileLog.m8e(r7);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
         if (r6 == 0) goto L_0x0004;
     L_0x0072:
         r6.close();
@@ -471,7 +474,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             String HOST_NAME = "([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef\\-]{0,61}[a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]){0,1}\\.)+[a-zA-Z\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]{2,63}";
             WEB_URL = Pattern.compile("((?:(http|https|Http|Https):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?(?:" + Pattern.compile("(([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef\\-]{0,61}[a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]){0,1}\\.)+[a-zA-Z\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]{2,63}|" + Pattern.compile("((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9]))") + ")") + ")(?:\\:\\d{1,5})?)(\\/(?:(?:[" + "a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef" + "\\;\\/\\?\\:\\@\\&\\=\\#\\~\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?(?:\\b|$)");
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         checkDisplaySize(ApplicationLoader.applicationContext, null);
         if (VERSION.SDK_INT >= 23) {
@@ -501,7 +504,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 bitmapColor = ((ColorDrawable) drawable).getColor();
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         double[] hsv = rgbToHsv((bitmapColor >> 16) & 255, (bitmapColor >> 8) & 255, bitmapColor & 255);
         hsv[1] = Math.min(1.0d, (hsv[1] + 0.05d) + (0.1d * (1.0d - hsv[1])));
@@ -608,7 +611,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     try {
                         fragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -684,7 +687,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -697,14 +700,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     prevOrientation = -10;
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
 
     public static byte[] getStringBytes(String src) {
         try {
-            return src.getBytes(C0559C.UTF8_NAME);
+            return src.getBytes(C0012C.UTF8_NAME);
         } catch (Exception e) {
             return new byte[0];
         }
@@ -721,7 +724,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         ArrayList<VcardData> vcardDatas = new ArrayList();
         VcardData currentData = null;
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0559C.UTF8_NAME));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0012C.UTF8_NAME));
         String pendingLine = null;
         boolean currentIsPhoto = false;
         VcardItem currentItem = null;
@@ -776,7 +779,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                     currentItem.type = 20;
                                 }
                             } catch (Throwable e2) {
-                                FileLog.m3e(e2);
+                                FileLog.m8e(e2);
                             } catch (Throwable th) {
                                 e2 = th;
                             }
@@ -885,7 +888,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
         }
         return result2;
-        FileLog.m3e(e2);
+        FileLog.m8e(e2);
         return result;
     }
 
@@ -910,7 +913,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     typefaceCache.put(assetPath, t);
                 } catch (Exception e) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m1e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
+                        FileLog.m6e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
                     }
                     typeface = null;
                 }
@@ -944,6 +947,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
     public static void setWaitingForCall(boolean value) {
         synchronized (callLock) {
+            if (value) {
+                try {
+                    if (callReceiver == null) {
+                        IntentFilter filter = new IntentFilter("android.intent.action.PHONE_STATE");
+                        Context context = ApplicationLoader.applicationContext;
+                        BroadcastReceiver callReceiver = new CallReceiver();
+                        callReceiver = callReceiver;
+                        context.registerReceiver(callReceiver, filter);
+                    }
+                } catch (Exception e) {
+                }
+            } else if (callReceiver != null) {
+                ApplicationLoader.applicationContext.unregisterReceiver(callReceiver);
+                callReceiver = null;
+            }
             waitingForCall = value;
         }
     }
@@ -953,7 +971,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 ((InputMethodManager) view.getContext().getSystemService("input_method")).showSoftInput(view, 1);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -964,7 +982,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 z = ((InputMethodManager) view.getContext().getSystemService("input_method")).isActive(view);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         return z;
@@ -978,7 +996,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -989,7 +1007,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             state = Environment.getExternalStorageState();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         if (state == null || state.startsWith("mounted")) {
             try {
@@ -998,7 +1016,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     return file;
                 }
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
         }
         try {
@@ -1007,7 +1025,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return file;
             }
         } catch (Throwable e22) {
-            FileLog.m3e(e22);
+            FileLog.m8e(e22);
         }
         return new File(TtmlNode.ANONYMOUS_REGION_ID);
     }
@@ -1084,10 +1102,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m1e("display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
+                FileLog.m6e("display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -1215,7 +1233,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 telephonyService.silenceRinger();
                 telephonyService.endCall();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -1250,7 +1268,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 String number = cursor.getString(0);
                 long date = cursor.getLong(1);
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m1e("number = " + number);
+                    FileLog.m6e("number = " + number);
                 }
                 if (Math.abs(System.currentTimeMillis() - date) < 3600000 && checkPhonePattern(pattern, number)) {
                     if (cursor == null) {
@@ -1264,7 +1282,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 cursor.close();
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             if (cursor != null) {
                 cursor.close();
             }
@@ -1281,7 +1299,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (callLogContentObserver == null) {
                 ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
                 Uri uri = Calls.CONTENT_URI;
-                ContentObserver c00602 = new ContentObserver(new Handler()) {
+                ContentObserver c01722 = new ContentObserver(new Handler()) {
                     public boolean deliverSelfNotifications() {
                         return true;
                     }
@@ -1291,16 +1309,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         AndroidUtilities.removeLoginPhoneCall(number, false);
                     }
                 };
-                callLogContentObserver = c00602;
-                contentResolver.registerContentObserver(uri, true, c00602);
-                Runnable c00613 = new Runnable() {
+                callLogContentObserver = c01722;
+                contentResolver.registerContentObserver(uri, true, c01722);
+                Runnable c01733 = new Runnable() {
                     public void run() {
                         AndroidUtilities.unregisterRunnable = null;
                         AndroidUtilities.registerLoginContentObserver(false, number);
                     }
                 };
-                unregisterRunnable = c00613;
-                runOnUIThread(c00613, 10000);
+                unregisterRunnable = c01733;
+                runOnUIThread(c01733, 10000);
             }
         } else if (callLogContentObserver != null) {
             if (unregisterRunnable != null) {
@@ -1333,7 +1351,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     i = ((Rect) mStableInsetsField.get(mAttachInfo)).bottom;
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         return i;
@@ -1350,11 +1368,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     size.set(((Integer) Display.class.getMethod("getRawWidth", new Class[0]).invoke(windowManager.getDefaultDisplay(), new Object[0])).intValue(), ((Integer) Display.class.getMethod("getRawHeight", new Class[0]).invoke(windowManager.getDefaultDisplay(), new Object[0])).intValue());
                 } catch (Throwable e) {
                     size.set(windowManager.getDefaultDisplay().getWidth(), windowManager.getDefaultDisplay().getHeight());
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
         return size;
     }
@@ -1410,7 +1428,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -1431,7 +1449,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     mEdgeGlowBottom.setColor(color);
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -1533,7 +1551,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             return spannableStringBuilder;
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return new SpannableStringBuilder(str);
         }
     }
@@ -1567,7 +1585,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C19475());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C13295());
     }
 
     public static void checkForUpdates(Activity context) {
@@ -1586,7 +1604,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", str));
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -1603,7 +1621,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 mediaScanIntent.setData(uri);
                 ApplicationLoader.applicationContext.sendBroadcast(mediaScanIntent);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -1618,13 +1636,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return storageDir;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("failed to create directory");
+                FileLog.m5d("failed to create directory");
             }
             return null;
         } else if (!BuildVars.LOGS_ENABLED) {
             return null;
         } else {
-            FileLog.m0d("External storage is not mounted READ/WRITE.");
+            FileLog.m5d("External storage is not mounted READ/WRITE.");
             return null;
         }
     }
@@ -1692,7 +1710,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return null;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return null;
         }
     }
@@ -1750,7 +1768,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             date.setTime((System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000))) + 1);
             return new File(storageDir, "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date) + ".jpg");
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return null;
         }
     }
@@ -1805,7 +1823,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             date.setTime((System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000))) + 1);
             return new File(storageDir, "VID_" + new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date) + ".mp4");
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return null;
         }
     }
@@ -1836,7 +1854,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         i++;
                         buffer.write((char) ((u << 4) + Character.digit((char) bytes[i], 16)));
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 } else {
                     buffer.write(b);
@@ -1847,7 +1865,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 buffer.close();
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
         }
         return bArr;
@@ -1896,7 +1914,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     destination = destination2;
                     source = source2;
                     try {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                         if (source != null) {
                             source.close();
                         }
@@ -1930,7 +1948,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             } catch (Exception e3) {
                 e = e3;
                 source = source2;
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 if (source != null) {
                     source.close();
                 }
@@ -1952,7 +1970,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
         } catch (Exception e4) {
             e = e4;
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             if (source != null) {
                 source.close();
             }
@@ -2028,7 +2046,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     try {
                         activity.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + activity.getPackageName())));
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -2286,5 +2304,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
         });
         builder.show();
+    }
+
+    public static String getSystemProperty(String key) {
+        try {
+            return (String) Class.forName("android.os.SystemProperties").getMethod("get", new Class[]{String.class}).invoke(null, new Object[]{key});
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

@@ -25,6 +25,7 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import com.google.android.exoplayer2.C0012C;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
@@ -69,8 +70,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private View windowView;
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$1 */
-    class C13181 implements OnClickListener {
-        C13181() {
+    class C08871 implements OnClickListener {
+        C08871() {
         }
 
         public void onClick(View view) {
@@ -83,8 +84,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$3 */
-    class C13193 implements ActionMode.Callback {
-        C13193() {
+    class C08883 implements ActionMode.Callback {
+        C08883() {
         }
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -111,8 +112,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$4 */
-    class C13204 implements ActionMode.Callback {
-        C13204() {
+    class C08894 implements ActionMode.Callback {
+        C08894() {
         }
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -139,8 +140,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$5 */
-    class C13215 implements OnKeyListener {
-        C13215() {
+    class C08905 implements OnKeyListener {
+        C08905() {
         }
 
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -161,8 +162,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$6 */
-    class C13226 implements OnClickListener {
-        C13226() {
+    class C08916 implements OnClickListener {
+        C08916() {
         }
 
         public void onClick(View view) {
@@ -173,10 +174,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$7 */
-    class C13237 implements TextWatcher {
+    class C08927 implements TextWatcher {
         boolean processChange = false;
 
-        C13237() {
+        C08927() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -206,8 +207,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$8 */
-    class C13248 implements OnClickListener {
-        C13248() {
+    class C08938 implements OnClickListener {
+        C08938() {
         }
 
         public void onClick(View view) {
@@ -224,8 +225,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$9 */
-    class C22449 implements Listener {
-        C22449() {
+    class C15289 implements Listener {
+        C15289() {
         }
 
         public boolean onBackspace() {
@@ -249,7 +250,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     int j = i + localCharSequence.length();
                     PhotoViewerCaptionEnterView.this.messageEditText.setSelection(j, j);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 } finally {
                     PhotoViewerCaptionEnterView.this.innerTextChange = false;
                 }
@@ -315,23 +316,23 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
-        this.emojiButton.setOnClickListener(new C13181());
+        this.emojiButton.setOnClickListener(new C08871());
         this.messageEditText = new EditTextCaption(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 try {
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 } catch (Throwable e) {
                     setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51.0f));
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         };
         if (VERSION.SDK_INT >= 23 && this.windowView != null) {
-            this.messageEditText.setCustomSelectionActionModeCallback(new C13193());
-            this.messageEditText.setCustomInsertionActionModeCallback(new C13204());
+            this.messageEditText.setCustomSelectionActionModeCallback(new C08883());
+            this.messageEditText.setCustomInsertionActionModeCallback(new C08894());
         }
         this.messageEditText.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
-        this.messageEditText.setImeOptions(268435456);
+        this.messageEditText.setImeOptions(C0012C.ENCODING_PCM_MU_LAW);
         this.messageEditText.setInputType(this.messageEditText.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS);
         this.messageEditText.setMaxLines(4);
         this.messageEditText.setHorizontallyScrolling(false);
@@ -345,9 +346,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setHintTextColor(-NUM);
         this.messageEditText.setFilters(new InputFilter[]{new LengthFilter(this.captionMaxLength)});
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 52.0f, 0.0f, 6.0f, 0.0f));
-        this.messageEditText.setOnKeyListener(new C13215());
-        this.messageEditText.setOnClickListener(new C13226());
-        this.messageEditText.addTextChangedListener(new C13237());
+        this.messageEditText.setOnKeyListener(new C08905());
+        this.messageEditText.setOnClickListener(new C08916());
+        this.messageEditText.addTextChangedListener(new C08927());
         ImageView doneButton = new ImageView(context);
         doneButton.setScaleType(ScaleType.CENTER);
         doneButton.setImageResource(R.drawable.ic_done);
@@ -355,7 +356,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (VERSION.SDK_INT >= 21) {
             doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         }
-        doneButton.setOnClickListener(new C13248());
+        doneButton.setOnClickListener(new C08938());
     }
 
     public void setForceFloatingEmoji(boolean value) {
@@ -369,7 +370,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         try {
             this.currentActionMode.finish();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         this.currentActionMode = null;
         return true;
@@ -397,7 +398,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 method.invoke(mode, new Object[0]);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -455,7 +456,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         try {
             return this.messageEditText.getSelectionEnd() - this.messageEditText.getSelectionStart();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return i;
         }
     }
@@ -470,7 +471,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private void createEmojiView() {
         if (this.emojiView == null) {
             this.emojiView = new EmojiView(false, false, getContext(), null);
-            this.emojiView.setListener(new C22449());
+            this.emojiView.setListener(new C15289());
             this.sizeNotifierLayout.addView(this.emojiView);
         }
     }
@@ -494,7 +495,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 this.messageEditText.setSelection(this.messageEditText.length());
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -508,7 +509,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                                 try {
                                     PhotoViewerCaptionEnterView.this.messageEditText.requestFocus();
                                 } catch (Throwable e) {
-                                    FileLog.m3e(e);
+                                    FileLog.m8e(e);
                                 }
                             }
                         }
@@ -593,7 +594,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             currentSelection = this.messageEditText.getSelectionStart();
         } catch (Throwable e) {
             currentSelection = this.messageEditText.length();
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         MotionEvent event = MotionEvent.obtain(0, 0, 0, 0.0f, 0.0f, 0);
         this.messageEditText.onTouchEvent(event);
@@ -605,7 +606,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         try {
             this.messageEditText.setSelection(currentSelection);
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
     }
 

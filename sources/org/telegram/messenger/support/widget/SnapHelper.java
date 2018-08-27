@@ -17,13 +17,13 @@ public abstract class SnapHelper extends OnFlingListener {
     static final float MILLISECONDS_PER_INCH = 100.0f;
     private Scroller mGravityScroller;
     RecyclerView mRecyclerView;
-    private final OnScrollListener mScrollListener = new C20351();
+    private final OnScrollListener mScrollListener = new C13751();
 
     /* renamed from: org.telegram.messenger.support.widget.SnapHelper$1 */
-    class C20351 extends OnScrollListener {
+    class C13751 extends OnScrollListener {
         boolean mScrolled = false;
 
-        C20351() {
+        C13751() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

@@ -99,7 +99,7 @@ public class BaseFragment {
                     onRemoveFromParent();
                     parent.removeView(this.fragmentView);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
             this.fragmentView = null;
@@ -110,7 +110,7 @@ public class BaseFragment {
                 try {
                     parent.removeView(this.actionBar);
                 } catch (Throwable e2) {
-                    FileLog.m3e(e2);
+                    FileLog.m8e(e2);
                 }
             }
             this.actionBar = null;
@@ -132,7 +132,7 @@ public class BaseFragment {
                         onRemoveFromParent();
                         parent.removeView(this.fragmentView);
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
                 if (!(this.parentLayout == null || this.parentLayout.getContext() == this.fragmentView.getContext())) {
@@ -147,7 +147,7 @@ public class BaseFragment {
                         try {
                             parent.removeView(this.actionBar);
                         } catch (Throwable e2) {
-                            FileLog.m3e(e2);
+                            FileLog.m8e(e2);
                         }
                     }
                 }
@@ -233,7 +233,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -298,7 +298,7 @@ public class BaseFragment {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -314,7 +314,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         if (this.actionBar != null) {
             this.actionBar.onPause();
@@ -345,7 +345,7 @@ public class BaseFragment {
         return showDialog(dialog, false, onDismissListener);
     }
 
-    public Dialog showDialog(Dialog dialog, boolean allowInTransition, final OnDismissListener onDismissListener) {
+    public Dialog showDialog(Dialog dialog, boolean allowInTransition, OnDismissListener onDismissListener) {
         Dialog dialog2 = null;
         if (!(dialog == null || this.parentLayout == null || this.parentLayout.animationInProgress || this.parentLayout.startedTracking || (!allowInTransition && this.parentLayout.checkTransitionAnimation()))) {
             try {
@@ -354,27 +354,27 @@ public class BaseFragment {
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             try {
                 this.visibleDialog = dialog;
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new OnDismissListener() {
-                    public void onDismiss(DialogInterface dialog) {
-                        if (onDismissListener != null) {
-                            onDismissListener.onDismiss(dialog);
-                        }
-                        BaseFragment.this.onDialogDismiss(BaseFragment.this.visibleDialog);
-                        BaseFragment.this.visibleDialog = null;
-                    }
-                });
+                this.visibleDialog.setOnDismissListener(new BaseFragment$$Lambda$0(this, onDismissListener));
                 this.visibleDialog.show();
                 dialog2 = this.visibleDialog;
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
         }
         return dialog2;
+    }
+
+    final /* synthetic */ void lambda$showDialog$0$BaseFragment(OnDismissListener onDismissListener, DialogInterface dialog1) {
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(dialog1);
+        }
+        onDialogDismiss(this.visibleDialog);
+        this.visibleDialog = null;
     }
 
     protected void onDialogDismiss(Dialog dialog) {

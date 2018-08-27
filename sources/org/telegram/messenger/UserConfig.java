@@ -64,8 +64,8 @@ public class UserConfig {
     public boolean unreadDialogsLoaded = true;
 
     /* renamed from: org.telegram.messenger.UserConfig$1 */
-    class C05321 implements Runnable {
-        C05321() {
+    class C03731 implements Runnable {
+        C03731() {
         }
 
         public void run() {
@@ -222,7 +222,7 @@ public class UserConfig {
                     oldFile.delete();
                 }
             } catch (Throwable e3) {
-                FileLog.m3e(e3);
+                FileLog.m8e(e3);
             }
         }
     }
@@ -309,7 +309,7 @@ public class UserConfig {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             if (this.currentAccount == 0) {
                 this.lastUpdateCheckTime = preferences.getLong("appUpdateCheckTime", System.currentTimeMillis());
@@ -331,15 +331,15 @@ public class UserConfig {
                             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                             updateTime = Math.max(packageInfo.lastUpdateTime, packageInfo.firstInstallTime);
                         } catch (Throwable e2) {
-                            FileLog.m3e(e2);
+                            FileLog.m8e(e2);
                         }
                         if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
                             this.pendingAppUpdate = null;
-                            AndroidUtilities.runOnUIThread(new C05321());
+                            AndroidUtilities.runOnUIThread(new C03731());
                         }
                     }
                 } catch (Throwable e22) {
-                    FileLog.m3e(e22);
+                    FileLog.m8e(e22);
                 }
             }
             this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);

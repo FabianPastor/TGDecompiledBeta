@@ -93,10 +93,12 @@ public class EditTextBoldCursor extends EditText {
         try {
             this.gradientDrawable = new GradientDrawable(Orientation.TOP_BOTTOM, new int[]{-11230757, -11230757});
             this.editor = mEditor.get(this);
-            this.mCursorDrawable = (Drawable[]) mCursorDrawableField.get(this.editor);
-            mCursorDrawableResField.set(this, Integer.valueOf(R.drawable.field_carret_empty));
+            if (mCursorDrawableField != null) {
+                this.mCursorDrawable = (Drawable[]) mCursorDrawableField.get(this.editor);
+                mCursorDrawableResField.set(this, Integer.valueOf(R.drawable.field_carret_empty));
+            }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         this.cursorSize = AndroidUtilities.dp(24.0f);
     }

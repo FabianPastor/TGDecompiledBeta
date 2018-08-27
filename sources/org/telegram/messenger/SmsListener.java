@@ -39,7 +39,7 @@ public class SmsListener extends BroadcastReceiver {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         }

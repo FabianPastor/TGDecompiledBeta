@@ -35,8 +35,8 @@ public class ChangePhoneHelpActivity extends BaseFragment {
     private TextView textView2;
 
     /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$2 */
-    class C09852 implements OnTouchListener {
-        C09852() {
+    class C06402 implements OnTouchListener {
+        C06402() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -45,11 +45,11 @@ public class ChangePhoneHelpActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$3 */
-    class C09873 implements OnClickListener {
+    class C06423 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$3$1 */
-        class C09861 implements DialogInterface.OnClickListener {
-            C09861() {
+        class C06411 implements DialogInterface.OnClickListener {
+            C06411() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -57,7 +57,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
             }
         }
 
-        C09873() {
+        C06423() {
         }
 
         public void onClick(View v) {
@@ -65,7 +65,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
                 Builder builder = new Builder(ChangePhoneHelpActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.getString("PhoneNumberAlert", R.string.PhoneNumberAlert));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C09861());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C06411());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 ChangePhoneHelpActivity.this.showDialog(builder.create());
             }
@@ -73,8 +73,8 @@ public class ChangePhoneHelpActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$1 */
-    class C21221 extends ActionBarMenuOnItemClick {
-        C21221() {
+    class C14471 extends ActionBarMenuOnItemClick {
+        C14471() {
         }
 
         public void onItemClick(int id) {
@@ -95,9 +95,9 @@ public class ChangePhoneHelpActivity extends BaseFragment {
             value = PhoneFormat.getInstance().format("+" + user.phone);
         }
         this.actionBar.setTitle(value);
-        this.actionBar.setActionBarMenuOnItemClick(new C21221());
+        this.actionBar.setActionBarMenuOnItemClick(new C14471());
         this.fragmentView = new RelativeLayout(context);
-        this.fragmentView.setOnTouchListener(new C09852());
+        this.fragmentView.setOnTouchListener(new C06402());
         RelativeLayout relativeLayout = this.fragmentView;
         ScrollView scrollView = new ScrollView(context);
         relativeLayout.addView(scrollView);
@@ -125,7 +125,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         try {
             this.textView1.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp)));
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             this.textView1.setText(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp));
         }
         linearLayout.addView(this.textView1, LayoutHelper.createLinear(-2, -2, 1, 20, 56, 20, 0));
@@ -137,7 +137,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         this.textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView2.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f));
         linearLayout.addView(this.textView2, LayoutHelper.createLinear(-2, -2, 1, 20, 46, 20, 0));
-        this.textView2.setOnClickListener(new C09873());
+        this.textView2.setOnClickListener(new C06423());
         return this.fragmentView;
     }
 

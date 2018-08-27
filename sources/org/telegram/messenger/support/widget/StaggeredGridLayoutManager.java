@@ -13,11 +13,11 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.accessibility.AccessibilityEvent;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry;
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
@@ -37,7 +37,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private static final String TAG = "StaggeredGridLManager";
     public static final int VERTICAL = 1;
     private final AnchorInfo mAnchorInfo = new AnchorInfo();
-    private final Runnable mCheckForGapsRunnable = new C07021();
+    private final Runnable mCheckForGapsRunnable = new C04221();
     private int mFullSizeSpec;
     private int mGapStrategy = 2;
     private boolean mLaidOutInvalidFullSpan = false;
@@ -62,8 +62,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private final Rect mTmpRect = new Rect();
 
     /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$1 */
-    class C07021 implements Runnable {
-        C07021() {
+    class C04221 implements Runnable {
+        C04221() {
         }
 
         public void run() {
@@ -129,15 +129,15 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         List<FullSpanItem> mFullSpanItems;
 
         static class FullSpanItem implements Parcelable {
-            public static final Creator<FullSpanItem> CREATOR = new C07031();
+            public static final Creator<FullSpanItem> CREATOR = new C04231();
             int mGapDir;
             int[] mGapPerSpan;
             boolean mHasUnwantedGapAfter;
             int mPosition;
 
             /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$LazySpanLookup$FullSpanItem$1 */
-            static class C07031 implements Creator<FullSpanItem> {
-                C07031() {
+            static class C04231 implements Creator<FullSpanItem> {
+                C04231() {
                 }
 
                 public FullSpanItem createFromParcel(Parcel in) {
@@ -382,7 +382,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new C07041();
+        public static final Creator<SavedState> CREATOR = new C04241();
         boolean mAnchorLayoutFromEnd;
         int mAnchorPosition;
         List<FullSpanItem> mFullSpanItems;
@@ -395,8 +395,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         int mVisibleAnchorPosition;
 
         /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$SavedState$1 */
-        static class C07041 implements Creator<SavedState> {
-            C07041() {
+        static class C04241 implements Creator<SavedState> {
+            C04241() {
             }
 
             public SavedState createFromParcel(Parcel in) {

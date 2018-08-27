@@ -108,8 +108,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private boolean updatingLocation;
 
     /* renamed from: org.telegram.ui.ThemeActivity$3 */
-    class C18753 implements OnClickListener {
-        C18753() {
+    class C12503 implements OnClickListener {
+        C12503() {
         }
 
         public void onClick(DialogInterface dialog, int id) {
@@ -123,8 +123,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.ThemeActivity$4 */
-    class C18774 implements Runnable {
-        C18774() {
+    class C12524 implements Runnable {
+        C12524() {
         }
 
         public void run() {
@@ -159,8 +159,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.ThemeActivity$5 */
-    class C18785 implements OnClickListener {
-        C18785() {
+    class C12535 implements OnClickListener {
+        C12535() {
         }
 
         @TargetApi(9)
@@ -171,7 +171,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
                     ThemeActivity.this.getParentActivity().startActivity(intent);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         }
@@ -199,8 +199,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.ThemeActivity$1 */
-    class C25141 extends ActionBarMenuOnItemClick {
-        C25141() {
+    class C17261 extends ActionBarMenuOnItemClick {
+        C17261() {
         }
 
         public void onItemClick(int id) {
@@ -211,11 +211,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.ThemeActivity$2 */
-    class C25152 implements OnItemClickListener {
+    class C17272 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ThemeActivity$2$1 */
-        class C18691 implements OnClickListener {
-            C18691() {
+        class C12441 implements OnClickListener {
+            C12441() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -223,8 +223,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
 
         /* renamed from: org.telegram.ui.ThemeActivity$2$2 */
-        class C18702 implements OnEditorActionListener {
-            C18702() {
+        class C12452 implements OnEditorActionListener {
+            C12452() {
             }
 
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -233,7 +233,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             }
         }
 
-        C25152() {
+        C17272() {
         }
 
         public void onItemClick(View view, int position) {
@@ -244,7 +244,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("NewTheme", R.string.NewTheme));
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C18691());
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C12441());
                     editTextBoldCursor = new LinearLayout(ThemeActivity.this.getParentActivity());
                     editTextBoldCursor.setOrientation(1);
                     builder.setView(editTextBoldCursor);
@@ -267,14 +267,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     editTextBoldCursor.setCursorWidth(1.5f);
                     editTextBoldCursor.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
                     editTextBoldCursor.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, 36, 51, 24, 6, 24, 0));
-                    editTextBoldCursor.setOnEditorActionListener(new C18702());
+                    editTextBoldCursor.setOnEditorActionListener(new C12452());
                     final AlertDialog alertDialog = builder.create();
                     final View view2 = editTextBoldCursor;
                     alertDialog.setOnShowListener(new OnShowListener() {
 
                         /* renamed from: org.telegram.ui.ThemeActivity$2$3$1 */
-                        class C18711 implements Runnable {
-                            C18711() {
+                        class C12461 implements Runnable {
+                            C12461() {
                             }
 
                             public void run() {
@@ -284,7 +284,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                         }
 
                         public void onShow(DialogInterface dialog) {
-                            AndroidUtilities.runOnUIThread(new C18711());
+                            AndroidUtilities.runOnUIThread(new C12461());
                         }
                     });
                     ThemeActivity.this.showDialog(alertDialog);
@@ -311,7 +311,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                 try {
                                     Toast.makeText(ThemeActivity.this.getParentActivity(), LocaleController.getString("CreateNewThemeHelp", R.string.CreateNewThemeHelp), 1).show();
                                 } catch (Throwable e) {
-                                    FileLog.m3e(e);
+                                    FileLog.m8e(e);
                                 }
                             }
                         }
@@ -399,8 +399,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ThemeActivity$ListAdapter$1 */
-        class C18811 implements View.OnClickListener {
-            C18811() {
+        class C12561 implements View.OnClickListener {
+            C12561() {
             }
 
             public void onClick(View v) {
@@ -410,8 +410,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     builder.setItems(themeInfo.pathToFile == null ? new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile)} : new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.ThemeActivity$ListAdapter$1$1$1 */
-                        class C18791 implements OnClickListener {
-                            C18791() {
+                        class C12541 implements OnClickListener {
+                            C12541() {
                             }
 
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -444,7 +444,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                                 try {
                                                     stream2.close();
                                                 } catch (Throwable e2) {
-                                                    FileLog.m3e(e2);
+                                                    FileLog.m8e(e2);
                                                     stream = stream2;
                                                 }
                                             }
@@ -453,12 +453,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                             e2 = e3;
                                             stream = stream2;
                                             try {
-                                                FileLog.m3e(e2);
+                                                FileLog.m8e(e2);
                                                 if (stream != null) {
                                                     try {
                                                         stream.close();
                                                     } catch (Throwable e22) {
-                                                        FileLog.m3e(e22);
+                                                        FileLog.m8e(e22);
                                                     }
                                                 }
                                                 finalFile = new File(FileLoader.getDirectory(4), currentFile.getName());
@@ -483,7 +483,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                                     try {
                                                         stream.close();
                                                     } catch (Throwable e222) {
-                                                        FileLog.m3e(e222);
+                                                        FileLog.m8e(e222);
                                                     }
                                                 }
                                                 throw th;
@@ -498,7 +498,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                         }
                                     } catch (Exception e5) {
                                         e222 = e5;
-                                        FileLog.m3e(e222);
+                                        FileLog.m8e(e222);
                                         if (stream != null) {
                                             stream.close();
                                         }
@@ -531,7 +531,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                         ThemeActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
                                     }
                                 } catch (Throwable e2222) {
-                                    FileLog.m3e(e2222);
+                                    FileLog.m8e(e2222);
                                 }
                             } else if (which == 1) {
                                 if (ThemeActivity.this.parentLayout != null) {
@@ -543,7 +543,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                 Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                                 builder.setMessage(LocaleController.getString("DeleteThemeAlert", R.string.DeleteThemeAlert));
                                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new C18791());
+                                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new C12541());
                                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                 ThemeActivity.this.showDialog(builder.create());
                             }
@@ -582,7 +582,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     view = new ThemeCell(context, z);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     if (ThemeActivity.this.currentType == 0) {
-                        ((ThemeCell) view).setOnOptionsClick(new C18811());
+                        ((ThemeCell) view).setOnOptionsClick(new C12561());
                         break;
                     }
                     break;
@@ -968,7 +968,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         } else {
             this.actionBar.setTitle(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C25141());
+        this.actionBar.setActionBarMenuOnItemClick(new C17261());
         this.listAdapter = new ListAdapter(context);
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -979,7 +979,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         this.listView.setAdapter(this.listAdapter);
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C25152());
+        this.listView.setOnItemClickListener(new C17272());
         return this.fragmentView;
     }
 
@@ -1006,13 +1006,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                         Builder builder = new Builder(getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                         builder.setMessage(LocaleController.getString("GpsDisabledAlert", R.string.GpsDisabledAlert));
-                        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new C18753());
+                        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new C12503());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         showDialog(builder.create());
                         return;
                     }
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             } else {
                 return;
@@ -1026,7 +1026,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 lastKnownLocation = locationManager.getLastKnownLocation("passive");
             }
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
         if (lastKnownLocation == null || forceUpdate) {
             startLocationUpdate();
@@ -1043,7 +1043,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         Theme.autoNightLastSunCheckDay = calendar.get(5);
-        Utilities.globalQueue.postRunnable(new C18774());
+        Utilities.globalQueue.postRunnable(new C12524());
         Holder holder = (Holder) this.listView.findViewHolderForAdapterPosition(this.scheduleLocationInfoRow);
         if (holder != null && (holder.itemView instanceof TextInfoPrivacyCell)) {
             ((TextInfoPrivacyCell) holder.itemView).setText(getLocationSunString());
@@ -1060,12 +1060,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             try {
                 locationManager.requestLocationUpdates("gps", 1, 0.0f, this.gpsLocationListener);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             try {
                 locationManager.requestLocationUpdates("network", 1, 0.0f, this.networkLocationListener);
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
         }
     }
@@ -1086,7 +1086,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             } else {
                 builder.setMessage(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation));
             }
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new C18785());
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new C12535());
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             showDialog(builder.create());
         }

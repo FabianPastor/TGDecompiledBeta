@@ -7,7 +7,6 @@ import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -29,15 +28,6 @@ public class ArchivedStickerSetCell extends FrameLayout {
     private StickerSetCovered stickersSet;
     private TextView textView;
     private TextView valueTextView;
-
-    /* renamed from: org.telegram.ui.Cells.ArchivedStickerSetCell$1 */
-    class C09141 implements OnClickListener {
-        C09141() {
-        }
-
-        public void onClick(View v) {
-        }
-    }
 
     public ArchivedStickerSetCell(Context context, boolean needCheckBox) {
         int i;
@@ -134,7 +124,10 @@ public class ArchivedStickerSetCell extends FrameLayout {
         Switch switchR = this.checkBox;
         this.onCheckedChangeListener = listener;
         switchR.setOnCheckedChangeListener(listener);
-        this.checkBox.setOnClickListener(new C09141());
+        this.checkBox.setOnClickListener(ArchivedStickerSetCell$$Lambda$0.$instance);
+    }
+
+    static final /* synthetic */ void lambda$setOnCheckClick$0$ArchivedStickerSetCell(View v) {
     }
 
     public void setChecked(boolean checked) {

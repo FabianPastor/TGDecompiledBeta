@@ -24,6 +24,7 @@ public class Switch2 extends View {
     private Paint paint2;
     private float progress;
     private RectF rectF = new RectF();
+    private Paint shadowPaint;
 
     public Switch2(Context context) {
         super(context);
@@ -38,6 +39,7 @@ public class Switch2 extends View {
             } catch (Exception e) {
             }
         }
+        this.shadowPaint = new Paint(2);
         this.paint = new Paint(1);
         this.paint2 = new Paint(1);
         this.paint2.setStyle(Style.STROKE);
@@ -130,7 +132,8 @@ public class Switch2 extends View {
             a1 = Color.alpha(color1);
             alpha = (int) (((float) a1) + (((float) (Color.alpha(color2) - a1)) * this.progress));
             this.paint.setColor(((((alpha & 255) << 24) | ((((int) (((float) r1) + (((float) (r2 - r1)) * this.progress))) & 255) << 16)) | ((((int) (((float) g1) + (((float) (g2 - g1)) * this.progress))) & 255) << 8)) | (((int) (((float) b1) + (((float) (b2 - b1)) * this.progress))) & 255));
-            canvas.drawBitmap(drawBitmap, (float) (tx - AndroidUtilities.dp(12.0f)), (float) (ty - AndroidUtilities.dp(11.0f)), null);
+            this.shadowPaint.setAlpha(alpha);
+            canvas.drawBitmap(drawBitmap, (float) (tx - AndroidUtilities.dp(12.0f)), (float) (ty - AndroidUtilities.dp(11.0f)), this.shadowPaint);
             canvas.drawCircle((float) tx, (float) ty, (float) AndroidUtilities.dp(10.0f), this.paint);
             this.paint2.setColor(Theme.getColor(Theme.key_switch2Check));
             tx = (int) (((float) tx) - (((float) AndroidUtilities.dp(10.8f)) - (((float) AndroidUtilities.dp(1.3f)) * this.progress)));

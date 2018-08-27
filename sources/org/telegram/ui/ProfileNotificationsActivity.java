@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -83,8 +82,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     private int vibrateRow;
 
     /* renamed from: org.telegram.ui.ProfileNotificationsActivity$1 */
-    class C24771 extends ActionBarMenuOnItemClick {
-        C24771() {
+    class C16911 extends ActionBarMenuOnItemClick {
+        C16911() {
         }
 
         public void onItemClick(int id) {
@@ -533,7 +532,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("CustomNotifications", R.string.CustomNotifications));
-        this.actionBar.setActionBarMenuOnItemClick(new C24771());
+        this.actionBar.setActionBarMenuOnItemClick(new C16911());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -553,95 +552,13 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.listView.setOnItemClickListener(new OnItemClickListener() {
 
             /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$1 */
-            class C18041 extends AnimatorListenerAdapter {
-                C18041() {
+            class C11961 extends AnimatorListenerAdapter {
+                C11961() {
                 }
 
                 public void onAnimationEnd(Animator animator) {
                     if (animator.equals(ProfileNotificationsActivity.this.animatorSet)) {
                         ProfileNotificationsActivity.this.animatorSet = null;
-                    }
-                }
-            }
-
-            /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$2 */
-            class C18052 implements Runnable {
-                C18052() {
-                }
-
-                public void run() {
-                    if (ProfileNotificationsActivity.this.adapter != null) {
-                        ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.vibrateRow);
-                    }
-                }
-            }
-
-            /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$3 */
-            class C18063 implements Runnable {
-                C18063() {
-                }
-
-                public void run() {
-                    if (ProfileNotificationsActivity.this.adapter != null) {
-                        ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.callsVibrateRow);
-                    }
-                }
-            }
-
-            /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$4 */
-            class C18074 implements Runnable {
-                C18074() {
-                }
-
-                public void run() {
-                    if (ProfileNotificationsActivity.this.adapter != null) {
-                        ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.priorityRow);
-                    }
-                }
-            }
-
-            /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$7 */
-            class C18097 implements OnClickListener {
-                C18097() {
-                }
-
-                public void onClick(DialogInterface dialog, int which) {
-                    MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit().putInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 0).commit();
-                    if (ProfileNotificationsActivity.this.adapter != null) {
-                        ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.smartRow);
-                    }
-                    ProfileNotificationsActivity.this.dismissCurrentDialig();
-                }
-            }
-
-            /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$8 */
-            class C18108 implements Runnable {
-                C18108() {
-                }
-
-                public void run() {
-                    if (ProfileNotificationsActivity.this.adapter != null) {
-                        ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.colorRow);
-                    }
-                }
-            }
-
-            /* renamed from: org.telegram.ui.ProfileNotificationsActivity$3$6 */
-            class C24786 implements OnItemClickListener {
-                C24786() {
-                }
-
-                public void onItemClick(View view, int position) {
-                    if (position >= 0 && position < 100) {
-                        int notifyMaxCount = (position % 10) + 1;
-                        int notifyDelay = (position / 10) + 1;
-                        SharedPreferences preferences = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
-                        preferences.edit().putInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, notifyMaxCount).commit();
-                        preferences.edit().putInt("smart_delay_" + ProfileNotificationsActivity.this.dialog_id, notifyDelay * 60).commit();
-                        if (ProfileNotificationsActivity.this.adapter != null) {
-                            ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.smartRow);
-                        }
-                        ProfileNotificationsActivity.this.dismissCurrentDialig();
                     }
                 }
             }
@@ -684,7 +601,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                         ProfileNotificationsActivity.this.animatorSet = new AnimatorSet();
                         ProfileNotificationsActivity.this.animatorSet.playTogether(animators);
-                        ProfileNotificationsActivity.this.animatorSet.addListener(new C18041());
+                        ProfileNotificationsActivity.this.animatorSet.addListener(new C11961());
                         ProfileNotificationsActivity.this.animatorSet.setDuration(150);
                         ProfileNotificationsActivity.this.animatorSet.start();
                     }
@@ -717,7 +634,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
                             ProfileNotificationsActivity.this.startActivityForResult(intent, 12);
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     } else if (position == ProfileNotificationsActivity.this.ringtoneRow) {
                         try {
@@ -741,14 +658,14 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
                             ProfileNotificationsActivity.this.startActivityForResult(intent, 13);
                         } catch (Throwable e2) {
-                            FileLog.m3e(e2);
+                            FileLog.m8e(e2);
                         }
                     } else if (position == ProfileNotificationsActivity.this.vibrateRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new C18052()));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new ProfileNotificationsActivity$3$$Lambda$0(this)));
                     } else if (position == ProfileNotificationsActivity.this.callsVibrateRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, "calls_vibrate_", new C18063()));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, "calls_vibrate_", new ProfileNotificationsActivity$3$$Lambda$1(this)));
                     } else if (position == ProfileNotificationsActivity.this.priorityRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new C18074()));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new ProfileNotificationsActivity$3$$Lambda$2(this)));
                     } else if (position == ProfileNotificationsActivity.this.smartRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
                             final Context context1 = ProfileNotificationsActivity.this.getParentActivity();
@@ -797,17 +714,17 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
                             });
                             recyclerListView.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(8.0f));
-                            recyclerListView.setOnItemClickListener(new C24786());
+                            recyclerListView.setOnItemClickListener(new ProfileNotificationsActivity$3$$Lambda$3(this));
                             Builder builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("SmartNotificationsAlert", R.string.SmartNotificationsAlert));
                             builder.setView(recyclerListView);
                             builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                            builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), new C18097());
+                            builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), new ProfileNotificationsActivity$3$$Lambda$4(this));
                             ProfileNotificationsActivity.this.showDialog(builder.create());
                         }
                     } else if (position == ProfileNotificationsActivity.this.colorRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
-                            ProfileNotificationsActivity.this.showDialog(AlertsCreator.createColorSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new C18108()));
+                            ProfileNotificationsActivity.this.showDialog(AlertsCreator.createColorSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new ProfileNotificationsActivity$3$$Lambda$5(this)));
                         }
                     } else if (position == ProfileNotificationsActivity.this.popupEnabledRow) {
                         MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit().putInt("popup_" + ProfileNotificationsActivity.this.dialog_id, 1).commit();
@@ -824,6 +741,52 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             ((RadioCell) view).setChecked(false, true);
                         }
                     }
+                }
+            }
+
+            final /* synthetic */ void lambda$onItemClick$0$ProfileNotificationsActivity$3() {
+                if (ProfileNotificationsActivity.this.adapter != null) {
+                    ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.vibrateRow);
+                }
+            }
+
+            final /* synthetic */ void lambda$onItemClick$1$ProfileNotificationsActivity$3() {
+                if (ProfileNotificationsActivity.this.adapter != null) {
+                    ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.callsVibrateRow);
+                }
+            }
+
+            final /* synthetic */ void lambda$onItemClick$2$ProfileNotificationsActivity$3() {
+                if (ProfileNotificationsActivity.this.adapter != null) {
+                    ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.priorityRow);
+                }
+            }
+
+            final /* synthetic */ void lambda$onItemClick$3$ProfileNotificationsActivity$3(View view1, int position1) {
+                if (position1 >= 0 && position1 < 100) {
+                    int notifyMaxCount1 = (position1 % 10) + 1;
+                    int notifyDelay1 = (position1 / 10) + 1;
+                    SharedPreferences preferences1 = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
+                    preferences1.edit().putInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, notifyMaxCount1).commit();
+                    preferences1.edit().putInt("smart_delay_" + ProfileNotificationsActivity.this.dialog_id, notifyDelay1 * 60).commit();
+                    if (ProfileNotificationsActivity.this.adapter != null) {
+                        ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.smartRow);
+                    }
+                    ProfileNotificationsActivity.this.dismissCurrentDialig();
+                }
+            }
+
+            final /* synthetic */ void lambda$onItemClick$4$ProfileNotificationsActivity$3(DialogInterface dialog, int which) {
+                MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit().putInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 0).commit();
+                if (ProfileNotificationsActivity.this.adapter != null) {
+                    ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.smartRow);
+                }
+                ProfileNotificationsActivity.this.dismissCurrentDialig();
+            }
+
+            final /* synthetic */ void lambda$onItemClick$5$ProfileNotificationsActivity$3() {
+                if (ProfileNotificationsActivity.this.adapter != null) {
+                    ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.colorRow);
                 }
             }
         });

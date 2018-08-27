@@ -11,6 +11,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory;
 import java.io.File;
 import java.util.Date;
 import org.telegram.messenger.AndroidUtilities;
@@ -24,7 +25,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.source.hls.DefaultHlsExtractorFactory;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
@@ -53,8 +53,8 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     private BackupImageView thumbImageView;
 
     /* renamed from: org.telegram.ui.Cells.SharedDocumentCell$1 */
-    class C21091 implements ImageReceiverDelegate {
-        C21091() {
+    class C14341 implements ImageReceiverDelegate {
+        C14341() {
         }
 
         public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
@@ -117,7 +117,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             f2 = 0.0f;
         }
         addView(view, LayoutHelper.createFrame(40, 40.0f, i, f, 8.0f, f2, 0.0f));
-        this.thumbImageView.getImageReceiver().setDelegate(new C21091());
+        this.thumbImageView.getImageReceiver().setDelegate(new C14341());
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 16.0f);

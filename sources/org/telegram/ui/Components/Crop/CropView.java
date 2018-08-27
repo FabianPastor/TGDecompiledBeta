@@ -53,8 +53,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     private CropRectangle tempRect = new CropRectangle();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$1 */
-    class C11771 implements OnPreDrawListener {
-        C11771() {
+    class C07471 implements OnPreDrawListener {
+        C07471() {
         }
 
         public boolean onPreDraw() {
@@ -65,8 +65,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$7 */
-    class C11837 implements OnCancelListener {
-        C11837() {
+    class C07537 implements OnCancelListener {
+        C07537() {
         }
 
         public void onCancel(DialogInterface dialog) {
@@ -110,15 +110,15 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         private float scale;
         private float width;
         /* renamed from: x */
-        private float f13x;
+        private float f16x;
         /* renamed from: y */
-        private float f14y;
+        private float f17y;
 
         private CropState(Bitmap bitmap, int bRotation) {
             this.width = (float) bitmap.getWidth();
             this.height = (float) bitmap.getHeight();
-            this.f13x = 0.0f;
-            this.f14y = 0.0f;
+            this.f16x = 0.0f;
+            this.f17y = 0.0f;
             this.scale = 1.0f;
             this.baseRotation = (float) bRotation;
             this.rotation = 0.0f;
@@ -126,7 +126,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private boolean hasChanges() {
-            return Math.abs(this.f13x) > CropView.EPSILON || Math.abs(this.f14y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
+            return Math.abs(this.f16x) > CropView.EPSILON || Math.abs(this.f17y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
         }
 
         private float getWidth() {
@@ -146,17 +146,17 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private void translate(float x, float y) {
-            this.f13x += x;
-            this.f14y += y;
+            this.f16x += x;
+            this.f17y += y;
             this.matrix.postTranslate(x, y);
         }
 
         private float getX() {
-            return this.f13x;
+            return this.f16x;
         }
 
         private float getY() {
-            return this.f14y;
+            return this.f17y;
         }
 
         private void scale(float s, float pivotX, float pivotY) {
@@ -191,8 +191,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
         private void reset(CropAreaView areaView, float orient, boolean freeform) {
             this.matrix.reset();
-            this.f13x = 0.0f;
-            this.f14y = 0.0f;
+            this.f16x = 0.0f;
+            this.f17y = 0.0f;
             this.rotation = 0.0f;
             this.orientation = orient;
             float w = (this.orientation + this.baseRotation) % 180.0f != 0.0f ? this.height : this.width;
@@ -262,7 +262,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (fform) {
             this.areaView.setDimVisibility(false);
         }
-        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C11771());
+        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C07471());
         this.imageView.setImageBitmap(this.bitmap);
     }
 
@@ -699,7 +699,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 }
             }).create();
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setOnCancelListener(new C11837());
+            dialog.setOnCancelListener(new C07537());
             dialog.show();
         }
     }

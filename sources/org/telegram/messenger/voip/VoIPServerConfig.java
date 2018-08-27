@@ -27,7 +27,7 @@ public class VoIPServerConfig {
             nativeSetConfig(keys, values);
         } catch (JSONException x) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m2e("Error parsing VoIP config", x);
+                FileLog.m7e("Error parsing VoIP config", x);
             }
         }
     }

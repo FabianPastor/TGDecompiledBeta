@@ -30,6 +30,8 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
+import com.google.android.exoplayer2.C0012C;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -40,8 +42,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0559C;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -93,8 +93,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     private int type;
 
     /* renamed from: org.telegram.ui.PasscodeActivity$2 */
-    class C16412 implements OnEditorActionListener {
-        C16412() {
+    class C11082 implements OnEditorActionListener {
+        C11082() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -111,8 +111,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PasscodeActivity$3 */
-    class C16423 implements TextWatcher {
-        C16423() {
+    class C11093 implements TextWatcher {
+        C11093() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,8 +139,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PasscodeActivity$4 */
-    class C16434 implements Callback {
-        C16434() {
+    class C11104 implements Callback {
+        C11104() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -160,8 +160,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PasscodeActivity$5 */
-    class C16445 implements OnClickListener {
-        C16445() {
+    class C11115 implements OnClickListener {
+        C11115() {
         }
 
         public void onClick(View view) {
@@ -170,8 +170,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PasscodeActivity$8 */
-    class C16468 implements Runnable {
-        C16468() {
+    class C11138 implements Runnable {
+        C11138() {
         }
 
         public void run() {
@@ -183,8 +183,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PasscodeActivity$9 */
-    class C16479 implements OnPreDrawListener {
-        C16479() {
+    class C11149 implements OnPreDrawListener {
+        C11149() {
         }
 
         public boolean onPreDraw() {
@@ -195,8 +195,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PasscodeActivity$1 */
-    class C23881 extends ActionBarMenuOnItemClick {
-        C23881() {
+    class C16411 extends ActionBarMenuOnItemClick {
+        C16411() {
         }
 
         public void onItemClick(int id) {
@@ -219,11 +219,11 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.PasscodeActivity$7 */
-    class C23907 implements OnItemClickListener {
+    class C16437 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.PasscodeActivity$7$1 */
-        class C23891 implements Formatter {
-            C23891() {
+        class C16421 implements Formatter {
+            C16421() {
             }
 
             public String format(int value) {
@@ -244,7 +244,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        C23907() {
+        C16437() {
         }
 
         public void onItemClick(View view, final int position) {
@@ -294,7 +294,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     } else if (SharedConfig.autoLockIn == 18000) {
                         numberPicker.setValue(4);
                     }
-                    numberPicker.setFormatter(new C23891());
+                    numberPicker.setFormatter(new C16421());
                     builder.setView(numberPicker);
                     builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -486,7 +486,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         }
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C23881());
+        this.actionBar.setActionBarMenuOnItemClick(new C16411());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         if (this.type != 0) {
@@ -525,9 +525,9 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             this.passwordEditText.setCursorSize(AndroidUtilities.dp(20.0f));
             this.passwordEditText.setCursorWidth(1.5f);
             frameLayout.addView(this.passwordEditText, LayoutHelper.createFrame(-1, 36.0f, 51, 40.0f, 90.0f, 40.0f, 0.0f));
-            this.passwordEditText.setOnEditorActionListener(new C16412());
-            this.passwordEditText.addTextChangedListener(new C16423());
-            this.passwordEditText.setCustomSelectionActionModeCallback(new C16434());
+            this.passwordEditText.setOnEditorActionListener(new C11082());
+            this.passwordEditText.addTextChangedListener(new C11093());
+            this.passwordEditText.setCustomSelectionActionModeCallback(new C11104());
             if (this.type == 1) {
                 frameLayout.setTag(Theme.key_windowBackgroundWhite);
                 this.dropDownContainer = new ActionBarMenuItem(context, menu, 0, 0);
@@ -535,7 +535,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 this.dropDownContainer.addSubItem(2, LocaleController.getString("PasscodePIN", R.string.PasscodePIN));
                 this.dropDownContainer.addSubItem(3, LocaleController.getString("PasscodePassword", R.string.PasscodePassword));
                 this.actionBar.addView(this.dropDownContainer, LayoutHelper.createFrame(-2, -1.0f, 51, AndroidUtilities.isTablet() ? 64.0f : 56.0f, 0.0f, 40.0f, 0.0f));
-                this.dropDownContainer.setOnClickListener(new C16445());
+                this.dropDownContainer.setOnClickListener(new C11115());
                 this.dropDown = new TextView(context);
                 this.dropDown.setGravity(3);
                 this.dropDown.setSingleLine(true);
@@ -572,7 +572,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             Adapter listAdapter = new ListAdapter(context);
             this.listAdapter = listAdapter;
             recyclerListView.setAdapter(listAdapter);
-            this.listView.setOnItemClickListener(new C23907());
+            this.listView.setOnItemClickListener(new C16437());
         }
         return this.fragmentView;
     }
@@ -583,7 +583,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             this.listAdapter.notifyDataSetChanged();
         }
         if (this.type != 0) {
-            AndroidUtilities.runOnUIThread(new C16468(), 200);
+            AndroidUtilities.runOnUIThread(new C11138(), 200);
         }
         fixLayoutInternal();
     }
@@ -616,7 +616,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     this.fingerprintRow = i;
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             i = this.rowCount;
             this.rowCount = i + 1;
@@ -642,7 +642,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (this.listView != null) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new C16479());
+            this.listView.getViewTreeObserver().addOnPreDrawListener(new C11149());
         }
     }
 
@@ -697,14 +697,14 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 try {
                     SharedConfig.passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(SharedConfig.passcodeSalt);
-                    byte[] passcodeBytes = this.firstPassword.getBytes(C0559C.UTF8_NAME);
+                    byte[] passcodeBytes = this.firstPassword.getBytes(C0012C.UTF8_NAME);
                     byte[] bytes = new byte[(passcodeBytes.length + 32)];
                     System.arraycopy(SharedConfig.passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
                     System.arraycopy(SharedConfig.passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
                     SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 SharedConfig.passcodeType = this.currentPasswordType;
                 SharedConfig.saveConfig();
@@ -717,7 +717,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             try {
                 Toast.makeText(getParentActivity(), LocaleController.getString("PasscodeDoNotMatch", R.string.PasscodeDoNotMatch), 0).show();
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
             AndroidUtilities.shakeView(this.titleTextView, 2.0f, 0);
             this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);

@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.util.Log;
+import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -65,12 +66,12 @@ public class FileLog {
                         this.streamWriter.write("-----start log " + this.dateFormat.format(System.currentTimeMillis()) + "-----\n");
                         this.streamWriter.flush();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        ThrowableExtension.printStackTrace(e);
                     }
                     this.initied = true;
                 }
             } catch (Exception e2) {
-                e2.printStackTrace();
+                ThrowableExtension.printStackTrace(e2);
             }
         }
     }
@@ -93,13 +94,13 @@ public class FileLog {
             getInstance().networkFile = new File(dir, getInstance().dateFormat.format(System.currentTimeMillis()) + "_net.txt");
             return getInstance().networkFile.getAbsolutePath();
         } catch (Throwable e) {
-            e.printStackTrace();
+            ThrowableExtension.printStackTrace(e);
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 
     /* renamed from: e */
-    public static void m2e(final String message, final Throwable exception) {
+    public static void m7e(final String message, final Throwable exception) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.e(tag, message, exception);
@@ -111,7 +112,7 @@ public class FileLog {
                             FileLog.getInstance().streamWriter.write(exception.toString());
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            ThrowableExtension.printStackTrace(e);
                         }
                     }
                 });
@@ -120,7 +121,7 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m1e(final String message) {
+    public static void m6e(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.e(tag, message);
@@ -131,7 +132,7 @@ public class FileLog {
                             FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            ThrowableExtension.printStackTrace(e);
                         }
                     }
                 });
@@ -140,10 +141,10 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m3e(final Throwable e) {
+    public static void m8e(final Throwable e) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
-            e.printStackTrace();
+            ThrowableExtension.printStackTrace(e);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
@@ -155,18 +156,18 @@ public class FileLog {
                             }
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            ThrowableExtension.printStackTrace(e);
                         }
                     }
                 });
             } else {
-                e.printStackTrace();
+                ThrowableExtension.printStackTrace(e);
             }
         }
     }
 
     /* renamed from: d */
-    public static void m0d(final String message) {
+    public static void m5d(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.d(tag, message);
@@ -177,7 +178,7 @@ public class FileLog {
                             FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + message + "\n");
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            ThrowableExtension.printStackTrace(e);
                         }
                     }
                 });
@@ -186,7 +187,7 @@ public class FileLog {
     }
 
     /* renamed from: w */
-    public static void m4w(final String message) {
+    public static void m9w(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.w(tag, message);
@@ -197,7 +198,7 @@ public class FileLog {
                             FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + message + "\n");
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            ThrowableExtension.printStackTrace(e);
                         }
                     }
                 });

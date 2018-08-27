@@ -63,8 +63,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     private boolean lastNameAvailable;
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$2 */
-    class C09882 implements OnTouchListener {
-        C09882() {
+    class C06432 implements OnTouchListener {
+        C06432() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -73,8 +73,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$3 */
-    class C09893 implements OnEditorActionListener {
-        C09893() {
+    class C06443 implements OnEditorActionListener {
+        C06443() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -87,8 +87,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$4 */
-    class C09904 implements TextWatcher {
-        C09904() {
+    class C06454 implements TextWatcher {
+        C06454() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -129,7 +129,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 Selection.removeSelection(buffer);
                 return result;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return false;
             }
         }
@@ -152,14 +152,14 @@ public class ChangeUsernameActivity extends BaseFragment {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.url));
                 Toast.makeText(ChangeUsernameActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$1 */
-    class C21231 extends ActionBarMenuOnItemClick {
-        C21231() {
+    class C14481 extends ActionBarMenuOnItemClick {
+        C14481() {
         }
 
         public void onItemClick(int id) {
@@ -175,7 +175,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("Username", R.string.Username));
-        this.actionBar.setActionBarMenuOnItemClick(new C21231());
+        this.actionBar.setActionBarMenuOnItemClick(new C14481());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
@@ -184,7 +184,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C09882());
+        this.fragmentView.setOnTouchListener(new C06432());
         this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -201,8 +201,8 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new C09893());
-        this.firstNameField.addTextChangedListener(new C09904());
+        this.firstNameField.setOnEditorActionListener(new C06443());
+        this.firstNameField.addTextChangedListener(new C06454());
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.checkTextView = new TextView(context);
         this.checkTextView.setTextSize(1, 15.0f);
@@ -327,8 +327,8 @@ public class ChangeUsernameActivity extends BaseFragment {
             this.checkRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.ChangeUsernameActivity$5$1 */
-                class C21241 implements RequestDelegate {
-                    C21241() {
+                class C14491 implements RequestDelegate {
+                    C14491() {
                     }
 
                     public void run(final TLObject response, final TL_error error) {
@@ -356,7 +356,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 public void run() {
                     TL_account_checkUsername req = new TL_account_checkUsername();
                     req.username = name;
-                    ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).sendRequest(req, new C21241(), 2);
+                    ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).sendRequest(req, new C14491(), 2);
                 }
             };
             AndroidUtilities.runOnUIThread(this.checkRunnable, 300);
@@ -393,7 +393,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                                     try {
                                         progressDialog.dismiss();
                                     } catch (Throwable e) {
-                                        FileLog.m3e(e);
+                                        FileLog.m8e(e);
                                     }
                                     ArrayList<User> users = new ArrayList();
                                     users.add(user);
@@ -410,7 +410,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.m3e(e);
+                                    FileLog.m8e(e);
                                 }
                                 AlertsCreator.processError(ChangeUsernameActivity.this.currentAccount, error, ChangeUsernameActivity.this, req, new Object[0]);
                             }
@@ -424,7 +424,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                         try {
                             dialog.dismiss();
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                 });

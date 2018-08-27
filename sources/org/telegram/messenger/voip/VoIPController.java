@@ -251,7 +251,7 @@ public class VoIPController {
         boolean z = (sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
         boolean z2 = (sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
         if (BuildConfig.DEBUG) {
-            logFilePath = getLogFilePath("voip");
+            logFilePath = getLogFilePath("voip" + callID);
         } else {
             logFilePath = getLogFilePath(callID);
         }

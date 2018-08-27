@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import com.google.android.exoplayer2.C0012C;
 import java.io.File;
 import java.io.FileInputStream;
 import org.telegram.messenger.AndroidUtilities;
@@ -21,7 +22,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0559C;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Components.LayoutHelper;
@@ -150,7 +150,7 @@ public class ThemeCell extends FrameLayout {
                             if (bytes[a] == (byte) 10) {
                                 linesRead++;
                                 int len = (a - start) + 1;
-                                String line = new String(bytes, start, len - 1, C0559C.UTF8_NAME);
+                                String line = new String(bytes, start, len - 1, C0012C.UTF8_NAME);
                                 if (line.startsWith("WPS")) {
                                     break;
                                 }
@@ -188,18 +188,18 @@ public class ThemeCell extends FrameLayout {
                     try {
                         fileInputStream2.close();
                     } catch (Throwable e3) {
-                        FileLog.m3e(e3);
+                        FileLog.m8e(e3);
                     }
                 }
             } catch (Throwable th3) {
                 e3 = th3;
                 try {
-                    FileLog.m3e(e3);
+                    FileLog.m8e(e3);
                     if (fileInputStream != null) {
                         try {
                             fileInputStream.close();
                         } catch (Throwable e32) {
-                            FileLog.m3e(e32);
+                            FileLog.m8e(e32);
                         }
                     }
                     if (!finished) {
@@ -211,7 +211,7 @@ public class ThemeCell extends FrameLayout {
                         try {
                             fileInputStream.close();
                         } catch (Throwable e322) {
-                            FileLog.m3e(e322);
+                            FileLog.m8e(e322);
                         }
                     }
                     throw th;

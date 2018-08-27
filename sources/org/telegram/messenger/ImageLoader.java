@@ -19,6 +19,8 @@ import android.os.Environment;
 import android.support.media.ExifInterface;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,10 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.messenger.FileLoader.FileLoaderDelegate;
-import org.telegram.messenger.exoplayer2.DefaultLoadControl;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
@@ -95,46 +95,24 @@ public class ImageLoader {
     private SparseArray<String> waitingForQualityThumbByTag = new SparseArray();
 
     /* renamed from: org.telegram.messenger.ImageLoader$3 */
-    class C02023 extends BroadcastReceiver {
-
-        /* renamed from: org.telegram.messenger.ImageLoader$3$1 */
-        class C02011 implements Runnable {
-            C02011() {
-            }
-
-            public void run() {
-                ImageLoader.this.checkMediaPaths();
-            }
-        }
-
-        C02023() {
+    class C02953 extends BroadcastReceiver {
+        C02953() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("file system changed");
+                FileLog.m5d("file system changed");
             }
-            Runnable r = new C02011();
+            Runnable r = new ImageLoader$3$$Lambda$0(this);
             if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
                 AndroidUtilities.runOnUIThread(r, 1000);
             } else {
                 r.run();
             }
         }
-    }
 
-    /* renamed from: org.telegram.messenger.ImageLoader$4 */
-    class C02044 implements Runnable {
-        C02044() {
-        }
-
-        public void run() {
-            final SparseArray<File> paths = ImageLoader.this.createMediaPaths();
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    FileLoader.setMediaDirs(paths);
-                }
-            });
+        final /* synthetic */ void lambda$onReceive$0$ImageLoader$3() {
+            ImageLoader.this.checkMediaPaths();
         }
     }
 
@@ -246,33 +224,9 @@ public class ImageLoader {
             }
         }
 
-        public void setImageAndClear(final BitmapDrawable image) {
+        public void setImageAndClear(BitmapDrawable image) {
             if (image != null) {
-                final ArrayList<ImageReceiver> finalImageReceiverArray = new ArrayList(this.imageReceiverArray);
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        int a;
-                        if (image instanceof AnimatedFileDrawable) {
-                            boolean imageSet = false;
-                            BitmapDrawable fileDrawable = image;
-                            a = 0;
-                            while (a < finalImageReceiverArray.size()) {
-                                if (((ImageReceiver) finalImageReceiverArray.get(a)).setImageBitmapByKey(a == 0 ? fileDrawable : fileDrawable.makeCopy(), CacheImage.this.key, CacheImage.this.selfThumb, false)) {
-                                    imageSet = true;
-                                }
-                                a++;
-                            }
-                            if (!imageSet) {
-                                ((AnimatedFileDrawable) image).recycle();
-                                return;
-                            }
-                            return;
-                        }
-                        for (a = 0; a < finalImageReceiverArray.size(); a++) {
-                            ((ImageReceiver) finalImageReceiverArray.get(a)).setImageBitmapByKey(image, CacheImage.this.key, CacheImage.this.selfThumb, false);
-                        }
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new ImageLoader$CacheImage$$Lambda$0(this, image, new ArrayList(this.imageReceiverArray)));
             }
             for (int a = 0; a < this.imageReceiverArray.size(); a++) {
                 ImageLoader.this.imageLoadingByTag.remove(((ImageReceiver) this.imageReceiverArray.get(a)).getTag(this.selfThumb));
@@ -283,6 +237,29 @@ public class ImageLoader {
             }
             if (this.key != null) {
                 ImageLoader.this.imageLoadingByKeys.remove(this.key);
+            }
+        }
+
+        final /* synthetic */ void lambda$setImageAndClear$0$ImageLoader$CacheImage(BitmapDrawable image, ArrayList finalImageReceiverArray) {
+            int a;
+            if (image instanceof AnimatedFileDrawable) {
+                boolean imageSet = false;
+                BitmapDrawable fileDrawable = (AnimatedFileDrawable) image;
+                a = 0;
+                while (a < finalImageReceiverArray.size()) {
+                    if (((ImageReceiver) finalImageReceiverArray.get(a)).setImageBitmapByKey(a == 0 ? fileDrawable : fileDrawable.makeCopy(), this.key, this.selfThumb, false)) {
+                        imageSet = true;
+                    }
+                    a++;
+                }
+                if (!imageSet) {
+                    ((AnimatedFileDrawable) image).recycle();
+                    return;
+                }
+                return;
+            }
+            for (a = 0; a < finalImageReceiverArray.size(); a++) {
+                ((ImageReceiver) finalImageReceiverArray.get(a)).setImageBitmapByKey(image, this.key, this.selfThumb, false);
             }
         }
     }
@@ -530,7 +507,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             r25 = move-exception;
             r4 = r33;
         L_0x016a:
-            org.telegram.messenger.FileLog.m3e(r25);
+            org.telegram.messenger.FileLog.m8e(r25);
         L_0x016d:
             java.lang.Thread.interrupted();
             if (r4 == 0) goto L_0x08bd;
@@ -560,19 +537,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             goto L_0x00ee;
         L_0x019a:
             r25 = move-exception;
-            org.telegram.messenger.FileLog.m3e(r25);
+            org.telegram.messenger.FileLog.m8e(r25);
             goto L_0x0128;
         L_0x019f:
             r25 = move-exception;
         L_0x01a0:
-            org.telegram.messenger.FileLog.m3e(r25);	 Catch:{ all -> 0x01af }
+            org.telegram.messenger.FileLog.m8e(r25);	 Catch:{ all -> 0x01af }
             if (r46 == 0) goto L_0x0128;
         L_0x01a5:
             r46.close();	 Catch:{ Exception -> 0x01a9 }
             goto L_0x0128;
         L_0x01a9:
             r25 = move-exception;
-            org.telegram.messenger.FileLog.m3e(r25);
+            org.telegram.messenger.FileLog.m8e(r25);
             goto L_0x0128;
         L_0x01af:
             r5 = move-exception;
@@ -584,7 +561,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             throw r5;
         L_0x01b6:
             r25 = move-exception;
-            org.telegram.messenger.FileLog.m3e(r25);
+            org.telegram.messenger.FileLog.m8e(r25);
             goto L_0x01b5;
         L_0x01bb:
             r0 = r56;
@@ -1628,29 +1605,28 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.CacheOutTask.run():void");
         }
 
-        private void onPostExecute(final BitmapDrawable bitmapDrawable) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    BitmapDrawable toSet = null;
-                    if (bitmapDrawable instanceof AnimatedFileDrawable) {
-                        toSet = bitmapDrawable;
-                    } else if (bitmapDrawable != null) {
-                        toSet = ImageLoader.this.memCache.get(CacheOutTask.this.cacheImage.key);
-                        if (toSet == null) {
-                            ImageLoader.this.memCache.put(CacheOutTask.this.cacheImage.key, bitmapDrawable);
-                            toSet = bitmapDrawable;
-                        } else {
-                            bitmapDrawable.getBitmap().recycle();
-                        }
-                    }
-                    final BitmapDrawable toSetFinal = toSet;
-                    ImageLoader.this.imageLoadQueue.postRunnable(new Runnable() {
-                        public void run() {
-                            CacheOutTask.this.cacheImage.setImageAndClear(toSetFinal);
-                        }
-                    });
+        private void onPostExecute(BitmapDrawable bitmapDrawable) {
+            AndroidUtilities.runOnUIThread(new ImageLoader$CacheOutTask$$Lambda$0(this, bitmapDrawable));
+        }
+
+        final /* synthetic */ void lambda$onPostExecute$1$ImageLoader$CacheOutTask(BitmapDrawable bitmapDrawable) {
+            BitmapDrawable toSet = null;
+            if (bitmapDrawable instanceof AnimatedFileDrawable) {
+                toSet = bitmapDrawable;
+            } else if (bitmapDrawable != null) {
+                toSet = ImageLoader.this.memCache.get(this.cacheImage.key);
+                if (toSet == null) {
+                    ImageLoader.this.memCache.put(this.cacheImage.key, bitmapDrawable);
+                    toSet = bitmapDrawable;
+                } else {
+                    bitmapDrawable.getBitmap().recycle();
                 }
-            });
+            }
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$CacheOutTask$$Lambda$1(this, toSet));
+        }
+
+        final /* synthetic */ void lambda$null$0$ImageLoader$CacheOutTask(BitmapDrawable toSetFinal) {
+            this.cacheImage.setImageAndClear(toSetFinal);
         }
 
         public void cancel() {
@@ -1683,28 +1659,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             this.currentAccount = currentAccount;
         }
 
-        private void reportProgress(final float progress) {
+        private void reportProgress(float progress) {
             long currentTime = System.currentTimeMillis();
             if (progress == 1.0f || this.lastProgressTime == 0 || this.lastProgressTime < currentTime - 500) {
                 this.lastProgressTime = currentTime;
-                Utilities.stageQueue.postRunnable(new Runnable() {
-
-                    /* renamed from: org.telegram.messenger.ImageLoader$HttpFileTask$1$1 */
-                    class C02131 implements Runnable {
-                        C02131() {
-                        }
-
-                        public void run() {
-                            NotificationCenter.getInstance(HttpFileTask.this.currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, HttpFileTask.this.url, Float.valueOf(progress));
-                        }
-                    }
-
-                    public void run() {
-                        ImageLoader.this.fileProgresses.put(HttpFileTask.this.url, Float.valueOf(progress));
-                        AndroidUtilities.runOnUIThread(new C02131());
-                    }
-                });
+                Utilities.stageQueue.postRunnable(new ImageLoader$HttpFileTask$$Lambda$0(this, progress));
             }
+        }
+
+        final /* synthetic */ void lambda$reportProgress$1$ImageLoader$HttpFileTask(float progress) {
+            ImageLoader.this.fileProgresses.put(this.url, Float.valueOf(progress));
+            AndroidUtilities.runOnUIThread(new ImageLoader$HttpFileTask$$Lambda$1(this, progress));
+        }
+
+        final /* synthetic */ void lambda$null$0$ImageLoader$HttpFileTask(float progress) {
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, this.url, Float.valueOf(progress));
         }
 
         protected Boolean doInBackground(Void... voids) {
@@ -1745,7 +1714,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 } else if (e instanceof FileNotFoundException) {
                     this.canRetry = false;
                 }
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             if (this.canRetry) {
                 if (httpConnection != null) {
@@ -1757,7 +1726,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             }
                         }
                     } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 }
                 if (httpConnection != null) {
@@ -1773,7 +1742,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                 }
                 if (httpConnectionStream != null) {
@@ -1796,9 +1765,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             }
                         }
                     } catch (Throwable e222) {
-                        FileLog.m3e(e222);
+                        FileLog.m8e(e222);
                     } catch (Throwable e2222) {
-                        FileLog.m3e(e2222);
+                        FileLog.m8e(e2222);
                     }
                 }
                 try {
@@ -1807,13 +1776,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         this.fileOutputStream = null;
                     }
                 } catch (Throwable e22222) {
-                    FileLog.m3e(e22222);
+                    FileLog.m8e(e22222);
                 }
                 if (httpConnectionStream != null) {
                     try {
                         httpConnectionStream.close();
                     } catch (Throwable e222222) {
-                        FileLog.m3e(e222222);
+                        FileLog.m8e(e222222);
                     }
                 }
             }
@@ -1837,84 +1806,26 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         private int imageSize;
         private long lastProgressTime;
 
-        /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$4 */
-        class C02194 implements Runnable {
-            C02194() {
-            }
-
-            public void run() {
-                ImageLoader.this.runHttpTasks(true);
-            }
-        }
-
-        /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$5 */
-        class C02205 implements Runnable {
-            C02205() {
-            }
-
-            public void run() {
-                ImageLoader.this.runHttpTasks(true);
-            }
-        }
-
-        /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$6 */
-        class C02226 implements Runnable {
-
-            /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$6$1 */
-            class C02211 implements Runnable {
-                C02211() {
-                }
-
-                public void run() {
-                    NotificationCenter.getInstance(HttpImageTask.this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, HttpImageTask.this.cacheImage.url, Integer.valueOf(1));
-                }
-            }
-
-            C02226() {
-            }
-
-            public void run() {
-                ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
-                AndroidUtilities.runOnUIThread(new C02211());
-            }
-        }
-
-        /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$2 */
-        class C19672 implements RequestDelegate {
-            C19672() {
-            }
-
-            public void run(TLObject response, TL_error error) {
-            }
-        }
-
         public HttpImageTask(CacheImage cacheImage, int size) {
             this.cacheImage = cacheImage;
             this.imageSize = size;
         }
 
-        private void reportProgress(final float progress) {
+        private void reportProgress(float progress) {
             long currentTime = System.currentTimeMillis();
             if (progress == 1.0f || this.lastProgressTime == 0 || this.lastProgressTime < currentTime - 500) {
                 this.lastProgressTime = currentTime;
-                Utilities.stageQueue.postRunnable(new Runnable() {
-
-                    /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$1$1 */
-                    class C02151 implements Runnable {
-                        C02151() {
-                        }
-
-                        public void run() {
-                            NotificationCenter.getInstance(HttpImageTask.this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, HttpImageTask.this.cacheImage.url, Float.valueOf(progress));
-                        }
-                    }
-
-                    public void run() {
-                        ImageLoader.this.fileProgresses.put(HttpImageTask.this.cacheImage.url, Float.valueOf(progress));
-                        AndroidUtilities.runOnUIThread(new C02151());
-                    }
-                });
+                Utilities.stageQueue.postRunnable(new ImageLoader$HttpImageTask$$Lambda$0(this, progress));
             }
+        }
+
+        final /* synthetic */ void lambda$reportProgress$1$ImageLoader$HttpImageTask(float progress) {
+            ImageLoader.this.fileProgresses.put(this.cacheImage.url, Float.valueOf(progress));
+            AndroidUtilities.runOnUIThread(new ImageLoader$HttpImageTask$$Lambda$8(this, progress));
+        }
+
+        final /* synthetic */ void lambda$null$0$ImageLoader$HttpImageTask(float progress) {
+            NotificationCenter.getInstance(this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, this.cacheImage.url, Float.valueOf(progress));
         }
 
         protected Boolean doInBackground(Void... voids) {
@@ -1931,7 +1842,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 req.location = webFile.location;
                                 req.offset = 0;
                                 req.limit = 0;
-                                ConnectionsManager.getInstance(this.cacheImage.currentAccount).sendRequest(req, new C19672());
+                                ConnectionsManager.getInstance(this.cacheImage.currentAccount).sendRequest(req, ImageLoader$HttpImageTask$$Lambda$1.$instance);
                             }
                         }
                     }
@@ -1959,19 +1870,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     } else if (e instanceof FileNotFoundException) {
                         this.canRetry = false;
                     }
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
             if (!isCancelled()) {
                 try {
                     if (this.httpConnection != null && (this.httpConnection instanceof HttpURLConnection)) {
                         int code = this.httpConnection.getResponseCode();
-                        if (!(code == 200 || code == 202 || code == 304)) {
+                        if (!(code == Callback.DEFAULT_DRAG_ANIMATION_DURATION || code == 202 || code == 304)) {
                             this.canRetry = false;
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.m3e(e2);
+                    FileLog.m8e(e2);
                 }
                 if (this.imageSize == 0 && this.httpConnection != null) {
                     try {
@@ -1986,7 +1897,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                 }
                 if (httpConnectionStream != null) {
@@ -2009,9 +1920,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             }
                         }
                     } catch (Throwable e222) {
-                        FileLog.m3e(e222);
+                        FileLog.m8e(e222);
                     } catch (Throwable e2222) {
-                        FileLog.m3e(e2222);
+                        FileLog.m8e(e2222);
                     }
                 }
             }
@@ -2021,7 +1932,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     this.fileOutputStream = null;
                 }
             } catch (Throwable e22222) {
-                FileLog.m3e(e22222);
+                FileLog.m8e(e22222);
             }
             try {
                 if (this.httpConnection != null) {
@@ -2033,7 +1944,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 try {
                     httpConnectionStream.close();
                 } catch (Throwable e222222) {
-                    FileLog.m3e(e222222);
+                    FileLog.m8e(e222222);
                 }
             }
             if (!(!done || this.cacheImage.tempFilePath == null || this.cacheImage.tempFilePath.renameTo(this.cacheImage.finalFilePath))) {
@@ -2042,39 +1953,52 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             return Boolean.valueOf(done);
         }
 
-        protected void onPostExecute(final Boolean result) {
+        static final /* synthetic */ void lambda$doInBackground$2$ImageLoader$HttpImageTask(TLObject response, TL_error error) {
+        }
+
+        protected void onPostExecute(Boolean result) {
             if (result.booleanValue() || !this.canRetry) {
                 ImageLoader.this.fileDidLoaded(this.cacheImage.url, this.cacheImage.finalFilePath, 0);
             } else {
                 ImageLoader.this.httpFileLoadError(this.cacheImage.url);
             }
-            Utilities.stageQueue.postRunnable(new Runnable() {
+            Utilities.stageQueue.postRunnable(new ImageLoader$HttpImageTask$$Lambda$2(this, result));
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$HttpImageTask$$Lambda$3(this));
+        }
 
-                /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$3$1 */
-                class C02171 implements Runnable {
-                    C02171() {
-                    }
+        final /* synthetic */ void lambda$onPostExecute$4$ImageLoader$HttpImageTask(Boolean result) {
+            ImageLoader.this.fileProgresses.remove(this.cacheImage.url);
+            AndroidUtilities.runOnUIThread(new ImageLoader$HttpImageTask$$Lambda$7(this, result));
+        }
 
-                    public void run() {
-                        if (result.booleanValue()) {
-                            NotificationCenter.getInstance(HttpImageTask.this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidLoaded, HttpImageTask.this.cacheImage.url);
-                            return;
-                        }
-                        NotificationCenter.getInstance(HttpImageTask.this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, HttpImageTask.this.cacheImage.url, Integer.valueOf(2));
-                    }
-                }
+        final /* synthetic */ void lambda$null$3$ImageLoader$HttpImageTask(Boolean result) {
+            if (result.booleanValue()) {
+                NotificationCenter.getInstance(this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidLoaded, this.cacheImage.url);
+                return;
+            }
+            NotificationCenter.getInstance(this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, this.cacheImage.url, Integer.valueOf(2));
+        }
 
-                public void run() {
-                    ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
-                    AndroidUtilities.runOnUIThread(new C02171());
-                }
-            });
-            ImageLoader.this.imageLoadQueue.postRunnable(new C02194());
+        final /* synthetic */ void lambda$onPostExecute$5$ImageLoader$HttpImageTask() {
+            ImageLoader.this.runHttpTasks(true);
+        }
+
+        final /* synthetic */ void lambda$onCancelled$6$ImageLoader$HttpImageTask() {
+            ImageLoader.this.runHttpTasks(true);
         }
 
         protected void onCancelled() {
-            ImageLoader.this.imageLoadQueue.postRunnable(new C02205());
-            Utilities.stageQueue.postRunnable(new C02226());
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$HttpImageTask$$Lambda$4(this));
+            Utilities.stageQueue.postRunnable(new ImageLoader$HttpImageTask$$Lambda$5(this));
+        }
+
+        final /* synthetic */ void lambda$onCancelled$8$ImageLoader$HttpImageTask() {
+            ImageLoader.this.fileProgresses.remove(this.cacheImage.url);
+            AndroidUtilities.runOnUIThread(new ImageLoader$HttpImageTask$$Lambda$6(this));
+        }
+
+        final /* synthetic */ void lambda$null$7$ImageLoader$HttpImageTask() {
+            NotificationCenter.getInstance(this.cacheImage.currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, this.cacheImage.url, Integer.valueOf(1));
         }
     }
 
@@ -2102,13 +2026,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
         private void removeTask() {
             if (this.thumbLocation != null) {
-                final String name = FileLoader.getAttachFileName(this.thumbLocation);
-                ImageLoader.this.imageLoadQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        ImageLoader.this.thumbGenerateTasks.remove(name);
-                    }
-                });
+                ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$ThumbGenerateTask$$Lambda$0(this, FileLoader.getAttachFileName(this.thumbLocation)));
             }
+        }
+
+        final /* synthetic */ void lambda$removeTask$0$ImageLoader$ThumbGenerateTask(String name) {
+            ThumbGenerateTask thumbGenerateTask = (ThumbGenerateTask) ImageLoader.this.thumbGenerateTasks.remove(name);
         }
 
         public void run() {
@@ -2117,7 +2040,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     removeTask();
                     return;
                 }
-                final String key = this.thumbLocation.volume_id + "_" + this.thumbLocation.local_id;
+                String key = this.thumbLocation.volume_id + "_" + this.thumbLocation.local_id;
                 File thumbFile = new File(FileLoader.getDirectory(4), "q_" + key + ".jpg");
                 if (thumbFile.exists() || !this.originalPath.exists()) {
                     removeTask();
@@ -2157,24 +2080,23 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 FileOutputStream stream = new FileOutputStream(thumbFile);
                 originalBitmap.compress(CompressFormat.JPEG, 60, stream);
                 stream.close();
-                final BitmapDrawable bitmapDrawable = new BitmapDrawable(originalBitmap);
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        ThumbGenerateTask.this.removeTask();
-                        String kf = key;
-                        if (ThumbGenerateTask.this.filter != null) {
-                            kf = kf + "@" + ThumbGenerateTask.this.filter;
-                        }
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.messageThumbGenerated, bitmapDrawable, kf);
-                        ImageLoader.this.memCache.put(kf, bitmapDrawable);
-                    }
-                });
+                AndroidUtilities.runOnUIThread(new ImageLoader$ThumbGenerateTask$$Lambda$1(this, key, new BitmapDrawable(originalBitmap)));
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
                 removeTask();
             }
+        }
+
+        final /* synthetic */ void lambda$run$1$ImageLoader$ThumbGenerateTask(String key, BitmapDrawable bitmapDrawable) {
+            removeTask();
+            String kf = key;
+            if (this.filter != null) {
+                kf = kf + "@" + this.filter;
+            }
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.messageThumbGenerated, bitmapDrawable, kf);
+            ImageLoader.this.memCache.put(kf, bitmapDrawable);
         }
     }
 
@@ -2229,116 +2151,80 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             try {
                 cachePath.mkdirs();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         try {
             new File(cachePath, ".nomedia").createNewFile();
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
         mediaDirs.put(4, cachePath);
         for (int a = 0; a < 3; a++) {
             final int currentAccount = a;
             FileLoader.getInstance(a).setDelegate(new FileLoaderDelegate() {
-                public void fileUploadProgressChanged(final String location, final float progress, final boolean isEncrypted) {
+                public void fileUploadProgressChanged(String location, float progress, boolean isEncrypted) {
                     ImageLoader.this.fileProgresses.put(location, Float.valueOf(progress));
                     long currentTime = System.currentTimeMillis();
                     if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTime - 500) {
                         ImageLoader.this.lastProgressUpdateTime = currentTime;
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileUploadProgressChanged, location, Float.valueOf(progress), Boolean.valueOf(isEncrypted));
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new ImageLoader$2$$Lambda$0(currentAccount, location, progress, isEncrypted));
                     }
                 }
 
                 public void fileDidUploaded(String location, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize) {
-                    final String str = location;
-                    final InputFile inputFile2 = inputFile;
-                    final InputEncryptedFile inputEncryptedFile2 = inputEncryptedFile;
-                    final byte[] bArr = key;
-                    final byte[] bArr2 = iv;
-                    final long j = totalFileSize;
-                    Utilities.stageQueue.postRunnable(new Runnable() {
-
-                        /* renamed from: org.telegram.messenger.ImageLoader$2$2$1 */
-                        class C01941 implements Runnable {
-                            C01941() {
-                            }
-
-                            public void run() {
-                                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidUpload, str, inputFile2, inputEncryptedFile2, bArr, bArr2, Long.valueOf(j));
-                            }
-                        }
-
-                        public void run() {
-                            AndroidUtilities.runOnUIThread(new C01941());
-                            ImageLoader.this.fileProgresses.remove(str);
-                        }
-                    });
+                    Utilities.stageQueue.postRunnable(new ImageLoader$2$$Lambda$1(this, currentAccount, location, inputFile, inputEncryptedFile, key, iv, totalFileSize));
                 }
 
-                public void fileDidFailedUpload(final String location, final boolean isEncrypted) {
-                    Utilities.stageQueue.postRunnable(new Runnable() {
-
-                        /* renamed from: org.telegram.messenger.ImageLoader$2$3$1 */
-                        class C01961 implements Runnable {
-                            C01961() {
-                            }
-
-                            public void run() {
-                                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidFailUpload, location, Boolean.valueOf(isEncrypted));
-                            }
-                        }
-
-                        public void run() {
-                            AndroidUtilities.runOnUIThread(new C01961());
-                            ImageLoader.this.fileProgresses.remove(location);
-                        }
-                    });
-                }
-
-                public void fileDidLoaded(final String location, final File finalFile, final int type) {
+                final /* synthetic */ void lambda$fileDidUploaded$2$ImageLoader$2(int currentAccount, String location, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize) {
+                    AndroidUtilities.runOnUIThread(new ImageLoader$2$$Lambda$7(currentAccount, location, inputFile, inputEncryptedFile, key, iv, totalFileSize));
                     ImageLoader.this.fileProgresses.remove(location);
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (SharedConfig.saveToGallery && ImageLoader.this.telegramPath != null && finalFile != null && ((location.endsWith(".mp4") || location.endsWith(".jpg")) && finalFile.toString().startsWith(ImageLoader.this.telegramPath.toString()))) {
-                                AndroidUtilities.addMediaToGallery(finalFile.toString());
-                            }
-                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidLoaded, location);
-                            ImageLoader.this.fileDidLoaded(location, finalFile, type);
-                        }
-                    });
                 }
 
-                public void fileDidFailedLoad(final String location, final int canceled) {
+                public void fileDidFailedUpload(String location, boolean isEncrypted) {
+                    Utilities.stageQueue.postRunnable(new ImageLoader$2$$Lambda$2(this, currentAccount, location, isEncrypted));
+                }
+
+                final /* synthetic */ void lambda$fileDidFailedUpload$4$ImageLoader$2(int currentAccount, String location, boolean isEncrypted) {
+                    AndroidUtilities.runOnUIThread(new ImageLoader$2$$Lambda$6(currentAccount, location, isEncrypted));
                     ImageLoader.this.fileProgresses.remove(location);
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            ImageLoader.this.fileDidFailedLoad(location, canceled);
-                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, location, Integer.valueOf(canceled));
-                        }
-                    });
                 }
 
-                public void fileLoadProgressChanged(final String location, final float progress) {
+                public void fileDidLoaded(String location, File finalFile, int type) {
+                    ImageLoader.this.fileProgresses.remove(location);
+                    AndroidUtilities.runOnUIThread(new ImageLoader$2$$Lambda$3(this, finalFile, location, currentAccount, type));
+                }
+
+                final /* synthetic */ void lambda$fileDidLoaded$5$ImageLoader$2(File finalFile, String location, int currentAccount, int type) {
+                    if (SharedConfig.saveToGallery && ImageLoader.this.telegramPath != null && finalFile != null && ((location.endsWith(".mp4") || location.endsWith(".jpg")) && finalFile.toString().startsWith(ImageLoader.this.telegramPath.toString()))) {
+                        AndroidUtilities.addMediaToGallery(finalFile.toString());
+                    }
+                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidLoaded, location);
+                    ImageLoader.this.fileDidLoaded(location, finalFile, type);
+                }
+
+                public void fileDidFailedLoad(String location, int canceled) {
+                    ImageLoader.this.fileProgresses.remove(location);
+                    AndroidUtilities.runOnUIThread(new ImageLoader$2$$Lambda$4(this, location, canceled, currentAccount));
+                }
+
+                final /* synthetic */ void lambda$fileDidFailedLoad$6$ImageLoader$2(String location, int canceled, int currentAccount) {
+                    ImageLoader.this.fileDidFailedLoad(location, canceled);
+                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileDidFailedLoad, location, Integer.valueOf(canceled));
+                }
+
+                public void fileLoadProgressChanged(String location, float progress) {
                     ImageLoader.this.fileProgresses.put(location, Float.valueOf(progress));
                     long currentTime = System.currentTimeMillis();
                     if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTime - 500) {
                         ImageLoader.this.lastProgressUpdateTime = currentTime;
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.FileLoadProgressChanged, location, Float.valueOf(progress));
-                            }
-                        });
+                        AndroidUtilities.runOnUIThread(new ImageLoader$2$$Lambda$5(currentAccount, location, progress));
                     }
                 }
             });
         }
         FileLoader.setMediaDirs(mediaDirs);
-        BroadcastReceiver receiver = new C02023();
+        BroadcastReceiver receiver = new C02953();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
         filter.addAction("android.intent.action.MEDIA_CHECKING");
@@ -2358,7 +2244,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public void checkMediaPaths() {
-        this.cacheOutQueue.postRunnable(new C02044());
+        this.cacheOutQueue.postRunnable(new ImageLoader$$Lambda$0(this));
+    }
+
+    final /* synthetic */ void lambda$checkMediaPaths$1$ImageLoader() {
+        AndroidUtilities.runOnUIThread(new ImageLoader$$Lambda$10(createMediaPaths()));
     }
 
     public void addTestWebFile(String url, WebFile webFile) {
@@ -2380,17 +2270,17 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             try {
                 cachePath.mkdirs();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         try {
             new File(cachePath, ".nomedia").createNewFile();
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
         mediaDirs.put(4, cachePath);
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("cache path = " + cachePath);
+            FileLog.m5d("cache path = " + cachePath);
         }
         try {
             if ("mounted".equals(Environment.getExternalStorageState())) {
@@ -2403,11 +2293,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, 0)) {
                             mediaDirs.put(0, imagePath);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("image path = " + imagePath);
+                                FileLog.m5d("image path = " + imagePath);
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                     try {
                         File videoPath = new File(this.telegramPath, "Telegram Video");
@@ -2415,11 +2305,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, 2)) {
                             mediaDirs.put(2, videoPath);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("video path = " + videoPath);
+                                FileLog.m5d("video path = " + videoPath);
                             }
                         }
                     } catch (Throwable e222) {
-                        FileLog.m3e(e222);
+                        FileLog.m8e(e222);
                     }
                     try {
                         File audioPath = new File(this.telegramPath, "Telegram Audio");
@@ -2428,11 +2318,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             new File(audioPath, ".nomedia").createNewFile();
                             mediaDirs.put(1, audioPath);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("audio path = " + audioPath);
+                                FileLog.m5d("audio path = " + audioPath);
                             }
                         }
                     } catch (Throwable e2222) {
-                        FileLog.m3e(e2222);
+                        FileLog.m8e(e2222);
                     }
                     try {
                         File documentPath = new File(this.telegramPath, "Telegram Documents");
@@ -2441,19 +2331,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             new File(documentPath, ".nomedia").createNewFile();
                             mediaDirs.put(3, documentPath);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("documents path = " + documentPath);
+                                FileLog.m5d("documents path = " + documentPath);
                             }
                         }
                     } catch (Throwable e22222) {
-                        FileLog.m3e(e22222);
+                        FileLog.m8e(e22222);
                     }
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("this Android can't rename files");
+                FileLog.m5d("this Android can't rename files");
             }
             SharedConfig.checkSaveToGalleryFiles();
         } catch (Throwable e222222) {
-            FileLog.m3e(e222222);
+            FileLog.m8e(e222222);
         }
         return mediaDirs;
     }
@@ -2475,12 +2365,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     e = e2;
                     srcFile = srcFile2;
                     try {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                         if (file != null) {
                             try {
                                 file.close();
                             } catch (Throwable e3) {
-                                FileLog.m3e(e3);
+                                FileLog.m8e(e3);
                             }
                         }
                         return false;
@@ -2490,7 +2380,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             try {
                                 file.close();
                             } catch (Throwable e32) {
-                                FileLog.m3e(e32);
+                                FileLog.m8e(e32);
                             }
                         }
                         throw th;
@@ -2498,7 +2388,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
             } catch (Exception e4) {
                 e32 = e4;
-                FileLog.m3e(e32);
+                FileLog.m8e(e32);
                 if (file != null) {
                     file.close();
                 }
@@ -2532,7 +2422,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     try {
                         file.close();
                     } catch (Throwable e322) {
-                        FileLog.m3e(e322);
+                        FileLog.m8e(e322);
                     }
                 }
                 return false;
@@ -2543,14 +2433,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     file.close();
                     return true;
                 } catch (Throwable e3222) {
-                    FileLog.m3e(e3222);
+                    FileLog.m8e(e3222);
                     return true;
                 }
             }
         } catch (Exception e5) {
             e3222 = e5;
             file = file2;
-            FileLog.m3e(e3222);
+            FileLog.m8e(e3222);
             if (file != null) {
                 file.close();
             }
@@ -2654,33 +2544,33 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
     }
 
-    public void cancelLoadingForImageReceiver(final ImageReceiver imageReceiver, final int type) {
+    public void cancelLoadingForImageReceiver(ImageReceiver imageReceiver, int type) {
         if (imageReceiver != null) {
-            this.imageLoadQueue.postRunnable(new Runnable() {
-                public void run() {
-                    int start = 0;
-                    int count = 2;
-                    if (type == 1) {
-                        count = 1;
-                    } else if (type == 2) {
-                        start = 1;
-                    }
-                    int a = start;
-                    while (a < count) {
-                        int TAG = imageReceiver.getTag(a == 0);
-                        if (a == 0) {
-                            ImageLoader.this.removeFromWaitingForThumb(TAG);
-                        }
-                        if (TAG != 0) {
-                            CacheImage ei = (CacheImage) ImageLoader.this.imageLoadingByTag.get(TAG);
-                            if (ei != null) {
-                                ei.removeImageReceiver(imageReceiver);
-                            }
-                        }
-                        a++;
-                    }
+            this.imageLoadQueue.postRunnable(new ImageLoader$$Lambda$1(this, type, imageReceiver));
+        }
+    }
+
+    final /* synthetic */ void lambda$cancelLoadingForImageReceiver$2$ImageLoader(int type, ImageReceiver imageReceiver) {
+        int start = 0;
+        int count = 2;
+        if (type == 1) {
+            count = 1;
+        } else if (type == 2) {
+            start = 1;
+        }
+        int a = start;
+        while (a < count) {
+            int TAG = imageReceiver.getTag(a == 0);
+            if (a == 0) {
+                removeFromWaitingForThumb(TAG);
+            }
+            if (TAG != 0) {
+                CacheImage ei = (CacheImage) this.imageLoadingByTag.get(TAG);
+                if (ei != null) {
+                    ei.removeImageReceiver(imageReceiver);
                 }
-            });
+            }
+            a++;
         }
     }
 
@@ -2731,16 +2621,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReplacedPhotoInMemCache, oldKey, newKey, newLocation);
     }
 
-    public void replaceImageInCache(final String oldKey, final String newKey, final FileLocation newLocation, boolean post) {
+    public void replaceImageInCache(String oldKey, String newKey, FileLocation newLocation, boolean post) {
         if (post) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    ImageLoader.this.replaceImageInCacheInternal(oldKey, newKey, newLocation);
-                }
-            });
+            AndroidUtilities.runOnUIThread(new ImageLoader$$Lambda$2(this, oldKey, newKey, newLocation));
         } else {
             replaceImageInCacheInternal(oldKey, newKey, newLocation);
         }
+    }
+
+    final /* synthetic */ void lambda$replaceImageInCache$3$ImageLoader(String oldKey, String newKey, FileLocation newLocation) {
+        replaceImageInCacheInternal(oldKey, newKey, newLocation);
     }
 
     public void putImageToCache(BitmapDrawable bitmap, String key) {
@@ -2757,15 +2647,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     public void cancelForceLoadingForImageReceiver(ImageReceiver imageReceiver) {
         if (imageReceiver != null) {
-            final String key = imageReceiver.getKey();
+            String key = imageReceiver.getKey();
             if (key != null) {
-                this.imageLoadQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        ImageLoader.this.forceLoadingImages.remove(key);
-                    }
-                });
+                this.imageLoadQueue.postRunnable(new ImageLoader$$Lambda$3(this, key));
             }
         }
+    }
+
+    final /* synthetic */ void lambda$cancelForceLoadingForImageReceiver$4$ImageLoader(String key) {
+        Integer num = (Integer) this.forceLoadingImages.remove(key);
     }
 
     private void createLoadOperationForImageReceiver(ImageReceiver imageReceiver, String key, String url, String ext, TLObject imageLocation, String httpLocation, String filter, int size, int cacheType, int thumb) {
@@ -2779,33 +2669,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     this.lastImageNum = 0;
                 }
             }
-            final int finalTag = TAG;
-            final boolean finalIsNeedsQualityThumb = imageReceiver.isNeedsQualityThumb();
-            final MessageObject parentMessageObject = imageReceiver.getParentMessageObject();
-            final boolean shouldGenerateQualityThumb = imageReceiver.isShouldGenerateQualityThumb();
-            final int currentAccount = imageReceiver.getcurrentAccount();
-            final int i = thumb;
-            final String str = url;
-            final String str2 = key;
-            final ImageReceiver imageReceiver2 = imageReceiver;
-            final String str3 = filter;
-            final String str4 = httpLocation;
-            final TLObject tLObject = imageLocation;
-            final int i2 = cacheType;
-            final int i3 = size;
-            final String str5 = ext;
-            this.imageLoadQueue.postRunnable(new Runnable() {
-                public void run() {
-                    /* JADX: method processing error */
+            this.imageLoadQueue.postRunnable(new ImageLoader$$Lambda$4(this, thumb, url, key, TAG, imageReceiver, filter, httpLocation, imageReceiver.isNeedsQualityThumb(), imageReceiver.getParentMessageObject(), imageLocation, imageReceiver.isShouldGenerateQualityThumb(), cacheType, size, ext, imageReceiver.getcurrentAccount()));
+        }
+    }
+
+    final /* synthetic */ void lambda$createLoadOperationForImageReceiver$5$ImageLoader(int r28, java.lang.String r29, java.lang.String r30, int r31, org.telegram.messenger.ImageReceiver r32, java.lang.String r33, java.lang.String r34, boolean r35, org.telegram.messenger.MessageObject r36, org.telegram.tgnet.TLObject r37, boolean r38, int r39, int r40, java.lang.String r41, int r42) {
+        /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r16_2 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo) in PHI: PHI: (r16_3 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo) = (r16_1 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo), (r16_2 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo) binds: {(r16_1 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo)=B:109:0x041a, (r16_2 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo)=B:110:0x041c}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r16_2 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo) in PHI: PHI: (r16_3 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo) = (r16_1 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo), (r16_2 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo) binds: {(r16_1 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo)=B:100:0x02d0, (r16_2 'info' org.telegram.messenger.ImageLoader$ThumbGenerateInfo)=B:101:0x02d2}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
 	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
 	at jadx.core.ProcessClass.process(ProcessClass.java:34)
 	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
 	at jadx.core.ProcessClass.process(ProcessClass.java:39)
@@ -2813,1042 +2690,724 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.api.JavaClass.decompile(JavaClass.java:62)
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
-                    /*
-                    r27 = this;
-                    r5 = 0;
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    r24 = 2;
-                    r0 = r23;
-                    r1 = r24;
-                    if (r0 == r1) goto L_0x00ae;
-                L_0x000f:
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.imageLoadingByUrl;
-                    r0 = r27;
-                    r0 = r5;
-                    r24 = r0;
-                    r8 = r23.get(r24);
-                    r8 = (org.telegram.messenger.ImageLoader.CacheImage) r8;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.imageLoadingByKeys;
-                    r0 = r27;
-                    r0 = r6;
-                    r24 = r0;
-                    r6 = r23.get(r24);
-                    r6 = (org.telegram.messenger.ImageLoader.CacheImage) r6;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.imageLoadingByTag;
-                    r0 = r27;
-                    r0 = r7;
-                    r24 = r0;
-                    r7 = r23.get(r24);
-                    r7 = (org.telegram.messenger.ImageLoader.CacheImage) r7;
-                    if (r7 == 0) goto L_0x0056;
-                L_0x0053:
-                    if (r7 != r6) goto L_0x02c1;
-                L_0x0055:
-                    r5 = 1;
-                L_0x0056:
-                    if (r5 != 0) goto L_0x0082;
-                L_0x0058:
-                    if (r6 == 0) goto L_0x0082;
-                L_0x005a:
-                    r0 = r27;
-                    r0 = r8;
-                    r24 = r0;
-                    r0 = r27;
-                    r0 = r6;
-                    r25 = r0;
-                    r0 = r27;
-                    r0 = r9;
-                    r26 = r0;
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x02ff;
-                L_0x0074:
-                    r23 = 1;
-                L_0x0076:
-                    r0 = r24;
-                    r1 = r25;
-                    r2 = r26;
-                    r3 = r23;
-                    r6.addImageReceiver(r0, r1, r2, r3);
-                    r5 = 1;
-                L_0x0082:
-                    if (r5 != 0) goto L_0x00ae;
-                L_0x0084:
-                    if (r8 == 0) goto L_0x00ae;
-                L_0x0086:
-                    r0 = r27;
-                    r0 = r8;
-                    r24 = r0;
-                    r0 = r27;
-                    r0 = r6;
-                    r25 = r0;
-                    r0 = r27;
-                    r0 = r9;
-                    r26 = r0;
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x0303;
-                L_0x00a0:
-                    r23 = 1;
-                L_0x00a2:
-                    r0 = r24;
-                    r1 = r25;
-                    r2 = r26;
-                    r3 = r23;
-                    r8.addImageReceiver(r0, r1, r2, r3);
-                    r5 = 1;
-                L_0x00ae:
-                    if (r5 != 0) goto L_0x02c0;
-                L_0x00b0:
-                    r21 = 0;
-                    r18 = 0;
-                    r11 = 0;
-                    r12 = 0;
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x034b;
-                L_0x00be:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = "http";
-                    r23 = r23.startsWith(r24);
-                    if (r23 != 0) goto L_0x0102;
-                L_0x00cd:
-                    r21 = 1;
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = "thumb://";
-                    r23 = r23.startsWith(r24);
-                    if (r23 == 0) goto L_0x0307;
-                L_0x00de:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = ":";
-                    r25 = 8;
-                    r14 = r23.indexOf(r24, r25);
-                    if (r14 < 0) goto L_0x0102;
-                L_0x00ef:
-                    r11 = new java.io.File;
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = r14 + 1;
-                    r23 = r23.substring(r24);
-                    r0 = r23;
-                    r11.<init>(r0);
-                L_0x0102:
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    r24 = 2;
-                    r0 = r23;
-                    r1 = r24;
-                    if (r0 == r1) goto L_0x02c0;
-                L_0x0110:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_documentEncrypted;
-                    r23 = r0;
-                    if (r23 != 0) goto L_0x012c;
-                L_0x011e:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_fileEncryptedLocation;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x04b6;
-                L_0x012c:
-                    r17 = 1;
-                L_0x012e:
-                    r15 = new org.telegram.messenger.ImageLoader$CacheImage;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r24 = 0;
-                    r0 = r23;
-                    r1 = r24;
-                    r15.<init>();
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x04ba;
-                L_0x0147:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = "vthumb";
-                    r23 = r23.startsWith(r24);
-                    if (r23 != 0) goto L_0x04ba;
-                L_0x0156:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = "thumb";
-                    r23 = r23.startsWith(r24);
-                    if (r23 != 0) goto L_0x04ba;
-                L_0x0165:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = "jpg";
-                    r22 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r23, r24);
-                    r23 = "mp4";
-                    r23 = r22.equals(r23);
-                    if (r23 != 0) goto L_0x0184;
-                L_0x017b:
-                    r23 = "gif";
-                    r23 = r22.equals(r23);
-                    if (r23 == 0) goto L_0x018a;
-                L_0x0184:
-                    r23 = 1;
-                    r0 = r23;
-                    r15.animatedFile = r0;
-                L_0x018a:
-                    if (r11 != 0) goto L_0x01d5;
-                L_0x018c:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.messenger.SecureDocument;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x050c;
-                L_0x019a:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.messenger.SecureDocument) r23;
-                    r0 = r23;
-                    r15.secureDocument = r0;
-                    r0 = r15.secureDocument;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.secureFile;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.dc_id;
-                    r23 = r0;
-                    r24 = -NUM; // 0xffffffff80000000 float:-0.0 double:NaN;
-                    r0 = r23;
-                    r1 = r24;
-                    if (r0 != r1) goto L_0x0508;
-                L_0x01be:
-                    r21 = 1;
-                L_0x01c0:
-                    r11 = new java.io.File;
-                    r23 = 4;
-                    r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r0 = r27;
-                    r0 = r5;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r11.<init>(r0, r1);
-                L_0x01d5:
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x0603;
-                L_0x01dd:
-                    r23 = 1;
-                L_0x01df:
-                    r0 = r23;
-                    r15.selfThumb = r0;
-                    r0 = r27;
-                    r0 = r6;
-                    r23 = r0;
-                    r0 = r23;
-                    r15.key = r0;
-                    r0 = r27;
-                    r0 = r9;
-                    r23 = r0;
-                    r0 = r23;
-                    r15.filter = r0;
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r0 = r23;
-                    r15.httpUrl = r0;
-                    r0 = r27;
-                    r0 = r17;
-                    r23 = r0;
-                    r0 = r23;
-                    r15.ext = r0;
-                    r0 = r27;
-                    r0 = r18;
-                    r23 = r0;
-                    r0 = r23;
-                    r15.currentAccount = r0;
-                    r0 = r27;
-                    r0 = r15;
-                    r23 = r0;
-                    r24 = 2;
-                    r0 = r23;
-                    r1 = r24;
-                    if (r0 != r1) goto L_0x024a;
-                L_0x0223:
-                    r23 = new java.io.File;
-                    r24 = org.telegram.messenger.FileLoader.getInternalCacheDir();
-                    r25 = new java.lang.StringBuilder;
-                    r25.<init>();
-                    r0 = r27;
-                    r0 = r5;
-                    r26 = r0;
-                    r25 = r25.append(r26);
-                    r26 = ".enc.key";
-                    r25 = r25.append(r26);
-                    r25 = r25.toString();
-                    r23.<init>(r24, r25);
-                    r0 = r23;
-                    r15.encryptionKeyPath = r0;
-                L_0x024a:
-                    r0 = r27;
-                    r0 = r8;
-                    r24 = r0;
-                    r0 = r27;
-                    r0 = r6;
-                    r25 = r0;
-                    r0 = r27;
-                    r0 = r9;
-                    r26 = r0;
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x0607;
-                L_0x0264:
-                    r23 = 1;
-                L_0x0266:
-                    r0 = r24;
-                    r1 = r25;
-                    r2 = r26;
-                    r3 = r23;
-                    r15.addImageReceiver(r0, r1, r2, r3);
-                    if (r21 != 0) goto L_0x027b;
-                L_0x0273:
-                    if (r12 != 0) goto L_0x027b;
-                L_0x0275:
-                    r23 = r11.exists();
-                    if (r23 == 0) goto L_0x061e;
-                L_0x027b:
-                    r15.finalFilePath = r11;
-                    r23 = new org.telegram.messenger.ImageLoader$CacheOutTask;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r0.<init>(r15);
-                    r0 = r23;
-                    r15.cacheTask = r0;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.imageLoadingByKeys;
-                    r0 = r27;
-                    r0 = r6;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r0.put(r1, r15);
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x060b;
-                L_0x02af:
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.cacheThumbOutQueue;
-                    r0 = r15.cacheTask;
-                    r24 = r0;
-                    r23.postRunnable(r24);
-                L_0x02c0:
-                    return;
-                L_0x02c1:
-                    if (r7 != r8) goto L_0x02f2;
-                L_0x02c3:
-                    if (r6 != 0) goto L_0x02ec;
-                L_0x02c5:
-                    r0 = r27;
-                    r0 = r8;
-                    r24 = r0;
-                    r0 = r27;
-                    r0 = r6;
-                    r25 = r0;
-                    r0 = r27;
-                    r0 = r9;
-                    r26 = r0;
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x02ef;
-                L_0x02df:
-                    r23 = 1;
-                L_0x02e1:
-                    r0 = r24;
-                    r1 = r25;
-                    r2 = r26;
-                    r3 = r23;
-                    r7.replaceImageReceiver(r0, r1, r2, r3);
-                L_0x02ec:
-                    r5 = 1;
-                    goto L_0x0056;
-                L_0x02ef:
-                    r23 = 0;
-                    goto L_0x02e1;
-                L_0x02f2:
-                    r0 = r27;
-                    r0 = r8;
-                    r23 = r0;
-                    r0 = r23;
-                    r7.removeImageReceiver(r0);
-                    goto L_0x0056;
-                L_0x02ff:
-                    r23 = 0;
-                    goto L_0x0076;
-                L_0x0303:
-                    r23 = 0;
-                    goto L_0x00a2;
-                L_0x0307:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = "vthumb://";
-                    r23 = r23.startsWith(r24);
-                    if (r23 == 0) goto L_0x033c;
-                L_0x0316:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = ":";
-                    r25 = 9;
-                    r14 = r23.indexOf(r24, r25);
-                    if (r14 < 0) goto L_0x0102;
-                L_0x0327:
-                    r11 = new java.io.File;
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r24 = r14 + 1;
-                    r23 = r23.substring(r24);
-                    r0 = r23;
-                    r11.<init>(r0);
-                    goto L_0x0102;
-                L_0x033c:
-                    r11 = new java.io.File;
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r0 = r23;
-                    r11.<init>(r0);
-                    goto L_0x0102;
-                L_0x034b:
-                    r0 = r27;
-                    r0 = r4;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x0102;
-                L_0x0353:
-                    r0 = r27;
-                    r0 = r11;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x038b;
-                L_0x035b:
-                    r11 = new java.io.File;
-                    r23 = 4;
-                    r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r24 = new java.lang.StringBuilder;
-                    r24.<init>();
-                    r25 = "q_";
-                    r24 = r24.append(r25);
-                    r0 = r27;
-                    r0 = r5;
-                    r25 = r0;
-                    r24 = r24.append(r25);
-                    r24 = r24.toString();
-                    r0 = r23;
-                    r1 = r24;
-                    r11.<init>(r0, r1);
-                    r23 = r11.exists();
-                    if (r23 != 0) goto L_0x04b3;
-                L_0x038a:
-                    r11 = 0;
-                L_0x038b:
-                    r0 = r27;
-                    r0 = r12;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x0102;
-                L_0x0393:
-                    r9 = 0;
-                    r0 = r27;
-                    r0 = r12;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.messageOwner;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.attachPath;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x03e0;
-                L_0x03a8:
-                    r0 = r27;
-                    r0 = r12;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.messageOwner;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.attachPath;
-                    r23 = r0;
-                    r23 = r23.length();
-                    if (r23 <= 0) goto L_0x03e0;
-                L_0x03c0:
-                    r9 = new java.io.File;
-                    r0 = r27;
-                    r0 = r12;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.messageOwner;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.attachPath;
-                    r23 = r0;
-                    r0 = r23;
-                    r9.<init>(r0);
-                    r23 = r9.exists();
-                    if (r23 != 0) goto L_0x03e0;
-                L_0x03df:
-                    r9 = 0;
-                L_0x03e0:
-                    if (r9 != 0) goto L_0x03f2;
-                L_0x03e2:
-                    r0 = r27;
-                    r0 = r12;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0.messageOwner;
-                    r23 = r0;
-                    r9 = org.telegram.messenger.FileLoader.getPathToMessage(r23);
-                L_0x03f2:
-                    r0 = r27;
-                    r0 = r11;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x047a;
-                L_0x03fa:
-                    if (r11 != 0) goto L_0x047a;
-                L_0x03fc:
-                    r0 = r27;
-                    r0 = r12;
-                    r23 = r0;
-                    r20 = r23.getFileName();
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.waitingForQualityThumb;
-                    r0 = r23;
-                    r1 = r20;
-                    r16 = r0.get(r1);
-                    r16 = (org.telegram.messenger.ImageLoader.ThumbGenerateInfo) r16;
-                    if (r16 != 0) goto L_0x045e;
-                L_0x041c:
-                    r16 = new org.telegram.messenger.ImageLoader$ThumbGenerateInfo;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r24 = 0;
-                    r0 = r16;
-                    r1 = r23;
-                    r2 = r24;
-                    r0.<init>();
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.tgnet.TLRPC.FileLocation) r23;
-                    r0 = r16;
-                    r1 = r23;
-                    r0.fileLocation = r1;
-                    r0 = r27;
-                    r0 = r9;
-                    r23 = r0;
-                    r0 = r16;
-                    r1 = r23;
-                    r0.filter = r1;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.waitingForQualityThumb;
-                    r0 = r23;
-                    r1 = r20;
-                    r2 = r16;
-                    r0.put(r1, r2);
-                L_0x045e:
-                    r16.count = r16.count + 1;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.waitingForQualityThumbByTag;
-                    r0 = r27;
-                    r0 = r7;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r2 = r20;
-                    r0.put(r1, r2);
-                L_0x047a:
-                    r23 = r9.exists();
-                    if (r23 == 0) goto L_0x0102;
-                L_0x0480:
-                    r0 = r27;
-                    r0 = r14;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x0102;
-                L_0x0488:
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r24 = r0;
-                    r0 = r27;
-                    r0 = r12;
-                    r23 = r0;
-                    r25 = r23.getFileType();
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.tgnet.TLRPC.FileLocation) r23;
-                    r0 = r27;
-                    r0 = r9;
-                    r26 = r0;
-                    r0 = r24;
-                    r1 = r25;
-                    r2 = r23;
-                    r3 = r26;
-                    r0.generateThumb(r1, r9, r2, r3);
-                    goto L_0x0102;
-                L_0x04b3:
-                    r12 = 1;
-                    goto L_0x038b;
-                L_0x04b6:
-                    r17 = 0;
-                    goto L_0x012e;
-                L_0x04ba:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.messenger.WebFile;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x04d6;
-                L_0x04c8:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.messenger.WebFile) r23;
-                    r23 = org.telegram.messenger.MessageObject.isGifDocument(r23);
-                    if (r23 != 0) goto L_0x0500;
-                L_0x04d6:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.tgnet.TLRPC.Document;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x018a;
-                L_0x04e4:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.tgnet.TLRPC.Document) r23;
-                    r23 = org.telegram.messenger.MessageObject.isGifDocument(r23);
-                    if (r23 != 0) goto L_0x0500;
-                L_0x04f2:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.tgnet.TLRPC.Document) r23;
-                    r23 = org.telegram.messenger.MessageObject.isRoundVideoDocument(r23);
-                    if (r23 == 0) goto L_0x018a;
-                L_0x0500:
-                    r23 = 1;
-                    r0 = r23;
-                    r15.animatedFile = r0;
-                    goto L_0x018a;
-                L_0x0508:
-                    r21 = 0;
-                    goto L_0x01c0;
-                L_0x050c:
-                    r0 = r27;
-                    r0 = r15;
-                    r23 = r0;
-                    if (r23 != 0) goto L_0x0526;
-                L_0x0514:
-                    r0 = r27;
-                    r0 = r16;
-                    r23 = r0;
-                    if (r23 <= 0) goto L_0x0526;
-                L_0x051c:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    if (r23 != 0) goto L_0x0526;
-                L_0x0524:
-                    if (r17 == 0) goto L_0x057d;
-                L_0x0526:
-                    r11 = new java.io.File;
-                    r23 = 4;
-                    r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r0 = r27;
-                    r0 = r5;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r11.<init>(r0, r1);
-                    r23 = r11.exists();
-                    if (r23 == 0) goto L_0x0544;
-                L_0x0541:
-                    r12 = 1;
-                    goto L_0x01d5;
-                L_0x0544:
-                    r0 = r27;
-                    r0 = r15;
-                    r23 = r0;
-                    r24 = 2;
-                    r0 = r23;
-                    r1 = r24;
-                    if (r0 != r1) goto L_0x01d5;
-                L_0x0552:
-                    r11 = new java.io.File;
-                    r23 = 4;
-                    r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r24 = new java.lang.StringBuilder;
-                    r24.<init>();
-                    r0 = r27;
-                    r0 = r5;
-                    r25 = r0;
-                    r24 = r24.append(r25);
-                    r25 = ".enc";
-                    r24 = r24.append(r25);
-                    r24 = r24.toString();
-                    r0 = r23;
-                    r1 = r24;
-                    r11.<init>(r0, r1);
-                    goto L_0x01d5;
-                L_0x057d:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.tgnet.TLRPC.Document;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x05c7;
-                L_0x058b:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.tgnet.TLRPC.Document) r23;
-                    r23 = org.telegram.messenger.MessageObject.isVideoDocument(r23);
-                    if (r23 == 0) goto L_0x05b0;
-                L_0x0599:
-                    r11 = new java.io.File;
-                    r23 = 2;
-                    r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r0 = r27;
-                    r0 = r5;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r11.<init>(r0, r1);
-                    goto L_0x01d5;
-                L_0x05b0:
-                    r11 = new java.io.File;
-                    r23 = 3;
-                    r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r0 = r27;
-                    r0 = r5;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r11.<init>(r0, r1);
-                    goto L_0x01d5;
-                L_0x05c7:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.messenger.WebFile;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x05ec;
-                L_0x05d5:
-                    r11 = new java.io.File;
-                    r23 = 3;
-                    r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r0 = r27;
-                    r0 = r5;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r11.<init>(r0, r1);
-                    goto L_0x01d5;
-                L_0x05ec:
-                    r11 = new java.io.File;
-                    r23 = 0;
-                    r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r0 = r27;
-                    r0 = r5;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r11.<init>(r0, r1);
-                    goto L_0x01d5;
-                L_0x0603:
-                    r23 = 0;
-                    goto L_0x01df;
-                L_0x0607:
-                    r23 = 0;
-                    goto L_0x0266;
-                L_0x060b:
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.cacheOutQueue;
-                    r0 = r15.cacheTask;
-                    r24 = r0;
-                    r23.postRunnable(r24);
-                    goto L_0x02c0;
-                L_0x061e:
-                    r0 = r27;
-                    r0 = r5;
-                    r23 = r0;
-                    r0 = r23;
-                    r15.url = r0;
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r15.location = r0;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.imageLoadingByUrl;
-                    r0 = r27;
-                    r0 = r5;
-                    r24 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r0.put(r1, r15);
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    if (r23 != 0) goto L_0x075f;
-                L_0x0651:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.tgnet.TLRPC.FileLocation;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x06c9;
-                L_0x065f:
-                    r0 = r27;
-                    r0 = r13;
-                    r20 = r0;
-                    r20 = (org.telegram.tgnet.TLRPC.FileLocation) r20;
-                    r0 = r27;
-                    r0 = r15;
-                    r19 = r0;
-                    if (r19 != 0) goto L_0x0681;
-                L_0x066f:
-                    r0 = r27;
-                    r0 = r16;
-                    r23 = r0;
-                    if (r23 <= 0) goto L_0x067f;
-                L_0x0677:
-                    r0 = r20;
-                    r0 = r0.key;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x0681;
-                L_0x067f:
-                    r19 = 1;
-                L_0x0681:
-                    r0 = r27;
-                    r0 = r18;
-                    r23 = r0;
-                    r23 = org.telegram.messenger.FileLoader.getInstance(r23);
-                    r0 = r27;
-                    r0 = r17;
-                    r24 = r0;
-                    r0 = r27;
-                    r0 = r16;
-                    r25 = r0;
-                    r0 = r23;
-                    r1 = r20;
-                    r2 = r24;
-                    r3 = r25;
-                    r4 = r19;
-                    r0.loadFile(r1, r2, r3, r4);
-                L_0x06a4:
-                    r0 = r27;
-                    r0 = r8;
-                    r23 = r0;
-                    r23 = r23.isForceLoding();
-                    if (r23 == 0) goto L_0x02c0;
-                L_0x06b0:
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.forceLoadingImages;
-                    r0 = r15.key;
-                    r24 = r0;
-                    r25 = 0;
-                    r25 = java.lang.Integer.valueOf(r25);
-                    r23.put(r24, r25);
-                    goto L_0x02c0;
-                L_0x06c9:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.tgnet.TLRPC.Document;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x06fd;
-                L_0x06d7:
-                    r0 = r27;
-                    r0 = r18;
-                    r23 = r0;
-                    r24 = org.telegram.messenger.FileLoader.getInstance(r23);
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.tgnet.TLRPC.Document) r23;
-                    r25 = 1;
-                    r0 = r27;
-                    r0 = r15;
-                    r26 = r0;
-                    r0 = r24;
-                    r1 = r23;
-                    r2 = r25;
-                    r3 = r26;
-                    r0.loadFile(r1, r2, r3);
-                    goto L_0x06a4;
-                L_0x06fd:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.messenger.SecureDocument;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x072a;
-                L_0x070b:
-                    r0 = r27;
-                    r0 = r18;
-                    r23 = r0;
-                    r24 = org.telegram.messenger.FileLoader.getInstance(r23);
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.messenger.SecureDocument) r23;
-                    r25 = 1;
-                    r0 = r24;
-                    r1 = r23;
-                    r2 = r25;
-                    r0.loadFile(r1, r2);
-                    goto L_0x06a4;
-                L_0x072a:
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r0 = r23;
-                    r0 = r0 instanceof org.telegram.messenger.WebFile;
-                    r23 = r0;
-                    if (r23 == 0) goto L_0x06a4;
-                L_0x0738:
-                    r0 = r27;
-                    r0 = r18;
-                    r23 = r0;
-                    r24 = org.telegram.messenger.FileLoader.getInstance(r23);
-                    r0 = r27;
-                    r0 = r13;
-                    r23 = r0;
-                    r23 = (org.telegram.messenger.WebFile) r23;
-                    r25 = 1;
-                    r0 = r27;
-                    r0 = r15;
-                    r26 = r0;
-                    r0 = r24;
-                    r1 = r23;
-                    r2 = r25;
-                    r3 = r26;
-                    r0.loadFile(r1, r2, r3);
-                    goto L_0x06a4;
-                L_0x075f:
-                    r0 = r27;
-                    r0 = r10;
-                    r23 = r0;
-                    r13 = org.telegram.messenger.Utilities.MD5(r23);
-                    r23 = 4;
-                    r10 = org.telegram.messenger.FileLoader.getDirectory(r23);
-                    r23 = new java.io.File;
-                    r24 = new java.lang.StringBuilder;
-                    r24.<init>();
-                    r0 = r24;
-                    r24 = r0.append(r13);
-                    r25 = "_temp.jpg";
-                    r24 = r24.append(r25);
-                    r24 = r24.toString();
-                    r0 = r23;
-                    r1 = r24;
-                    r0.<init>(r10, r1);
-                    r0 = r23;
-                    r15.tempFilePath = r0;
-                    r15.finalFilePath = r11;
-                    r23 = new org.telegram.messenger.ImageLoader$HttpImageTask;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r24 = r0;
-                    r0 = r27;
-                    r0 = r16;
-                    r25 = r0;
-                    r0 = r23;
-                    r1 = r24;
-                    r2 = r25;
-                    r0.<init>(r15, r2);
-                    r0 = r23;
-                    r15.httpTask = r0;
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r23 = r23.httpTasks;
-                    r0 = r15.httpTask;
-                    r24 = r0;
-                    r23.add(r24);
-                    r0 = r27;
-                    r0 = org.telegram.messenger.ImageLoader.this;
-                    r23 = r0;
-                    r24 = 0;
-                    r23.runHttpTasks(r24);
-                    goto L_0x02c0;
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.8.run():void");
-                }
-            });
-        }
+        /*
+        r27 = this;
+        r5 = 0;
+        r23 = 2;
+        r0 = r28;
+        r1 = r23;
+        if (r0 == r1) goto L_0x0066;
+    L_0x0009:
+        r0 = r27;
+        r0 = r0.imageLoadingByUrl;
+        r23 = r0;
+        r0 = r23;
+        r1 = r29;
+        r8 = r0.get(r1);
+        r8 = (org.telegram.messenger.ImageLoader.CacheImage) r8;
+        r0 = r27;
+        r0 = r0.imageLoadingByKeys;
+        r23 = r0;
+        r0 = r23;
+        r1 = r30;
+        r6 = r0.get(r1);
+        r6 = (org.telegram.messenger.ImageLoader.CacheImage) r6;
+        r0 = r27;
+        r0 = r0.imageLoadingByTag;
+        r23 = r0;
+        r0 = r23;
+        r1 = r31;
+        r7 = r0.get(r1);
+        r7 = (org.telegram.messenger.ImageLoader.CacheImage) r7;
+        if (r7 == 0) goto L_0x003e;
+    L_0x003b:
+        if (r7 != r6) goto L_0x01db;
+    L_0x003d:
+        r5 = 1;
+    L_0x003e:
+        if (r5 != 0) goto L_0x0052;
+    L_0x0040:
+        if (r6 == 0) goto L_0x0052;
+    L_0x0042:
+        if (r28 == 0) goto L_0x01fb;
+    L_0x0044:
+        r23 = 1;
+    L_0x0046:
+        r0 = r32;
+        r1 = r30;
+        r2 = r33;
+        r3 = r23;
+        r6.addImageReceiver(r0, r1, r2, r3);
+        r5 = 1;
+    L_0x0052:
+        if (r5 != 0) goto L_0x0066;
+    L_0x0054:
+        if (r8 == 0) goto L_0x0066;
+    L_0x0056:
+        if (r28 == 0) goto L_0x01ff;
+    L_0x0058:
+        r23 = 1;
+    L_0x005a:
+        r0 = r32;
+        r1 = r30;
+        r2 = r33;
+        r3 = r23;
+        r8.addImageReceiver(r0, r1, r2, r3);
+        r5 = 1;
+    L_0x0066:
+        if (r5 != 0) goto L_0x01da;
+    L_0x0068:
+        r21 = 0;
+        r18 = 0;
+        r11 = 0;
+        r12 = 0;
+        if (r34 == 0) goto L_0x023d;
+    L_0x0070:
+        r23 = "http";
+        r0 = r34;
+        r1 = r23;
+        r23 = r0.startsWith(r1);
+        if (r23 != 0) goto L_0x00ae;
+    L_0x007d:
+        r21 = 1;
+        r23 = "thumb://";
+        r0 = r34;
+        r1 = r23;
+        r23 = r0.startsWith(r1);
+        if (r23 == 0) goto L_0x0203;
+    L_0x008c:
+        r23 = ":";
+        r24 = 8;
+        r0 = r34;
+        r1 = r23;
+        r2 = r24;
+        r14 = r0.indexOf(r1, r2);
+        if (r14 < 0) goto L_0x00ae;
+    L_0x009d:
+        r11 = new java.io.File;
+        r23 = r14 + 1;
+        r0 = r34;
+        r1 = r23;
+        r23 = r0.substring(r1);
+        r0 = r23;
+        r11.<init>(r0);
+    L_0x00ae:
+        r23 = 2;
+        r0 = r28;
+        r1 = r23;
+        if (r0 == r1) goto L_0x01da;
+    L_0x00b6:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_documentEncrypted;
+        r23 = r0;
+        if (r23 != 0) goto L_0x00c6;
+    L_0x00be:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_fileEncryptedLocation;
+        r23 = r0;
+        if (r23 == 0) goto L_0x0332;
+    L_0x00c6:
+        r17 = 1;
+    L_0x00c8:
+        r15 = new org.telegram.messenger.ImageLoader$CacheImage;
+        r23 = 0;
+        r0 = r27;
+        r1 = r23;
+        r15.<init>();
+        if (r34 == 0) goto L_0x0336;
+    L_0x00d5:
+        r23 = "vthumb";
+        r0 = r34;
+        r1 = r23;
+        r23 = r0.startsWith(r1);
+        if (r23 != 0) goto L_0x0336;
+    L_0x00e2:
+        r23 = "thumb";
+        r0 = r34;
+        r1 = r23;
+        r23 = r0.startsWith(r1);
+        if (r23 != 0) goto L_0x0336;
+    L_0x00ef:
+        r23 = "jpg";
+        r0 = r34;
+        r1 = r23;
+        r22 = getHttpUrlExtension(r0, r1);
+        r23 = "mp4";
+        r23 = r22.equals(r23);
+        if (r23 != 0) goto L_0x010c;
+    L_0x0103:
+        r23 = "gif";
+        r23 = r22.equals(r23);
+        if (r23 == 0) goto L_0x0112;
+    L_0x010c:
+        r23 = 1;
+        r0 = r23;
+        r15.animatedFile = r0;
+    L_0x0112:
+        if (r11 != 0) goto L_0x014d;
+    L_0x0114:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.messenger.SecureDocument;
+        r23 = r0;
+        if (r23 == 0) goto L_0x0370;
+    L_0x011c:
+        r23 = r37;
+        r23 = (org.telegram.messenger.SecureDocument) r23;
+        r0 = r23;
+        r15.secureDocument = r0;
+        r0 = r15.secureDocument;
+        r23 = r0;
+        r0 = r23;
+        r0 = r0.secureFile;
+        r23 = r0;
+        r0 = r23;
+        r0 = r0.dc_id;
+        r23 = r0;
+        r24 = -NUM; // 0xffffffff80000000 float:-0.0 double:NaN;
+        r0 = r23;
+        r1 = r24;
+        if (r0 != r1) goto L_0x036c;
+    L_0x013c:
+        r21 = 1;
+    L_0x013e:
+        r11 = new java.io.File;
+        r23 = 4;
+        r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r0 = r23;
+        r1 = r29;
+        r11.<init>(r0, r1);
+    L_0x014d:
+        if (r28 == 0) goto L_0x041f;
+    L_0x014f:
+        r23 = 1;
+    L_0x0151:
+        r0 = r23;
+        r15.selfThumb = r0;
+        r0 = r30;
+        r15.key = r0;
+        r0 = r33;
+        r15.filter = r0;
+        r0 = r34;
+        r15.httpUrl = r0;
+        r0 = r41;
+        r15.ext = r0;
+        r0 = r42;
+        r15.currentAccount = r0;
+        r23 = 2;
+        r0 = r39;
+        r1 = r23;
+        if (r0 != r1) goto L_0x0196;
+    L_0x0171:
+        r23 = new java.io.File;
+        r24 = org.telegram.messenger.FileLoader.getInternalCacheDir();
+        r25 = new java.lang.StringBuilder;
+        r25.<init>();
+        r0 = r25;
+        r1 = r29;
+        r25 = r0.append(r1);
+        r26 = ".enc.key";
+        r25 = r25.append(r26);
+        r25 = r25.toString();
+        r23.<init>(r24, r25);
+        r0 = r23;
+        r15.encryptionKeyPath = r0;
+    L_0x0196:
+        if (r28 == 0) goto L_0x0423;
+    L_0x0198:
+        r23 = 1;
+    L_0x019a:
+        r0 = r32;
+        r1 = r30;
+        r2 = r33;
+        r3 = r23;
+        r15.addImageReceiver(r0, r1, r2, r3);
+        if (r21 != 0) goto L_0x01af;
+    L_0x01a7:
+        if (r12 != 0) goto L_0x01af;
+    L_0x01a9:
+        r23 = r11.exists();
+        if (r23 == 0) goto L_0x0436;
+    L_0x01af:
+        r15.finalFilePath = r11;
+        r23 = new org.telegram.messenger.ImageLoader$CacheOutTask;
+        r0 = r23;
+        r1 = r27;
+        r0.<init>(r15);
+        r0 = r23;
+        r15.cacheTask = r0;
+        r0 = r27;
+        r0 = r0.imageLoadingByKeys;
+        r23 = r0;
+        r0 = r23;
+        r1 = r30;
+        r0.put(r1, r15);
+        if (r28 == 0) goto L_0x0427;
+    L_0x01cd:
+        r0 = r27;
+        r0 = r0.cacheThumbOutQueue;
+        r23 = r0;
+        r0 = r15.cacheTask;
+        r24 = r0;
+        r23.postRunnable(r24);
+    L_0x01da:
+        return;
+    L_0x01db:
+        if (r7 != r8) goto L_0x01f4;
+    L_0x01dd:
+        if (r6 != 0) goto L_0x01ee;
+    L_0x01df:
+        if (r28 == 0) goto L_0x01f1;
+    L_0x01e1:
+        r23 = 1;
+    L_0x01e3:
+        r0 = r32;
+        r1 = r30;
+        r2 = r33;
+        r3 = r23;
+        r7.replaceImageReceiver(r0, r1, r2, r3);
+    L_0x01ee:
+        r5 = 1;
+        goto L_0x003e;
+    L_0x01f1:
+        r23 = 0;
+        goto L_0x01e3;
+    L_0x01f4:
+        r0 = r32;
+        r7.removeImageReceiver(r0);
+        goto L_0x003e;
+    L_0x01fb:
+        r23 = 0;
+        goto L_0x0046;
+    L_0x01ff:
+        r23 = 0;
+        goto L_0x005a;
+    L_0x0203:
+        r23 = "vthumb://";
+        r0 = r34;
+        r1 = r23;
+        r23 = r0.startsWith(r1);
+        if (r23 == 0) goto L_0x0234;
+    L_0x0210:
+        r23 = ":";
+        r24 = 9;
+        r0 = r34;
+        r1 = r23;
+        r2 = r24;
+        r14 = r0.indexOf(r1, r2);
+        if (r14 < 0) goto L_0x00ae;
+    L_0x0221:
+        r11 = new java.io.File;
+        r23 = r14 + 1;
+        r0 = r34;
+        r1 = r23;
+        r23 = r0.substring(r1);
+        r0 = r23;
+        r11.<init>(r0);
+        goto L_0x00ae;
+    L_0x0234:
+        r11 = new java.io.File;
+        r0 = r34;
+        r11.<init>(r0);
+        goto L_0x00ae;
+    L_0x023d:
+        if (r28 == 0) goto L_0x00ae;
+    L_0x023f:
+        if (r35 == 0) goto L_0x026f;
+    L_0x0241:
+        r11 = new java.io.File;
+        r23 = 4;
+        r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r24 = new java.lang.StringBuilder;
+        r24.<init>();
+        r25 = "q_";
+        r24 = r24.append(r25);
+        r0 = r24;
+        r1 = r29;
+        r24 = r0.append(r1);
+        r24 = r24.toString();
+        r0 = r23;
+        r1 = r24;
+        r11.<init>(r0, r1);
+        r23 = r11.exists();
+        if (r23 != 0) goto L_0x032f;
+    L_0x026e:
+        r11 = 0;
+    L_0x026f:
+        if (r36 == 0) goto L_0x00ae;
+    L_0x0271:
+        r9 = 0;
+        r0 = r36;
+        r0 = r0.messageOwner;
+        r23 = r0;
+        r0 = r23;
+        r0 = r0.attachPath;
+        r23 = r0;
+        if (r23 == 0) goto L_0x02ac;
+    L_0x0280:
+        r0 = r36;
+        r0 = r0.messageOwner;
+        r23 = r0;
+        r0 = r23;
+        r0 = r0.attachPath;
+        r23 = r0;
+        r23 = r23.length();
+        if (r23 <= 0) goto L_0x02ac;
+    L_0x0292:
+        r9 = new java.io.File;
+        r0 = r36;
+        r0 = r0.messageOwner;
+        r23 = r0;
+        r0 = r23;
+        r0 = r0.attachPath;
+        r23 = r0;
+        r0 = r23;
+        r9.<init>(r0);
+        r23 = r9.exists();
+        if (r23 != 0) goto L_0x02ac;
+    L_0x02ab:
+        r9 = 0;
+    L_0x02ac:
+        if (r9 != 0) goto L_0x02b8;
+    L_0x02ae:
+        r0 = r36;
+        r0 = r0.messageOwner;
+        r23 = r0;
+        r9 = org.telegram.messenger.FileLoader.getPathToMessage(r23);
+    L_0x02b8:
+        if (r35 == 0) goto L_0x0312;
+    L_0x02ba:
+        if (r11 != 0) goto L_0x0312;
+    L_0x02bc:
+        r20 = r36.getFileName();
+        r0 = r27;
+        r0 = r0.waitingForQualityThumb;
+        r23 = r0;
+        r0 = r23;
+        r1 = r20;
+        r16 = r0.get(r1);
+        r16 = (org.telegram.messenger.ImageLoader.ThumbGenerateInfo) r16;
+        if (r16 != 0) goto L_0x0300;
+    L_0x02d2:
+        r16 = new org.telegram.messenger.ImageLoader$ThumbGenerateInfo;
+        r23 = 0;
+        r0 = r16;
+        r1 = r27;
+        r2 = r23;
+        r0.<init>();
+        r23 = r37;
+        r23 = (org.telegram.tgnet.TLRPC.FileLocation) r23;
+        r0 = r16;
+        r1 = r23;
+        r0.fileLocation = r1;
+        r0 = r16;
+        r1 = r33;
+        r0.filter = r1;
+        r0 = r27;
+        r0 = r0.waitingForQualityThumb;
+        r23 = r0;
+        r0 = r23;
+        r1 = r20;
+        r2 = r16;
+        r0.put(r1, r2);
+    L_0x0300:
+        r16.count = r16.count + 1;
+        r0 = r27;
+        r0 = r0.waitingForQualityThumbByTag;
+        r23 = r0;
+        r0 = r23;
+        r1 = r31;
+        r2 = r20;
+        r0.put(r1, r2);
+    L_0x0312:
+        r23 = r9.exists();
+        if (r23 == 0) goto L_0x00ae;
+    L_0x0318:
+        if (r38 == 0) goto L_0x00ae;
+    L_0x031a:
+        r24 = r36.getFileType();
+        r23 = r37;
+        r23 = (org.telegram.tgnet.TLRPC.FileLocation) r23;
+        r0 = r27;
+        r1 = r24;
+        r2 = r23;
+        r3 = r33;
+        r0.generateThumb(r1, r9, r2, r3);
+        goto L_0x00ae;
+    L_0x032f:
+        r12 = 1;
+        goto L_0x026f;
+    L_0x0332:
+        r17 = 0;
+        goto L_0x00c8;
+    L_0x0336:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.messenger.WebFile;
+        r23 = r0;
+        if (r23 == 0) goto L_0x0348;
+    L_0x033e:
+        r23 = r37;
+        r23 = (org.telegram.messenger.WebFile) r23;
+        r23 = org.telegram.messenger.MessageObject.isGifDocument(r23);
+        if (r23 != 0) goto L_0x0364;
+    L_0x0348:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.Document;
+        r23 = r0;
+        if (r23 == 0) goto L_0x0112;
+    L_0x0350:
+        r23 = r37;
+        r23 = (org.telegram.tgnet.TLRPC.Document) r23;
+        r23 = org.telegram.messenger.MessageObject.isGifDocument(r23);
+        if (r23 != 0) goto L_0x0364;
+    L_0x035a:
+        r23 = r37;
+        r23 = (org.telegram.tgnet.TLRPC.Document) r23;
+        r23 = org.telegram.messenger.MessageObject.isRoundVideoDocument(r23);
+        if (r23 == 0) goto L_0x0112;
+    L_0x0364:
+        r23 = 1;
+        r0 = r23;
+        r15.animatedFile = r0;
+        goto L_0x0112;
+    L_0x036c:
+        r21 = 0;
+        goto L_0x013e;
+    L_0x0370:
+        if (r39 != 0) goto L_0x0378;
+    L_0x0372:
+        if (r40 <= 0) goto L_0x0378;
+    L_0x0374:
+        if (r34 != 0) goto L_0x0378;
+    L_0x0376:
+        if (r17 == 0) goto L_0x03c1;
+    L_0x0378:
+        r11 = new java.io.File;
+        r23 = 4;
+        r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r0 = r23;
+        r1 = r29;
+        r11.<init>(r0, r1);
+        r23 = r11.exists();
+        if (r23 == 0) goto L_0x0390;
+    L_0x038d:
+        r12 = 1;
+        goto L_0x014d;
+    L_0x0390:
+        r23 = 2;
+        r0 = r39;
+        r1 = r23;
+        if (r0 != r1) goto L_0x014d;
+    L_0x0398:
+        r11 = new java.io.File;
+        r23 = 4;
+        r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r24 = new java.lang.StringBuilder;
+        r24.<init>();
+        r0 = r24;
+        r1 = r29;
+        r24 = r0.append(r1);
+        r25 = ".enc";
+        r24 = r24.append(r25);
+        r24 = r24.toString();
+        r0 = r23;
+        r1 = r24;
+        r11.<init>(r0, r1);
+        goto L_0x014d;
+    L_0x03c1:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.Document;
+        r23 = r0;
+        if (r23 == 0) goto L_0x03f5;
+    L_0x03c9:
+        r23 = r37;
+        r23 = (org.telegram.tgnet.TLRPC.Document) r23;
+        r23 = org.telegram.messenger.MessageObject.isVideoDocument(r23);
+        if (r23 == 0) goto L_0x03e4;
+    L_0x03d3:
+        r11 = new java.io.File;
+        r23 = 2;
+        r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r0 = r23;
+        r1 = r29;
+        r11.<init>(r0, r1);
+        goto L_0x014d;
+    L_0x03e4:
+        r11 = new java.io.File;
+        r23 = 3;
+        r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r0 = r23;
+        r1 = r29;
+        r11.<init>(r0, r1);
+        goto L_0x014d;
+    L_0x03f5:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.messenger.WebFile;
+        r23 = r0;
+        if (r23 == 0) goto L_0x040e;
+    L_0x03fd:
+        r11 = new java.io.File;
+        r23 = 3;
+        r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r0 = r23;
+        r1 = r29;
+        r11.<init>(r0, r1);
+        goto L_0x014d;
+    L_0x040e:
+        r11 = new java.io.File;
+        r23 = 0;
+        r23 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r0 = r23;
+        r1 = r29;
+        r11.<init>(r0, r1);
+        goto L_0x014d;
+    L_0x041f:
+        r23 = 0;
+        goto L_0x0151;
+    L_0x0423:
+        r23 = 0;
+        goto L_0x019a;
+    L_0x0427:
+        r0 = r27;
+        r0 = r0.cacheOutQueue;
+        r23 = r0;
+        r0 = r15.cacheTask;
+        r24 = r0;
+        r23.postRunnable(r24);
+        goto L_0x01da;
+    L_0x0436:
+        r0 = r29;
+        r15.url = r0;
+        r0 = r37;
+        r15.location = r0;
+        r0 = r27;
+        r0 = r0.imageLoadingByUrl;
+        r23 = r0;
+        r0 = r23;
+        r1 = r29;
+        r0.put(r1, r15);
+        if (r34 != 0) goto L_0x04e7;
+    L_0x044d:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.FileLocation;
+        r23 = r0;
+        if (r23 == 0) goto L_0x0495;
+    L_0x0455:
+        r20 = r37;
+        r20 = (org.telegram.tgnet.TLRPC.FileLocation) r20;
+        r19 = r39;
+        if (r19 != 0) goto L_0x0469;
+    L_0x045d:
+        if (r40 <= 0) goto L_0x0467;
+    L_0x045f:
+        r0 = r20;
+        r0 = r0.key;
+        r23 = r0;
+        if (r23 == 0) goto L_0x0469;
+    L_0x0467:
+        r19 = 1;
+    L_0x0469:
+        r23 = org.telegram.messenger.FileLoader.getInstance(r42);
+        r0 = r23;
+        r1 = r20;
+        r2 = r41;
+        r3 = r40;
+        r4 = r19;
+        r0.loadFile(r1, r2, r3, r4);
+    L_0x047a:
+        r23 = r32.isForceLoding();
+        if (r23 == 0) goto L_0x01da;
+    L_0x0480:
+        r0 = r27;
+        r0 = r0.forceLoadingImages;
+        r23 = r0;
+        r0 = r15.key;
+        r24 = r0;
+        r25 = 0;
+        r25 = java.lang.Integer.valueOf(r25);
+        r23.put(r24, r25);
+        goto L_0x01da;
+    L_0x0495:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.Document;
+        r23 = r0;
+        if (r23 == 0) goto L_0x04b1;
+    L_0x049d:
+        r23 = org.telegram.messenger.FileLoader.getInstance(r42);
+        r37 = (org.telegram.tgnet.TLRPC.Document) r37;
+        r24 = 1;
+        r0 = r23;
+        r1 = r37;
+        r2 = r24;
+        r3 = r39;
+        r0.loadFile(r1, r2, r3);
+        goto L_0x047a;
+    L_0x04b1:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.messenger.SecureDocument;
+        r23 = r0;
+        if (r23 == 0) goto L_0x04cb;
+    L_0x04b9:
+        r23 = org.telegram.messenger.FileLoader.getInstance(r42);
+        r37 = (org.telegram.messenger.SecureDocument) r37;
+        r24 = 1;
+        r0 = r23;
+        r1 = r37;
+        r2 = r24;
+        r0.loadFile(r1, r2);
+        goto L_0x047a;
+    L_0x04cb:
+        r0 = r37;
+        r0 = r0 instanceof org.telegram.messenger.WebFile;
+        r23 = r0;
+        if (r23 == 0) goto L_0x047a;
+    L_0x04d3:
+        r23 = org.telegram.messenger.FileLoader.getInstance(r42);
+        r37 = (org.telegram.messenger.WebFile) r37;
+        r24 = 1;
+        r0 = r23;
+        r1 = r37;
+        r2 = r24;
+        r3 = r39;
+        r0.loadFile(r1, r2, r3);
+        goto L_0x047a;
+    L_0x04e7:
+        r13 = org.telegram.messenger.Utilities.MD5(r34);
+        r23 = 4;
+        r10 = org.telegram.messenger.FileLoader.getDirectory(r23);
+        r23 = new java.io.File;
+        r24 = new java.lang.StringBuilder;
+        r24.<init>();
+        r0 = r24;
+        r24 = r0.append(r13);
+        r25 = "_temp.jpg";
+        r24 = r24.append(r25);
+        r24 = r24.toString();
+        r0 = r23;
+        r1 = r24;
+        r0.<init>(r10, r1);
+        r0 = r23;
+        r15.tempFilePath = r0;
+        r15.finalFilePath = r11;
+        r23 = new org.telegram.messenger.ImageLoader$HttpImageTask;
+        r0 = r23;
+        r1 = r27;
+        r2 = r40;
+        r0.<init>(r15, r2);
+        r0 = r23;
+        r15.httpTask = r0;
+        r0 = r27;
+        r0 = r0.httpTasks;
+        r23 = r0;
+        r0 = r15.httpTask;
+        r24 = r0;
+        r23.add(r24);
+        r23 = 0;
+        r0 = r27;
+        r1 = r23;
+        r0.runHttpTasks(r1);
+        goto L_0x01da;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.lambda$createLoadOperationForImageReceiver$5$ImageLoader(int, java.lang.String, java.lang.String, int, org.telegram.messenger.ImageReceiver, java.lang.String, java.lang.String, boolean, org.telegram.messenger.MessageObject, org.telegram.tgnet.TLObject, boolean, int, int, java.lang.String, int):void");
     }
 
     public void loadImageForImageReceiver(ImageReceiver imageReceiver) {
@@ -4002,80 +3561,80 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
     }
 
-    private void httpFileLoadError(final String location) {
-        this.imageLoadQueue.postRunnable(new Runnable() {
-            public void run() {
-                CacheImage img = (CacheImage) ImageLoader.this.imageLoadingByUrl.get(location);
-                if (img != null) {
-                    HttpImageTask oldTask = img.httpTask;
-                    img.httpTask = new HttpImageTask(oldTask.cacheImage, oldTask.imageSize);
-                    ImageLoader.this.httpTasks.add(img.httpTask);
-                    ImageLoader.this.runHttpTasks(false);
-                }
-            }
-        });
+    private void httpFileLoadError(String location) {
+        this.imageLoadQueue.postRunnable(new ImageLoader$$Lambda$5(this, location));
     }
 
-    private void fileDidLoaded(final String location, final File finalFile, final int type) {
-        this.imageLoadQueue.postRunnable(new Runnable() {
-            public void run() {
-                ThumbGenerateInfo info = (ThumbGenerateInfo) ImageLoader.this.waitingForQualityThumb.get(location);
-                if (info != null) {
-                    ImageLoader.this.generateThumb(type, finalFile, info.fileLocation, info.filter);
-                    ImageLoader.this.waitingForQualityThumb.remove(location);
-                }
-                CacheImage img = (CacheImage) ImageLoader.this.imageLoadingByUrl.get(location);
-                if (img != null) {
-                    int a;
-                    ImageLoader.this.imageLoadingByUrl.remove(location);
-                    ArrayList<CacheOutTask> tasks = new ArrayList();
-                    for (a = 0; a < img.imageReceiverArray.size(); a++) {
-                        String key = (String) img.keys.get(a);
-                        String filter = (String) img.filters.get(a);
-                        Boolean thumb = (Boolean) img.thumbs.get(a);
-                        ImageReceiver imageReceiver = (ImageReceiver) img.imageReceiverArray.get(a);
-                        CacheImage cacheImage = (CacheImage) ImageLoader.this.imageLoadingByKeys.get(key);
-                        if (cacheImage == null) {
-                            cacheImage = new CacheImage();
-                            cacheImage.secureDocument = img.secureDocument;
-                            cacheImage.currentAccount = img.currentAccount;
-                            cacheImage.finalFilePath = finalFile;
-                            cacheImage.key = key;
-                            cacheImage.httpUrl = img.httpUrl;
-                            cacheImage.selfThumb = thumb.booleanValue();
-                            cacheImage.ext = img.ext;
-                            cacheImage.encryptionKeyPath = img.encryptionKeyPath;
-                            cacheImage.cacheTask = new CacheOutTask(cacheImage);
-                            cacheImage.filter = filter;
-                            cacheImage.animatedFile = img.animatedFile;
-                            ImageLoader.this.imageLoadingByKeys.put(key, cacheImage);
-                            tasks.add(cacheImage.cacheTask);
-                        }
-                        cacheImage.addImageReceiver(imageReceiver, key, filter, thumb.booleanValue());
-                    }
-                    for (a = 0; a < tasks.size(); a++) {
-                        CacheOutTask task = (CacheOutTask) tasks.get(a);
-                        if (task.cacheImage.selfThumb) {
-                            ImageLoader.this.cacheThumbOutQueue.postRunnable(task);
-                        } else {
-                            ImageLoader.this.cacheOutQueue.postRunnable(task);
-                        }
-                    }
-                }
-            }
-        });
+    final /* synthetic */ void lambda$httpFileLoadError$6$ImageLoader(String location) {
+        CacheImage img = (CacheImage) this.imageLoadingByUrl.get(location);
+        if (img != null) {
+            HttpImageTask oldTask = img.httpTask;
+            img.httpTask = new HttpImageTask(oldTask.cacheImage, oldTask.imageSize);
+            this.httpTasks.add(img.httpTask);
+            runHttpTasks(false);
+        }
     }
 
-    private void fileDidFailedLoad(final String location, int canceled) {
+    private void fileDidLoaded(String location, File finalFile, int type) {
+        this.imageLoadQueue.postRunnable(new ImageLoader$$Lambda$6(this, location, type, finalFile));
+    }
+
+    final /* synthetic */ void lambda$fileDidLoaded$7$ImageLoader(String location, int type, File finalFile) {
+        ThumbGenerateInfo info = (ThumbGenerateInfo) this.waitingForQualityThumb.get(location);
+        if (info != null) {
+            generateThumb(type, finalFile, info.fileLocation, info.filter);
+            this.waitingForQualityThumb.remove(location);
+        }
+        CacheImage img = (CacheImage) this.imageLoadingByUrl.get(location);
+        if (img != null) {
+            int a;
+            this.imageLoadingByUrl.remove(location);
+            ArrayList<CacheOutTask> tasks = new ArrayList();
+            for (a = 0; a < img.imageReceiverArray.size(); a++) {
+                String key = (String) img.keys.get(a);
+                String filter = (String) img.filters.get(a);
+                Boolean thumb = (Boolean) img.thumbs.get(a);
+                ImageReceiver imageReceiver = (ImageReceiver) img.imageReceiverArray.get(a);
+                CacheImage cacheImage = (CacheImage) this.imageLoadingByKeys.get(key);
+                if (cacheImage == null) {
+                    cacheImage = new CacheImage();
+                    cacheImage.secureDocument = img.secureDocument;
+                    cacheImage.currentAccount = img.currentAccount;
+                    cacheImage.finalFilePath = finalFile;
+                    cacheImage.key = key;
+                    cacheImage.httpUrl = img.httpUrl;
+                    cacheImage.selfThumb = thumb.booleanValue();
+                    cacheImage.ext = img.ext;
+                    cacheImage.encryptionKeyPath = img.encryptionKeyPath;
+                    cacheImage.cacheTask = new CacheOutTask(cacheImage);
+                    cacheImage.filter = filter;
+                    cacheImage.animatedFile = img.animatedFile;
+                    this.imageLoadingByKeys.put(key, cacheImage);
+                    tasks.add(cacheImage.cacheTask);
+                }
+                cacheImage.addImageReceiver(imageReceiver, key, filter, thumb.booleanValue());
+            }
+            for (a = 0; a < tasks.size(); a++) {
+                CacheOutTask task = (CacheOutTask) tasks.get(a);
+                if (task.cacheImage.selfThumb) {
+                    this.cacheThumbOutQueue.postRunnable(task);
+                } else {
+                    this.cacheOutQueue.postRunnable(task);
+                }
+            }
+        }
+    }
+
+    private void fileDidFailedLoad(String location, int canceled) {
         if (canceled != 1) {
-            this.imageLoadQueue.postRunnable(new Runnable() {
-                public void run() {
-                    CacheImage img = (CacheImage) ImageLoader.this.imageLoadingByUrl.get(location);
-                    if (img != null) {
-                        img.setImageAndClear(null);
-                    }
-                }
-            });
+            this.imageLoadQueue.postRunnable(new ImageLoader$$Lambda$7(this, location));
+        }
+    }
+
+    final /* synthetic */ void lambda$fileDidFailedLoad$8$ImageLoader(String location) {
+        CacheImage img = (CacheImage) this.imageLoadingByUrl.get(location);
+        if (img != null) {
+            img.setImageAndClear(null);
         }
     }
 
@@ -4119,41 +3678,40 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         runHttpFileLoadTasks(null, 0);
     }
 
-    private void runHttpFileLoadTasks(final HttpFileTask oldTask, final int reason) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                if (oldTask != null) {
-                    ImageLoader.this.currentHttpFileLoadTasksCount = ImageLoader.this.currentHttpFileLoadTasksCount - 1;
+    private void runHttpFileLoadTasks(HttpFileTask oldTask, int reason) {
+        AndroidUtilities.runOnUIThread(new ImageLoader$$Lambda$8(this, oldTask, reason));
+    }
+
+    final /* synthetic */ void lambda$runHttpFileLoadTasks$10$ImageLoader(HttpFileTask oldTask, int reason) {
+        if (oldTask != null) {
+            this.currentHttpFileLoadTasksCount--;
+        }
+        if (oldTask != null) {
+            if (reason == 1) {
+                if (oldTask.canRetry) {
+                    Runnable runnable = new ImageLoader$$Lambda$9(this, new HttpFileTask(oldTask.url, oldTask.tempFile, oldTask.ext, oldTask.currentAccount));
+                    this.retryHttpsTasks.put(oldTask.url, runnable);
+                    AndroidUtilities.runOnUIThread(runnable, 1000);
+                } else {
+                    this.httpFileLoadTasksByKeys.remove(oldTask.url);
+                    NotificationCenter.getInstance(oldTask.currentAccount).postNotificationName(NotificationCenter.httpFileDidFailedLoad, oldTask.url, Integer.valueOf(0));
                 }
-                if (oldTask != null) {
-                    if (reason == 1) {
-                        if (oldTask.canRetry) {
-                            final HttpFileTask newTask = new HttpFileTask(oldTask.url, oldTask.tempFile, oldTask.ext, oldTask.currentAccount);
-                            Runnable runnable = new Runnable() {
-                                public void run() {
-                                    ImageLoader.this.httpFileLoadTasks.add(newTask);
-                                    ImageLoader.this.runHttpFileLoadTasks(null, 0);
-                                }
-                            };
-                            ImageLoader.this.retryHttpsTasks.put(oldTask.url, runnable);
-                            AndroidUtilities.runOnUIThread(runnable, 1000);
-                        } else {
-                            ImageLoader.this.httpFileLoadTasksByKeys.remove(oldTask.url);
-                            NotificationCenter.getInstance(oldTask.currentAccount).postNotificationName(NotificationCenter.httpFileDidFailedLoad, oldTask.url, Integer.valueOf(0));
-                        }
-                    } else if (reason == 2) {
-                        ImageLoader.this.httpFileLoadTasksByKeys.remove(oldTask.url);
-                        File file = new File(FileLoader.getDirectory(4), Utilities.MD5(oldTask.url) + "." + oldTask.ext);
-                        String result = oldTask.tempFile.renameTo(file) ? file.toString() : oldTask.tempFile.toString();
-                        NotificationCenter.getInstance(oldTask.currentAccount).postNotificationName(NotificationCenter.httpFileDidLoaded, oldTask.url, result);
-                    }
-                }
-                while (ImageLoader.this.currentHttpFileLoadTasksCount < 2 && !ImageLoader.this.httpFileLoadTasks.isEmpty()) {
-                    ((HttpFileTask) ImageLoader.this.httpFileLoadTasks.poll()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    ImageLoader.this.currentHttpFileLoadTasksCount = ImageLoader.this.currentHttpFileLoadTasksCount + 1;
-                }
+            } else if (reason == 2) {
+                this.httpFileLoadTasksByKeys.remove(oldTask.url);
+                File file = new File(FileLoader.getDirectory(4), Utilities.MD5(oldTask.url) + "." + oldTask.ext);
+                String result = oldTask.tempFile.renameTo(file) ? file.toString() : oldTask.tempFile.toString();
+                NotificationCenter.getInstance(oldTask.currentAccount).postNotificationName(NotificationCenter.httpFileDidLoaded, oldTask.url, result);
             }
-        });
+        }
+        while (this.currentHttpFileLoadTasksCount < 2 && !this.httpFileLoadTasks.isEmpty()) {
+            ((HttpFileTask) this.httpFileLoadTasks.poll()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+            this.currentHttpFileLoadTasksCount++;
+        }
+    }
+
+    final /* synthetic */ void lambda$null$9$ImageLoader(HttpFileTask newTask) {
+        this.httpFileLoadTasks.add(newTask);
+        runHttpFileLoadTasks(null, 0);
     }
 
     /* JADX WARNING: inconsistent code. */
@@ -4170,7 +3728,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 try {
                     path = AndroidUtilities.getPath(uri);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         }
@@ -4183,7 +3741,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 inputStream.close();
                 inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
                 return null;
             }
         }
@@ -4255,7 +3813,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 b.recycle();
                 return newBitmap;
             } catch (Throwable e22) {
-                FileLog.m3e(e22);
+                FileLog.m8e(e22);
                 return null;
             }
         } else if (uri == null) {
@@ -4277,11 +3835,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     inputStream.close();
                     return b;
                 } catch (Throwable e23) {
-                    FileLog.m3e(e23);
+                    FileLog.m8e(e23);
                     return b;
                 }
             } catch (Throwable e232) {
-                FileLog.m3e(e232);
+                FileLog.m8e(e232);
                 return null;
             }
         }
@@ -4296,7 +3854,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     f.readFully(photoSize.bytes, 0, photoSize.bytes.length);
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -4314,15 +3872,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         location.local_id = SharedConfig.getLastLocalId();
         PhotoSize size = new TL_photoSize();
         size.location = location;
-        size.f45w = scaledBitmap.getWidth();
-        size.f44h = scaledBitmap.getHeight();
-        if (size.f45w <= 100 && size.f44h <= 100) {
+        size.f48w = scaledBitmap.getWidth();
+        size.f47h = scaledBitmap.getHeight();
+        if (size.f48w <= 100 && size.f47h <= 100) {
             size.type = "s";
-        } else if (size.f45w <= 320 && size.f44h <= 320) {
+        } else if (size.f48w <= 320 && size.f47h <= 320) {
             size.type = "m";
-        } else if (size.f45w <= 800 && size.f44h <= 800) {
+        } else if (size.f48w <= 800 && size.f47h <= 800) {
             size.type = "x";
-        } else if (size.f45w > 1280 || size.f44h > 1280) {
+        } else if (size.f48w > 1280 || size.f47h > 1280) {
             size.type = "w";
         } else {
             size.type = "y";
@@ -4378,7 +3936,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         try {
             return scaleAndSaveImageInternal(bitmap, w, h, photoW, photoH, scaleFactor, quality, cache, scaleAnyway);
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
             return null;
         }
     }
@@ -4459,7 +4017,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         keyFile.close();
                         Utilities.aesCtrDecryptionByteArray(photoSize.bytes, encryptKey, encryptIv, 0, photoSize.bytes.length, 0);
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
                 RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rws");
@@ -4467,8 +4025,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 randomAccessFile.close();
             }
             PhotoSize newPhotoSize = new TL_photoSize();
-            newPhotoSize.w = photoSize.f45w;
-            newPhotoSize.h = photoSize.f44h;
+            newPhotoSize.w = photoSize.f48w;
+            newPhotoSize.h = photoSize.f47h;
             newPhotoSize.location = photoSize.location;
             newPhotoSize.size = photoSize.size;
             newPhotoSize.type = photoSize.type;

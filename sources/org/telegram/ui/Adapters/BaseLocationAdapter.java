@@ -10,7 +10,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.TL_botInlineMessageMediaVenue;
@@ -42,67 +41,6 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         void didLoadedSearchResult(ArrayList<TL_messageMediaVenue> arrayList);
     }
 
-    /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$2 */
-    class C20522 implements RequestDelegate {
-        C20522() {
-        }
-
-        public void run(final TLObject response, TL_error error) {
-            if (response != null) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        TL_contacts_resolvedPeer res = response;
-                        MessagesController.getInstance(BaseLocationAdapter.this.currentAccount).putUsers(res.users, false);
-                        MessagesController.getInstance(BaseLocationAdapter.this.currentAccount).putChats(res.chats, false);
-                        MessagesStorage.getInstance(BaseLocationAdapter.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
-                        Location coord = BaseLocationAdapter.this.lastSearchLocation;
-                        BaseLocationAdapter.this.lastSearchLocation = null;
-                        BaseLocationAdapter.this.searchPlacesWithQuery(BaseLocationAdapter.this.lastSearchQuery, coord, false);
-                    }
-                });
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$3 */
-    class C20533 implements RequestDelegate {
-        C20533() {
-        }
-
-        public void run(final TLObject response, final TL_error error) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    BaseLocationAdapter.this.currentRequestNum = 0;
-                    BaseLocationAdapter.this.searching = false;
-                    BaseLocationAdapter.this.places.clear();
-                    BaseLocationAdapter.this.iconUrls.clear();
-                    if (error == null) {
-                        messages_BotResults res = response;
-                        int size = res.results.size();
-                        for (int a = 0; a < size; a++) {
-                            BotInlineResult result = (BotInlineResult) res.results.get(a);
-                            if ("venue".equals(result.type) && (result.send_message instanceof TL_botInlineMessageMediaVenue)) {
-                                TL_botInlineMessageMediaVenue mediaVenue = result.send_message;
-                                BaseLocationAdapter.this.iconUrls.add("https://ss3.4sqi.net/img/categories_v2/" + mediaVenue.venue_type + "_64.png");
-                                TL_messageMediaVenue venue = new TL_messageMediaVenue();
-                                venue.geo = mediaVenue.geo;
-                                venue.address = mediaVenue.address;
-                                venue.title = mediaVenue.title;
-                                venue.venue_type = mediaVenue.venue_type;
-                                venue.venue_id = mediaVenue.venue_id;
-                                venue.provider = mediaVenue.provider;
-                                BaseLocationAdapter.this.places.add(venue);
-                            }
-                        }
-                    } else if (BaseLocationAdapter.this.delegate != null) {
-                        BaseLocationAdapter.this.delegate.didLoadedSearchResult(BaseLocationAdapter.this.places);
-                    }
-                    BaseLocationAdapter.this.notifyDataSetChanged();
-                }
-            });
-        }
-    }
-
     public void destroy() {
         if (this.currentRequestNum != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.currentRequestNum, true);
@@ -126,30 +64,23 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 this.searchTimer.cancel();
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         this.searchTimer = new Timer();
         this.searchTimer.schedule(new TimerTask() {
-
-            /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
-            class C08091 implements Runnable {
-                C08091() {
-                }
-
-                public void run() {
-                    BaseLocationAdapter.this.lastSearchLocation = null;
-                    BaseLocationAdapter.this.searchPlacesWithQuery(query, coordinate, true);
-                }
-            }
-
             public void run() {
                 try {
                     BaseLocationAdapter.this.searchTimer.cancel();
                     BaseLocationAdapter.this.searchTimer = null;
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
-                AndroidUtilities.runOnUIThread(new C08091());
+                AndroidUtilities.runOnUIThread(new BaseLocationAdapter$1$$Lambda$0(this, query, coordinate));
+            }
+
+            final /* synthetic */ void lambda$run$0$BaseLocationAdapter$1(String query, Location coordinate) {
+                BaseLocationAdapter.this.lastSearchLocation = null;
+                BaseLocationAdapter.this.searchPlacesWithQuery(query, coordinate, true);
             }
         }, 200, 500);
     }
@@ -159,8 +90,24 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
             this.searchingUser = true;
             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
             req.username = MessagesController.getInstance(this.currentAccount).venueSearchBot;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20522());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new BaseLocationAdapter$$Lambda$0(this));
         }
+    }
+
+    final /* synthetic */ void lambda$searchBotUser$1$BaseLocationAdapter(TLObject response, TL_error error) {
+        if (response != null) {
+            AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$Lambda$3(this, response));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$0$BaseLocationAdapter(TLObject response) {
+        TL_contacts_resolvedPeer res = (TL_contacts_resolvedPeer) response;
+        MessagesController.getInstance(this.currentAccount).putUsers(res.users, false);
+        MessagesController.getInstance(this.currentAccount).putChats(res.chats, false);
+        MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
+        Location coord = this.lastSearchLocation;
+        this.lastSearchLocation = null;
+        searchPlacesWithQuery(this.lastSearchQuery, coord, false);
     }
 
     public void searchPlacesWithQuery(String query, Location coordinate, boolean searchUser) {
@@ -199,11 +146,44 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } else {
                     req.peer = new TL_inputPeerEmpty();
                 }
-                this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C20533());
+                this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new BaseLocationAdapter$$Lambda$1(this));
                 notifyDataSetChanged();
             } else if (searchUser) {
                 searchBotUser();
             }
         }
+    }
+
+    final /* synthetic */ void lambda$searchPlacesWithQuery$3$BaseLocationAdapter(TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$Lambda$2(this, error, response));
+    }
+
+    final /* synthetic */ void lambda$null$2$BaseLocationAdapter(TL_error error, TLObject response) {
+        this.currentRequestNum = 0;
+        this.searching = false;
+        this.places.clear();
+        this.iconUrls.clear();
+        if (error == null) {
+            messages_BotResults res = (messages_BotResults) response;
+            int size = res.results.size();
+            for (int a = 0; a < size; a++) {
+                BotInlineResult result = (BotInlineResult) res.results.get(a);
+                if ("venue".equals(result.type) && (result.send_message instanceof TL_botInlineMessageMediaVenue)) {
+                    TL_botInlineMessageMediaVenue mediaVenue = result.send_message;
+                    this.iconUrls.add("https://ss3.4sqi.net/img/categories_v2/" + mediaVenue.venue_type + "_64.png");
+                    TL_messageMediaVenue venue = new TL_messageMediaVenue();
+                    venue.geo = mediaVenue.geo;
+                    venue.address = mediaVenue.address;
+                    venue.title = mediaVenue.title;
+                    venue.venue_type = mediaVenue.venue_type;
+                    venue.venue_id = mediaVenue.venue_id;
+                    venue.provider = mediaVenue.provider;
+                    this.places.add(venue);
+                }
+            }
+        } else if (this.delegate != null) {
+            this.delegate.didLoadedSearchResult(this.places);
+        }
+        notifyDataSetChanged();
     }
 }

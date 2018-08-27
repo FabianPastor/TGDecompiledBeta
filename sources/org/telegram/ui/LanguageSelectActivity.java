@@ -51,8 +51,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     private ArrayList<LocaleInfo> sortedLanguages;
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$1 */
-    class C23351 extends ActionBarMenuOnItemClick {
-        C23351() {
+    class C16101 extends ActionBarMenuOnItemClick {
+        C16101() {
         }
 
         public void onItemClick(int id) {
@@ -63,8 +63,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$2 */
-    class C23362 extends ActionBarMenuItemSearchListener {
-        C23362() {
+    class C16112 extends ActionBarMenuItemSearchListener {
+        C16112() {
         }
 
         public void onSearchExpand() {
@@ -94,8 +94,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$3 */
-    class C23373 implements OnItemClickListener {
-        C23373() {
+    class C16123 implements OnItemClickListener {
+        C16123() {
         }
 
         public void onItemClick(View view, int position) {
@@ -118,8 +118,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$4 */
-    class C23384 implements OnItemLongClickListener {
-        C23384() {
+    class C16134 implements OnItemLongClickListener {
+        C16134() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -161,8 +161,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$5 */
-    class C23395 extends OnScrollListener {
-        C23395() {
+    class C16145 extends OnScrollListener {
+        C16145() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -256,8 +256,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("Language", R.string.Language));
-        this.actionBar.setActionBarMenuOnItemClick(new C23351());
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C23362()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        this.actionBar.setActionBarMenuOnItemClick(new C16101());
+        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C16112()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.listAdapter = new ListAdapter(context, false);
         this.searchListViewAdapter = new ListAdapter(context, true);
         this.fragmentView = new FrameLayout(context);
@@ -273,9 +273,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setAdapter(this.listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C23373());
-        this.listView.setOnItemLongClickListener(new C23384());
-        this.listView.setOnScrollListener(new C23395());
+        this.listView.setOnItemClickListener(new C16123());
+        this.listView.setOnItemLongClickListener(new C16134());
+        this.listView.setOnScrollListener(new C16145());
         return this.fragmentView;
     }
 
@@ -319,7 +319,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 this.searchTimer.cancel();
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         this.searchTimer = new Timer();
         this.searchTimer.schedule(new TimerTask() {
@@ -328,7 +328,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     LanguageSelectActivity.this.searchTimer.cancel();
                     LanguageSelectActivity.this.searchTimer = null;
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 LanguageSelectActivity.this.processSearch(query);
             }

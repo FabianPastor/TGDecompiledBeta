@@ -25,8 +25,8 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
     private PhotoPickerAlbumsCellDelegate delegate;
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerAlbumsCell$1 */
-    class C09341 implements OnClickListener {
-        C09341() {
+    class C05891 implements OnClickListener {
+        C05891() {
         }
 
         public void onClick(View v) {
@@ -90,7 +90,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             addView(this.albumViews[a]);
             this.albumViews[a].setVisibility(4);
             this.albumViews[a].setTag(Integer.valueOf(a));
-            this.albumViews[a].setOnClickListener(new C09341());
+            this.albumViews[a].setOnClickListener(new C05891());
         }
     }
 

@@ -2,8 +2,12 @@ package org.telegram.messenger;
 
 import android.text.TextUtils;
 import android.util.Base64;
+import com.google.android.exoplayer2.C0012C;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
+import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -11,9 +15,6 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0559C;
-import org.telegram.messenger.exoplayer2.RendererCapabilities;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -38,19 +39,19 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         final Map data = message.getData();
         final long time = message.getSentTime();
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("GCM received data: " + data + " from: " + from);
+            FileLog.m5d("GCM received data: " + data + " from: " + from);
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.GcmPushListenerService$1$1 */
-            class C01891 implements Runnable {
-                C01891() {
+            class C02921 implements Runnable {
+                C02921() {
                 }
 
                 public void run() {
                     Throwable e;
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("GCM START PROCESSING");
+                        FileLog.m5d("GCM START PROCESSING");
                     }
                     int currentAccount;
                     try {
@@ -78,7 +79,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     int a;
                                     byte[] strBytes = new byte[nativeByteBuffer.readInt32(true)];
                                     nativeByteBuffer.readBytes(strBytes, true);
-                                    JSONObject json = new JSONObject(new String(strBytes, C0559C.UTF8_NAME));
+                                    JSONObject json = new JSONObject(new String(strBytes, C0012C.UTF8_NAME));
                                     JSONObject custom = json.getJSONObject("custom");
                                     if (json.has("user_id")) {
                                         obj = json.get("user_id");
@@ -255,7 +256,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     channel = true;
                                                                 }
                                                                 if (BuildVars.LOGS_ENABLED) {
-                                                                    FileLog.m0d("GCM received message notification " + loc_key + " for dialogId = " + dialog_id + " mid = " + msg_id);
+                                                                    FileLog.m5d("GCM received message notification " + loc_key + " for dialogId = " + dialog_id + " mid = " + msg_id);
                                                                 }
                                                                 obj3 = -1;
                                                                 switch (loc_key.hashCode()) {
@@ -874,19 +875,19 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                         messageText = LocaleController.formatString("ChannelMessagePhoto", R.string.ChannelMessagePhoto, args[0]);
                                                                         message = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
                                                                         break;
-                                                                    case 23:
+                                                                    case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
                                                                         messageText = LocaleController.formatString("ChannelMessageVideo", R.string.ChannelMessageVideo, args[0]);
                                                                         message = LocaleController.getString("AttachVideo", R.string.AttachVideo);
                                                                         break;
-                                                                    case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
+                                                                    case 24:
                                                                         messageText = LocaleController.formatString("ChannelMessageRound", R.string.ChannelMessageRound, args[0]);
                                                                         message = LocaleController.getString("AttachRound", R.string.AttachRound);
                                                                         break;
-                                                                    case 25:
+                                                                    case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
                                                                         messageText = LocaleController.formatString("ChannelMessageDocument", R.string.ChannelMessageDocument, args[0]);
                                                                         message = LocaleController.getString("AttachDocument", R.string.AttachDocument);
                                                                         break;
-                                                                    case 26:
+                                                                    case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                                                                         if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
                                                                             messageText = LocaleController.formatString("ChannelMessageStickerEmoji", R.string.ChannelMessageStickerEmoji, args[0], args[1]);
                                                                             message = args[1] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
@@ -900,19 +901,19 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                         messageText = LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, args[0]);
                                                                         message = LocaleController.getString("AttachAudio", R.string.AttachAudio);
                                                                         break;
-                                                                    case 28:
+                                                                    case NalUnitTypes.NAL_TYPE_RSV_VCL28 /*28*/:
                                                                         messageText = LocaleController.formatString("ChannelMessageContact", R.string.ChannelMessageContact, args[0]);
                                                                         message = LocaleController.getString("AttachContact", R.string.AttachContact);
                                                                         break;
-                                                                    case 29:
+                                                                    case NalUnitTypes.NAL_TYPE_RSV_VCL29 /*29*/:
                                                                         messageText = LocaleController.formatString("ChannelMessageMap", R.string.ChannelMessageMap, args[0]);
                                                                         message = LocaleController.getString("AttachLocation", R.string.AttachLocation);
                                                                         break;
-                                                                    case 30:
+                                                                    case NalUnitTypes.NAL_TYPE_RSV_VCL30 /*30*/:
                                                                         messageText = LocaleController.formatString("ChannelMessageLiveLocation", R.string.ChannelMessageLiveLocation, args[0]);
                                                                         message = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
                                                                         break;
-                                                                    case 31:
+                                                                    case NalUnitTypes.NAL_TYPE_RSV_VCL31 /*31*/:
                                                                         messageText = LocaleController.formatString("ChannelMessageGIF", R.string.ChannelMessageGIF, args[0]);
                                                                         message = LocaleController.getString("AttachGif", R.string.AttachGif);
                                                                         break;
@@ -932,15 +933,15 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                         messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1]).intValue()));
                                                                         localMessage = true;
                                                                         break;
-                                                                    case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
+                                                                    case 36:
                                                                         messageText = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
                                                                         message = args[2];
                                                                         break;
-                                                                    case 37:
+                                                                    case NalUnitTypes.NAL_TYPE_EOB_NUT /*37*/:
                                                                         messageText = LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, args[0], args[1]);
                                                                         message = LocaleController.getString("Message", R.string.Message);
                                                                         break;
-                                                                    case 38:
+                                                                    case NalUnitTypes.NAL_TYPE_FD_NUT /*38*/:
                                                                         messageText = LocaleController.formatString("NotificationMessageGroupPhoto", R.string.NotificationMessageGroupPhoto, args[0], args[1]);
                                                                         message = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
                                                                         break;
@@ -1108,7 +1109,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                             messageText = LocaleController.formatString("NotificationActionPinnedVoice", R.string.NotificationActionPinnedVoice, args[0], args[1]);
                                                                             break;
                                                                         }
-                                                                    case 71:
+                                                                    case TsExtractor.TS_SYNC_BYTE /*71*/:
                                                                         if (chat_from_id == 0) {
                                                                             messageText = LocaleController.formatString("NotificationActionPinnedContactChannel", R.string.NotificationActionPinnedContactChannel, args[0]);
                                                                             break;
@@ -1116,7 +1117,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                             messageText = LocaleController.formatString("NotificationActionPinnedContact", R.string.NotificationActionPinnedContact, args[0], args[1]);
                                                                             break;
                                                                         }
-                                                                    case 72:
+                                                                    case XtraBox.MP4_XTRA_BT_GUID /*72*/:
                                                                         if (chat_from_id == 0) {
                                                                             messageText = LocaleController.formatString("NotificationActionPinnedGeoChannel", R.string.NotificationActionPinnedGeoChannel, args[0]);
                                                                             break;
@@ -1160,10 +1161,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     case 78:
                                                                     case 79:
                                                                     case 81:
-                                                                    case TLRPC.LAYER /*82*/:
+                                                                    case 82:
                                                                     case 83:
                                                                     case 84:
-                                                                    case 85:
+                                                                    case TLRPC.LAYER /*85*/:
                                                                         break;
                                                                     case 80:
                                                                         messageText = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
@@ -1172,7 +1173,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                         break;
                                                                     default:
                                                                         if (BuildVars.LOGS_ENABLED) {
-                                                                            FileLog.m4w("unhandled loc_key = " + loc_key);
+                                                                            FileLog.m9w("unhandled loc_key = " + loc_key);
                                                                             break;
                                                                         }
                                                                         break;
@@ -1215,7 +1216,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                             int max_id = custom.getInt("max_id");
                                                             ArrayList<Update> updates2 = new ArrayList();
                                                             if (BuildVars.LOGS_ENABLED) {
-                                                                FileLog.m0d("GCM received read notification max_id = " + max_id + " for dialogId = " + dialog_id);
+                                                                FileLog.m5d("GCM received read notification max_id = " + max_id + " for dialogId = " + dialog_id);
                                                             }
                                                             if (channel_id != 0) {
                                                                 TL_updateReadChannelInbox update2 = new TL_updateReadChannelInbox();
@@ -1242,7 +1243,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                     return;
                                             }
                                         } else if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.m0d("GCM ACCOUNT NOT ACTIVATED");
+                                            FileLog.m5d("GCM ACCOUNT NOT ACTIVATED");
                                             return;
                                         } else {
                                             return;
@@ -1256,27 +1257,27 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                             GcmPushListenerService.this.onDecryptError();
                                         }
                                         if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.m1e("error in loc_key = " + null);
+                                            FileLog.m6e("error in loc_key = " + null);
                                         }
-                                        FileLog.m3e(e);
+                                        FileLog.m8e(e);
                                     }
                                 }
                                 GcmPushListenerService.this.onDecryptError();
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m0d(String.format("GCM DECRYPT ERROR 3, key = %s", new Object[]{Utilities.bytesToHex(SharedConfig.pushAuthKey)}));
+                                    FileLog.m5d(String.format("GCM DECRYPT ERROR 3, key = %s", new Object[]{Utilities.bytesToHex(SharedConfig.pushAuthKey)}));
                                 }
                                 currentAccount = -1;
                                 return;
                             }
                             GcmPushListenerService.this.onDecryptError();
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d(String.format(Locale.US, "GCM DECRYPT ERROR 2 k1=%s k2=%s, key=%s", new Object[]{Utilities.bytesToHex(SharedConfig.pushAuthKeyId), Utilities.bytesToHex(inAuthKeyId), Utilities.bytesToHex(SharedConfig.pushAuthKey)}));
+                                FileLog.m5d(String.format(Locale.US, "GCM DECRYPT ERROR 2 k1=%s k2=%s, key=%s", new Object[]{Utilities.bytesToHex(SharedConfig.pushAuthKeyId), Utilities.bytesToHex(inAuthKeyId), Utilities.bytesToHex(SharedConfig.pushAuthKey)}));
                             }
                             currentAccount = -1;
                             return;
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("GCM DECRYPT ERROR 1");
+                            FileLog.m5d("GCM DECRYPT ERROR 1");
                         }
                         GcmPushListenerService.this.onDecryptError();
                         currentAccount = -1;
@@ -1290,16 +1291,16 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                             ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m1e("error in loc_key = " + null);
+                            FileLog.m6e("error in loc_key = " + null);
                         }
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             }
 
             public void run() {
                 ApplicationLoader.postInitApplication();
-                Utilities.stageQueue.postRunnable(new C01891());
+                Utilities.stageQueue.postRunnable(new C02921());
             }
         });
     }

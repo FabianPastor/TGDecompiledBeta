@@ -48,8 +48,8 @@ public class ChatActionCell extends BaseCell {
     private int textY = 0;
 
     /* renamed from: org.telegram.ui.Cells.ChatActionCell$1 */
-    class C09171 implements Runnable {
-        C09171() {
+    class C05731 implements Runnable {
+        C05731() {
         }
 
         public void run() {
@@ -90,7 +90,7 @@ public class ChatActionCell extends BaseCell {
                     createLayout(this.customText, getMeasuredWidth());
                     invalidate();
                 }
-                AndroidUtilities.runOnUIThread(new C09171());
+                AndroidUtilities.runOnUIThread(new C05731());
             }
         }
     }
@@ -246,7 +246,7 @@ public class ChatActionCell extends BaseCell {
                 this.textWidth = (int) Math.max((double) this.textWidth, Math.ceil((double) lineWidth));
                 a++;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return;
             }
         }

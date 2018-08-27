@@ -31,7 +31,7 @@ public class ClearCacheService extends IntentService {
                             try {
                                 Utilities.clearDir(((File) paths.valueAt(a)).getAbsolutePath(), 0, currentTime);
                             } catch (Throwable e) {
-                                FileLog.m3e(e);
+                                FileLog.m8e(e);
                             }
                         }
                     }

@@ -47,8 +47,8 @@ public class ColorPicker extends FrameLayout {
     private float weight = 0.27f;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.ColorPicker$1 */
-    class C12771 implements OnClickListener {
-        C12771() {
+    class C08461 implements OnClickListener {
+        C08461() {
         }
 
         public void onClick(View v) {
@@ -59,8 +59,8 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.ColorPicker$2 */
-    class C12782 implements OnClickListener {
-        C12782() {
+    class C08472 implements OnClickListener {
+        C08472() {
         }
 
         public void onClick(View v) {
@@ -93,12 +93,12 @@ public class ColorPicker extends FrameLayout {
         this.settingsButton.setScaleType(ScaleType.CENTER);
         this.settingsButton.setImageResource(R.drawable.photo_paint_brush);
         addView(this.settingsButton, LayoutHelper.createFrame(60, 52.0f));
-        this.settingsButton.setOnClickListener(new C12771());
+        this.settingsButton.setOnClickListener(new C08461());
         this.undoButton = new ImageView(context);
         this.undoButton.setScaleType(ScaleType.CENTER);
         this.undoButton.setImageResource(R.drawable.photo_undo);
         addView(this.undoButton, LayoutHelper.createFrame(60, 52.0f));
-        this.undoButton.setOnClickListener(new C12782());
+        this.undoButton.setOnClickListener(new C08472());
         this.location = context.getSharedPreferences("paint", 0).getFloat("last_color_location", 1.0f);
         setLocation(this.location);
     }

@@ -1,5 +1,6 @@
 package org.telegram.PhoneFormat;
 
+import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -112,14 +113,14 @@ public class PhoneFormat {
                     try {
                         bos.close();
                     } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 }
                 if (stream != null) {
                     try {
                         stream.close();
                     } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                 }
                 if (countryCode == null || countryCode.length() == 0) {
@@ -138,19 +139,19 @@ public class PhoneFormat {
                 e = e3;
                 byteArrayOutputStream = bos;
                 try {
-                    e.printStackTrace();
+                    ThrowableExtension.printStackTrace(e);
                     if (byteArrayOutputStream != null) {
                         try {
                             byteArrayOutputStream.close();
                         } catch (Throwable e222) {
-                            FileLog.m3e(e222);
+                            FileLog.m8e(e222);
                         }
                     }
                     if (stream != null) {
                         try {
                             stream.close();
                         } catch (Throwable e2222) {
-                            FileLog.m3e(e2222);
+                            FileLog.m8e(e2222);
                         }
                     }
                 } catch (Throwable th2) {
@@ -159,14 +160,14 @@ public class PhoneFormat {
                         try {
                             byteArrayOutputStream.close();
                         } catch (Throwable e22222) {
-                            FileLog.m3e(e22222);
+                            FileLog.m8e(e22222);
                         }
                     }
                     if (stream != null) {
                         try {
                             stream.close();
                         } catch (Throwable e222222) {
-                            FileLog.m3e(e222222);
+                            FileLog.m8e(e222222);
                         }
                     }
                     throw th;
@@ -184,7 +185,7 @@ public class PhoneFormat {
             }
         } catch (Exception e4) {
             e = e4;
-            e.printStackTrace();
+            ThrowableExtension.printStackTrace(e);
             if (byteArrayOutputStream != null) {
                 byteArrayOutputStream.close();
             }
@@ -257,7 +258,7 @@ public class PhoneFormat {
             }
             return String.format("%s %s", new Object[]{accessCode, phone});
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return orig;
         }
     }
@@ -323,7 +324,7 @@ public class PhoneFormat {
                     return new String(this.data, offset, a - offset);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                ThrowableExtension.printStackTrace(e);
                 return TtmlNode.ANONYMOUS_REGION_ID;
             }
         }

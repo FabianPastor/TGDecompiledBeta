@@ -38,8 +38,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
     private PhotoVideoView[] photoVideoViews = new PhotoVideoView[6];
 
     /* renamed from: org.telegram.ui.Cells.SharedPhotoVideoCell$1 */
-    class C09411 implements OnClickListener {
-        C09411() {
+    class C05961 implements OnClickListener {
+        C05961() {
         }
 
         public void onClick(View v) {
@@ -51,8 +51,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.SharedPhotoVideoCell$2 */
-    class C09422 implements OnLongClickListener {
-        C09422() {
+    class C05972 implements OnLongClickListener {
+        C05972() {
         }
 
         public boolean onLongClick(View v) {
@@ -201,8 +201,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
             addView(this.photoVideoViews[a]);
             this.photoVideoViews[a].setVisibility(4);
             this.photoVideoViews[a].setTag(Integer.valueOf(a));
-            this.photoVideoViews[a].setOnClickListener(new C09411());
-            this.photoVideoViews[a].setOnLongClickListener(new C09422());
+            this.photoVideoViews[a].setOnClickListener(new C05961());
+            this.photoVideoViews[a].setOnLongClickListener(new C05972());
         }
     }
 

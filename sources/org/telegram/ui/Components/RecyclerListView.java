@@ -61,7 +61,7 @@ public class RecyclerListView extends RecyclerView {
     private boolean interceptedByChild;
     private boolean isChildViewEnabled;
     private boolean longPressCalled;
-    private AdapterDataObserver observer = new C22471();
+    private AdapterDataObserver observer = new C15311();
     private OnInterceptTouchListener onInterceptTouchListener;
     private OnItemClickListener onItemClickListener;
     private OnItemClickListenerExtended onItemClickListenerExtended;
@@ -334,8 +334,8 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$1 */
-    class C22471 extends AdapterDataObserver {
-        C22471() {
+    class C15311 extends AdapterDataObserver {
+        C15311() {
         }
 
         public void onChanged() {
@@ -354,10 +354,10 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$2 */
-    class C22482 extends OnScrollListener {
+    class C15322 extends OnScrollListener {
         boolean scrollingByUser;
 
-        C22482() {
+        C15322() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -371,7 +371,7 @@ public class RecyclerListView extends RecyclerView {
                 try {
                     RecyclerListView.this.gestureDetector.onTouchEvent(event);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 RecyclerListView.this.currentChildView.onTouchEvent(event);
                 event.recycle();
@@ -521,8 +521,8 @@ public class RecyclerListView extends RecyclerView {
     private class RecyclerListViewItemClickListener implements OnItemTouchListener {
 
         /* renamed from: org.telegram.ui.Components.RecyclerListView$RecyclerListViewItemClickListener$2 */
-        class C13422 implements Runnable {
-            C13422() {
+        class C09112 implements Runnable {
+            C09112() {
             }
 
             public void run() {
@@ -637,12 +637,12 @@ public class RecyclerListView extends RecyclerView {
                 try {
                     RecyclerListView.this.gestureDetector.onTouchEvent(event);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
             if (action == 0 || action == 5) {
                 if (!(RecyclerListView.this.interceptedByChild || RecyclerListView.this.currentChildView == null)) {
-                    RecyclerListView.this.selectChildRunnable = new C13422();
+                    RecyclerListView.this.selectChildRunnable = new C09112();
                     AndroidUtilities.runOnUIThread(RecyclerListView.this.selectChildRunnable, (long) ViewConfiguration.getTapTimeout());
                     if (RecyclerListView.this.currentChildView.isEnabled()) {
                         RecyclerListView.this.positionSelector(RecyclerListView.this.currentChildPosition, RecyclerListView.this.currentChildView);
@@ -903,9 +903,9 @@ public class RecyclerListView extends RecyclerView {
             View.class.getDeclaredMethod("initializeScrollbars", new Class[]{TypedArray.class}).invoke(this, new Object[]{a});
             a.recycle();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
-        super.setOnScrollListener(new C22482());
+        super.setOnScrollListener(new C15322());
         addOnItemTouchListener(new RecyclerListViewItemClickListener(context));
     }
 
@@ -1223,13 +1223,13 @@ public class RecyclerListView extends RecyclerView {
                 try {
                     header.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, NUM), MeasureSpec.makeMeasureSpec(layoutParams.height, NUM));
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             } else if (this.sectionsType == 2) {
                 try {
                     header.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(0, 0));
                 } catch (Throwable e2) {
-                    FileLog.m3e(e2);
+                    FileLog.m8e(e2);
                 }
             }
             header.layout(0, 0, header.getMeasuredWidth(), header.getMeasuredHeight());

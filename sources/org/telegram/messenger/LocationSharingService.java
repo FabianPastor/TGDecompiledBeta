@@ -7,11 +7,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationManagerCompat;
+import com.google.android.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import java.util.ArrayList;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.ui.LaunchActivity;
 
@@ -21,11 +21,11 @@ public class LocationSharingService extends Service implements NotificationCente
     private Runnable runnable;
 
     /* renamed from: org.telegram.messenger.LocationSharingService$1 */
-    class C02531 implements Runnable {
+    class C03171 implements Runnable {
 
         /* renamed from: org.telegram.messenger.LocationSharingService$1$1 */
-        class C02521 implements Runnable {
-            C02521() {
+        class C03161 implements Runnable {
+            C03161() {
             }
 
             public void run() {
@@ -35,18 +35,18 @@ public class LocationSharingService extends Service implements NotificationCente
             }
         }
 
-        C02531() {
+        C03171() {
         }
 
         public void run() {
             LocationSharingService.this.handler.postDelayed(LocationSharingService.this.runnable, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
-            Utilities.stageQueue.postRunnable(new C02521());
+            Utilities.stageQueue.postRunnable(new C03161());
         }
     }
 
     /* renamed from: org.telegram.messenger.LocationSharingService$2 */
-    class C02542 implements Runnable {
-        C02542() {
+    class C03182 implements Runnable {
+        C03182() {
         }
 
         public void run() {
@@ -65,7 +65,7 @@ public class LocationSharingService extends Service implements NotificationCente
     public void onCreate() {
         super.onCreate();
         this.handler = new Handler();
-        this.runnable = new C02531();
+        this.runnable = new C03171();
         this.handler.postDelayed(this.runnable, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
     }
 
@@ -83,7 +83,7 @@ public class LocationSharingService extends Service implements NotificationCente
 
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.liveLocationsChanged && this.handler != null) {
-            this.handler.post(new C02542());
+            this.handler.post(new C03182());
         }
     }
 
@@ -141,6 +141,7 @@ public class LocationSharingService extends Service implements NotificationCente
             this.builder.setWhen(System.currentTimeMillis());
             this.builder.setSmallIcon(R.drawable.live_loc);
             this.builder.setContentIntent(contentIntent);
+            NotificationsController.checkOtherNotificationsChannel();
             this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
             this.builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class), 134217728));

@@ -91,7 +91,7 @@ public class SQLiteCursor {
                 }
                 try {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("sqlite busy, waiting...");
+                        FileLog.m5d("sqlite busy, waiting...");
                     }
                     Thread.sleep(500);
                     res = this.preparedStatement.step();
@@ -100,7 +100,7 @@ public class SQLiteCursor {
                     }
                     repeatCount = repeatCount2;
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                     repeatCount = repeatCount2;
                 }
             }

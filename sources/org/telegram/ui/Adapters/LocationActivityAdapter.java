@@ -38,16 +38,6 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     private SendLocationCell sendLocationCell;
     private int shareLiveLocationPotistion = -1;
 
-    /* renamed from: org.telegram.ui.Adapters.LocationActivityAdapter$1 */
-    class C08281 implements Runnable {
-        C08281() {
-        }
-
-        public void run() {
-            LocationActivityAdapter.this.notifyItemChanged(LocationActivityAdapter.this.liveLocationType == 0 ? 2 : 3);
-        }
-    }
-
     public LocationActivityAdapter(Context context, int live, long did) {
         this.mContext = context;
         this.liveLocationType = live;
@@ -181,8 +171,12 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     public void setPulledUp() {
         if (!this.pulledUp) {
             this.pulledUp = true;
-            AndroidUtilities.runOnUIThread(new C08281());
+            AndroidUtilities.runOnUIThread(new LocationActivityAdapter$$Lambda$0(this));
         }
+    }
+
+    final /* synthetic */ void lambda$setPulledUp$0$LocationActivityAdapter() {
+        notifyItemChanged(this.liveLocationType == 0 ? 2 : 3);
     }
 
     public boolean isPulledUp() {

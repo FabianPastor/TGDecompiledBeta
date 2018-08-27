@@ -6,8 +6,8 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public class BackDrawable extends Drawable {
     private boolean alwaysClose;

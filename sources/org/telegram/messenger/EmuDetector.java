@@ -8,12 +8,13 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import com.google.android.exoplayer2.C0012C;
+import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0559C;
 
 public class EmuDetector {
     private static final String[] ANDY_FILES = new String[]{"fstab.andy", "ueventd.andy.rc"};
@@ -155,7 +156,7 @@ public class EmuDetector {
         PackageManager packageManager = this.mContext.getPackageManager();
         for (String pkgName : this.mListPackageName) {
             Intent tryIntent = packageManager.getLaunchIntentForPackage(pkgName);
-            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, C0559C.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
+            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, C0012C.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
                 return true;
             }
         }
@@ -209,7 +210,7 @@ public class EmuDetector {
                     is.read(data);
                     is.close();
                 } catch (Exception exception) {
-                    exception.printStackTrace();
+                    ThrowableExtension.printStackTrace(exception);
                 }
                 String driver_data = new String(data);
                 for (String known_qemu_driver : QEMU_DRIVERS) {

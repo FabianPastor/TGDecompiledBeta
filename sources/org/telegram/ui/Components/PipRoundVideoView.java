@@ -30,6 +30,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -40,7 +41,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -65,8 +65,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$3 */
-    class C13263 extends ViewOutlineProvider {
-        C13263() {
+    class C08953 extends ViewOutlineProvider {
+        C08953() {
         }
 
         @TargetApi(21)
@@ -76,8 +76,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$5 */
-    class C13275 extends AnimatorListenerAdapter {
-        C13275() {
+    class C08965 extends AnimatorListenerAdapter {
+        C08965() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -88,8 +88,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$7 */
-    class C13297 extends AnimatorListenerAdapter {
-        C13297() {
+    class C08987 extends AnimatorListenerAdapter {
+        C08987() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -209,7 +209,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                         return result;
                     }
                 };
-                this.aspectRatioFrameLayout.setOutlineProvider(new C13263());
+                this.aspectRatioFrameLayout.setOutlineProvider(new C08953());
                 this.aspectRatioFrameLayout.setClipToOutline(true);
             } else {
                 final Paint aspectPaint = new Paint(1);
@@ -281,7 +281,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
                 runShowHideAnimation(true);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -399,7 +399,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         if (this.decelerateInterpolator == null) {
             this.decelerateInterpolator = new DecelerateInterpolator();
         }
-        this.hideShowAnimation.addListener(new C13275());
+        this.hideShowAnimation.addListener(new C08965());
         this.hideShowAnimation.setInterpolator(this.decelerateInterpolator);
         this.hideShowAnimation.start();
     }
@@ -530,7 +530,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C13297());
+                animatorSet.addListener(new C08987());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();
