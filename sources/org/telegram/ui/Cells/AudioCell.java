@@ -8,13 +8,12 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
@@ -41,33 +40,6 @@ public class AudioCell extends FrameLayout {
         void startedPlayingAudio(MessageObject messageObject);
     }
 
-    /* renamed from: org.telegram.ui.Cells.AudioCell$1 */
-    class C11021 implements OnClickListener {
-        C11021() {
-        }
-
-        public void onClick(View v) {
-            if (AudioCell.this.audioEntry == null) {
-                return;
-            }
-            if (!MediaController.getInstance().isPlayingMessage(AudioCell.this.audioEntry.messageObject) || MediaController.getInstance().isMessagePaused()) {
-                ArrayList<MessageObject> arrayList = new ArrayList();
-                arrayList.add(AudioCell.this.audioEntry.messageObject);
-                if (MediaController.getInstance().setPlaylist(arrayList, AudioCell.this.audioEntry.messageObject)) {
-                    AudioCell.this.setPlayDrawable(true);
-                    if (AudioCell.this.delegate != null) {
-                        AudioCell.this.delegate.startedPlayingAudio(AudioCell.this.audioEntry.messageObject);
-                        return;
-                    }
-                    return;
-                }
-                return;
-            }
-            MediaController.getInstance().pauseMessage(AudioCell.this.audioEntry.messageObject);
-            AudioCell.this.setPlayDrawable(false);
-        }
-    }
-
     public AudioCell(Context context) {
         float f;
         float f2;
@@ -88,7 +60,7 @@ public class AudioCell extends FrameLayout {
             f2 = 0.0f;
         }
         addView(view, LayoutHelper.createFrame(46, 46.0f, i3, f, 13.0f, f2, 0.0f));
-        this.playButton.setOnClickListener(new C11021());
+        this.playButton.setOnClickListener(new AudioCell$$Lambda$0(this));
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.titleTextView.setTextSize(1, 16.0f);
@@ -168,7 +140,7 @@ public class AudioCell extends FrameLayout {
             i3 = 5;
         }
         addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0505R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, C0431R.drawable.round_check2);
         this.checkBox.setVisibility(0);
         this.checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
         view2 = this.checkBox;
@@ -178,9 +150,30 @@ public class AudioCell extends FrameLayout {
         addView(view2, LayoutHelper.createFrame(22, 22.0f, i2 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 39.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
     }
 
+    final /* synthetic */ void lambda$new$0$AudioCell(View v) {
+        if (this.audioEntry == null) {
+            return;
+        }
+        if (!MediaController.getInstance().isPlayingMessage(this.audioEntry.messageObject) || MediaController.getInstance().isMessagePaused()) {
+            ArrayList<MessageObject> arrayList = new ArrayList();
+            arrayList.add(this.audioEntry.messageObject);
+            if (MediaController.getInstance().setPlaylist(arrayList, this.audioEntry.messageObject)) {
+                setPlayDrawable(true);
+                if (this.delegate != null) {
+                    this.delegate.startedPlayingAudio(this.audioEntry.messageObject);
+                    return;
+                }
+                return;
+            }
+            return;
+        }
+        MediaController.getInstance().pauseMessage(this.audioEntry.messageObject);
+        setPlayDrawable(false);
+    }
+
     private void setPlayDrawable(boolean play) {
         Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(46.0f), Theme.getColor(Theme.key_musicPicker_buttonBackground), Theme.getColor(Theme.key_musicPicker_buttonBackground));
-        Drawable drawable = getResources().getDrawable(play ? C0505R.drawable.audiosend_pause : C0505R.drawable.audiosend_play);
+        Drawable drawable = getResources().getDrawable(play ? C0431R.drawable.audiosend_pause : C0431R.drawable.audiosend_play);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_musicPicker_buttonIcon), Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
         combinedDrawable.setCustomSize(AndroidUtilities.dp(46.0f), AndroidUtilities.dp(46.0f));

@@ -13,13 +13,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import com.google.android.exoplayer2.C0020C;
 import java.io.Closeable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0621C;
 
 public class NotificationBadge {
     private static final List<Class<? extends Badger>> BADGERS = new LinkedList();
@@ -146,7 +146,7 @@ public class NotificationBadge {
                     try {
                         ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"), "change_badge", null, localBundle);
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -420,7 +420,7 @@ public class NotificationBadge {
                     try {
                         ApplicationLoader.applicationContext.getContentResolver().call(ZukHomeBadger.this.CONTENT_URI, "setAppBadgeCount", null, extra);
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -472,7 +472,7 @@ public class NotificationBadge {
         componentName = launchIntent.getComponent();
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
-        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, C0621C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, C0020C.DEFAULT_BUFFER_SEGMENT_SIZE);
         if (resolveInfo != null) {
             String currentHomePackage = resolveInfo.activityInfo.packageName;
             for (Class<? extends Badger> b : BADGERS) {
@@ -490,7 +490,7 @@ public class NotificationBadge {
                 return true;
             }
         }
-        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, C0621C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, C0020C.DEFAULT_BUFFER_SEGMENT_SIZE);
         if (resolveInfos != null) {
             for (int a = 0; a < resolveInfos.size(); a++) {
                 currentHomePackage = ((ResolveInfo) resolveInfos.get(a)).activityInfo.packageName;

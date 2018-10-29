@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
@@ -26,8 +26,8 @@ public class ShareActivity extends Activity {
     private Dialog visibleDialog;
 
     /* renamed from: org.telegram.ui.ShareActivity$1 */
-    class C24951 implements OnDismissListener {
-        C24951() {
+    class C17291 implements OnDismissListener {
+        C17291() {
         }
 
         public void onDismiss(DialogInterface dialog) {
@@ -42,7 +42,7 @@ public class ShareActivity extends Activity {
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         requestWindowFeature(1);
-        setTheme(C0505R.style.Theme.TMessages.Transparent);
+        setTheme(C0431R.style.Theme.TMessages.Transparent);
         super.onCreate(savedInstanceState);
         setContentView(new View(this), new LayoutParams(-1, -1));
         Intent intent = getIntent();
@@ -75,11 +75,11 @@ public class ShareActivity extends Activity {
             try {
                 this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, null, false, link, false);
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new C24951());
+                this.visibleDialog.setOnDismissListener(new C17291());
                 this.visibleDialog.show();
                 return;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 finish();
                 return;
             }
@@ -95,7 +95,7 @@ public class ShareActivity extends Activity {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 }

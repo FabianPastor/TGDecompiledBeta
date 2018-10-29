@@ -18,8 +18,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import com.google.android.exoplayer2.C0020C;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -49,8 +50,8 @@ public class ChangeBioActivity extends BaseFragment {
     private TextView helpTextView;
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$1 */
-    class C11381 extends ActionBarMenuOnItemClick {
-        C11381() {
+    class C07621 extends ActionBarMenuOnItemClick {
+        C07621() {
         }
 
         public void onItemClick(int id) {
@@ -63,8 +64,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$2 */
-    class C11392 implements OnTouchListener {
-        C11392() {
+    class C07632 implements OnTouchListener {
+        C07632() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -73,8 +74,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$4 */
-    class C11414 implements OnEditorActionListener {
-        C11414() {
+    class C07654 implements OnEditorActionListener {
+        C07654() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -87,8 +88,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$5 */
-    class C11425 implements TextWatcher {
-        C11425() {
+    class C07665 implements TextWatcher {
+        C07665() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -103,15 +104,15 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0431R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("UserBio", C0505R.string.UserBio));
-        this.actionBar.setActionBarMenuOnItemClick(new C11381());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0505R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("UserBio", C0431R.string.UserBio));
+        this.actionBar.setActionBarMenuOnItemClick(new C07621());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0431R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C11392());
+        this.fragmentView.setOnTouchListener(new C07632());
         FrameLayout fieldContainer = new FrameLayout(context);
         linearLayout.addView(fieldContainer, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
         this.firstNameField = new EditTextBoldCursor(context);
@@ -122,7 +123,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.firstNameField.setMaxLines(4);
         this.firstNameField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24.0f : 0.0f), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0.0f : 24.0f), AndroidUtilities.dp(6.0f));
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.firstNameField.setImeOptions(268435456);
+        this.firstNameField.setImeOptions(C0020C.ENCODING_PCM_MU_LAW);
         this.firstNameField.setInputType(147457);
         this.firstNameField.setImeOptions(6);
         this.firstNameField.setFilters(new InputFilter[]{new LengthFilter(70) {
@@ -144,12 +145,12 @@ public class ChangeBioActivity extends BaseFragment {
             }
         }});
         this.firstNameField.setMinHeight(AndroidUtilities.dp(36.0f));
-        this.firstNameField.setHint(LocaleController.getString("UserBio", C0505R.string.UserBio));
+        this.firstNameField.setHint(LocaleController.getString("UserBio", C0431R.string.UserBio));
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new C11414());
-        this.firstNameField.addTextChangedListener(new C11425());
+        this.firstNameField.setOnEditorActionListener(new C07654());
+        this.firstNameField.addTextChangedListener(new C07665());
         fieldContainer.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
         this.checkTextView = new TextView(context);
         this.checkTextView.setTextSize(1, 15.0f);
@@ -160,7 +161,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.helpTextView.setTextSize(1, 15.0f);
         this.helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
         this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", C0505R.string.UserBioInfo)));
+        this.helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", C0431R.string.UserBioInfo)));
         linearLayout.addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
         TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
         if (!(userFull == null || userFull.about == null)) {
@@ -191,7 +192,7 @@ public class ChangeBioActivity extends BaseFragment {
                 return;
             }
             final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", C0505R.string.Loading));
+            progressDialog.setMessage(LocaleController.getString("Loading", C0431R.string.Loading));
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             final TL_account_updateProfile req = new TL_account_updateProfile();
@@ -206,7 +207,7 @@ public class ChangeBioActivity extends BaseFragment {
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.m3e(e);
+                                    FileLog.m8e(e);
                                 }
                                 userFull.about = newName;
                                 NotificationCenter.getInstance(ChangeBioActivity.this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoaded, Integer.valueOf(user.id), userFull);
@@ -220,7 +221,7 @@ public class ChangeBioActivity extends BaseFragment {
                             try {
                                 progressDialog.dismiss();
                             } catch (Throwable e) {
-                                FileLog.m3e(e);
+                                FileLog.m8e(e);
                             }
                             AlertsCreator.processError(ChangeBioActivity.this.currentAccount, error, ChangeBioActivity.this, req, new Object[0]);
                         }
@@ -228,13 +229,13 @@ public class ChangeBioActivity extends BaseFragment {
                 }
             }, 2);
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, this.classGuid);
-            progressDialog.setButton(-2, LocaleController.getString("Cancel", C0505R.string.Cancel), new OnClickListener() {
+            progressDialog.setButton(-2, LocaleController.getString("Cancel", C0431R.string.Cancel), new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     ConnectionsManager.getInstance(ChangeBioActivity.this.currentAccount).cancelRequest(reqId, true);
                     try {
                         dialog.dismiss();
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });

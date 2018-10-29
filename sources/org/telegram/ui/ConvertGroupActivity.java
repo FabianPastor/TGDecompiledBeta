@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -38,8 +38,8 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     private int rowCount;
 
     /* renamed from: org.telegram.ui.ConvertGroupActivity$1 */
-    class C18251 extends ActionBarMenuOnItemClick {
-        C18251() {
+    class C13141 extends ActionBarMenuOnItemClick {
+        C13141() {
         }
 
         public void onItemClick(int id) {
@@ -50,11 +50,11 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ConvertGroupActivity$2 */
-    class C18272 implements OnItemClickListener {
+    class C13162 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ConvertGroupActivity$2$1 */
-        class C18261 implements OnClickListener {
-            C18261() {
+        class C13151 implements OnClickListener {
+            C13151() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -62,16 +62,16 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C18272() {
+        C13162() {
         }
 
         public void onItemClick(View view, int position) {
             if (position == ConvertGroupActivity.this.convertRow) {
                 Builder builder = new Builder(ConvertGroupActivity.this.getParentActivity());
-                builder.setMessage(LocaleController.getString("ConvertGroupAlert", C0505R.string.ConvertGroupAlert));
-                builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", C0505R.string.ConvertGroupAlertWarning));
-                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), new C18261());
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
+                builder.setMessage(LocaleController.getString("ConvertGroupAlert", C0431R.string.ConvertGroupAlert));
+                builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", C0431R.string.ConvertGroupAlertWarning));
+                builder.setPositiveButton(LocaleController.getString("OK", C0431R.string.OK), new C13151());
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0431R.string.Cancel), null);
                 ConvertGroupActivity.this.showDialog(builder.create());
             }
         }
@@ -111,19 +111,19 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
                 case 0:
                     TextSettingsCell textCell = holder.itemView;
                     if (position == ConvertGroupActivity.this.convertRow) {
-                        textCell.setText(LocaleController.getString("ConvertGroup", C0505R.string.ConvertGroup), false);
+                        textCell.setText(LocaleController.getString("ConvertGroup", C0431R.string.ConvertGroup), false);
                         return;
                     }
                     return;
                 case 1:
                     TextInfoPrivacyCell privacyCell = holder.itemView;
                     if (position == ConvertGroupActivity.this.convertInfoRow) {
-                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo2", C0505R.string.ConvertGroupInfo2)));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0505R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo2", C0431R.string.ConvertGroupInfo2)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0431R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ConvertGroupActivity.this.convertDetailRow) {
-                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo3", C0505R.string.ConvertGroupInfo3)));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0505R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo3", C0431R.string.ConvertGroupInfo3)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0431R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -170,10 +170,10 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0431R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ConvertGroup", C0505R.string.ConvertGroup));
-        this.actionBar.setActionBarMenuOnItemClick(new C18251());
+        this.actionBar.setTitle(LocaleController.getString("ConvertGroup", C0431R.string.ConvertGroup));
+        this.actionBar.setActionBarMenuOnItemClick(new C13141());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -183,7 +183,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C18272());
+        this.listView.setOnItemClickListener(new C13162());
         return this.fragmentView;
     }
 

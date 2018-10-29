@@ -40,7 +40,7 @@ public class Render {
         if (Math.abs(state.angle) > 0.0f) {
             vectorAngle = state.angle;
         } else {
-            vectorAngle = (float) Math.atan2(vector.f55y, vector.f54x);
+            vectorAngle = (float) Math.atan2(vector.f65y, vector.f64x);
         }
         float brushWeight = state.baseWeight * state.scale;
         double step = (double) Math.max(1.0f, state.spacing * brushWeight);

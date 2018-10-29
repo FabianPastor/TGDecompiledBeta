@@ -9,8 +9,8 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 public class VoIPPermissionActivity extends Activity {
 
     /* renamed from: org.telegram.ui.VoIPPermissionActivity$1 */
-    class C25851 implements Runnable {
-        C25851() {
+    class C17981 implements Runnable {
+        C17981() {
         }
 
         public void run() {
@@ -39,7 +39,7 @@ public class VoIPPermissionActivity extends Activity {
             if (VoIPService.getSharedInstance() != null) {
                 VoIPService.getSharedInstance().declineIncomingCall();
             }
-            VoIPHelper.permissionDenied(this, new C25851());
+            VoIPHelper.permissionDenied(this, new C17981());
         }
     }
 }

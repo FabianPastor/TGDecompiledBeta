@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -33,8 +33,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     private FrameLayout radialProgressView;
 
     /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$1 */
-    class C17731 implements OnClickListener {
-        C17731() {
+    class C12721 implements OnClickListener {
+        C12721() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -54,8 +54,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$2 */
-    class C17742 implements OnClickListener {
-        C17742() {
+    class C12732 implements OnClickListener {
+        C12732() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -74,16 +74,16 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
             this.fileName = FileLoader.getAttachFileName(update.document);
         }
         this.parentActivity = activity;
-        setTopImage((int) C0505R.drawable.update, Theme.getColor(Theme.key_dialogTopBackground));
+        setTopImage((int) C0431R.drawable.update, Theme.getColor(Theme.key_dialogTopBackground));
         setTopHeight(175);
         setMessage(this.appUpdate.text);
         if (this.appUpdate.document instanceof TL_document) {
             setSecondTitle(AndroidUtilities.formatFileSize((long) this.appUpdate.document.size));
         }
         setDismissDialogByButtons(false);
-        setTitle(LocaleController.getString("UpdateTelegram", C0505R.string.UpdateTelegram));
-        setPositiveButton(LocaleController.getString("UpdateNow", C0505R.string.UpdateNow), new C17731());
-        setNeutralButton(LocaleController.getString("Later", C0505R.string.Later), new C17742());
+        setTitle(LocaleController.getString("UpdateTelegram", C0431R.string.UpdateTelegram));
+        setPositiveButton(LocaleController.getString("UpdateNow", C0431R.string.UpdateNow), new C12721());
+        setNeutralButton(LocaleController.getString("Later", C0431R.string.Later), new C12732());
         this.radialProgressView = new FrameLayout(this.parentActivity) {
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);

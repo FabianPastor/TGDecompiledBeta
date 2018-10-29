@@ -14,14 +14,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import com.google.android.exoplayer2.C0020C;
 import java.io.File;
 import java.io.FileInputStream;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Components.LayoutHelper;
@@ -59,7 +59,7 @@ public class ThemeCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 101.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 101.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-        this.checkImage.setImageResource(C0505R.drawable.sticker_added);
+        this.checkImage.setImageResource(C0431R.drawable.sticker_added);
         if (this.isNightTheme) {
             view = this.checkImage;
             if (!LocaleController.isRTL) {
@@ -78,7 +78,7 @@ public class ThemeCell extends FrameLayout {
         this.optionsButton = new ImageView(context);
         this.optionsButton.setFocusable(false);
         this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-        this.optionsButton.setImageResource(C0505R.drawable.ic_ab_other);
+        this.optionsButton.setImageResource(C0431R.drawable.ic_ab_other);
         this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
         this.optionsButton.setScaleType(ScaleType.CENTER);
         View view2 = this.optionsButton;
@@ -150,7 +150,7 @@ public class ThemeCell extends FrameLayout {
                             if (bytes[a] == (byte) 10) {
                                 linesRead++;
                                 int len = (a - start) + 1;
-                                String line = new String(bytes, start, len - 1, C0621C.UTF8_NAME);
+                                String line = new String(bytes, start, len - 1, C0020C.UTF8_NAME);
                                 if (line.startsWith("WPS")) {
                                     break;
                                 }
@@ -188,18 +188,18 @@ public class ThemeCell extends FrameLayout {
                     try {
                         fileInputStream2.close();
                     } catch (Throwable e3) {
-                        FileLog.m3e(e3);
+                        FileLog.m8e(e3);
                     }
                 }
             } catch (Throwable th3) {
                 e3 = th3;
                 try {
-                    FileLog.m3e(e3);
+                    FileLog.m8e(e3);
                     if (fileInputStream != null) {
                         try {
                             fileInputStream.close();
                         } catch (Throwable e32) {
-                            FileLog.m3e(e32);
+                            FileLog.m8e(e32);
                         }
                     }
                     if (!finished) {
@@ -211,7 +211,7 @@ public class ThemeCell extends FrameLayout {
                         try {
                             fileInputStream.close();
                         } catch (Throwable e322) {
-                            FileLog.m3e(e322);
+                            FileLog.m8e(e322);
                         }
                     }
                     throw th;

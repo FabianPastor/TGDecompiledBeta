@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaController.PhotoEntry;
 import org.telegram.ui.Components.BackupImageView;
@@ -39,8 +39,8 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     private TextView videoTextView;
 
     /* renamed from: org.telegram.ui.Cells.PhotoAttachPhotoCell$1 */
-    class C11201 extends AnimatorListenerAdapter {
-        C11201() {
+    class C07441 extends AnimatorListenerAdapter {
+        C07441() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -61,17 +61,17 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.checkFrame = new FrameLayout(context);
         addView(this.checkFrame, LayoutHelper.createFrame(42, 42.0f, 51, 38.0f, 0.0f, 0.0f, 0.0f));
         this.videoInfoContainer = new FrameLayout(context);
-        this.videoInfoContainer.setBackgroundResource(C0505R.drawable.phototime);
+        this.videoInfoContainer.setBackgroundResource(C0431R.drawable.phototime);
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(80, 16, 83));
         ImageView imageView1 = new ImageView(context);
-        imageView1.setImageResource(C0505R.drawable.ic_video);
+        imageView1.setImageResource(C0431R.drawable.ic_video);
         this.videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(-2, -2, 19));
         this.videoTextView = new TextView(context);
         this.videoTextView.setTextColor(-1);
         this.videoTextView.setTextSize(1, 12.0f);
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0505R.drawable.checkbig);
+        this.checkBox = new CheckBox(context, C0431R.drawable.checkbig);
         this.checkBox.setSize(30);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setDrawBackground(true);
@@ -136,14 +136,14 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             this.videoInfoContainer.setVisibility(4);
         }
         if (this.photoEntry.thumbPath != null) {
-            this.imageView.setImage(this.photoEntry.thumbPath, null, getResources().getDrawable(C0505R.drawable.nophotos));
+            this.imageView.setImage(this.photoEntry.thumbPath, null, getResources().getDrawable(C0431R.drawable.nophotos));
         } else if (this.photoEntry.path == null) {
-            this.imageView.setImageResource(C0505R.drawable.nophotos);
+            this.imageView.setImageResource(C0431R.drawable.nophotos);
         } else if (this.photoEntry.isVideo) {
-            this.imageView.setImage("vthumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(C0505R.drawable.nophotos));
+            this.imageView.setImage("vthumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(C0431R.drawable.nophotos));
         } else {
             this.imageView.setOrientation(this.photoEntry.orientation, true);
-            this.imageView.setImage("thumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(C0505R.drawable.nophotos));
+            this.imageView.setImage("thumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(C0431R.drawable.nophotos));
         }
         if (needCheckShow && PhotoViewer.isShowingImage(this.photoEntry.path)) {
             showing = true;
@@ -215,7 +215,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 fArr2[0] = f;
                 animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str2, fArr2);
                 animatorSet.playTogether(animatorArr);
-                this.animatorSet.addListener(new C11201());
+                this.animatorSet.addListener(new C07441());
                 this.animatorSet.start();
             }
         }

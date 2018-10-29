@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fcm_fallback_notification_channel_label">ଅନ୍ୟାନ୍ୟ</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

@@ -39,10 +39,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private long lastFrameDecodeTime;
     private long lastFrameTime;
     private int lastTimeStamp;
-    private Runnable loadFrameRunnable = new C14203();
+    private Runnable loadFrameRunnable = new C09442();
     private Runnable loadFrameTask;
-    protected final Runnable mInvalidateTask = new C14181();
-    private final Runnable mStartTask = new C14214();
+    protected final Runnable mInvalidateTask = new AnimatedFileDrawable$$Lambda$0(this);
+    private final Runnable mStartTask = new AnimatedFileDrawable$$Lambda$1(this);
     private final int[] metaData = new int[4];
     private volatile long nativePtr;
     private Bitmap nextRenderingBitmap;
@@ -59,25 +59,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private View secondParentView = null;
     private Matrix shaderMatrix = new Matrix();
     private boolean singleFrameDecoded;
-    private Runnable uiRunnable = new C14192();
+    private Runnable uiRunnable = new C09431();
 
     /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$1 */
-    class C14181 implements Runnable {
-        C14181() {
-        }
-
-        public void run() {
-            if (AnimatedFileDrawable.this.secondParentView != null) {
-                AnimatedFileDrawable.this.secondParentView.invalidate();
-            } else if (AnimatedFileDrawable.this.parentView != null) {
-                AnimatedFileDrawable.this.parentView.invalidate();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$2 */
-    class C14192 implements Runnable {
-        C14192() {
+    class C09431 implements Runnable {
+        C09431() {
         }
 
         public void run() {
@@ -117,9 +103,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$3 */
-    class C14203 implements Runnable {
-        C14203() {
+    /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$2 */
+    class C09442 implements Runnable {
+        C09442() {
         }
 
         public void run() {
@@ -136,7 +122,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 if (AnimatedFileDrawable.this.backgroundBitmap != null) {
                     AnimatedFileDrawable.this.lastFrameDecodeTime = System.currentTimeMillis();
@@ -147,25 +133,27 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$4 */
-    class C14214 implements Runnable {
-        C14214() {
-        }
-
-        public void run() {
-            if (AnimatedFileDrawable.this.secondParentView != null) {
-                AnimatedFileDrawable.this.secondParentView.invalidate();
-            } else if (AnimatedFileDrawable.this.parentView != null) {
-                AnimatedFileDrawable.this.parentView.invalidate();
-            }
-        }
-    }
-
     private static native long createDecoder(String str, int[] iArr);
 
     private static native void destroyDecoder(long j);
 
     private static native int getVideoFrame(long j, Bitmap bitmap, int[] iArr);
+
+    final /* synthetic */ void lambda$new$0$AnimatedFileDrawable() {
+        if (this.secondParentView != null) {
+            this.secondParentView.invalidate();
+        } else if (this.parentView != null) {
+            this.parentView.invalidate();
+        }
+    }
+
+    final /* synthetic */ void lambda$new$1$AnimatedFileDrawable() {
+        if (this.secondParentView != null) {
+            this.secondParentView.invalidate();
+        } else if (this.parentView != null) {
+            this.parentView.invalidate();
+        }
+    }
 
     public AnimatedFileDrawable(File file, boolean createDecoder) {
         this.path = file;

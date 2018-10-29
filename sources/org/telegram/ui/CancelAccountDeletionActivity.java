@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import com.google.android.exoplayer2.DefaultLoadControl;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
@@ -35,12 +36,11 @@ import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -82,8 +82,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     private SlideView[] views = new SlideView[5];
 
     /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$1 */
-    class C10841 extends ActionBarMenuOnItemClick {
-        C10841() {
+    class C07121 extends ActionBarMenuOnItemClick {
+        C07121() {
         }
 
         public void onItemClick(int id) {
@@ -123,11 +123,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         private boolean waitingForEvent;
 
         /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 */
-        class C10925 extends TimerTask {
+        class C07205 extends TimerTask {
 
             /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1 */
-            class C10911 implements Runnable {
-                C10911() {
+            class C07191 implements Runnable {
+                C07191() {
                 }
 
                 public void run() {
@@ -138,26 +138,26 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
             }
 
-            C10925() {
+            C07205() {
             }
 
             public void run() {
                 double currentTime = (double) System.currentTimeMillis();
                 LoginActivitySmsView.this.codeTime = (int) (((double) LoginActivitySmsView.this.codeTime) - (currentTime - LoginActivitySmsView.this.lastCodeTime));
                 LoginActivitySmsView.this.lastCodeTime = currentTime;
-                AndroidUtilities.runOnUIThread(new C10911());
+                AndroidUtilities.runOnUIThread(new C07191());
             }
         }
 
         /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$6 */
-        class C10966 extends TimerTask {
+        class C07246 extends TimerTask {
 
             /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$6$1 */
-            class C10951 implements Runnable {
+            class C07231 implements Runnable {
 
                 /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$6$1$1 */
-                class C10941 implements RequestDelegate {
-                    C10941() {
+                class C07221 implements RequestDelegate {
+                    C07221() {
                     }
 
                     public void run(TLObject response, final TL_error error) {
@@ -171,16 +171,16 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     }
                 }
 
-                C10951() {
+                C07231() {
                 }
 
                 public void run() {
                     if (LoginActivitySmsView.this.time >= 1000) {
                         int seconds = (LoginActivitySmsView.this.time / 1000) - (((LoginActivitySmsView.this.time / 1000) / 60) * 60);
                         if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", C0505R.string.CallText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
+                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", C0431R.string.CallText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
                         } else if (LoginActivitySmsView.this.nextType == 2) {
-                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", C0505R.string.SmsText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
+                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", C0431R.string.SmsText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
                         }
                         if (LoginActivitySmsView.this.progressView != null) {
                             LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
@@ -201,12 +201,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     } else if (LoginActivitySmsView.this.currentType != 2) {
                     } else {
                         if (LoginActivitySmsView.this.nextType == 4) {
-                            LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", C0505R.string.Calling));
+                            LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", C0431R.string.Calling));
                             LoginActivitySmsView.this.createCodeTimer();
                             TL_auth_resendCode req = new TL_auth_resendCode();
                             req.phone_number = LoginActivitySmsView.this.phone;
                             req.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                            ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(req, new C10941(), 2);
+                            ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(req, new C07221(), 2);
                         } else if (LoginActivitySmsView.this.nextType == 3) {
                             AndroidUtilities.setWaitingForSms(false);
                             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
@@ -218,7 +218,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
             }
 
-            C10966() {
+            C07246() {
             }
 
             public void run() {
@@ -226,7 +226,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     double currentTime = (double) System.currentTimeMillis();
                     LoginActivitySmsView.this.time = (int) (((double) LoginActivitySmsView.this.time) - (currentTime - LoginActivitySmsView.this.lastCurrentTime));
                     LoginActivitySmsView.this.lastCurrentTime = currentTime;
-                    AndroidUtilities.runOnUIThread(new C10951());
+                    AndroidUtilities.runOnUIThread(new C07231());
                 }
             }
         }
@@ -243,7 +243,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (this.currentType == 3) {
                 FrameLayout frameLayout = new FrameLayout(context);
                 ImageView imageView = new ImageView(context);
-                imageView.setImageResource(C0505R.drawable.phone_activate);
+                imageView.setImageResource(C0431R.drawable.phone_activate);
                 if (LocaleController.isRTL) {
                     frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76.0f, 19, 2.0f, 2.0f, 0.0f, 0.0f));
                     frameLayout.addView(this.confirmTextView, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, 82.0f, 0.0f, 0.0f, 0.0f));
@@ -257,7 +257,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             }
             this.codeField = new EditTextBoldCursor(context);
             this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            this.codeField.setHint(LocaleController.getString("Code", C0505R.string.Code));
+            this.codeField.setHint(LocaleController.getString("Code", C0431R.string.Code));
             this.codeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.codeField.setCursorWidth(1.5f);
             this.codeField.setCursorSize(AndroidUtilities.dp(20.0f));
@@ -307,7 +307,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 addView(this.progressView, LayoutHelper.createLinear(-1, 3, 0.0f, 12.0f, 0.0f, 0.0f));
             }
             this.problemText = new TextView(context);
-            this.problemText.setText(LocaleController.getString("DidNotGetTheCode", C0505R.string.DidNotGetTheCode));
+            this.problemText.setText(LocaleController.getString("DidNotGetTheCode", C0431R.string.DidNotGetTheCode));
             this.problemText.setGravity(LocaleController.isRTL ? 5 : 3);
             this.problemText.setTextSize(1, 14.0f);
             this.problemText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
@@ -329,7 +329,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 LoginActivitySmsView.this.getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                                 return;
                             } catch (Exception e) {
-                                AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.getString("NoMailInstalled", C0505R.string.NoMailInstalled));
+                                AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.getString("NoMailInstalled", C0431R.string.NoMailInstalled));
                                 return;
                             }
                         }
@@ -365,7 +365,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         public String getHeaderName() {
-            return LocaleController.getString("CancelAccountReset", C0505R.string.CancelAccountReset);
+            return LocaleController.getString("CancelAccountReset", C0431R.string.CancelAccountReset);
         }
 
         public void setParams(Bundle params, boolean restore) {
@@ -399,7 +399,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
                 if (this.phone != null) {
                     String number = PhoneFormat.getInstance().format(this.phone);
-                    this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CancelAccountResetInfo", C0505R.string.CancelAccountResetInfo, PhoneFormat.getInstance().format("+" + number))));
+                    this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CancelAccountResetInfo", C0431R.string.CancelAccountResetInfo, PhoneFormat.getInstance().format("+" + number))));
                     if (this.currentType != 3) {
                         AndroidUtilities.showKeyboard(this.codeField);
                         this.codeField.requestFocus();
@@ -416,14 +416,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                         this.problemText.setVisibility(8);
                         this.timeText.setVisibility(0);
                         if (this.nextType == 4) {
-                            this.timeText.setText(LocaleController.formatString("CallText", C0505R.string.CallText, Integer.valueOf(1), Integer.valueOf(0)));
+                            this.timeText.setText(LocaleController.formatString("CallText", C0431R.string.CallText, Integer.valueOf(1), Integer.valueOf(0)));
                         } else if (this.nextType == 2) {
-                            this.timeText.setText(LocaleController.formatString("SmsText", C0505R.string.SmsText, Integer.valueOf(1), Integer.valueOf(0)));
+                            this.timeText.setText(LocaleController.formatString("SmsText", C0431R.string.SmsText, Integer.valueOf(1), Integer.valueOf(0)));
                         }
                         createTimer();
                     } else if (this.currentType == 2 && (this.nextType == 4 || this.nextType == 3)) {
                         this.timeText.setVisibility(0);
-                        this.timeText.setText(LocaleController.formatString("CallText", C0505R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
+                        this.timeText.setText(LocaleController.formatString("CallText", C0431R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
                         this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
                         createTimer();
                     } else {
@@ -440,7 +440,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 this.codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
                 this.codeTimer = new Timer();
                 this.lastCodeTime = (double) System.currentTimeMillis();
-                this.codeTimer.schedule(new C10925(), 0, 1000);
+                this.codeTimer.schedule(new C07205(), 0, 1000);
             }
         }
 
@@ -453,14 +453,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
         private void createTimer() {
             if (this.timeTimer == null) {
                 this.timeTimer = new Timer();
-                this.timeTimer.schedule(new C10966(), 0, 1000);
+                this.timeTimer.schedule(new C07246(), 0, 1000);
             }
         }
 
@@ -473,7 +473,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -500,7 +500,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 CancelAccountDeletionActivity.this.needHideProgress();
                                 LoginActivitySmsView.this.nextPressed = false;
                                 if (error == null) {
-                                    CancelAccountDeletionActivity.this.errorDialog = AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.formatString("CancelLinkSuccess", C0505R.string.CancelLinkSuccess, PhoneFormat.getInstance().format("+" + LoginActivitySmsView.this.phone)));
+                                    CancelAccountDeletionActivity.this.errorDialog = AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.formatString("CancelLinkSuccess", C0431R.string.CancelLinkSuccess, PhoneFormat.getInstance().format("+" + LoginActivitySmsView.this.phone)));
                                     return;
                                 }
                                 LoginActivitySmsView.this.lastError = error.text;
@@ -618,7 +618,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                         }
                     } catch (Throwable e) {
                         req.allow_flashcall = false;
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
                 final Bundle params = new Bundle();
@@ -642,7 +642,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         public String getHeaderName() {
-            return LocaleController.getString("CancelAccountReset", C0505R.string.CancelAccountReset);
+            return LocaleController.getString("CancelAccountReset", C0431R.string.CancelAccountReset);
         }
 
         public void onShow() {
@@ -691,7 +691,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             this.progressDialog = null;
         }
@@ -699,10 +699,10 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
-        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
-        this.actionBar.setActionBarMenuOnItemClick(new C10841());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0505R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("AppName", C0431R.string.AppName));
+        this.actionBar.setBackButtonImage(C0431R.drawable.ic_ab_back);
+        this.actionBar.setActionBarMenuOnItemClick(new C07121());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0431R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.doneButton.setVisibility(8);
         this.fragmentView = new ScrollView(context);
         ScrollView scrollView = this.fragmentView;
@@ -765,7 +765,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     public void needShowProgress() {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
             this.progressDialog = new AlertDialog(getParentActivity(), 1);
-            this.progressDialog.setMessage(LocaleController.getString("Loading", C0505R.string.Loading));
+            this.progressDialog.setMessage(LocaleController.getString("Loading", C0431R.string.Loading));
             this.progressDialog.setCanceledOnTouchOutside(false);
             this.progressDialog.setCancelable(false);
             this.progressDialog.show();
@@ -777,7 +777,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             this.progressDialog = null;
         }

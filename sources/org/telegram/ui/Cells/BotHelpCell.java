@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -68,7 +68,7 @@ public class BotHelpCell extends View {
             }
             String[] lines = text.split("\n");
             SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-            String help = LocaleController.getString("BotInfoTitle", C0505R.string.BotInfoTitle);
+            String help = LocaleController.getString("BotInfoTitle", C0431R.string.BotInfoTitle);
             stringBuilder.append(help);
             stringBuilder.append("\n\n");
             for (a = 0; a < lines.length; a++) {
@@ -92,7 +92,7 @@ public class BotHelpCell extends View {
                     this.width = maxWidth;
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             this.width += AndroidUtilities.dp(22.0f);
         }
@@ -125,7 +125,7 @@ public class BotHelpCell extends View {
                                     this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
                                     this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
                                 } catch (Throwable e) {
-                                    FileLog.m3e(e);
+                                    FileLog.m8e(e);
                                 }
                             } else {
                                 resetPressedLink();
@@ -133,7 +133,7 @@ public class BotHelpCell extends View {
                         }
                     } catch (Throwable e2) {
                         resetPressedLink();
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 } else if (this.pressedLink != null) {
                     try {
@@ -148,7 +148,7 @@ public class BotHelpCell extends View {
                             this.pressedLink.onClick(this);
                         }
                     } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                     resetPressedLink();
                     result = true;

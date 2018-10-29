@@ -41,7 +41,7 @@ public class StaticLayoutEx {
                 sConstructorArgs = new Object[signature.length];
                 initialized = true;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -56,7 +56,7 @@ public class StaticLayoutEx {
                 CharSequence text = TextUtils.ellipsize(source, paint, (float) ellipsisWidth, TruncateAt.END);
                 return new StaticLayout(text, 0, text.length(), paint, outerWidth, align, spacingMult, spacingAdd, includePad);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return null;
             }
         }

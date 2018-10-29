@@ -26,8 +26,8 @@ public class BotKeyboardView extends LinearLayout {
     private ScrollView scrollView;
 
     /* renamed from: org.telegram.ui.Components.BotKeyboardView$1 */
-    class C14411 implements OnClickListener {
-        C14411() {
+    class C09561 implements OnClickListener {
+        C09561() {
         }
 
         public void onClick(View v) {
@@ -124,7 +124,7 @@ public class BotKeyboardView extends LinearLayout {
                     textView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
                     textView.setText(Emoji.replaceEmoji(button.text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
                     layout.addView(textView, LayoutHelper.createLinear(0, -1, weight, 0, 0, b != row.buttons.size() + -1 ? 10 : 0, 0));
-                    textView.setOnClickListener(new C14411());
+                    textView.setOnClickListener(new C09561());
                     this.buttonViews.add(textView);
                     b++;
                 }

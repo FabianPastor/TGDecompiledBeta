@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
@@ -21,7 +22,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.WebFile;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.MessageMedia;
@@ -466,10 +466,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r4 == 0) goto L_0x04b1;
     L_0x02a8:
         r0 = r39;
-        r0 = r0.f20w;
+        r0 = r0.f27w;
         r50 = r0;
         r0 = r39;
-        r0 = r0.f19h;
+        r0 = r0.f26h;
         r43 = r0;
     L_0x02b4:
         if (r50 == 0) goto L_0x02b8;
@@ -488,11 +488,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x02c5:
         r0 = r55;
         r4 = r0.currentPhotoObject;
-        r0 = r4.f27w;
+        r0 = r4.f34w;
         r50 = r0;
         r0 = r55;
         r4 = r0.currentPhotoObject;
-        r0 = r4.f26h;
+        r0 = r4.f33h;
         r43 = r0;
     L_0x02d5:
         if (r50 == 0) goto L_0x02d9;
@@ -661,15 +661,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         goto L_0x0076;
     L_0x03f8:
         r42 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r42);
+        org.telegram.messenger.FileLog.m8e(r42);
         goto L_0x00e7;
     L_0x03fe:
         r42 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r42);
+        org.telegram.messenger.FileLog.m8e(r42);
         goto L_0x014f;
     L_0x0404:
         r42 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r42);
+        org.telegram.messenger.FileLog.m8e(r42);
         goto L_0x019d;
     L_0x040a:
         r0 = r55;

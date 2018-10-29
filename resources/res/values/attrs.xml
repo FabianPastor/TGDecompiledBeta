@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="alpha" format="float">
+    </attr>
     <attr name="ambientEnabled" format="boolean">
     </attr>
     <attr name="appTheme">
@@ -92,6 +94,8 @@
     <attr name="fontStyle">
         <enum name="italic" value="1" />
         <enum name="normal" value="0" />
+    </attr>
+    <attr name="fontVariationSettings" format="string">
     </attr>
     <attr name="fontWeight" format="integer">
     </attr>
@@ -194,6 +198,8 @@
     <attr name="toolbarTextColorStyle">
         <enum name="dark" value="2" />
         <enum name="light" value="1" />
+    </attr>
+    <attr name="ttcIndex" format="integer">
     </attr>
     <attr name="uiCompass" format="boolean">
     </attr>

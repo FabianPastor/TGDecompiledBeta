@@ -74,6 +74,7 @@ public class NotificationCenter {
     public static final int mediaCountDidLoaded;
     public static final int mediaDidLoaded;
     public static final int messagePlayingDidReset;
+    public static final int messagePlayingDidSeek;
     public static final int messagePlayingDidStarted;
     public static final int messagePlayingPlayStateChanged;
     public static final int messagePlayingProgressDidChanged;
@@ -405,6 +406,9 @@ public class NotificationCenter {
         messagePlayingDidStarted = i;
         i = totalEvents;
         totalEvents = i + 1;
+        messagePlayingDidSeek = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         recordProgressChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -640,7 +644,7 @@ public class NotificationCenter {
         } else {
             this.delayedPosts.add(new DelayedPost(id, args));
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m1e("delay post notification " + id + " with args count = " + args.length);
+                FileLog.m6e("delay post notification " + id + " with args count = " + args.length);
             }
         }
     }

@@ -14,20 +14,20 @@ public class TelegramConnectionService extends ConnectionService {
     public void onCreate() {
         super.onCreate();
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m4w("ConnectionService created");
+            FileLog.m9w("ConnectionService created");
         }
     }
 
     public void onDestroy() {
         super.onDestroy();
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m4w("ConnectionService destroyed");
+            FileLog.m9w("ConnectionService destroyed");
         }
     }
 
     public Connection onCreateIncomingConnection(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("onCreateIncomingConnection ");
+            FileLog.m5d("onCreateIncomingConnection ");
         }
         Bundle extras = request.getExtras();
         if (extras.getInt("call_type") != 1) {
@@ -43,7 +43,7 @@ public class TelegramConnectionService extends ConnectionService {
 
     public void onCreateIncomingConnectionFailed(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m1e("onCreateIncomingConnectionFailed ");
+            FileLog.m6e("onCreateIncomingConnectionFailed ");
         }
         if (VoIPBaseService.getSharedInstance() != null) {
             VoIPBaseService.getSharedInstance().callFailedFromConnectionService();
@@ -52,7 +52,7 @@ public class TelegramConnectionService extends ConnectionService {
 
     public void onCreateOutgoingConnectionFailed(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m1e("onCreateOutgoingConnectionFailed ");
+            FileLog.m6e("onCreateOutgoingConnectionFailed ");
         }
         if (VoIPBaseService.getSharedInstance() != null) {
             VoIPBaseService.getSharedInstance().callFailedFromConnectionService();
@@ -61,7 +61,7 @@ public class TelegramConnectionService extends ConnectionService {
 
     public Connection onCreateOutgoingConnection(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("onCreateOutgoingConnection ");
+            FileLog.m5d("onCreateOutgoingConnection ");
         }
         Bundle extras = request.getExtras();
         if (extras.getInt("call_type") != 1) {

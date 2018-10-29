@@ -1,23 +1,26 @@
 package org.telegram.messenger.secretmedia;
 
 import android.net.Uri;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DataSource$$CC;
+import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.TransferListener;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Map;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.exoplayer2.upstream.DataSource;
-import org.telegram.messenger.exoplayer2.upstream.DataSpec;
-import org.telegram.messenger.exoplayer2.upstream.TransferListener;
 
 public final class EncryptedFileDataSource implements DataSource {
     private long bytesRemaining;
+    private DataSpec dataSpec;
     private RandomAccessFile file;
     private int fileOffset;
     private byte[] iv;
     private byte[] key;
-    private final TransferListener<? super EncryptedFileDataSource> listener;
+    private final TransferListener listener;
     private boolean opened;
     private Uri uri;
 
@@ -27,11 +30,19 @@ public final class EncryptedFileDataSource implements DataSource {
         }
     }
 
+    public void addTransferListener(TransferListener transferListener) {
+        DataSource$$CC.addTransferListener(this, transferListener);
+    }
+
+    public Map getResponseHeaders() {
+        return DataSource$$CC.getResponseHeaders(this);
+    }
+
     public EncryptedFileDataSource() {
         this(null);
     }
 
-    public EncryptedFileDataSource(TransferListener<? super EncryptedFileDataSource> listener) {
+    public EncryptedFileDataSource(TransferListener listener) {
         this.key = new byte[32];
         this.iv = new byte[16];
         this.listener = listener;
@@ -39,6 +50,7 @@ public final class EncryptedFileDataSource implements DataSource {
 
     public long open(DataSpec dataSpec) throws EncryptedFileDataSourceException {
         try {
+            this.dataSpec = dataSpec;
             this.uri = dataSpec.uri;
             File path = new File(dataSpec.uri.getPath());
             RandomAccessFile keyFile = new RandomAccessFile(new File(FileLoader.getInternalCacheDir(), path.getName() + ".key"), "r");
@@ -54,7 +66,7 @@ public final class EncryptedFileDataSource implements DataSource {
             }
             this.opened = true;
             if (this.listener != null) {
-                this.listener.onTransferStart(this, dataSpec);
+                this.listener.onTransferStart(this, dataSpec, false);
             }
             return this.bytesRemaining;
         } catch (IOException e) {
@@ -80,7 +92,7 @@ public final class EncryptedFileDataSource implements DataSource {
             if (this.listener == null) {
                 return bytesRead;
             }
-            this.listener.onBytesTransferred(this, bytesRead);
+            this.listener.onBytesTransferred(this, this.dataSpec, false, bytesRead);
             return bytesRead;
         } catch (IOException e) {
             throw new EncryptedFileDataSourceException(e);
@@ -102,7 +114,7 @@ public final class EncryptedFileDataSource implements DataSource {
             if (this.opened) {
                 this.opened = false;
                 if (this.listener != null) {
-                    this.listener.onTransferEnd(this);
+                    this.listener.onTransferEnd(this, this.dataSpec, false);
                 }
             }
         } catch (IOException e) {
@@ -112,7 +124,7 @@ public final class EncryptedFileDataSource implements DataSource {
             if (this.opened) {
                 this.opened = false;
                 if (this.listener != null) {
-                    this.listener.onTransferEnd(this);
+                    this.listener.onTransferEnd(this, this.dataSpec, false);
                 }
             }
         }

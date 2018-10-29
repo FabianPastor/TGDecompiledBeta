@@ -10,14 +10,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
@@ -37,7 +36,6 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
@@ -56,8 +54,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$1 */
-    class C18281 extends ActionBarMenuOnItemClick {
-        C18281() {
+    class C13171 extends ActionBarMenuOnItemClick {
+        C13171() {
         }
 
         public void onItemClick(int id) {
@@ -68,8 +66,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$2 */
-    class C18292 extends ActionBarMenuItemSearchListener {
-        C18292() {
+    class C13182 extends ActionBarMenuItemSearchListener {
+        C13182() {
         }
 
         public void onSearchExpand() {
@@ -82,7 +80,7 @@ public class CountrySelectActivity extends BaseFragment {
             CountrySelectActivity.this.searchWas = false;
             CountrySelectActivity.this.listView.setAdapter(CountrySelectActivity.this.listViewAdapter);
             CountrySelectActivity.this.listView.setFastScrollVisible(true);
-            CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", C0505R.string.ChooseCountry));
+            CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", C0431R.string.ChooseCountry));
         }
 
         public void onTextChanged(EditText editText) {
@@ -101,35 +99,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$3 */
-    class C18303 implements OnItemClickListener {
-        C18303() {
-        }
-
-        public void onItemClick(View view, int position) {
-            Country country;
-            if (CountrySelectActivity.this.searching && CountrySelectActivity.this.searchWas) {
-                country = CountrySelectActivity.this.searchListViewAdapter.getItem(position);
-            } else {
-                int section = CountrySelectActivity.this.listViewAdapter.getSectionForPosition(position);
-                int row = CountrySelectActivity.this.listViewAdapter.getPositionInSectionForPosition(position);
-                if (row >= 0 && section >= 0) {
-                    country = CountrySelectActivity.this.listViewAdapter.getItem(section, row);
-                } else {
-                    return;
-                }
-            }
-            if (position >= 0) {
-                CountrySelectActivity.this.finishFragment();
-                if (country != null && CountrySelectActivity.this.delegate != null) {
-                    CountrySelectActivity.this.delegate.didSelectCountry(country.name, country.shortname);
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.CountrySelectActivity$4 */
-    class C18314 extends OnScrollListener {
-        C18314() {
+    class C13193 extends OnScrollListener {
+        C13193() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -178,19 +149,11 @@ public class CountrySelectActivity extends BaseFragment {
                 reader.close();
                 stream.close();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
-            Collections.sort(this.sortedCountries, new Comparator<String>(CountrySelectActivity.this) {
-                public int compare(String lhs, String rhs) {
-                    return lhs.compareTo(rhs);
-                }
-            });
+            Collections.sort(this.sortedCountries, CountrySelectActivity$CountryAdapter$$Lambda$0.$instance);
             for (ArrayList<Country> arr2 : this.countries.values()) {
-                Collections.sort(arr2, new Comparator<Country>(CountrySelectActivity.this) {
-                    public int compare(Country country, Country country2) {
-                        return country.name.compareTo(country2.name);
-                    }
-                });
+                Collections.sort(arr2, CountrySelectActivity$CountryAdapter$$Lambda$1.$instance);
             }
         }
 
@@ -311,7 +274,7 @@ public class CountrySelectActivity extends BaseFragment {
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             this.searchTimer = new Timer();
             this.searchTimer.schedule(new TimerTask() {
@@ -320,43 +283,45 @@ public class CountrySelectActivity extends BaseFragment {
                         CountrySearchAdapter.this.searchTimer.cancel();
                         CountrySearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                     CountrySearchAdapter.this.processSearch(query);
                 }
             }, 100, 300);
         }
 
-        private void processSearch(final String query) {
-            Utilities.searchQueue.postRunnable(new Runnable() {
-                public void run() {
-                    if (query.trim().toLowerCase().length() == 0) {
-                        CountrySearchAdapter.this.updateSearchResults(new ArrayList());
-                        return;
-                    }
-                    ArrayList<Country> resultArray = new ArrayList();
-                    ArrayList<Country> arr = (ArrayList) CountrySearchAdapter.this.countries.get(query.substring(0, 1).toUpperCase());
-                    if (arr != null) {
-                        Iterator it = arr.iterator();
-                        while (it.hasNext()) {
-                            Country c = (Country) it.next();
-                            if (c.name.toLowerCase().startsWith(query)) {
-                                resultArray.add(c);
-                            }
-                        }
-                    }
-                    CountrySearchAdapter.this.updateSearchResults(resultArray);
-                }
-            });
+        private void processSearch(String query) {
+            Utilities.searchQueue.postRunnable(new CountrySelectActivity$CountrySearchAdapter$$Lambda$0(this, query));
         }
 
-        private void updateSearchResults(final ArrayList<Country> arrCounties) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    CountrySearchAdapter.this.searchResult = arrCounties;
-                    CountrySearchAdapter.this.notifyDataSetChanged();
+        /* renamed from: lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter */
+        final /* synthetic */ void m13xa1825eb2(String query) {
+            if (query.trim().toLowerCase().length() == 0) {
+                updateSearchResults(new ArrayList());
+                return;
+            }
+            ArrayList<Country> resultArray = new ArrayList();
+            ArrayList<Country> arr = (ArrayList) this.countries.get(query.substring(0, 1).toUpperCase());
+            if (arr != null) {
+                Iterator it = arr.iterator();
+                while (it.hasNext()) {
+                    Country c = (Country) it.next();
+                    if (c.name.toLowerCase().startsWith(query)) {
+                        resultArray.add(c);
+                    }
                 }
-            });
+            }
+            updateSearchResults(resultArray);
+        }
+
+        private void updateSearchResults(ArrayList<Country> arrCounties) {
+            AndroidUtilities.runOnUIThread(new CountrySelectActivity$CountrySearchAdapter$$Lambda$1(this, arrCounties));
+        }
+
+        /* renamed from: lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter */
+        final /* synthetic */ void m14xa883bb23(ArrayList arrCounties) {
+            this.searchResult = arrCounties;
+            notifyDataSetChanged();
         }
 
         public boolean isEnabled(ViewHolder holder) {
@@ -405,11 +370,11 @@ public class CountrySelectActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0431R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", C0505R.string.ChooseCountry));
-        this.actionBar.setActionBarMenuOnItemClick(new C18281());
-        this.actionBar.createMenu().addItem(0, (int) C0505R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C18292()).getSearchField().setHint(LocaleController.getString("Search", C0505R.string.Search));
+        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", C0431R.string.ChooseCountry));
+        this.actionBar.setActionBarMenuOnItemClick(new C13171());
+        this.actionBar.createMenu().addItem(0, (int) C0431R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C13182()).getSearchField().setHint(LocaleController.getString("Search", C0431R.string.Search));
         this.searching = false;
         this.searchWas = false;
         this.listViewAdapter = new CountryAdapter(context);
@@ -419,7 +384,7 @@ public class CountrySelectActivity extends BaseFragment {
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoResult", C0505R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", C0431R.string.NoResult));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setSectionsType(1);
@@ -434,9 +399,30 @@ public class CountrySelectActivity extends BaseFragment {
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C18303());
-        this.listView.setOnScrollListener(new C18314());
+        this.listView.setOnItemClickListener(new CountrySelectActivity$$Lambda$0(this));
+        this.listView.setOnScrollListener(new C13193());
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$0$CountrySelectActivity(View view, int position) {
+        Country country;
+        if (this.searching && this.searchWas) {
+            country = this.searchListViewAdapter.getItem(position);
+        } else {
+            int section = this.listViewAdapter.getSectionForPosition(position);
+            int row = this.listViewAdapter.getPositionInSectionForPosition(position);
+            if (row >= 0 && section >= 0) {
+                country = this.listViewAdapter.getItem(section, row);
+            } else {
+                return;
+            }
+        }
+        if (position >= 0) {
+            finishFragment();
+            if (country != null && this.delegate != null) {
+                this.delegate.didSelectCountry(country.name, country.shortname);
+            }
+        }
     }
 
     public void onResume() {

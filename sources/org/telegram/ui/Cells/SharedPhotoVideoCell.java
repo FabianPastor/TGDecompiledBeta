@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -38,8 +38,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
     private PhotoVideoView[] photoVideoViews = new PhotoVideoView[6];
 
     /* renamed from: org.telegram.ui.Cells.SharedPhotoVideoCell$1 */
-    class C11341 implements OnClickListener {
-        C11341() {
+    class C07581 implements OnClickListener {
+        C07581() {
         }
 
         public void onClick(View v) {
@@ -51,8 +51,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.SharedPhotoVideoCell$2 */
-    class C11352 implements OnLongClickListener {
-        C11352() {
+    class C07592 implements OnLongClickListener {
+        C07592() {
         }
 
         public boolean onLongClick(View v) {
@@ -82,11 +82,11 @@ public class SharedPhotoVideoCell extends FrameLayout {
             this.imageView.getImageReceiver().setShouldGenerateQualityThumb(true);
             this.container.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
             this.videoInfoContainer = new FrameLayout(context);
-            this.videoInfoContainer.setBackgroundResource(C0505R.drawable.phototime);
+            this.videoInfoContainer.setBackgroundResource(C0431R.drawable.phototime);
             this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
             this.container.addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
             ImageView imageView1 = new ImageView(context);
-            imageView1.setImageResource(C0505R.drawable.ic_video);
+            imageView1.setImageResource(C0431R.drawable.ic_video);
             this.videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(-2, -2, 19));
             this.videoTextView = new TextView(context);
             this.videoTextView.setTextColor(-1);
@@ -95,7 +95,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             this.selector = new View(context);
             this.selector.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             addView(this.selector, LayoutHelper.createFrame(-1, -1.0f));
-            this.checkBox = new CheckBox(context, C0505R.drawable.round_check2);
+            this.checkBox = new CheckBox(context, C0431R.drawable.round_check2);
             this.checkBox.setVisibility(4);
             this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, 53, 0.0f, 2.0f, 2.0f, 0.0f));
@@ -201,8 +201,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
             addView(this.photoVideoViews[a]);
             this.photoVideoViews[a].setVisibility(4);
             this.photoVideoViews[a].setTag(Integer.valueOf(a));
-            this.photoVideoViews[a].setOnClickListener(new C11341());
-            this.photoVideoViews[a].setOnLongClickListener(new C11352());
+            this.photoVideoViews[a].setOnClickListener(new C07581());
+            this.photoVideoViews[a].setOnLongClickListener(new C07592());
         }
     }
 
@@ -269,19 +269,19 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 int seconds = duration - ((duration / 60) * 60);
                 photoVideoView.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)}));
                 if (messageObject.getDocument().thumb != null) {
-                    photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(C0505R.drawable.photo_placeholder_in), null, messageObject.getDocument().thumb.location, "b", null, 0);
+                    photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(C0431R.drawable.photo_placeholder_in), null, messageObject.getDocument().thumb.location, "b", null, 0);
                     return;
                 } else {
-                    photoVideoView.imageView.setImageResource(C0505R.drawable.photo_placeholder_in);
+                    photoVideoView.imageView.setImageResource(C0431R.drawable.photo_placeholder_in);
                     return;
                 }
             } else if (!(messageObject.messageOwner.media instanceof TL_messageMediaPhoto) || messageObject.messageOwner.media.photo == null || messageObject.photoThumbs.isEmpty()) {
                 photoVideoView.videoInfoContainer.setVisibility(4);
-                photoVideoView.imageView.setImageResource(C0505R.drawable.photo_placeholder_in);
+                photoVideoView.imageView.setImageResource(C0431R.drawable.photo_placeholder_in);
                 return;
             } else {
                 photoVideoView.videoInfoContainer.setVisibility(4);
-                photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(C0505R.drawable.photo_placeholder_in), null, FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80).location, "b", null, 0);
+                photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(C0431R.drawable.photo_placeholder_in), null, FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80).location, "b", null, 0);
                 return;
             }
         }

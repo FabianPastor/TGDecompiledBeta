@@ -1,13 +1,13 @@
 package org.telegram.messenger;
 
 import android.util.SparseArray;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
@@ -106,8 +106,8 @@ public class FileLoadOperation {
     private InputWebFileLocation webLocation;
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$4 */
-    class C01874 implements Runnable {
-        C01874() {
+    class C03204 implements Runnable {
+        C03204() {
         }
 
         public void run() {
@@ -116,8 +116,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$6 */
-    class C01896 implements Runnable {
-        C01896() {
+    class C03226 implements Runnable {
+        C03226() {
         }
 
         public void run() {
@@ -126,8 +126,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$7 */
-    class C01907 implements Runnable {
-        C01907() {
+    class C03237 implements Runnable {
+        C03237() {
         }
 
         public void run() {
@@ -144,8 +144,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$8 */
-    class C01918 implements Runnable {
-        C01918() {
+    class C03248 implements Runnable {
+        C03248() {
         }
 
         public void run() {
@@ -378,7 +378,7 @@ public class FileLoadOperation {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             onFail(true, 0);
         }
     }
@@ -484,7 +484,7 @@ public class FileLoadOperation {
                         this.filePartsStream.writeInt(range.end);
                     }
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 if (this.streamListeners != null) {
                     count = this.streamListeners.size();
@@ -493,7 +493,7 @@ public class FileLoadOperation {
                     }
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m1e(this.cacheFileFinal + " downloaded duplicate file part " + start + " - " + end);
+                FileLog.m6e(this.cacheFileFinal + " downloaded duplicate file part " + start + " - " + end);
             }
         }
     }
@@ -514,7 +514,7 @@ public class FileLoadOperation {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return result[0];
     }
@@ -569,7 +569,7 @@ public class FileLoadOperation {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return result[0];
     }
@@ -599,7 +599,7 @@ public class FileLoadOperation {
 
     public void pause() {
         if (this.state == 1) {
-            Utilities.stageQueue.postRunnable(new C01874());
+            Utilities.stageQueue.postRunnable(new C03204());
         }
     }
 
@@ -631,7 +631,7 @@ public class FileLoadOperation {
                 }
             });
         } else if (wasPaused && alreadyStarted) {
-            Utilities.stageQueue.postRunnable(new C01896());
+            Utilities.stageQueue.postRunnable(new C03226());
         }
         if (alreadyStarted) {
             return wasPaused;
@@ -738,7 +738,7 @@ public class FileLoadOperation {
                         file.write(this.encryptIv);
                         newKeyGenerated = true;
                     } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 } else {
                     file.read(this.encryptKey, 0, 32);
@@ -747,7 +747,7 @@ public class FileLoadOperation {
                 try {
                     file.getChannel().close();
                 } catch (Throwable e22) {
-                    FileLog.m3e(e22);
+                    FileLog.m8e(e22);
                 }
                 file.close();
             }
@@ -769,7 +769,7 @@ public class FileLoadOperation {
                         }
                     }
                 } catch (Throwable e222) {
-                    FileLog.m3e(e222);
+                    FileLog.m8e(e222);
                 }
             }
             if (this.cacheFileTemp.exists()) {
@@ -803,7 +803,7 @@ public class FileLoadOperation {
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("start loading file to temp = " + this.cacheFileTemp + " final = " + this.cacheFileFinal);
+                FileLog.m5d("start loading file to temp = " + this.cacheFileTemp + " final = " + this.cacheFileFinal);
             }
             if (fileNameIv != null) {
                 this.cacheIvTemp = new File(this.tempPath, fileNameIv);
@@ -819,7 +819,7 @@ public class FileLoadOperation {
                         }
                     }
                 } catch (Throwable e2222) {
-                    FileLog.m3e(e2222);
+                    FileLog.m8e(e2222);
                     this.downloadedBytes = 0;
                     this.requestedBytesCount = 0;
                 }
@@ -834,14 +834,14 @@ public class FileLoadOperation {
                     this.fileOutputStream.seek((long) this.downloadedBytes);
                 }
             } catch (Throwable e22222) {
-                FileLog.m3e(e22222);
+                FileLog.m8e(e22222);
             }
             if (this.fileOutputStream == null) {
                 onFail(true, 0);
                 return false;
             }
             this.started = true;
-            Utilities.stageQueue.postRunnable(new C01907());
+            Utilities.stageQueue.postRunnable(new C03237());
         }
         return true;
     }
@@ -851,7 +851,7 @@ public class FileLoadOperation {
     }
 
     public void cancel() {
-        Utilities.stageQueue.postRunnable(new C01918());
+        Utilities.stageQueue.postRunnable(new C03248());
     }
 
     private void cleanup() {
@@ -860,39 +860,39 @@ public class FileLoadOperation {
                 try {
                     this.fileOutputStream.getChannel().close();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 this.fileOutputStream.close();
                 this.fileOutputStream = null;
             }
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
         try {
             if (this.fileReadStream != null) {
                 try {
                     this.fileReadStream.getChannel().close();
                 } catch (Throwable e22) {
-                    FileLog.m3e(e22);
+                    FileLog.m8e(e22);
                 }
                 this.fileReadStream.close();
                 this.fileReadStream = null;
             }
         } catch (Throwable e222) {
-            FileLog.m3e(e222);
+            FileLog.m8e(e222);
         }
         try {
             if (this.filePartsStream != null) {
                 try {
                     this.filePartsStream.getChannel().close();
                 } catch (Throwable e2222) {
-                    FileLog.m3e(e2222);
+                    FileLog.m8e(e2222);
                 }
                 this.filePartsStream.close();
                 this.filePartsStream = null;
             }
         } catch (Throwable e22222) {
-            FileLog.m3e(e22222);
+            FileLog.m8e(e22222);
         }
         try {
             if (this.fiv != null) {
@@ -900,7 +900,7 @@ public class FileLoadOperation {
                 this.fiv = null;
             }
         } catch (Throwable e222222) {
-            FileLog.m3e(e222222);
+            FileLog.m8e(e222222);
         }
         if (this.delayedRequestInfos != null) {
             for (int a = 0; a < this.delayedRequestInfos.size(); a++) {
@@ -934,7 +934,7 @@ public class FileLoadOperation {
             }
             if (!(this.cacheFileTemp == null || this.cacheFileTemp.renameTo(this.cacheFileFinal))) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m1e("unable to rename temp = " + this.cacheFileTemp + " to final = " + this.cacheFileFinal + " retry = " + this.renameRetryCount);
+                    FileLog.m6e("unable to rename temp = " + this.cacheFileTemp + " to final = " + this.cacheFileFinal + " retry = " + this.renameRetryCount);
                 }
                 this.renameRetryCount++;
                 if (this.renameRetryCount < 3) {
@@ -953,7 +953,7 @@ public class FileLoadOperation {
                 this.cacheFileFinal = this.cacheFileTemp;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("finished downloading file to " + this.cacheFileFinal);
+                FileLog.m5d("finished downloading file to " + this.cacheFileFinal);
             }
             this.delegate.didFinishLoadingFile(this, this.cacheFileFinal);
             if (!increment) {
@@ -1126,9 +1126,9 @@ public class FileLoadOperation {
                                 } else {
                                     if (BuildVars.LOGS_ENABLED) {
                                         if (this.location != null) {
-                                            FileLog.m1e("invalid cdn hash " + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
+                                            FileLog.m6e("invalid cdn hash " + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
                                         } else if (this.webLocation != null) {
-                                            FileLog.m1e("invalid cdn hash  " + this.webLocation + " id = " + getFileName());
+                                            FileLog.m6e("invalid cdn hash  " + this.webLocation + " id = " + getFileName());
                                         }
                                     }
                                     onFail(false, 0);
@@ -1183,7 +1183,7 @@ public class FileLoadOperation {
                 }
             } catch (Throwable e) {
                 onFail(false, 0);
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         } else if (error.text.contains("FILE_MIGRATE_")) {
             Integer val;
@@ -1207,7 +1207,7 @@ public class FileLoadOperation {
                 try {
                     onFinishLoadingFile(true);
                 } catch (Throwable e3) {
-                    FileLog.m3e(e3);
+                    FileLog.m8e(e3);
                     onFail(false, 0);
                 }
             } else {
@@ -1218,9 +1218,9 @@ public class FileLoadOperation {
         } else {
             if (BuildVars.LOGS_ENABLED) {
                 if (this.location != null) {
-                    FileLog.m1e(TtmlNode.ANONYMOUS_REGION_ID + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
+                    FileLog.m6e(TtmlNode.ANONYMOUS_REGION_ID + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
                 } else if (this.webLocation != null) {
-                    FileLog.m1e(TtmlNode.ANONYMOUS_REGION_ID + this.webLocation + " id = " + getFileName());
+                    FileLog.m6e(TtmlNode.ANONYMOUS_REGION_ID + this.webLocation + " id = " + getFileName());
                 }
             }
             onFail(false, 0);
@@ -1354,8 +1354,8 @@ public class FileLoadOperation {
                     RequestDelegate anonymousClass12 = new RequestDelegate() {
 
                         /* renamed from: org.telegram.messenger.FileLoadOperation$12$1 */
-                        class C01831 implements RequestDelegate {
-                            C01831() {
+                        class C03161 implements RequestDelegate {
+                            C03161() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -1449,7 +1449,7 @@ public class FileLoadOperation {
                                 TL_upload_reuploadCdnFile req = new TL_upload_reuploadCdnFile();
                                 req.file_token = FileLoadOperation.this.cdnToken;
                                 req.request_token = res2.request_token;
-                                ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C01831(), null, null, 0, FileLoadOperation.this.datacenterId, 1, true);
+                                ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C03161(), null, null, 0, FileLoadOperation.this.datacenterId, 1, true);
                             }
                         }
                     };

@@ -3,7 +3,6 @@ package org.telegram.ui.ActionBar;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
@@ -11,25 +10,6 @@ import org.telegram.messenger.AndroidUtilities;
 public class ActionBarMenu extends LinearLayout {
     protected boolean isActionMode;
     protected ActionBar parentActionBar;
-
-    /* renamed from: org.telegram.ui.ActionBar.ActionBarMenu$1 */
-    class C08911 implements OnClickListener {
-        C08911() {
-        }
-
-        public void onClick(View view) {
-            ActionBarMenuItem item = (ActionBarMenuItem) view;
-            if (item.hasSubMenu()) {
-                if (ActionBarMenu.this.parentActionBar.actionBarMenuOnItemClick.canOpenMenu()) {
-                    item.toggleSubMenu();
-                }
-            } else if (item.isSearchField()) {
-                ActionBarMenu.this.parentActionBar.onSearchFieldVisibilityChanged(item.toggleSearch(true));
-            } else {
-                ActionBarMenu.this.onItemClick(((Integer) view.getTag()).intValue());
-            }
-        }
-    }
 
     public ActionBarMenu(Context context, ActionBar layer) {
         super(context);
@@ -86,8 +66,21 @@ public class ActionBarMenu extends LinearLayout {
             menuItem.iconView.setImageResource(icon);
         }
         addView(menuItem, new LayoutParams(width, -1));
-        menuItem.setOnClickListener(new C08911());
+        menuItem.setOnClickListener(new ActionBarMenu$$Lambda$0(this));
         return menuItem;
+    }
+
+    final /* synthetic */ void lambda$addItem$0$ActionBarMenu(View view) {
+        ActionBarMenuItem item = (ActionBarMenuItem) view;
+        if (item.hasSubMenu()) {
+            if (this.parentActionBar.actionBarMenuOnItemClick.canOpenMenu()) {
+                item.toggleSubMenu();
+            }
+        } else if (item.isSearchField()) {
+            this.parentActionBar.onSearchFieldVisibilityChanged(item.toggleSearch(true));
+        } else {
+            onItemClick(((Integer) view.getTag()).intValue());
+        }
     }
 
     public void hideAllPopupMenus() {

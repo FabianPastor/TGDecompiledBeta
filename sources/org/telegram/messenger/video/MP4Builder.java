@@ -101,7 +101,7 @@ public class MP4Builder {
             return 8 + contentSize < 4294967296L;
         }
 
-        public void parse(DataSource dataSource, ByteBuffer header, long contentSize, BoxParser boxParser) throws IOException {
+        public void parse(DataSource dataSource, ByteBuffer header, long contentSize, BoxParser boxParser) {
         }
 
         public void getBox(WritableByteChannel writableByteChannel) throws IOException {

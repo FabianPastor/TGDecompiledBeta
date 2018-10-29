@@ -17,7 +17,6 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnApplyWindowInsetsListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.WindowInsets;
@@ -27,7 +26,7 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLog;
 
 public class DrawerLayoutContainer extends FrameLayout {
@@ -56,25 +55,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     private VelocityTracker velocityTracker;
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$1 */
-    class C09281 implements OnApplyWindowInsetsListener {
-        C09281() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-            DrawerLayoutContainer drawerLayout = (DrawerLayoutContainer) v;
-            AndroidUtilities.statusBarHeight = insets.getSystemWindowInsetTop();
-            DrawerLayoutContainer.this.lastInsets = insets;
-            boolean z = insets.getSystemWindowInsetTop() <= 0 && DrawerLayoutContainer.this.getBackground() == null;
-            drawerLayout.setWillNotDraw(z);
-            drawerLayout.requestLayout();
-            return insets.consumeSystemWindowInsets();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$2 */
-    class C09292 extends AnimatorListenerAdapter {
-        C09292() {
+    class C06111 extends AnimatorListenerAdapter {
+        C06111() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -82,9 +64,9 @@ public class DrawerLayoutContainer extends FrameLayout {
         }
     }
 
-    /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$3 */
-    class C09303 extends AnimatorListenerAdapter {
-        C09303() {
+    /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$2 */
+    class C06122 extends AnimatorListenerAdapter {
+        C06122() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -98,10 +80,20 @@ public class DrawerLayoutContainer extends FrameLayout {
         setFocusableInTouchMode(true);
         if (VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
-            setOnApplyWindowInsetsListener(new C09281());
+            setOnApplyWindowInsetsListener(new DrawerLayoutContainer$$Lambda$0(this));
             setSystemUiVisibility(1280);
         }
-        this.shadowLeft = getResources().getDrawable(C0505R.drawable.menu_shadow);
+        this.shadowLeft = getResources().getDrawable(C0431R.drawable.menu_shadow);
+    }
+
+    final /* synthetic */ WindowInsets lambda$new$0$DrawerLayoutContainer(View v, WindowInsets insets) {
+        DrawerLayoutContainer drawerLayout = (DrawerLayoutContainer) v;
+        AndroidUtilities.statusBarHeight = insets.getSystemWindowInsetTop();
+        this.lastInsets = insets;
+        boolean z = insets.getSystemWindowInsetTop() <= 0 && getBackground() == null;
+        drawerLayout.setWillNotDraw(z);
+        drawerLayout.requestLayout();
+        return insets.consumeSystemWindowInsets();
     }
 
     @SuppressLint({"NewApi"})
@@ -195,7 +187,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             } else {
                 animatorSet.setDuration(300);
             }
-            animatorSet.addListener(new C09292());
+            animatorSet.addListener(new C06111());
             animatorSet.start();
             this.currentAnimation = animatorSet;
         }
@@ -213,7 +205,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         } else {
             animatorSet.setDuration(300);
         }
-        animatorSet.addListener(new C09303());
+        animatorSet.addListener(new C06122());
         animatorSet.start();
     }
 
@@ -387,7 +379,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                             child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
                         }
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 } else if (this.drawerLayout != child) {
                     child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());

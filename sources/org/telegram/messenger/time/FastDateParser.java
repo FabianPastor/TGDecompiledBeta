@@ -1,5 +1,7 @@
 package org.telegram.messenger.time;
 
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -472,9 +474,9 @@ public class FastDateParser implements Serializable, DateParser {
                 return getLocaleSpecificStrategy(7, definingCalendar);
             case 'F':
                 return DAY_OF_WEEK_IN_MONTH_STRATEGY;
-            case 'G':
+            case TsExtractor.TS_SYNC_BYTE /*71*/:
                 return getLocaleSpecificStrategy(0, definingCalendar);
-            case 'H':
+            case XtraBox.MP4_XTRA_BT_GUID /*72*/:
                 return MODULO_HOUR_OF_DAY_STRATEGY;
             case 'K':
                 return HOUR_STRATEGY;

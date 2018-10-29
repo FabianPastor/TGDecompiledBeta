@@ -6,6 +6,7 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.os.Build.VERSION;
+import com.google.android.exoplayer2.extractor.ts.PsExtractor;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -13,7 +14,6 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public class JNIUtilities {
     @TargetApi(23)
@@ -84,7 +84,7 @@ public class JNIUtilities {
             }
             return null;
         } catch (Throwable x) {
-            FileLog.m3e(x);
+            FileLog.m8e(x);
             return null;
         }
     }

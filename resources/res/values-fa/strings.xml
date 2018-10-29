@@ -103,6 +103,6 @@
     <string name="hockeyapp_update_title">بروز رسانی برنامه</string>
     <string name="hockeyapp_update_unknown_size">اندازه نامعلوم</string>
     <string name="hockeyapp_update_version">%s نسخه</string>
-    <string name="status_bar_notification_info_overflow">۹۹۹+</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">خرید با Google</string>
 </resources>

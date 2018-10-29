@@ -2,17 +2,19 @@ package org.telegram.messenger.secretmedia;
 
 import android.content.Context;
 import android.net.Uri;
+import com.google.android.exoplayer2.upstream.AssetDataSource;
+import com.google.android.exoplayer2.upstream.ContentDataSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DataSource$$CC;
+import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.upstream.FileDataSource;
+import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.util.Assertions;
+import com.google.android.exoplayer2.util.Util;
 import java.io.IOException;
+import java.util.Map;
 import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.exoplayer2.upstream.AssetDataSource;
-import org.telegram.messenger.exoplayer2.upstream.ContentDataSource;
-import org.telegram.messenger.exoplayer2.upstream.DataSource;
-import org.telegram.messenger.exoplayer2.upstream.DataSpec;
-import org.telegram.messenger.exoplayer2.upstream.DefaultHttpDataSource;
-import org.telegram.messenger.exoplayer2.upstream.FileDataSource;
-import org.telegram.messenger.exoplayer2.upstream.TransferListener;
-import org.telegram.messenger.exoplayer2.util.Assertions;
-import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ExtendedDefaultDataSource implements DataSource {
     private static final String SCHEME_ASSET = "asset";
@@ -23,17 +25,25 @@ public final class ExtendedDefaultDataSource implements DataSource {
     private DataSource dataSource;
     private final DataSource encryptedFileDataSource;
     private final DataSource fileDataSource;
-    private TransferListener<? super DataSource> listener;
+    private TransferListener listener;
 
-    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, boolean allowCrossProtocolRedirects) {
+    public void addTransferListener(TransferListener transferListener) {
+        DataSource$$CC.addTransferListener(this, transferListener);
+    }
+
+    public Map getResponseHeaders() {
+        return DataSource$$CC.getResponseHeaders(this);
+    }
+
+    public ExtendedDefaultDataSource(Context context, TransferListener listener, String userAgent, boolean allowCrossProtocolRedirects) {
         this(context, listener, userAgent, 8000, 8000, allowCrossProtocolRedirects);
     }
 
-    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+    public ExtendedDefaultDataSource(Context context, TransferListener listener, String userAgent, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
         this(context, listener, new DefaultHttpDataSource(userAgent, null, listener, connectTimeoutMillis, readTimeoutMillis, allowCrossProtocolRedirects, null));
     }
 
-    public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> listener, DataSource baseDataSource) {
+    public ExtendedDefaultDataSource(Context context, TransferListener listener, DataSource baseDataSource) {
         this.baseDataSource = (DataSource) Assertions.checkNotNull(baseDataSource);
         this.fileDataSource = new FileDataSource(listener);
         this.encryptedFileDataSource = new EncryptedFileDataSource(listener);

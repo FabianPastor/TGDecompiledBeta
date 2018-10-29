@@ -32,11 +32,12 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.google.android.exoplayer2.extractor.ts.PsExtractor;
 import java.util.ArrayList;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -49,7 +50,6 @@ import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -117,8 +117,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private WakeLock wakeLock = null;
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$3 */
-    class C23393 implements ChatActivityEnterViewDelegate {
-        C23393() {
+    class C16323 implements ChatActivityEnterViewDelegate {
+        C16323() {
         }
 
         public void onMessageSend(CharSequence message) {
@@ -188,8 +188,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$4 */
-    class C23404 extends ActionBarMenuOnItemClick {
-        C23404() {
+    class C16334 extends ActionBarMenuOnItemClick {
+        C16334() {
         }
 
         public void onItemClick(int id) {
@@ -205,8 +205,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$5 */
-    class C23415 implements OnClickListener {
-        C23415() {
+    class C16345 implements OnClickListener {
+        C16345() {
         }
 
         @TargetApi(9)
@@ -216,14 +216,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
                 PopupNotificationActivity.this.startActivity(intent);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$6 */
-    class C23426 implements Runnable {
-        C23426() {
+    class C16356 implements Runnable {
+        C16356() {
         }
 
         public void run() {
@@ -234,8 +234,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$7 */
-    class C23437 implements Runnable {
-        C23437() {
+    class C16367 implements Runnable {
+        C16367() {
         }
 
         public void run() {
@@ -246,8 +246,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$8 */
-    class C23448 implements Runnable {
-        C23448() {
+    class C16378 implements Runnable {
+        C16378() {
         }
 
         public void run() {
@@ -258,8 +258,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$9 */
-    class C23459 extends AnimatorListenerAdapter {
-        C23459() {
+    class C16389 extends AnimatorListenerAdapter {
+        C16389() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -432,12 +432,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.chatActivityEnterView = new ChatActivityEnterView(this, contentView, null, false);
         this.chatActivityEnterView.setId(id_chat_compose_panel);
         this.popupContainer.addView(this.chatActivityEnterView, LayoutHelper.createRelative(-1, -2, 12));
-        this.chatActivityEnterView.setDelegate(new C23393());
+        this.chatActivityEnterView.setDelegate(new C16323());
         this.messageContainer = new FrameLayoutTouch(this);
         this.popupContainer.addView(this.messageContainer, 0);
         this.actionBar = new ActionBar(this);
         this.actionBar.setOccupyStatusBar(false);
-        this.actionBar.setBackButtonImage(C0505R.drawable.ic_close_white);
+        this.actionBar.setBackButtonImage(C0431R.drawable.ic_close_white);
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSelector), false);
         this.popupContainer.addView(this.actionBar);
@@ -501,7 +501,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.bottomMargin = AndroidUtilities.dp(4.0f);
         layoutParams2.gravity = 80;
         this.onlineTextView.setLayoutParams(layoutParams2);
-        this.actionBar.setActionBarMenuOnItemClick(new C23404());
+        this.actionBar.setActionBarMenuOnItemClick(new C16334());
         this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(268435462, "screen");
         this.wakeLock.setReferenceCounted(false);
         handleIntent(getIntent());
@@ -522,10 +522,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 3 && grantResults[0] != 0) {
             Builder builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
-            builder.setMessage(LocaleController.getString("PermissionNoAudio", C0505R.string.PermissionNoAudio));
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0505R.string.PermissionOpenSettings), new C23415());
-            builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", C0431R.string.AppName));
+            builder.setMessage(LocaleController.getString("PermissionNoAudio", C0431R.string.PermissionNoAudio));
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0431R.string.PermissionOpenSettings), new C16345());
+            builder.setPositiveButton(LocaleController.getString("OK", C0431R.string.OK), null);
             builder.show();
         }
     }
@@ -621,12 +621,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     moveDiff = ((float) width) - this.centerView.getTranslationX();
                     otherView = this.leftView;
                     otherButtonsView = this.leftButtonsView;
-                    this.onAnimationEndRunnable = new C23426();
+                    this.onAnimationEndRunnable = new C16356();
                 } else if ((forceMove == 2 || diff < (-width) / 3) && this.rightView != null) {
                     moveDiff = ((float) (-width)) - this.centerView.getTranslationX();
                     otherView = this.rightView;
                     otherButtonsView = this.rightButtonsView;
-                    this.onAnimationEndRunnable = new C23437();
+                    this.onAnimationEndRunnable = new C16367();
                 } else if (this.centerView.getTranslationX() != 0.0f) {
                     moveDiff = -this.centerView.getTranslationX();
                     otherView = diff > 0 ? this.leftView : this.rightView;
@@ -635,7 +635,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     } else {
                         otherButtonsView = this.rightButtonsView;
                     }
-                    this.onAnimationEndRunnable = new C23448();
+                    this.onAnimationEndRunnable = new C16378();
                 }
                 if (moveDiff != 0.0f) {
                     int time = (int) (Math.abs(moveDiff / ((float) width)) * 200.0f);
@@ -653,7 +653,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(animators);
                     animatorSet.setDuration((long) time);
-                    animatorSet.addListener(new C23459());
+                    animatorSet.addListener(new C16389());
                     animatorSet.start();
                     this.animationInProgress = true;
                     this.animationStartTime = System.currentTimeMillis();
@@ -1674,7 +1674,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             } else if (this.currentUser != null) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
                 if (((int) dialog_id) == 0) {
-                    this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(C0505R.drawable.ic_lock_white, 0, 0, 0);
+                    this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(C0431R.drawable.ic_lock_white, 0, 0, 0);
                     this.nameTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                 } else {
                     this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -1714,7 +1714,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 setTypingAnimation(true);
                 return;
             }
-            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", C0505R.string.ServiceNotifications));
+            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", C0431R.string.ServiceNotifications));
         }
     }
 
@@ -1768,7 +1768,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     }
                     return;
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                     return;
                 }
             }

@@ -5,11 +5,11 @@ import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
+import com.google.android.exoplayer2.C0020C;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0621C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
@@ -67,7 +67,7 @@ public class FileUploadOperation {
     private RandomAccessFile stream;
     private long totalFileSize;
     private int totalPartsCount;
-    private int uploadChunkSize = C0621C.DEFAULT_BUFFER_SEGMENT_SIZE;
+    private int uploadChunkSize = C0020C.DEFAULT_BUFFER_SEGMENT_SIZE;
     private boolean uploadFirstPartLater;
     private int uploadStartTime;
     private long uploadedBytesCount;
@@ -82,15 +82,15 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$1 */
-    class C02101 implements Runnable {
-        C02101() {
+    class C03431 implements Runnable {
+        C03431() {
         }
 
         public void run() {
             FileUploadOperation.this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo", 0);
             FileUploadOperation.this.slowNetwork = ConnectionsManager.isConnectionSlow();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("start upload on slow network = " + FileUploadOperation.this.slowNetwork);
+                FileLog.m5d("start upload on slow network = " + FileUploadOperation.this.slowNetwork);
             }
             int a = 0;
             int count = FileUploadOperation.this.slowNetwork ? 1 : 8;
@@ -102,8 +102,8 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$3 */
-    class C02123 implements Runnable {
-        C02123() {
+    class C03453 implements Runnable {
+        C03453() {
         }
 
         public void run() {
@@ -114,11 +114,11 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$6 */
-    class C02166 implements WriteToSocketDelegate {
+    class C03496 implements WriteToSocketDelegate {
 
         /* renamed from: org.telegram.messenger.FileUploadOperation$6$1 */
-        class C02151 implements Runnable {
-            C02151() {
+        class C03481 implements Runnable {
+            C03481() {
             }
 
             public void run() {
@@ -128,11 +128,11 @@ public class FileUploadOperation {
             }
         }
 
-        C02166() {
+        C03496() {
         }
 
         public void run() {
-            Utilities.stageQueue.postRunnable(new C02151());
+            Utilities.stageQueue.postRunnable(new C03481());
         }
     }
 
@@ -165,7 +165,7 @@ public class FileUploadOperation {
     public void start() {
         if (this.state == 0) {
             this.state = 1;
-            Utilities.stageQueue.postRunnable(new C02101());
+            Utilities.stageQueue.postRunnable(new C03431());
         }
     }
 
@@ -178,7 +178,7 @@ public class FileUploadOperation {
                         int a;
                         FileUploadOperation.this.slowNetwork = slow;
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("network changed to slow = " + FileUploadOperation.this.slowNetwork);
+                            FileLog.m5d("network changed to slow = " + FileUploadOperation.this.slowNetwork);
                         }
                         for (a = 0; a < FileUploadOperation.this.requestTokens.size(); a++) {
                             ConnectionsManager.getInstance(FileUploadOperation.this.currentAccount).cancelRequest(FileUploadOperation.this.requestTokens.valueAt(a), true);
@@ -217,7 +217,7 @@ public class FileUploadOperation {
     public void cancel() {
         if (this.state != 3) {
             this.state = 2;
-            Utilities.stageQueue.postRunnable(new C02123());
+            Utilities.stageQueue.postRunnable(new C03453());
             this.delegate.didFailedUploadingFile(this);
             cleanup();
         }
@@ -234,7 +234,7 @@ public class FileUploadOperation {
                 this.stream = null;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -429,7 +429,7 @@ public class FileUploadOperation {
                                 this.fingerprint |= ((digest[a] ^ digest[a + 4]) & 255) << (a * 8);
                             }
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                     this.uploadedBytesCount = this.readBytesCount;
@@ -547,7 +547,7 @@ public class FileUploadOperation {
                                     FileUploadOperation.this.requestTokens.delete(requestNumFinal);
                                     if (!(response instanceof TL_boolTrue)) {
                                         if (finalRequest != null) {
-                                            FileLog.m1e("23123");
+                                            FileLog.m6e("23123");
                                         }
                                         FileUploadOperation.this.state = 4;
                                         FileUploadOperation.this.delegate.didFailedUploadingFile(FileUploadOperation.this);
@@ -644,11 +644,11 @@ public class FileUploadOperation {
                                     }
                                 }
                             }
-                        }, null, new C02166(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true));
+                        }, null, new C03496(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true));
                     }
                 }
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
                 this.state = 4;
                 this.delegate.didFailedUploadingFile(this);
                 cleanup();

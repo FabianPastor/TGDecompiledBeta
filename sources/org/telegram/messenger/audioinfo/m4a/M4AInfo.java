@@ -15,6 +15,9 @@ import com.coremedia.iso.boxes.RatingBox;
 import com.coremedia.iso.boxes.TrackBox;
 import com.coremedia.iso.boxes.UserDataBox;
 import com.coremedia.iso.boxes.apple.AppleItemListBox;
+import com.google.android.exoplayer2.upstream.DataSchemeDataSource;
+import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
+import com.googlecode.mp4parser.boxes.apple.AppleNameBox;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -22,7 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.audioinfo.mp3.ID3v1Genre;
-import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 
 public class M4AInfo extends AudioInfo {
     private static final String ASCII = "ISO8859_1";
@@ -315,7 +317,7 @@ public class M4AInfo extends AudioInfo {
                 }
                 break;
             case 5143505:
-                if (type.equals("\u00a9nam")) {
+                if (type.equals(AppleNameBox.TYPE)) {
                     obj = 16;
                     break;
                 }
@@ -376,7 +378,7 @@ public class M4AInfo extends AudioInfo {
                     }
                     return;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    ThrowableExtension.printStackTrace(e);
                     return;
                 }
             case 7:

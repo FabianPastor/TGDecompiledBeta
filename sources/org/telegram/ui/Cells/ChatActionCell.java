@@ -11,7 +11,7 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -48,8 +48,8 @@ public class ChatActionCell extends BaseCell {
     private int textY = 0;
 
     /* renamed from: org.telegram.ui.Cells.ChatActionCell$1 */
-    class C11061 implements Runnable {
-        C11061() {
+    class C07311 implements Runnable {
+        C07311() {
         }
 
         public void run() {
@@ -90,7 +90,7 @@ public class ChatActionCell extends BaseCell {
                     createLayout(this.customText, getMeasuredWidth());
                     invalidate();
                 }
-                AndroidUtilities.runOnUIThread(new C11061());
+                AndroidUtilities.runOnUIThread(new C07311());
             }
         }
     }
@@ -246,7 +246,7 @@ public class ChatActionCell extends BaseCell {
                 this.textWidth = (int) Math.max((double) this.textWidth, Math.ceil((double) lineWidth));
                 a++;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return;
             }
         }
@@ -269,9 +269,9 @@ public class ChatActionCell extends BaseCell {
             } else if (this.currentMessageObject.messageOwner == null || this.currentMessageObject.messageOwner.media == null || this.currentMessageObject.messageOwner.media.ttl_seconds == 0) {
                 text = this.currentMessageObject.messageText;
             } else if (this.currentMessageObject.messageOwner.media.photo instanceof TL_photoEmpty) {
-                text = LocaleController.getString("AttachPhotoExpired", C0505R.string.AttachPhotoExpired);
+                text = LocaleController.getString("AttachPhotoExpired", C0431R.string.AttachPhotoExpired);
             } else if (this.currentMessageObject.messageOwner.media.document instanceof TL_documentEmpty) {
-                text = LocaleController.getString("AttachVideoExpired", C0505R.string.AttachVideoExpired);
+                text = LocaleController.getString("AttachVideoExpired", C0431R.string.AttachVideoExpired);
             } else {
                 text = this.currentMessageObject.messageText;
             }

@@ -609,7 +609,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                         this.currentThumbKey = null;
                     }
                     setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 canvas.restore();
                 return;
@@ -655,7 +655,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             this.currentThumbKey = null;
                         }
                         setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 }
                 canvas.restore();
@@ -695,7 +695,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             this.currentThumbKey = null;
                         }
                         setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                 }
                 canvas.restore();
@@ -709,7 +709,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 drawable.setAlpha(alpha);
                 drawable.draw(canvas);
             } catch (Throwable e222) {
-                FileLog.m3e(e222);
+                FileLog.m8e(e222);
             }
         }
     }
@@ -817,7 +817,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 return false;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 

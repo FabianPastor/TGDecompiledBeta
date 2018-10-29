@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.BundleCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.RemoteViews;
+import com.google.android.exoplayer2.C0020C;
 import java.util.ArrayList;
 
 public final class CustomTabsIntent {
@@ -199,17 +200,17 @@ public final class CustomTabsIntent {
         if (intent == null) {
             intent = new Intent("android.intent.action.VIEW");
         }
-        intent.addFlags(268435456);
+        intent.addFlags(C0020C.ENCODING_PCM_MU_LAW);
         intent.putExtra(EXTRA_USER_OPT_OUT_FROM_CUSTOM_TABS, true);
         return intent;
     }
 
     public void setUseNewTask() {
-        this.intent.addFlags(268435456);
+        this.intent.addFlags(C0020C.ENCODING_PCM_MU_LAW);
     }
 
     public static boolean shouldAlwaysUseBrowserUI(Intent intent) {
-        if (!intent.getBooleanExtra(EXTRA_USER_OPT_OUT_FROM_CUSTOM_TABS, false) || (intent.getFlags() & 268435456) == 0) {
+        if (!intent.getBooleanExtra(EXTRA_USER_OPT_OUT_FROM_CUSTOM_TABS, false) || (intent.getFlags() & C0020C.ENCODING_PCM_MU_LAW) == 0) {
             return false;
         }
         return true;

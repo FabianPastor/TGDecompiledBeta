@@ -19,6 +19,6 @@
     <string name="common_signin_button_text">साइन इन करा</string>
     <string name="common_signin_button_text_long">Google सह साइन इन करा</string>
     <string name="fcm_fallback_notification_channel_label">मिश्र</string>
-    <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="status_bar_notification_info_overflow">९९९+</string>
     <string name="wallet_buy_button_place_holder">Google सह खरेदी करा</string>
 </resources>

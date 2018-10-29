@@ -18,6 +18,9 @@ import android.telecom.TelecomManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import com.google.android.exoplayer2.C0020C;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -30,7 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -40,8 +43,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.voip.VoIPBaseService.CallConnection;
 import org.telegram.messenger.voip.VoIPBaseService.StateListener;
 import org.telegram.tgnet.ConnectionsManager;
@@ -109,8 +110,8 @@ public class VoIPService extends VoIPBaseService {
     private User user;
 
     /* renamed from: org.telegram.messenger.voip.VoIPService$1 */
-    class C08421 implements Runnable {
-        C08421() {
+    class C05431 implements Runnable {
+        C05431() {
         }
 
         public void run() {
@@ -120,20 +121,20 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPService$3 */
-    class C08443 implements RequestDelegate {
-        C08443() {
+    class C05453 implements RequestDelegate {
+        C05453() {
         }
 
         public void run(TLObject response, TL_error error) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("Sent debug logs, response=" + response);
+                FileLog.m5d("Sent debug logs, response=" + response);
             }
         }
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPService$4 */
-    class C08454 implements Runnable {
-        C08454() {
+    class C05464 implements Runnable {
+        C05464() {
         }
 
         public void run() {
@@ -142,8 +143,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* renamed from: org.telegram.messenger.voip.VoIPService$7 */
-    class C08547 implements Runnable {
-        C08547() {
+    class C05557 implements Runnable {
+        C05557() {
         }
 
         public void run() {
@@ -167,7 +168,7 @@ public class VoIPService extends VoIPBaseService {
             this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userID));
             if (this.user == null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m4w("VoIPService: user==null");
+                    FileLog.m9w("VoIPService: user==null");
                 }
                 stopSelf();
             } else {
@@ -183,11 +184,11 @@ public class VoIPService extends VoIPBaseService {
                         extras.putBundle("android.telecom.extra.OUTGOING_CALL_EXTRAS", myExtras);
                         tm.placeCall(Uri.fromParts("sip", UserConfig.getInstance(this.currentAccount).getClientUserId() + ";user=" + this.user.id, null), extras);
                     } else {
-                        this.delayedStartOutgoingCall = new C08421();
+                        this.delayedStartOutgoingCall = new C05431();
                         AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                     }
                     if (intent.getBooleanExtra("start_incall_activity", false)) {
-                        startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
+                        startActivity(new Intent(this, VoIPActivity.class).addFlags(C0020C.ENCODING_PCM_MU_LAW));
                     }
                 } else {
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
@@ -203,7 +204,7 @@ public class VoIPService extends VoIPBaseService {
                 initializeAccountRelatedThings();
             }
         } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.m1e("Tried to start the VoIP service when it's already started");
+            FileLog.m6e("Tried to start the VoIP service when it's already started");
         }
         return 2;
     }
@@ -211,7 +212,8 @@ public class VoIPService extends VoIPBaseService {
     public void onCreate() {
         super.onCreate();
         if (callIShouldHavePutIntoIntent != null && VERSION.SDK_INT >= 26) {
-            startForeground(201, new Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(C0505R.drawable.notification).setContentTitle(LocaleController.getString("VoipOutgoingCall", C0505R.string.VoipOutgoingCall)).setShowWhen(false).build());
+            NotificationsController.checkOtherNotificationsChannel();
+            startForeground(201, new Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(C0431R.drawable.notification).setContentTitle(LocaleController.getString("VoipOutgoingCall", C0431R.string.VoipOutgoingCall)).setShowWhen(false).build());
         }
     }
 
@@ -238,7 +240,7 @@ public class VoIPService extends VoIPBaseService {
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
             req.peer.id = this.call.id;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C08443());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C05453());
         }
     }
 
@@ -268,7 +270,7 @@ public class VoIPService extends VoIPBaseService {
         showNotification();
         startConnectingSound();
         dispatchStateChanged(14);
-        AndroidUtilities.runOnUIThread(new C08454());
+        AndroidUtilities.runOnUIThread(new C05464());
         Utilities.random.nextBytes(new byte[256]);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
@@ -280,9 +282,9 @@ public class VoIPService extends VoIPBaseService {
                 if (error == null) {
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
-                        if (Utilities.isGoodPrime(res.f36p, res.f35g)) {
-                            messagesStorage.setSecretPBytes(res.f36p);
-                            messagesStorage.setSecretG(res.f35g);
+                        if (Utilities.isGoodPrime(res.f44p, res.f43g)) {
+                            messagesStorage.setSecretPBytes(res.f44p);
+                            messagesStorage.setSecretG(res.f43g);
                             messagesStorage.setLastSecretVersion(res.version);
                             messagesStorage.saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
                         } else {
@@ -315,14 +317,14 @@ public class VoIPService extends VoIPBaseService {
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.voip.VoIPService$5$1$1$1 */
-                                class C08481 implements Runnable {
+                                class C05491 implements Runnable {
 
                                     /* renamed from: org.telegram.messenger.voip.VoIPService$5$1$1$1$1 */
-                                    class C08471 implements RequestDelegate {
+                                    class C05481 implements RequestDelegate {
 
                                         /* renamed from: org.telegram.messenger.voip.VoIPService$5$1$1$1$1$1 */
-                                        class C08461 implements Runnable {
-                                            C08461() {
+                                        class C05471 implements Runnable {
+                                            C05471() {
                                             }
 
                                             public void run() {
@@ -330,22 +332,22 @@ public class VoIPService extends VoIPBaseService {
                                             }
                                         }
 
-                                        C08471() {
+                                        C05481() {
                                         }
 
                                         public void run(TLObject response, TL_error error) {
                                             if (BuildVars.LOGS_ENABLED) {
                                                 if (error != null) {
-                                                    FileLog.m1e("error on phone.discardCall: " + error);
+                                                    FileLog.m6e("error on phone.discardCall: " + error);
                                                 } else {
-                                                    FileLog.m0d("phone.discardCall " + response);
+                                                    FileLog.m5d("phone.discardCall " + response);
                                                 }
                                             }
-                                            AndroidUtilities.runOnUIThread(new C08461());
+                                            AndroidUtilities.runOnUIThread(new C05471());
                                         }
                                     }
 
-                                    C08481() {
+                                    C05491() {
                                     }
 
                                     public void run() {
@@ -355,7 +357,7 @@ public class VoIPService extends VoIPBaseService {
                                         req.peer.access_hash = VoIPService.this.call.access_hash;
                                         req.peer.id = VoIPService.this.call.id;
                                         req.reason = new TL_phoneCallDiscardReasonMissed();
-                                        ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new C08471(), 2);
+                                        ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new C05481(), 2);
                                     }
                                 }
 
@@ -375,7 +377,7 @@ public class VoIPService extends VoIPBaseService {
                                             }
                                             VoIPService.this.pendingUpdates.clear();
                                         }
-                                        VoIPService.this.timeoutRunnable = new C08481();
+                                        VoIPService.this.timeoutRunnable = new C05491();
                                         AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance(VoIPService.this.currentAccount).callReceiveTimeout);
                                     } else if (error.code == 400 && "PARTICIPANT_VERSION_OUTDATED".equals(error.text)) {
                                         VoIPService.this.callFailed(-1);
@@ -385,7 +387,7 @@ public class VoIPService extends VoIPBaseService {
                                         VoIPService.this.callFailed(-3);
                                     } else {
                                         if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.m1e("Error on phone.requestCall: " + error);
+                                            FileLog.m6e("Error on phone.requestCall: " + error);
                                         }
                                         VoIPService.this.callFailed();
                                     }
@@ -396,7 +398,7 @@ public class VoIPService extends VoIPBaseService {
                     return;
                 }
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m1e("Error on getDhConfig " + error);
+                    FileLog.m6e("Error on getDhConfig " + error);
                 }
                 VoIPService.this.callFailed();
             }
@@ -406,7 +408,7 @@ public class VoIPService extends VoIPBaseService {
     private void acknowledgeCall(final boolean startRinging) {
         if (this.call instanceof TL_phoneCallDiscarded) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m4w("Call " + this.call.id + " was discarded before the service started, stopping");
+                FileLog.m9w("Call " + this.call.id + " was discarded before the service started, stopping");
             }
             stopSelf();
             return;
@@ -421,11 +423,11 @@ public class VoIPService extends VoIPBaseService {
                     public void run() {
                         if (VoIPBaseService.sharedInstance != null) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m4w("receivedCall response = " + response);
+                                FileLog.m9w("receivedCall response = " + response);
                             }
                             if (error != null) {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m1e("error on receivedCall: " + error);
+                                    FileLog.m6e("error on receivedCall: " + error);
                                 }
                                 VoIPService.this.stopSelf();
                                 return;
@@ -452,19 +454,19 @@ public class VoIPService extends VoIPBaseService {
                 this.systemCallConnection.setRinging();
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("starting ringing for call " + this.call.id);
+                FileLog.m5d("starting ringing for call " + this.call.id);
             }
             dispatchStateChanged(15);
             startRingtoneAndVibration(this.user.id);
             if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode() || !NotificationManagerCompat.from(this).areNotificationsEnabled()) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("Starting incall activity for incoming call");
+                    FileLog.m5d("Starting incall activity for incoming call");
                 }
                 try {
-                    PendingIntent.getActivity(this, 12345, new Intent(this, VoIPActivity.class).addFlags(268435456), 0).send();
+                    PendingIntent.getActivity(this, 12345, new Intent(this, VoIPActivity.class).addFlags(C0020C.ENCODING_PCM_MU_LAW), 0).send();
                 } catch (Exception x) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m2e("Error starting incall activity", x);
+                        FileLog.m7e("Error starting incall activity", x);
                     }
                 }
                 if (VERSION.SDK_INT >= 26) {
@@ -475,9 +477,13 @@ public class VoIPService extends VoIPBaseService {
             }
             showIncomingNotification(ContactsController.formatName(this.user.first_name, this.user.last_name), null, this.user, null, 0, VoIPActivity.class);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("Showing incoming call notification");
+                FileLog.m5d("Showing incoming call notification");
             }
         }
+    }
+
+    protected boolean isRinging() {
+        return this.currentState == 15;
     }
 
     public void acceptIncomingCall() {
@@ -486,7 +492,7 @@ public class VoIPService extends VoIPBaseService {
         configureDeviceForCall();
         startConnectingSound();
         dispatchStateChanged(12);
-        AndroidUtilities.runOnUIThread(new C08547());
+        AndroidUtilities.runOnUIThread(new C05557());
         final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
@@ -494,8 +500,8 @@ public class VoIPService extends VoIPBaseService {
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
             /* renamed from: org.telegram.messenger.voip.VoIPService$8$1 */
-            class C08561 implements RequestDelegate {
-                C08561() {
+            class C05571 implements RequestDelegate {
+                C05571() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -503,7 +509,7 @@ public class VoIPService extends VoIPBaseService {
                         public void run() {
                             if (error == null) {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m4w("accept call ok! " + response);
+                                    FileLog.m9w("accept call ok! " + response);
                                 }
                                 VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
                                 if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
@@ -513,7 +519,7 @@ public class VoIPService extends VoIPBaseService {
                                 return;
                             }
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m1e("Error on phone.acceptCall: " + error);
+                                FileLog.m6e("Error on phone.acceptCall: " + error);
                             }
                             VoIPService.this.callFailed();
                         }
@@ -525,14 +531,14 @@ public class VoIPService extends VoIPBaseService {
                 if (error == null) {
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
-                        if (Utilities.isGoodPrime(res.f36p, res.f35g)) {
-                            messagesStorage.setSecretPBytes(res.f36p);
-                            messagesStorage.setSecretG(res.f35g);
+                        if (Utilities.isGoodPrime(res.f44p, res.f43g)) {
+                            messagesStorage.setSecretPBytes(res.f44p);
+                            messagesStorage.setSecretG(res.f43g);
                             messagesStorage.setLastSecretVersion(res.version);
                             MessagesStorage.getInstance(VoIPService.this.currentAccount).saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
                         } else {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m1e("stopping VoIP service, bad prime");
+                                FileLog.m6e("stopping VoIP service, bad prime");
                             }
                             VoIPService.this.callFailed();
                             return;
@@ -544,7 +550,7 @@ public class VoIPService extends VoIPBaseService {
                     }
                     if (VoIPService.this.call == null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m1e("call is null");
+                            FileLog.m6e("call is null");
                         }
                         VoIPService.this.callFailed();
                         return;
@@ -569,7 +575,7 @@ public class VoIPService extends VoIPBaseService {
                     tL_phoneCallProtocol.udp_p2p = true;
                     req.protocol.min_layer = 65;
                     req.protocol.max_layer = 74;
-                    ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new C08561(), 2);
+                    ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new C05571(), 2);
                     return;
                 }
                 VoIPService.this.callFailed();
@@ -671,10 +677,10 @@ public class VoIPService extends VoIPBaseService {
                             MessagesController.getInstance(VoIPService.this.currentAccount).processUpdates((TL_updates) response, false);
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("phone.discardCall " + response);
+                            FileLog.m5d("phone.discardCall " + response);
                         }
                     } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m1e("error on phone.discardCall: " + error);
+                        FileLog.m6e("error on phone.discardCall: " + error);
                     }
                     if (!wasNotConnected) {
                         AndroidUtilities.cancelRunOnUIThread(stopper);
@@ -691,12 +697,12 @@ public class VoIPService extends VoIPBaseService {
         try {
             if (BuildVars.LOGS_ENABLED) {
                 for (Field f : PhoneCall.class.getFields()) {
-                    FileLog.m0d(f.getName() + " = " + f.get(this.call));
+                    FileLog.m5d(f.getName() + " = " + f.get(this.call));
                 }
             }
         } catch (Throwable x) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m3e(x);
+                FileLog.m8e(x);
             }
         }
     }
@@ -711,14 +717,14 @@ public class VoIPService extends VoIPBaseService {
                     call.access_hash = this.call.access_hash;
                 }
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("Call updated: " + call);
+                    FileLog.m5d("Call updated: " + call);
                     dumpCallObject();
                 }
                 this.call = call;
                 if (call instanceof TL_phoneCallDiscarded) {
                     this.needSendDebugLog = call.need_debug;
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("call discarded, stopping service");
+                        FileLog.m5d("call discarded, stopping service");
                     }
                     if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
                         dispatchStateChanged(17);
@@ -735,7 +741,7 @@ public class VoIPService extends VoIPBaseService {
                 } else if ((call instanceof TL_phoneCall) && this.authKey == null) {
                     if (call.g_a_or_b == null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m4w("stopping VoIP service, Ga == null");
+                            FileLog.m9w("stopping VoIP service, Ga == null");
                         }
                         callFailed();
                     } else if (Arrays.equals(this.g_a_hash, Utilities.computeSHA256(call.g_a_or_b, 0, call.g_a_or_b.length))) {
@@ -753,7 +759,7 @@ public class VoIPService extends VoIPBaseService {
                                 correctedAuth = new byte[256];
                                 System.arraycopy(authKey, 0, correctedAuth, 256 - authKey.length, authKey.length);
                                 for (int a = 0; a < 256 - authKey.length; a++) {
-                                    authKey[a] = (byte) 0;
+                                    correctedAuth[a] = (byte) 0;
                                 }
                                 authKey = correctedAuth;
                             }
@@ -764,7 +770,7 @@ public class VoIPService extends VoIPBaseService {
                             this.keyFingerprint = Utilities.bytesToLong(authKeyId);
                             if (this.keyFingerprint != call.key_fingerprint) {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m4w("key fingerprints don't match");
+                                    FileLog.m9w("key fingerprints don't match");
                                 }
                                 callFailed();
                                 return;
@@ -773,12 +779,12 @@ public class VoIPService extends VoIPBaseService {
                             return;
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m4w("stopping VoIP service, bad Ga and Gb (accepting)");
+                            FileLog.m9w("stopping VoIP service, bad Ga and Gb (accepting)");
                         }
                         callFailed();
                     } else {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m4w("stopping VoIP service, Ga hash doesn't match");
+                            FileLog.m9w("stopping VoIP service, Ga hash doesn't match");
                         }
                         callFailed();
                     }
@@ -787,7 +793,7 @@ public class VoIPService extends VoIPBaseService {
                 } else if (this.currentState == 13 && call.receive_date != 0) {
                     dispatchStateChanged(16);
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("!!!!!! CALL RECEIVED");
+                        FileLog.m5d("!!!!!! CALL RECEIVED");
                     }
                     if (this.spPlayID != 0) {
                         this.soundPool.stop(this.spPlayID);
@@ -806,7 +812,7 @@ public class VoIPService extends VoIPBaseService {
                     AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance(this.currentAccount).callRingTimeout);
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m4w("onCallUpdated called with wrong call id (got " + call.id + ", expected " + this.call.id + ")");
+                FileLog.m9w("onCallUpdated called with wrong call id (got " + call.id + ", expected " + this.call.id + ")");
             }
         }
     }
@@ -816,7 +822,7 @@ public class VoIPService extends VoIPBaseService {
             PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).putExtra("call_id", this.call.id).putExtra("call_access_hash", this.call.access_hash).putExtra("account", this.currentAccount).addFlags(805306368), 0).send();
         } catch (Exception x) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m2e("Error starting incall activity", x);
+                FileLog.m7e("Error starting incall activity", x);
             }
         }
     }
@@ -840,7 +846,7 @@ public class VoIPService extends VoIPBaseService {
                 correctedAuth = new byte[256];
                 System.arraycopy(authKey, 0, correctedAuth, 256 - authKey.length, authKey.length);
                 for (int a = 0; a < 256 - authKey.length; a++) {
-                    authKey[a] = (byte) 0;
+                    correctedAuth[a] = (byte) 0;
                 }
                 authKey = correctedAuth;
             }
@@ -879,7 +885,7 @@ public class VoIPService extends VoIPBaseService {
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m4w("stopping VoIP service, bad Ga and Gb");
+            FileLog.m9w("stopping VoIP service, bad Ga and Gb");
         }
         callFailed();
     }
@@ -896,7 +902,7 @@ public class VoIPService extends VoIPBaseService {
             String server;
             String secret;
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("InitCall: keyID=" + this.keyFingerprint);
+                FileLog.m5d("InitCall: keyID=" + this.keyFingerprint);
             }
             SharedPreferences nprefs = MessagesController.getNotificationsSettings(this.currentAccount);
             HashSet<String> hashes = new HashSet(nprefs.getStringSet("calls_access_hashes", Collections.EMPTY_SET));
@@ -965,14 +971,12 @@ public class VoIPService extends VoIPBaseService {
                 if (prefs.getBoolean("dbg_force_tcp_in_calls", false)) {
                     z2 = true;
                     voIPController.setRemoteEndpoints(endpoints, z, z2, this.call.protocol.max_layer);
-                    if (BuildVars.DEBUG_VERSION) {
-                        if (prefs.getBoolean("dbg_force_tcp_in_calls", false)) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    Toast.makeText(VoIPService.this, "This call uses TCP which will degrade its quality.", 0).show();
-                                }
-                            });
-                        }
+                    if (prefs.getBoolean("dbg_force_tcp_in_calls", false)) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(VoIPService.this, "This call uses TCP which will degrade its quality.", 0).show();
+                            }
+                        });
                     }
                     if (prefs.getBoolean("proxy_enabled", false)) {
                         if (prefs.getBoolean("proxy_enabled_calls", false)) {
@@ -999,10 +1003,8 @@ public class VoIPService extends VoIPBaseService {
             }
             z2 = false;
             voIPController.setRemoteEndpoints(endpoints, z, z2, this.call.protocol.max_layer);
-            if (BuildVars.DEBUG_VERSION) {
-                if (prefs.getBoolean("dbg_force_tcp_in_calls", false)) {
-                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                }
+            if (prefs.getBoolean("dbg_force_tcp_in_calls", false)) {
+                AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
             }
             if (prefs.getBoolean("proxy_enabled", false)) {
                 if (prefs.getBoolean("proxy_enabled_calls", false)) {
@@ -1018,7 +1020,7 @@ public class VoIPService extends VoIPBaseService {
             AndroidUtilities.runOnUIThread(/* anonymous class already generated */, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         } catch (Throwable x) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m2e("error starting call", x);
+                FileLog.m7e("error starting call", x);
             }
             callFailed();
         }
@@ -1052,7 +1054,7 @@ public class VoIPService extends VoIPBaseService {
     protected void callFailed(int errorCode) {
         if (this.call != null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("Discarding failed call");
+                FileLog.m5d("Discarding failed call");
             }
             TL_phone_discardCall req = new TL_phone_discardCall();
             req.peer = new TL_inputPhoneCall();
@@ -1067,10 +1069,10 @@ public class VoIPService extends VoIPBaseService {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m1e("error on phone.discardCall: " + error);
+                            FileLog.m6e("error on phone.discardCall: " + error);
                         }
                     } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("phone.discardCall " + response);
+                        FileLog.m5d("phone.discardCall " + response);
                     }
                 }
             });
@@ -1097,7 +1099,7 @@ public class VoIPService extends VoIPBaseService {
                         PendingIntent.getActivity(VoIPService.this, 0, intent, 0).send();
                     } catch (CanceledException e) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m2e("error restarting activity", e);
+                            FileLog.m7e("error restarting activity", e);
                         }
                         VoIPService.this.declineIncomingCall(4, null);
                     }
@@ -1115,7 +1117,7 @@ public class VoIPService extends VoIPBaseService {
 
     void onMediaButtonEvent(KeyEvent ev) {
         boolean z = true;
-        if (ev.getKeyCode() != 79 || ev.getAction() != 1) {
+        if ((ev.getKeyCode() != 79 && ev.getKeyCode() != 127 && ev.getKeyCode() != 85) || ev.getAction() != 1) {
             return;
         }
         if (this.currentState == 15) {
@@ -1215,7 +1217,7 @@ public class VoIPService extends VoIPBaseService {
     public CallConnection getConnectionAndStartCall() {
         if (this.systemCallConnection == null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("creating call connection");
+                FileLog.m5d("creating call connection");
             }
             this.systemCallConnection = new CallConnection();
             this.systemCallConnection.setInitializing();

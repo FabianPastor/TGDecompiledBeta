@@ -103,6 +103,6 @@
     <string name="hockeyapp_update_title">Обновление приложения</string>
     <string name="hockeyapp_update_unknown_size">Размер неизвестен</string>
     <string name="hockeyapp_update_version">Версия %s</string>
-    <string name="status_bar_notification_info_overflow">&gt;999</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Купить через Google</string>
 </resources>

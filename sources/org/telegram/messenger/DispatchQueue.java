@@ -10,8 +10,8 @@ public class DispatchQueue extends Thread {
     private CountDownLatch syncLatch = new CountDownLatch(1);
 
     /* renamed from: org.telegram.messenger.DispatchQueue$1 */
-    class C01771 extends Handler {
-        C01771() {
+    class C03131 extends Handler {
+        C03131() {
         }
 
         public void handleMessage(Message msg) {
@@ -33,7 +33,7 @@ public class DispatchQueue extends Thread {
                 this.handler.sendMessageDelayed(msg, (long) delay);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -42,7 +42,7 @@ public class DispatchQueue extends Thread {
             this.syncLatch.await();
             this.handler.removeCallbacks(runnable);
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -59,7 +59,7 @@ public class DispatchQueue extends Thread {
                 this.handler.postDelayed(runnable, delay);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -68,7 +68,7 @@ public class DispatchQueue extends Thread {
             this.syncLatch.await();
             this.handler.removeCallbacksAndMessages(null);
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -77,7 +77,7 @@ public class DispatchQueue extends Thread {
 
     public void run() {
         Looper.prepare();
-        this.handler = new C01771();
+        this.handler = new C03131();
         this.syncLatch.countDown();
         Looper.loop();
     }

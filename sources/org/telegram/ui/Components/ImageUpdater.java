@@ -50,8 +50,8 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     }
 
     /* renamed from: org.telegram.ui.Components.ImageUpdater$1 */
-    class C15581 implements PhotoAlbumPickerActivityDelegate {
-        C15581() {
+    class C10581 implements PhotoAlbumPickerActivityDelegate {
+        C10581() {
         }
 
         public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
@@ -66,7 +66,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 photoPickerIntent.setType("image/*");
                 ImageUpdater.this.parentFragment.startActivityForResult(photoPickerIntent, 14);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -101,7 +101,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
                 this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 19);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -110,7 +110,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
         if (this.parentFragment != null) {
             if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
-                fragment.setDelegate(new C15581());
+                fragment.setDelegate(new C10581());
                 this.parentFragment.presentFragment(fragment);
                 return;
             }
@@ -133,7 +133,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 activity.presentFragment(photoCropActivity);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             processBitmap(ImageLoader.loadBitmap(path, uri, 800.0f, 800.0f, true));
         }
     }
@@ -158,7 +158,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                         break;
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             final ArrayList<Object> arrayList = new ArrayList();
             arrayList.add(new PhotoEntry(0, 0, 0, this.currentPicturePath, orientation, false));

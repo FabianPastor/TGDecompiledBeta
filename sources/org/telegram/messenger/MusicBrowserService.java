@@ -147,7 +147,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                         MusicBrowserService.this.handlePlayRequest();
                     }
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         }
@@ -240,8 +240,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             messagesStorage.getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.MusicBrowserService$1$1 */
-                class C04671 implements Runnable {
-                    C04671() {
+                class C04141 implements Runnable {
+                    C04141() {
                     }
 
                     public void run() {
@@ -350,9 +350,9 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                             }
                         }
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C04671());
+                    AndroidUtilities.runOnUIThread(new C04141());
                 }
             });
         }
@@ -407,7 +407,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 try {
                     did = Integer.parseInt(parentMediaId.replace("__CHAT_", TtmlNode.ANONYMOUS_REGION_ID));
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(did);
                 if (arrayList != null) {
@@ -444,7 +444,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 return result;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return null;
     }
@@ -505,7 +505,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             try {
                 startService(new Intent(getApplicationContext(), MusicBrowserService.class));
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             this.serviceStarted = true;
         }

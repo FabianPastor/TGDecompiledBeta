@@ -21,7 +21,7 @@ public class Slice {
         try {
             this.file = File.createTempFile("paint", ".bin", ApplicationLoader.applicationContext.getCacheDir());
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         if (this.file != null) {
             storeData(data);
@@ -49,7 +49,7 @@ public class Slice {
             deflater.end();
             fos.close();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -82,7 +82,7 @@ public class Slice {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return null;
         }
     }

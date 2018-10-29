@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
+import org.telegram.tgnet.TLRPC;
 
 public class MusicPlayerReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
@@ -13,7 +14,7 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                 if (keyEvent != null && keyEvent.getAction() == 0) {
                     switch (keyEvent.getKeyCode()) {
                         case 79:
-                        case 85:
+                        case TLRPC.LAYER /*85*/:
                             if (MediaController.getInstance().isMessagePaused()) {
                                 MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                                 return;

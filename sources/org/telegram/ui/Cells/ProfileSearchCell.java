@@ -11,7 +11,7 @@ import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -197,7 +197,7 @@ public class ProfileSearchCell extends BaseCell {
         }
         if (nameString.length() == 0) {
             if (this.user == null || this.user.phone == null || this.user.phone.length() == 0) {
-                nameString = LocaleController.getString("HiddenName", C0505R.string.HiddenName);
+                nameString = LocaleController.getString("HiddenName", C0431R.string.HiddenName);
             } else {
                 nameString = PhoneFormat.getInstance().format("+" + this.user.phone);
             }
@@ -261,14 +261,14 @@ public class ProfileSearchCell extends BaseCell {
                 onlineString = this.subLabel;
             } else if (this.user != null) {
                 if (this.user.bot) {
-                    onlineString = LocaleController.getString("Bot", C0505R.string.Bot);
+                    onlineString = LocaleController.getString("Bot", C0431R.string.Bot);
                 } else if (this.user.id == 333000 || this.user.id == 777000) {
-                    onlineString = LocaleController.getString("ServiceNotifications", C0505R.string.ServiceNotifications);
+                    onlineString = LocaleController.getString("ServiceNotifications", C0431R.string.ServiceNotifications);
                 } else {
                     onlineString = LocaleController.formatUserStatus(this.currentAccount, this.user);
                     if (this.user != null && (this.user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
                         currentOnlinePaint = Theme.dialogs_onlinePaint;
-                        onlineString = LocaleController.getString("Online", C0505R.string.Online);
+                        onlineString = LocaleController.getString("Online", C0431R.string.Online);
                     }
                 }
             }

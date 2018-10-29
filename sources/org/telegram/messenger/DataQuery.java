@@ -222,8 +222,8 @@ public class DataQuery {
     private ArrayList<Long> unreadStickerSets = new ArrayList();
 
     /* renamed from: org.telegram.messenger.DataQuery$1 */
-    class C01361 implements RequestDelegate {
-        C01361() {
+    class C02721 implements RequestDelegate {
+        C02721() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -231,8 +231,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$3 */
-    class C01503 implements RequestDelegate {
-        C01503() {
+    class C02863 implements RequestDelegate {
+        C02863() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -240,8 +240,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$7 */
-    class C01737 implements RequestDelegate {
-        C01737() {
+    class C03097 implements RequestDelegate {
+        C03097() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -268,7 +268,7 @@ public class DataQuery {
                             data.reuse();
                             state.dispose();
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                 });
@@ -437,16 +437,16 @@ public class DataQuery {
         }
         if (type == 2) {
             if (remove) {
-                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("RemovedFromFavorites", C0505R.string.RemovedFromFavorites), 0).show();
+                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("RemovedFromFavorites", C0431R.string.RemovedFromFavorites), 0).show();
             } else {
-                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("AddedToFavorites", C0505R.string.AddedToFavorites), 0).show();
+                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("AddedToFavorites", C0431R.string.AddedToFavorites), 0).show();
             }
             TL_messages_faveSticker req = new TL_messages_faveSticker();
             req.id = new TL_inputDocument();
             req.id.id = document.id;
             req.id.access_hash = document.access_hash;
             req.unfave = remove;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C01361());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C02721());
             maxCount = MessagesController.getInstance(this.currentAccount).maxFaveStickersCount;
         } else {
             maxCount = MessagesController.getInstance(this.currentAccount).maxRecentStickersCount;
@@ -466,7 +466,7 @@ public class DataQuery {
                     try {
                         MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.id + "' AND type = " + cacheType).stepThis().dispose();
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -492,13 +492,13 @@ public class DataQuery {
         req.id.id = document.id;
         req.id.access_hash = document.access_hash;
         req.unsave = true;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C01503());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C02863());
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + document.id + "' AND type = 2").stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -524,7 +524,7 @@ public class DataQuery {
                     try {
                         MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.id + "' AND type = 2").stepThis().dispose();
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -594,7 +594,7 @@ public class DataQuery {
                             });
                         }
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -604,7 +604,7 @@ public class DataQuery {
         req.stickerset = new TL_inputStickerSetID();
         req.stickerset.id = stickerSet.id;
         req.stickerset.access_hash = stickerSet.access_hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C01737());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C03097());
     }
 
     public HashMap<String, ArrayList<Document>> getAllStickers() {
@@ -728,7 +728,7 @@ public class DataQuery {
                             }
                         });
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -860,7 +860,7 @@ public class DataQuery {
                             database.commitTransaction();
                         }
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -1011,7 +1011,7 @@ public class DataQuery {
                             }
                         } catch (Throwable th3) {
                             e = th3;
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                             if (cursor != null) {
                                 cursor.dispose();
                             }
@@ -1056,8 +1056,8 @@ public class DataQuery {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.DataQuery$17$1 */
-            class C01331 implements Runnable {
-                C01331() {
+            class C02691 implements Runnable {
+                C02691() {
                 }
 
                 public void run() {
@@ -1069,8 +1069,8 @@ public class DataQuery {
             }
 
             /* renamed from: org.telegram.messenger.DataQuery$17$3 */
-            class C01353 implements Runnable {
-                C01353() {
+            class C02713 implements Runnable {
+                C02713() {
                 }
 
                 public void run() {
@@ -1081,11 +1081,11 @@ public class DataQuery {
             public void run() {
                 long j = 1000;
                 if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    Runnable c01331 = new C01331();
+                    Runnable c02691 = new C02691();
                     if (arrayList != null || z) {
                         j = 0;
                     }
-                    AndroidUtilities.runOnUIThread(c01331, j);
+                    AndroidUtilities.runOnUIThread(c02691, j);
                     if (arrayList == null) {
                         return;
                     }
@@ -1114,10 +1114,10 @@ public class DataQuery {
                             }
                         });
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C01353());
+                    AndroidUtilities.runOnUIThread(new C02713());
                     DataQuery.this.putFeaturedStickersToCache(null, null, i, 0);
                 }
             }
@@ -1168,7 +1168,7 @@ public class DataQuery {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -1373,7 +1373,7 @@ public class DataQuery {
                             }
                         } catch (Throwable th3) {
                             e = th3;
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                             if (cursor != null) {
                                 cursor.dispose();
                             }
@@ -1461,7 +1461,7 @@ public class DataQuery {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -1518,8 +1518,8 @@ public class DataQuery {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.DataQuery$28$1 */
-            class C01401 implements Runnable {
-                C01401() {
+            class C02761 implements Runnable {
+                C02761() {
                 }
 
                 public void run() {
@@ -1531,8 +1531,8 @@ public class DataQuery {
             }
 
             /* renamed from: org.telegram.messenger.DataQuery$28$3 */
-            class C01423 implements Runnable {
-                C01423() {
+            class C02783 implements Runnable {
+                C02783() {
                 }
 
                 public void run() {
@@ -1542,9 +1542,9 @@ public class DataQuery {
 
             public void run() {
                 if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    C01401 c01401 = new C01401();
+                    C02761 c02761 = new C02761();
                     long j = (arrayList != null || z) ? 0 : 1000;
-                    AndroidUtilities.runOnUIThread(c01401, j);
+                    AndroidUtilities.runOnUIThread(c02761, j);
                     if (arrayList == null) {
                         return;
                     }
@@ -1627,10 +1627,10 @@ public class DataQuery {
                             }
                         });
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C01423());
+                    AndroidUtilities.runOnUIThread(new C02783());
                     DataQuery.this.putStickersToCache(i3, null, i, 0);
                 }
             }
@@ -1671,8 +1671,8 @@ public class DataQuery {
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                         /* renamed from: org.telegram.messenger.DataQuery$29$2 */
-                        class C01442 implements Runnable {
-                            C01442() {
+                        class C02802 implements Runnable {
+                            C02802() {
                             }
 
                             public void run() {
@@ -1691,7 +1691,7 @@ public class DataQuery {
                                     }
                                 }
                             });
-                            AndroidUtilities.runOnUIThread(new C01442(), 1000);
+                            AndroidUtilities.runOnUIThread(new C02802(), 1000);
                         }
                     });
                     return;
@@ -1720,16 +1720,16 @@ public class DataQuery {
                         try {
                             if (error == null) {
                                 if (stickerSet.masks) {
-                                    Toast.makeText(context, LocaleController.getString("MasksRemoved", C0505R.string.MasksRemoved), 0).show();
+                                    Toast.makeText(context, LocaleController.getString("MasksRemoved", C0431R.string.MasksRemoved), 0).show();
                                 } else {
-                                    Toast.makeText(context, LocaleController.getString("StickersRemoved", C0505R.string.StickersRemoved), 0).show();
+                                    Toast.makeText(context, LocaleController.getString("StickersRemoved", C0431R.string.StickersRemoved), 0).show();
                                 }
                                 DataQuery.this.loadStickers(type, false, true);
                             }
-                            Toast.makeText(context, LocaleController.getString("ErrorOccurred", C0505R.string.ErrorOccurred), 0).show();
+                            Toast.makeText(context, LocaleController.getString("ErrorOccurred", C0431R.string.ErrorOccurred), 0).show();
                             DataQuery.this.loadStickers(type, false, true);
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                 });
@@ -1836,7 +1836,7 @@ public class DataQuery {
                     req.peer = inputPeer;
                     this.lastMergeDialogId = mergeDialogId;
                     req.limit = 1;
-                    req.f37q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+                    req.f45q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
                     if (user != null) {
                         req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                         req.flags |= 1;
@@ -1857,7 +1857,7 @@ public class DataQuery {
                                             messages_Messages res = response;
                                             DataQuery.this.messagesSearchEndReached[1] = res.messages.isEmpty();
                                             DataQuery.this.messagesSearchCount[1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
-                                            DataQuery.this.searchMessagesInChat(req.f37q, j2, j, i, i2, true, user2);
+                                            DataQuery.this.searchMessagesInChat(req.f45q, j2, j, i, i2, true, user2);
                                         }
                                     }
                                 }
@@ -1876,7 +1876,7 @@ public class DataQuery {
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) queryWithDialog);
         if (req.peer != null) {
             req.limit = 21;
-            req.f37q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+            req.f45q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
             if (user != null) {
                 req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
@@ -1984,7 +1984,7 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f37q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.f45q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
             final int i = count;
@@ -2030,7 +2030,7 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f37q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.f45q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
             final long j = uid;
@@ -2200,7 +2200,7 @@ public class DataQuery {
                     state2.step();
                     state2.dispose();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -2232,7 +2232,7 @@ public class DataQuery {
                     }
                     DataQuery.this.processLoadedMediaCount(count, j, i, i2, true);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -2360,7 +2360,7 @@ public class DataQuery {
                     res.messages.clear();
                     res.chats.clear();
                     res.users.clear();
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                     DataQuery.this.processLoadedMedia(res, j, i, i2, i3, true, i4, z, false);
                 } catch (Throwable th) {
                     Throwable th2 = th;
@@ -2421,7 +2421,7 @@ public class DataQuery {
                     }
                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -2455,7 +2455,7 @@ public class DataQuery {
                     }
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -2516,7 +2516,7 @@ public class DataQuery {
                         Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
                         intent.setAction("new_dialog");
                         ArrayList<ShortcutInfo> arrayList = new ArrayList();
-                        arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", C0505R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", C0505R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0505R.drawable.shortcut_compose)).setIntent(intent).build());
+                        arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", C0431R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", C0431R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0431R.drawable.shortcut_compose)).setIntent(intent).build());
                         if (shortcutsToUpdate.contains("compose")) {
                             shortcutManager.updateShortcuts(arrayList);
                         } else {
@@ -2595,7 +2595,7 @@ public class DataQuery {
                                 if (bitmap != null) {
                                     builder.setIcon(Icon.createWithBitmap(bitmap));
                                 } else {
-                                    builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0505R.drawable.shortcut_user));
+                                    builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0431R.drawable.shortcut_user));
                                 }
                                 arrayList.add(builder.build());
                                 if (shortcutsToUpdate.contains(id)) {
@@ -2629,8 +2629,8 @@ public class DataQuery {
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                     /* renamed from: org.telegram.messenger.DataQuery$44$2 */
-                    class C01562 implements Runnable {
-                        C01562() {
+                    class C02922 implements Runnable {
+                        C02922() {
                         }
 
                         public void run() {
@@ -2672,8 +2672,8 @@ public class DataQuery {
                                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                         /* renamed from: org.telegram.messenger.DataQuery$44$1$1$1 */
-                                        class C01531 implements Runnable {
-                                            C01531() {
+                                        class C02891 implements Runnable {
+                                            C02891() {
                                             }
 
                                             public void run() {
@@ -2717,16 +2717,16 @@ public class DataQuery {
                                                 }
                                                 state.dispose();
                                                 MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
-                                                AndroidUtilities.runOnUIThread(new C01531());
+                                                AndroidUtilities.runOnUIThread(new C02891());
                                             } catch (Throwable e) {
-                                                FileLog.m3e(e);
+                                                FileLog.m8e(e);
                                             }
                                         }
                                     });
                                 }
                             });
                         } else if (response instanceof TL_contacts_topPeersDisabled) {
-                            AndroidUtilities.runOnUIThread(new C01562());
+                            AndroidUtilities.runOnUIThread(new C02922());
                         }
                     }
                 });
@@ -2789,7 +2789,7 @@ public class DataQuery {
                                 }
                             });
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                 });
@@ -2914,14 +2914,14 @@ public class DataQuery {
                                     dt = (double) (lastTime - UserConfig.getInstance(DataQuery.this.currentAccount).ratingLoadTime);
                                 }
                             } catch (Throwable e) {
-                                FileLog.m3e(e);
+                                FileLog.m8e(e);
                             }
                             final double dtFinal = dt;
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.DataQuery$49$1$1 */
-                                class C01571 implements Comparator<TL_topPeer> {
-                                    C01571() {
+                                class C02931 implements Comparator<TL_topPeer> {
+                                    C02931() {
                                     }
 
                                     public int compare(TL_topPeer lhs, TL_topPeer rhs) {
@@ -2956,7 +2956,7 @@ public class DataQuery {
                                         DataQuery.this.hints.add(peer);
                                     }
                                     peer.rating += Math.exp(dtFinal / ((double) MessagesController.getInstance(DataQuery.this.currentAccount).ratingDecay));
-                                    Collections.sort(DataQuery.this.hints, new C01571());
+                                    Collections.sort(DataQuery.this.hints, new C02931());
                                     DataQuery.this.savePeer((int) did, 0, peer.rating);
                                     NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
                                 }
@@ -2984,7 +2984,7 @@ public class DataQuery {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -2996,7 +2996,7 @@ public class DataQuery {
                 try {
                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast(String.format(Locale.US, "DELETE FROM chat_hints WHERE did = %d AND type = %d", new Object[]{Integer.valueOf(did), Integer.valueOf(type)})).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -3055,7 +3055,7 @@ public class DataQuery {
                         photo = chat.photo.photo_small;
                     }
                 } else if (UserObject.isUserSelf(user)) {
-                    name = LocaleController.getString("SavedMessages", C0505R.string.SavedMessages);
+                    name = LocaleController.getString("SavedMessages", C0431R.string.SavedMessages);
                     selfUser = true;
                 } else {
                     name = ContactsController.formatName(user.first_name, user.last_name);
@@ -3069,7 +3069,7 @@ public class DataQuery {
                         try {
                             bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photo, true).toString());
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                     if (selfUser || bitmap != null) {
@@ -3096,7 +3096,7 @@ public class DataQuery {
                             canvas.drawRoundRect(bitmapRect, (float) bitmap.getWidth(), (float) bitmap.getHeight(), roundPaint);
                             canvas.restore();
                         }
-                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(C0505R.drawable.book_logo);
+                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(C0431R.drawable.book_logo);
                         int w = AndroidUtilities.dp(15.0f);
                         int left = (size - w) - AndroidUtilities.dp(2.0f);
                         int top = (size - w) - AndroidUtilities.dp(2.0f);
@@ -3115,15 +3115,15 @@ public class DataQuery {
                         pinShortcutInfo.setIcon(Icon.createWithBitmap(bitmap));
                     } else if (user != null) {
                         if (user.bot) {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0505R.drawable.book_bot));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0431R.drawable.book_bot));
                         } else {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0505R.drawable.book_user));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0431R.drawable.book_user));
                         }
                     } else if (chat != null) {
                         if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0505R.drawable.book_group));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0431R.drawable.book_group));
                         } else {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0505R.drawable.book_channel));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0431R.drawable.book_channel));
                         }
                     }
                     ((ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class)).requestPinShortcut(pinShortcutInfo.build(), null);
@@ -3134,15 +3134,15 @@ public class DataQuery {
                     addIntent.putExtra("android.intent.extra.shortcut.ICON", bitmap);
                 } else if (user != null) {
                     if (user.bot) {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0505R.drawable.book_bot));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0431R.drawable.book_bot));
                     } else {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0505R.drawable.book_user));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0431R.drawable.book_user));
                     }
                 } else if (chat != null) {
                     if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0505R.drawable.book_group));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0431R.drawable.book_group));
                     } else {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0505R.drawable.book_channel));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0431R.drawable.book_channel));
                     }
                 }
                 addIntent.putExtra("android.intent.extra.shortcut.INTENT", shortcutIntent);
@@ -3152,7 +3152,7 @@ public class DataQuery {
                 ApplicationLoader.applicationContext.sendBroadcast(addIntent);
             }
         } catch (Throwable e3) {
-            FileLog.m3e(e3);
+            FileLog.m8e(e3);
         }
     }
 
@@ -3198,7 +3198,7 @@ public class DataQuery {
                 ApplicationLoader.applicationContext.sendBroadcast(addIntent);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -3295,7 +3295,7 @@ public class DataQuery {
                 broadcastPinnedMessage(result, users, chats, true, false);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return null;
     }
@@ -3317,7 +3317,7 @@ public class DataQuery {
                     state.dispose();
                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -3393,8 +3393,8 @@ public class DataQuery {
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.DataQuery$57$1 */
-                    class C01601 implements Runnable {
-                        C01601() {
+                    class C02961 implements Runnable {
+                        C02961() {
                         }
 
                         public void run() {
@@ -3442,9 +3442,9 @@ public class DataQuery {
                                     }
                                 }
                             }
-                            AndroidUtilities.runOnUIThread(new C01601());
+                            AndroidUtilities.runOnUIThread(new C02961());
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                 });
@@ -3486,8 +3486,8 @@ public class DataQuery {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.DataQuery$58$1 */
-                class C01611 implements RequestDelegate {
-                    C01611() {
+                class C02971 implements RequestDelegate {
+                    C02971() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -3503,8 +3503,8 @@ public class DataQuery {
                 }
 
                 /* renamed from: org.telegram.messenger.DataQuery$58$2 */
-                class C01622 implements RequestDelegate {
-                    C01622() {
+                class C02982 implements RequestDelegate {
+                    C02982() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -3554,15 +3554,15 @@ public class DataQuery {
                                 TL_channels_getMessages req = new TL_channels_getMessages();
                                 req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
                                 req.id = replyMessages2;
-                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C01611());
+                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C02971());
                                 return;
                             }
                             TL_messages_getMessages req2 = new TL_messages_getMessages();
                             req2.id = replyMessages2;
-                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C01622());
+                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C02982());
                         }
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -3598,7 +3598,7 @@ public class DataQuery {
                     state.dispose();
                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -3919,8 +3919,8 @@ public class DataQuery {
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getAllDrafts(), new RequestDelegate() {
 
                 /* renamed from: org.telegram.messenger.DataQuery$61$1 */
-                class C01651 implements Runnable {
-                    C01651() {
+                class C03011 implements Runnable {
+                    C03011() {
                     }
 
                     public void run() {
@@ -3933,7 +3933,7 @@ public class DataQuery {
                 public void run(TLObject response, TL_error error) {
                     if (error == null) {
                         MessagesController.getInstance(DataQuery.this.currentAccount).processUpdates((Updates) response, false);
-                        AndroidUtilities.runOnUIThread(new C01651());
+                        AndroidUtilities.runOnUIThread(new C03011());
                     }
                 }
             });
@@ -4016,7 +4016,7 @@ public class DataQuery {
                 editor.putString(TtmlNode.ANONYMOUS_REGION_ID + did, Utilities.bytesToHex(serializedData.toByteArray()));
                 serializedData.cleanup();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         if (replyToMessage == null) {
@@ -4054,8 +4054,8 @@ public class DataQuery {
                     MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                         /* renamed from: org.telegram.messenger.DataQuery$63$1 */
-                        class C01661 implements RequestDelegate {
-                            C01661() {
+                        class C03021 implements RequestDelegate {
+                            C03021() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -4069,8 +4069,8 @@ public class DataQuery {
                         }
 
                         /* renamed from: org.telegram.messenger.DataQuery$63$2 */
-                        class C01672 implements RequestDelegate {
-                            C01672() {
+                        class C03032 implements RequestDelegate {
+                            C03032() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -4102,14 +4102,14 @@ public class DataQuery {
                                     TL_channels_getMessages req = new TL_channels_getMessages();
                                     req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
                                     req.id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C01661());
+                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C03021());
                                 } else {
                                     TL_messages_getMessages req2 = new TL_messages_getMessages();
                                     req2.id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C01672());
+                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C03032());
                                 }
                             } catch (Throwable e) {
-                                FileLog.m3e(e);
+                                FileLog.m8e(e);
                             }
                         }
                     });
@@ -4217,7 +4217,7 @@ public class DataQuery {
                         });
                     }
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -4247,7 +4247,7 @@ public class DataQuery {
                             });
                         }
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });
@@ -4289,7 +4289,7 @@ public class DataQuery {
                     });
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
     }
@@ -4310,7 +4310,7 @@ public class DataQuery {
                         data.reuse();
                         state.dispose();
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 }
             });

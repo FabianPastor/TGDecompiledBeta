@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -42,30 +41,6 @@ public class Emoji {
     private static boolean recentEmojiLoaded = false;
     private static HashMap<CharSequence, DrawableInfo> rects = new HashMap();
     private static final int splitCount = 4;
-
-    /* renamed from: org.telegram.messenger.Emoji$2 */
-    static class C01812 implements Comparator<String> {
-        C01812() {
-        }
-
-        public int compare(String lhs, String rhs) {
-            Integer count1 = (Integer) Emoji.emojiUseHistory.get(lhs);
-            Integer count2 = (Integer) Emoji.emojiUseHistory.get(rhs);
-            if (count1 == null) {
-                count1 = Integer.valueOf(0);
-            }
-            if (count2 == null) {
-                count2 = Integer.valueOf(0);
-            }
-            if (count1.intValue() > count2.intValue()) {
-                return -1;
-            }
-            if (count1.intValue() < count2.intValue()) {
-                return 1;
-            }
-            return 0;
-        }
-    }
 
     private static class DrawableInfo {
         public int emojiIndex;
@@ -87,17 +62,6 @@ public class Emoji {
         private static TextPaint textPaint = new TextPaint(1);
         private boolean fullSize = false;
         private DrawableInfo info;
-
-        /* renamed from: org.telegram.messenger.Emoji$EmojiDrawable$1 */
-        class C01821 implements Runnable {
-            C01821() {
-            }
-
-            public void run() {
-                Emoji.loadEmoji(EmojiDrawable.this.info.page, EmojiDrawable.this.info.page2);
-                Emoji.loadingEmoji[EmojiDrawable.this.info.page][EmojiDrawable.this.info.page2] = false;
-            }
-        }
 
         public EmojiDrawable(DrawableInfo i) {
             this.info = i;
@@ -129,9 +93,14 @@ public class Emoji {
                 canvas.drawBitmap(Emoji.emojiBmp[this.info.page][this.info.page2], this.info.rect, b, paint);
             } else if (!Emoji.loadingEmoji[this.info.page][this.info.page2]) {
                 Emoji.loadingEmoji[this.info.page][this.info.page2] = true;
-                Utilities.globalQueue.postRunnable(new C01821());
+                Utilities.globalQueue.postRunnable(new Emoji$EmojiDrawable$$Lambda$0(this));
                 canvas.drawRect(getBounds(), Emoji.placeholderPaint);
             }
+        }
+
+        final /* synthetic */ void lambda$draw$0$Emoji$EmojiDrawable() {
+            Emoji.loadEmoji(this.info.page, this.info.page2);
+            Emoji.loadingEmoji[this.info.page][this.info.page2] = false;
         }
 
         public int getOpacity() {
@@ -146,7 +115,7 @@ public class Emoji {
     }
 
     public static class EmojiSpan extends ImageSpan {
-        private FontMetricsInt fontMetrics = null;
+        private FontMetricsInt fontMetrics;
         private int size = AndroidUtilities.dp(20.0f);
 
         public EmojiSpan(EmojiDrawable d, int verticalAlignment, int s, FontMetricsInt original) {
@@ -254,10 +223,10 @@ public class Emoji {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         } catch (Throwable x) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m2e("Error loading emoji", x);
+                FileLog.m7e("Error loading emoji", x);
                 return;
             }
             return;
@@ -271,17 +240,14 @@ public class Emoji {
             bitmap = BitmapFactory.decodeStream(is, null, opts);
             is.close();
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
-        final Bitmap finalBitmap = bitmap;
-        final int i = page;
-        final int i2 = page2;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                Emoji.emojiBmp[i][i2] = finalBitmap;
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
-            }
-        });
+        AndroidUtilities.runOnUIThread(new Emoji$$Lambda$0(page, page2, bitmap));
+    }
+
+    static final /* synthetic */ void lambda$loadEmoji$0$Emoji(int page, int page2, Bitmap finalBitmap) {
+        emojiBmp[page][page2] = finalBitmap;
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
     }
 
     public static void invalidateAll(View view) {
@@ -335,7 +301,7 @@ public class Emoji {
         }
         if (info == null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("No drawable for emoji " + code);
+                FileLog.m5d("No drawable for emoji " + code);
             }
             return null;
         }
@@ -519,7 +485,7 @@ public class Emoji {
                 }
                 i++;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return cs;
             }
         }
@@ -548,10 +514,28 @@ public class Emoji {
         for (Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
             recentEmoji.add(entry.getKey());
         }
-        Collections.sort(recentEmoji, new C01812());
+        Collections.sort(recentEmoji, Emoji$$Lambda$1.$instance);
         while (recentEmoji.size() > 50) {
             recentEmoji.remove(recentEmoji.size() - 1);
         }
+    }
+
+    static final /* synthetic */ int lambda$sortEmoji$1$Emoji(String lhs, String rhs) {
+        Integer count1 = (Integer) emojiUseHistory.get(lhs);
+        Integer count2 = (Integer) emojiUseHistory.get(rhs);
+        if (count1 == null) {
+            count1 = Integer.valueOf(0);
+        }
+        if (count2 == null) {
+            count2 = Integer.valueOf(0);
+        }
+        if (count1.intValue() > count2.intValue()) {
+            return -1;
+        }
+        if (count1.intValue() < count2.intValue()) {
+            return 1;
+        }
+        return 0;
     }
 
     public static void saveRecentEmoji() {
@@ -624,7 +608,7 @@ public class Emoji {
                 }
                 sortEmoji();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             try {
                 str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
@@ -636,7 +620,7 @@ public class Emoji {
                     }
                 }
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
         }
     }

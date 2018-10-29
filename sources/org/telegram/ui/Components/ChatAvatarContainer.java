@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -52,53 +51,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private TimerDrawable timerDrawable;
     private SimpleTextView titleTextView;
 
-    /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$1 */
-    class C14741 implements OnClickListener {
-        C14741() {
-        }
-
-        public void onClick(View v) {
-            ChatAvatarContainer.this.parentFragment.showDialog(AlertsCreator.createTTLAlert(ChatAvatarContainer.this.getContext(), ChatAvatarContainer.this.parentFragment.getCurrentEncryptedChat()).create());
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.ChatAvatarContainer$2 */
-    class C14752 implements OnClickListener {
-        C14752() {
-        }
-
-        public void onClick(View v) {
-            User user = ChatAvatarContainer.this.parentFragment.getCurrentUser();
-            Chat chat = ChatAvatarContainer.this.parentFragment.getCurrentChat();
-            Bundle args;
-            ProfileActivity fragment;
-            if (user != null) {
-                args = new Bundle();
-                if (UserObject.isUserSelf(user)) {
-                    args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
-                    MediaActivity fragment2 = new MediaActivity(args, new int[]{-1, -1, -1, -1, -1});
-                    fragment2.setChatInfo(ChatAvatarContainer.this.parentFragment.getCurrentChatInfo());
-                    ChatAvatarContainer.this.parentFragment.presentFragment(fragment2);
-                    return;
-                }
-                args.putInt("user_id", user.id);
-                if (ChatAvatarContainer.this.timeItem != null) {
-                    args.putLong("dialog_id", ChatAvatarContainer.this.parentFragment.getDialogId());
-                }
-                fragment = new ProfileActivity(args);
-                fragment.setPlayProfileAnimation(true);
-                ChatAvatarContainer.this.parentFragment.presentFragment(fragment);
-            } else if (chat != null) {
-                args = new Bundle();
-                args.putInt("chat_id", chat.id);
-                fragment = new ProfileActivity(args);
-                fragment.setChatInfo(ChatAvatarContainer.this.parentFragment.getCurrentChatInfo());
-                fragment.setPlayProfileAnimation(true);
-                ChatAvatarContainer.this.parentFragment.presentFragment(fragment);
-            }
-        }
-    }
-
     public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean needTime) {
         super(context);
         this.parentFragment = chatActivity;
@@ -126,10 +78,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.timerDrawable = timerDrawable;
             imageView.setImageDrawable(timerDrawable);
             addView(this.timeItem);
-            this.timeItem.setOnClickListener(new C14741());
+            this.timeItem.setOnClickListener(new ChatAvatarContainer$$Lambda$0(this));
         }
         if (this.parentFragment != null) {
-            setOnClickListener(new C14752());
+            setOnClickListener(new ChatAvatarContainer$$Lambda$1(this));
             Chat chat = this.parentFragment.getCurrentChat();
             this.statusDrawables[0] = new TypingDotsDrawable();
             this.statusDrawables[1] = new RecordStatusDrawable();
@@ -145,6 +97,41 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
                 statusDrawable.setIsChat(z);
             }
+        }
+    }
+
+    final /* synthetic */ void lambda$new$0$ChatAvatarContainer(View v) {
+        this.parentFragment.showDialog(AlertsCreator.createTTLAlert(getContext(), this.parentFragment.getCurrentEncryptedChat()).create());
+    }
+
+    final /* synthetic */ void lambda$new$1$ChatAvatarContainer(View v) {
+        User user = this.parentFragment.getCurrentUser();
+        Chat chat = this.parentFragment.getCurrentChat();
+        Bundle args;
+        ProfileActivity fragment;
+        if (user != null) {
+            args = new Bundle();
+            if (UserObject.isUserSelf(user)) {
+                args.putLong("dialog_id", this.parentFragment.getDialogId());
+                MediaActivity fragment2 = new MediaActivity(args, new int[]{-1, -1, -1, -1, -1});
+                fragment2.setChatInfo(this.parentFragment.getCurrentChatInfo());
+                this.parentFragment.presentFragment(fragment2);
+                return;
+            }
+            args.putInt("user_id", user.id);
+            if (this.timeItem != null) {
+                args.putLong("dialog_id", this.parentFragment.getDialogId());
+            }
+            fragment = new ProfileActivity(args);
+            fragment.setPlayProfileAnimation(true);
+            this.parentFragment.presentFragment(fragment);
+        } else if (chat != null) {
+            args = new Bundle();
+            args.putInt("chat_id", chat.id);
+            fragment = new ProfileActivity(args);
+            fragment.setChatInfo(this.parentFragment.getCurrentChatInfo());
+            fragment.setPlayProfileAnimation(true);
+            this.parentFragment.presentFragment(fragment);
         }
     }
 
@@ -252,7 +239,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
                 return;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
                 return;
             }
         }
@@ -279,11 +266,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                         if (ChatObject.isChannel(chat)) {
                             if (info == null || info.participants_count == 0) {
                                 if (chat.megagroup) {
-                                    newSubtitle = LocaleController.getString("Loading", C0505R.string.Loading).toLowerCase();
+                                    newSubtitle = LocaleController.getString("Loading", C0431R.string.Loading).toLowerCase();
                                 } else if ((chat.flags & 64) != 0) {
-                                    newSubtitle = LocaleController.getString("ChannelPublic", C0505R.string.ChannelPublic).toLowerCase();
+                                    newSubtitle = LocaleController.getString("ChannelPublic", C0431R.string.ChannelPublic).toLowerCase();
                                 } else {
-                                    newSubtitle = LocaleController.getString("ChannelPrivate", C0505R.string.ChannelPrivate).toLowerCase();
+                                    newSubtitle = LocaleController.getString("ChannelPrivate", C0431R.string.ChannelPrivate).toLowerCase();
                                 }
                             } else if (!chat.megagroup || info.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                                 int[] result = new int[1];
@@ -299,9 +286,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                                 newSubtitle = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)});
                             }
                         } else if (ChatObject.isKickedFromChat(chat)) {
-                            newSubtitle = LocaleController.getString("YouWereKicked", C0505R.string.YouWereKicked);
+                            newSubtitle = LocaleController.getString("YouWereKicked", C0431R.string.YouWereKicked);
                         } else if (ChatObject.isLeftFromChat(chat)) {
-                            newSubtitle = LocaleController.getString("YouLeft", C0505R.string.YouLeft);
+                            newSubtitle = LocaleController.getString("YouLeft", C0431R.string.YouLeft);
                         } else {
                             int count = chat.participants_count;
                             if (!(info == null || info.participants == null)) {
@@ -320,11 +307,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             user = newUser;
                         }
                         if (user.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                            newStatus = LocaleController.getString("ChatYourSelf", C0505R.string.ChatYourSelf);
+                            newStatus = LocaleController.getString("ChatYourSelf", C0431R.string.ChatYourSelf);
                         } else if (user.id == 333000 || user.id == 777000) {
-                            newStatus = LocaleController.getString("ServiceNotifications", C0505R.string.ServiceNotifications);
+                            newStatus = LocaleController.getString("ServiceNotifications", C0431R.string.ServiceNotifications);
                         } else if (user.bot) {
-                            newStatus = LocaleController.getString("Bot", C0505R.string.Bot);
+                            newStatus = LocaleController.getString("Bot", C0431R.string.Bot);
                         } else {
                             newStatus = LocaleController.formatUserStatus(this.currentAccount, user);
                         }
@@ -442,13 +429,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private void updateCurrentConnectionState() {
         String title = null;
         if (this.currentConnectionState == 2) {
-            title = LocaleController.getString("WaitingForNetwork", C0505R.string.WaitingForNetwork);
+            title = LocaleController.getString("WaitingForNetwork", C0431R.string.WaitingForNetwork);
         } else if (this.currentConnectionState == 1) {
-            title = LocaleController.getString("Connecting", C0505R.string.Connecting);
+            title = LocaleController.getString("Connecting", C0431R.string.Connecting);
         } else if (this.currentConnectionState == 5) {
-            title = LocaleController.getString("Updating", C0505R.string.Updating);
+            title = LocaleController.getString("Updating", C0431R.string.Updating);
         } else if (this.currentConnectionState == 4) {
-            title = LocaleController.getString("ConnectingToProxy", C0505R.string.ConnectingToProxy);
+            title = LocaleController.getString("ConnectingToProxy", C0431R.string.ConnectingToProxy);
         }
         if (title != null) {
             this.lastSubtitle = this.subtitleTextView.getText();

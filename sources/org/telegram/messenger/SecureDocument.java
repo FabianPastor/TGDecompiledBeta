@@ -11,6 +11,7 @@ public class SecureDocument extends TLObject {
     public String path;
     public SecureDocumentKey secureDocumentKey;
     public TL_secureFile secureFile;
+    public int type;
 
     public SecureDocument(SecureDocumentKey key, TL_secureFile file, String p, byte[] fh, byte[] secret) {
         this.secureDocumentKey = key;

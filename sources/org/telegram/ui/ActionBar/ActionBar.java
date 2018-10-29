@@ -17,7 +17,6 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -67,34 +66,8 @@ public class ActionBar extends FrameLayout {
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$1 */
-    class C08781 implements OnClickListener {
-        C08781() {
-        }
-
-        public void onClick(View v) {
-            if (ActionBar.this.titleActionRunnable != null) {
-                ActionBar.this.titleActionRunnable.run();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.ActionBar$2 */
-    class C08792 implements OnClickListener {
-        C08792() {
-        }
-
-        public void onClick(View v) {
-            if (!ActionBar.this.actionModeVisible && ActionBar.this.isSearchFieldVisible) {
-                ActionBar.this.closeSearchField();
-            } else if (ActionBar.this.actionBarMenuOnItemClick != null) {
-                ActionBar.this.actionBarMenuOnItemClick.onItemClick(-1);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.ActionBar$3 */
-    class C08803 extends AnimatorListenerAdapter {
-        C08803() {
+    class C05801 extends AnimatorListenerAdapter {
+        C05801() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -126,9 +99,9 @@ public class ActionBar extends FrameLayout {
         }
     }
 
-    /* renamed from: org.telegram.ui.ActionBar.ActionBar$4 */
-    class C08814 extends AnimatorListenerAdapter {
-        C08814() {
+    /* renamed from: org.telegram.ui.ActionBar.ActionBar$2 */
+    class C05812 extends AnimatorListenerAdapter {
+        C05812() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -163,7 +136,13 @@ public class ActionBar extends FrameLayout {
         this.addToContainer = true;
         this.interceptTouches = true;
         this.castShadows = true;
-        setOnClickListener(new C08781());
+        setOnClickListener(new ActionBar$$Lambda$0(this));
+    }
+
+    final /* synthetic */ void lambda$new$0$ActionBar(View v) {
+        if (this.titleActionRunnable != null) {
+            this.titleActionRunnable.run();
+        }
     }
 
     private void createBackButtonImage() {
@@ -176,7 +155,15 @@ public class ActionBar extends FrameLayout {
             }
             this.backButtonImageView.setPadding(AndroidUtilities.dp(1.0f), 0, 0, 0);
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
-            this.backButtonImageView.setOnClickListener(new C08792());
+            this.backButtonImageView.setOnClickListener(new ActionBar$$Lambda$1(this));
+        }
+    }
+
+    final /* synthetic */ void lambda$createBackButtonImage$1$ActionBar(View v) {
+        if (!this.actionModeVisible && this.isSearchFieldVisible) {
+            closeSearchField();
+        } else if (this.actionBarMenuOnItemClick != null) {
+            this.actionBarMenuOnItemClick.onItemClick(-1);
         }
     }
 
@@ -443,7 +430,7 @@ public class ActionBar extends FrameLayout {
             this.actionModeAnimation = new AnimatorSet();
             this.actionModeAnimation.playTogether(animators);
             this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new C08803());
+            this.actionModeAnimation.addListener(new C05801());
             this.actionModeAnimation.start();
             if (this.backButtonImageView != null) {
                 Drawable drawable = this.backButtonImageView.getDrawable();
@@ -469,7 +456,7 @@ public class ActionBar extends FrameLayout {
             this.actionModeAnimation = new AnimatorSet();
             this.actionModeAnimation.playTogether(animators);
             this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new C08814());
+            this.actionModeAnimation.addListener(new C05812());
             this.actionModeAnimation.start();
             if (this.titleTextView != null) {
                 this.titleTextView.setVisibility(0);

@@ -10,7 +10,6 @@ import android.support.annotation.Keep;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -26,7 +25,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     private int animateIndicatorToX;
     private boolean animatingIndicator;
     private float animationIdicatorProgress;
-    private Runnable animationRunnable = new C16951();
+    private Runnable animationRunnable = new C11951();
     private boolean animationRunning;
     private float animationTime;
     private int currentPosition;
@@ -46,8 +45,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     private LinearLayout tabsContainer;
 
     /* renamed from: org.telegram.ui.Components.ScrollSlidingTextTabStrip$1 */
-    class C16951 implements Runnable {
-        C16951() {
+    class C11951 implements Runnable {
+        C11951() {
         }
 
         public void run() {
@@ -109,11 +108,11 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         int r1 = Color.red(newColor);
         int g1 = Color.green(newColor);
         int b1 = Color.blue(newColor);
-        int a1 = Color.blue(newColor);
+        int a1 = Color.alpha(newColor);
         int r2 = Color.red(prevColor);
         int g2 = Color.green(prevColor);
         int b2 = Color.blue(prevColor);
-        int a2 = Color.blue(prevColor);
+        int a2 = Color.alpha(prevColor);
         prevTab.setTextColor(Color.argb((int) (((float) a1) + (((float) (a2 - a1)) * value)), (int) (((float) r1) + (((float) (r2 - r1)) * value)), (int) (((float) g1) + (((float) (g2 - g1)) * value)), (int) (((float) b1) + (((float) (b2 - b1)) * value))));
         newTab.setTextColor(Color.argb((int) (((float) a2) + (((float) (a1 - a2)) * value)), (int) (((float) r2) + (((float) (r1 - r2)) * value)), (int) (((float) g2) + (((float) (g1 - g2)) * value)), (int) (((float) b2) + (((float) (b1 - b2)) * value))));
         this.indicatorX = (int) (((float) this.animateIndicatorStartX) + (((float) (this.animateIndicatorToX - this.animateIndicatorStartX)) * value));
@@ -163,7 +162,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         return this.idToPosition.get(id, -1) != -1;
     }
 
-    public void addTextTab(final int id, CharSequence text) {
+    public void addTextTab(int id, CharSequence text) {
         int position = this.tabCount;
         this.tabCount = position + 1;
         if (position == 0 && this.selectedTabId == -1) {
@@ -185,42 +184,42 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         tab.setSingleLine(true);
         tab.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         tab.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
-        tab.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                int position = ScrollSlidingTextTabStrip.this.tabsContainer.indexOfChild(v);
-                if (position >= 0 && position != ScrollSlidingTextTabStrip.this.currentPosition) {
-                    boolean scrollingForward;
-                    if (ScrollSlidingTextTabStrip.this.currentPosition < position) {
-                        scrollingForward = true;
-                    } else {
-                        scrollingForward = false;
-                    }
-                    ScrollSlidingTextTabStrip.this.previousPosition = ScrollSlidingTextTabStrip.this.currentPosition;
-                    ScrollSlidingTextTabStrip.this.currentPosition = position;
-                    ScrollSlidingTextTabStrip.this.selectedTabId = id;
-                    if (ScrollSlidingTextTabStrip.this.animatingIndicator) {
-                        AndroidUtilities.cancelRunOnUIThread(ScrollSlidingTextTabStrip.this.animationRunnable);
-                        ScrollSlidingTextTabStrip.this.animatingIndicator = false;
-                    }
-                    ScrollSlidingTextTabStrip.this.animationTime = 0.0f;
-                    ScrollSlidingTextTabStrip.this.animatingIndicator = true;
-                    ScrollSlidingTextTabStrip.this.animateIndicatorStartX = ScrollSlidingTextTabStrip.this.indicatorX;
-                    ScrollSlidingTextTabStrip.this.animateIndicatorStartWidth = ScrollSlidingTextTabStrip.this.indicatorWidth;
-                    ScrollSlidingTextTabStrip.this.animateIndicatorToX = v.getLeft();
-                    ScrollSlidingTextTabStrip.this.animateIndicatorToWidth = v.getMeasuredWidth();
-                    ScrollSlidingTextTabStrip.this.setEnabled(false);
-                    AndroidUtilities.runOnUIThread(ScrollSlidingTextTabStrip.this.animationRunnable, 16);
-                    if (ScrollSlidingTextTabStrip.this.delegate != null) {
-                        ScrollSlidingTextTabStrip.this.delegate.onPageSelected(id, scrollingForward);
-                    }
-                    ScrollSlidingTextTabStrip.this.scrollToChild(position);
-                }
-            }
-        });
+        tab.setOnClickListener(new ScrollSlidingTextTabStrip$$Lambda$0(this, id));
         int tabWidth = ((int) Math.ceil((double) tab.getPaint().measureText(text, 0, text.length()))) + AndroidUtilities.dp(16.0f);
         this.allTextWidth += tabWidth;
         this.positionToWidth.put(position, tabWidth);
         this.tabsContainer.addView(tab, LayoutHelper.createLinear(0, -1));
+    }
+
+    final /* synthetic */ void lambda$addTextTab$0$ScrollSlidingTextTabStrip(int id, View v) {
+        int position1 = this.tabsContainer.indexOfChild(v);
+        if (position1 >= 0 && position1 != this.currentPosition) {
+            boolean scrollingForward;
+            if (this.currentPosition < position1) {
+                scrollingForward = true;
+            } else {
+                scrollingForward = false;
+            }
+            this.previousPosition = this.currentPosition;
+            this.currentPosition = position1;
+            this.selectedTabId = id;
+            if (this.animatingIndicator) {
+                AndroidUtilities.cancelRunOnUIThread(this.animationRunnable);
+                this.animatingIndicator = false;
+            }
+            this.animationTime = 0.0f;
+            this.animatingIndicator = true;
+            this.animateIndicatorStartX = this.indicatorX;
+            this.animateIndicatorStartWidth = this.indicatorWidth;
+            this.animateIndicatorToX = v.getLeft();
+            this.animateIndicatorToWidth = v.getMeasuredWidth();
+            setEnabled(false);
+            AndroidUtilities.runOnUIThread(this.animationRunnable, 16);
+            if (this.delegate != null) {
+                this.delegate.onPageSelected(id, scrollingForward);
+            }
+            scrollToChild(position1);
+        }
     }
 
     public int getCurrentTabId() {

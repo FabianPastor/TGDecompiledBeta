@@ -1,10 +1,10 @@
 package org.telegram.messenger;
 
 import android.content.SharedPreferences;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Array;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 
 public class StatsController {
     private static volatile StatsController[] Instance = new StatsController[3];
@@ -19,7 +19,7 @@ public class StatsController {
     public static final int TYPE_TOTAL = 6;
     public static final int TYPE_VIDEOS = 2;
     public static final int TYPE_WIFI = 1;
-    private static final ThreadLocal<Long> lastStatsSaveTime = new C05841();
+    private static final ThreadLocal<Long> lastStatsSaveTime = new C04351();
     private static DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
     private byte[] buffer = new byte[8];
     private int[] callsTotalTime = new int[3];
@@ -27,14 +27,14 @@ public class StatsController {
     private long[][] receivedBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] receivedItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
     private long[] resetStatsDate = new long[3];
-    private Runnable saveRunnable = new C05852();
+    private Runnable saveRunnable = new C04362();
     private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
     private RandomAccessFile statsFile;
 
     /* renamed from: org.telegram.messenger.StatsController$1 */
-    static class C05841 extends ThreadLocal<Long> {
-        C05841() {
+    static class C04351 extends ThreadLocal<Long> {
+        C04351() {
         }
 
         protected Long initialValue() {
@@ -43,8 +43,8 @@ public class StatsController {
     }
 
     /* renamed from: org.telegram.messenger.StatsController$2 */
-    class C05852 implements Runnable {
-        C05852() {
+    class C04362 implements Runnable {
+        C04362() {
         }
 
         public void run() {

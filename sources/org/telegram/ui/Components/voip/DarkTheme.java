@@ -4,11 +4,12 @@ import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import com.google.android.exoplayer2.extractor.ts.PsExtractor;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
+import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SecretChatHelper;
-import org.telegram.messenger.exoplayer2.RendererCapabilities;
-import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC;
@@ -872,7 +873,7 @@ public class DarkTheme {
                 }
             case 939137799:
                 if (key.equals(Theme.key_chat_inContactPhoneText)) {
-                    obj = 188;
+                    obj = TsExtractor.TS_PACKET_SIZE;
                     break;
                 }
             case 939824634:
@@ -1071,7 +1072,7 @@ public class DarkTheme {
                     break;
                 }
             case 1450167170:
-                if (key.equals(Theme.key_chat_outContactPhoneText)) {
+                if (key.equals("chat_outContactPhoneText")) {
                     obj = 117;
                     break;
                 }
@@ -1387,23 +1388,23 @@ public class DarkTheme {
                 return -1;
             case 22:
                 return -11164709;
-            case 23:
+            case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
                 return -9594162;
-            case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
+            case 24:
                 return -14339006;
-            case 25:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
                 return 251658239;
-            case 26:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                 return -14605274;
             case 27:
                 return -11164965;
-            case 28:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL28 /*28*/:
                 return -1313793;
-            case 29:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL29 /*29*/:
                 return -3019777;
-            case 30:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL30 /*30*/:
                 return -1;
-            case 31:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL31 /*31*/:
                 return -NUM;
             case 32:
                 return -11972268;
@@ -1413,11 +1414,11 @@ public class DarkTheme {
                 return -10653824;
             case 35:
                 return -12829636;
-            case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
+            case 36:
                 return 268435455;
-            case 37:
+            case NalUnitTypes.NAL_TYPE_EOB_NUT /*37*/:
                 return -986896;
-            case 38:
+            case NalUnitTypes.NAL_TYPE_FD_NUT /*38*/:
                 return -2954241;
             case 39:
                 return 402653183;
@@ -1481,9 +1482,9 @@ public class DarkTheme {
                 return -11164965;
             case 70:
                 return -9868951;
-            case 71:
+            case TsExtractor.TS_SYNC_BYTE /*71*/:
                 return -14540254;
-            case 72:
+            case XtraBox.MP4_XTRA_BT_GUID /*72*/:
                 return -2236963;
             case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*73*/:
                 return -14605274;
@@ -1501,13 +1502,13 @@ public class DarkTheme {
                 return -5648402;
             case 81:
                 return -10052929;
-            case TLRPC.LAYER /*82*/:
+            case 82:
                 return -8812393;
             case 83:
                 return -11234874;
             case 84:
                 return -11099173;
-            case 85:
+            case TLRPC.LAYER /*85*/:
                 return -14183202;
             case 86:
                 return -10132123;
@@ -1711,7 +1712,7 @@ public class DarkTheme {
                 return -8224126;
             case 187:
                 return -11443856;
-            case 188:
+            case TsExtractor.TS_PACKET_SIZE /*188*/:
                 return -8812393;
             case PsExtractor.PRIVATE_STREAM_1 /*189*/:
                 return -11232035;
@@ -1854,7 +1855,7 @@ public class DarkTheme {
             case 260:
                 return -13948117;
             default:
-                FileLog.m4w("returning color for key " + key + " from current theme");
+                FileLog.m9w("returning color for key " + key + " from current theme");
                 return Theme.getColor(key);
         }
     }

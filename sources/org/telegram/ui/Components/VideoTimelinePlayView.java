@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -54,10 +54,10 @@ public class VideoTimelinePlayView extends View {
     private long videoLength;
 
     /* renamed from: org.telegram.ui.Components.VideoTimelinePlayView$1 */
-    class C17781 extends AsyncTask<Integer, Integer, Bitmap> {
+    class C12771 extends AsyncTask<Integer, Integer, Bitmap> {
         private int frameNum = 0;
 
-        C17781() {
+        C12771() {
         }
 
         protected Bitmap doInBackground(Integer... objects) {
@@ -93,7 +93,7 @@ public class VideoTimelinePlayView extends View {
                 bitmap2 = bitmap;
                 return bitmap;
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
 
@@ -125,9 +125,9 @@ public class VideoTimelinePlayView extends View {
         this.paint.setColor(-1);
         this.paint2 = new Paint();
         this.paint2.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-        this.drawableLeft = context.getResources().getDrawable(C0505R.drawable.video_cropleft);
+        this.drawableLeft = context.getResources().getDrawable(C0431R.drawable.video_cropleft);
         this.drawableLeft.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
-        this.drawableRight = context.getResources().getDrawable(C0505R.drawable.video_cropright);
+        this.drawableRight = context.getResources().getDrawable(C0431R.drawable.video_cropright);
         this.drawableRight.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
     }
 
@@ -299,7 +299,7 @@ public class VideoTimelinePlayView extends View {
             this.mediaMetadataRetriever.setDataSource(path);
             this.videoLength = Long.parseLong(this.mediaMetadataRetriever.extractMetadata(9));
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         invalidate();
     }
@@ -323,7 +323,7 @@ public class VideoTimelinePlayView extends View {
                 }
                 this.frameTimeOffset = this.videoLength / ((long) this.framesToLoad);
             }
-            this.currentTask = new C17781();
+            this.currentTask = new C12771();
             this.currentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(frameNum), null, null});
         }
     }
@@ -336,7 +336,7 @@ public class VideoTimelinePlayView extends View {
                     this.mediaMetadataRetriever = null;
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         for (int a = 0; a < this.frames.size(); a++) {

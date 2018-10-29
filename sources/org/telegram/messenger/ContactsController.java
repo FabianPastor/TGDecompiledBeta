@@ -20,6 +20,7 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -106,8 +107,8 @@ public class ContactsController {
     public HashMap<String, ArrayList<TL_contact>> usersSectionsDict = new HashMap();
 
     /* renamed from: org.telegram.messenger.ContactsController$1 */
-    class C01111 implements Runnable {
-        C01111() {
+    class C02471 implements Runnable {
+        C02471() {
         }
 
         public void run() {
@@ -121,8 +122,8 @@ public class ContactsController {
     }
 
     /* renamed from: org.telegram.messenger.ContactsController$2 */
-    class C01202 implements Runnable {
-        C01202() {
+    class C02562 implements Runnable {
+        C02562() {
         }
 
         public void run() {
@@ -132,8 +133,8 @@ public class ContactsController {
     }
 
     /* renamed from: org.telegram.messenger.ContactsController$3 */
-    class C01233 implements RequestDelegate {
-        C01233() {
+    class C02593 implements RequestDelegate {
+        C02593() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -155,14 +156,14 @@ public class ContactsController {
     }
 
     /* renamed from: org.telegram.messenger.ContactsController$4 */
-    class C01244 implements Runnable {
-        C01244() {
+    class C02604 implements Runnable {
+        C02604() {
         }
 
         public void run() {
             if (ContactsController.this.checkContactsInternal()) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("detected contacts change");
+                    FileLog.m5d("detected contacts change");
                 }
                 ContactsController.this.performSyncPhoneBook(ContactsController.this.getContactsCopy(ContactsController.this.contactsBook), true, false, true, false, true, false);
             }
@@ -170,21 +171,21 @@ public class ContactsController {
     }
 
     /* renamed from: org.telegram.messenger.ContactsController$5 */
-    class C01255 implements Runnable {
-        C01255() {
+    class C02615 implements Runnable {
+        C02615() {
         }
 
         public void run() {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("force import contacts");
+                FileLog.m5d("force import contacts");
             }
             ContactsController.this.performSyncPhoneBook(new HashMap(), true, true, true, true, false, false);
         }
     }
 
     /* renamed from: org.telegram.messenger.ContactsController$8 */
-    class C01298 implements RequestDelegate {
-        C01298() {
+    class C02658 implements RequestDelegate {
+        C02658() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -192,8 +193,8 @@ public class ContactsController {
     }
 
     /* renamed from: org.telegram.messenger.ContactsController$9 */
-    class C01309 implements Runnable {
-        C01309() {
+    class C02669 implements Runnable {
+        C02669() {
         }
 
         public void run() {
@@ -238,11 +239,11 @@ public class ContactsController {
     }
 
     private class MyContentObserver extends ContentObserver {
-        private Runnable checkRunnable = new C01311();
+        private Runnable checkRunnable = new C02671();
 
         /* renamed from: org.telegram.messenger.ContactsController$MyContentObserver$1 */
-        class C01311 implements Runnable {
-            C01311() {
+        class C02671 implements Runnable {
+            C02671() {
             }
 
             public void run() {
@@ -346,7 +347,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         goto L_0x0050;
     L_0x0064:
         r9 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r9);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
+        org.telegram.messenger.FileLog.m8e(r9);	 Catch:{ Exception -> 0x0064, all -> 0x00a5 }
         if (r8 == 0) goto L_0x000c;
     L_0x006a:
         r8.close();
@@ -445,7 +446,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         this.sectionsToReplace.put("\u00dd", "Y");
         this.sectionsToReplace.put("\u0162", "Y");
         if (instance == 0) {
-            Utilities.globalQueue.postRunnable(new C01111());
+            Utilities.globalQueue.postRunnable(new C02471());
         }
     }
 
@@ -474,7 +475,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         this.loadingLastSeenInfo = 0;
         this.loadingGroupInfo = 0;
         this.loadingCallsInfo = 0;
-        Utilities.globalQueue.postRunnable(new C01202());
+        Utilities.globalQueue.postRunnable(new C02562());
         this.privacyRules = null;
     }
 
@@ -485,7 +486,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         if (!this.updatingInviteLink) {
             if (this.inviteLink == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) time)) >= 86400) {
                 this.updatingInviteLink = true;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getInviteText(), new C01233(), 2);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getInviteText(), new C02593(), 2);
             }
         }
     }
@@ -493,12 +494,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     public String getInviteText(int contacts) {
         String link = this.inviteLink == null ? "https://telegram.org/dl" : this.inviteLink;
         if (contacts <= 1) {
-            return LocaleController.formatString("InviteText2", C0505R.string.InviteText2, link);
+            return LocaleController.formatString("InviteText2", C0431R.string.InviteText2, link);
         }
         try {
             return String.format(LocaleController.getPluralString("InviteTextNum", contacts), new Object[]{Integer.valueOf(contacts), link});
         } catch (Exception e) {
-            return LocaleController.formatString("InviteText2", C0505R.string.InviteText2, link);
+            return LocaleController.formatString("InviteText2", C0431R.string.InviteText2, link);
         }
     }
 
@@ -569,16 +570,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 }
             }
         } catch (Exception e2) {
-            e2.printStackTrace();
+            ThrowableExtension.printStackTrace(e2);
         }
     }
 
     public void checkContacts() {
-        Utilities.globalQueue.postRunnable(new C01244());
+        Utilities.globalQueue.postRunnable(new C02604());
     }
 
     public void forceImportContacts() {
-        Utilities.globalQueue.postRunnable(new C01255());
+        Utilities.globalQueue.postRunnable(new C02615());
     }
 
     public void syncPhoneBookByAlert(HashMap<String, Contact> contacts, boolean first, boolean schedule, boolean cancel) {
@@ -589,7 +590,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         Utilities.globalQueue.postRunnable(new Runnable() {
             public void run() {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("sync contacts by alert");
+                    FileLog.m5d("sync contacts by alert");
                 }
                 ContactsController.this.performSyncPhoneBook(hashMap, true, z, z2, false, false, z3);
             }
@@ -606,8 +607,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
             /* renamed from: org.telegram.messenger.ContactsController$7$1 */
-            class C01271 implements Runnable {
-                C01271() {
+            class C02631 implements Runnable {
+                C02631() {
                 }
 
                 public void run() {
@@ -662,14 +663,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     ContactsController.this.loadingContacts = false;
                     ContactsController.this.contactsBookLoaded = false;
                     ContactsController.this.lastContactsVersions = TtmlNode.ANONYMOUS_REGION_ID;
-                    AndroidUtilities.runOnUIThread(new C01271());
+                    AndroidUtilities.runOnUIThread(new C02631());
                 }
             }
         });
     }
 
     public void resetImportedContacts() {
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_contacts_resetSaved(), new C01298());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_contacts_resetSaved(), new C02658());
     }
 
     private boolean checkContactsInternal() {
@@ -696,7 +697,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         pCur.close();
                     }
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                     if (pCur != null) {
                         pCur.close();
                     }
@@ -711,7 +712,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             z = false;
             return false;
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
         }
     }
 
@@ -721,7 +722,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return;
             }
             this.loadingContacts = true;
-            Utilities.stageQueue.postRunnable(new C01309());
+            Utilities.stageQueue.postRunnable(new C02669());
         }
     }
 
@@ -748,7 +749,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     private HashMap<String, Contact> readContactsFromPhoneBook() {
         if (!UserConfig.getInstance(this.currentAccount).syncContacts) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("contacts sync disabled");
+                FileLog.m5d("contacts sync disabled");
             }
             return new HashMap();
         } else if (hasContactsPermission()) {
@@ -824,7 +825,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                         try {
                                                             pCur.close();
                                                         } catch (Throwable e) {
-                                                            FileLog.m3e(e);
+                                                            FileLog.m8e(e);
                                                         }
                                                     }
                                                 }
@@ -846,19 +847,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                         String custom = pCur.getString(3);
                                         ArrayList arrayList = contact.phoneTypes;
                                         if (custom == null) {
-                                            custom = LocaleController.getString("PhoneMobile", C0505R.string.PhoneMobile);
+                                            custom = LocaleController.getString("PhoneMobile", C0431R.string.PhoneMobile);
                                         }
                                         arrayList.add(custom);
                                     } else if (type == 1) {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneHome", C0505R.string.PhoneHome));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneHome", C0431R.string.PhoneHome));
                                     } else if (type == 2) {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneMobile", C0505R.string.PhoneMobile));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneMobile", C0431R.string.PhoneMobile));
                                     } else if (type == 3) {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneWork", C0505R.string.PhoneWork));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneWork", C0431R.string.PhoneWork));
                                     } else if (type == 12) {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneMain", C0505R.string.PhoneMain));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneMain", C0431R.string.PhoneMain));
                                     } else {
-                                        contact.phoneTypes.add(LocaleController.getString("PhoneOther", C0505R.string.PhoneOther));
+                                        contact.phoneTypes.add(LocaleController.getString("PhoneOther", C0431R.string.PhoneOther));
                                     }
                                     shortContacts.put(shortNumber, contact);
                                     lastContactId = lastContactId2;
@@ -965,13 +966,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 try {
                     pCur.close();
                 } catch (Throwable e4) {
-                    FileLog.m3e(e4);
+                    FileLog.m8e(e4);
                 }
             }
             return contactsMap == null ? new HashMap() : contactsMap;
         } else {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("app has no contacts permissions");
+                FileLog.m5d("app has no contacts permissions");
             }
             return new HashMap();
         }
@@ -1023,7 +1024,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("migrated contacts " + migratedMap.size() + " of " + contactHashMap.size());
+                        FileLog.m5d("migrated contacts " + migratedMap.size() + " of " + contactHashMap.size());
                     }
                     MessagesStorage.getInstance(ContactsController.this.currentAccount).putCachedPhoneBook(migratedMap, true, false);
                 }
@@ -1043,8 +1044,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             Utilities.globalQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.ContactsController$11$1 */
-                class C00881 implements Runnable {
-                    C00881() {
+                class C02241 implements Runnable {
+                    C02241() {
                     }
 
                     public void run() {
@@ -1080,7 +1081,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                     }
                                 }
                             } catch (Throwable e) {
-                                FileLog.m3e(e);
+                                FileLog.m8e(e);
                             }
                         }
                         if (!toDelete.isEmpty()) {
@@ -1102,7 +1103,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("start read contacts from phone");
+                        FileLog.m5d("start read contacts from phone");
                     }
                     if (!z) {
                         ContactsController.this.checkContactsInternal();
@@ -1257,7 +1258,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                         if (!z3 && hashMap.isEmpty() && toImport.isEmpty() && alreadyImportedContacts == contactsMap.size()) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("contacts not changed!");
+                                FileLog.m5d("contacts not changed!");
                                 return;
                             }
                             return;
@@ -1266,7 +1267,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 MessagesStorage.getInstance(ContactsController.this.currentAccount).putCachedPhoneBook(contactsMap, false, false);
                             }
                             if (!(true || hashMap.isEmpty())) {
-                                AndroidUtilities.runOnUIThread(new C00881());
+                                AndroidUtilities.runOnUIThread(new C02241());
                             }
                         }
                     } else if (z2) {
@@ -1306,14 +1307,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("done processing contacts");
+                        FileLog.m5d("done processing contacts");
                     }
                     if (!z2) {
                         Utilities.stageQueue.postRunnable(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.ContactsController$11$6$1 */
-                            class C00981 implements Runnable {
-                                C00981() {
+                            class C02341 implements Runnable {
+                                C02341() {
                                 }
 
                                 public void run() {
@@ -1333,7 +1334,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                     ContactsController.this.applyContactsUpdates(ContactsController.this.delayedContactsUpdate, null, null, null);
                                     ContactsController.this.delayedContactsUpdate.clear();
                                 }
-                                AndroidUtilities.runOnUIThread(new C00981());
+                                AndroidUtilities.runOnUIThread(new C02341());
                             }
                         });
                         if (!contactsMap.isEmpty()) {
@@ -1343,8 +1344,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         Utilities.stageQueue.postRunnable(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.ContactsController$11$5$1 */
-                            class C00961 implements Runnable {
-                                C00961() {
+                            class C02321 implements Runnable {
+                                C02321() {
                                 }
 
                                 public void run() {
@@ -1367,13 +1368,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                     ContactsController.this.applyContactsUpdates(ContactsController.this.delayedContactsUpdate, null, null, null);
                                     ContactsController.this.delayedContactsUpdate.clear();
                                 }
-                                AndroidUtilities.runOnUIThread(new C00961());
+                                AndroidUtilities.runOnUIThread(new C02321());
                             }
                         });
                     } else {
                         int checkType;
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m1e("start import contacts");
+                            FileLog.m6e("start import contacts");
                         }
                         if (!z5 || newPhonebookContacts == 0) {
                             checkType = 0;
@@ -1385,7 +1386,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             checkType = 0;
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("new phone book contacts " + newPhonebookContacts + " serverContactsInPhonebook " + serverContactsInPhonebook + " totalContacts " + ContactsController.this.contactsByPhone.size());
+                            FileLog.m5d("new phone book contacts " + newPhonebookContacts + " serverContactsInPhonebook " + serverContactsInPhonebook + " totalContacts " + ContactsController.this.contactsByPhone.size());
                         }
                         if (checkType != 0) {
                             final int i = checkType;
@@ -1398,8 +1399,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             Utilities.stageQueue.postRunnable(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.ContactsController$11$3$1 */
-                                class C00901 implements Runnable {
-                                    C00901() {
+                                class C02261 implements Runnable {
+                                    C02261() {
                                     }
 
                                     public void run() {
@@ -1423,7 +1424,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                         ContactsController.this.delayedContactsUpdate.clear();
                                     }
                                     MessagesStorage.getInstance(ContactsController.this.currentAccount).putCachedPhoneBook(contactsMap, false, false);
-                                    AndroidUtilities.runOnUIThread(new C00901());
+                                    AndroidUtilities.runOnUIThread(new C02261());
                                 }
                             });
                         } else {
@@ -1448,11 +1449,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 ConnectionsManager.getInstance(ContactsController.this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                                     /* renamed from: org.telegram.messenger.ContactsController$11$4$1 */
-                                    class C00941 implements Runnable {
+                                    class C02301 implements Runnable {
 
                                         /* renamed from: org.telegram.messenger.ContactsController$11$4$1$1 */
-                                        class C00921 implements Runnable {
-                                            C00921() {
+                                        class C02281 implements Runnable {
+                                            C02281() {
                                             }
 
                                             public void run() {
@@ -1462,8 +1463,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                         }
 
                                         /* renamed from: org.telegram.messenger.ContactsController$11$4$1$2 */
-                                        class C00932 implements Runnable {
-                                            C00932() {
+                                        class C02292 implements Runnable {
+                                            C02292() {
                                             }
 
                                             public void run() {
@@ -1471,7 +1472,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                             }
                                         }
 
-                                        C00941() {
+                                        C02301() {
                                         }
 
                                         public void run() {
@@ -1486,9 +1487,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                 ContactsController.this.applyContactsUpdates(ContactsController.this.delayedContactsUpdate, null, null, null);
                                                 ContactsController.this.delayedContactsUpdate.clear();
                                             }
-                                            AndroidUtilities.runOnUIThread(new C00921());
+                                            AndroidUtilities.runOnUIThread(new C02281());
                                             if (hasErrors[0]) {
-                                                Utilities.globalQueue.postRunnable(new C00932(), 1800000);
+                                                Utilities.globalQueue.postRunnable(new C02292(), 1800000);
                                             }
                                         }
                                     }
@@ -1498,7 +1499,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                         int a;
                                         if (error == null) {
                                             if (BuildVars.LOGS_ENABLED) {
-                                                FileLog.m0d("contacts imported");
+                                                FileLog.m5d("contacts imported");
                                             }
                                             TL_contacts_importedContacts res = (TL_contacts_importedContacts) response;
                                             if (!res.retry_contacts.isEmpty()) {
@@ -1507,7 +1508,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                 }
                                                 hasErrors[0] = true;
                                                 if (BuildVars.LOGS_ENABLED) {
-                                                    FileLog.m0d("result has retry contacts");
+                                                    FileLog.m5d("result has retry contacts");
                                                 }
                                             }
                                             for (a = 0; a < res.popular_invites.size(); a++) {
@@ -1531,14 +1532,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                             }
                                             hasErrors[0] = true;
                                             if (BuildVars.LOGS_ENABLED) {
-                                                FileLog.m0d("import contacts error " + error.text);
+                                                FileLog.m5d("import contacts error " + error.text);
                                             }
                                         }
                                         if (ContactsController.this.completedRequestsCount == count) {
                                             if (!contactsMapToSave.isEmpty()) {
                                                 MessagesStorage.getInstance(ContactsController.this.currentAccount).putCachedPhoneBook(contactsMapToSave, false, false);
                                             }
-                                            Utilities.stageQueue.postRunnable(new C00941());
+                                            Utilities.stageQueue.postRunnable(new C02301());
                                         }
                                     }
                                 }, 6);
@@ -1589,21 +1590,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         if (fromCache) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("load contacts from cache");
+                FileLog.m5d("load contacts from cache");
             }
             MessagesStorage.getInstance(this.currentAccount).getContacts();
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("load contacts from server");
+            FileLog.m5d("load contacts from server");
         }
         TL_contacts_getContacts req = new TL_contacts_getContacts();
         req.hash = hash;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
             /* renamed from: org.telegram.messenger.ContactsController$13$1 */
-            class C01001 implements Runnable {
-                C01001() {
+            class C02361 implements Runnable {
+                C02361() {
                 }
 
                 public void run() {
@@ -1630,9 +1631,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                     UserConfig.getInstance(ContactsController.this.currentAccount).lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000);
                     UserConfig.getInstance(ContactsController.this.currentAccount).saveConfig(false);
-                    AndroidUtilities.runOnUIThread(new C01001());
+                    AndroidUtilities.runOnUIThread(new C02361());
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("load contacts don't change");
+                        FileLog.m5d("load contacts don't change");
                     }
                 }
             }
@@ -1672,8 +1673,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.ContactsController$14$1$1 */
-                    class C01011 implements Comparator<TL_contact> {
-                        C01011() {
+                    class C02371 implements Comparator<TL_contact> {
+                        C02371() {
                         }
 
                         public int compare(TL_contact tl_contact, TL_contact tl_contact2) {
@@ -1682,8 +1683,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
 
                     /* renamed from: org.telegram.messenger.ContactsController$14$1$2 */
-                    class C01022 implements Comparator<String> {
-                        C01022() {
+                    class C02382 implements Comparator<String> {
+                        C02382() {
                         }
 
                         public int compare(String s, String s2) {
@@ -1700,8 +1701,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
 
                     /* renamed from: org.telegram.messenger.ContactsController$14$1$3 */
-                    class C01033 implements Comparator<String> {
-                        C01033() {
+                    class C02393 implements Comparator<String> {
+                        C02393() {
                         }
 
                         public int compare(String s, String s2) {
@@ -1719,7 +1720,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
                     public void run() {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("done loading contacts");
+                            FileLog.m5d("done loading contacts");
                         }
                         if (from == 1 && (contactsArr.isEmpty() || Math.abs((System.currentTimeMillis() / 1000) - ((long) UserConfig.getInstance(ContactsController.this.currentAccount).lastContactsSyncTime)) >= 86400)) {
                             ContactsController.this.loadContacts(false, ContactsController.this.getContactsHash(contactsArr));
@@ -1739,7 +1740,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             } else {
                                 ContactsController.this.loadContacts(false, 0);
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m0d("contacts are broken, load from server");
+                                    FileLog.m5d("contacts are broken, load from server");
                                     return;
                                 }
                                 return;
@@ -1749,7 +1750,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             MessagesStorage.getInstance(ContactsController.this.currentAccount).putUsersAndChats(usersArr, null, true, true);
                             MessagesStorage.getInstance(ContactsController.this.currentAccount).putContacts(contactsArr, from != 2);
                         }
-                        Collections.sort(contactsArr, new C01011());
+                        Collections.sort(contactsArr, new C02371());
                         final ConcurrentHashMap<Integer, TL_contact> contactsDictionary = new ConcurrentHashMap(20, 1.0f, 2);
                         final HashMap<String, ArrayList<TL_contact>> sectionsDict = new HashMap();
                         final HashMap<String, ArrayList<TL_contact>> sectionsDictMutual = new HashMap();
@@ -1803,8 +1804,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 }
                             }
                         }
-                        Collections.sort(sortedSectionsArray, new C01022());
-                        Collections.sort(sortedSectionsArrayMutual, new C01033());
+                        Collections.sort(sortedSectionsArray, new C02382());
+                        Collections.sort(sortedSectionsArrayMutual, new C02393());
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
                                 ContactsController.this.contacts = contactsArr;
@@ -1837,8 +1838,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.ContactsController$14$1$5$1 */
-                                class C01051 implements Runnable {
-                                    C01051() {
+                                class C02411 implements Runnable {
+                                    C02411() {
                                     }
 
                                     public void run() {
@@ -1848,7 +1849,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 }
 
                                 public void run() {
-                                    Utilities.globalQueue.postRunnable(new C01051());
+                                    Utilities.globalQueue.postRunnable(new C02411());
                                     if (!ContactsController.this.contactsSyncInProgress) {
                                         ContactsController.this.contactsSyncInProgress = true;
                                         MessagesStorage.getInstance(ContactsController.this.currentAccount).getCachedPhoneBook(false);
@@ -1870,7 +1871,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 reloadContactsStatuses();
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -1878,7 +1879,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             MessagesController.getMainSettings(this.currentAccount).edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).commit();
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -1890,8 +1891,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         Utilities.globalQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.ContactsController$15$1 */
-            class C01081 implements Comparator<Object> {
-                C01081() {
+            class C02441 implements Comparator<Object> {
+                C02441() {
                 }
 
                 public int compare(Object o1, Object o2) {
@@ -1929,8 +1930,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
 
             /* renamed from: org.telegram.messenger.ContactsController$15$2 */
-            class C01092 implements Comparator<String> {
-                C01092() {
+            class C02452 implements Comparator<String> {
+                C02452() {
                 }
 
                 public int compare(String s, String s2) {
@@ -1947,8 +1948,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
 
             /* renamed from: org.telegram.messenger.ContactsController$15$3 */
-            class C01103 implements Runnable {
-                C01103() {
+            class C02463 implements Runnable {
+                C02463() {
                 }
 
                 public void run() {
@@ -1979,10 +1980,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                 }
                 for (ArrayList<Object> arrayList2 : hashMap2.values()) {
-                    Collections.sort(arrayList2, new C01081());
+                    Collections.sort(arrayList2, new C02441());
                 }
-                Collections.sort(arrayList, new C01092());
-                AndroidUtilities.runOnUIThread(new C01103());
+                Collections.sort(arrayList, new C02452());
+                AndroidUtilities.runOnUIThread(new C02463());
             }
         });
     }
@@ -2093,7 +2094,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         try {
                             cursor.close();
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                     return false;
@@ -2102,7 +2103,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     try {
                         cursor.close();
                     } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 }
                 return true;
@@ -2111,7 +2112,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     try {
                         cursor.close();
                     } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                 }
             }
@@ -2149,7 +2150,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("process update - contacts add = " + newC.size() + " delete = " + contactsTD.size());
+            FileLog.m5d("process update - contacts add = " + newC.size() + " delete = " + contactsTD.size());
         }
         StringBuilder toAdd = new StringBuilder();
         StringBuilder toDelete = new StringBuilder();
@@ -2301,7 +2302,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         this.delayedContactsUpdate.addAll(ids);
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("delay update - contacts add = " + newContacts.size() + " delete = " + contactsToDelete.size());
+            FileLog.m5d("delay update - contacts add = " + newContacts.size() + " delete = " + contactsToDelete.size());
         }
     }
 
@@ -2317,7 +2318,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 try {
                     contentResolver.delete(RawContacts.CONTENT_URI.buildUpon().appendQueryParameter("caller_is_syncadapter", "true").appendQueryParameter("account_name", this.systemAccount.name).appendQueryParameter("account_type", this.systemAccount.type).build(), "sync2 = " + user.id, null);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
             ArrayList<ContentProviderOperation> query = new ArrayList();
@@ -2347,7 +2348,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     j = Long.parseLong(result[0].uri.getLastPathSegment());
                 }
             } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                FileLog.m8e(e2);
             }
             synchronized (this.observerLock) {
                 this.ignoreChanges = false;
@@ -2364,7 +2365,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 ApplicationLoader.applicationContext.getContentResolver().delete(RawContacts.CONTENT_URI.buildUpon().appendQueryParameter("caller_is_syncadapter", "true").appendQueryParameter("account_name", this.systemAccount.name).appendQueryParameter("account_type", this.systemAccount.type).build(), "sync2 = " + uid, null);
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             synchronized (this.observerLock) {
                 this.ignoreChanges = false;
@@ -2467,8 +2468,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                 /* renamed from: org.telegram.messenger.ContactsController$25$1 */
-                class C01141 implements Runnable {
-                    C01141() {
+                class C02501 implements Runnable {
+                    C02501() {
                     }
 
                     public void run() {
@@ -2480,8 +2481,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 }
 
                 /* renamed from: org.telegram.messenger.ContactsController$25$2 */
-                class C01152 implements Runnable {
-                    C01152() {
+                class C02512 implements Runnable {
+                    C02512() {
                     }
 
                     public void run() {
@@ -2507,7 +2508,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 public void run(TLObject response, TL_error error) {
                     if (error == null) {
                         MessagesStorage.getInstance(ContactsController.this.currentAccount).deleteContacts(uids);
-                        Utilities.phoneBookQueue.postRunnable(new C01141());
+                        Utilities.phoneBookQueue.postRunnable(new C02501());
                         for (int a = 0; a < users.size(); a++) {
                             User user = (User) users.get(a);
                             if (!TextUtils.isEmpty(user.phone)) {
@@ -2522,7 +2523,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 }
                             }
                         }
-                        AndroidUtilities.runOnUIThread(new C01152());
+                        AndroidUtilities.runOnUIThread(new C02512());
                     }
                 }
             });

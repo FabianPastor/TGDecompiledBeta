@@ -1,14 +1,16 @@
 package org.telegram.messenger;
 
 import android.net.Uri;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DataSource$$CC;
+import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import org.telegram.messenger.exoplayer2.upstream.DataSource;
-import org.telegram.messenger.exoplayer2.upstream.DataSpec;
-import org.telegram.messenger.exoplayer2.upstream.TransferListener;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
@@ -20,23 +22,33 @@ public class FileStreamLoadOperation implements DataSource {
     private CountDownLatch countDownLatch;
     private int currentAccount;
     private int currentOffset;
+    private DataSpec dataSpec;
     private Document document;
     private RandomAccessFile file;
-    private final TransferListener<? super FileStreamLoadOperation> listener;
+    private final TransferListener listener;
     private FileLoadOperation loadOperation;
     private boolean opened;
     private Uri uri;
+
+    public void addTransferListener(TransferListener transferListener) {
+        DataSource$$CC.addTransferListener(this, transferListener);
+    }
+
+    public Map getResponseHeaders() {
+        return DataSource$$CC.getResponseHeaders(this);
+    }
 
     public FileStreamLoadOperation() {
         this(null);
     }
 
-    public FileStreamLoadOperation(TransferListener<? super FileStreamLoadOperation> listener) {
+    public FileStreamLoadOperation(TransferListener listener) {
         this.listener = listener;
     }
 
     public long open(DataSpec dataSpec) throws IOException {
         this.uri = dataSpec.uri;
+        this.dataSpec = dataSpec;
         this.currentAccount = Utilities.parseInt(this.uri.getQueryParameter("account")).intValue();
         this.document = new TL_document();
         this.document.access_hash = Utilities.parseLong(this.uri.getQueryParameter("hash")).longValue();
@@ -63,7 +75,7 @@ public class FileStreamLoadOperation implements DataSource {
         }
         this.opened = true;
         if (this.listener != null) {
-            this.listener.onTransferStart(this, dataSpec);
+            this.listener.onTransferStart(this, dataSpec, false);
         }
         this.file = new RandomAccessFile(this.loadOperation.getCurrentFile(), "r");
         this.file.seek((long) this.currentOffset);
@@ -98,7 +110,7 @@ public class FileStreamLoadOperation implements DataSource {
             if (this.listener == null) {
                 return availableLength;
             }
-            this.listener.onBytesTransferred(this, availableLength);
+            this.listener.onBytesTransferred(this, this.dataSpec, false, availableLength);
             return availableLength;
         } catch (Exception e) {
             throw new IOException(e);
@@ -120,7 +132,7 @@ public class FileStreamLoadOperation implements DataSource {
             try {
                 this.file.close();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
             this.file = null;
         }
@@ -128,7 +140,7 @@ public class FileStreamLoadOperation implements DataSource {
         if (this.opened) {
             this.opened = false;
             if (this.listener != null) {
-                this.listener.onTransferEnd(this);
+                this.listener.onTransferEnd(this, this.dataSpec, false);
             }
         }
     }

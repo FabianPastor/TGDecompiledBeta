@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -79,8 +79,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     private SparseArray<WallPaper> wallpappersByIds = new SparseArray();
 
     /* renamed from: org.telegram.ui.WallpapersActivity$1 */
-    class C25861 implements WallpaperUpdaterDelegate {
-        C25861() {
+    class C17991 implements WallpaperUpdaterDelegate {
+        C17991() {
         }
 
         public void didSelectWallpaper(File file, Bitmap bitmap) {
@@ -97,8 +97,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$2 */
-    class C25872 extends ActionBarMenuOnItemClick {
-        C25872() {
+    class C18002 extends ActionBarMenuOnItemClick {
+        C18002() {
         }
 
         public void onItemClick(int id) {
@@ -120,14 +120,14 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                         done = AndroidUtilities.copyFile(new File(FileLoader.getDirectory(4), size.location.volume_id + "_" + size.location.local_id + ".jpg"), new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg"));
                     } catch (Throwable e) {
                         done = false;
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                 } else if (WallpapersActivity.this.selectedBackground == -1) {
                     try {
                         done = AndroidUtilities.copyFile(WallpapersActivity.this.updater.getCurrentWallpaperPath(), new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg"));
                     } catch (Throwable e2) {
                         done = false;
-                        FileLog.m3e(e2);
+                        FileLog.m8e(e2);
                     }
                 } else {
                     done = true;
@@ -148,8 +148,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$3 */
-    class C25883 implements OnTouchListener {
-        C25883() {
+    class C18013 implements OnTouchListener {
+        C18013() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -158,8 +158,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$4 */
-    class C25894 implements OnItemClickListener {
-        C25894() {
+    class C18024 implements OnItemClickListener {
+        C18024() {
         }
 
         public void onItemClick(View view, int position) {
@@ -186,8 +186,8 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.WallpapersActivity$5 */
-    class C25915 implements RequestDelegate {
-        C25915() {
+    class C18045 implements RequestDelegate {
+        C18045() {
         }
 
         public void run(final TLObject response, TL_error error) {
@@ -298,23 +298,23 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
 
     public View createView(Context context) {
         this.themedWallpaper = Theme.getThemedWallpaper(true);
-        this.updater = new WallpaperUpdater(getParentActivity(), new C25861());
-        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
+        this.updater = new WallpaperUpdater(getParentActivity(), new C17991());
+        this.actionBar.setBackButtonImage(C0431R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ChatBackground", C0505R.string.ChatBackground));
-        this.actionBar.setActionBarMenuOnItemClick(new C25872());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0505R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("ChatBackground", C0431R.string.ChatBackground));
+        this.actionBar.setActionBarMenuOnItemClick(new C18002());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0431R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         this.backgroundImage = new ImageView(context);
         this.backgroundImage.setScaleType(ScaleType.CENTER_CROP);
         frameLayout.addView(this.backgroundImage, LayoutHelper.createFrame(-1, -1.0f));
-        this.backgroundImage.setOnTouchListener(new C25883());
+        this.backgroundImage.setOnTouchListener(new C18013());
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(4);
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 52.0f));
         this.progressViewBackground = new View(context);
-        this.progressViewBackground.setBackgroundResource(C0505R.drawable.system_loader);
+        this.progressViewBackground.setBackgroundResource(C0431R.drawable.system_loader);
         this.progressView.addView(this.progressViewBackground, LayoutHelper.createFrame(36, 36, 17));
         RadialProgressView progressBar = new RadialProgressView(context);
         progressBar.setSize(AndroidUtilities.dp(28.0f));
@@ -334,7 +334,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         this.listAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, 102, 83));
-        this.listView.setOnItemClickListener(new C25894());
+        this.listView.setOnItemClickListener(new C18024());
         processSelectedBackground();
         return this.fragmentView;
     }
@@ -362,7 +362,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.loadingSize);
                 }
                 if (this.selectedBackground == 1000001) {
-                    this.backgroundImage.setImageResource(C0505R.drawable.background_hd);
+                    this.backgroundImage.setImageResource(C0431R.drawable.background_hd);
                     this.backgroundImage.setBackgroundColor(0);
                     this.selectedColor = 0;
                 } else if (this.selectedBackground == -1) {
@@ -417,7 +417,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     try {
                         this.backgroundImage.setImageURI(Uri.fromFile(f));
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                     this.backgroundImage.setBackgroundColor(0);
                     this.selectedColor = 0;
@@ -482,7 +482,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     private void loadWallpapers() {
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWallPapers(), new C25915()), this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWallPapers(), new C18045()), this.classGuid);
     }
 
     public void onResume() {

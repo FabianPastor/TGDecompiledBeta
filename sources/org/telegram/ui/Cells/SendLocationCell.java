@@ -10,7 +10,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
@@ -26,13 +26,13 @@ public class SendLocationCell extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private long dialogId;
     private ImageView imageView;
-    private Runnable invalidateRunnable = new C11311();
+    private Runnable invalidateRunnable = new C07551();
     private RectF rect;
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.Cells.SendLocationCell$1 */
-    class C11311 implements Runnable {
-        C11311() {
+    class C07551 implements Runnable {
+        C07551() {
         }
 
         public void run() {
@@ -59,7 +59,7 @@ public class SendLocationCell extends FrameLayout {
         CombinedDrawable combinedDrawable;
         if (live) {
             this.rect = new RectF();
-            drawable = getResources().getDrawable(C0505R.drawable.livelocationpin);
+            drawable = getResources().getDrawable(C0431R.drawable.livelocationpin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLiveLocationIcon), Mode.MULTIPLY));
             combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
@@ -67,7 +67,7 @@ public class SendLocationCell extends FrameLayout {
             AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
             setWillNotDraw(false);
         } else {
-            drawable = getResources().getDrawable(C0505R.drawable.pin);
+            drawable = getResources().getDrawable(C0431R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), Mode.MULTIPLY));
             combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
@@ -148,9 +148,9 @@ public class SendLocationCell extends FrameLayout {
     private void checkText() {
         SharingLocationInfo info = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
         if (info != null) {
-            setText(LocaleController.getString("StopLiveLocation", C0505R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate(info.messageObject.messageOwner.edit_date != 0 ? (long) info.messageObject.messageOwner.edit_date : (long) info.messageObject.messageOwner.date));
+            setText(LocaleController.getString("StopLiveLocation", C0431R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate(info.messageObject.messageOwner.edit_date != 0 ? (long) info.messageObject.messageOwner.edit_date : (long) info.messageObject.messageOwner.date));
         } else {
-            setText(LocaleController.getString("SendLiveLocation", C0505R.string.SendLiveLocation), LocaleController.getString("SendLiveLocationInfo", C0505R.string.SendLiveLocationInfo));
+            setText(LocaleController.getString("SendLiveLocation", C0431R.string.SendLiveLocation), LocaleController.getString("SendLiveLocationInfo", C0431R.string.SendLiveLocationInfo));
         }
     }
 

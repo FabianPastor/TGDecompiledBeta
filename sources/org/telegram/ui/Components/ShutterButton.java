@@ -12,19 +12,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 
 public class ShutterButton extends View {
     private static final int LONG_PRESS_TIME = 800;
     private ShutterButtonDelegate delegate;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private long lastUpdateTime;
-    private Runnable longPressed = new C17181();
+    private Runnable longPressed = new C12171();
     private boolean pressed;
     private boolean processRelease;
     private Paint redPaint;
     private float redProgress;
-    private Drawable shadowDrawable = getResources().getDrawable(C0505R.drawable.camera_btn);
+    private Drawable shadowDrawable = getResources().getDrawable(C0431R.drawable.camera_btn);
     private State state;
     private long totalTime;
     private Paint whitePaint = new Paint(1);
@@ -38,8 +38,8 @@ public class ShutterButton extends View {
     }
 
     /* renamed from: org.telegram.ui.Components.ShutterButton$1 */
-    class C17181 implements Runnable {
-        C17181() {
+    class C12171 implements Runnable {
+        C12171() {
         }
 
         public void run() {

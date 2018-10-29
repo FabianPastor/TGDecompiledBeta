@@ -1,13 +1,11 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -16,16 +14,6 @@ public class EmptyTextProgressView extends FrameLayout {
     private RadialProgressView progressBar;
     private boolean showAtCenter;
     private TextView textView;
-
-    /* renamed from: org.telegram.ui.Components.EmptyTextProgressView$1 */
-    class C15451 implements OnTouchListener {
-        C15451() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
-        }
-    }
 
     public EmptyTextProgressView(Context context) {
         super(context);
@@ -38,9 +26,9 @@ public class EmptyTextProgressView extends FrameLayout {
         this.textView.setGravity(17);
         this.textView.setVisibility(4);
         this.textView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.textView.setText(LocaleController.getString("NoResult", C0505R.string.NoResult));
+        this.textView.setText(LocaleController.getString("NoResult", C0431R.string.NoResult));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
-        setOnTouchListener(new C15451());
+        setOnTouchListener(EmptyTextProgressView$$Lambda$0.$instance);
     }
 
     public void showProgress() {

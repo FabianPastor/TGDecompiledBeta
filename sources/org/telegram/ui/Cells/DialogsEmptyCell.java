@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -26,8 +26,8 @@ public class DialogsEmptyCell extends LinearLayout {
     private TextView emptyTextView2;
 
     /* renamed from: org.telegram.ui.Cells.DialogsEmptyCell$1 */
-    class C11091 implements OnTouchListener {
-        C11091() {
+    class C07341 implements OnTouchListener {
+        C07341() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -39,15 +39,15 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener(new C11091());
+        setOnTouchListener(new C07341());
         this.emptyTextView1 = new TextView(context);
-        this.emptyTextView1.setText(LocaleController.getString("NoChats", C0505R.string.NoChats));
+        this.emptyTextView1.setText(LocaleController.getString("NoChats", C0431R.string.NoChats));
         this.emptyTextView1.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         this.emptyTextView1.setGravity(17);
         this.emptyTextView1.setTextSize(1, 20.0f);
         addView(this.emptyTextView1, LayoutHelper.createLinear(-2, -2, 0.0f, 20.0f, 0.0f, 0.0f));
         this.emptyTextView2 = new TextView(context);
-        String help = LocaleController.getString("NoChatsHelp", C0505R.string.NoChatsHelp);
+        String help = LocaleController.getString("NoChatsHelp", C0431R.string.NoChatsHelp);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
             help = help.replace('\n', ' ');
         }
@@ -64,12 +64,12 @@ public class DialogsEmptyCell extends LinearLayout {
         String help;
         this.currentType = value;
         if (this.currentType == 0) {
-            help = LocaleController.getString("NoChatsHelp", C0505R.string.NoChatsHelp);
+            help = LocaleController.getString("NoChatsHelp", C0431R.string.NoChatsHelp);
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
                 help = help.replace('\n', ' ');
             }
         } else {
-            help = LocaleController.getString("NoChatsContactsHelp", C0505R.string.NoChatsContactsHelp);
+            help = LocaleController.getString("NoChatsContactsHelp", C0431R.string.NoChatsContactsHelp);
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
                 help = help.replace('\n', ' ');
             }

@@ -17,14 +17,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import com.google.android.exoplayer2.C0020C;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.exoplayer2.C0621C;
-import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -67,7 +67,7 @@ public class ThemeDescription {
     public static int FLAG_CHECKBOXCHECK = MessagesController.UPDATE_MASK_CHAT_ADMINS;
     public static int FLAG_CHECKTAG = 262144;
     public static int FLAG_CURSORCOLOR = 16777216;
-    public static int FLAG_DRAWABLESELECTEDSTATE = C0621C.DEFAULT_BUFFER_SEGMENT_SIZE;
+    public static int FLAG_DRAWABLESELECTEDSTATE = C0020C.DEFAULT_BUFFER_SEGMENT_SIZE;
     public static int FLAG_FASTSCROLL = ConnectionsManager.FileTypeVideo;
     public static int FLAG_HINTTEXTCOLOR = 8388608;
     public static int FLAG_IMAGECOLOR = 8;
@@ -76,8 +76,8 @@ public class ThemeDescription {
     public static int FLAG_PROGRESSBAR = 2048;
     public static int FLAG_SECTIONS = 524288;
     public static int FLAG_SELECTOR = 4096;
-    public static int FLAG_SELECTORWHITE = 268435456;
-    public static int FLAG_SERVICEBACKGROUND = 536870912;
+    public static int FLAG_SELECTORWHITE = C0020C.ENCODING_PCM_MU_LAW;
+    public static int FLAG_SERVICEBACKGROUND = C0020C.ENCODING_PCM_A_LAW;
     public static int FLAG_TEXTCOLOR = 4;
     public static int FLAG_USEBACKGROUNDDRAWABLE = 131072;
     private HashMap<String, Field> cachedFields;
@@ -560,7 +560,7 @@ public class ThemeDescription {
                                                     ((EditTextCaption) obj).setTextColor(color);
                                                 }
                                             } catch (Throwable e) {
-                                                FileLog.m3e(e);
+                                                FileLog.m8e(e);
                                                 this.notFoundCachedFields.put(key, Boolean.valueOf(true));
                                             }
                                         }

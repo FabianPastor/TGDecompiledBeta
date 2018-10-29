@@ -18,7 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -87,8 +87,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     private TextView textView2;
 
     /* renamed from: org.telegram.ui.SessionsActivity$1 */
-    class C24461 extends ActionBarMenuOnItemClick {
-        C24461() {
+    class C16931 extends ActionBarMenuOnItemClick {
+        C16931() {
         }
 
         public void onItemClick(int id) {
@@ -99,14 +99,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$2 */
-    class C24582 implements OnItemClickListener {
+    class C17052 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.SessionsActivity$2$1 */
-        class C24511 implements OnClickListener {
+        class C16981 implements OnClickListener {
 
             /* renamed from: org.telegram.ui.SessionsActivity$2$1$1 */
-            class C24481 implements RequestDelegate {
-                C24481() {
+            class C16951 implements RequestDelegate {
+                C16951() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -114,9 +114,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         public void run() {
                             if (SessionsActivity.this.getParentActivity() != null) {
                                 if (error == null && (response instanceof TL_boolTrue)) {
-                                    Toast.makeText(SessionsActivity.this.getParentActivity(), LocaleController.getString("TerminateAllSessions", C0505R.string.TerminateAllSessions), 0).show();
+                                    Toast.makeText(SessionsActivity.this.getParentActivity(), LocaleController.getString("TerminateAllSessions", C0431R.string.TerminateAllSessions), 0).show();
                                 } else {
-                                    Toast.makeText(SessionsActivity.this.getParentActivity(), LocaleController.getString("UnknownError", C0505R.string.UnknownError), 0).show();
+                                    Toast.makeText(SessionsActivity.this.getParentActivity(), LocaleController.getString("UnknownError", C0431R.string.UnknownError), 0).show();
                                 }
                                 SessionsActivity.this.finishFragment();
                             }
@@ -135,8 +135,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             }
 
             /* renamed from: org.telegram.ui.SessionsActivity$2$1$2 */
-            class C24502 implements RequestDelegate {
-                C24502() {
+            class C16972 implements RequestDelegate {
+                C16972() {
                 }
 
                 public void run(final TLObject response, final TL_error error) {
@@ -144,9 +144,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         public void run() {
                             if (SessionsActivity.this.getParentActivity() != null) {
                                 if (error == null && (response instanceof TL_boolTrue)) {
-                                    Toast.makeText(SessionsActivity.this.getParentActivity(), LocaleController.getString("TerminateAllWebSessions", C0505R.string.TerminateAllWebSessions), 0).show();
+                                    Toast.makeText(SessionsActivity.this.getParentActivity(), LocaleController.getString("TerminateAllWebSessions", C0431R.string.TerminateAllWebSessions), 0).show();
                                 } else {
-                                    Toast.makeText(SessionsActivity.this.getParentActivity(), LocaleController.getString("UnknownError", C0505R.string.UnknownError), 0).show();
+                                    Toast.makeText(SessionsActivity.this.getParentActivity(), LocaleController.getString("UnknownError", C0431R.string.UnknownError), 0).show();
                                 }
                                 SessionsActivity.this.finishFragment();
                             }
@@ -155,19 +155,19 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            C24511() {
+            C16981() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (SessionsActivity.this.currentType == 0) {
-                    ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_auth_resetAuthorizations(), new C24481());
+                    ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_auth_resetAuthorizations(), new C16951());
                     return;
                 }
-                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_account_resetWebAuthorizations(), new C24502());
+                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(new TL_account_resetWebAuthorizations(), new C16972());
             }
         }
 
-        C24582() {
+        C17052() {
         }
 
         public void onItemClick(View view, int position) {
@@ -176,24 +176,24 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 if (SessionsActivity.this.getParentActivity() != null) {
                     builder = new Builder(SessionsActivity.this.getParentActivity());
                     if (SessionsActivity.this.currentType == 0) {
-                        builder.setMessage(LocaleController.getString("AreYouSureSessions", C0505R.string.AreYouSureSessions));
+                        builder.setMessage(LocaleController.getString("AreYouSureSessions", C0431R.string.AreYouSureSessions));
                     } else {
-                        builder.setMessage(LocaleController.getString("AreYouSureWebSessions", C0505R.string.AreYouSureWebSessions));
+                        builder.setMessage(LocaleController.getString("AreYouSureWebSessions", C0431R.string.AreYouSureWebSessions));
                     }
-                    builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), new C24511());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AppName", C0431R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", C0431R.string.OK), new C16981());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", C0431R.string.Cancel), null);
                     SessionsActivity.this.showDialog(builder.create());
                 }
             } else if (position >= SessionsActivity.this.otherSessionsStartRow && position < SessionsActivity.this.otherSessionsEndRow && SessionsActivity.this.getParentActivity() != null) {
                 builder = new Builder(SessionsActivity.this.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", C0505R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", C0431R.string.AppName));
                 final boolean[] param = new boolean[1];
                 if (SessionsActivity.this.currentType == 0) {
-                    builder.setMessage(LocaleController.getString("TerminateSessionQuestion", C0505R.string.TerminateSessionQuestion));
+                    builder.setMessage(LocaleController.getString("TerminateSessionQuestion", C0431R.string.TerminateSessionQuestion));
                 } else {
                     String name;
-                    builder.setMessage(LocaleController.formatString("TerminateWebSessionQuestion", C0505R.string.TerminateWebSessionQuestion, ((TL_webAuthorization) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow)).domain));
+                    builder.setMessage(LocaleController.formatString("TerminateWebSessionQuestion", C0431R.string.TerminateWebSessionQuestion, ((TL_webAuthorization) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow)).domain));
                     FrameLayout frameLayout = new FrameLayout(SessionsActivity.this.getParentActivity());
                     User user = MessagesController.getInstance(SessionsActivity.this.currentAccount).getUser(Integer.valueOf(authorization.bot_id));
                     if (user != null) {
@@ -203,7 +203,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     }
                     CheckBoxCell cell = new CheckBoxCell(SessionsActivity.this.getParentActivity(), 1);
                     cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                    cell.setText(LocaleController.formatString("TerminateWebSessionStop", C0505R.string.TerminateWebSessionStop, name), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                    cell.setText(LocaleController.formatString("TerminateWebSessionStop", C0431R.string.TerminateWebSessionStop, name), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                     cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
                     frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     cell.setOnClickListener(new View.OnClickListener() {
@@ -226,11 +226,11 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     builder.setView(frameLayout);
                 }
                 final int i = position;
-                builder.setPositiveButton(LocaleController.getString("OK", C0505R.string.OK), new OnClickListener() {
+                builder.setPositiveButton(LocaleController.getString("OK", C0431R.string.OK), new OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int option) {
                         if (SessionsActivity.this.getParentActivity() != null) {
                             final AlertDialog progressDialog = new AlertDialog(SessionsActivity.this.getParentActivity(), 1);
-                            progressDialog.setMessage(LocaleController.getString("Loading", C0505R.string.Loading));
+                            progressDialog.setMessage(LocaleController.getString("Loading", C0431R.string.Loading));
                             progressDialog.setCanceledOnTouchOutside(false);
                             progressDialog.setCancelable(false);
                             progressDialog.show();
@@ -245,7 +245,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                                 try {
                                                     progressDialog.dismiss();
                                                 } catch (Throwable e) {
-                                                    FileLog.m3e(e);
+                                                    FileLog.m8e(e);
                                                 }
                                                 if (error == null) {
                                                     SessionsActivity.this.sessions.remove(authorization);
@@ -270,7 +270,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                             try {
                                                 progressDialog.dismiss();
                                             } catch (Throwable e) {
-                                                FileLog.m3e(e);
+                                                FileLog.m8e(e);
                                             }
                                             if (error == null) {
                                                 SessionsActivity.this.sessions.remove(authorization2);
@@ -289,15 +289,15 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         }
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0505R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", C0431R.string.Cancel), null);
                 SessionsActivity.this.showDialog(builder.create());
             }
         }
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$3 */
-    class C24603 implements RequestDelegate {
-        C24603() {
+    class C17073 implements RequestDelegate {
+        C17073() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -326,8 +326,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SessionsActivity$4 */
-    class C24624 implements RequestDelegate {
-        C24624() {
+    class C17094 implements RequestDelegate {
+        C17094() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -399,10 +399,10 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     if (position == SessionsActivity.this.terminateAllSessionsRow) {
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText2));
                         if (SessionsActivity.this.currentType == 0) {
-                            textCell.setText(LocaleController.getString("TerminateAllSessions", C0505R.string.TerminateAllSessions), false);
+                            textCell.setText(LocaleController.getString("TerminateAllSessions", C0431R.string.TerminateAllSessions), false);
                             return;
                         } else {
-                            textCell.setText(LocaleController.getString("TerminateAllWebSessions", C0505R.string.TerminateAllWebSessions), false);
+                            textCell.setText(LocaleController.getString("TerminateAllWebSessions", C0431R.string.TerminateAllWebSessions), false);
                             return;
                         }
                     }
@@ -411,19 +411,19 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     TextInfoPrivacyCell privacyCell = holder.itemView;
                     if (position == SessionsActivity.this.terminateAllSessionsDetailRow) {
                         if (SessionsActivity.this.currentType == 0) {
-                            privacyCell.setText(LocaleController.getString("ClearOtherSessionsHelp", C0505R.string.ClearOtherSessionsHelp));
+                            privacyCell.setText(LocaleController.getString("ClearOtherSessionsHelp", C0431R.string.ClearOtherSessionsHelp));
                         } else {
-                            privacyCell.setText(LocaleController.getString("ClearOtherWebSessionsHelp", C0505R.string.ClearOtherWebSessionsHelp));
+                            privacyCell.setText(LocaleController.getString("ClearOtherWebSessionsHelp", C0431R.string.ClearOtherWebSessionsHelp));
                         }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0505R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0431R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == SessionsActivity.this.otherSessionsTerminateDetail) {
                         if (SessionsActivity.this.currentType == 0) {
-                            privacyCell.setText(LocaleController.getString("TerminateSessionInfo", C0505R.string.TerminateSessionInfo));
+                            privacyCell.setText(LocaleController.getString("TerminateSessionInfo", C0431R.string.TerminateSessionInfo));
                         } else {
-                            privacyCell.setText(LocaleController.getString("TerminateWebSessionInfo", C0505R.string.TerminateWebSessionInfo));
+                            privacyCell.setText(LocaleController.getString("TerminateWebSessionInfo", C0431R.string.TerminateWebSessionInfo));
                         }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0505R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0431R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -431,16 +431,16 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 case 2:
                     HeaderCell headerCell = holder.itemView;
                     if (position == SessionsActivity.this.currentSessionSectionRow) {
-                        headerCell.setText(LocaleController.getString("CurrentSession", C0505R.string.CurrentSession));
+                        headerCell.setText(LocaleController.getString("CurrentSession", C0431R.string.CurrentSession));
                         return;
                     } else if (position != SessionsActivity.this.otherSessionsSectionRow) {
                         return;
                     } else {
                         if (SessionsActivity.this.currentType == 0) {
-                            headerCell.setText(LocaleController.getString("OtherSessions", C0505R.string.OtherSessions));
+                            headerCell.setText(LocaleController.getString("OtherSessions", C0431R.string.OtherSessions));
                             return;
                         } else {
-                            headerCell.setText(LocaleController.getString("OtherWebSessions", C0505R.string.OtherWebSessions));
+                            headerCell.setText(LocaleController.getString("OtherWebSessions", C0431R.string.OtherWebSessions));
                             return;
                         }
                     }
@@ -518,14 +518,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0431R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.currentType == 0) {
-            this.actionBar.setTitle(LocaleController.getString("SessionsTitle", C0505R.string.SessionsTitle));
+            this.actionBar.setTitle(LocaleController.getString("SessionsTitle", C0431R.string.SessionsTitle));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("WebSessionsTitle", C0505R.string.WebSessionsTitle));
+            this.actionBar.setTitle(LocaleController.getString("WebSessionsTitle", C0431R.string.WebSessionsTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C24461());
+        this.actionBar.setActionBarMenuOnItemClick(new C16931());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -533,13 +533,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.emptyLayout = new LinearLayout(context);
         this.emptyLayout.setOrientation(1);
         this.emptyLayout.setGravity(17);
-        this.emptyLayout.setBackgroundDrawable(Theme.getThemedDrawable(context, C0505R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+        this.emptyLayout.setBackgroundDrawable(Theme.getThemedDrawable(context, C0431R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.emptyLayout.setLayoutParams(new AbsListView.LayoutParams(-1, AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()));
         this.imageView = new ImageView(context);
         if (this.currentType == 0) {
-            this.imageView.setImageResource(C0505R.drawable.devices);
+            this.imageView.setImageResource(C0431R.drawable.devices);
         } else {
-            this.imageView.setImageResource(C0505R.drawable.no_apps);
+            this.imageView.setImageResource(C0431R.drawable.no_apps);
         }
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_sessions_devicesImage), Mode.MULTIPLY));
         this.emptyLayout.addView(this.imageView, LayoutHelper.createLinear(-2, -2));
@@ -549,9 +549,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.textView1.setTextSize(1, 17.0f);
         this.textView1.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         if (this.currentType == 0) {
-            this.textView1.setText(LocaleController.getString("NoOtherSessions", C0505R.string.NoOtherSessions));
+            this.textView1.setText(LocaleController.getString("NoOtherSessions", C0431R.string.NoOtherSessions));
         } else {
-            this.textView1.setText(LocaleController.getString("NoOtherWebSessions", C0505R.string.NoOtherWebSessions));
+            this.textView1.setText(LocaleController.getString("NoOtherWebSessions", C0431R.string.NoOtherWebSessions));
         }
         this.emptyLayout.addView(this.textView1, LayoutHelper.createLinear(-2, -2, 17, 0, 16, 0, 0));
         this.textView2 = new TextView(context);
@@ -560,9 +560,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.textView2.setTextSize(1, 17.0f);
         this.textView2.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         if (this.currentType == 0) {
-            this.textView2.setText(LocaleController.getString("NoOtherSessionsInfo", C0505R.string.NoOtherSessionsInfo));
+            this.textView2.setText(LocaleController.getString("NoOtherSessionsInfo", C0431R.string.NoOtherSessionsInfo));
         } else {
-            this.textView2.setText(LocaleController.getString("NoOtherWebSessionsInfo", C0505R.string.NoOtherWebSessionsInfo));
+            this.textView2.setText(LocaleController.getString("NoOtherWebSessionsInfo", C0431R.string.NoOtherWebSessionsInfo));
         }
         this.emptyLayout.addView(this.textView2, LayoutHelper.createLinear(-2, -2, 17, 0, 14, 0, 0));
         this.emptyView = new EmptyTextProgressView(context);
@@ -574,7 +574,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.listView.setEmptyView(this.emptyView);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C24582());
+        this.listView.setOnItemClickListener(new C17052());
         return this.fragmentView;
     }
 
@@ -597,10 +597,10 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 this.loading = true;
             }
             if (this.currentType == 0) {
-                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAuthorizations(), new C24603()), this.classGuid);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAuthorizations(), new C17073()), this.classGuid);
                 return;
             }
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWebAuthorizations(), new C24624()), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWebAuthorizations(), new C17094()), this.classGuid);
         }
     }
 

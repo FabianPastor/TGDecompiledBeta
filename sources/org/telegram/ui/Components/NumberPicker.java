@@ -17,6 +17,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.util.Locale;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.Theme;
@@ -85,16 +86,16 @@ public class NumberPicker extends LinearLayout {
         String format(int i);
     }
 
-    public interface OnValueChangeListener {
-        void onValueChange(NumberPicker numberPicker, int i, int i2);
-    }
-
     public interface OnScrollListener {
         public static final int SCROLL_STATE_FLING = 2;
         public static final int SCROLL_STATE_IDLE = 0;
         public static final int SCROLL_STATE_TOUCH_SCROLL = 1;
 
         void onScrollStateChange(NumberPicker numberPicker, int i);
+    }
+
+    public interface OnValueChangeListener {
+        void onValueChange(NumberPicker numberPicker, int i, int i2);
     }
 
     class ChangeCurrentByOneFromLongPressCommand implements Runnable {
@@ -473,7 +474,7 @@ public class NumberPicker extends LinearLayout {
                     default:
                         break;
                 }
-            case 23:
+            case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
             case 66:
                 removeAllCallbacks();
                 break;

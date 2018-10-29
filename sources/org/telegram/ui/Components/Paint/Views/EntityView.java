@@ -32,8 +32,8 @@ public class EntityView extends FrameLayout {
     private UUID uuid = UUID.randomUUID();
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.EntityView$1 */
-    class C16121 extends SimpleOnGestureListener {
-        C16121() {
+    class C11121 extends SimpleOnGestureListener {
+        C11121() {
         }
 
         public void onLongPress(MotionEvent e) {
@@ -77,8 +77,8 @@ public class EntityView extends FrameLayout {
         protected void updatePosition() {
             Rect bounds = EntityView.this.getSelectionBounds();
             LayoutParams layoutParams = (LayoutParams) getLayoutParams();
-            layoutParams.leftMargin = ((int) bounds.f60x) + EntityView.this.offsetX;
-            layoutParams.topMargin = ((int) bounds.f61y) + EntityView.this.offsetY;
+            layoutParams.leftMargin = ((int) bounds.f70x) + EntityView.this.offsetX;
+            layoutParams.topMargin = ((int) bounds.f71y) + EntityView.this.offsetY;
             layoutParams.width = (int) bounds.width;
             layoutParams.height = (int) bounds.height;
             setLayoutParams(layoutParams);
@@ -117,7 +117,7 @@ public class EntityView extends FrameLayout {
                             EntityView.this.hasTransformed = true;
                             Point translation = new Point(event.getRawX() - EntityView.this.previousLocationX, event.getRawY() - EntityView.this.previousLocationY);
                             float radAngle = (float) Math.toRadians((double) getRotation());
-                            float delta = (float) ((((double) translation.f58x) * Math.cos((double) radAngle)) + (((double) translation.f59y) * Math.sin((double) radAngle)));
+                            float delta = (float) ((((double) translation.f68x) * Math.cos((double) radAngle)) + (((double) translation.f69y) * Math.sin((double) radAngle)));
                             if (this.currentHandle == 1) {
                                 delta *= -1.0f;
                             }
@@ -153,7 +153,7 @@ public class EntityView extends FrameLayout {
     public EntityView(Context context, Point pos) {
         super(context);
         this.position = pos;
-        this.gestureDetector = new GestureDetector(context, new C16121());
+        this.gestureDetector = new GestureDetector(context, new C11121());
     }
 
     public UUID getUUID() {
@@ -194,7 +194,7 @@ public class EntityView extends FrameLayout {
     private boolean onTouchMove(float x, float y) {
         float scale = ((View) getParent()).getScaleX();
         Point translation = new Point((x - this.previousLocationX) / scale, (y - this.previousLocationY) / scale);
-        if (((float) Math.hypot((double) translation.f58x, (double) translation.f59y)) <= (this.hasPanned ? 6.0f : 16.0f)) {
+        if (((float) Math.hypot((double) translation.f68x, (double) translation.f69y)) <= (this.hasPanned ? 6.0f : 16.0f)) {
             return false;
         }
         pan(translation);
@@ -250,16 +250,16 @@ public class EntityView extends FrameLayout {
 
     public void pan(Point translation) {
         Point point = this.position;
-        point.f58x += translation.f58x;
+        point.f68x += translation.f68x;
         point = this.position;
-        point.f59y += translation.f59y;
+        point.f69y += translation.f69y;
         updatePosition();
     }
 
     protected void updatePosition() {
         float halfHeight = ((float) getHeight()) / 2.0f;
-        setX(this.position.f58x - (((float) getWidth()) / 2.0f));
-        setY(this.position.f59y - halfHeight);
+        setX(this.position.f68x - (((float) getWidth()) / 2.0f));
+        setY(this.position.f69y - halfHeight);
         updateSelectionView();
     }
 

@@ -16,6 +16,10 @@ import android.os.Build.VERSION;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
+import com.google.android.exoplayer2.C0020C;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.upstream.DataSchemeDataSource;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -53,10 +57,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.exoplayer2.C0621C;
-import org.telegram.messenger.exoplayer2.DefaultLoadControl;
-import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
-import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 import org.telegram.tgnet.TLRPC.TL_config;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.Updates;
@@ -87,7 +87,7 @@ public class ConnectionsManager {
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
     private static AsyncTask currentTask;
-    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new C08591();
+    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new C05601();
     private static int lastClassGuid = 1;
     private static long lastDnsRequestTime;
     private boolean appPaused = true;
@@ -99,8 +99,8 @@ public class ConnectionsManager {
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$1 */
-    static class C08591 extends ThreadLocal<HashMap<String, ResolvedDomain>> {
-        C08591() {
+    static class C05601 extends ThreadLocal<HashMap<String, ResolvedDomain>> {
+        C05601() {
         }
 
         protected HashMap<String, ResolvedDomain> initialValue() {
@@ -109,8 +109,8 @@ public class ConnectionsManager {
     }
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$3 */
-    class C08633 extends BroadcastReceiver {
-        C08633() {
+    class C05643 extends BroadcastReceiver {
+        C05643() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -164,7 +164,7 @@ public class ConnectionsManager {
                                 try {
                                     httpConnectionStream.close();
                                 } catch (Throwable e2) {
-                                    FileLog.m3e(e2);
+                                    FileLog.m8e(e2);
                                 }
                             }
                             if (outbuf != null) {
@@ -195,12 +195,12 @@ public class ConnectionsManager {
             } catch (Throwable th3) {
                 e2 = th3;
                 try {
-                    FileLog.m3e(e2);
+                    FileLog.m8e(e2);
                     if (httpConnectionStream != null) {
                         try {
                             httpConnectionStream.close();
                         } catch (Throwable e22) {
-                            FileLog.m3e(e22);
+                            FileLog.m8e(e22);
                         }
                     }
                     if (byteArrayOutputStream != null) {
@@ -216,7 +216,7 @@ public class ConnectionsManager {
                         try {
                             httpConnectionStream.close();
                         } catch (Throwable e222) {
-                            FileLog.m3e(e222);
+                            FileLog.m8e(e222);
                         }
                     }
                     if (byteArrayOutputStream != null) {
@@ -236,7 +236,7 @@ public class ConnectionsManager {
                     if (result != null) {
                         ConnectionsManager.native_applyDnsConfig(AzureLoadTask.this.currentAccount, result.address, UserConfig.getInstance(AzureLoadTask.this.currentAccount).getClientPhone());
                     } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("failed to get azure result");
+                        FileLog.m5d("failed to get azure result");
                     }
                     ConnectionsManager.currentTask = null;
                 }
@@ -248,8 +248,8 @@ public class ConnectionsManager {
         private int currentAccount;
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$DnsTxtLoadTask$1 */
-        class C08711 implements Comparator<String> {
-            C08711() {
+        class C05721 implements Comparator<String> {
+            C05721() {
             }
 
             public int compare(String o1, String o2) {
@@ -319,13 +319,13 @@ public class ConnectionsManager {
                         } else {
                             if (read == -1) {
                             }
-                            array = new JSONObject(new String(outbuf.toByteArray(), C0621C.UTF8_NAME)).getJSONArray("Answer");
+                            array = new JSONObject(new String(outbuf.toByteArray(), C0020C.UTF8_NAME)).getJSONArray("Answer");
                             len = array.length();
                             arrayList = new ArrayList(len);
                             for (a = 0; a < len; a++) {
                                 arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                             }
-                            Collections.sort(arrayList, new C08711());
+                            Collections.sort(arrayList, new C05721());
                             builder = new StringBuilder();
                             for (a = 0; a < arrayList.size(); a++) {
                                 builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
@@ -337,7 +337,7 @@ public class ConnectionsManager {
                                 try {
                                     httpConnectionStream.close();
                                 } catch (Throwable e2) {
-                                    FileLog.m3e(e2);
+                                    FileLog.m8e(e2);
                                 }
                             }
                             if (outbuf != null) {
@@ -351,13 +351,13 @@ public class ConnectionsManager {
                             }
                         }
                     }
-                    array = new JSONObject(new String(outbuf.toByteArray(), C0621C.UTF8_NAME)).getJSONArray("Answer");
+                    array = new JSONObject(new String(outbuf.toByteArray(), C0020C.UTF8_NAME)).getJSONArray("Answer");
                     len = array.length();
                     arrayList = new ArrayList(len);
                     for (a = 0; a < len; a++) {
                         arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                     }
-                    Collections.sort(arrayList, new C08711());
+                    Collections.sort(arrayList, new C05721());
                     builder = new StringBuilder();
                     for (a = 0; a < arrayList.size(); a++) {
                         builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
@@ -383,7 +383,7 @@ public class ConnectionsManager {
                 try {
                     httpConnectionStream.close();
                 } catch (Throwable e22) {
-                    FileLog.m3e(e22);
+                    FileLog.m8e(e22);
                 }
             }
             if (outbuf != null) {
@@ -409,8 +409,8 @@ public class ConnectionsManager {
                         return;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("failed to get dns txt result");
-                        FileLog.m0d("start azure task");
+                        FileLog.m5d("failed to get dns txt result");
+                        FileLog.m5d("start azure task");
                     }
                     AzureLoadTask task = new AzureLoadTask(DnsTxtLoadTask.this.currentAccount);
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
@@ -425,8 +425,8 @@ public class ConnectionsManager {
         private FirebaseRemoteConfig firebaseRemoteConfig;
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$1 */
-        class C08741 implements OnCompleteListener<Void> {
-            C08741() {
+        class C05751 implements OnCompleteListener<Void> {
+            C05751() {
             }
 
             public void onComplete(Task<Void> finishedTask) {
@@ -441,8 +441,8 @@ public class ConnectionsManager {
                         }
                         if (TextUtils.isEmpty(config)) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("failed to get firebase result");
-                                FileLog.m0d("start dns txt task");
+                                FileLog.m5d("failed to get firebase result");
+                                FileLog.m5d("start dns txt task");
                             }
                             DnsTxtLoadTask task = new DnsTxtLoadTask(FirebaseTask.this.currentAccount);
                             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
@@ -455,7 +455,7 @@ public class ConnectionsManager {
                             buffer.writeBytes(bytes);
                             ConnectionsManager.native_applyDnsConfig(FirebaseTask.this.currentAccount, buffer.address, UserConfig.getInstance(FirebaseTask.this.currentAccount).getClientPhone());
                         } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                         }
                     }
                 });
@@ -463,14 +463,14 @@ public class ConnectionsManager {
         }
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$2 */
-        class C08752 implements Runnable {
-            C08752() {
+        class C05762 implements Runnable {
+            C05762() {
             }
 
             public void run() {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("failed to get firebase result");
-                    FileLog.m0d("start dns txt task");
+                    FileLog.m5d("failed to get firebase result");
+                    FileLog.m5d("start dns txt task");
                 }
                 DnsTxtLoadTask task = new DnsTxtLoadTask(FirebaseTask.this.currentAccount);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
@@ -491,13 +491,13 @@ public class ConnectionsManager {
                 this.firebaseRemoteConfig.setConfigSettings(new Builder().setDeveloperModeEnabled(false).build());
                 String currentValue = this.firebaseRemoteConfig.getString("ipconfigv2");
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("current firebase value = " + currentValue);
+                    FileLog.m5d("current firebase value = " + currentValue);
                 }
-                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C08741());
+                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C05751());
                 return null;
             } catch (Throwable e) {
-                Utilities.stageQueue.postRunnable(new C08752());
-                FileLog.m3e(e);
+                Utilities.stageQueue.postRunnable(new C05762());
+                FileLog.m8e(e);
             }
         }
 
@@ -635,7 +635,7 @@ public class ConnectionsManager {
             systemVersion = "SDK Unknown";
         }
         UserConfig.getInstance(this.currentAccount).loadConfig();
-        init(BuildVars.BUILD_VERSION, 82, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getInstance(this.currentAccount).getClientUserId(), enablePushConnection);
+        init(BuildVars.BUILD_VERSION, 85, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getInstance(this.currentAccount).getClientUserId(), enablePushConnection);
     }
 
     public long getCurrentTimeMillis() {
@@ -679,8 +679,8 @@ public class ConnectionsManager {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.tgnet.ConnectionsManager$2$1 */
-            class C08611 implements RequestDelegateInternal {
-                C08611() {
+            class C05621 implements RequestDelegateInternal {
+                C05621() {
                 }
 
                 public void run(long response, int errorCode, String errorText, int networkType) {
@@ -694,7 +694,7 @@ public class ConnectionsManager {
                             resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
                         } catch (Exception e2) {
                             e = e2;
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                             return;
                         }
                     } else if (errorText != null) {
@@ -703,13 +703,13 @@ public class ConnectionsManager {
                             error2.code = errorCode;
                             error2.text = errorText;
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m1e(tLObject + " got error " + error2.code + " " + error2.text);
+                                FileLog.m6e(tLObject + " got error " + error2.code + " " + error2.text);
                             }
                             error = error2;
                         } catch (Exception e3) {
                             e = e3;
                             error = error2;
-                            FileLog.m3e(e);
+                            FileLog.m8e(e);
                             return;
                         }
                     }
@@ -717,7 +717,7 @@ public class ConnectionsManager {
                         resp.networkType = networkType;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("java received " + resp + " error = " + error);
+                        FileLog.m5d("java received " + resp + " error = " + error);
                     }
                     final TLObject finalResponse = resp;
                     final TL_error finalError = error;
@@ -734,15 +734,15 @@ public class ConnectionsManager {
 
             public void run() {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("send request " + tLObject + " with token = " + requestToken);
+                    FileLog.m5d("send request " + tLObject + " with token = " + requestToken);
                 }
                 try {
                     NativeByteBuffer buffer = new NativeByteBuffer(tLObject.getObjectSize());
                     tLObject.serializeToStream(buffer);
                     tLObject.freeResources();
-                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C08611(), quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
+                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C05621(), quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
                 } catch (Throwable e) {
-                    FileLog.m3e(e);
+                    FileLog.m8e(e);
                 }
             }
         });
@@ -801,7 +801,7 @@ public class ConnectionsManager {
         }
         native_init(this.currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
         checkConnection();
-        ApplicationLoader.applicationContext.registerReceiver(new C08633(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        ApplicationLoader.applicationContext.registerReceiver(new C05643(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     public static void setLangCode(String langCode) {
@@ -851,7 +851,7 @@ public class ConnectionsManager {
         if (!byScreenState) {
             this.appPaused = value;
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("app paused = " + value);
+                FileLog.m5d("app paused = " + value);
             }
             if (value) {
                 this.appResumeCount--;
@@ -859,7 +859,7 @@ public class ConnectionsManager {
                 this.appResumeCount++;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("app resume count " + this.appResumeCount);
+                FileLog.m5d("app resume count " + this.appResumeCount);
             }
             if (this.appResumeCount < 0) {
                 this.appResumeCount = 0;
@@ -872,7 +872,7 @@ public class ConnectionsManager {
             native_pauseNetwork(this.currentAccount);
         } else if (!this.appPaused) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("reset app pause time");
+                FileLog.m5d("reset app pause time");
             }
             if (this.lastPauseTime != 0 && System.currentTimeMillis() - this.lastPauseTime > DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) {
                 ContactsController.getInstance(this.currentAccount).checkContacts();
@@ -889,7 +889,7 @@ public class ConnectionsManager {
             final TLObject message = TLClassStore.Instance().TLdeserialize(buff, buff.readInt32(true), true);
             if (message instanceof Updates) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("java received " + message);
+                    FileLog.m5d("java received " + message);
                 }
                 KeepAliveJob.finishJob();
                 Utilities.stageQueue.postRunnable(new Runnable() {
@@ -899,7 +899,7 @@ public class ConnectionsManager {
                 });
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -960,7 +960,7 @@ public class ConnectionsManager {
         try {
             StatsController.getInstance(currentAccount).incrementSentBytesCount(networkType, 6, (long) amount);
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -971,28 +971,28 @@ public class ConnectionsManager {
                     ConnectionsManager.lastDnsRequestTime = System.currentTimeMillis();
                     if (second == 2) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("start azure dns task");
+                            FileLog.m5d("start azure dns task");
                         }
                         AzureLoadTask task = new AzureLoadTask(currentAccount);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                         ConnectionsManager.currentTask = task;
                     } else if (second == 1) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("start dns txt task");
+                            FileLog.m5d("start dns txt task");
                         }
                         DnsTxtLoadTask task2 = new DnsTxtLoadTask(currentAccount);
                         task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                         ConnectionsManager.currentTask = task2;
                     } else {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("start firebase task");
+                            FileLog.m5d("start firebase task");
                         }
                         FirebaseTask task3 = new FirebaseTask(currentAccount);
                         task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                         ConnectionsManager.currentTask = task3;
                     }
                 } else if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("don't start task, current task = " + ConnectionsManager.currentTask + " next task = " + second + " time diff = " + Math.abs(ConnectionsManager.lastDnsRequestTime - System.currentTimeMillis()) + " network = " + ConnectionsManager.isNetworkOnline());
+                    FileLog.m5d("don't start task, current task = " + ConnectionsManager.currentTask + " next task = " + second + " time diff = " + Math.abs(ConnectionsManager.lastDnsRequestTime - System.currentTimeMillis()) + " network = " + ConnectionsManager.isNetworkOnline());
                 }
             }
         });
@@ -1045,7 +1045,7 @@ public class ConnectionsManager {
                         try {
                             httpConnectionStream.close();
                         } catch (Throwable e2) {
-                            FileLog.m3e(e2);
+                            FileLog.m8e(e2);
                         }
                     }
                     if (outbuf == null) {
@@ -1062,7 +1062,7 @@ public class ConnectionsManager {
                     try {
                         httpConnectionStream.close();
                     } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                        FileLog.m8e(e22);
                     }
                 }
                 if (outbuf != null) {
@@ -1087,7 +1087,7 @@ public class ConnectionsManager {
             }
         } catch (Throwable th3) {
             e22 = th3;
-            FileLog.m3e(e22);
+            FileLog.m8e(e22);
             if (httpConnectionStream != null) {
                 httpConnectionStream.close();
             }
@@ -1102,7 +1102,7 @@ public class ConnectionsManager {
         try {
             StatsController.getInstance(currentAccount).incrementReceivedBytesCount(networkType, 6, (long) amount);
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -1119,7 +1119,7 @@ public class ConnectionsManager {
                 });
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
     }
 
@@ -1165,7 +1165,7 @@ public class ConnectionsManager {
                 return netInfo.isRoaming();
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return false;
     }
@@ -1178,7 +1178,7 @@ public class ConnectionsManager {
                 return true;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return false;
     }
@@ -1190,7 +1190,7 @@ public class ConnectionsManager {
                 return true;
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return false;
     }
@@ -1225,22 +1225,22 @@ public class ConnectionsManager {
                     networkInterface = (NetworkInterface) networkInterfaces.nextElement();
                     if (!(!networkInterface.isUp() || networkInterface.isLoopback() || networkInterface.getInterfaceAddresses().isEmpty())) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("valid interface: " + networkInterface);
+                            FileLog.m5d("valid interface: " + networkInterface);
                         }
                         interfaceAddresses = networkInterface.getInterfaceAddresses();
                         for (a = 0; a < interfaceAddresses.size(); a++) {
                             inetAddress = ((InterfaceAddress) interfaceAddresses.get(a)).getAddress();
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("address: " + inetAddress.getHostAddress());
+                                FileLog.m5d("address: " + inetAddress.getHostAddress());
                             }
                             if (!(inetAddress.isLinkLocalAddress() || inetAddress.isLoopbackAddress() || inetAddress.isMulticastAddress() || !BuildVars.LOGS_ENABLED)) {
-                                FileLog.m0d("address is good");
+                                FileLog.m5d("address is good");
                             }
                         }
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         try {
@@ -1268,7 +1268,7 @@ public class ConnectionsManager {
             }
             return true;
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
             return false;
         }
     }
@@ -1308,7 +1308,7 @@ public class ConnectionsManager {
             }
             return true;
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
             return true;
         }
     }

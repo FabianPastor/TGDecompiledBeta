@@ -29,9 +29,9 @@ public class SnowflakesEffect {
         float vx;
         float vy;
         /* renamed from: x */
-        float f62x;
+        float f72x;
         /* renamed from: y */
-        float f63y;
+        float f73y;
 
         private Particle() {
         }
@@ -40,7 +40,7 @@ public class SnowflakesEffect {
             switch (this.type) {
                 case 0:
                     SnowflakesEffect.this.particlePaint.setAlpha((int) (255.0f * this.alpha));
-                    canvas.drawPoint(this.f62x, this.f63y, SnowflakesEffect.this.particlePaint);
+                    canvas.drawPoint(this.f72x, this.f73y, SnowflakesEffect.this.particlePaint);
                     return;
                 default:
                     SnowflakesEffect.this.particleThinPaint.setAlpha((int) (255.0f * this.alpha));
@@ -53,10 +53,10 @@ public class SnowflakesEffect {
                         float y1 = ((float) Math.sin((double) angle)) * px;
                         float cx = x1 * 0.66f;
                         float cy = y1 * 0.66f;
-                        canvas.drawLine(this.f62x, this.f63y, this.f62x + x1, this.f63y + y1, SnowflakesEffect.this.particleThinPaint);
+                        canvas.drawLine(this.f72x, this.f73y, this.f72x + x1, this.f73y + y1, SnowflakesEffect.this.particleThinPaint);
                         float angle2 = (float) (((double) angle) - 1.5707963267948966d);
-                        canvas.drawLine(this.f62x + cx, this.f63y + cy, this.f62x + ((float) ((Math.cos((double) angle2) * ((double) px1)) - (Math.sin((double) angle2) * ((double) py1)))), this.f63y + ((float) ((Math.sin((double) angle2) * ((double) px1)) + (Math.cos((double) angle2) * ((double) py1)))), SnowflakesEffect.this.particleThinPaint);
-                        canvas.drawLine(this.f62x + cx, this.f63y + cy, this.f62x + ((float) (((-Math.cos((double) angle2)) * ((double) px1)) - (Math.sin((double) angle2) * ((double) py1)))), this.f63y + ((float) (((-Math.sin((double) angle2)) * ((double) px1)) + (Math.cos((double) angle2) * ((double) py1)))), SnowflakesEffect.this.particleThinPaint);
+                        canvas.drawLine(this.f72x + cx, this.f73y + cy, this.f72x + ((float) ((Math.cos((double) angle2) * ((double) px1)) - (Math.sin((double) angle2) * ((double) py1)))), this.f73y + ((float) ((Math.sin((double) angle2) * ((double) px1)) + (Math.cos((double) angle2) * ((double) py1)))), SnowflakesEffect.this.particleThinPaint);
+                        canvas.drawLine(this.f72x + cx, this.f73y + cy, this.f72x + ((float) (((-Math.cos((double) angle2)) * ((double) px1)) - (Math.sin((double) angle2) * ((double) py1)))), this.f73y + ((float) (((-Math.sin((double) angle2)) * ((double) px1)) + (Math.cos((double) angle2) * ((double) py1)))), SnowflakesEffect.this.particleThinPaint);
                         angle += 1.0471976f;
                     }
                     return;
@@ -97,8 +97,8 @@ public class SnowflakesEffect {
                 } else {
                     particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation((particle.currentTime - 200.0f) / (particle.lifeTime - 200.0f));
                 }
-                particle.f62x += ((particle.vx * particle.velocity) * ((float) dt)) / 500.0f;
-                particle.f63y += ((particle.vy * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.f72x += ((particle.vx * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.f73y += ((particle.vy * particle.velocity) * ((float) dt)) / 500.0f;
                 particle.currentTime += (float) dt;
             }
             a++;
@@ -125,8 +125,8 @@ public class SnowflakesEffect {
                     newParticle = (Particle) this.freeParticles.get(0);
                     this.freeParticles.remove(0);
                 }
-                newParticle.f62x = cx;
-                newParticle.f63y = cy;
+                newParticle.f72x = cx;
+                newParticle.f73y = cy;
                 newParticle.vx = vx;
                 newParticle.vy = vy;
                 newParticle.alpha = 0.0f;

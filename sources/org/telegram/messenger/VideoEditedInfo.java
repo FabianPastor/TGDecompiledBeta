@@ -66,7 +66,7 @@ public class VideoEditedInfo {
             }
             return true;
         } catch (Throwable e2) {
-            FileLog.m3e(e2);
+            FileLog.m8e(e2);
             return false;
         }
     }

@@ -34,13 +34,13 @@ public class CallSwipeView extends View {
     private View viewToDrag;
 
     /* renamed from: org.telegram.ui.Components.voip.CallSwipeView$1 */
-    class C17981 extends AnimatorListenerAdapter {
-        private Runnable restarter = new C17971();
+    class C12881 extends AnimatorListenerAdapter {
+        private Runnable restarter = new C12871();
         private long startTime;
 
         /* renamed from: org.telegram.ui.Components.voip.CallSwipeView$1$1 */
-        class C17971 implements Runnable {
-            C17971() {
+        class C12871 implements Runnable {
+            C12871() {
             }
 
             public void run() {
@@ -50,13 +50,13 @@ public class CallSwipeView extends View {
             }
         }
 
-        C17981() {
+        C12881() {
         }
 
         public void onAnimationEnd(Animator animation) {
             if (System.currentTimeMillis() - this.startTime < animation.getDuration() / 4) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m4w("Not repeating animation because previous loop was too fast");
+                    FileLog.m9w("Not repeating animation because previous loop was too fast");
                 }
             } else if (!CallSwipeView.this.canceled && CallSwipeView.this.animatingArrows) {
                 CallSwipeView.this.post(this.restarter);
@@ -116,7 +116,7 @@ public class CallSwipeView extends View {
         }
         this.arrowAnim = new AnimatorSet();
         this.arrowAnim.playTogether(anims);
-        this.arrowAnim.addListener(new C17981());
+        this.arrowAnim.addListener(new C12881());
     }
 
     protected void onDetachedFromWindow() {

@@ -16,7 +16,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0505R;
+import org.telegram.messenger.C0431R;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MrzRecognizer;
 import org.telegram.messenger.MrzRecognizer.Result;
@@ -43,8 +43,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     private TextView titleTextView;
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$1 */
-    class C21071 extends ActionBarMenuOnItemClick {
-        C21071() {
+    class C14801 extends ActionBarMenuOnItemClick {
+        C14801() {
         }
 
         public void onItemClick(int id) {
@@ -55,8 +55,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$3 */
-    class C21093 implements OnTouchListener {
-        C21093() {
+    class C14823 implements OnTouchListener {
+        C14823() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -65,8 +65,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$4 */
-    class C21104 implements CameraViewDelegate {
-        C21104() {
+    class C14834 implements CameraViewDelegate {
+        C14834() {
         }
 
         public void onCameraCreated(Camera camera) {
@@ -82,8 +82,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$5 */
-    class C21115 implements Runnable {
-        C21115() {
+    class C14845 implements Runnable {
+        C14845() {
         }
 
         public void run() {
@@ -107,14 +107,14 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     public View createView(Context context) {
         getParentActivity().setRequestedOrientation(1);
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        this.actionBar.setBackButtonImage(C0505R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(C0431R.drawable.ic_ab_back);
         this.actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
         this.actionBar.setCastShadows(false);
         if (!AndroidUtilities.isTablet()) {
             this.actionBar.showActionModeTop();
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21071());
+        this.actionBar.setActionBarMenuOnItemClick(new C14801());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -140,21 +140,21 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         };
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         ViewGroup viewGroup = this.fragmentView;
-        viewGroup.setOnTouchListener(new C21093());
+        viewGroup.setOnTouchListener(new C14823());
         this.cameraView = new CameraView(context, false);
-        this.cameraView.setDelegate(new C21104());
+        this.cameraView.setDelegate(new C14834());
         viewGroup.addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.titleTextView.setGravity(1);
         this.titleTextView.setTextSize(1, 24.0f);
-        this.titleTextView.setText(LocaleController.getString("PassportScanPassport", C0505R.string.PassportScanPassport));
+        this.titleTextView.setText(LocaleController.getString("PassportScanPassport", C0431R.string.PassportScanPassport));
         viewGroup.addView(this.titleTextView);
         this.descriptionText = new TextView(context);
         this.descriptionText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
         this.descriptionText.setGravity(1);
         this.descriptionText.setTextSize(1, 16.0f);
-        this.descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", C0505R.string.PassportScanPassportInfo));
+        this.descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", C0431R.string.PassportScanPassportInfo));
         viewGroup.addView(this.descriptionText);
         this.recognizedMrzView = new TextView(context);
         this.recognizedMrzView.setTypeface(Typeface.MONOSPACE);
@@ -188,7 +188,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     private void startRecognizing() {
         this.backgroundHandlerThread.start();
         this.handler = new Handler(this.backgroundHandlerThread.getLooper());
-        AndroidUtilities.runOnUIThread(new C21115());
+        AndroidUtilities.runOnUIThread(new C14845());
     }
 
     public void onPreviewFrame(final byte[] data, final Camera camera) {
@@ -204,8 +204,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.ui.MrzCameraActivity$6$1$1 */
-                                class C21121 implements Runnable {
-                                    C21121() {
+                                class C14851 implements Runnable {
+                                    C14851() {
                                     }
 
                                     public void run() {
@@ -219,7 +219,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                                     if (MrzCameraActivity.this.delegate != null) {
                                         MrzCameraActivity.this.delegate.didFindMrzInfo(res);
                                     }
-                                    AndroidUtilities.runOnUIThread(new C21121(), 1200);
+                                    AndroidUtilities.runOnUIThread(new C14851(), 1200);
                                 }
                             });
                         }

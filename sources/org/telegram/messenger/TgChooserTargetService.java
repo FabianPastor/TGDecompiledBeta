@@ -74,7 +74,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                             MessagesStorage.getInstance(currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
                         }
                     } catch (Throwable e) {
-                        FileLog.m3e(e);
+                        FileLog.m8e(e);
                     }
                     for (int a = 0; a < dialogs.size(); a++) {
                         Bundle extras = new Bundle();
@@ -113,7 +113,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                         }
                         if (name != null) {
                             if (icon == null) {
-                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, C0505R.drawable.logo_avatar);
+                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, C0431R.drawable.logo_avatar);
                             }
                             targets.add(new ChooserTarget(name, icon, 1.0f, componentName, extras));
                         }
@@ -124,7 +124,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             try {
                 countDownLatch.await();
             } catch (Throwable e) {
-                FileLog.m3e(e);
+                FileLog.m8e(e);
             }
         }
         return targets;
@@ -148,7 +148,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 return Icon.createWithBitmap(result);
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            FileLog.m8e(e);
         }
         return null;
     }

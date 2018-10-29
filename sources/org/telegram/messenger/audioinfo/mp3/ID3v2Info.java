@@ -3,14 +3,15 @@ package org.telegram.messenger.audioinfo.mp3;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import com.google.android.exoplayer2.metadata.id3.ApicFrame;
+import com.google.android.exoplayer2.metadata.id3.CommentFrame;
+import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
+import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
-import org.telegram.messenger.exoplayer2.RendererCapabilities;
-import org.telegram.messenger.exoplayer2.metadata.id3.ApicFrame;
-import org.telegram.messenger.exoplayer2.metadata.id3.CommentFrame;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class ID3v2Info extends AudioInfo {
@@ -345,7 +346,7 @@ public class ID3v2Info extends AudioInfo {
                                 }
                             }
                         } catch (Throwable e) {
-                            e.printStackTrace();
+                            ThrowableExtension.printStackTrace(e);
                         }
                         this.coverPictureType = picture.type;
                         return;
@@ -477,8 +478,8 @@ public class ID3v2Info extends AudioInfo {
                     }
                 }
                 return;
-            case 23:
-            case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
+            case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
+            case 24:
                 String trck = parseTextFrame(frame);
                 if (trck.length() > 0) {
                     index = trck.indexOf(47);
@@ -513,16 +514,16 @@ public class ID3v2Info extends AudioInfo {
                     }
                 }
                 return;
-            case 25:
-            case 26:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                 this.grouping = parseTextFrame(frame);
                 return;
             case 27:
-            case 28:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL28 /*28*/:
                 this.title = parseTextFrame(frame);
                 return;
-            case 29:
-            case 30:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL29 /*29*/:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL30 /*30*/:
                 String tyer = parseTextFrame(frame);
                 if (tyer.length() > 0) {
                     try {
@@ -537,7 +538,7 @@ public class ID3v2Info extends AudioInfo {
                     }
                 }
                 return;
-            case 31:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL31 /*31*/:
             case 32:
                 if (this.lyrics == null) {
                     this.lyrics = parseCommentOrUnsynchronizedLyricsFrame(frame).text;
