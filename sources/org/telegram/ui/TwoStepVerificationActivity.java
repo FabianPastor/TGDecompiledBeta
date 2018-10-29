@@ -650,7 +650,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 return;
             }
         }
-        if (this.type == 0 && !this.destroyed && this.shortPollRunnable == null && !TextUtils.isEmpty(this.currentPassword.email_unconfirmed_pattern)) {
+        if (!(this.type != 0 || this.destroyed || this.shortPollRunnable != null || this.currentPassword == null || TextUtils.isEmpty(this.currentPassword.email_unconfirmed_pattern))) {
             startShortpoll();
         }
         updateRows();
