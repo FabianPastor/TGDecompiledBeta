@@ -64,8 +64,8 @@ public class UserConfig {
     public boolean unreadDialogsLoaded = true;
 
     /* renamed from: org.telegram.messenger.UserConfig$1 */
-    class C04381 implements Runnable {
-        C04381() {
+    class C05481 implements Runnable {
+        C05481() {
         }
 
         public void run() {
@@ -74,6 +74,7 @@ public class UserConfig {
     }
 
     public static UserConfig getInstance(int num) {
+        Throwable th;
         UserConfig localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (UserConfig.class) {
@@ -85,15 +86,15 @@ public class UserConfig {
                         try {
                             userConfigArr[num] = localInstance2;
                             localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
+                        } catch (Throwable th2) {
+                            th = th2;
                             localInstance = localInstance2;
-                            throw th2;
+                            throw th;
                         }
                     }
                 } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                    th = th3;
+                    throw th;
                 }
             }
         }
@@ -130,6 +131,7 @@ public class UserConfig {
     public void saveConfig(boolean withFile, File oldFile) {
         synchronized (this.sync) {
             SharedPreferences preferences;
+            SerializedData data;
             if (this.currentAccount == 0) {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
             } else {
@@ -167,7 +169,7 @@ public class UserConfig {
             }
             if (this.unacceptedTermsOfService != null) {
                 try {
-                    SerializedData data = new SerializedData(this.unacceptedTermsOfService.getObjectSize());
+                    data = new SerializedData(this.unacceptedTermsOfService.getObjectSize());
                     this.unacceptedTermsOfService.serializeToStream(data);
                     editor.putString("terms", Base64.encodeToString(data.toByteArray(), 0));
                     data.cleanup();
@@ -222,7 +224,7 @@ public class UserConfig {
                     oldFile.delete();
                 }
             } catch (Throwable e3) {
-                FileLog.m8e(e3);
+                FileLog.m14e(e3);
             }
         }
     }
@@ -238,7 +240,7 @@ public class UserConfig {
     public int getClientUserId() {
         int i;
         synchronized (this.sync) {
-            i = this.currentUser != null ? this.currentUser.id : 0;
+            i = this.currentUser != null ? this.currentUser.f228id : 0;
         }
         return i;
     }
@@ -262,7 +264,7 @@ public class UserConfig {
     public void setCurrentUser(User user) {
         synchronized (this.sync) {
             this.currentUser = user;
-            this.clientUserId = user.id;
+            this.clientUserId = user.f228id;
         }
     }
 
@@ -273,6 +275,7 @@ public class UserConfig {
             }
             SharedPreferences preferences;
             byte[] arr;
+            SerializedData data;
             byte[] bytes;
             if (this.currentAccount == 0) {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
@@ -303,13 +306,13 @@ public class UserConfig {
                 if (terms != null) {
                     arr = Base64.decode(terms, 0);
                     if (arr != null) {
-                        SerializedData data = new SerializedData(arr);
+                        data = new SerializedData(arr);
                         this.unacceptedTermsOfService = TL_help_termsOfService.TLdeserialize(data, data.readInt32(false), false);
                         data.cleanup();
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
             if (this.currentAccount == 0) {
                 this.lastUpdateCheckTime = preferences.getLong("appUpdateCheckTime", System.currentTimeMillis());
@@ -331,15 +334,15 @@ public class UserConfig {
                             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                             updateTime = Math.max(packageInfo.lastUpdateTime, packageInfo.firstInstallTime);
                         } catch (Throwable e2) {
-                            FileLog.m8e(e2);
+                            FileLog.m14e(e2);
                         }
                         if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
                             this.pendingAppUpdate = null;
-                            AndroidUtilities.runOnUIThread(new C04381());
+                            AndroidUtilities.runOnUIThread(new C05481());
                         }
                     }
                 } catch (Throwable e22) {
-                    FileLog.m8e(e22);
+                    FileLog.m14e(e22);
                 }
             }
             this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
@@ -376,9 +379,10 @@ public class UserConfig {
                 }
             }
             if (this.currentUser != null) {
-                this.clientUserId = this.currentUser.id;
+                this.clientUserId = this.currentUser.f228id;
             }
             this.configLoaded = true;
+            return;
         }
     }
 

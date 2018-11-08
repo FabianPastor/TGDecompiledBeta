@@ -164,7 +164,7 @@
     <string name="AreYouSureDeletePhoto">هل أنت متأكد من رغبتك في حذف هذه الصورة؟</string>
     <string name="AreYouSureDeleteThisChat">هل أنت متأكد من رغبتك في حذف هذه المحادثة؟</string>
     <string name="AreYouSureDeleteVideo">هل أنت متأكد من رغبتك في حذف هذا المقطع المرئي؟</string>
-    <string name="AreYouSureLogout">هل أنت متأكد من رغبتك في تسجيل الخروج؟\n\nتذكَّر أنه يمكنك استخدام تيليجرام على جميع أجهزتك في ذات الوقت بسهولة تامة.\n\nولا تنسَ أن تسجيل الخروج سيحذف كل محادثاتك السرية.</string>
+    <string name="AreYouSureLogout">هل أنت متأكد من رغبتك في تسجيل الخروج؟\10\10تذكَّر أنه يمكنك استخدام تيليجرام على جميع أجهزتك في ذات الوقت بسهولة تامة.\10\10ولا تنسَ أن تسجيل الخروج سيحذف كل محادثاتك السرية.</string>
     <string name="AreYouSureRegistration">هل أنت متأكد من رغبتك في إلغاء التسجيل؟</string>
     <string name="AreYouSureSecretChat">هل أنت متأكد من رغبتك في بدءِ محادثة سرية؟</string>
     <string name="AreYouSureSessions">هل أنت متأكد من رغبتك في إنهاء جميع الجلسات النشطة الأخرى؟</string>
@@ -176,7 +176,7 @@
     <string name="ArticleByAuthor">بواسطة %1$s</string>
     <string name="ArticleDateByAuthor">%1$s بواسطة %2$s</string>
     <string name="AskAQuestion">اسأل سؤالًا</string>
-    <string name="AskAQuestionInfo">نرجو الأخذ بالعلم أن الدعم الفني في تيليجرام يقوم به مجموعة من المتطوعين. نحاول الرد سريعًا قدر الإمكان، لكن ذلك قد يستغرق بعض الوقت.\n\nيرجى الإطلاع على&lt;a href=\"https://telegram.org/faq/ar#a\"&gt; الأسئلة الشائعة عن تيليجرام&lt;/a&gt; فهي تحوي إجابات لمعظم الأسئلة &lt;a href=\"https://telegram.org/faq/ar#j\"&gt;وحلولًا للعديد من المشاكل.&lt;/a&gt;</string>
+    <string name="AskAQuestionInfo">نرجو الأخذ بالعلم أن الدعم الفني في تيليجرام يقوم به مجموعة من المتطوعين. نحاول الرد سريعًا قدر الإمكان، لكن ذلك قد يستغرق بعض الوقت.\10\10يرجى الإطلاع على&lt;a href=\"https://telegram.org/faq/ar#a\"&gt; الأسئلة الشائعة عن تيليجرام&lt;/a&gt; فهي تحوي إجابات لمعظم الأسئلة &lt;a href=\"https://telegram.org/faq/ar#j\"&gt;وحلولًا للعديد من المشاكل.&lt;/a&gt;</string>
     <string name="AskButton">اسأل متطوعًا</string>
     <string name="AttachAudio">رسالة صوتية</string>
     <string name="AttachBotsHelp">مرِّر إلى الأسفل للبوتات</string>
@@ -223,7 +223,7 @@
     <string name="AutoNightTheme">الوضع الليلي الآلي</string>
     <string name="AutoNightTo">حتى</string>
     <string name="AutoNightUpdateLocation">تحديث الموقع</string>
-    <string name="AutoNightUpdateLocationInfo">يتطلب حساب مواعيد الشروق والغروب التحقق لمرة واحدة من موقعك التقريبي. يرجى العلم أن موقعك يتم حفظه في جهازك فقط.\n\nالغروب: %1$s\nالشروق: %2$s</string>
+    <string name="AutoNightUpdateLocationInfo">يتطلب حساب مواعيد الشروق والغروب التحقق لمرة واحدة من موقعك التقريبي. يرجى العلم أن موقعك يتم حفظه في جهازك فقط.\10\10الغروب: %1$s\10الشروق: %2$s</string>
     <string name="AutodownloadChannels">القنوات</string>
     <string name="AutodownloadContacts">جهات الاتصال</string>
     <string name="AutodownloadGroupChats">محادثات المجموعات</string>
@@ -288,7 +288,7 @@
     <string name="CallsTotalTime">الوقت الإجمالي</string>
     <string name="Cancel">إلغاء</string>
     <string name="CancelAccountReset">إلغاء إعادة تعيين الحساب</string>
-    <string name="CancelAccountResetInfo">شخص ما لديه صلاحية الوصول لرقمك **%1$s** طلب حذف حسابك وتعطيل التحقق بخطوتين من حسابك.\n\nإن لم يكن أنت، فقم رجاء بإدخال الرمز الذي أرسلناه للتوِّ برسالة قصيرة.</string>
+    <string name="CancelAccountResetInfo">شخص ما لديه صلاحية الوصول لرقمك **%1$s** طلب حذف حسابك وتعطيل التحقق بخطوتين من حسابك.\10\10إن لم يكن أنت، فقم رجاء بإدخال الرمز الذي أرسلناه للتوِّ برسالة قصيرة.</string>
     <string name="CancelLinkExpired">رابط غير صحيح أو منتهي الصلاحية.</string>
     <string name="CancelLinkSuccess">تم إلغاء عملية حذف حسابك %1$s. يمكنك الآن إغلاق هذه النافذة.</string>
     <string name="CancelRegistration">إلغاء التسجيل</string>
@@ -297,7 +297,7 @@
     <string name="Caption">الوصف</string>
     <string name="ChangeLanguageLater">يمكنك تغيير لغة التطبيق لاحقًا من الإعدادات.</string>
     <string name="ChangePasscode">تغيير رمز القفل</string>
-    <string name="ChangePasscodeInfo">عندما تقوم بتعيين رمز قفل إضافي ستظهر أيقونة قفل أعلى صفحةِ المحادثات. اضغط عليها لإقفال تيليجرام أو فتْحِه.\n\nملحوظة: إذا نسيت رمز القفل فستحتاج لحذف التطبيق وإعادة تنزيله، ستفقد كافة محادثاتك السرية.</string>
+    <string name="ChangePasscodeInfo">عندما تقوم بتعيين رمز قفل إضافي ستظهر أيقونة قفل أعلى صفحةِ المحادثات. اضغط عليها لإقفال تيليجرام أو فتْحِه.\10\10ملحوظة: إذا نسيت رمز القفل فستحتاج لحذف التطبيق وإعادة تنزيله، ستفقد كافة محادثاتك السرية.</string>
     <string name="ChangePassword">تغيير كلمة المرور</string>
     <string name="ChangePhoneHelp">سيتم إرسال رسالة SMS قصيرة تحوي رمز التفعيل إلى رقمك الجديد.</string>
     <string name="ChangePhoneNewNumber">الرقم الجديد</string>
@@ -361,7 +361,7 @@
     <string name="ChannelPrivateInfo">يمكن الانضمام للقنوات الخاصة عن طريق رابط الدعوة فقط.</string>
     <string name="ChannelPrivateLinkHelp">يستطيع الناس الانضمام لقناتك من خلال هذا الرابط. يمكنك استبداله في أي وقت.</string>
     <string name="ChannelPublic">قناة عامة</string>
-    <string name="ChannelPublicEmptyUsername">فضلًا قم باختيار رابط لقناتك العامة ليتمكن الناس من إيجادها عبر البحث ومشاركتِها مع غيرهم.\n\nإذا لم ترغب بذلك، ننصحك بإنشاء قناة خاصة بدلا منها.</string>
+    <string name="ChannelPublicEmptyUsername">فضلًا قم باختيار رابط لقناتك العامة ليتمكن الناس من إيجادها عبر البحث ومشاركتِها مع غيرهم.\10\10إذا لم ترغب بذلك، ننصحك بإنشاء قناة خاصة بدلا منها.</string>
     <string name="ChannelPublicInfo">يمكن إيجاد القنوات العامة من خلال البحث ويستطيع أي شخص الانضمام لها.</string>
     <string name="ChannelRemoveUser">الإزالة من القناة</string>
     <string name="ChannelRemoveUserAdmin">إزالة المشرف</string>
@@ -442,7 +442,7 @@
     <string name="ColorViolet">بنفسجي</string>
     <string name="ColorWhite">أبيض</string>
     <string name="ColorYellow">أصفر</string>
-    <string name="CompatibilityChat">يستخدم %1$s إصدارًا قديمًا من تيليجرام، لذلك ستظهر الصور السرية في الوضع التوافقي.\n\nعندما يقوم %2$s بتحديث تيليجرام فإن الصور التي بها عداد تدمير خلال دقيقة أو أقل ستعمل بطريقة \"الاستمرار بالضغط للمشاهدة\"، وسيتم إخبارك عندما يلتقط المستقبل صورة للشاشة.</string>
+    <string name="CompatibilityChat">يستخدم %1$s إصدارًا قديمًا من تيليجرام، لذلك ستظهر الصور السرية في الوضع التوافقي.\10\10عندما يقوم %2$s بتحديث تيليجرام فإن الصور التي بها عداد تدمير خلال دقيقة أو أقل ستعمل بطريقة \"الاستمرار بالضغط للمشاهدة\"، وسيتم إخبارك عندما يلتقط المستقبل صورة للشاشة.</string>
     <string name="ConfirmDeleteCallLog">هل أنت متأكد من رغبتك في حذف المكالمة من سجل المكالمات؟</string>
     <string name="Connected">متصل</string>
     <string name="Connecting">جارٍ الاتصال...</string>
@@ -464,8 +464,8 @@
     <string name="ConvertGroup">تحويل إلى مجموعة خارقة</string>
     <string name="ConvertGroupAlert">تحذير: هذا القرار لا يمكن التراجع عنه، لن تتمكن من إعادة المجموعة الخارقة إلى مجموع عادية مرة أخرى.</string>
     <string name="ConvertGroupAlertWarning">تحذير</string>
-    <string name="ConvertGroupInfo">**تم بلوغ الحد الأقصى لعدد الأعضاء**\n\nلتخطي هذا الحد والحصول على خصائص جديدة، يمكنك الترقية لمجموعة خارقة:\n\n• يمكن أن تحتوي المجموعات الخارقة على %1$s عضو\n• يمكن للأعضاء الجدد مشاهدة سجل المحادثات كاملًا\n• تختفي الرسائل المحذوفة من أجهزة جميع الأعضاء\n• يمكن للمشرفين تثبيت الرسائل المهمة\n• يمكن لمُنشئ المجموعة إنشاء رابط عام لها</string>
-    <string name="ConvertGroupInfo2">** في المجموعات الخارقة:**\n\n• يمكن للأعضاء الجدد مشاهدة سجل المحادثات كاملًا\n• تختفي الرسائل المحذوفة من أجهزة جميع الأعضاء\n• يمكن للمشرفين تثبيت الرسائل المهمة\n• يمكن لمُنشئ المجموعة إنشاء رابط عام لها</string>
+    <string name="ConvertGroupInfo">**تم بلوغ الحد الأقصى لعدد الأعضاء**\10\10لتخطي هذا الحد والحصول على خصائص جديدة، يمكنك الترقية لمجموعة خارقة:\10\10• يمكن أن تحتوي المجموعات الخارقة على %1$s عضو\10• يمكن للأعضاء الجدد مشاهدة سجل المحادثات كاملًا\10• تختفي الرسائل المحذوفة من أجهزة جميع الأعضاء\10• يمكن للمشرفين تثبيت الرسائل المهمة\10• يمكن لمُنشئ المجموعة إنشاء رابط عام لها</string>
+    <string name="ConvertGroupInfo2">** في المجموعات الخارقة:**\10\10• يمكن للأعضاء الجدد مشاهدة سجل المحادثات كاملًا\10• تختفي الرسائل المحذوفة من أجهزة جميع الأعضاء\10• يمكن للمشرفين تثبيت الرسائل المهمة\10• يمكن لمُنشئ المجموعة إنشاء رابط عام لها</string>
     <string name="ConvertGroupInfo3">**ملحوظة:** لن يكون بإمكانك التراجع عن هذا القرار.</string>
     <string name="ConvertGroupMenu">تحويل إلى مجموعة خارقة</string>
     <string name="Copy">نسخ</string>
@@ -491,7 +491,7 @@
     <string name="CurvesGreen">أخضر</string>
     <string name="CurvesRed">أحمر</string>
     <string name="CustomCallInfo">هؤلاء المستخدمون سيتم السماح لهم بالاتصال بك أو منعُهم من ذلك بغض النظر عن الإعدادات أعلاه.</string>
-    <string name="CustomHelp">هام: لن تستطيع رؤية آخر ظهور للأشخاص الذين اخترت ألا يروا آخر ظهور لك.\nسيتم بدلًا من ذلك عرض آخر ظهور تقريبي (شُوهدَ مؤخرًا، خلال أسبوع، خلال شهر).</string>
+    <string name="CustomHelp">هام: لن تستطيع رؤية آخر ظهور للأشخاص الذين اخترت ألا يروا آخر ظهور لك.\10سيتم بدلًا من ذلك عرض آخر ظهور تقريبي (شُوهدَ مؤخرًا، خلال أسبوع، خلال شهر).</string>
     <string name="CustomNotifications">الإشعارات المخصصة</string>
     <string name="CustomShareInfo">هؤلاء المستخدمون سيتم السماح لهم بإضافتك للمجموعات والقنوات أو منعُهم من ذلك بغض النظر عن الإعدادات أعلاه.</string>
     <string name="CustomShareSettingsHelp">ستتجاوز هذه الإعدادات القيم في الأعلى.</string>
@@ -593,7 +593,7 @@
     <string name="EditName">تعديل الاسم</string>
     <string name="EditedMessage">معدلة</string>
     <string name="EmailCopied">تم نسخ البريد للحافظة</string>
-    <string name="EmailPasswordConfirmText">لإكمال عملية إعدادِ التحقق بخطوتين قم بما يلي رجاءً:\n\n١. تفقَّد بريدك الإلكتروني %1$s (بما في ذلك مجلد الرسائل غير المرغوب فيها).\n\n٢. اضغط على رابط التأكيد.</string>
+    <string name="EmailPasswordConfirmText">لإكمال عملية إعدادِ التحقق بخطوتين قم بما يلي رجاءً:\10\10١. تفقَّد بريدك الإلكتروني %1$s (بما في ذلك مجلد الرسائل غير المرغوب فيها).\10\10٢. اضغط على رابط التأكيد.</string>
     <string name="Emoji">الرموز التعبيرية</string>
     <string name="EmojiBigSize">رسمُ رمز تعبيري واحد كبير</string>
     <string name="EmojiUseDefault">استخدم الرموز التعبيرية الافتراضية</string>
@@ -602,7 +602,7 @@
     <string name="EnableAllStreamingInfo">بعض المقاطع المرئية لا يمكن بثها – على سبيل المثال: كل المقاطع المرئية التي تم إرسالها من نسخة التطبيق 4.7 أو ما قبلها.</string>
     <string name="EnableAnimations">تفعيل المؤثرات البصرية</string>
     <string name="EnableStreaming">بَثُّ الصوتيات والمقاطع المرئية</string>
-    <string name="EnabledPasswordText">لقد قمت بتفعيل التحقق بخطوتين.\nلتسجيل الدخول إلى حسابك هذا من أجهزة جديدةٍ ستحتاج إلى كلمة المرور التي قمت بتعيينها.</string>
+    <string name="EnabledPasswordText">لقد قمت بتفعيل التحقق بخطوتين.\10لتسجيل الدخول إلى حسابك هذا من أجهزة جديدةٍ ستحتاج إلى كلمة المرور التي قمت بتعيينها.</string>
     <string name="EncryptedChatStartedIncoming">لقد انضممت للمحادثة السرية</string>
     <string name="EncryptedChatStartedOutgoing">انضم %s لمحادثتك السرية.</string>
     <string name="EncryptedDescription1">تستخدم التشفير من البداية للنهاية</string>
@@ -613,7 +613,7 @@
     <string name="EncryptedPlaceholderTitleIncoming">%s دعاك للانضمام لمحادثة سرية.</string>
     <string name="EncryptedPlaceholderTitleOutgoing">لقد قمت بدعوة %s لمحادثة سرية.</string>
     <string name="EncryptionKey">مفتاح التشفير</string>
-    <string name="EncryptionKeyDescription">تم اشتقاق الصورة والنص من مفتاح تشفير هذه المحادثة السرية مع **%1$s**.\n\nإن كانت مطابقة لما يظهر على جهاز **%2$s**، فالتشفير من البداية للنهاية مضمون.\n\nللاستزادة، اطلع على telegram.org</string>
+    <string name="EncryptionKeyDescription">تم اشتقاق الصورة والنص من مفتاح تشفير هذه المحادثة السرية مع **%1$s**.\10\10إن كانت مطابقة لما يظهر على جهاز **%2$s**، فالتشفير من البداية للنهاية مضمون.\10\10للاستزادة، اطلع على telegram.org</string>
     <string name="EncryptionKeyLink">https://telegram.org/faq/ar#g</string>
     <string name="EncryptionProcessing">جارٍ مبادلة مفاتيح التشفير...</string>
     <string name="EncryptionRejected">تم إلغاء المحادثة السرية</string>
@@ -651,9 +651,9 @@
     <string name="EventLogEditedMedia">عدّل un1 ملف الوسائط:</string>
     <string name="EventLogEditedMediaCaption">عدّل un1 ملف الوسائط والوصف:</string>
     <string name="EventLogEditedMessages">un1 عدل هذه الرسالة:</string>
-    <string name="EventLogEmpty">**لا توجد أحداث هنا بعد**\n\nأعضاء المجموعة ومشرفيها\nلم يقوموا بأي أحداث\nخلال الـ 48 ساعة الماضية.</string>
-    <string name="EventLogEmptyChannel">**لا توجد أحداث هنا بعد**\n\nمشرفي القناة\nلم يقوموا بأي أحداث\nخلال الـ 48 ساعة الماضية.</string>
-    <string name="EventLogEmptySearch">**لم يتم العثور على أحداث**\n\nلا توجد نتائج تطابق ما بحثت عنه\nضمن الأحداث الأخيرة.</string>
+    <string name="EventLogEmpty">**لا توجد أحداث هنا بعد**\10\10أعضاء المجموعة ومشرفيها\10لم يقوموا بأي أحداث\10خلال الـ 48 ساعة الماضية.</string>
+    <string name="EventLogEmptyChannel">**لا توجد أحداث هنا بعد**\10\10مشرفي القناة\10لم يقوموا بأي أحداث\10خلال الـ 48 ساعة الماضية.</string>
+    <string name="EventLogEmptySearch">**لم يتم العثور على أحداث**\10\10لا توجد نتائج تطابق ما بحثت عنه\10ضمن الأحداث الأخيرة.</string>
     <string name="EventLogEmptyTextSearch">لا توجد أحداث حصلت مؤخرًأ تحوي \'**%1$s**\' تم العثور عليها.</string>
     <string name="EventLogFilterAll">كافة الأحداث</string>
     <string name="EventLogFilterChannelInfo">معلومات القناة</string>
@@ -690,14 +690,14 @@
     <string name="EventLogRemovedChannelLink">un1 أزال رابط القناة</string>
     <string name="EventLogRemovedChannelPhoto">أزال un1 صورة القناة</string>
     <string name="EventLogRemovedGroupLink">un1 أزال رابط المجموعة</string>
-    <string name="EventLogRemovedStickersSet">\nun1 أزال حزمة ملصقات المجموعة</string>
+    <string name="EventLogRemovedStickersSet">\10un1 أزال حزمة ملصقات المجموعة</string>
     <string name="EventLogRemovedWGroupPhoto">أزال un1 صورة المجموعة</string>
     <string name="EventLogRestrictedReadMessages">قراءة الرسائل</string>
     <string name="EventLogRestrictedSendEmbed">تضمين روابط</string>
     <string name="EventLogRestrictedSendMedia">إرسال الوسائط</string>
     <string name="EventLogRestrictedSendMessages">إرسال الرسائل</string>
     <string name="EventLogRestrictedSendStickers">إرسال الملصقات والصور المتحركة</string>
-    <string name="EventLogRestrictedUntil">غير القيود الخاصة بـ %1$s\n\nلمدة: %2$s</string>
+    <string name="EventLogRestrictedUntil">غير القيود الخاصة بـ %1$s\10\10لمدة: %2$s</string>
     <string name="EventLogSelectedEvents">الأحداث المختارة</string>
     <string name="EventLogToggledInvitesHistoryOff">جعل un1 سجل محادثة المجموعة مخفيًا للأعضاء الجدد</string>
     <string name="EventLogToggledInvitesHistoryOn">جعل un1 سجل المحادثة في المجموعة ظاهرًا للأعضاء الجدد</string>
@@ -811,7 +811,7 @@
     <string name="GettingLinkInfo">جارٍ جلب معلومات الرابط...</string>
     <string name="GifCaption">وصف الصورة المتحركة</string>
     <string name="GlobalSearch">البحث العام</string>
-    <string name="GotAQuestion">هل يوجد لديك سؤال\nحول تيليجرام؟</string>
+    <string name="GotAQuestion">هل يوجد لديك سؤال\10حول تيليجرام؟</string>
     <string name="GpsDisabledAlert">يبدو أن تحديد المواقع معطّل لديك، يرجى تفعيله لاستخدام ميزات تيليجرام التي تحتاجه.</string>
     <string name="Grain">حبوب</string>
     <string name="GroupMembers">أعضاء</string>
@@ -899,7 +899,7 @@
     <string name="KMetersAway">ك.مترًا من هنا</string>
     <string name="KeepMedia">الإحتفاظ بالوسائط</string>
     <string name="KeepMediaForever">للأبد</string>
-    <string name="KeepMediaInfo">سيتم حذف جميع الصور، المقاطع المرئية، وجميع الملفات المحفوظة في خوادمنا والتي **لم تقم باستخدامها** خلال هذه المدة لتوفير المساحة على هذا الجهاز.\n\nمع ذلك ستبقى جميع الملفات في خوادم تيليجرام، ويمكنك إعادة تنزيلها مرة أخرى متى ما احتجتها.</string>
+    <string name="KeepMediaInfo">سيتم حذف جميع الصور، المقاطع المرئية، وجميع الملفات المحفوظة في خوادمنا والتي **لم تقم باستخدامها** خلال هذه المدة لتوفير المساحة على هذا الجهاز.\10\10مع ذلك ستبقى جميع الملفات في خوادم تيليجرام، ويمكنك إعادة تنزيلها مرة أخرى متى ما احتجتها.</string>
     <string name="KickFromBroadcast">إزالة من قائمة الرسالة الجماعية</string>
     <string name="KickFromGroup">إزالة من المجموعة</string>
     <string name="KickFromSupergroup">تقييد المستخدم</string>
@@ -950,7 +950,7 @@
     <string name="LocalCache">الملفات الأخرى</string>
     <string name="LocalDatabase">قاعدة البيانات على الجهاز</string>
     <string name="LocalDatabaseClear">هل ترغب في مسح الرسائل النصية من الذاكرة المؤقتة؟</string>
-    <string name="LocalDatabaseInfo">مسح قاعدة البيانات على الجهاز سيحذف الرسائل التي تم تنزيلها على جهازك ويقوم بضغط قاعدة البيانات لتوفير مساحة على جهازك. تيليجرام يحتاج لبعض البيانات ليعمل، لذلك حجم قاعدة البيانات لن يصل إلى صفر.\n\nهذه العملية ربما تأخذ عدة دقائق لتتم.</string>
+    <string name="LocalDatabaseInfo">مسح قاعدة البيانات على الجهاز سيحذف الرسائل التي تم تنزيلها على جهازك ويقوم بضغط قاعدة البيانات لتوفير مساحة على جهازك. تيليجرام يحتاج لبعض البيانات ليعمل، لذلك حجم قاعدة البيانات لن يصل إلى صفر.\10\10هذه العملية ربما تأخذ عدة دقائق لتتم.</string>
     <string name="LocalDocumentCache">المستندات</string>
     <string name="LocalGifCache">الصور المتحركة</string>
     <string name="LocalMusicCache">الصوتيات</string>
@@ -1077,10 +1077,10 @@
     <string name="NoBlockedUsers">لا يوجد مستخدمون محظورون</string>
     <string name="NoCallLog">لم تقم بإجراء أي مكالمة بعد.</string>
     <string name="NoChats">لا توجد محادثات بعد...</string>
-    <string name="NoChatsContactsHelp">ابدأ المراسلة عبر الضغط على\nزر الرسالة في الزاوية السفلية الشاشة\nأو اضغط على زر القائمة للمزيد من الخيارات.</string>
-    <string name="NoChatsHelp">ابدأ المراسلة عبر الضغط على\nزر الرسالة في الزاوية السفلية للشاشة\nأو اضغط على زر القائمة للمزيد من الخيارات.</string>
+    <string name="NoChatsContactsHelp">ابدأ المراسلة عبر الضغط على\10زر الرسالة في الزاوية السفلية الشاشة\10أو اضغط على زر القائمة للمزيد من الخيارات.</string>
+    <string name="NoChatsHelp">ابدأ المراسلة عبر الضغط على\10زر الرسالة في الزاوية السفلية للشاشة\10أو اضغط على زر القائمة للمزيد من الخيارات.</string>
     <string name="NoContacts">لا توجد جهات اتصال بعد</string>
-    <string name="NoExceptions">يحوي هذا القسم على جميع المحادثات التي تملك إعدادات إشعارات مخصصة.\n\nيمكنك تخصيص إشعارات المحادثات عبر فتح صفحاتها واختيار \'الإشعارات\'. </string>
+    <string name="NoExceptions">يحوي هذا القسم على جميع المحادثات التي تملك إعدادات إشعارات مخصصة.\10\10يمكنك تخصيص إشعارات المحادثات عبر فتح صفحاتها واختيار \'الإشعارات\'. </string>
     <string name="NoGroupsInCommon">لا توجد مجموعات مشتركة بعد</string>
     <string name="NoHandleAppInstalled">لا تملك تطبيقًا يمكنه فتح صيغة الملفات \'%1$s\'، يرجى تنزيل تطبيق مناسب للاستمرار</string>
     <string name="NoMailInstalled">يرجى مراسلتنا عبر البريد الإلكتروني sms@stel.com لإخبارنا بمشكلتك.</string>
@@ -1198,7 +1198,7 @@
     <string name="NotificationMessageText">%1$s: %2$s</string>
     <string name="NotificationMessageVideo">أرسل لك %1$s مقطعًا مرئيًا</string>
     <string name="NotificationMessagesPeopleDisplayOrder">%1$s %2$s</string>
-    <string name="NotificationUnrecognizedDevice">%1$s، \nلقد تم تسجيل الدخول لحسابك هذا من جهاز جديد في: %2$s\n\nالجهاز: %3$s\nالموقع: %4$s\n\nإن لم تكن أنت من قام بتسجيل الدخول فيمكنك الذهاب للإعدادات - الخصوصية والأمان - الجلسات النشطة - ومن ثم إنهاء الجلسات المريبة.\n\nإذا كنت تعتقد أن شخصًا ما قام بتسجيل الدخول دون إذنك فيمكنك تفعيل التحقق بخطوتين من خلال قسم الخصوصية واﻷمان في الإعدادات.\n\nشكرًا، \nفريق تيليجرام</string>
+    <string name="NotificationUnrecognizedDevice">%1$s، \10لقد تم تسجيل الدخول لحسابك هذا من جهاز جديد في: %2$s\10\10الجهاز: %3$s\10الموقع: %4$s\10\10إن لم تكن أنت من قام بتسجيل الدخول فيمكنك الذهاب للإعدادات - الخصوصية والأمان - الجلسات النشطة - ومن ثم إنهاء الجلسات المريبة.\10\10إذا كنت تعتقد أن شخصًا ما قام بتسجيل الدخول دون إذنك فيمكنك تفعيل التحقق بخطوتين من خلال قسم الخصوصية واﻷمان في الإعدادات.\10\10شكرًا، \10فريق تيليجرام</string>
     <string name="Notifications">الإشعارات</string>
     <string name="NotificationsAndSounds">الإشعارات والأصوات</string>
     <string name="NotificationsCustom">مخصص</string>
@@ -1250,17 +1250,17 @@
     <string name="OtherSessions">الجلسات النشطة</string>
     <string name="OtherWebSessions">المواقع المتصلة</string>
     <string name="OutgoingCalls">المكالمات صادرة</string>
-    <string name="Page1Message">تيليجرام هو **أسرع** تطبيق مراسلة في العالم.\n,وهو كذلك **مجاني** و **آمن**.</string>
+    <string name="Page1Message">تيليجرام هو **أسرع** تطبيق مراسلة في العالم.\10,وهو كذلك **مجاني** و **آمن**.</string>
     <string name="Page1Title">تيليجرام</string>
-    <string name="Page2Message">**تيليجرام** يوصل الرّسائل أسرع من\nأي تطبيق آخر.</string>
+    <string name="Page2Message">**تيليجرام** يوصل الرّسائل أسرع من\10أي تطبيق آخر.</string>
     <string name="Page2Title">سريع</string>
-    <string name="Page3Message">**تيليجرام** مجّاني للأبد. لا إعلانات.\nدون رسوم إشتراك.</string>
+    <string name="Page3Message">**تيليجرام** مجّاني للأبد. لا إعلانات.\10دون رسوم إشتراك.</string>
     <string name="Page3Title">مجاني</string>
-    <string name="Page4Message">**تيليجرام** يحمي رسائلك\nمن هجمات المخترقين.</string>
+    <string name="Page4Message">**تيليجرام** يحمي رسائلك\10من هجمات المخترقين.</string>
     <string name="Page4Title">آمن</string>
-    <string name="Page5Message">**تيليجرام** لا يفرض حدودًا على حجم\nمحادثاتك و وسائطك.</string>
+    <string name="Page5Message">**تيليجرام** لا يفرض حدودًا على حجم\10محادثاتك و وسائطك.</string>
     <string name="Page5Title">قوي</string>
-    <string name="Page6Message">**تيليجرام** يمكنك من الوصول إلى الرسائل الخاصة بك\nمن أجهزة متعددة.</string>
+    <string name="Page6Message">**تيليجرام** يمكنك من الوصول إلى الرسائل الخاصة بك\10من أجهزة متعددة.</string>
     <string name="Page6Title">مرتبط بالسحاب</string>
     <string name="PaintDelete">حذف</string>
     <string name="PaintDuplicate">تكرار</string>
@@ -1340,7 +1340,7 @@
     <string name="PassportIdentityID">Upload a scan of your identity card</string>
     <string name="PassportIdentityInternalPassport">Upload a scan of your internal passport</string>
     <string name="PassportIdentityPassport">Upload a scan of your passport</string>
-    <string name="PassportInfo">مع **جواز تيليجرام** يمْكنك التسجيل في المواقع والخدمات التي تتطلب توثيق الهوية الشخصية بسهولة.\n\nمعلوماتك، بياناتك الشخصية ووثائقك محمية ومشفرة من البداية للنهاية. لا أحد بما فيهم تيليجرام ذاتُه يمكنه الوصول إليها دون إذنك. \n\nلمزيد من التفاصيل يمكنك زيارة الأسئلة الشائعة عن تيليجرام.</string>
+    <string name="PassportInfo">مع **جواز تيليجرام** يمْكنك التسجيل في المواقع والخدمات التي تتطلب توثيق الهوية الشخصية بسهولة.\10\10معلوماتك، بياناتك الشخصية ووثائقك محمية ومشفرة من البداية للنهاية. لا أحد بما فيهم تيليجرام ذاتُه يمكنه الوصول إليها دون إذنك. \10\10لمزيد من التفاصيل يمكنك زيارة الأسئلة الشائعة عن تيليجرام.</string>
     <string name="PassportInfoTitle">ماهو جواز تيليجرام؟</string>
     <string name="PassportLanguage_AR">العربية</string>
     <string name="PassportLanguage_AZ">الأذرية</string>
@@ -1395,7 +1395,7 @@
     <string name="PassportMidnameCountry">الاسم الأوسط (%1$s)</string>
     <string name="PassportMidnameLatin">الاسم الأوسط (بالأحرف اللاتينية)</string>
     <string name="PassportName">الاسم</string>
-    <string name="PassportNameCheckAlert">يرجى التأكد إن كان هذا الاسم صحيحًا:\n\n%1$s %2$s %3$s</string>
+    <string name="PassportNameCheckAlert">يرجى التأكد إن كان هذا الاسم صحيحًا:\10\10%1$s %2$s %3$s</string>
     <string name="PassportNameCountry">الاسم (%1$s)</string>
     <string name="PassportNameLatin">الاسم (بالأحرف اللاتينية)</string>
     <string name="PassportNativeHeader">اسمك</string>
@@ -1517,7 +1517,7 @@
     <string name="PaymentTransactionReview">مراجعة العملية</string>
     <string name="PaymentTransactionTotal">الإجمالي</string>
     <string name="PaymentWarning">تحذير</string>
-    <string name="PaymentWarningText">لا يملك تيليجرام ولا %1$s صلاحياتِ الوصولِ إلى معلومات بطاقتك الإئتمانية. تفاصيل البطاقات الإئتمانية تتم معالجتها مباشرة عن طريق نظام الدفع %2$s.\n\nالدفعات المالية تذهب بشكل مباشر إلى مطور %1$s. لا يوفر تيليجرام أي ضمانات حول عملية الشراء، لذلك استمر على مسئوليتك. في حال وجود مشاكل يمكنك التواصل مع مطور %1$s أو مع المَصرف الخاص بك.</string>
+    <string name="PaymentWarningText">لا يملك تيليجرام ولا %1$s صلاحياتِ الوصولِ إلى معلومات بطاقتك الإئتمانية. تفاصيل البطاقات الإئتمانية تتم معالجتها مباشرة عن طريق نظام الدفع %2$s.\10\10الدفعات المالية تذهب بشكل مباشر إلى مطور %1$s. لا يوفر تيليجرام أي ضمانات حول عملية الشراء، لذلك استمر على مسئوليتك. في حال وجود مشاكل يمكنك التواصل مع مطور %1$s أو مع المَصرف الخاص بك.</string>
     <string name="PendingEmailText">بريد الاسترداد الخاص بك %1$s غير مفعل ويَلزمك تفعيله عبر الرسالة الواردة إليه.</string>
     <string name="PermissionContacts">يحتاج تيليجرام إلى الوصول لجهات اتصالك لتتمكن من التواصل مع أصدقائك عبر جميع أجهزتك.</string>
     <string name="PermissionDrawAboveOtherApps">يحتاج تيليجرام إلى صلاحية الظهور فوق التطبيقات لتشغيل المقاطع المرئية في وضع (صورة في الصورة).</string>
@@ -1536,7 +1536,7 @@
     <string name="PhoneNumberAlert">ستحصل جميع جهات اتصالك على رقمك الجديد، في حال وجود رقمك القديم عندها وعدم قيامك بحظرها سابقًا في تيليجرام.</string>
     <string name="PhoneNumberChange">تغيير الرقم</string>
     <string name="PhoneNumberFlood">المعذرة، لقد قمت بحذف حسابك وإعادة إنشائه عدة مرات مؤخرًا، انتظر لعدة أيام رجاءً قبل محاولة إنشاء الحساب من جديد.</string>
-    <string name="PhoneNumberHelp">يمكنك تغيير رقم تيليجرام الخاص بك هنا، سيتم نقل حسابك وجميع بياناتك التي في سحابة تيليجرام بما فيها رسائلك، الوسائط، جهات الاتصال وغيرها للرقم الجديد.\n\n**هام:** ستحصل جميع جهات اتصالك على **رقمك الجديد**، في حال وجود رقمك القديم عندها وعدم قيامك بحظرها سابقًا في تيليجرام.</string>
+    <string name="PhoneNumberHelp">يمكنك تغيير رقم تيليجرام الخاص بك هنا، سيتم نقل حسابك وجميع بياناتك التي في سحابة تيليجرام بما فيها رسائلك، الوسائط، جهات الاتصال وغيرها للرقم الجديد.\10\10**هام:** ستحصل جميع جهات اتصالك على **رقمك الجديد**، في حال وجود رقمك القديم عندها وعدم قيامك بحظرها سابقًا في تيليجرام.</string>
     <string name="PhoneOther">آخر</string>
     <string name="PhoneWork">العمل</string>
     <string name="PhotoCaption">وصف الصورة</string>
@@ -1641,7 +1641,7 @@
     <string name="ResetAccount">إعادة تعيين الحساب</string>
     <string name="ResetAccountButton">إعادة تعيين</string>
     <string name="ResetAccountCancelledAlert">تم إلغاء محاولاتك السابقة لإعادة تعيين هذا الحساب. فضلًا أعد المحاولة بعد 7 أيام.</string>
-    <string name="ResetAccountInfo">بما أن الحساب **%1$s** فعّال ومحمي بكلمة مرور، سنقوم بحذفه خلال أسبوع لأسباب أمنية.\n\nيمكنك إلغاء هذه العملية في أي وقت.</string>
+    <string name="ResetAccountInfo">بما أن الحساب **%1$s** فعّال ومحمي بكلمة مرور، سنقوم بحذفه خلال أسبوع لأسباب أمنية.\10\10يمكنك إلغاء هذه العملية في أي وقت.</string>
     <string name="ResetAccountStatus">ستتمكن من إعادة تعيين حسابك خلال:</string>
     <string name="ResetAllNotifications">إعادة تعيين كافة الإشعارات</string>
     <string name="ResetAutomaticMediaDownload">إعادة تعيين إعدادات التنزيل التلقائي </string>
@@ -1650,12 +1650,12 @@
     <string name="ResetMyAccountText">إذا قمت بإعادة تعيين حسابك، ستفقد كافّة محادثاتك ورسائلك، بالإضافة إلى الوسائط والملفات التي تمت مشاركتها.</string>
     <string name="ResetMyAccountWarning">تحذير</string>
     <string name="ResetMyAccountWarningReset">إعادة تعيين</string>
-    <string name="ResetMyAccountWarningText">لن يكون بإمكانك الرجوع عن هذا القرار.\n\nإذا قمت بإعادة تعيين حسابك، سيتم حذف كافة رسائلك ومحادثاتك.</string>
+    <string name="ResetMyAccountWarningText">لن يكون بإمكانك الرجوع عن هذا القرار.\10\10إذا قمت بإعادة تعيين حسابك، سيتم حذف كافة رسائلك ومحادثاتك.</string>
     <string name="ResetNotificationsAlert">هل أنت متأكد من رغبتك في إعادة تعيين إعدادات الإشعارات إلى الوضع الافتراضي؟</string>
     <string name="ResetNotificationsText">تم تعيين كل الإشعارات إلى الوضع الافتراضي</string>
     <string name="ResetStatistics">إعادة تعيين الإحصائيات</string>
     <string name="ResetStatisticsAlert">هل ترغب في مسح إحصائيات استخدامك؟</string>
-    <string name="RestoreEmailSent">لقد قمنا بإرسال رمز الاستعادة إلى بريدك الإلكتروني الذي اخترته مسبقًا:\n\n%1$s</string>
+    <string name="RestoreEmailSent">لقد قمنا بإرسال رمز الاستعادة إلى بريدك الإلكتروني الذي اخترته مسبقًا:\10\10%1$s</string>
     <string name="RestoreEmailSentInfo">يرجى تفقُّد بريدك وإدخال رمز التفعيل الذي قمنا بإرساله والمكون من 6 أرقام.</string>
     <string name="RestoreEmailTrouble">هل تواجه صعوبات في الدخول إلى بريدك %1$s؟</string>
     <string name="RestoreEmailTroubleText">إن لم تستطع الوصول إلى البريد الإلكتروني، فإن خياراتك المتبقية هي إما أن تتذكر كلمة المرور الخاصة بك أو أن تعيد تعيين حسابك.</string>
@@ -1669,8 +1669,8 @@
     <string name="RevokeAlertNewLink">رابط الدعوة السابق لم يعد مفعلًا، تم إنشاء رابط جديد بدلًا منه.</string>
     <string name="RevokeButton">استبدال</string>
     <string name="RevokeLink">استبدال الرابط</string>
-    <string name="RevokeLinkAlert">هل أنت متأكد من رغبتك في تعطيل الرابط **%1$s**؟\n\nستصبح المجموعة \"**%2$s**\" خاصة.</string>
-    <string name="RevokeLinkAlertChannel">هل أنت متأكد من رغبتك في تعطيل الرابط **%1$s**؟\nستصبح القناة \"**%2$s**\" خاصة.</string>
+    <string name="RevokeLinkAlert">هل أنت متأكد من رغبتك في تعطيل الرابط **%1$s**؟\10\10ستصبح المجموعة \"**%2$s**\" خاصة.</string>
+    <string name="RevokeLinkAlertChannel">هل أنت متأكد من رغبتك في تعطيل الرابط **%1$s**؟\10ستصبح القناة \"**%2$s**\" خاصة.</string>
     <string name="RoamingUsage">استخدام بيانات التجوال</string>
     <string name="SETTINGS">الإعدادات</string>
     <string name="Satellite">قمر صناعي</string>
@@ -1685,7 +1685,7 @@
     <string name="SavedMessages">الرسائل المحفوظة</string>
     <string name="SavedMessagesInfo">أعد التوجيه إلى هنا للحفظ.</string>
     <string name="ScreenCapture">السماح بتصوير الشاشة</string>
-    <string name="ScreenCaptureInfo">إن تم التفعيل، ستتمكن من تصوير الشاشة داخل التطبيق، لكن سيعرض النظام محادثاتك في شاشة تعدد المهام حتى في حال تفعيل رمز القفل.\n\nقد تحتاج لإعادة تشغيل التطبيق ليتم تفعيل هذا الخيار.</string>
+    <string name="ScreenCaptureInfo">إن تم التفعيل، ستتمكن من تصوير الشاشة داخل التطبيق، لكن سيعرض النظام محادثاتك في شاشة تعدد المهام حتى في حال تفعيل رمز القفل.\10\10قد تحتاج لإعادة تشغيل التطبيق ليتم تفعيل هذا الخيار.</string>
     <string name="SdCard">بطاقة الذاكرة</string>
     <string name="Search">بحث</string>
     <string name="SearchFriends">بحث الأصدقاء</string>
@@ -1753,7 +1753,7 @@
     <string name="SendingVideo">جارٍ إرسال المقطع المرئي...</string>
     <string name="SendingVideoStatus">يرسل مقطعًا مرئيًا...</string>
     <string name="SentAppCode">أرسلنا الرمز إلى تطبيق **تيليجرام** على جهازك الآخر.</string>
-    <string name="SentCallCode">يتم الاتصال على رقمك **%1$s**.\n\nلا حاجة للرد، سيقوم تيليجرام بعملية التفعيل تلقائيًا.</string>
+    <string name="SentCallCode">يتم الاتصال على رقمك **%1$s**.\10\10لا حاجة للرد، سيقوم تيليجرام بعملية التفعيل تلقائيًا.</string>
     <string name="SentCallOnly">يتم الاتصال برقمك **%1$s** لإملاء الرمز عليك صوتيًا.</string>
     <string name="SentSmsCode">تم إرسال رسالة تحتوي على رمز التفعيل لرقمك **%1$s**.</string>
     <string name="ServiceNotifications">إشعارات الخدمة</string>
@@ -1877,7 +1877,7 @@
     <string name="TelegramFaqUrl">https://telegram.org/faq/ar</string>
     <string name="TelegramPassport">جواز تيليجرام</string>
     <string name="TelegramPassportCreatePassword">إنشاء كلمة مرور</string>
-    <string name="TelegramPassportCreatePasswordInfo">يرجى إنشاء كلمة مرور لحماية بياناتك الشخصية باستخدام التشفير من البداية للنهاية.\n\nستكون كلمة المرور هذه مطلوبة أيضًا عند تسجيل دخولك إلى تيليجرام على جهاز جديد.</string>
+    <string name="TelegramPassportCreatePasswordInfo">يرجى إنشاء كلمة مرور لحماية بياناتك الشخصية باستخدام التشفير من البداية للنهاية.\10\10ستكون كلمة المرور هذه مطلوبة أيضًا عند تسجيل دخولك إلى تيليجرام على جهاز جديد.</string>
     <string name="TelegramPassportDelete">حذف جواز تيليجرام</string>
     <string name="TelegramPassportDeleteAlert">هل أنت متأكد من رغبتك في حذف جواز تيليجرام الخاص بك؟</string>
     <string name="TelegramVersion">تيليجرام للأندرويد %1$s</string>
@@ -1889,7 +1889,7 @@
     <string name="TerminateWebSessionQuestion">فك الارتباط مع %1$s؟</string>
     <string name="TerminateWebSessionStop">حظر %1$s</string>
     <string name="TermsOfService">شروط الخدمة</string>
-    <string name="TermsOfServiceLogin">من خلال تسجيلك،\nأنت توافق على *شروط الخدمة*.</string>
+    <string name="TermsOfServiceLogin">من خلال تسجيلك،\10أنت توافق على *شروط الخدمة*.</string>
     <string name="TextCopied">تم نسخ النص للحافظة</string>
     <string name="TextSize">حجم خط الرسائل</string>
     <string name="Theme">النمط</string>
@@ -1908,12 +1908,12 @@
     <string name="TintShadows">الظلال</string>
     <string name="TodayAt">في</string>
     <string name="TodayAtFormatted">الساعة %1$s</string>
-    <string name="TooManyTries">محاولات عديدة.\nأعد المحاولة خلال %1$s.</string>
+    <string name="TooManyTries">محاولات عديدة.\10أعد المحاولة خلال %1$s.</string>
     <string name="TosAgeText">اضغط موافق للتأكيد بأن عمرك %1$s أو أكثر.</string>
     <string name="TosAgeTitle">التحقق من العمر</string>
-    <string name="TosDecline">نحن متأسفون للغاية، ولكن هذا يعني أنه لا يمكنك الاشتراك بتيليجرام.\n\nعلى عكس الآخرين، نحن لا نستخدم بياناتك لاستهدافك بالإعلانات أو لأغراض تجارية أخرى. لا يخزن تيليجرام سوى المعلومات التي يحتاجها ليعمل كخدمة سحابية غنية بالميزات. يمكنك ضبط كيفية استخدامنا لبياناتك (مثل إعدادات حذف الجهات المزامَنة) في إعدادات الخصوصية والأمان.\n\nلكن إن كنت غير موافق على احتياجات تيليجرام المتواضعة بشكل عام، فلن يكون من الممكن لنا تقديم هذه الخدمة.</string>
-    <string name="TosDeclineDeleteAccount">تحذير، سيؤدي هذا إلى حذف حسابك في تيليجرام بشكل نهائي بالإضافة لجميع البيانات التي تخزنها في سحابة تيليجرام.\n\nهام: يمكنك الإلغاء الآن وتصدير بياناتك قبل حذف حسابك عوضًا عن خسارتها كلها. (للقيام بذلك، افتح النسخة الأخيرة من تيليجرام لسطح المكتب وتوجه إلى الإعدادات &gt; تصدير بيانات تيليجرام.)</string>
-    <string name="TosUpdateDecline">نحن متأسفون للغاية، ولكن هذا يعني أنه يجب علينا الافتراق. على عكس الآخرين فنحن لا نستخدم بياناتك لاستهدافك بالإعلانات أو لأغراض تجارية أخرى. لا يخزن تيليجرام سوى المعلومات التي يحتاجها ليعمل كخدمة سحابية غنية بالميزات. يمكنك التحكم بكيفية استخدامنا لبياناتك (مثل إعدادات حذف الجهات المزامَنة) في إعدادات الخصوصية والأمان.\n\nلكن إن كنت غيرَ موافق على احتياجات تيليجرام المتواضعة بشكل عام، فلن يكون بإمكاننا تقديم هذه الخدمة. يمكنك حذف حسابك الآن — أو القيام بالإطلاع أكثر ومن ثَم حذفِه لاحقًا إن كنت تشعر بعدم الرضى عن الطريقة التي نستخدم بها بياناتك.</string>
+    <string name="TosDecline">نحن متأسفون للغاية، ولكن هذا يعني أنه لا يمكنك الاشتراك بتيليجرام.\10\10على عكس الآخرين، نحن لا نستخدم بياناتك لاستهدافك بالإعلانات أو لأغراض تجارية أخرى. لا يخزن تيليجرام سوى المعلومات التي يحتاجها ليعمل كخدمة سحابية غنية بالميزات. يمكنك ضبط كيفية استخدامنا لبياناتك (مثل إعدادات حذف الجهات المزامَنة) في إعدادات الخصوصية والأمان.\10\10لكن إن كنت غير موافق على احتياجات تيليجرام المتواضعة بشكل عام، فلن يكون من الممكن لنا تقديم هذه الخدمة.</string>
+    <string name="TosDeclineDeleteAccount">تحذير، سيؤدي هذا إلى حذف حسابك في تيليجرام بشكل نهائي بالإضافة لجميع البيانات التي تخزنها في سحابة تيليجرام.\10\10هام: يمكنك الإلغاء الآن وتصدير بياناتك قبل حذف حسابك عوضًا عن خسارتها كلها. (للقيام بذلك، افتح النسخة الأخيرة من تيليجرام لسطح المكتب وتوجه إلى الإعدادات &gt; تصدير بيانات تيليجرام.)</string>
+    <string name="TosUpdateDecline">نحن متأسفون للغاية، ولكن هذا يعني أنه يجب علينا الافتراق. على عكس الآخرين فنحن لا نستخدم بياناتك لاستهدافك بالإعلانات أو لأغراض تجارية أخرى. لا يخزن تيليجرام سوى المعلومات التي يحتاجها ليعمل كخدمة سحابية غنية بالميزات. يمكنك التحكم بكيفية استخدامنا لبياناتك (مثل إعدادات حذف الجهات المزامَنة) في إعدادات الخصوصية والأمان.\10\10لكن إن كنت غيرَ موافق على احتياجات تيليجرام المتواضعة بشكل عام، فلن يكون بإمكاننا تقديم هذه الخدمة. يمكنك حذف حسابك الآن — أو القيام بالإطلاع أكثر ومن ثَم حذفِه لاحقًا إن كنت تشعر بعدم الرضى عن الطريقة التي نستخدم بها بياناتك.</string>
     <string name="TotalDataUsage">الإجمالي</string>
     <string name="TurnPasswordOff">إيقاف كلمة المرور</string>
     <string name="TurnPasswordOffPassport">تحذير! سيتم فقدان جميع البيانات المحفوظة في جواز تيليجرام!</string>
@@ -1972,7 +1972,7 @@
     <string name="UseProxyTelegram">بروكسي MTProto</string>
     <string name="UseProxyTelegramError">لم يتم إعداد البروكسي الذي تستخدمه بشكل صحيح وسيتم تعطيله. يرجى العثور على واحد آخر.</string>
     <string name="UseProxyTelegramInfo">إعدادات بروكسي MTProto.</string>
-    <string name="UseProxyTelegramInfo2">قد يعرض هذا البروكسي قناة إعلانية في قائمة الدردشات الخاصة بك.\nلن يكشف هذا عن أي من بيانات تيليجرام الخاصة بك.</string>
+    <string name="UseProxyTelegramInfo2">قد يعرض هذا البروكسي قناة إعلانية في قائمة الدردشات الخاصة بك.\10لن يكشف هذا عن أي من بيانات تيليجرام الخاصة بك.</string>
     <string name="UseProxyUsername">اسم المستخدم</string>
     <string name="UserBio">النبذة التعريفية</string>
     <string name="UserBioEmpty">لا شيء</string>
@@ -1993,8 +1993,8 @@
     <string name="UsernameAvailable">%1$s متاح.</string>
     <string name="UsernameChecking">جارٍ التحقق من اسم المستخدم...</string>
     <string name="UsernameEmpty">لا شيء</string>
-    <string name="UsernameHelp">يمكنك اختيار اسم مستخدم لحسابك في **تيليجرام**، إذا قمت بذلك سيتمكن المستخدمون الآخرون من العثور عليك والتواصل معك عبر هذا الاسم دون معرفة رقمك.\n\nيمكنك استخدام **الحروف والأرقام الإنجليزية** وكذلك الشَّرطة السفلية. الطول الأدنى هو **خمسُ خانات**.</string>
-    <string name="UsernameHelpLink">يقوم هذا الرابط بفتح محادثة معك في تيليجرام:\n%1$s</string>
+    <string name="UsernameHelp">يمكنك اختيار اسم مستخدم لحسابك في **تيليجرام**، إذا قمت بذلك سيتمكن المستخدمون الآخرون من العثور عليك والتواصل معك عبر هذا الاسم دون معرفة رقمك.\10\10يمكنك استخدام **الحروف والأرقام الإنجليزية** وكذلك الشَّرطة السفلية. الطول الأدنى هو **خمسُ خانات**.</string>
+    <string name="UsernameHelpLink">يقوم هذا الرابط بفتح محادثة معك في تيليجرام:\10%1$s</string>
     <string name="UsernameInUse">عذرًا، هذا الاسم محجوز.</string>
     <string name="UsernameInvalid">المعذرة، اسم المستخدم غير مقبول.</string>
     <string name="UsernameInvalidLong">لا يمكن أن يتخطى الاسم 32 حرفًا كحد أقصى.</string>
@@ -2102,7 +2102,7 @@
     <string name="YourEmailInfo">فضلًا قم بإضافة بريد إلكتروني صالح، هذه هي الطريقة الوحيدة لاستعادة كلمة المرور المنسية.</string>
     <string name="YourEmailSkip">تجاوز</string>
     <string name="YourEmailSkipWarning">تحذير</string>
-    <string name="YourEmailSkipWarningText">المخاطرة حقيقية!\n\nإن نسيتَ كلمة مرورك، ستفقد الوصول لحسابك في تيليجرام، لن يكون هناك أي طريقة لاستعادته.</string>
+    <string name="YourEmailSkipWarningText">المخاطرة حقيقية!\10\10إن نسيتَ كلمة مرورك، ستفقد الوصول لحسابك في تيليجرام، لن يكون هناك أي طريقة لاستعادته.</string>
     <string name="YourName">اسمك</string>
     <string name="YourPassword">كلمة مرورك</string>
     <string name="YourPasswordSuccess">نجح الأمر!</string>

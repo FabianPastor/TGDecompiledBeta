@@ -1,7 +1,7 @@
 package org.telegram.messenger.support.widget.helper;
 
 import android.graphics.Canvas;
-import android.support.v4.view.ViewCompat;
+import android.support.p000v4.view.ViewCompat;
 import android.view.View;
 import org.telegram.messenger.support.widget.RecyclerView;
 

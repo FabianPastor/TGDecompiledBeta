@@ -22,8 +22,6 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                                 MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
                                 return;
                             }
-                        case 86:
-                            return;
                         case 87:
                             MediaController.getInstance().playNextMessage();
                             return;

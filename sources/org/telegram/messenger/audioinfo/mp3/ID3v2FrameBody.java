@@ -5,15 +5,15 @@ import java.io.InputStream;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class ID3v2FrameBody {
-    static final ThreadLocal<Buffer> textBuffer = new C04481();
+    static final ThreadLocal<Buffer> textBuffer = new C05581();
     private final ID3v2DataInput data = new ID3v2DataInput(this.input);
     private final ID3v2FrameHeader frameHeader;
     private final RangeInputStream input;
     private final ID3v2TagHeader tagHeader;
 
     /* renamed from: org.telegram.messenger.audioinfo.mp3.ID3v2FrameBody$1 */
-    static class C04481 extends ThreadLocal<Buffer> {
-        C04481() {
+    static class C05581 extends ThreadLocal<Buffer> {
+        C05581() {
         }
 
         protected Buffer initialValue() {
@@ -85,7 +85,7 @@ public class ID3v2FrameBody {
         }
         try {
             String string = new String(bytes, offset, length, encoding.getCharset().name());
-            if (string.length() <= 0 || string.charAt(0) != '\ufeff') {
+            if (string.length() <= 0 || string.charAt(0) != 65279) {
                 return string;
             }
             return string.substring(1);

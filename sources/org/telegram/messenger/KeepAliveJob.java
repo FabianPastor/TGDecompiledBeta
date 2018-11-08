@@ -6,20 +6,20 @@ import org.telegram.messenger.support.JobIntentService;
 
 public class KeepAliveJob extends JobIntentService {
     private static volatile CountDownLatch countDownLatch;
-    private static Runnable finishJobByTimeoutRunnable = new C03603();
+    private static Runnable finishJobByTimeoutRunnable = new C04503();
     private static volatile boolean startingJob;
     private static final Object sync = new Object();
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$1 */
-    static class C03581 implements Runnable {
-        C03581() {
+    static class C04481 implements Runnable {
+        C04481() {
         }
 
         public void run() {
             if (!KeepAliveJob.startingJob && KeepAliveJob.countDownLatch == null) {
                 try {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m5d("starting keep-alive job");
+                        FileLog.m11d("starting keep-alive job");
                     }
                     synchronized (KeepAliveJob.sync) {
                         KeepAliveJob.startingJob = true;
@@ -32,8 +32,8 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$2 */
-    static class C03592 implements Runnable {
-        C03592() {
+    static class C04492 implements Runnable {
+        C04492() {
         }
 
         public void run() {
@@ -42,8 +42,8 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$3 */
-    static class C03603 implements Runnable {
-        C03603() {
+    static class C04503 implements Runnable {
+        C04503() {
         }
 
         public void run() {
@@ -52,20 +52,20 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     public static void startJob() {
-        Utilities.globalQueue.postRunnable(new C03581());
+        Utilities.globalQueue.postRunnable(new C04481());
     }
 
     private static void finishJobInternal() {
         synchronized (sync) {
             if (countDownLatch != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m5d("finish keep-alive job");
+                    FileLog.m11d("finish keep-alive job");
                 }
                 countDownLatch.countDown();
             }
             if (startingJob) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m5d("finish queued keep-alive job");
+                    FileLog.m11d("finish queued keep-alive job");
                 }
                 startingJob = false;
             }
@@ -73,10 +73,21 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     public static void finishJob() {
-        Utilities.globalQueue.postRunnable(new C03592());
+        Utilities.globalQueue.postRunnable(new C04492());
     }
 
-    /* JADX WARNING: inconsistent code. */
+    /* JADX WARNING: Missing block: B:9:0x0014, code:
+            if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x001c;
+     */
+    /* JADX WARNING: Missing block: B:10:0x0016, code:
+            org.telegram.messenger.FileLog.m11d("started keep-alive job");
+     */
+    /* JADX WARNING: Missing block: B:11:0x001c, code:
+            org.telegram.messenger.Utilities.globalQueue.postRunnable(finishJobByTimeoutRunnable, com.google.android.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
+     */
+    /* JADX WARNING: Missing block: B:13:?, code:
+            countDownLatch.await();
+     */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     protected void onHandleWork(Intent intent) {
         synchronized (sync) {
@@ -91,7 +102,7 @@ public class KeepAliveJob extends JobIntentService {
             countDownLatch = null;
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m5d("ended keep-alive job");
+            FileLog.m11d("ended keep-alive job");
         }
     }
 }

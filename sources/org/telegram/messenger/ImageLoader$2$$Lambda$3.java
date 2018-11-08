@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
 import java.io.File;
-import org.telegram.messenger.ImageLoader.C03552;
+import org.telegram.messenger.ImageLoader.C04452;
 
 final /* synthetic */ class ImageLoader$2$$Lambda$3 implements Runnable {
-    private final C03552 arg$1;
+    private final C04452 arg$1;
     private final File arg$2;
     private final String arg$3;
     private final int arg$4;
     private final int arg$5;
 
-    ImageLoader$2$$Lambda$3(C03552 c03552, File file, String str, int i, int i2) {
-        this.arg$1 = c03552;
+    ImageLoader$2$$Lambda$3(C04452 c04452, File file, String str, int i, int i2) {
+        this.arg$1 = c04452;
         this.arg$2 = file;
         this.arg$3 = str;
         this.arg$4 = i;

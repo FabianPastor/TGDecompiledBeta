@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.p005ui.Components.AnimatedFileDrawable;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
@@ -23,7 +24,6 @@ import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentEncrypted;
 import org.telegram.tgnet.TLRPC.TL_fileEncryptedLocation;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
-import org.telegram.ui.Components.AnimatedFileDrawable;
 
 public class ImageReceiver implements NotificationCenterDelegate {
     private static PorterDuffColorFilter selectedColorFilter = new PorterDuffColorFilter(-2236963, Mode.MULTIPLY);
@@ -214,7 +214,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             if (fileLocation != null) {
                 if (fileLocation instanceof SecureDocument) {
                     SecureDocument document = (SecureDocument) fileLocation;
-                    key = document.secureFile.dc_id + "_" + document.secureFile.id;
+                    key = document.secureFile.dc_id + "_" + document.secureFile.f223id;
                 } else if (fileLocation instanceof FileLocation) {
                     FileLocation location = (FileLocation) fileLocation;
                     key = location.volume_id + "_" + location.local_id;
@@ -223,7 +223,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 } else {
                     Document location2 = (Document) fileLocation;
                     if (location2.dc_id != 0) {
-                        key = location2.version == 0 ? location2.dc_id + "_" + location2.id : location2.dc_id + "_" + location2.id + "_" + location2.version;
+                        key = location2.version == 0 ? location2.dc_id + "_" + location2.f119id : location2.dc_id + "_" + location2.f119id + "_" + location2.version;
                     } else {
                         fileLocation = null;
                     }
@@ -562,6 +562,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
             float scaleW = ((float) bitmapW) / ((float) this.imageW);
             float scaleH = ((float) bitmapH) / ((float) this.imageH);
             float scale;
+            int width;
+            int height;
+            int centerX;
+            int centerY;
             if (shader != null) {
                 this.roundPaint.setShader(shader);
                 scale = Math.min(scaleW, scaleH);
@@ -609,7 +613,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                         this.currentThumbKey = null;
                     }
                     setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
                 canvas.restore();
                 return;
@@ -655,7 +659,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             this.currentThumbKey = null;
                         }
                         setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
-                        FileLog.m8e(e2);
+                        FileLog.m14e(e2);
                     }
                 }
                 canvas.restore();
@@ -695,7 +699,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             this.currentThumbKey = null;
                         }
                         setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheType);
-                        FileLog.m8e(e22);
+                        FileLog.m14e(e22);
                     }
                 }
                 canvas.restore();
@@ -709,7 +713,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 drawable.setAlpha(alpha);
                 drawable.draw(canvas);
             } catch (Throwable e222) {
-                FileLog.m8e(e222);
+                FileLog.m14e(e222);
             }
         }
     }
@@ -817,7 +821,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 return false;
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 

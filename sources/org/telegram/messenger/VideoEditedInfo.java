@@ -12,7 +12,8 @@ public class VideoEditedInfo {
     public long estimatedSize;
     public InputFile file;
     public int framerate = 24;
-    public byte[] iv;
+    /* renamed from: iv */
+    public byte[] f89iv;
     public byte[] key;
     public boolean muted;
     public int originalHeight;
@@ -66,7 +67,7 @@ public class VideoEditedInfo {
             }
             return true;
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
             return false;
         }
     }

@@ -19,6 +19,7 @@ public class FileLog {
     private OutputStreamWriter streamWriter = null;
 
     public static FileLog getInstance() {
+        Throwable th;
         FileLog localInstance = Instance;
         if (localInstance == null) {
             synchronized (FileLog.class) {
@@ -29,15 +30,15 @@ public class FileLog {
                         try {
                             Instance = localInstance2;
                             localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
+                        } catch (Throwable th2) {
+                            th = th2;
                             localInstance = localInstance2;
-                            throw th2;
+                            throw th;
                         }
                     }
                 } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                    th = th3;
+                    throw th;
                 }
             }
         }
@@ -100,7 +101,7 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m7e(final String message, final Throwable exception) {
+    public static void m13e(final String message, final Throwable exception) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.e(tag, message, exception);
@@ -121,7 +122,7 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m6e(final String message) {
+    public static void m12e(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.e(tag, message);
@@ -141,7 +142,7 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m8e(final Throwable e) {
+    public static void m14e(final Throwable e) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             ThrowableExtension.printStackTrace(e);
@@ -167,7 +168,7 @@ public class FileLog {
     }
 
     /* renamed from: d */
-    public static void m5d(final String message) {
+    public static void m11d(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.d(tag, message);
@@ -187,7 +188,7 @@ public class FileLog {
     }
 
     /* renamed from: w */
-    public static void m9w(final String message) {
+    public static void m15w(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.w(tag, message);

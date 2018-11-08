@@ -19,7 +19,7 @@ public class StatsController {
     public static final int TYPE_TOTAL = 6;
     public static final int TYPE_VIDEOS = 2;
     public static final int TYPE_WIFI = 1;
-    private static final ThreadLocal<Long> lastStatsSaveTime = new C04351();
+    private static final ThreadLocal<Long> lastStatsSaveTime = new C05451();
     private static DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
     private byte[] buffer = new byte[8];
     private int[] callsTotalTime = new int[3];
@@ -27,14 +27,14 @@ public class StatsController {
     private long[][] receivedBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] receivedItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
     private long[] resetStatsDate = new long[3];
-    private Runnable saveRunnable = new C04362();
+    private Runnable saveRunnable = new C05462();
     private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
     private RandomAccessFile statsFile;
 
     /* renamed from: org.telegram.messenger.StatsController$1 */
-    static class C04351 extends ThreadLocal<Long> {
-        C04351() {
+    static class C05451 extends ThreadLocal<Long> {
+        C05451() {
         }
 
         protected Long initialValue() {
@@ -43,8 +43,8 @@ public class StatsController {
     }
 
     /* renamed from: org.telegram.messenger.StatsController$2 */
-    class C04362 implements Runnable {
-        C04362() {
+    class C05462 implements Runnable {
+        C05462() {
         }
 
         public void run() {
@@ -99,6 +99,7 @@ public class StatsController {
     }
 
     public static StatsController getInstance(int num) {
+        Throwable th;
         StatsController localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (StatsController.class) {
@@ -110,15 +111,15 @@ public class StatsController {
                         try {
                             statsControllerArr[num] = localInstance2;
                             localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
+                        } catch (Throwable th2) {
+                            th = th2;
                             localInstance = localInstance2;
-                            throw th2;
+                            throw th;
                         }
                     }
                 } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                    th = th3;
+                    throw th;
                 }
             }
         }

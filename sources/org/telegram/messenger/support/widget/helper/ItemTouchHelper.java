@@ -8,8 +8,8 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Build.VERSION;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.ViewCompat;
+import android.support.p000v4.view.GestureDetectorCompat;
+import android.support.p000v4.view.ViewCompat;
 import android.util.Log;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -51,7 +51,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     public static final int RIGHT = 8;
     public static final int START = 16;
     static final String TAG = "ItemTouchHelper";
-    public static final int UP = 1;
+    /* renamed from: UP */
+    public static final int f103UP = 1;
     int mActionState = 0;
     int mActivePointerId = -1;
     Callback mCallback;
@@ -65,13 +66,13 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     float mInitialTouchY;
     private ItemTouchHelperGestureListener mItemTouchHelperGestureListener;
     float mMaxSwipeVelocity;
-    private final OnItemTouchListener mOnItemTouchListener = new C05192();
+    private final OnItemTouchListener mOnItemTouchListener = new C06302();
     View mOverdrawChild = null;
     int mOverdrawChildPosition = -1;
     final List<View> mPendingCleanup = new ArrayList();
     List<RecoverAnimation> mRecoverAnimations = new ArrayList();
     RecyclerView mRecyclerView;
-    final Runnable mScrollRunnable = new C05181();
+    final Runnable mScrollRunnable = new C06291();
     ViewHolder mSelected = null;
     int mSelectedFlags;
     float mSelectedStartX;
@@ -88,8 +89,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     }
 
     /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$1 */
-    class C05181 implements Runnable {
-        C05181() {
+    class C06291 implements Runnable {
+        C06291() {
         }
 
         public void run() {
@@ -104,8 +105,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     }
 
     /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$2 */
-    class C05192 implements OnItemTouchListener {
-        C05192() {
+    class C06302 implements OnItemTouchListener {
+        C06302() {
         }
 
         public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent event) {
@@ -120,9 +121,9 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
                     RecoverAnimation animation = ItemTouchHelper.this.findAnimation(event);
                     if (animation != null) {
                         ItemTouchHelper itemTouchHelper = ItemTouchHelper.this;
-                        itemTouchHelper.mInitialTouchX -= animation.mX;
+                        itemTouchHelper.mInitialTouchX -= animation.f101mX;
                         itemTouchHelper = ItemTouchHelper.this;
-                        itemTouchHelper.mInitialTouchY -= animation.mY;
+                        itemTouchHelper.mInitialTouchY -= animation.f102mY;
                         ItemTouchHelper.this.endRecoverAnimation(animation.mViewHolder, true);
                         if (ItemTouchHelper.this.mPendingCleanup.remove(animation.mViewHolder.itemView)) {
                             ItemTouchHelper.this.mCallback.clearView(ItemTouchHelper.this.mRecyclerView, animation.mViewHolder);
@@ -222,12 +223,14 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         final float mTargetY;
         private final ValueAnimator mValueAnimator;
         final ViewHolder mViewHolder;
-        float mX;
-        float mY;
+        /* renamed from: mX */
+        float f101mX;
+        /* renamed from: mY */
+        float f102mY;
 
         /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$RecoverAnimation$1 */
-        class C05251 implements AnimatorUpdateListener {
-            C05251() {
+        class C06311 implements AnimatorUpdateListener {
+            C06311() {
             }
 
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -244,7 +247,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
             this.mTargetX = targetX;
             this.mTargetY = targetY;
             this.mValueAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            this.mValueAnimator.addUpdateListener(new C05251());
+            this.mValueAnimator.addUpdateListener(new C06311());
             this.mValueAnimator.setTarget(viewHolder.itemView);
             this.mValueAnimator.addListener(this);
             setFraction(0.0f);
@@ -269,14 +272,14 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
 
         public void update() {
             if (this.mStartDx == this.mTargetX) {
-                this.mX = this.mViewHolder.itemView.getTranslationX();
+                this.f101mX = this.mViewHolder.itemView.getTranslationX();
             } else {
-                this.mX = this.mStartDx + (this.mFraction * (this.mTargetX - this.mStartDx));
+                this.f101mX = this.mStartDx + (this.mFraction * (this.mTargetX - this.mStartDx));
             }
             if (this.mStartDy == this.mTargetY) {
-                this.mY = this.mViewHolder.itemView.getTranslationY();
+                this.f102mY = this.mViewHolder.itemView.getTranslationY();
             } else {
-                this.mY = this.mStartDy + (this.mFraction * (this.mTargetY - this.mStartDy));
+                this.f102mY = this.mStartDy + (this.mFraction * (this.mTargetY - this.mStartDy));
             }
         }
 
@@ -299,8 +302,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     }
 
     /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$5 */
-    class C05225 implements ChildDrawingOrderCallback {
-        C05225() {
+    class C06345 implements ChildDrawingOrderCallback {
+        C06345() {
         }
 
         public int onGetChildDrawingOrder(int childCount, int i) {
@@ -325,14 +328,14 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         public static final int DEFAULT_SWIPE_ANIMATION_DURATION = 250;
         private static final long DRAG_SCROLL_ACCELERATION_LIMIT_TIME_MS = 500;
         static final int RELATIVE_DIR_FLAGS = 3158064;
-        private static final Interpolator sDragScrollInterpolator = new C05231();
-        private static final Interpolator sDragViewScrollCapInterpolator = new C05242();
+        private static final Interpolator sDragScrollInterpolator = new C06351();
+        private static final Interpolator sDragViewScrollCapInterpolator = new C06362();
         private static final ItemTouchUIUtil sUICallback;
         private int mCachedMaxScrollSpeed = -1;
 
         /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$Callback$1 */
-        static class C05231 implements Interpolator {
-            C05231() {
+        static class C06351 implements Interpolator {
+            C06351() {
             }
 
             public float getInterpolation(float t) {
@@ -341,8 +344,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         }
 
         /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$Callback$2 */
-        static class C05242 implements Interpolator {
-            C05242() {
+        static class C06362 implements Interpolator {
+            C06362() {
             }
 
             public float getInterpolation(float t) {
@@ -395,9 +398,10 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
                 return flags;
             }
             flags &= masked ^ -1;
+            int i;
             if (layoutDirection == 0) {
                 flags |= masked >> 2;
-                int i = flags;
+                i = flags;
                 return flags;
             }
             flags = (flags | ((masked >> 1) & -3158065)) | (((masked >> 1) & RELATIVE_DIR_FLAGS) >> 2);
@@ -513,7 +517,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
 
         private int getMaxDragScroll(RecyclerView recyclerView) {
             if (this.mCachedMaxScrollSpeed == -1) {
-                this.mCachedMaxScrollSpeed = AndroidUtilities.dp(20.0f);
+                this.mCachedMaxScrollSpeed = AndroidUtilities.m10dp(20.0f);
             }
             return this.mCachedMaxScrollSpeed;
         }
@@ -543,12 +547,13 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         }
 
         void onDraw(Canvas c, RecyclerView parent, ViewHolder selected, List<RecoverAnimation> recoverAnimationList, int actionState, float dX, float dY) {
+            int count;
             int recoverAnimSize = recoverAnimationList.size();
             for (int i = 0; i < recoverAnimSize; i++) {
                 RecoverAnimation anim = (RecoverAnimation) recoverAnimationList.get(i);
                 anim.update();
-                int count = c.save();
-                onChildDraw(c, parent, anim.mViewHolder, anim.mX, anim.mY, anim.mActionState, false);
+                count = c.save();
+                onChildDraw(c, parent, anim.mViewHolder, anim.f101mX, anim.f102mY, anim.mActionState, false);
                 c.restoreToCount(count);
             }
             if (selected != null) {
@@ -560,11 +565,13 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
 
         void onDrawOver(Canvas c, RecyclerView parent, ViewHolder selected, List<RecoverAnimation> recoverAnimationList, int actionState, float dX, float dY) {
             int i;
+            RecoverAnimation anim;
+            int count;
             int recoverAnimSize = recoverAnimationList.size();
             for (i = 0; i < recoverAnimSize; i++) {
-                RecoverAnimation anim = (RecoverAnimation) recoverAnimationList.get(i);
-                int count = c.save();
-                onChildDrawOver(c, parent, anim.mViewHolder, anim.mX, anim.mY, anim.mActionState, false);
+                anim = (RecoverAnimation) recoverAnimationList.get(i);
+                count = c.save();
+                onChildDrawOver(c, parent, anim.mViewHolder, anim.f101mX, anim.f102mY, anim.mActionState, false);
                 c.restoreToCount(count);
             }
             if (selected != null) {
@@ -710,8 +717,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
             this.mRecyclerView = recyclerView;
             if (this.mRecyclerView != null) {
                 Resources resources = recyclerView.getResources();
-                this.mSwipeEscapeVelocity = (float) AndroidUtilities.dp(120.0f);
-                this.mMaxSwipeVelocity = (float) AndroidUtilities.dp(800.0f);
+                this.mSwipeEscapeVelocity = (float) AndroidUtilities.m10dp(120.0f);
+                this.mMaxSwipeVelocity = (float) AndroidUtilities.m10dp(800.0f);
                 setupCallbacks();
             }
         }
@@ -1176,7 +1183,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         for (int i = this.mRecoverAnimations.size() - 1; i >= 0; i--) {
             RecoverAnimation anim = (RecoverAnimation) this.mRecoverAnimations.get(i);
             View view = anim.mViewHolder.itemView;
-            if (hitTest(view, x, y, anim.mX, anim.mY)) {
+            if (hitTest(view, x, y, anim.f101mX, anim.f102mY)) {
                 return view;
             }
         }
@@ -1335,7 +1342,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     private void addChildDrawingOrderCallback() {
         if (VERSION.SDK_INT < 21) {
             if (this.mChildDrawingOrderCallback == null) {
-                this.mChildDrawingOrderCallback = new C05225();
+                this.mChildDrawingOrderCallback = new C06345();
             }
             this.mRecyclerView.setChildDrawingOrderCallback(this.mChildDrawingOrderCallback);
         }

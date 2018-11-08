@@ -2,8 +2,8 @@ package org.telegram.messenger.support.widget;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
+import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -509,6 +509,7 @@ public class GridLayoutManager extends LinearLayoutManager {
     }
 
     void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
+        View view;
         int otherDirSpecMode = this.mOrientationHelper.getModeInOther();
         boolean flexibleInOtherDir = otherDirSpecMode != NUM;
         int currentOtherDirSize = getChildCount() > 0 ? this.mCachedBorders[this.mSpanCount] : 0;
@@ -525,7 +526,6 @@ public class GridLayoutManager extends LinearLayoutManager {
         while (count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0) {
             int pos = layoutState.mCurrentPosition;
             int spanSize = getSpanSize(recycler, state, pos);
-            View view;
             if (spanSize <= this.mSpanCount) {
                 remainingSpan -= spanSize;
                 if (remainingSpan >= 0) {
@@ -547,6 +547,7 @@ public class GridLayoutManager extends LinearLayoutManager {
             return;
         }
         int i;
+        int size;
         int maxSize = 0;
         float maxSizeInOther = 0.0f;
         assignSpans(recycler, state, count, consumedSpanCount, layingOutInPrimaryDirection);
@@ -565,7 +566,7 @@ public class GridLayoutManager extends LinearLayoutManager {
             }
             calculateItemDecorationsForChild(view, this.mDecorInsets);
             measureChild(view, otherDirSpecMode, false);
-            int size = this.mOrientationHelper.getDecoratedMeasurement(view);
+            size = this.mOrientationHelper.getDecoratedMeasurement(view);
             if (size > maxSize) {
                 maxSize = size;
             }

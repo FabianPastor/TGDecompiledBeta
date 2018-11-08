@@ -57,14 +57,7 @@ public class PagerSnapHelper extends SnapHelper {
         if (centerPosition == -1) {
             return -1;
         }
-        boolean forwardDirection;
-        if (!layoutManager.canScrollHorizontally()) {
-            forwardDirection = velocityY > 0;
-        } else if (velocityX > 0) {
-            forwardDirection = true;
-        } else {
-            forwardDirection = false;
-        }
+        boolean forwardDirection = layoutManager.canScrollHorizontally() ? velocityX > 0 : velocityY > 0;
         boolean reverseLayout = false;
         if (layoutManager instanceof ScrollVectorProvider) {
             PointF vectorForEnd = ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(itemCount - 1);

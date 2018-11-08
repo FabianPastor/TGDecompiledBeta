@@ -33,6 +33,7 @@ public class CallingCodeInfo {
     }
 
     String format(String orig) {
+        String phone;
         String str = orig;
         String trunkPrefix = null;
         String intlPrefix = null;
@@ -48,7 +49,7 @@ public class CallingCodeInfo {
         }
         Iterator it = this.ruleSets.iterator();
         while (it.hasNext()) {
-            String phone = ((RuleSet) it.next()).format(str, intlPrefix, trunkPrefix, true);
+            phone = ((RuleSet) it.next()).format(str, intlPrefix, trunkPrefix, true);
             if (phone != null) {
                 return phone;
             }

@@ -6,7 +6,7 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-import com.google.android.exoplayer2.C0020C;
+import com.google.android.exoplayer2.C0021C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class SharedConfig {
     public static ProxyInfo currentProxy;
     public static boolean customTabs = true;
     public static boolean directShare = true;
-    public static int fontSize = AndroidUtilities.dp(16.0f);
+    public static int fontSize = AndroidUtilities.m10dp(16.0f);
     public static boolean groupPhotosEnabled = true;
     public static boolean hasCameraCache;
     public static boolean inappCamera = true;
@@ -128,7 +128,7 @@ public class SharedConfig {
                 editor.putInt("passportConfigHash", passportConfigHash);
                 editor.commit();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
         }
     }
@@ -254,7 +254,7 @@ public class SharedConfig {
                     passportConfigMap.put(key.toUpperCase(), object.getString(key).toUpperCase());
                 }
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
         }
         return passportConfigMap;
@@ -266,34 +266,36 @@ public class SharedConfig {
         byte[] bytes;
         if (passcodeSalt.length == 0) {
             result = Utilities.MD5(passcode).equals(passcodeHash);
-            if (result) {
-                try {
-                    passcodeSalt = new byte[16];
-                    Utilities.random.nextBytes(passcodeSalt);
-                    passcodeBytes = passcode.getBytes(C0020C.UTF8_NAME);
-                    bytes = new byte[(passcodeBytes.length + 32)];
-                    System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
-                    System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
-                    System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
-                    passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
-                    saveConfig();
-                } catch (Throwable e) {
-                    FileLog.m8e(e);
-                }
+            if (!result) {
+                return result;
             }
-        } else {
             try {
-                passcodeBytes = passcode.getBytes(C0020C.UTF8_NAME);
+                passcodeSalt = new byte[16];
+                Utilities.random.nextBytes(passcodeSalt);
+                passcodeBytes = passcode.getBytes(C0021C.UTF8_NAME);
                 bytes = new byte[(passcodeBytes.length + 32)];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
                 System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
-                result = passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
-            } catch (Throwable e2) {
-                FileLog.m8e(e2);
+                passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
+                saveConfig();
+                return result;
+            } catch (Throwable e) {
+                FileLog.m14e(e);
+                return result;
             }
         }
-        return result;
+        try {
+            passcodeBytes = passcode.getBytes(C0021C.UTF8_NAME);
+            bytes = new byte[(passcodeBytes.length + 32)];
+            System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
+            System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
+            System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
+            return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
+        } catch (Throwable e2) {
+            FileLog.m14e(e2);
+            return result;
+        }
     }
 
     public static void clearConfig() {
@@ -557,7 +559,7 @@ public class SharedConfig {
                 new File(videoPath, ".nomedia").createNewFile();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 }

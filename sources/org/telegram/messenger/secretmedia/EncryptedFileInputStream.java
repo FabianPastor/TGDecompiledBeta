@@ -12,42 +12,43 @@ public class EncryptedFileInputStream extends FileInputStream {
     private static final int MODE_CTR = 0;
     private int currentMode;
     private int fileOffset;
-    private byte[] iv;
+    /* renamed from: iv */
+    private byte[] f95iv;
     private byte[] key;
 
     public EncryptedFileInputStream(File file, File keyFile) throws Exception {
         super(file);
         this.key = new byte[32];
-        this.iv = new byte[16];
+        this.f95iv = new byte[16];
         this.currentMode = 0;
         RandomAccessFile randomAccessFile = new RandomAccessFile(keyFile, "r");
         randomAccessFile.read(this.key, 0, 32);
-        randomAccessFile.read(this.iv, 0, 16);
+        randomAccessFile.read(this.f95iv, 0, 16);
         randomAccessFile.close();
     }
 
     public EncryptedFileInputStream(File file, SecureDocumentKey secureDocumentKey) throws Exception {
         super(file);
         this.key = new byte[32];
-        this.iv = new byte[16];
+        this.f95iv = new byte[16];
         this.currentMode = 1;
         System.arraycopy(secureDocumentKey.file_key, 0, this.key, 0, this.key.length);
-        System.arraycopy(secureDocumentKey.file_iv, 0, this.iv, 0, this.iv.length);
+        System.arraycopy(secureDocumentKey.file_iv, 0, this.f95iv, 0, this.f95iv.length);
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
         if (this.currentMode == 1 && this.fileOffset == 0) {
             byte[] temp = new byte[32];
             super.read(temp, 0, 32);
-            Utilities.aesCbcEncryptionByteArraySafe(b, this.key, this.iv, off, len, this.fileOffset, 0);
+            Utilities.aesCbcEncryptionByteArraySafe(b, this.key, this.f95iv, off, len, this.fileOffset, 0);
             this.fileOffset += 32;
             skip((long) ((temp[0] & 255) - 32));
         }
         int result = super.read(b, off, len);
         if (this.currentMode == 1) {
-            Utilities.aesCbcEncryptionByteArraySafe(b, this.key, this.iv, off, len, this.fileOffset, 0);
+            Utilities.aesCbcEncryptionByteArraySafe(b, this.key, this.f95iv, off, len, this.fileOffset, 0);
         } else if (this.currentMode == 0) {
-            Utilities.aesCtrDecryptionByteArray(b, this.key, this.iv, off, len, this.fileOffset);
+            Utilities.aesCtrDecryptionByteArray(b, this.key, this.f95iv, off, len, this.fileOffset);
         }
         this.fileOffset += len;
         return result;

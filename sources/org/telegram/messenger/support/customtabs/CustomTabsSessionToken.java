@@ -4,18 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.app.BundleCompat;
+import android.support.p000v4.app.BundleCompat;
 import android.util.Log;
 import org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub;
 
 public class CustomTabsSessionToken {
     private static final String TAG = "CustomTabsSessionToken";
-    private final CustomTabsCallback mCallback = new C04781();
+    private final CustomTabsCallback mCallback = new C05891();
     private final ICustomTabsCallback mCallbackBinder;
 
     /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsSessionToken$1 */
-    class C04781 extends CustomTabsCallback {
-        C04781() {
+    class C05891 extends CustomTabsCallback {
+        C05891() {
         }
 
         public void onNavigationEvent(int navigationEvent, Bundle extras) {

@@ -12,7 +12,8 @@ class JoinPointImpl implements ProceedingJoinPoint {
     Object target;
 
     static class StaticPartImpl implements StaticPart {
-        private int id;
+        /* renamed from: id */
+        private int f74id;
         String kind;
         Signature signature;
         SourceLocation sourceLocation;
@@ -21,7 +22,7 @@ class JoinPointImpl implements ProceedingJoinPoint {
             this.kind = kind;
             this.signature = signature;
             this.sourceLocation = sourceLocation;
-            this.id = id;
+            this.f74id = id;
         }
 
         public String getKind() {

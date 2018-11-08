@@ -12,12 +12,12 @@ import android.graphics.RectF;
 import android.os.Build.VERSION;
 
 public class Bitmaps {
-    private static final ThreadLocal<byte[]> jpegData = new C02211();
+    private static final ThreadLocal<byte[]> jpegData = new C02261();
     private static volatile Matrix sScaleMatrix;
 
     /* renamed from: org.telegram.messenger.Bitmaps$1 */
-    static class C02211 extends ThreadLocal<byte[]> {
-        C02211() {
+    static class C02261 extends ThreadLocal<byte[]> {
+        C02261() {
         }
 
         protected byte[] initialValue() {
@@ -26,7 +26,7 @@ public class Bitmaps {
     }
 
     /* renamed from: org.telegram.messenger.Bitmaps$2 */
-    static /* synthetic */ class C02222 {
+    static /* synthetic */ class C02272 {
         static final /* synthetic */ int[] $SwitchMap$android$graphics$Bitmap$Config = new int[Config.values().length];
 
         static {
@@ -115,7 +115,7 @@ public class Bitmaps {
             Config newConfig = Config.ARGB_8888;
             Config config = source.getConfig();
             if (config != null) {
-                switch (C02222.$SwitchMap$android$graphics$Bitmap$Config[config.ordinal()]) {
+                switch (C02272.$SwitchMap$android$graphics$Bitmap$Config[config.ordinal()]) {
                     case 1:
                         newConfig = Config.ARGB_8888;
                         break;

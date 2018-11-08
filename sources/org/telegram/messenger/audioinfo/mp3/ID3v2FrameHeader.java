@@ -123,7 +123,7 @@ public class ID3v2FrameHeader {
 
     public boolean isPadding() {
         for (int i = 0; i < this.frameId.length(); i++) {
-            if (this.frameId.charAt(0) != '\u0000') {
+            if (this.frameId.charAt(0) != 0) {
                 return false;
             }
         }

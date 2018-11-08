@@ -158,8 +158,6 @@ public class SortedList<T> {
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void replaceAllInternal(T[] newData) {
         boolean forceBatchedUpdates;
         if (this.mCallback instanceof BatchedCallback) {
@@ -177,11 +175,21 @@ public class SortedList<T> {
         int newSize = sortAndDedup(newData);
         this.mData = (Object[]) Array.newInstance(this.mTClass, newSize);
         while (true) {
+            int itemCount;
             if (this.mNewDataStart >= newSize && this.mOldDataStart >= this.mOldDataSize) {
                 break;
             } else if (this.mOldDataStart >= this.mOldDataSize) {
+                int insertIndex = this.mNewDataStart;
+                itemCount = newSize - this.mNewDataStart;
+                System.arraycopy(newData, insertIndex, this.mData, insertIndex, itemCount);
+                this.mNewDataStart += itemCount;
+                this.mSize += itemCount;
+                this.mCallback.onInserted(insertIndex, itemCount);
                 break;
             } else if (this.mNewDataStart >= newSize) {
+                itemCount = this.mOldDataSize - this.mOldDataStart;
+                this.mSize -= itemCount;
+                this.mCallback.onRemoved(this.mNewDataStart, itemCount);
                 break;
             } else {
                 T oldItem = this.mOldData[this.mOldDataStart];
@@ -204,12 +212,6 @@ public class SortedList<T> {
                 }
             }
         }
-        int insertIndex = this.mNewDataStart;
-        int itemCount = newSize - this.mNewDataStart;
-        System.arraycopy(newData, insertIndex, this.mData, insertIndex, itemCount);
-        this.mNewDataStart += itemCount;
-        this.mSize += itemCount;
-        this.mCallback.onInserted(insertIndex, itemCount);
         this.mOldData = null;
         if (forceBatchedUpdates) {
             endBatchedUpdates();
@@ -268,8 +270,6 @@ public class SortedList<T> {
         return -1;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void merge(T[] newData, int newDataSize) {
         boolean forceBatchedUpdates;
         if (this.mCallback instanceof BatchedCallback) {
@@ -287,11 +287,20 @@ public class SortedList<T> {
         this.mNewDataStart = 0;
         int newDataStart = 0;
         while (true) {
+            int itemCount;
             if (this.mOldDataStart >= this.mOldDataSize && newDataStart >= newDataSize) {
                 break;
             } else if (this.mOldDataStart == this.mOldDataSize) {
+                itemCount = newDataSize - newDataStart;
+                System.arraycopy(newData, newDataStart, this.mData, this.mNewDataStart, itemCount);
+                this.mNewDataStart += itemCount;
+                this.mSize += itemCount;
+                this.mCallback.onInserted(this.mNewDataStart - itemCount, itemCount);
                 break;
             } else if (newDataStart == newDataSize) {
+                itemCount = this.mOldDataSize - this.mOldDataStart;
+                System.arraycopy(this.mOldData, this.mOldDataStart, this.mData, this.mNewDataStart, itemCount);
+                this.mNewDataStart += itemCount;
                 break;
             } else {
                 T oldItem = this.mOldData[this.mOldDataStart];
@@ -326,11 +335,6 @@ public class SortedList<T> {
                 }
             }
         }
-        int itemCount = newDataSize - newDataStart;
-        System.arraycopy(newData, newDataStart, this.mData, this.mNewDataStart, itemCount);
-        this.mNewDataStart += itemCount;
-        this.mSize += itemCount;
-        this.mCallback.onInserted(this.mNewDataStart - itemCount, itemCount);
         this.mOldData = null;
         if (forceBatchedUpdates) {
             endBatchedUpdates();
@@ -508,10 +512,11 @@ public class SortedList<T> {
     }
 
     private int linearEqualitySearch(T item, int middle, int left, int right) {
+        T nextItem;
         int i;
         int next = middle - 1;
         while (next >= left) {
-            T nextItem = this.mData[next];
+            nextItem = this.mData[next];
             if (this.mCallback.compare(nextItem, item) != 0) {
                 break;
             } else if (this.mCallback.areItemsTheSame(nextItem, item)) {

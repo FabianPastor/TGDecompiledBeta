@@ -8,16 +8,16 @@ import java.util.List;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 
 public class DiffUtil {
-    private static final Comparator<Snake> SNAKE_COMPARATOR = new C04841();
+    private static final Comparator<Snake> SNAKE_COMPARATOR = new C05951();
 
     /* renamed from: org.telegram.messenger.support.util.DiffUtil$1 */
-    static class C04841 implements Comparator<Snake> {
-        C04841() {
+    static class C05951 implements Comparator<Snake> {
+        C05951() {
         }
 
         public int compare(Snake o1, Snake o2) {
-            int cmpX = o1.f21x - o2.f21x;
-            return cmpX == 0 ? o1.f22y - o2.f22y : cmpX;
+            int cmpX = o1.f96x - o2.f96x;
+            return cmpX == 0 ? o1.f97y - o2.f97y : cmpX;
         }
     }
 
@@ -67,10 +67,10 @@ public class DiffUtil {
 
         private void addRootSnake() {
             Snake firstSnake = this.mSnakes.isEmpty() ? null : (Snake) this.mSnakes.get(0);
-            if (firstSnake == null || firstSnake.f21x != 0 || firstSnake.f22y != 0) {
+            if (firstSnake == null || firstSnake.f96x != 0 || firstSnake.f97y != 0) {
                 Snake root = new Snake();
-                root.f21x = 0;
-                root.f22y = 0;
+                root.f96x = 0;
+                root.f97y = 0;
                 root.removal = false;
                 root.size = 0;
                 root.reverse = false;
@@ -83,8 +83,8 @@ public class DiffUtil {
             int posNew = this.mNewListSize;
             for (int i = this.mSnakes.size() - 1; i >= 0; i--) {
                 Snake snake = (Snake) this.mSnakes.get(i);
-                int endX = snake.f21x + snake.size;
-                int endY = snake.f22y + snake.size;
+                int endX = snake.f96x + snake.size;
+                int endY = snake.f97y + snake.size;
                 if (this.mDetectMoves) {
                     while (posOld > endX) {
                         findAddition(posOld, posNew, i);
@@ -96,14 +96,14 @@ public class DiffUtil {
                     }
                 }
                 for (int j = 0; j < snake.size; j++) {
-                    int oldItemPos = snake.f21x + j;
-                    int newItemPos = snake.f22y + j;
+                    int oldItemPos = snake.f96x + j;
+                    int newItemPos = snake.f97y + j;
                     int changeFlag = this.mCallback.areContentsTheSame(oldItemPos, newItemPos) ? 1 : 2;
                     this.mOldItemStatuses[oldItemPos] = (newItemPos << 5) | changeFlag;
                     this.mNewItemStatuses[newItemPos] = (oldItemPos << 5) | changeFlag;
                 }
-                posOld = snake.f21x;
-                posNew = snake.f22y;
+                posOld = snake.f96x;
+                posNew = snake.f97y;
             }
         }
 
@@ -134,8 +134,8 @@ public class DiffUtil {
             }
             for (int i = snakeIndex; i >= 0; i--) {
                 Snake snake = (Snake) this.mSnakes.get(i);
-                int endX = snake.f21x + snake.size;
-                int endY = snake.f22y + snake.size;
+                int endX = snake.f96x + snake.size;
+                int endY = snake.f97y + snake.size;
                 int pos;
                 int changeFlag;
                 if (removal) {
@@ -159,8 +159,8 @@ public class DiffUtil {
                     }
                     continue;
                 }
-                curX = snake.f21x;
-                curY = snake.f22y;
+                curX = snake.f96x;
+                curY = snake.f97y;
             }
             return false;
         }
@@ -183,8 +183,8 @@ public class DiffUtil {
             for (int snakeIndex = this.mSnakes.size() - 1; snakeIndex >= 0; snakeIndex--) {
                 Snake snake = (Snake) this.mSnakes.get(snakeIndex);
                 int snakeSize = snake.size;
-                int endX = snake.f21x + snakeSize;
-                int endY = snake.f22y + snakeSize;
+                int endX = snake.f96x + snakeSize;
+                int endY = snake.f97y + snakeSize;
                 if (endX < posOld) {
                     dispatchRemovals(postponedUpdates, batchingCallback, endX, posOld - endX, endX);
                 }
@@ -192,12 +192,12 @@ public class DiffUtil {
                     dispatchAdditions(postponedUpdates, batchingCallback, endX, posNew - endY, endY);
                 }
                 for (int i = snakeSize - 1; i >= 0; i--) {
-                    if ((this.mOldItemStatuses[snake.f21x + i] & 31) == 2) {
-                        batchingCallback.onChanged(snake.f21x + i, 1, this.mCallback.getChangePayload(snake.f21x + i, snake.f22y + i));
+                    if ((this.mOldItemStatuses[snake.f96x + i] & 31) == 2) {
+                        batchingCallback.onChanged(snake.f96x + i, 1, this.mCallback.getChangePayload(snake.f96x + i, snake.f97y + i));
                     }
                 }
-                posOld = snake.f21x;
-                posNew = snake.f22y;
+                posOld = snake.f96x;
+                posNew = snake.f97y;
             }
             batchingCallback.dispatchLastEvent();
         }
@@ -328,9 +328,9 @@ public class DiffUtil {
         boolean reverse;
         int size;
         /* renamed from: x */
-        int f21x;
+        int f96x;
         /* renamed from: y */
-        int f22y;
+        int f97y;
 
         Snake() {
         }
@@ -361,8 +361,8 @@ public class DiffUtil {
                 if (snake.size > 0) {
                     snakes.add(snake);
                 }
-                snake.f21x += range.oldListStart;
-                snake.f22y += range.newListStart;
+                snake.f96x += range.oldListStart;
+                snake.f97y += range.newListStart;
                 if (rangePool.isEmpty()) {
                     left = new Range();
                 } else {
@@ -371,26 +371,26 @@ public class DiffUtil {
                 left.oldListStart = range.oldListStart;
                 left.newListStart = range.newListStart;
                 if (snake.reverse) {
-                    left.oldListEnd = snake.f21x;
-                    left.newListEnd = snake.f22y;
+                    left.oldListEnd = snake.f96x;
+                    left.newListEnd = snake.f97y;
                 } else if (snake.removal) {
-                    left.oldListEnd = snake.f21x - 1;
-                    left.newListEnd = snake.f22y;
+                    left.oldListEnd = snake.f96x - 1;
+                    left.newListEnd = snake.f97y;
                 } else {
-                    left.oldListEnd = snake.f21x;
-                    left.newListEnd = snake.f22y - 1;
+                    left.oldListEnd = snake.f96x;
+                    left.newListEnd = snake.f97y - 1;
                 }
                 stack.add(left);
                 Range right = range;
                 if (!snake.reverse) {
-                    right.oldListStart = snake.f21x + snake.size;
-                    right.newListStart = snake.f22y + snake.size;
+                    right.oldListStart = snake.f96x + snake.size;
+                    right.newListStart = snake.f97y + snake.size;
                 } else if (snake.removal) {
-                    right.oldListStart = (snake.f21x + snake.size) + 1;
-                    right.newListStart = snake.f22y + snake.size;
+                    right.oldListStart = (snake.f96x + snake.size) + 1;
+                    right.newListStart = snake.f97y + snake.size;
                 } else {
-                    right.oldListStart = snake.f21x + snake.size;
-                    right.newListStart = (snake.f22y + snake.size) + 1;
+                    right.oldListStart = snake.f96x + snake.size;
+                    right.newListStart = (snake.f97y + snake.size) + 1;
                 }
                 stack.add(right);
             } else {
@@ -414,10 +414,12 @@ public class DiffUtil {
         boolean checkInFwd = delta % 2 != 0;
         int d = 0;
         while (d <= dLimit) {
+            int x;
+            boolean removal;
+            int y;
+            Snake outSnake;
             int k = -d;
             while (k <= d) {
-                int x;
-                boolean removal;
                 if (k == (-d) || (k != d && forward[(kOffset + k) - 1] < forward[(kOffset + k) + 1])) {
                     x = forward[(kOffset + k) + 1];
                     removal = false;
@@ -425,7 +427,7 @@ public class DiffUtil {
                     x = forward[(kOffset + k) - 1] + 1;
                     removal = true;
                 }
-                int y = x - k;
+                y = x - k;
                 while (x < oldSize && y < newSize) {
                     if (!cb.areItemsTheSame(startOld + x, startNew + y)) {
                         break;
@@ -437,9 +439,9 @@ public class DiffUtil {
                 if (!checkInFwd || k < (delta - d) + 1 || k > (delta + d) - 1 || forward[kOffset + k] < backward[kOffset + k]) {
                     k += 2;
                 } else {
-                    Snake outSnake = new Snake();
-                    outSnake.f21x = backward[kOffset + k];
-                    outSnake.f22y = outSnake.f21x - k;
+                    outSnake = new Snake();
+                    outSnake.f96x = backward[kOffset + k];
+                    outSnake.f97y = outSnake.f96x - k;
                     outSnake.size = forward[kOffset + k] - backward[kOffset + k];
                     outSnake.removal = removal;
                     outSnake.reverse = false;
@@ -469,8 +471,8 @@ public class DiffUtil {
                     k += 2;
                 } else {
                     outSnake = new Snake();
-                    outSnake.f21x = backward[kOffset + backwardK];
-                    outSnake.f22y = outSnake.f21x - backwardK;
+                    outSnake.f96x = backward[kOffset + backwardK];
+                    outSnake.f97y = outSnake.f96x - backwardK;
                     outSnake.size = forward[kOffset + backwardK] - backward[kOffset + backwardK];
                     outSnake.removal = removal;
                     outSnake.reverse = true;

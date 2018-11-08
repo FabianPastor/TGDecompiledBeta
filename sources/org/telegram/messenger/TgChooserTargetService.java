@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.p005ui.LaunchActivity;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.User;
-import org.telegram.ui.LaunchActivity;
 
 @TargetApi(23)
 public class TgChooserTargetService extends ChooserTargetService {
@@ -74,7 +74,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                             MessagesStorage.getInstance(currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
                         }
                     } catch (Throwable e) {
-                        FileLog.m8e(e);
+                        FileLog.m14e(e);
                     }
                     for (int a = 0; a < dialogs.size(); a++) {
                         Bundle extras = new Bundle();
@@ -86,7 +86,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                             b = 0;
                             while (b < users.size()) {
                                 User user = (User) users.get(b);
-                                if (user.id != id2) {
+                                if (user.f228id != id2) {
                                     b++;
                                 } else if (!user.bot) {
                                     extras.putLong("dialogId", (long) id2);
@@ -100,7 +100,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                             b = 0;
                             while (b < chats.size()) {
                                 Chat chat = (Chat) chats.get(b);
-                                if (chat.id != (-id2)) {
+                                if (chat.f113id != (-id2)) {
                                     b++;
                                 } else if (!ChatObject.isNotInChat(chat) && (!ChatObject.isChannel(chat) || chat.megagroup)) {
                                     extras.putLong("dialogId", (long) id2);
@@ -113,7 +113,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                         }
                         if (name != null) {
                             if (icon == null) {
-                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, C0431R.drawable.logo_avatar);
+                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, C0541R.drawable.logo_avatar);
                             }
                             targets.add(new ChooserTarget(name, icon, 1.0f, componentName, extras));
                         }
@@ -124,7 +124,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             try {
                 countDownLatch.await();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
         }
         return targets;
@@ -148,7 +148,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 return Icon.createWithBitmap(result);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return null;
     }

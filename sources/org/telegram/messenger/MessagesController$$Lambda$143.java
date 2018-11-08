@@ -2,7 +2,7 @@ package org.telegram.messenger;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.p005ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class MessagesController$$Lambda$143 implements OnClickListener {
     private final MessagesController arg$1;

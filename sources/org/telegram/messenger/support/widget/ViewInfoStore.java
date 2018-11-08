@@ -1,9 +1,9 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.v4.util.ArrayMap;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.Pools.Pool;
-import android.support.v4.util.Pools.SimplePool;
+import android.support.p000v4.util.ArrayMap;
+import android.support.p000v4.util.LongSparseArray;
+import android.support.p000v4.util.Pools.Pool;
+import android.support.p000v4.util.Pools.SimplePool;
 import org.telegram.messenger.support.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 
@@ -88,16 +88,16 @@ class ViewInfoStore {
     }
 
     private ItemHolderInfo popFromLayoutStep(ViewHolder vh, int flag) {
-        ItemHolderInfo itemHolderInfo = null;
+        ItemHolderInfo info = null;
         int index = this.mLayoutHolderMap.indexOfKey(vh);
         if (index >= 0) {
             InfoRecord record = (InfoRecord) this.mLayoutHolderMap.valueAt(index);
             if (!(record == null || (record.flags & flag) == 0)) {
                 record.flags &= flag ^ -1;
                 if (flag == 4) {
-                    itemHolderInfo = record.preInfo;
+                    info = record.preInfo;
                 } else if (flag == 8) {
-                    itemHolderInfo = record.postInfo;
+                    info = record.postInfo;
                 } else {
                     throw new IllegalArgumentException("Must provide flag PRE or POST");
                 }
@@ -107,7 +107,7 @@ class ViewInfoStore {
                 }
             }
         }
-        return itemHolderInfo;
+        return info;
     }
 
     void addToOldChangeHolders(long key, ViewHolder holder) {

@@ -8,7 +8,7 @@ import android.os.Parcelable.Creator;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
-import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import java.util.List;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry;
@@ -232,14 +232,14 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new C05001();
+        public static final Creator<SavedState> CREATOR = new C06131();
         boolean mAnchorLayoutFromEnd;
         int mAnchorOffset;
         int mAnchorPosition;
 
         /* renamed from: org.telegram.messenger.support.widget.LinearLayoutManager$SavedState$1 */
-        static class C05001 implements Creator<SavedState> {
-            C05001() {
+        static class C06131 implements Creator<SavedState> {
+            C06131() {
             }
 
             public SavedState createFromParcel(Parcel in) {
@@ -1021,11 +1021,7 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         if (this.mPendingSavedState == null || !this.mPendingSavedState.hasValidAnchor()) {
             resolveShouldLayoutReverse();
             fromEnd = this.mShouldReverseLayout;
-            if (this.mPendingScrollPosition == -1) {
-                anchorPos = fromEnd ? adapterItemCount - 1 : 0;
-            } else {
-                anchorPos = this.mPendingScrollPosition;
-            }
+            anchorPos = this.mPendingScrollPosition == -1 ? fromEnd ? adapterItemCount - 1 : 0 : this.mPendingScrollPosition;
         } else {
             fromEnd = this.mPendingSavedState.mAnchorLayoutFromEnd;
             anchorPos = this.mPendingSavedState.mAnchorPosition;
@@ -1063,7 +1059,7 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     int scrollBy(int dy, Recycler recycler, State state) {
-        int i = 0;
+        int scrolled = 0;
         if (!(getChildCount() == 0 || dy == 0)) {
             this.mLayoutState.mRecycle = true;
             ensureLayoutState();
@@ -1073,15 +1069,15 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             int consumed = this.mLayoutState.mScrollingOffset + fill(recycler, this.mLayoutState, state, false);
             if (consumed >= 0) {
                 if (absDy > consumed) {
-                    i = layoutDirection * consumed;
+                    scrolled = layoutDirection * consumed;
                 } else {
-                    i = dy;
+                    scrolled = dy;
                 }
-                this.mOrientationHelper.offsetChildren(-i);
-                this.mLayoutState.mLastScrollDelta = i;
+                this.mOrientationHelper.offsetChildren(-scrolled);
+                this.mLayoutState.mLastScrollDelta = scrolled;
             }
         }
-        return i;
+        return scrolled;
     }
 
     public void assertNotInLayoutOrScroll(String message) {

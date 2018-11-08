@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-import com.google.android.exoplayer2.C0020C;
+import com.google.android.exoplayer2.C0021C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
-import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.PhoneFormat.C0216PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
@@ -138,583 +138,12 @@ public class MessagesStorage {
     }
 
     public interface IntCallback {
-        void run(int i);
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$isMigratedChat$67$MessagesStorage(int r10, boolean[] r11, java.util.concurrent.CountDownLatch r12) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x0057 in list [B:21:0x005e]
-	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
-	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r9 = this;
-        r5 = 0;
-        r6 = r9.database;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r7.<init>();	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r8 = "SELECT info FROM chat_settings_v2 WHERE uid = ";	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r7 = r7.append(r8);	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r7 = r7.append(r10);	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r7 = r7.toString();	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r8 = 0;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r8 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r0 = r6.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r3 = 0;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r4.<init>();	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r6 = r0.next();	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        if (r6 == 0) goto L_0x003e;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-    L_0x002a:
-        r6 = 0;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r1 = r0.byteBufferValue(r6);	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        if (r1 == 0) goto L_0x003e;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-    L_0x0031:
-        r6 = 0;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r6 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r7 = 0;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r3 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r1, r6, r7);	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r1.reuse();	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-    L_0x003e:
-        r0.dispose();	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r6 = 0;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        r7 = r3 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        if (r7 == 0) goto L_0x004b;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-    L_0x0046:
-        r7 = r3.migrated_from_chat_id;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        if (r7 == 0) goto L_0x004b;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-    L_0x004a:
-        r5 = 1;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-    L_0x004b:
-        r11[r6] = r5;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        if (r12 == 0) goto L_0x0052;	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-    L_0x004f:
-        r12.countDown();	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-    L_0x0052:
-        if (r12 == 0) goto L_0x0057;
-    L_0x0054:
-        r12.countDown();
-    L_0x0057:
-        return;
-    L_0x0058:
-        r2 = move-exception;
-        org.telegram.messenger.FileLog.m8e(r2);	 Catch:{ Exception -> 0x0058, all -> 0x0062 }
-        if (r12 == 0) goto L_0x0057;
-    L_0x005e:
-        r12.countDown();
-        goto L_0x0057;
-    L_0x0062:
-        r5 = move-exception;
-        if (r12 == 0) goto L_0x0068;
-    L_0x0065:
-        r12.countDown();
-    L_0x0068:
-        throw r5;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$isMigratedChat$67$MessagesStorage(int, boolean[], java.util.concurrent.CountDownLatch):void");
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$putSentFile$85$MessagesStorage(java.lang.String r8, org.telegram.tgnet.TLObject r9, int r10) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x0022 in list [B:9:0x001f]
-	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
-	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r7 = this;
-        r4 = 0;
-        r2 = org.telegram.messenger.Utilities.MD5(r8);	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        if (r2 == 0) goto L_0x006b;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-    L_0x0007:
-        r3 = 0;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = r9 instanceof org.telegram.tgnet.TLRPC.Photo;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        if (r5 == 0) goto L_0x0023;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-    L_0x000c:
-        r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r3.<init>();	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r9 = (org.telegram.tgnet.TLRPC.Photo) r9;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r3.photo = r9;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = r3.flags;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = r5 | 1;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r3.flags = r5;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-    L_0x001b:
-        if (r3 != 0) goto L_0x0041;
-    L_0x001d:
-        if (r4 == 0) goto L_0x0022;
-    L_0x001f:
-        r4.dispose();
-    L_0x0022:
-        return;
-    L_0x0023:
-        r5 = r9 instanceof org.telegram.tgnet.TLRPC.Document;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        if (r5 == 0) goto L_0x001b;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-    L_0x0027:
-        r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r3.<init>();	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r9 = (org.telegram.tgnet.TLRPC.Document) r9;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r3.document = r9;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = r3.flags;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = r5 | 1;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r3.flags = r5;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        goto L_0x001b;
-    L_0x0037:
-        r1 = move-exception;
-        org.telegram.messenger.FileLog.m8e(r1);	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        if (r4 == 0) goto L_0x0022;
-    L_0x003d:
-        r4.dispose();
-        goto L_0x0022;
-    L_0x0041:
-        r5 = r7.database;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r6 = "REPLACE INTO sent_files_v2 VALUES(?, ?, ?)";	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r4 = r5.executeFast(r6);	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r4.requery();	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = r3.getObjectSize();	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r0.<init>(r5);	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r3.serializeToStream(r0);	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = 1;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r4.bindString(r5, r2);	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = 2;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r4.bindInteger(r5, r10);	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r5 = 3;	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r4.bindByteBuffer(r5, r0);	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r4.step();	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-        r0.reuse();	 Catch:{ Exception -> 0x0037, all -> 0x0071 }
-    L_0x006b:
-        if (r4 == 0) goto L_0x0022;
-    L_0x006d:
-        r4.dispose();
-        goto L_0x0022;
-    L_0x0071:
-        r5 = move-exception;
-        if (r4 == 0) goto L_0x0077;
-    L_0x0074:
-        r4.dispose();
-    L_0x0077:
-        throw r5;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$85$MessagesStorage(java.lang.String, org.telegram.tgnet.TLObject, int):void");
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChat$89$MessagesStorage(org.telegram.tgnet.TLRPC.EncryptedChat r11) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x0104 in list [B:35:0x0101]
-	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
-	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r10 = this;
-        r9 = 16;
-        r7 = 1;
-        r6 = 0;
-        r8 = r11.key_hash;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r8 == 0) goto L_0x000d;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0008:
-        r8 = r11.key_hash;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r8.length;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r8 >= r9) goto L_0x0019;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x000d:
-        r8 = r11.auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r8 == 0) goto L_0x0019;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0011:
-        r8 = r11.auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = org.telegram.messenger.AndroidUtilities.calcAuthKeyHash(r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r11.key_hash = r8;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0019:
-        r8 = r10.database;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r9 = "UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ?, admin_id = ?, mtproto_seq = ? WHERE uid = ?";	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6 = r8.executeFast(r9);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.getObjectSize();	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r0.<init>(r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r1 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.a_or_b;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r8 == 0) goto L_0x0105;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0031:
-        r8 = r11.a_or_b;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r8.length;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0034:
-        r1.<init>(r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r2 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r8 == 0) goto L_0x0108;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x003d:
-        r8 = r11.auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r8.length;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0040:
-        r2.<init>(r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.future_auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r8 == 0) goto L_0x010b;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0049:
-        r8 = r11.future_auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r8.length;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x004c:
-        r3.<init>(r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.key_hash;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r8 == 0) goto L_0x0058;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0055:
-        r7 = r11.key_hash;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = r7.length;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0058:
-        r4.<init>(r7);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r11.serializeToStream(r0);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 1;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindByteBuffer(r7, r0);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = r11.a_or_b;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r7 == 0) goto L_0x006b;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0066:
-        r7 = r11.a_or_b;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r1.writeBytes(r7);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x006b:
-        r7 = r11.auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r7 == 0) goto L_0x0074;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x006f:
-        r7 = r11.auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r2.writeBytes(r7);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0074:
-        r7 = r11.future_auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r7 == 0) goto L_0x007d;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0078:
-        r7 = r11.future_auth_key;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r3.writeBytes(r7);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x007d:
-        r7 = r11.key_hash;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r7 == 0) goto L_0x0086;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0081:
-        r7 = r11.key_hash;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r4.writeBytes(r7);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-    L_0x0086:
-        r7 = 2;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindByteBuffer(r7, r1);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 3;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindByteBuffer(r7, r2);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 4;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.ttl;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 5;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.layer;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 6;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.seq_in;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 7;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.seq_out;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 8;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.key_use_count_in;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r8 << 16;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r9 = r11.key_use_count_out;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r8 | r9;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 9;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.exchange_id;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 10;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.key_create_date;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 11;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 12;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindByteBuffer(r7, r3);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 13;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindByteBuffer(r7, r4);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 14;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.in_seq_no;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 15;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.admin_id;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 16;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.mtproto_seq;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r7 = 17;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r8 = r11.id;	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r6.step();	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r0.reuse();	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r1.reuse();	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r2.reuse();	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r3.reuse();	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        r4.reuse();	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r6 == 0) goto L_0x0104;
-    L_0x0101:
-        r6.dispose();
-    L_0x0104:
-        return;
-    L_0x0105:
-        r8 = r7;
-        goto L_0x0034;
-    L_0x0108:
-        r8 = r7;
-        goto L_0x0040;
-    L_0x010b:
-        r8 = r7;
-        goto L_0x004c;
-    L_0x010e:
-        r5 = move-exception;
-        org.telegram.messenger.FileLog.m8e(r5);	 Catch:{ Exception -> 0x010e, all -> 0x0118 }
-        if (r6 == 0) goto L_0x0104;
-    L_0x0114:
-        r6.dispose();
-        goto L_0x0104;
-    L_0x0118:
-        r7 = move-exception;
-        if (r6 == 0) goto L_0x011e;
-    L_0x011b:
-        r6.dispose();
-    L_0x011e:
-        throw r7;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateEncryptedChat$89$MessagesStorage(org.telegram.tgnet.TLRPC$EncryptedChat):void");
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatLayer$88$MessagesStorage(org.telegram.tgnet.TLRPC.EncryptedChat r5) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x001e in list [B:4:0x001b]
-	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
-	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r4 = this;
-        r1 = 0;
-        r2 = r4.database;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r3 = "UPDATE enc_chats SET layer = ? WHERE uid = ?";	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r2 = 1;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r3 = r5.layer;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r2 = 2;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r3 = r5.id;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r1.step();	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        if (r1 == 0) goto L_0x001e;
-    L_0x001b:
-        r1.dispose();
-    L_0x001e:
-        return;
-    L_0x001f:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.m8e(r0);	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        if (r1 == 0) goto L_0x001e;
-    L_0x0025:
-        r1.dispose();
-        goto L_0x001e;
-    L_0x0029:
-        r2 = move-exception;
-        if (r1 == 0) goto L_0x002f;
-    L_0x002c:
-        r1.dispose();
-    L_0x002f:
-        throw r2;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateEncryptedChatLayer$88$MessagesStorage(org.telegram.tgnet.TLRPC$EncryptedChat):void");
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatSeq$86$MessagesStorage(org.telegram.tgnet.TLRPC.EncryptedChat r11, boolean r12) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x006d in list [B:6:0x006a]
-	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
-	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r10 = this;
-        r3 = 0;
-        r4 = r10.database;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = "UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?";	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r3 = r4.executeFast(r5);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = 1;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = r11.seq_in;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = 2;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = r11.seq_out;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = 3;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = r11.key_use_count_in;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = r5 << 16;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r6 = r11.key_use_count_out;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = r5 | r6;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = 4;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = r11.in_seq_no;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = 5;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = r11.mtproto_seq;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = 6;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = r11.id;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r3.step();	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        if (r12 == 0) goto L_0x0068;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-    L_0x0038:
-        r4 = r11.id;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = (long) r4;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r6 = 32;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r0 = r4 << r6;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = r10.database;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r6 = "DELETE FROM messages WHERE mid IN (SELECT m.mid FROM messages as m LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.uid = %d AND m.date = 0 AND m.mid < 0 AND s.seq_out <= %d)";	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r7 = 2;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r7 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r8 = 0;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r9 = java.lang.Long.valueOf(r0);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r7[r8] = r9;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r8 = 1;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r9 = r11.in_seq_no;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r7[r8] = r9;	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r5 = java.lang.String.format(r5, r6, r7);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = r4.executeFast(r5);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4 = r4.stepThis();	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        r4.dispose();	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-    L_0x0068:
-        if (r3 == 0) goto L_0x006d;
-    L_0x006a:
-        r3.dispose();
-    L_0x006d:
-        return;
-    L_0x006e:
-        r2 = move-exception;
-        org.telegram.messenger.FileLog.m8e(r2);	 Catch:{ Exception -> 0x006e, all -> 0x0078 }
-        if (r3 == 0) goto L_0x006d;
-    L_0x0074:
-        r3.dispose();
-        goto L_0x006d;
-    L_0x0078:
-        r4 = move-exception;
-        if (r3 == 0) goto L_0x007e;
-    L_0x007b:
-        r3.dispose();
-    L_0x007e:
-        throw r4;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateEncryptedChatSeq$86$MessagesStorage(org.telegram.tgnet.TLRPC$EncryptedChat, boolean):void");
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatTTL$87$MessagesStorage(org.telegram.tgnet.TLRPC.EncryptedChat r5) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x001e in list [B:4:0x001b]
-	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
-	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r4 = this;
-        r1 = 0;
-        r2 = r4.database;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r3 = "UPDATE enc_chats SET ttl = ? WHERE uid = ?";	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r2 = 1;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r3 = r5.ttl;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r2 = 2;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r3 = r5.id;	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        r1.step();	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        if (r1 == 0) goto L_0x001e;
-    L_0x001b:
-        r1.dispose();
-    L_0x001e:
-        return;
-    L_0x001f:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.m8e(r0);	 Catch:{ Exception -> 0x001f, all -> 0x0029 }
-        if (r1 == 0) goto L_0x001e;
-    L_0x0025:
-        r1.dispose();
-        goto L_0x001e;
-    L_0x0029:
-        r2 = move-exception;
-        if (r1 == 0) goto L_0x002f;
-    L_0x002c:
-        r1.dispose();
-    L_0x002f:
-        throw r2;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateEncryptedChatTTL$87$MessagesStorage(org.telegram.tgnet.TLRPC$EncryptedChat):void");
+        /* renamed from: run */
+        void lambda$null$79$MessagesStorage(int i);
     }
 
     public static MessagesStorage getInstance(int num) {
+        Throwable th;
         MessagesStorage localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (MessagesStorage.class) {
@@ -726,15 +155,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         try {
                             messagesStorageArr[num] = localInstance2;
                             localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
+                        } catch (Throwable th2) {
+                            th = th2;
                             localInstance = localInstance2;
-                            throw th2;
+                            throw th;
                         }
                     }
                 } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                    th = th3;
+                    throw th;
                 }
             }
         }
@@ -867,7 +296,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             this.database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
             if (createTable) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m5d("create new database");
+                    FileLog.m11d("create new database");
                 }
                 this.database.executeFast("CREATE TABLE messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
@@ -939,7 +368,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m5d("current db version = " + version);
+                    FileLog.m11d("current db version = " + version);
                 }
                 if (version == 0) {
                     throw new Exception("malformed");
@@ -964,12 +393,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                     try {
                         this.database.executeFast("CREATE TABLE IF NOT EXISTS params(id INTEGER PRIMARY KEY, seq INTEGER, pts INTEGER, date INTEGER, qts INTEGER, lsv INTEGER, sg INTEGER, pbytes BLOB)").stepThis().dispose();
                         this.database.executeFast("INSERT INTO params VALUES(1, 0, 0, 0, 0, 0, 0, NULL)").stepThis().dispose();
                     } catch (Throwable e2) {
-                        FileLog.m8e(e2);
+                        FileLog.m14e(e2);
                     }
                 }
                 if (version < 48) {
@@ -977,7 +406,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 }
             }
         } catch (Throwable e3) {
-            FileLog.m8e(e3);
+            FileLog.m14e(e3);
             if (first && e3.getMessage().contains("malformed")) {
                 cleanupInternal();
                 UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = 0;
@@ -1033,7 +462,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 this.database.executeFast("PRAGMA user_version = 4").stepThis().dispose();
                 version = 4;
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -1158,7 +587,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     data.reuse();
                     if (participants != null) {
                         TL_chatFull chatFull = new TL_chatFull();
-                        chatFull.id = chat_id;
+                        chatFull.f114id = chat_id;
                         chatFull.chat_photo = new TL_photoEmpty();
                         chatFull.notify_settings = new TL_peerNotifySettingsEmpty_layer77();
                         chatFull.exported_invite = new TL_chatInviteEmpty();
@@ -1389,7 +818,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.dispose();
             data.reuse();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -1435,12 +864,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 state.dispose();
                 this.database.commitTransaction();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
         } catch (Exception e2) {
             ThrowableExtension.printStackTrace(e2);
         } catch (Throwable e3) {
-            FileLog.m8e(e3);
+            FileLog.m14e(e3);
         }
     }
 
@@ -1461,7 +890,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         } finally {
             data.reuse();
         }
@@ -1475,7 +904,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast("DELETE FROM pending_tasks WHERE id = " + id).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -1507,7 +936,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         case 8:
                         case 10:
                             TL_dialog dialog = new TL_dialog();
-                            dialog.id = data.readInt64(false);
+                            dialog.f165id = data.readInt64(false);
                             dialog.top_message = data.readInt32(false);
                             dialog.read_inbox_max_id = data.readInt32(false);
                             dialog.read_outbox_max_id = data.readInt32(false);
@@ -1559,7 +988,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             cursor.dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -1603,7 +1032,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -1623,12 +1052,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 this.lastSavedQts = qts;
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
-    }
-
-    final /* synthetic */ void lambda$saveDiffParams$17$MessagesStorage(int seq, int pts, int date, int qts) {
-        saveDiffParamsInternal(seq, pts, date, qts);
     }
 
     public void saveDiffParams(int seq, int pts, int date, int qts) {
@@ -1643,7 +1068,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast(String.format(Locale.US, "REPLACE INTO dialog_settings VALUES(%d, %d)", new Object[]{Long.valueOf(did), Long.valueOf(flags)})).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -1709,14 +1134,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
                         MessageObject.setUnreadFlags(message, cursor.intValue(0));
-                        message.id = cursor.intValue(3);
+                        message.f139id = cursor.intValue(3);
                         message.date = cursor.intValue(4);
                         message.dialog_id = cursor.longValue(5);
                         messages.add(message);
                         lower_id = (int) message.dialog_id;
                         addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                         message.send_state = cursor.intValue(2);
-                        if (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.id > 0) {
+                        if (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.f139id > 0) {
                             message.send_state = 0;
                         }
                         if (lower_id == 0 && !cursor.isNull(5)) {
@@ -1756,7 +1181,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.m8e(e);
+                            FileLog.m14e(e);
                         }
                     }
                 }
@@ -1769,11 +1194,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             message = Message.TLdeserialize(data, data.readInt32(false), false);
                             message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                             data.reuse();
-                            message.id = cursor.intValue(1);
+                            message.f139id = cursor.intValue(1);
                             message.date = cursor.intValue(2);
                             message.dialog_id = cursor.longValue(3);
                             addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                            arrayList = (ArrayList) replyMessageOwners.get(message.id);
+                            arrayList = (ArrayList) replyMessageOwners.get(message.f139id);
                             if (arrayList != null) {
                                 for (a = 0; a < arrayList.size(); a++) {
                                     Message m = (Message) arrayList.get(a);
@@ -1800,14 +1225,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     while (a < chats.size()) {
                         Chat chat = (Chat) chats.get(a);
                         if (chat != null && (chat.left || chat.migrated_to != null)) {
-                            this.database.executeFast("UPDATE dialogs SET unread_count = 0 WHERE did = " + ((long) (-chat.id))).stepThis().dispose();
+                            this.database.executeFast("UPDATE dialogs SET unread_count = 0 WHERE did = " + ((long) (-chat.f113id))).stepThis().dispose();
                             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = 3 WHERE uid = %d AND mid > 0 AND read_state IN(0,2) AND out = 0", new Object[]{Long.valueOf(did)})).stepThis().dispose();
                             chats.remove(a);
                             a--;
-                            pushDialogs.remove((long) (-chat.id));
+                            pushDialogs.remove((long) (-chat.f113id));
                             int b = 0;
                             while (b < messages.size()) {
-                                if (((Message) messages.get(b)).dialog_id == ((long) (-chat.id))) {
+                                if (((Message) messages.get(b)).dialog_id == ((long) (-chat.f113id))) {
                                     messages.remove(b);
                                     b--;
                                 }
@@ -1821,7 +1246,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             Collections.reverse(messages);
             AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$118(this, pushDialogs, messages, users, chats, encryptedChats));
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
         }
     }
 
@@ -1854,7 +1279,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.dispose();
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -1868,7 +1293,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             ArrayList<SearchImage> arrayList = new ArrayList();
             while (cursor.next()) {
                 SearchImage searchImage = new SearchImage();
-                searchImage.id = cursor.stringValue(0);
+                searchImage.f81id = cursor.stringValue(0);
                 searchImage.imageUrl = cursor.stringValue(1);
                 searchImage.thumbUrl = cursor.stringValue(2);
                 searchImage.localUrl = cursor.stringValue(3);
@@ -1899,7 +1324,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             cursor.dispose();
             AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$117(this, type, arrayList));
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -1916,9 +1341,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     final /* synthetic */ void lambda$addRecentLocalFile$24$MessagesStorage(Document document, String imageUrl, String localUrl) {
+        SQLitePreparedStatement state;
         if (document != null) {
             try {
-                SQLitePreparedStatement state = this.database.executeFast("UPDATE web_recent_v3 SET document = ? WHERE image_url = ?");
+                state = this.database.executeFast("UPDATE web_recent_v3 SET document = ? WHERE image_url = ?");
                 state.requery();
                 NativeByteBuffer data = new NativeByteBuffer(document.getObjectSize());
                 document.serializeToStream(data);
@@ -1929,7 +1355,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 data.reuse();
                 return;
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -1949,7 +1375,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast("DELETE FROM web_recent_v3 WHERE type = " + type).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -1965,7 +1391,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             while (a < arrayList.size() && a != Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                 SearchImage searchImage = (SearchImage) arrayList.get(a);
                 state.requery();
-                state.bindString(1, searchImage.id);
+                state.bindString(1, searchImage.f81id);
                 state.bindInteger(2, searchImage.type);
                 state.bindString(3, searchImage.imageUrl != null ? searchImage.imageUrl : TtmlNode.ANONYMOUS_REGION_ID);
                 state.bindString(4, searchImage.thumbUrl != null ? searchImage.thumbUrl : TtmlNode.ANONYMOUS_REGION_ID);
@@ -1997,12 +1423,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (arrayList.size() >= Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                 this.database.beginTransaction();
                 for (a = Callback.DEFAULT_DRAG_ANIMATION_DURATION; a < arrayList.size(); a++) {
-                    this.database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((SearchImage) arrayList.get(a)).id + "'").stepThis().dispose();
+                    this.database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((SearchImage) arrayList.get(a)).f81id + "'").stepThis().dispose();
                 }
                 this.database.commitTransaction();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2025,7 +1451,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             cursor.dispose();
             AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$116(wallPapers));
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2053,7 +1479,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             MessagesController.getInstance(this.currentAccount).processLoadedBlockedUsers(ids, users, true);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2065,7 +1491,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast("DELETE FROM blocked_users WHERE uid = " + id).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2080,7 +1506,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 this.database.executeFast("DELETE FROM blocked_users WHERE 1").stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -2107,39 +1533,37 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             SQLiteCursor cursor = this.database.queryFinalized("SELECT data FROM messages WHERE uid = " + did, new Object[0]);
             ArrayList<File> filesToDelete = new ArrayList();
             while (cursor.next()) {
-                NativeByteBuffer data = cursor.byteBufferValue(0);
-                if (data != null) {
-                    Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                    message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
-                    data.reuse();
-                    if (!(message == null || message.from_id != uid || message.id == 1)) {
-                        mids.add(Integer.valueOf(message.id));
-                        File file;
-                        if (message.media instanceof TL_messageMediaPhoto) {
-                            Iterator it = message.media.photo.sizes.iterator();
-                            while (it.hasNext()) {
-                                file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                try {
+                    NativeByteBuffer data = cursor.byteBufferValue(0);
+                    if (data != null) {
+                        Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                        message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                        data.reuse();
+                        if (!(message == null || message.from_id != uid || message.f139id == 1)) {
+                            mids.add(Integer.valueOf(message.f139id));
+                            File file;
+                            if (message.media instanceof TL_messageMediaPhoto) {
+                                Iterator it = message.media.photo.sizes.iterator();
+                                while (it.hasNext()) {
+                                    file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
+                                }
+                            } else if (message.media instanceof TL_messageMediaDocument) {
+                                file = FileLoader.getPathToAttach(message.media.document);
+                                if (file != null && file.toString().length() > 0) {
+                                    filesToDelete.add(file);
+                                }
+                                file = FileLoader.getPathToAttach(message.media.document.thumb);
                                 if (file != null && file.toString().length() > 0) {
                                     filesToDelete.add(file);
                                 }
                             }
-                        } else {
-                            try {
-                                if (message.media instanceof TL_messageMediaDocument) {
-                                    file = FileLoader.getPathToAttach(message.media.document);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
-                                    file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
-                                }
-                            } catch (Throwable e) {
-                                FileLog.m8e(e);
-                            }
                         }
                     }
+                } catch (Throwable e) {
+                    FileLog.m14e(e);
                 }
             }
             cursor.dispose();
@@ -2151,7 +1575,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$115(this, mids, channelId));
             }
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
         }
     }
 
@@ -2183,7 +1607,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -2191,38 +1615,36 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             cursor = this.database.queryFinalized("SELECT data FROM messages WHERE uid = " + did, new Object[0]);
             ArrayList<File> filesToDelete = new ArrayList();
             while (cursor.next()) {
-                data = cursor.byteBufferValue(0);
-                if (data != null) {
-                    message = Message.TLdeserialize(data, data.readInt32(false), false);
-                    message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
-                    data.reuse();
-                    if (!(message == null || message.media == null)) {
-                        File file;
-                        if (message.media instanceof TL_messageMediaPhoto) {
-                            Iterator it = message.media.photo.sizes.iterator();
-                            while (it.hasNext()) {
-                                file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                try {
+                    data = cursor.byteBufferValue(0);
+                    if (data != null) {
+                        message = Message.TLdeserialize(data, data.readInt32(false), false);
+                        message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                        data.reuse();
+                        if (!(message == null || message.media == null)) {
+                            File file;
+                            if (message.media instanceof TL_messageMediaPhoto) {
+                                Iterator it = message.media.photo.sizes.iterator();
+                                while (it.hasNext()) {
+                                    file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
+                                }
+                            } else if (message.media instanceof TL_messageMediaDocument) {
+                                file = FileLoader.getPathToAttach(message.media.document);
+                                if (file != null && file.toString().length() > 0) {
+                                    filesToDelete.add(file);
+                                }
+                                file = FileLoader.getPathToAttach(message.media.document.thumb);
                                 if (file != null && file.toString().length() > 0) {
                                     filesToDelete.add(file);
                                 }
                             }
-                        } else {
-                            try {
-                                if (message.media instanceof TL_messageMediaDocument) {
-                                    file = FileLoader.getPathToAttach(message.media.document);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
-                                    file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
-                                }
-                            } catch (Throwable e2) {
-                                FileLog.m8e(e2);
-                            }
                         }
                     }
+                } catch (Throwable e2) {
+                    FileLog.m14e(e2);
                 }
             }
             cursor.dispose();
@@ -2257,11 +1679,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                             data.reuse();
                             if (message != null) {
-                                messageId = message.id;
+                                messageId = message.f139id;
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.m8e(e22);
+                        FileLog.m14e(e22);
                     }
                 }
                 cursor2.dispose();
@@ -2308,7 +1730,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d AND id < %d ORDER BY id DESC LIMIT %d", new Object[]{Integer.valueOf(did), Long.valueOf(max_id), Integer.valueOf(count)}), new Object[0]);
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -2338,7 +1760,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2350,7 +1772,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid + " AND id = " + pid).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2368,7 +1790,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             ArrayList<Long> oldPinnedOrder = new ArrayList();
             ArrayList<Long> orderArrayList = new ArrayList();
             for (a = dialogsCount; a < dialogsRes.dialogs.size(); a++) {
-                orderArrayList.add(Long.valueOf(((TL_dialog) dialogsRes.dialogs.get(a)).id));
+                orderArrayList.add(Long.valueOf(((TL_dialog) dialogsRes.dialogs.get(a)).f165id));
             }
             SQLiteCursor cursor = this.database.queryFinalized("SELECT did, pinned FROM dialogs WHERE 1", new Object[0]);
             while (cursor.next()) {
@@ -2401,12 +1823,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             this.database.commitTransaction();
             for (a = 0; a < totalPinnedCount; a++) {
                 TL_dialog dialog = (TL_dialog) dialogsRes.dialogs.get(dialogsCount + a);
-                int oldIdx = oldPinnedOrder.indexOf(Long.valueOf(dialog.id));
-                int newIdx = orderArrayList.indexOf(Long.valueOf(dialog.id));
+                int oldIdx = oldPinnedOrder.indexOf(Long.valueOf(dialog.f165id));
+                int newIdx = orderArrayList.indexOf(Long.valueOf(dialog.f165id));
                 if (!(oldIdx == -1 || newIdx == -1)) {
                     Integer oldNum;
                     if (oldIdx == newIdx) {
-                        oldNum = (Integer) oldPinnedDialogNums.get(dialog.id);
+                        oldNum = (Integer) oldPinnedDialogNums.get(dialog.f165id);
                         if (oldNum != null) {
                             dialog.pinnedNum = oldNum.intValue();
                         }
@@ -2423,11 +1845,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             putDialogsInternal(dialogsRes, 0);
             saveDiffParamsInternal(seq, newPts, date, qts);
-            if (lastMessage == null || lastMessage.id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId) {
+            if (lastMessage == null || lastMessage.f139id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId) {
                 UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = ConnectionsManager.DEFAULT_DATACENTER_ID;
             } else {
                 UserConfig.getInstance(this.currentAccount).totalDialogsLoadCount = dialogsRes.dialogs.size();
-                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = lastMessage.id;
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = lastMessage.f139id;
                 UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetDate = lastMessage.date;
                 Chat chat;
                 if (lastMessage.to_id.channel_id != 0) {
@@ -2436,7 +1858,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId = 0;
                     for (a = 0; a < dialogsRes.chats.size(); a++) {
                         chat = (Chat) dialogsRes.chats.get(a);
-                        if (chat.id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChannelId) {
+                        if (chat.f113id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChannelId) {
                             UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
                             break;
                         }
@@ -2447,7 +1869,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId = 0;
                     for (a = 0; a < dialogsRes.chats.size(); a++) {
                         chat = (Chat) dialogsRes.chats.get(a);
-                        if (chat.id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChatId) {
+                        if (chat.f113id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChatId) {
                             UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
                             break;
                         }
@@ -2458,7 +1880,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChannelId = 0;
                     for (a = 0; a < dialogsRes.users.size(); a++) {
                         User user = (User) dialogsRes.users.get(a);
-                        if (user.id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId) {
+                        if (user.f228id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId) {
                             UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = user.access_hash;
                             break;
                         }
@@ -2468,7 +1890,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             UserConfig.getInstance(this.currentAccount).saveConfig(false);
             MessagesController.getInstance(this.currentAccount).completeDialogsReset(dialogsRes, messagesCount, seq, newPts, date, qts, new_dialogs_dict, new_dialogMessage, lastMessage);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2502,7 +1924,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     NativeByteBuffer data = new NativeByteBuffer(photo.getObjectSize());
                     photo.serializeToStream(data);
                     state.bindInteger(1, did);
-                    state.bindLong(2, photo.id);
+                    state.bindLong(2, photo.f143id);
                     state.bindByteBuffer(3, data);
                     state.step();
                     data.reuse();
@@ -2510,7 +1932,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2531,9 +1953,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     message = Message.TLdeserialize(data, data.readInt32(false), false);
                     message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                     data.reuse();
-                    if (message.media == null) {
-                        continue;
-                    } else {
+                    if (message.media != null) {
                         File file;
                         if (message.media.document != null) {
                             file = FileLoader.getPathToAttach(message.media.document, true);
@@ -2556,7 +1976,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             message.media.photo = new TL_photoEmpty();
                         }
                         message.media.flags &= -2;
-                        message.id = cursor.intValue(1);
+                        message.f139id = cursor.intValue(1);
                         message.date = cursor.intValue(2);
                         message.dialog_id = cursor.longValue(3);
                         messages.add(message);
@@ -2571,7 +1991,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     data = new NativeByteBuffer(message.getObjectSize());
                     message.serializeToStream(data);
                     state.requery();
-                    state.bindLong(1, (long) message.id);
+                    state.bindLong(1, (long) message.f139id);
                     state.bindLong(2, message.dialog_id);
                     state.bindInteger(3, MessageObject.getUnreadFlags(message));
                     state.bindInteger(4, message.send_state);
@@ -2594,7 +2014,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2614,7 +2034,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 String ids = TextUtils.join(",", oldTask);
                 this.database.executeFast(String.format(Locale.US, "DELETE FROM enc_tasks_v2 WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -2662,7 +2082,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             sparseArray.put(did, Integer.valueOf(old_mentions_count));
             MessagesController.getInstance(this.currentAccount).processDialogsUpdateRead(null, sparseArray);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2674,7 +2094,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET mention = 1, read_state = read_state & ~2 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2687,7 +2107,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(did)})).stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -2731,7 +2151,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET ttl = 0 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
             MessagesController.getInstance(this.currentAccount).didAddedNewTask(minDate, messages);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2810,7 +2230,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 MessagesController.getInstance(this.currentAccount).didAddedNewTask(minDate, messages);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -2938,7 +2358,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 MessagesController.getInstance(this.currentAccount).reloadMentionsCountForChannels(channelMentionsToReload);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3003,7 +2423,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
-                state.bindInteger(1, info.id);
+                state.bindInteger(1, info.f114id);
                 state.bindByteBuffer(2, data);
                 state.bindInteger(3, info.pinned_msg_id);
                 state.step();
@@ -3011,7 +2431,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 data.reuse();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3033,7 +2453,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             cursor.dispose();
             MessagesController.getInstance(this.currentAccount).processLoadedChannelAdmins(ids, chatId, true);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3056,7 +2476,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.dispose();
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3088,7 +2508,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             this.database.commitTransaction();
             loadChatInfo(channel_id, null, false, true);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3116,7 +2536,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.dispose();
             data.reuse();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3144,12 +2564,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         data.reuse();
                     }
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
             }
             cursor.dispose();
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
         } finally {
             requestDelegate.run(result, null);
         }
@@ -3160,30 +2580,31 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     final /* synthetic */ void lambda$updateChatInfo$62$MessagesStorage(boolean ifExist, ChatFull info) {
+        SQLiteCursor cursor;
         if (ifExist) {
             try {
-                SQLiteCursor cursor = this.database.queryFinalized("SELECT uid FROM chat_settings_v2 WHERE uid = " + info.id, new Object[0]);
+                cursor = this.database.queryFinalized("SELECT uid FROM chat_settings_v2 WHERE uid = " + info.f114id, new Object[0]);
                 boolean exist = cursor.next();
                 cursor.dispose();
                 if (!exist) {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
         SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
         NativeByteBuffer data = new NativeByteBuffer(info.getObjectSize());
         info.serializeToStream(data);
-        state.bindInteger(1, info.id);
+        state.bindInteger(1, info.f114id);
         state.bindByteBuffer(2, data);
         state.bindInteger(3, info.pinned_msg_id);
         state.step();
         state.dispose();
         data.reuse();
         if (info instanceof TL_channelFull) {
-            cursor = this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i, flags FROM dialogs WHERE did = " + (-info.id), new Object[0]);
+            cursor = this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i, flags FROM dialogs WHERE did = " + (-info.f114id), new Object[0]);
             if (cursor.next() && cursor.intValue(3) < info.read_inbox_max_id) {
                 int dialog_date = cursor.intValue(0);
                 int pts = cursor.intValue(1);
@@ -3193,7 +2614,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 int mentions = cursor.intValue(6);
                 int flags = cursor.intValue(7);
                 state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                state.bindLong(1, (long) (-info.id));
+                state.bindLong(1, (long) (-info.f114id));
                 state.bindInteger(2, dialog_date);
                 state.bindInteger(3, info.unread_count);
                 state.bindLong(4, last_mid);
@@ -3246,7 +2667,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 data.reuse();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3330,7 +2751,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 data.reuse();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3345,9 +2766,48 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return result[0];
+    }
+
+    /* JADX WARNING: Failed to extract finally block: empty outs */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$isMigratedChat$67$MessagesStorage(int chat_id, boolean[] result, CountDownLatch countDownLatch) {
+        boolean z = false;
+        try {
+            SQLiteCursor cursor = this.database.queryFinalized("SELECT info FROM chat_settings_v2 WHERE uid = " + chat_id, new Object[0]);
+            ChatFull info = null;
+            ArrayList<User> loadedUsers = new ArrayList();
+            if (cursor.next()) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    info = ChatFull.TLdeserialize(data, data.readInt32(false), false);
+                    data.reuse();
+                }
+            }
+            cursor.dispose();
+            if ((info instanceof TL_channelFull) && info.migrated_from_chat_id != 0) {
+                z = true;
+            }
+            result[0] = z;
+            if (countDownLatch != null) {
+                countDownLatch.countDown();
+            }
+            if (countDownLatch != null) {
+                countDownLatch.countDown();
+            }
+        } catch (Throwable e) {
+            FileLog.m14e(e);
+            if (countDownLatch != null) {
+                countDownLatch.countDown();
+            }
+        } catch (Throwable th) {
+            if (countDownLatch != null) {
+                countDownLatch.countDown();
+            }
+            throw th;
+        }
     }
 
     public void loadChatInfo(int chat_id, CountDownLatch countDownLatch, boolean force, boolean byChannelUsers) {
@@ -3415,7 +2875,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             info.participants.participants.add(chatChannelParticipant);
                         }
                     } catch (Throwable e) {
-                        FileLog.m8e(e);
+                        FileLog.m14e(e);
                     }
                 }
                 cursor.dispose();
@@ -3442,7 +2902,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 countDownLatch.countDown();
             }
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
             MessagesController.getInstance(this.currentAccount).processChatInfo(chat_id, info, loadedUsers, true, force, byChannelUsers, null);
             if (countDownLatch != null) {
                 countDownLatch.countDown();
@@ -3527,7 +2987,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.dispose();
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3542,7 +3002,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 this.database.executeFast("DELETE FROM contacts WHERE 1").stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -3569,7 +3029,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast("DELETE FROM contacts WHERE uid IN(" + TextUtils.join(",", uids) + ")").stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3588,7 +3048,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 1 WHERE sphone IN(%s)", new Object[]{deletes})).stepThis().dispose();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3604,7 +3064,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     final /* synthetic */ void lambda$putCachedPhoneBook$73$MessagesStorage(HashMap contactHashMap, boolean migrate) {
         try {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m5d(this.currentAccount + " save contacts to db " + contactHashMap.size());
+                FileLog.m11d(this.currentAccount + " save contacts to db " + contactHashMap.size());
             }
             this.database.executeFast("DELETE FROM user_contacts_v7 WHERE 1").stepThis().dispose();
             this.database.executeFast("DELETE FROM user_phones_v7 WHERE 1").stepThis().dispose();
@@ -3640,7 +3100,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 getCachedPhoneBook(false);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3693,7 +3153,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             continue;
                         } else {
                             if (sphone.length() == 8 && phone.length() != 8) {
-                                sphone = PhoneFormat.stripExceptNumbers(phone);
+                                sphone = C0216PhoneFormat.stripExceptNumbers(phone);
                             }
                             contact.shortPhones.add(sphone);
                             contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(5)));
@@ -3729,7 +3189,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         start = currentContactsCount - 5000;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m5d(this.currentAccount + " current cached contacts count = " + currentContactsCount);
+                        FileLog.m11d(this.currentAccount + " current cached contacts count = " + currentContactsCount);
                     }
                 }
                 if (cursor != null) {
@@ -3746,7 +3206,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     cursor = this.database.queryFinalized("SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1 LIMIT 0," + currentContactsCount, new Object[0]);
                 } catch (Throwable e) {
                     contactHashMap2.clear();
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                     if (cursor != null) {
                         cursor.dispose();
                     }
@@ -3783,7 +3243,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         continue;
                     } else {
                         if (sphone.length() == 8 && phone.length() != 8) {
-                            sphone = PhoneFormat.stripExceptNumbers(phone);
+                            sphone = C0216PhoneFormat.stripExceptNumbers(phone);
                         }
                         contact.shortPhones.add(sphone);
                         contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(6)));
@@ -3847,7 +3307,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         } catch (Throwable e) {
             contacts.clear();
             users.clear();
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         ContactsController.getInstance(this.currentAccount).processLoadedContacts(contacts, users, 1);
     }
@@ -3875,9 +3335,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     message.send_state = cursor.intValue(2);
                     message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                     data.reuse();
-                    if (messageHashMap.indexOfKey(message.id) < 0) {
+                    if (messageHashMap.indexOfKey(message.f139id) < 0) {
                         MessageObject.setUnreadFlags(message, cursor.intValue(0));
-                        message.id = cursor.intValue(3);
+                        message.f139id = cursor.intValue(3);
                         message.date = cursor.intValue(4);
                         if (!cursor.isNull(5)) {
                             message.random_id = cursor.longValue(5);
@@ -3887,7 +3347,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         message.seq_out = cursor.intValue(8);
                         message.ttl = cursor.intValue(9);
                         messages.add(message);
-                        messageHashMap.put(message.id, message);
+                        messageHashMap.put(message.f139id, message);
                         int lower_id = (int) message.dialog_id;
                         int high_id = (int) (message.dialog_id >> 32);
                         if (lower_id != 0) {
@@ -3906,14 +3366,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             encryptedChatIds.add(Integer.valueOf(high_id));
                         }
                         addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                        if (message.send_state != 3 && (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.id > 0)) {
+                        if (message.send_state != 3 && (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.f139id > 0)) {
                             message.send_state = 0;
                         }
                         if (lower_id == 0 && !cursor.isNull(5)) {
                             message.random_id = cursor.longValue(5);
                         }
-                    } else {
-                        continue;
                     }
                 }
             }
@@ -3946,7 +3404,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             SendMessagesHelper.getInstance(this.currentAccount).processUnsentMessages(messages, users, chats, encryptedChats);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -3957,7 +3415,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return result[0];
     }
@@ -3973,7 +3431,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 cursor.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -3992,7 +3450,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return result[0];
     }
@@ -4008,7 +3466,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 cursor.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -4036,7 +3494,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             cursor.dispose();
             AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$104(callback, result));
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -4191,6 +3649,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     }
                     cursor.dispose();
                 }
+                long holeMessageId;
                 if (load_type == 3 || load_type == 4 || (queryFromServer && load_type == 2)) {
                     cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0", new Object[]{Long.valueOf(dialog_id)}), new Object[0]);
                     if (cursor.next()) {
@@ -4272,9 +3731,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
                         } else {
                             if (holeMessageMaxId == 0) {
-                                holeMessageMaxId = C0020C.NANOS_PER_SECOND;
+                                holeMessageMaxId = C0021C.NANOS_PER_SECOND;
                                 if (channelId != 0) {
-                                    holeMessageMaxId = C0020C.NANOS_PER_SECOND | (((long) channelId) << 32);
+                                    holeMessageMaxId = C0021C.NANOS_PER_SECOND | (((long) channelId) << 32);
                                 }
                             }
                             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND (m.mid <= %d OR m.mid < 0) ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMinId), Integer.valueOf(count_query / 2), Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
@@ -4428,16 +3887,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     if (data != null) {
                         message = Message.TLdeserialize(data, data.readInt32(false), false);
                         message.send_state = cursor.intValue(2);
-                        if (!(message.id <= 0 || message.send_state == 0 || message.send_state == 3)) {
+                        if (!(message.f139id <= 0 || message.send_state == 0 || message.send_state == 3)) {
                             message.send_state = 0;
                         }
                         message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
                         MessageObject.setUnreadFlags(message, cursor.intValue(0));
-                        message.id = cursor.intValue(3);
-                        if (message.id > 0) {
-                            minId = Math.min(message.id, minId);
-                            maxId = Math.max(message.id, maxId);
+                        message.f139id = cursor.intValue(3);
+                        if (message.f139id > 0) {
+                            minId = Math.min(message.f139id, minId);
+                            maxId = Math.max(message.f139id, maxId);
                         }
                         message.date = cursor.intValue(4);
                         message.dialog_id = dialog_id;
@@ -4502,13 +3961,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                         if (MessageObject.isSecretPhotoOrVideo(message)) {
                             try {
-                                SQLiteCursor cursor2 = this.database.queryFinalized(String.format(Locale.US, "SELECT date FROM enc_tasks_v2 WHERE mid = %d", new Object[]{Integer.valueOf(message.id)}), new Object[0]);
+                                SQLiteCursor cursor2 = this.database.queryFinalized(String.format(Locale.US, "SELECT date FROM enc_tasks_v2 WHERE mid = %d", new Object[]{Integer.valueOf(message.f139id)}), new Object[0]);
                                 if (cursor2.next()) {
                                     message.destroyTime = cursor2.intValue(0);
                                 }
                                 cursor2.dispose();
                             } catch (Throwable e) {
-                                FileLog.m8e(e);
+                                FileLog.m14e(e);
                             }
                         } else {
                             continue;
@@ -4543,13 +4002,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         message = Message.TLdeserialize(data, data.readInt32(false), false);
                         message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
-                        message.id = cursor.intValue(1);
+                        message.f139id = cursor.intValue(1);
                         message.date = cursor.intValue(2);
                         message.dialog_id = dialog_id;
                         addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                         Message object;
                         if (replyMessageOwners.size() > 0) {
-                            arrayList = (ArrayList) replyMessageOwners.get(message.id);
+                            arrayList = (ArrayList) replyMessageOwners.get(message.f139id);
                             if (arrayList != null) {
                                 for (a = 0; a < arrayList.size(); a++) {
                                     object = (Message) arrayList.get(a);
@@ -4568,7 +4027,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 for (a = 0; a < arrayList.size(); a++) {
                                     object = (Message) arrayList.get(a);
                                     object.replyMessage = message;
-                                    object.reply_to_msg_id = message.id;
+                                    object.reply_to_msg_id = message.f139id;
                                     if (MessageObject.isMegagroup(object)) {
                                         message2 = object.replyMessage;
                                         message2.flags |= Integer.MIN_VALUE;
@@ -4608,7 +4067,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             res.messages.clear();
             res.chats.clear();
             res.users.clear();
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
             MessagesController.getInstance(this.currentAccount).processLoadedMessages(res, dialog_id, count_query, max_id_override, offset_date, true, classGuid, min_unread_id, last_message_id, count_unread, max_unread_date, load_type, isChannel, isEnd, loadIndex, queryFromServer, mentions_unread);
         } catch (Throwable th) {
             Throwable th2 = th;
@@ -4617,25 +4076,25 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     static final /* synthetic */ int lambda$null$81$MessagesStorage(Message lhs, Message rhs) {
-        if (lhs.id <= 0 || rhs.id <= 0) {
-            if (lhs.id >= 0 || rhs.id >= 0) {
+        if (lhs.f139id <= 0 || rhs.f139id <= 0) {
+            if (lhs.f139id >= 0 || rhs.f139id >= 0) {
                 if (lhs.date > rhs.date) {
                     return -1;
                 }
                 if (lhs.date < rhs.date) {
                     return 1;
                 }
-            } else if (lhs.id < rhs.id) {
+            } else if (lhs.f139id < rhs.f139id) {
                 return -1;
             } else {
-                if (lhs.id > rhs.id) {
+                if (lhs.f139id > rhs.f139id) {
                     return 1;
                 }
             }
-        } else if (lhs.id > rhs.id) {
+        } else if (lhs.f139id > rhs.f139id) {
             return -1;
         } else {
-            if (lhs.id < rhs.id) {
+            if (lhs.f139id < rhs.f139id) {
                 return 1;
             }
         }
@@ -4650,7 +4109,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -4664,7 +4123,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         if (result.isEmpty()) {
             return null;
@@ -4672,8 +4131,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         return (TLObject) result.get(0);
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     final /* synthetic */ void lambda$getSentFile$84$MessagesStorage(String path, int type, ArrayList result, CountDownLatch countDownLatch) {
         try {
             if (Utilities.MD5(path) != null) {
@@ -4694,9 +4151,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             countDownLatch.countDown();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
+            countDownLatch.countDown();
         } catch (Throwable th) {
             countDownLatch.countDown();
+            throw th;
         }
     }
 
@@ -4706,9 +4165,92 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
+    /* JADX WARNING: Failed to extract finally block: empty outs */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$putSentFile$85$MessagesStorage(String path, TLObject file, int type) {
+        SQLitePreparedStatement state = null;
+        try {
+            String id = Utilities.MD5(path);
+            if (id != null) {
+                MessageMedia messageMedia = null;
+                if (file instanceof Photo) {
+                    messageMedia = new TL_messageMediaPhoto();
+                    messageMedia.photo = (Photo) file;
+                    messageMedia.flags |= 1;
+                } else if (file instanceof Document) {
+                    messageMedia = new TL_messageMediaDocument();
+                    messageMedia.document = (Document) file;
+                    messageMedia.flags |= 1;
+                }
+                if (messageMedia != null) {
+                    state = this.database.executeFast("REPLACE INTO sent_files_v2 VALUES(?, ?, ?)");
+                    state.requery();
+                    NativeByteBuffer data = new NativeByteBuffer(messageMedia.getObjectSize());
+                    messageMedia.serializeToStream(data);
+                    state.bindString(1, id);
+                    state.bindInteger(2, type);
+                    state.bindByteBuffer(3, data);
+                    state.step();
+                    data.reuse();
+                } else if (state != null) {
+                    state.dispose();
+                    return;
+                } else {
+                    return;
+                }
+            }
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable e) {
+            FileLog.m14e(e);
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable th) {
+            if (state != null) {
+                state.dispose();
+            }
+            throw th;
+        }
+    }
+
     public void updateEncryptedChatSeq(EncryptedChat chat, boolean cleanup) {
         if (chat != null) {
             this.storageQueue.postRunnable(new MessagesStorage$$Lambda$62(this, chat, cleanup));
+        }
+    }
+
+    /* JADX WARNING: Failed to extract finally block: empty outs */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$updateEncryptedChatSeq$86$MessagesStorage(EncryptedChat chat, boolean cleanup) {
+        SQLitePreparedStatement state = null;
+        try {
+            state = this.database.executeFast("UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?");
+            state.bindInteger(1, chat.seq_in);
+            state.bindInteger(2, chat.seq_out);
+            state.bindInteger(3, (chat.key_use_count_in << 16) | chat.key_use_count_out);
+            state.bindInteger(4, chat.in_seq_no);
+            state.bindInteger(5, chat.mtproto_seq);
+            state.bindInteger(6, chat.f123id);
+            state.step();
+            if (cleanup) {
+                long did = ((long) chat.f123id) << 32;
+                this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid IN (SELECT m.mid FROM messages as m LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.uid = %d AND m.date = 0 AND m.mid < 0 AND s.seq_out <= %d)", new Object[]{Long.valueOf(did), Integer.valueOf(chat.in_seq_no)})).stepThis().dispose();
+            }
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable e) {
+            FileLog.m14e(e);
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable th) {
+            if (state != null) {
+                state.dispose();
+            }
+            throw th;
         }
     }
 
@@ -4718,15 +4260,151 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
+    /* JADX WARNING: Failed to extract finally block: empty outs */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$updateEncryptedChatTTL$87$MessagesStorage(EncryptedChat chat) {
+        SQLitePreparedStatement state = null;
+        try {
+            state = this.database.executeFast("UPDATE enc_chats SET ttl = ? WHERE uid = ?");
+            state.bindInteger(1, chat.ttl);
+            state.bindInteger(2, chat.f123id);
+            state.step();
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable e) {
+            FileLog.m14e(e);
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable th) {
+            if (state != null) {
+                state.dispose();
+            }
+            throw th;
+        }
+    }
+
     public void updateEncryptedChatLayer(EncryptedChat chat) {
         if (chat != null) {
             this.storageQueue.postRunnable(new MessagesStorage$$Lambda$64(this, chat));
         }
     }
 
+    /* JADX WARNING: Failed to extract finally block: empty outs */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$updateEncryptedChatLayer$88$MessagesStorage(EncryptedChat chat) {
+        SQLitePreparedStatement state = null;
+        try {
+            state = this.database.executeFast("UPDATE enc_chats SET layer = ? WHERE uid = ?");
+            state.bindInteger(1, chat.layer);
+            state.bindInteger(2, chat.f123id);
+            state.step();
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable e) {
+            FileLog.m14e(e);
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable th) {
+            if (state != null) {
+                state.dispose();
+            }
+            throw th;
+        }
+    }
+
     public void updateEncryptedChat(EncryptedChat chat) {
         if (chat != null) {
             this.storageQueue.postRunnable(new MessagesStorage$$Lambda$65(this, chat));
+        }
+    }
+
+    /* JADX WARNING: Failed to extract finally block: empty outs */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$updateEncryptedChat$89$MessagesStorage(EncryptedChat chat) {
+        int i = 1;
+        SQLitePreparedStatement state = null;
+        try {
+            int length;
+            if ((chat.key_hash == null || chat.key_hash.length < 16) && chat.auth_key != null) {
+                chat.key_hash = AndroidUtilities.calcAuthKeyHash(chat.auth_key);
+            }
+            state = this.database.executeFast("UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ?, admin_id = ?, mtproto_seq = ? WHERE uid = ?");
+            NativeByteBuffer data = new NativeByteBuffer(chat.getObjectSize());
+            if (chat.a_or_b != null) {
+                length = chat.a_or_b.length;
+            } else {
+                length = 1;
+            }
+            NativeByteBuffer data2 = new NativeByteBuffer(length);
+            if (chat.auth_key != null) {
+                length = chat.auth_key.length;
+            } else {
+                length = 1;
+            }
+            NativeByteBuffer data3 = new NativeByteBuffer(length);
+            if (chat.future_auth_key != null) {
+                length = chat.future_auth_key.length;
+            } else {
+                length = 1;
+            }
+            NativeByteBuffer data4 = new NativeByteBuffer(length);
+            if (chat.key_hash != null) {
+                i = chat.key_hash.length;
+            }
+            NativeByteBuffer data5 = new NativeByteBuffer(i);
+            chat.serializeToStream(data);
+            state.bindByteBuffer(1, data);
+            if (chat.a_or_b != null) {
+                data2.writeBytes(chat.a_or_b);
+            }
+            if (chat.auth_key != null) {
+                data3.writeBytes(chat.auth_key);
+            }
+            if (chat.future_auth_key != null) {
+                data4.writeBytes(chat.future_auth_key);
+            }
+            if (chat.key_hash != null) {
+                data5.writeBytes(chat.key_hash);
+            }
+            state.bindByteBuffer(2, data2);
+            state.bindByteBuffer(3, data3);
+            state.bindInteger(4, chat.ttl);
+            state.bindInteger(5, chat.layer);
+            state.bindInteger(6, chat.seq_in);
+            state.bindInteger(7, chat.seq_out);
+            state.bindInteger(8, (chat.key_use_count_in << 16) | chat.key_use_count_out);
+            state.bindLong(9, chat.exchange_id);
+            state.bindInteger(10, chat.key_create_date);
+            state.bindLong(11, chat.future_key_fingerprint);
+            state.bindByteBuffer(12, data4);
+            state.bindByteBuffer(13, data5);
+            state.bindInteger(14, chat.in_seq_no);
+            state.bindInteger(15, chat.admin_id);
+            state.bindInteger(16, chat.mtproto_seq);
+            state.bindInteger(17, chat.f123id);
+            state.step();
+            data.reuse();
+            data2.reuse();
+            data3.reuse();
+            data4.reuse();
+            data5.reuse();
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable e) {
+            FileLog.m14e(e);
+            if (state != null) {
+                state.dispose();
+            }
+        } catch (Throwable th) {
+            if (state != null) {
+                state.dispose();
+            }
+            throw th;
         }
     }
 
@@ -4737,7 +4415,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return result[0];
     }
@@ -4748,7 +4426,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             result[0] = cursor.next();
             cursor.dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         } finally {
             countDownLatch.countDown();
         }
@@ -4761,7 +4439,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return result[0];
     }
@@ -4772,7 +4450,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             result[0] = cursor.next();
             cursor.dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         } finally {
             countDownLatch.countDown();
         }
@@ -4784,8 +4462,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     final /* synthetic */ void lambda$getEncryptedChat$92$MessagesStorage(int chat_id, ArrayList result, CountDownLatch countDownLatch) {
         try {
             ArrayList<Integer> usersToLoad = new ArrayList();
@@ -4801,9 +4477,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             countDownLatch.countDown();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
+            countDownLatch.countDown();
         } catch (Throwable th) {
             countDownLatch.countDown();
+            throw th;
         }
     }
 
@@ -4845,8 +4523,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             NativeByteBuffer data5 = new NativeByteBuffer(i);
             chat.serializeToStream(data);
-            state.bindInteger(1, chat.id);
-            state.bindInteger(2, user.id);
+            state.bindInteger(1, chat.f123id);
+            state.bindInteger(2, user.f228id);
             state.bindString(3, formatUserSearchName(user));
             state.bindByteBuffer(4, data);
             if (chat.a_or_b != null) {
@@ -4885,7 +4563,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             data5.reuse();
             if (dialog != null) {
                 state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                state.bindLong(1, dialog.id);
+                state.bindLong(1, dialog.f165id);
                 state.bindInteger(2, dialog.last_message_date);
                 state.bindInteger(3, dialog.unread_count);
                 state.bindInteger(4, dialog.top_message);
@@ -4901,7 +4579,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 state.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -4930,7 +4608,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 NativeByteBuffer data;
                 User user = (User) users.get(a);
                 if (user.min) {
-                    SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM users WHERE uid = %d", new Object[]{Integer.valueOf(user.id)}), new Object[0]);
+                    SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM users WHERE uid = %d", new Object[]{Integer.valueOf(user.f228id)}), new Object[0]);
                     if (cursor.next()) {
                         try {
                             data = cursor.byteBufferValue(0);
@@ -4956,7 +4634,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.m8e(e);
+                            FileLog.m14e(e);
                         }
                     }
                     cursor.dispose();
@@ -4964,7 +4642,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 state.requery();
                 data = new NativeByteBuffer(user.getObjectSize());
                 user.serializeToStream(data);
-                state.bindInteger(1, user.id);
+                state.bindInteger(1, user.f228id);
                 state.bindString(2, formatUserSearchName(user));
                 if (user.status != null) {
                     if (user.status instanceof TL_userStatusRecently) {
@@ -4993,7 +4671,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 NativeByteBuffer data;
                 Chat chat = (Chat) chats.get(a);
                 if (chat.min) {
-                    SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM chats WHERE uid = %d", new Object[]{Integer.valueOf(chat.id)}), new Object[0]);
+                    SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM chats WHERE uid = %d", new Object[]{Integer.valueOf(chat.f113id)}), new Object[0]);
                     if (cursor.next()) {
                         try {
                             data = cursor.byteBufferValue(0);
@@ -5018,7 +4696,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.m8e(e);
+                            FileLog.m14e(e);
                         }
                     }
                     cursor.dispose();
@@ -5026,7 +4704,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 state.requery();
                 data = new NativeByteBuffer(chat.getObjectSize());
                 chat.serializeToStream(data);
-                state.bindInteger(1, chat.id);
+                state.bindInteger(1, chat.f113id);
                 if (chat.title != null) {
                     state.bindString(2, chat.title.toLowerCase());
                 } else {
@@ -5057,7 +4735,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
             }
             cursor.dispose();
@@ -5078,7 +4756,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
             }
             cursor.dispose();
@@ -5123,7 +4801,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
             }
             cursor.dispose();
@@ -5135,7 +4813,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 this.database.beginTransaction();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -5157,10 +4835,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
-    final /* synthetic */ void lambda$putUsersAndChats$94$MessagesStorage(ArrayList users, ArrayList chats, boolean withTransaction) {
-        putUsersAndChatsInternal(users, chats, withTransaction);
-    }
-
     public void removeFromDownloadQueue(long id, int type, boolean move) {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$71(this, move, type, id));
     }
@@ -5180,7 +4854,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 }
                 return;
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -5197,7 +4871,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
                 return;
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -5215,7 +4889,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             while (cursor.next()) {
                 DownloadObject downloadObject = new DownloadObject();
                 downloadObject.type = cursor.intValue(1);
-                downloadObject.id = cursor.longValue(0);
+                downloadObject.f75id = cursor.longValue(0);
                 NativeByteBuffer data = cursor.byteBufferValue(2);
                 if (data != null) {
                     boolean z;
@@ -5238,7 +4912,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             cursor.dispose();
             AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$102(this, type, objects));
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -5257,10 +4931,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         } else if ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) {
             return 1;
         } else {
-            if (message.media instanceof TL_messageMediaPhoto) {
-                return 0;
-            }
-            if (MessageObject.isVideoMessage(message)) {
+            if ((message.media instanceof TL_messageMediaPhoto) || MessageObject.isVideoMessage(message)) {
                 return 0;
             }
         }
@@ -5296,7 +4967,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                             data.reuse();
                             if (message.media instanceof TL_messageMediaWebPage) {
-                                message.id = mid;
+                                message.f139id = mid;
                                 message.media.webpage = (WebPage) webPages.valueAt(a);
                                 messages.add(message);
                             }
@@ -5313,7 +4984,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     message = (Message) messages.get(a);
                     data = new NativeByteBuffer(message.getObjectSize());
                     message.serializeToStream(data);
-                    long messageId = (long) message.id;
+                    long messageId = (long) message.f139id;
                     if (message.to_id.channel_id != 0) {
                         messageId |= ((long) message.to_id.channel_id) << 32;
                     }
@@ -5333,7 +5004,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$101(this, messages));
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -5369,7 +5040,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             dialogs.users.addAll(difference.users);
             dialogs.messages.addAll(difference.messages);
             TL_dialog dialog = new TL_dialog();
-            dialog.id = did;
+            dialog.f165id = did;
             dialog.flags = 1;
             dialog.peer = new TL_peerChannel();
             dialog.peer.channel_id = channel_id;
@@ -5395,7 +5066,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 MessagesController.getInstance(this.currentAccount).generateJoinMessage(channel_id, false);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -5432,7 +5103,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.dispose();
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -5444,7 +5115,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         Message lastMessage;
         SQLiteCursor cursor;
         int a;
+        Message message;
+        long messageId;
+        long key;
         Integer count;
+        int type;
         if (ifNoLastMessage) {
             try {
                 lastMessage = (Message) messages.get(0);
@@ -5467,7 +5142,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 return;
             }
         }
@@ -5492,8 +5167,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         SQLitePreparedStatement state4 = this.database.executeFast("REPLACE INTO download_queue VALUES(?, ?, ?, ?)");
         SQLitePreparedStatement state5 = this.database.executeFast("REPLACE INTO webpage_pending VALUES(?, ?)");
         for (a = 0; a < messages.size(); a++) {
-            Message message = (Message) messages.get(a);
-            long messageId = (long) message.id;
+            message = (Message) messages.get(a);
+            messageId = (long) message.f139id;
             if (message.dialog_id == 0) {
                 if (message.to_id.user_id != 0) {
                     message.dialog_id = (long) message.to_id.user_id;
@@ -5509,7 +5184,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (message.mentioned && message.media_unread) {
                 mentionsIdsMap.put(messageId, Long.valueOf(message.dialog_id));
             }
-            if (!((message.action instanceof TL_messageActionHistoryClear) || MessageObject.isOut(message) || (message.id <= 0 && !MessageObject.isUnread(message)))) {
+            if (!((message.action instanceof TL_messageActionHistoryClear) || MessageObject.isOut(message) || (message.f139id <= 0 && !MessageObject.isUnread(message)))) {
                 Integer currentMaxId = (Integer) dialogsReadMax.get(message.dialog_id);
                 if (currentMaxId == null) {
                     cursor = this.database.queryFinalized("SELECT inbox_max FROM dialogs WHERE did = " + message.dialog_id, new Object[0]);
@@ -5521,7 +5196,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     cursor.dispose();
                     dialogsReadMax.put(message.dialog_id, currentMaxId);
                 }
-                if (message.id < 0 || currentMaxId.intValue() < message.id) {
+                if (message.f139id < 0 || currentMaxId.intValue() < message.f139id) {
                     if (messageIds.length() > 0) {
                         messageIds.append(",");
                     }
@@ -5544,7 +5219,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             if (isValidKeyboardToSave(message)) {
                 Message oldMessage = (Message) botKeyboards.get(message.dialog_id);
-                if (oldMessage == null || oldMessage.id < message.id) {
+                if (oldMessage == null || oldMessage.f139id < message.f139id) {
                     botKeyboards.put(message.dialog_id, message);
                 }
             }
@@ -5560,14 +5235,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             cursor.dispose();
             mediaCounts = new SparseArray();
             for (a = 0; a < messagesMediaIdsMap.size(); a++) {
-                long key = messagesMediaIdsMap.keyAt(a);
+                key = messagesMediaIdsMap.keyAt(a);
                 long value = ((Long) messagesMediaIdsMap.valueAt(a)).longValue();
-                Integer type = (Integer) mediaTypes.get(key);
-                LongSparseArray<Integer> counts = (LongSparseArray) mediaCounts.get(type.intValue());
+                Integer type2 = (Integer) mediaTypes.get(key);
+                LongSparseArray<Integer> counts = (LongSparseArray) mediaCounts.get(type2.intValue());
                 if (counts == null) {
                     counts = new LongSparseArray();
                     count = Integer.valueOf(0);
-                    mediaCounts.put(type.intValue(), counts);
+                    mediaCounts.put(type2.intValue(), counts);
                 } else {
                     count = (Integer) counts.get(value);
                 }
@@ -5605,11 +5280,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         int downloadMediaMask = 0;
         for (a = 0; a < messages.size(); a++) {
-            int type2;
             message = (Message) messages.get(a);
             fixUnsupportedMedia(message);
             state.requery();
-            messageId = (long) message.id;
+            messageId = (long) message.f139id;
             if (message.local_id != 0) {
                 messageId = (long) message.local_id;
             }
@@ -5624,7 +5298,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             if (updateDialog) {
                 lastMessage = (Message) messagesMap.get(message.dialog_id);
-                if (lastMessage == null || message.date > lastMessage.date || ((message.id > 0 && lastMessage.id > 0 && message.id > lastMessage.id) || (message.id < 0 && lastMessage.id < 0 && message.id < lastMessage.id))) {
+                if (lastMessage == null || message.date > lastMessage.date || ((message.f139id > 0 && lastMessage.f139id > 0 && message.f139id > lastMessage.f139id) || (message.f139id < 0 && lastMessage.f139id < 0 && message.f139id < lastMessage.f139id))) {
                     messagesMap.put(message.dialog_id, message);
                 }
             }
@@ -5664,44 +5338,44 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             if (message.media instanceof TL_messageMediaWebPage) {
                 state5.requery();
-                state5.bindLong(1, message.media.webpage.id);
+                state5.bindLong(1, message.media.webpage.f237id);
                 state5.bindLong(2, messageId);
                 state5.step();
             }
             data.reuse();
             if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - 3600 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
-                type2 = 0;
+                type = 0;
                 long id = 0;
                 MessageMedia object = null;
                 if (MessageObject.isVoiceMessage(message)) {
-                    id = message.media.document.id;
-                    type2 = 2;
+                    id = message.media.document.f119id;
+                    type = 2;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (MessageObject.isRoundVideoMessage(message)) {
-                    id = message.media.document.id;
-                    type2 = 64;
+                    id = message.media.document.f119id;
+                    type = 64;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (message.media instanceof TL_messageMediaPhoto) {
                     if (FileLoader.getClosestPhotoSizeWithSize(message.media.photo.sizes, AndroidUtilities.getPhotoSize()) != null) {
-                        id = message.media.photo.id;
-                        type2 = 1;
+                        id = message.media.photo.f143id;
+                        type = 1;
                         object = new TL_messageMediaPhoto();
                         object.photo = message.media.photo;
                         object.flags |= 1;
                     }
                 } else if (MessageObject.isVideoMessage(message)) {
-                    id = message.media.document.id;
-                    type2 = 4;
+                    id = message.media.document.f119id;
+                    type = 4;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (!(!(message.media instanceof TL_messageMediaDocument) || MessageObject.isMusicMessage(message) || MessageObject.isGifDocument(message.media.document))) {
-                    id = message.media.document.id;
-                    type2 = 8;
+                    id = message.media.document.f119id;
+                    type = 8;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
@@ -5711,12 +5385,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         object.ttl_seconds = message.media.ttl_seconds;
                         object.flags |= 4;
                     }
-                    downloadMediaMask |= type2;
+                    downloadMediaMask |= type;
                     state4.requery();
                     data = new NativeByteBuffer(object.getObjectSize());
                     object.serializeToStream(data);
                     state4.bindLong(1, id);
-                    state4.bindInteger(2, type2);
+                    state4.bindInteger(2, type);
                     state4.bindInteger(3, message.date);
                     state4.bindByteBuffer(4, data);
                     state4.step();
@@ -5777,7 +5451,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     mentionCounts.put(key, Integer.valueOf(mentions_count.intValue() + old_mentions_count));
                 }
                 if (message != null) {
-                    messageId = (long) message.id;
+                    messageId = (long) message.f139id;
                 } else {
                     messageId = (long) last_mid;
                 }
@@ -5811,13 +5485,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         if (mediaCounts != null) {
             state3 = this.database.executeFast("REPLACE INTO media_counts_v2 VALUES(?, ?, ?)");
             for (a = 0; a < mediaCounts.size(); a++) {
-                type2 = mediaCounts.keyAt(a);
+                type = mediaCounts.keyAt(a);
                 LongSparseArray<Integer> value2 = (LongSparseArray) mediaCounts.valueAt(a);
                 for (int b = 0; b < value2.size(); b++) {
                     long uid = value2.keyAt(b);
                     int lower_part = (int) uid;
                     int count2 = -1;
-                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type2)}), new Object[0]);
+                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
                     if (cursor.next()) {
                         count2 = cursor.intValue(0);
                     }
@@ -5826,7 +5500,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         state3.requery();
                         count2 += ((Integer) value2.valueAt(b)).intValue();
                         state3.bindLong(1, uid);
-                        state3.bindInteger(2, type2);
+                        state3.bindInteger(2, type);
                         state3.bindInteger(3, count2);
                         state3.step();
                     }
@@ -5861,23 +5535,19 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
-    final /* synthetic */ void lambda$putMessages$105$MessagesStorage(ArrayList messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
-        putMessagesInternal(messages, withTransaction, doNotUpdateDialogDate, downloadMask, ifNoLastMessage);
-    }
-
     public void markMessageAsSendError(Message message) {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$79(this, message));
     }
 
     final /* synthetic */ void lambda$markMessageAsSendError$106$MessagesStorage(Message message) {
         try {
-            long messageId = (long) message.id;
+            long messageId = (long) message.f139id;
             if (message.to_id.channel_id != 0) {
                 messageId |= ((long) message.to_id.channel_id) << 32;
             }
             this.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid = " + messageId).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -5895,7 +5565,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -5912,7 +5582,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     cursor.dispose();
                 }
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 if (cursor != null) {
                     cursor.dispose();
                 }
@@ -5940,7 +5610,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 cursor.dispose();
             }
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -5969,7 +5639,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM messages_seq WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                 } catch (Throwable e22) {
-                    FileLog.m8e(e22);
+                    FileLog.m14e(e22);
                 } catch (Throwable th3) {
                     if (state != null) {
                         state.dispose();
@@ -5993,7 +5663,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 try {
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                 } catch (Throwable e222) {
-                    FileLog.m8e(e222);
+                    FileLog.m14e(e222);
                 } catch (Throwable th4) {
                     if (state != null) {
                         state.dispose();
@@ -6013,7 +5683,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     state.dispose();
                 }
             } catch (Throwable e23) {
-                FileLog.m8e(e23);
+                FileLog.m14e(e23);
                 if (state != null) {
                     state.dispose();
                 }
@@ -6034,7 +5704,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 state.dispose();
             }
         } catch (Throwable e232) {
-            FileLog.m8e(e232);
+            FileLog.m14e(e232);
             if (state != null) {
                 state.dispose();
             }
@@ -6054,11 +5724,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         return null;
     }
 
-    final /* synthetic */ void lambda$updateMessageStateAndId$108$MessagesStorage(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        updateMessageStateAndIdInternal(random_id, _oldId, newId, date, channelId);
-    }
-
     private void updateUsersInternal(ArrayList<User> users, boolean onlyStatus, boolean withTransaction) {
+        Iterator it;
+        User user;
         if (Thread.currentThread().getId() != this.storageQueue.getId()) {
             throw new RuntimeException("wrong db thread");
         } else if (onlyStatus) {
@@ -6066,21 +5734,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 try {
                     this.database.beginTransaction();
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                     return;
                 }
             }
             SQLitePreparedStatement state = this.database.executeFast("UPDATE users SET status = ? WHERE uid = ?");
-            r7 = users.iterator();
-            while (r7.hasNext()) {
-                user = (User) r7.next();
+            it = users.iterator();
+            while (it.hasNext()) {
+                user = (User) it.next();
                 state.requery();
                 if (user.status != null) {
                     state.bindInteger(1, user.status.expires);
                 } else {
                     state.bindInteger(1, 0);
                 }
-                state.bindInteger(2, user.id);
+                state.bindInteger(2, user.f228id);
                 state.step();
             }
             state.dispose();
@@ -6090,21 +5758,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         } else {
             StringBuilder ids = new StringBuilder();
             SparseArray<User> usersDict = new SparseArray();
-            r7 = users.iterator();
-            while (r7.hasNext()) {
-                user = (User) r7.next();
+            it = users.iterator();
+            while (it.hasNext()) {
+                user = (User) it.next();
                 if (ids.length() != 0) {
                     ids.append(",");
                 }
-                ids.append(user.id);
-                usersDict.put(user.id, user);
+                ids.append(user.f228id);
+                usersDict.put(user.f228id, user);
             }
             ArrayList<User> loadedUsers = new ArrayList();
             getUsersInternal(ids.toString(), loadedUsers);
-            r7 = loadedUsers.iterator();
-            while (r7.hasNext()) {
-                user = (User) r7.next();
-                User updateUser = (User) usersDict.get(user.id);
+            it = loadedUsers.iterator();
+            while (it.hasNext()) {
+                user = (User) it.next();
+                User updateUser = (User) usersDict.get(user.f228id);
                 if (updateUser != null) {
                     if (updateUser.first_name != null && updateUser.last_name != null) {
                         if (!UserObject.isContact(user)) {
@@ -6141,10 +5809,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
-    final /* synthetic */ void lambda$updateUsers$109$MessagesStorage(ArrayList users, boolean onlyStatus, boolean withTransaction) {
-        updateUsersInternal(users, onlyStatus, withTransaction);
-    }
-
     private void markMessagesAsReadInternal(SparseLongArray inbox, SparseLongArray outbox, SparseIntArray encryptedMessages) {
         try {
             int b;
@@ -6174,7 +5838,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 }
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -6203,7 +5867,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 cursor.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -6213,10 +5877,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         } else {
             markMessagesAsReadInternal(inbox, outbox, encryptedMessages);
         }
-    }
-
-    final /* synthetic */ void lambda$markMessagesAsRead$111$MessagesStorage(SparseLongArray inbox, SparseLongArray outbox, SparseIntArray encryptedMessages) {
-        markMessagesAsReadInternal(inbox, outbox, encryptedMessages);
     }
 
     public void markMessagesAsDeletedByRandoms(ArrayList<Long> messages) {
@@ -6241,7 +5901,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 updateDialogsWithDeletedMessagesInternal(mids, null, 0);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -6302,35 +5962,32 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 Message message = Message.TLdeserialize(data, data.readInt32(false), false);
                                 message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                                 data.reuse();
-                                if (message == null) {
-                                    continue;
-                                } else if (message.media instanceof TL_messageMediaPhoto) {
-                                    Iterator it = message.media.photo.sizes.iterator();
-                                    while (it.hasNext()) {
-                                        file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                if (message != null) {
+                                    File file;
+                                    if (message.media instanceof TL_messageMediaPhoto) {
+                                        Iterator it = message.media.photo.sizes.iterator();
+                                        while (it.hasNext()) {
+                                            file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                            if (file != null && file.toString().length() > 0) {
+                                                filesToDelete.add(file);
+                                            }
+                                        }
+                                    } else if (message.media instanceof TL_messageMediaDocument) {
+                                        file = FileLoader.getPathToAttach(message.media.document);
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
+                                        file = FileLoader.getPathToAttach(message.media.document.thumb);
                                         if (file != null && file.toString().length() > 0) {
                                             filesToDelete.add(file);
                                         }
                                     }
-                                } else if (message.media instanceof TL_messageMediaDocument) {
-                                    file = FileLoader.getPathToAttach(message.media.document);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
-                                    file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
                                 }
-                            } else {
-                                continue;
                             }
-                        } else {
-                            continue;
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
             }
             cursor.dispose();
@@ -6417,7 +6074,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             DataQuery.getInstance(this.currentAccount).clearBotKeyboard(0, messages);
             return arrayList2;
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
             return null;
         }
     }
@@ -6476,7 +6133,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned, d.unread_count_i, d.flags FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{ids}), new Object[0]);
             while (cursor.next()) {
                 TL_dialog dialog = new TL_dialog();
-                dialog.id = cursor.longValue(0);
+                dialog.f165id = cursor.longValue(0);
                 dialog.top_message = cursor.intValue(1);
                 dialog.read_inbox_max_id = cursor.intValue(10);
                 dialog.read_outbox_max_id = cursor.intValue(11);
@@ -6495,18 +6152,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                     data.reuse();
                     MessageObject.setUnreadFlags(message, cursor.intValue(5));
-                    message.id = cursor.intValue(6);
+                    message.f139id = cursor.intValue(6);
                     message.send_state = cursor.intValue(7);
                     int date = cursor.intValue(8);
                     if (date != 0) {
                         dialog.last_message_date = date;
                     }
-                    message.dialog_id = dialog.id;
+                    message.dialog_id = dialog.f165id;
                     dialogs.messages.add(message);
                     addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                 }
-                int lower_id = (int) dialog.id;
-                int high_id = (int) (dialog.id >> 32);
+                int lower_id = (int) dialog.f165id;
+                int high_id = (int) (dialog.f165id >> 32);
                 if (lower_id != 0) {
                     if (high_id == 1) {
                         if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
@@ -6537,7 +6194,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 MessagesController.getInstance(this.currentAccount).processDialogsUpdate(dialogs, encryptedChats);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -6551,10 +6208,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
-    final /* synthetic */ void lambda$updateDialogsWithDeletedMessages$114$MessagesStorage(ArrayList messages, ArrayList additionalDialogsToUpdate, int channelId) {
-        updateDialogsWithDeletedMessagesInternal(messages, additionalDialogsToUpdate, channelId);
-    }
-
     public ArrayList<Long> markMessagesAsDeleted(ArrayList<Integer> messages, boolean useQueue, int channelId) {
         if (messages.isEmpty()) {
             return null;
@@ -6564,10 +6217,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$87(this, messages, channelId));
         return null;
-    }
-
-    final /* synthetic */ void lambda$markMessagesAsDeleted$115$MessagesStorage(ArrayList messages, int channelId) {
-        markMessagesAsDeletedInternal(messages, channelId);
     }
 
     private ArrayList<Long> markMessagesAsDeletedInternal(int channelId, int mid) {
@@ -6606,35 +6255,32 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                 Message message = Message.TLdeserialize(data, data.readInt32(false), false);
                                 message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                                 data.reuse();
-                                if (message == null) {
-                                    continue;
-                                } else if (message.media instanceof TL_messageMediaPhoto) {
-                                    Iterator it = message.media.photo.sizes.iterator();
-                                    while (it.hasNext()) {
-                                        file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                if (message != null) {
+                                    File file;
+                                    if (message.media instanceof TL_messageMediaPhoto) {
+                                        Iterator it = message.media.photo.sizes.iterator();
+                                        while (it.hasNext()) {
+                                            file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                            if (file != null && file.toString().length() > 0) {
+                                                filesToDelete.add(file);
+                                            }
+                                        }
+                                    } else if (message.media instanceof TL_messageMediaDocument) {
+                                        file = FileLoader.getPathToAttach(message.media.document);
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
+                                        file = FileLoader.getPathToAttach(message.media.document.thumb);
                                         if (file != null && file.toString().length() > 0) {
                                             filesToDelete.add(file);
                                         }
                                     }
-                                } else if (message.media instanceof TL_messageMediaDocument) {
-                                    file = FileLoader.getPathToAttach(message.media.document);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
-                                    file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
                                 }
-                            } else {
-                                continue;
                             }
-                        } else {
-                            continue;
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
             }
             cursor.dispose();
@@ -6664,7 +6310,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             this.database.executeFast(String.format(Locale.US, "DELETE FROM media_counts_v2 WHERE uid = %d", new Object[]{Integer.valueOf(-channelId)})).stepThis().dispose();
             return dialogsIds;
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
             return null;
         }
     }
@@ -6675,10 +6321,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$88(this, channelId, mid));
         return null;
-    }
-
-    final /* synthetic */ void lambda$markMessagesAsDeleted$116$MessagesStorage(int channelId, int mid) {
-        markMessagesAsDeletedInternal(channelId, mid);
     }
 
     private void fixUnsupportedMedia(Message message) {
@@ -6750,10 +6392,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     public void closeHolesInMedia(long did, int minId, int maxId, int type) {
         SQLiteCursor cursor;
         if (type < 0) {
-            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT type, start, end FROM media_holes_v2 WHERE uid = %d AND type >= 0 AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
-        } else {
-            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT type, start, end FROM media_holes_v2 WHERE uid = %d AND type = %d AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(type), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
+            try {
+                cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT type, start, end FROM media_holes_v2 WHERE uid = %d AND type >= 0 AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
+            } catch (Throwable e) {
+                FileLog.m14e(e);
+                return;
+            }
         }
+        cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT type, start, end FROM media_holes_v2 WHERE uid = %d AND type = %d AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(type), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
         ArrayList<Hole> holes = null;
         while (cursor.next()) {
             if (holes == null) {
@@ -6776,16 +6422,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     if (hole.end != minId) {
                         try {
                             this.database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET end = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(minId), Long.valueOf(did), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
-                        } catch (Throwable e) {
-                            try {
-                                FileLog.m8e(e);
-                            } catch (Throwable e2) {
-                                FileLog.m8e(e2);
-                                return;
-                            }
+                        } catch (Throwable e2) {
+                            FileLog.m14e(e2);
                         }
                     }
-                    continue;
                 } else if (minId > hole.start + 1) {
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_v2 WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Long.valueOf(did), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                     SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
@@ -6806,72 +6446,66 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     try {
                         this.database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET start = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(maxId), Long.valueOf(did), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                     } catch (Throwable e22) {
-                        FileLog.m8e(e22);
+                        FileLog.m14e(e22);
                     }
-                } else {
-                    continue;
                 }
             }
         }
     }
 
     private void closeHolesInTable(String table, long did, int minId, int maxId) {
-        SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT start, end FROM " + table + " WHERE uid = %d AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
-        ArrayList<Hole> holes = null;
-        while (cursor.next()) {
-            if (holes == null) {
-                holes = new ArrayList();
-            }
-            int start = cursor.intValue(0);
-            int end = cursor.intValue(1);
-            if (start != end || start != 1) {
-                holes.add(new Hole(start, end));
-            }
-        }
-        cursor.dispose();
-        if (holes != null) {
-            for (int a = 0; a < holes.size(); a++) {
-                Hole hole = (Hole) holes.get(a);
-                if (maxId >= hole.end - 1 && minId <= hole.start + 1) {
-                    this.database.executeFast(String.format(Locale.US, "DELETE FROM " + table + " WHERE uid = %d AND start = %d AND end = %d", new Object[]{Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
-                } else if (maxId >= hole.end - 1) {
-                    if (hole.end != minId) {
-                        try {
-                            this.database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET end = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(minId), Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
-                        } catch (Throwable e) {
-                            try {
-                                FileLog.m8e(e);
-                            } catch (Throwable e2) {
-                                FileLog.m8e(e2);
-                                return;
-                            }
-                        }
-                    }
-                    continue;
-                } else if (minId > hole.start + 1) {
-                    this.database.executeFast(String.format(Locale.US, "DELETE FROM " + table + " WHERE uid = %d AND start = %d AND end = %d", new Object[]{Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
-                    SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO " + table + " VALUES(?, ?, ?)");
-                    state.requery();
-                    state.bindLong(1, did);
-                    state.bindInteger(2, hole.start);
-                    state.bindInteger(3, minId);
-                    state.step();
-                    state.requery();
-                    state.bindLong(1, did);
-                    state.bindInteger(2, maxId);
-                    state.bindInteger(3, hole.end);
-                    state.step();
-                    state.dispose();
-                } else if (hole.start != maxId) {
-                    try {
-                        this.database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET start = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(maxId), Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
-                    } catch (Throwable e22) {
-                        FileLog.m8e(e22);
-                    }
-                } else {
-                    continue;
+        try {
+            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT start, end FROM " + table + " WHERE uid = %d AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
+            ArrayList<Hole> holes = null;
+            while (cursor.next()) {
+                if (holes == null) {
+                    holes = new ArrayList();
+                }
+                int start = cursor.intValue(0);
+                int end = cursor.intValue(1);
+                if (start != end || start != 1) {
+                    holes.add(new Hole(start, end));
                 }
             }
+            cursor.dispose();
+            if (holes != null) {
+                for (int a = 0; a < holes.size(); a++) {
+                    Hole hole = (Hole) holes.get(a);
+                    if (maxId >= hole.end - 1 && minId <= hole.start + 1) {
+                        this.database.executeFast(String.format(Locale.US, "DELETE FROM " + table + " WHERE uid = %d AND start = %d AND end = %d", new Object[]{Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
+                    } else if (maxId >= hole.end - 1) {
+                        if (hole.end != minId) {
+                            try {
+                                this.database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET end = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(minId), Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
+                            } catch (Throwable e) {
+                                FileLog.m14e(e);
+                            }
+                        }
+                    } else if (minId > hole.start + 1) {
+                        this.database.executeFast(String.format(Locale.US, "DELETE FROM " + table + " WHERE uid = %d AND start = %d AND end = %d", new Object[]{Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
+                        SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO " + table + " VALUES(?, ?, ?)");
+                        state.requery();
+                        state.bindLong(1, did);
+                        state.bindInteger(2, hole.start);
+                        state.bindInteger(3, minId);
+                        state.step();
+                        state.requery();
+                        state.bindLong(1, did);
+                        state.bindInteger(2, maxId);
+                        state.bindInteger(3, hole.end);
+                        state.step();
+                        state.dispose();
+                    } else if (hole.start != maxId) {
+                        try {
+                            this.database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET start = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(maxId), Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
+                        } catch (Throwable e2) {
+                            FileLog.m14e(e2);
+                        }
+                    }
+                }
+            }
+        } catch (Throwable e22) {
+            FileLog.m14e(e22);
         }
     }
 
@@ -6885,21 +6519,22 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (!messages.messages.isEmpty()) {
                 this.database.beginTransaction();
                 int minId;
+                int maxId;
                 if (load_type == 0) {
-                    minId = ((Message) messages.messages.get(messages.messages.size() - 1)).id;
+                    minId = ((Message) messages.messages.get(messages.messages.size() - 1)).f139id;
                     closeHolesInTable("messages_holes", dialog_id, minId, max_id);
                     closeHolesInMedia(dialog_id, minId, max_id, -1);
                 } else if (load_type == 1) {
-                    maxId = ((Message) messages.messages.get(0)).id;
+                    maxId = ((Message) messages.messages.get(0)).f139id;
                     closeHolesInTable("messages_holes", dialog_id, max_id, maxId);
                     closeHolesInMedia(dialog_id, max_id, maxId, -1);
                 } else if (load_type == 3 || load_type == 2 || load_type == 4) {
                     if (max_id != 0 || load_type == 4) {
-                        maxId = ((Message) messages.messages.get(0)).id;
+                        maxId = ((Message) messages.messages.get(0)).f139id;
                     } else {
                         maxId = ConnectionsManager.DEFAULT_DATACENTER_ID;
                     }
-                    minId = ((Message) messages.messages.get(messages.messages.size() - 1)).id;
+                    minId = ((Message) messages.messages.get(messages.messages.size() - 1)).f139id;
                     closeHolesInTable("messages_holes", dialog_id, minId, maxId);
                     closeHolesInMedia(dialog_id, minId, maxId, -1);
                 }
@@ -6912,7 +6547,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 for (int a = 0; a < count; a++) {
                     SQLiteCursor cursor;
                     Message message = (Message) messages.messages.get(a);
-                    long messageId = (long) message.id;
+                    long messageId = (long) message.f139id;
                     if (channelId == 0) {
                         channelId = message.to_id.channel_id;
                     }
@@ -6973,7 +6608,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         state3.bindInteger(2, message.date);
                         state3.bindInteger(3, 0);
                         state3.bindLong(4, messageId);
-                        state3.bindInteger(5, message.id);
+                        state3.bindInteger(5, message.f139id);
                         state3.bindInteger(6, 0);
                         state3.bindLong(7, messageId);
                         state3.bindInteger(8, mentions);
@@ -7019,11 +6654,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             state5 = this.database.executeFast("REPLACE INTO webpage_pending VALUES(?, ?)");
                         }
                         state5.requery();
-                        state5.bindLong(1, message.media.webpage.id);
+                        state5.bindLong(1, message.media.webpage.f237id);
                         state5.bindLong(2, messageId);
                         state5.step();
                     }
-                    if (load_type == 0 && isValidKeyboardToSave(message) && (botKeyboard == null || botKeyboard.id < message.id)) {
+                    if (load_type == 0 && isValidKeyboardToSave(message) && (botKeyboard == null || botKeyboard.f139id < message.f139id)) {
                         botKeyboard = message;
                     }
                 }
@@ -7052,7 +6687,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 doneHolesInMedia(dialog_id, max_id, -1);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -7135,152 +6770,153 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     final /* synthetic */ void lambda$getDialogs$118$MessagesStorage(int offset, int count) {
         messages_Dialogs dialogs = new TL_messages_dialogs();
         ArrayList<EncryptedChat> encryptedChats = new ArrayList();
-        ArrayList<Integer> usersToLoad = new ArrayList();
-        usersToLoad.add(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
-        ArrayList<Integer> chatsToLoad = new ArrayList();
-        ArrayList<Integer> encryptedToLoad = new ArrayList();
-        ArrayList<Long> replyMessages = new ArrayList();
-        LongSparseArray<Message> replyMessageOwners = new LongSparseArray();
-        SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i, d.flags FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
-        while (cursor.next()) {
+        try {
+            NativeByteBuffer data;
             Message message;
-            TL_dialog dialog = new TL_dialog();
-            dialog.id = cursor.longValue(0);
-            dialog.top_message = cursor.intValue(1);
-            dialog.unread_count = cursor.intValue(2);
-            dialog.last_message_date = cursor.intValue(3);
-            dialog.pts = cursor.intValue(10);
-            int i = (dialog.pts == 0 || ((int) dialog.id) > 0) ? 0 : 1;
-            dialog.flags = i;
-            dialog.read_inbox_max_id = cursor.intValue(11);
-            dialog.read_outbox_max_id = cursor.intValue(12);
-            dialog.pinnedNum = cursor.intValue(14);
-            dialog.pinned = dialog.pinnedNum != 0;
-            dialog.unread_mentions_count = cursor.intValue(15);
-            dialog.unread_mark = (cursor.intValue(16) & 1) != 0;
-            long flags = cursor.longValue(8);
-            int low_flags = (int) flags;
-            dialog.notify_settings = new TL_peerNotifySettings();
-            if ((low_flags & 1) != 0) {
-                dialog.notify_settings.mute_until = (int) (flags >> 32);
-                if (dialog.notify_settings.mute_until == 0) {
-                    dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
-                }
-            }
-            dialogs.dialogs.add(dialog);
-            NativeByteBuffer data = cursor.byteBufferValue(4);
-            if (data != null) {
-                message = Message.TLdeserialize(data, data.readInt32(false), false);
-                message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
-                data.reuse();
-                if (message != null) {
-                    MessageObject.setUnreadFlags(message, cursor.intValue(5));
-                    message.id = cursor.intValue(6);
-                    int date = cursor.intValue(9);
-                    if (date != 0) {
-                        dialog.last_message_date = date;
-                    }
-                    message.send_state = cursor.intValue(7);
-                    message.dialog_id = dialog.id;
-                    dialogs.messages.add(message);
-                    addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                    try {
-                        if (message.reply_to_msg_id != 0 && ((message.action instanceof TL_messageActionPinMessage) || (message.action instanceof TL_messageActionPaymentSent) || (message.action instanceof TL_messageActionGameScore))) {
-                            if (!cursor.isNull(13)) {
-                                data = cursor.byteBufferValue(13);
-                                if (data != null) {
-                                    message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.replyMessage.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
-                                    data.reuse();
-                                    if (message.replyMessage != null) {
-                                        if (MessageObject.isMegagroup(message)) {
-                                            Message message2 = message.replyMessage;
-                                            message2.flags |= Integer.MIN_VALUE;
-                                        }
-                                        addUsersAndChatsFromMessage(message.replyMessage, usersToLoad, chatsToLoad);
-                                    }
-                                }
-                            }
-                            if (message.replyMessage == null) {
-                                long messageId = (long) message.reply_to_msg_id;
-                                if (message.to_id.channel_id != 0) {
-                                    messageId |= ((long) message.to_id.channel_id) << 32;
-                                }
-                                if (!replyMessages.contains(Long.valueOf(messageId))) {
-                                    replyMessages.add(Long.valueOf(messageId));
-                                }
-                                replyMessageOwners.put(dialog.id, message);
-                            }
-                        }
-                    } catch (Throwable e) {
-                        try {
-                            FileLog.m8e(e);
-                        } catch (Throwable e2) {
-                            dialogs.dialogs.clear();
-                            dialogs.users.clear();
-                            dialogs.chats.clear();
-                            encryptedChats.clear();
-                            FileLog.m8e(e2);
-                            MessagesController.getInstance(this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
-                            return;
-                        }
-                    }
-                }
-            }
-            int lower_id = (int) dialog.id;
-            int high_id = (int) (dialog.id >> 32);
-            if (lower_id == 0) {
-                if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
-                    encryptedToLoad.add(Integer.valueOf(high_id));
-                }
-            } else if (high_id == 1) {
-                if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
-                    chatsToLoad.add(Integer.valueOf(lower_id));
-                }
-            } else if (lower_id > 0) {
-                if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
-                    usersToLoad.add(Integer.valueOf(lower_id));
-                }
-            } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
-                chatsToLoad.add(Integer.valueOf(-lower_id));
-            }
-        }
-        cursor.dispose();
-        if (!replyMessages.isEmpty()) {
-            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data, mid, date, uid FROM messages WHERE mid IN(%s)", new Object[]{TextUtils.join(",", replyMessages)}), new Object[0]);
+            Message message2;
+            ArrayList<Integer> usersToLoad = new ArrayList();
+            usersToLoad.add(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+            ArrayList<Integer> chatsToLoad = new ArrayList();
+            ArrayList<Integer> encryptedToLoad = new ArrayList();
+            ArrayList<Long> replyMessages = new ArrayList();
+            LongSparseArray<Message> replyMessageOwners = new LongSparseArray();
+            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i, d.flags FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
             while (cursor.next()) {
-                data = cursor.byteBufferValue(0);
+                TL_dialog dialog = new TL_dialog();
+                dialog.f165id = cursor.longValue(0);
+                dialog.top_message = cursor.intValue(1);
+                dialog.unread_count = cursor.intValue(2);
+                dialog.last_message_date = cursor.intValue(3);
+                dialog.pts = cursor.intValue(10);
+                int i = (dialog.pts == 0 || ((int) dialog.f165id) > 0) ? 0 : 1;
+                dialog.flags = i;
+                dialog.read_inbox_max_id = cursor.intValue(11);
+                dialog.read_outbox_max_id = cursor.intValue(12);
+                dialog.pinnedNum = cursor.intValue(14);
+                dialog.pinned = dialog.pinnedNum != 0;
+                dialog.unread_mentions_count = cursor.intValue(15);
+                dialog.unread_mark = (cursor.intValue(16) & 1) != 0;
+                long flags = cursor.longValue(8);
+                int low_flags = (int) flags;
+                dialog.notify_settings = new TL_peerNotifySettings();
+                if ((low_flags & 1) != 0) {
+                    dialog.notify_settings.mute_until = (int) (flags >> 32);
+                    if (dialog.notify_settings.mute_until == 0) {
+                        dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                    }
+                }
+                dialogs.dialogs.add(dialog);
+                data = cursor.byteBufferValue(4);
                 if (data != null) {
                     message = Message.TLdeserialize(data, data.readInt32(false), false);
                     message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                     data.reuse();
-                    message.id = cursor.intValue(1);
-                    message.date = cursor.intValue(2);
-                    message.dialog_id = cursor.longValue(3);
-                    addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                    Message owner = (Message) replyMessageOwners.get(message.dialog_id);
-                    if (owner != null) {
-                        owner.replyMessage = message;
-                        message.dialog_id = owner.dialog_id;
-                        if (MessageObject.isMegagroup(owner)) {
-                            message2 = owner.replyMessage;
-                            message2.flags |= Integer.MIN_VALUE;
+                    if (message != null) {
+                        MessageObject.setUnreadFlags(message, cursor.intValue(5));
+                        message.f139id = cursor.intValue(6);
+                        int date = cursor.intValue(9);
+                        if (date != 0) {
+                            dialog.last_message_date = date;
+                        }
+                        message.send_state = cursor.intValue(7);
+                        message.dialog_id = dialog.f165id;
+                        dialogs.messages.add(message);
+                        addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
+                        try {
+                            if (message.reply_to_msg_id != 0 && ((message.action instanceof TL_messageActionPinMessage) || (message.action instanceof TL_messageActionPaymentSent) || (message.action instanceof TL_messageActionGameScore))) {
+                                if (!cursor.isNull(13)) {
+                                    data = cursor.byteBufferValue(13);
+                                    if (data != null) {
+                                        message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
+                                        message.replyMessage.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                                        data.reuse();
+                                        if (message.replyMessage != null) {
+                                            if (MessageObject.isMegagroup(message)) {
+                                                message2 = message.replyMessage;
+                                                message2.flags |= Integer.MIN_VALUE;
+                                            }
+                                            addUsersAndChatsFromMessage(message.replyMessage, usersToLoad, chatsToLoad);
+                                        }
+                                    }
+                                }
+                                if (message.replyMessage == null) {
+                                    long messageId = (long) message.reply_to_msg_id;
+                                    if (message.to_id.channel_id != 0) {
+                                        messageId |= ((long) message.to_id.channel_id) << 32;
+                                    }
+                                    if (!replyMessages.contains(Long.valueOf(messageId))) {
+                                        replyMessages.add(Long.valueOf(messageId));
+                                    }
+                                    replyMessageOwners.put(dialog.f165id, message);
+                                }
+                            }
+                        } catch (Throwable e) {
+                            FileLog.m14e(e);
                         }
                     }
                 }
+                int lower_id = (int) dialog.f165id;
+                int high_id = (int) (dialog.f165id >> 32);
+                if (lower_id == 0) {
+                    if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
+                        encryptedToLoad.add(Integer.valueOf(high_id));
+                    }
+                } else if (high_id == 1) {
+                    if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
+                        chatsToLoad.add(Integer.valueOf(lower_id));
+                    }
+                } else if (lower_id > 0) {
+                    if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
+                        usersToLoad.add(Integer.valueOf(lower_id));
+                    }
+                } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
+                    chatsToLoad.add(Integer.valueOf(-lower_id));
+                }
             }
             cursor.dispose();
+            if (!replyMessages.isEmpty()) {
+                cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data, mid, date, uid FROM messages WHERE mid IN(%s)", new Object[]{TextUtils.join(",", replyMessages)}), new Object[0]);
+                while (cursor.next()) {
+                    data = cursor.byteBufferValue(0);
+                    if (data != null) {
+                        message = Message.TLdeserialize(data, data.readInt32(false), false);
+                        message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                        data.reuse();
+                        message.f139id = cursor.intValue(1);
+                        message.date = cursor.intValue(2);
+                        message.dialog_id = cursor.longValue(3);
+                        addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
+                        Message owner = (Message) replyMessageOwners.get(message.dialog_id);
+                        if (owner != null) {
+                            owner.replyMessage = message;
+                            message.dialog_id = owner.dialog_id;
+                            if (MessageObject.isMegagroup(owner)) {
+                                message2 = owner.replyMessage;
+                                message2.flags |= Integer.MIN_VALUE;
+                            }
+                        }
+                    }
+                }
+                cursor.dispose();
+            }
+            if (!encryptedToLoad.isEmpty()) {
+                getEncryptedChatsInternal(TextUtils.join(",", encryptedToLoad), encryptedChats, usersToLoad);
+            }
+            if (!chatsToLoad.isEmpty()) {
+                getChatsInternal(TextUtils.join(",", chatsToLoad), dialogs.chats);
+            }
+            if (!usersToLoad.isEmpty()) {
+                getUsersInternal(TextUtils.join(",", usersToLoad), dialogs.users);
+            }
+            MessagesController.getInstance(this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, offset, count, 1, false, false, true);
+        } catch (Throwable e2) {
+            dialogs.dialogs.clear();
+            dialogs.users.clear();
+            dialogs.chats.clear();
+            encryptedChats.clear();
+            FileLog.m14e(e2);
+            MessagesController.getInstance(this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
         }
-        if (!encryptedToLoad.isEmpty()) {
-            getEncryptedChatsInternal(TextUtils.join(",", encryptedToLoad), encryptedChats, usersToLoad);
-        }
-        if (!chatsToLoad.isEmpty()) {
-            getChatsInternal(TextUtils.join(",", chatsToLoad), dialogs.chats);
-        }
-        if (!usersToLoad.isEmpty()) {
-            getUsersInternal(TextUtils.join(",", usersToLoad), dialogs.users);
-        }
-        MessagesController.getInstance(this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, offset, count, 1, false, false, true);
     }
 
     public static void createFirstHoles(long did, SQLitePreparedStatement state5, SQLitePreparedStatement state6, int messageId) throws Exception {
@@ -7310,6 +6946,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x01c2 A:{Catch:{ Exception -> 0x0147 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x034f A:{Catch:{ Exception -> 0x0147 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x0405 A:{Catch:{ Exception -> 0x0147 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x011e A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0419 A:{Catch:{ Exception -> 0x0147 }} */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void putDialogsInternal(messages_Dialogs dialogs, int check) {
         try {
             int a;
@@ -7329,72 +6971,70 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 SQLitePreparedStatement state6 = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
                 for (a = 0; a < dialogs.dialogs.size(); a++) {
                     TL_dialog dialog = (TL_dialog) dialogs.dialogs.get(a);
-                    if (dialog.id == 0) {
+                    if (dialog.f165id == 0) {
                         if (dialog.peer.user_id != 0) {
-                            dialog.id = (long) dialog.peer.user_id;
+                            dialog.f165id = (long) dialog.peer.user_id;
                         } else if (dialog.peer.chat_id != 0) {
-                            dialog.id = (long) (-dialog.peer.chat_id);
+                            dialog.f165id = (long) (-dialog.peer.chat_id);
                         } else {
-                            dialog.id = (long) (-dialog.peer.channel_id);
+                            dialog.f165id = (long) (-dialog.peer.channel_id);
                         }
                     }
                     SQLiteCursor cursor;
                     int messageDate;
-                    NativeByteBuffer data;
-                    long messageId;
                     long topMessage;
                     int flags;
                     if (check == 1) {
-                        cursor = this.database.queryFinalized("SELECT did FROM dialogs WHERE did = " + dialog.id, new Object[0]);
+                        cursor = this.database.queryFinalized("SELECT did FROM dialogs WHERE did = " + dialog.f165id, new Object[0]);
                         boolean exists = cursor.next();
                         cursor.dispose();
                         if (exists) {
                         }
                         messageDate = 0;
-                        message = (Message) new_dialogMessage.get(dialog.id);
+                        message = (Message) new_dialogMessage.get(dialog.f165id);
                         if (message != null) {
                             messageDate = Math.max(message.date, 0);
                             if (isValidKeyboardToSave(message)) {
-                                DataQuery.getInstance(this.currentAccount).putBotKeyboard(dialog.id, message);
+                                DataQuery.getInstance(this.currentAccount).putBotKeyboard(dialog.f165id, message);
                             }
                             fixUnsupportedMedia(message);
-                            data = new NativeByteBuffer(message.getObjectSize());
+                            NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
                             message.serializeToStream(data);
-                            messageId = (long) message.id;
+                            long messageId = (long) message.f139id;
                             if (message.to_id.channel_id != 0) {
                                 messageId |= ((long) message.to_id.channel_id) << 32;
                             }
                             state.requery();
                             state.bindLong(1, messageId);
-                            state.bindLong(2, dialog.id);
+                            state.bindLong(2, dialog.f165id);
                             state.bindInteger(3, MessageObject.getUnreadFlags(message));
                             state.bindInteger(4, message.send_state);
                             state.bindInteger(5, message.date);
                             state.bindByteBuffer(6, data);
                             state.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
                             state.bindInteger(8, 0);
-                            state.bindInteger(9, (message.flags & 1024) == 0 ? message.views : 0);
+                            state.bindInteger(9, (message.flags & 1024) != 0 ? message.views : 0);
                             state.bindInteger(10, 0);
                             state.bindInteger(11, message.mentioned ? 1 : 0);
                             state.step();
                             if (DataQuery.canAddMessageToMedia(message)) {
                                 state3.requery();
                                 state3.bindLong(1, messageId);
-                                state3.bindLong(2, dialog.id);
+                                state3.bindLong(2, dialog.f165id);
                                 state3.bindInteger(3, message.date);
                                 state3.bindInteger(4, DataQuery.getMediaType(message));
                                 state3.bindByteBuffer(5, data);
                                 state3.step();
                             }
                             data.reuse();
-                            createFirstHoles(dialog.id, state5, state6, message.id);
+                            createFirstHoles(dialog.f165id, state5, state6, message.f139id);
                         }
                         topMessage = (long) dialog.top_message;
                         if (dialog.peer.channel_id != 0) {
                             topMessage |= ((long) dialog.peer.channel_id) << 32;
                         }
                         state2.requery();
-                        state2.bindLong(1, dialog.id);
+                        state2.bindLong(1, dialog.f165id);
                         state2.bindInteger(2, messageDate);
                         state2.bindInteger(3, dialog.unread_count);
                         state2.bindLong(4, topMessage);
@@ -7411,71 +7051,29 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         }
                         state2.bindInteger(12, flags);
                         state2.step();
-                        if (dialog.notify_settings != null) {
+                        if (dialog.notify_settings == null) {
                             state4.requery();
-                            state4.bindLong(1, dialog.id);
-                            state4.bindInteger(2, dialog.notify_settings.mute_until == 0 ? 1 : 0);
+                            state4.bindLong(1, dialog.f165id);
+                            state4.bindInteger(2, dialog.notify_settings.mute_until != 0 ? 1 : 0);
                             state4.step();
                         }
                     } else {
                         if (dialog.pinned && check == 2) {
-                            cursor = this.database.queryFinalized("SELECT pinned FROM dialogs WHERE did = " + dialog.id, new Object[0]);
+                            cursor = this.database.queryFinalized("SELECT pinned FROM dialogs WHERE did = " + dialog.f165id, new Object[0]);
                             if (cursor.next()) {
                                 dialog.pinnedNum = cursor.intValue(0);
                             }
                             cursor.dispose();
                         }
                         messageDate = 0;
-                        message = (Message) new_dialogMessage.get(dialog.id);
+                        message = (Message) new_dialogMessage.get(dialog.f165id);
                         if (message != null) {
-                            messageDate = Math.max(message.date, 0);
-                            if (isValidKeyboardToSave(message)) {
-                                DataQuery.getInstance(this.currentAccount).putBotKeyboard(dialog.id, message);
-                            }
-                            fixUnsupportedMedia(message);
-                            data = new NativeByteBuffer(message.getObjectSize());
-                            message.serializeToStream(data);
-                            messageId = (long) message.id;
-                            if (message.to_id.channel_id != 0) {
-                                messageId |= ((long) message.to_id.channel_id) << 32;
-                            }
-                            state.requery();
-                            state.bindLong(1, messageId);
-                            state.bindLong(2, dialog.id);
-                            state.bindInteger(3, MessageObject.getUnreadFlags(message));
-                            state.bindInteger(4, message.send_state);
-                            state.bindInteger(5, message.date);
-                            state.bindByteBuffer(6, data);
-                            if (MessageObject.isOut(message)) {
-                            }
-                            state.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
-                            state.bindInteger(8, 0);
-                            if ((message.flags & 1024) == 0) {
-                            }
-                            state.bindInteger(9, (message.flags & 1024) == 0 ? message.views : 0);
-                            state.bindInteger(10, 0);
-                            if (message.mentioned) {
-                            }
-                            state.bindInteger(11, message.mentioned ? 1 : 0);
-                            state.step();
-                            if (DataQuery.canAddMessageToMedia(message)) {
-                                state3.requery();
-                                state3.bindLong(1, messageId);
-                                state3.bindLong(2, dialog.id);
-                                state3.bindInteger(3, message.date);
-                                state3.bindInteger(4, DataQuery.getMediaType(message));
-                                state3.bindByteBuffer(5, data);
-                                state3.step();
-                            }
-                            data.reuse();
-                            createFirstHoles(dialog.id, state5, state6, message.id);
                         }
                         topMessage = (long) dialog.top_message;
                         if (dialog.peer.channel_id != 0) {
-                            topMessage |= ((long) dialog.peer.channel_id) << 32;
                         }
                         state2.requery();
-                        state2.bindLong(1, dialog.id);
+                        state2.bindLong(1, dialog.f165id);
                         state2.bindInteger(2, messageDate);
                         state2.bindInteger(3, dialog.unread_count);
                         state2.bindLong(4, topMessage);
@@ -7488,17 +7086,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                         state2.bindInteger(11, dialog.pinnedNum);
                         flags = 0;
                         if (dialog.unread_mark) {
-                            flags = 0 | 1;
                         }
                         state2.bindInteger(12, flags);
                         state2.step();
-                        if (dialog.notify_settings != null) {
-                            state4.requery();
-                            state4.bindLong(1, dialog.id);
-                            if (dialog.notify_settings.mute_until == 0) {
-                            }
-                            state4.bindInteger(2, dialog.notify_settings.mute_until == 0 ? 1 : 0);
-                            state4.step();
+                        if (dialog.notify_settings == null) {
                         }
                     }
                 }
@@ -7513,7 +7104,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             putChatsInternal(dialogs.chats);
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -7543,7 +7134,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 state.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -7563,12 +7154,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 try {
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                     return;
                 }
             }
         } catch (Throwable e2) {
-            FileLog.m8e(e2);
+            FileLog.m14e(e2);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -7601,7 +7192,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -7616,7 +7207,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             loadUnreadMessages();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -7627,7 +7218,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return max[0].intValue();
     }
@@ -7638,7 +7229,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 cursor = this.database.queryFinalized("SELECT outbox_max FROM dialogs WHERE did = " + dialog_id, new Object[0]);
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
                 if (cursor != null) {
                     cursor.dispose();
                 }
@@ -7666,7 +7257,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return pts[0].intValue();
     }
@@ -7682,7 +7273,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 cursor.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -7695,7 +7286,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 countDownLatch.countDown();
             } catch (Throwable e2) {
-                FileLog.m8e(e2);
+                FileLog.m14e(e2);
             }
         }
     }
@@ -7707,7 +7298,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return user[0];
     }
@@ -7724,7 +7315,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return chat[0];
     }
@@ -7743,7 +7334,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             return (User) users.get(0);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return null;
         }
     }
@@ -7754,7 +7345,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             getUsersInternal(TextUtils.join(",", uids), users);
         } catch (Throwable e) {
             users.clear();
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return users;
     }
@@ -7768,7 +7359,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             return (Chat) chats.get(0);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return null;
         }
     }
@@ -7782,7 +7373,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             }
             return (EncryptedChat) encryptedChats.get(0);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return null;
         }
     }

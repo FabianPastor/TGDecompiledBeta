@@ -15,9 +15,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import com.google.firebase.iid.FirebaseInstanceId;
 import java.io.File;
+import org.telegram.p005ui.Components.ForegroundDetector;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.User;
-import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
     @SuppressLint({"StaticFieldLeak"})
@@ -31,8 +31,9 @@ public class ApplicationLoader extends Application {
     public static volatile long mainInterfacePausedStageQueueTime;
 
     public static File getFilesDirFixed() {
+        File path;
         for (int a = 0; a < 10; a++) {
-            File path = applicationContext.getFilesDir();
+            path = applicationContext.getFilesDir();
             if (path != null) {
                 return path;
             }
@@ -42,7 +43,7 @@ public class ApplicationLoader extends Application {
             path.mkdirs();
             return path;
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new File("/data/data/org.telegram.messenger/files");
         }
     }
@@ -66,10 +67,10 @@ public class ApplicationLoader extends Application {
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m5d("screen state = " + isScreenOn);
+                    FileLog.m11d("screen state = " + isScreenOn);
                 }
             } catch (Throwable e3) {
-                FileLog.m8e(e3);
+                FileLog.m14e(e3);
             }
             SharedConfig.loadConfig();
             for (a = 0; a < 3; a++) {
@@ -85,7 +86,7 @@ public class ApplicationLoader extends Application {
             }
             ((ApplicationLoader) applicationContext).initPlayServices();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m5d("app initied");
+                FileLog.m11d("app initied");
             }
             MediaController.getInstance();
             for (a = 0; a < 3; a++) {
@@ -142,14 +143,14 @@ public class ApplicationLoader extends Application {
             String currentPushString = SharedConfig.pushString;
             if (TextUtils.isEmpty(currentPushString)) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m5d("GCM Registration not found.");
+                    FileLog.m11d("GCM Registration not found.");
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m5d("GCM regId = " + currentPushString);
+                FileLog.m11d("GCM regId = " + currentPushString);
             }
             Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$2.$instance);
         } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.m5d("No valid Google Play Services APK found.");
+            FileLog.m11d("No valid Google Play Services APK found.");
         }
     }
 
@@ -160,7 +161,7 @@ public class ApplicationLoader extends Application {
                 GcmInstanceIDListenerService.sendRegistrationToServer(token);
             }
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -171,7 +172,7 @@ public class ApplicationLoader extends Application {
             }
             return false;
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return true;
         }
     }

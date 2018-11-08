@@ -7,7 +7,7 @@ import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
-import android.support.v4.view.ViewCompat;
+import android.support.p000v4.view.ViewCompat;
 import android.view.MotionEvent;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,7 +35,7 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private static final int STATE_VISIBLE = 1;
     private int mAnimationState = 0;
     private int mDragState = 0;
-    private final Runnable mHideRunnable = new C04971();
+    private final Runnable mHideRunnable = new C06081();
     float mHorizontalDragX;
     private final int[] mHorizontalRange = new int[2];
     int mHorizontalThumbCenterX;
@@ -47,7 +47,7 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private final int mMargin;
     private boolean mNeedHorizontalScrollbar = false;
     private boolean mNeedVerticalScrollbar = false;
-    private final OnScrollListener mOnScrollListener = new C04982();
+    private final OnScrollListener mOnScrollListener = new C06092();
     private RecyclerView mRecyclerView;
     private int mRecyclerViewHeight = 0;
     private int mRecyclerViewWidth = 0;
@@ -64,8 +64,8 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     private final int mVerticalTrackWidth;
 
     /* renamed from: org.telegram.messenger.support.widget.FastScroller$1 */
-    class C04971 implements Runnable {
-        C04971() {
+    class C06081 implements Runnable {
+        C06081() {
         }
 
         public void run() {
@@ -74,8 +74,8 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.FastScroller$2 */
-    class C04982 extends OnScrollListener {
-        C04982() {
+    class C06092 extends OnScrollListener {
+        C06092() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -92,6 +92,10 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
 
         private AnimatorListener() {
             this.mCanceled = false;
+        }
+
+        /* synthetic */ AnimatorListener(FastScroller x0, C06081 x1) {
+            this();
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -113,6 +117,10 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
 
     private class AnimatorUpdater implements AnimatorUpdateListener {
         private AnimatorUpdater() {
+        }
+
+        /* synthetic */ AnimatorUpdater(FastScroller x0, C06081 x1) {
+            this();
         }
 
         public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -144,8 +152,8 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         this.mMargin = margin;
         this.mVerticalThumbDrawable.setAlpha(255);
         this.mVerticalTrackDrawable.setAlpha(255);
-        this.mShowHideAnimator.addListener(new AnimatorListener());
-        this.mShowHideAnimator.addUpdateListener(new AnimatorUpdater());
+        this.mShowHideAnimator.addListener(new AnimatorListener(this, null));
+        this.mShowHideAnimator.addUpdateListener(new AnimatorUpdater(this, null));
         attachToRecyclerView(recyclerView);
     }
 

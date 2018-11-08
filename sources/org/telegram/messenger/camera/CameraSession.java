@@ -19,7 +19,7 @@ import org.telegram.messenger.FileLog;
 
 public class CameraSession {
     public static final int ORIENTATION_HYSTERESIS = 5;
-    private AutoFocusCallback autoFocusCallback = new C04641();
+    private AutoFocusCallback autoFocusCallback = new C05751();
     protected CameraInfo cameraInfo;
     private String currentFlashMode;
     private int currentOrientation;
@@ -38,12 +38,12 @@ public class CameraSession {
     private boolean sameTakePictureOrientation;
 
     /* renamed from: org.telegram.messenger.camera.CameraSession$1 */
-    class C04641 implements AutoFocusCallback {
-        C04641() {
+    class C05751 implements AutoFocusCallback {
+        C05751() {
         }
 
         public void onAutoFocus(boolean success, Camera camera) {
-            if (!success) {
+            if (success) {
             }
         }
     }
@@ -163,9 +163,9 @@ public class CameraSession {
             try {
                 params = camera.getParameters();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             } catch (Throwable e2) {
-                FileLog.m8e(e2);
+                FileLog.m14e(e2);
                 return;
             }
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
@@ -204,11 +204,11 @@ public class CameraSession {
             this.diffOrientation = this.currentOrientation - displayOrientation;
             if (params != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m5d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
+                    FileLog.m11d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
                 }
                 params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m5d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
+                    FileLog.m11d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
                 }
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
@@ -267,9 +267,9 @@ public class CameraSession {
             try {
                 params = camera.getParameters();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             } catch (Throwable e2) {
-                FileLog.m8e(e2);
+                FileLog.m14e(e2);
                 return;
             }
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
@@ -357,7 +357,7 @@ public class CameraSession {
                 try {
                     parameters = camera.getParameters();
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
                 if (parameters != null) {
                     parameters.setFocusMode("auto");
@@ -373,12 +373,12 @@ public class CameraSession {
                         camera.setParameters(parameters);
                         camera.autoFocus(this.autoFocusCallback);
                     } catch (Throwable e2) {
-                        FileLog.m8e(e2);
+                        FileLog.m14e(e2);
                     }
                 }
             }
         } catch (Throwable e22) {
-            FileLog.m8e(e22);
+            FileLog.m14e(e22);
         }
     }
 
@@ -455,7 +455,7 @@ public class CameraSession {
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
             return getDisplayOrientation(info, true);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return 0;
         }
     }

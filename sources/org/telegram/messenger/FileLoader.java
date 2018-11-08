@@ -62,45 +62,6 @@ public class FileLoader {
     private HashMap<String, Long> uploadSizes = new HashMap();
     private LinkedList<FileUploadOperation> uploadSmallOperationQueue = new LinkedList();
 
-    /* renamed from: org.telegram.messenger.FileLoader$6 */
-    class C03346 implements FileLoadOperationDelegate {
-        final /* synthetic */ Document val$document;
-        final /* synthetic */ String val$finalFileName;
-        final /* synthetic */ int val$finalType;
-        final /* synthetic */ FileLocation val$location;
-        final /* synthetic */ WebFile val$webDocument;
-
-        C03346(String str, int i, Document document, WebFile webFile, FileLocation fileLocation) {
-            this.val$finalFileName = str;
-            this.val$finalType = i;
-            this.val$document = document;
-            this.val$webDocument = webFile;
-            this.val$location = fileLocation;
-        }
-
-        public void didFinishLoadingFile(FileLoadOperation operation, File finalFile) {
-            FileLoader.this.loadOperationPathsUI.remove(this.val$finalFileName);
-            if (FileLoader.this.delegate != null) {
-                FileLoader.this.delegate.fileDidLoaded(this.val$finalFileName, finalFile, this.val$finalType);
-            }
-            FileLoader.this.checkDownloadQueue(operation.getDatacenterId(), this.val$document, this.val$webDocument, this.val$location, this.val$finalFileName);
-        }
-
-        public void didFailedLoadingFile(FileLoadOperation operation, int reason) {
-            FileLoader.this.loadOperationPathsUI.remove(this.val$finalFileName);
-            FileLoader.this.checkDownloadQueue(operation.getDatacenterId(), this.val$document, this.val$webDocument, this.val$location, this.val$finalFileName);
-            if (FileLoader.this.delegate != null) {
-                FileLoader.this.delegate.fileDidFailedLoad(this.val$finalFileName, reason);
-            }
-        }
-
-        public void didChangedLoadProgress(FileLoadOperation operation, float progress) {
-            if (FileLoader.this.delegate != null) {
-                FileLoader.this.delegate.fileLoadProgressChanged(this.val$finalFileName, progress);
-            }
-        }
-    }
-
     public interface FileLoaderDelegate {
         void fileDidFailedLoad(String str, int i);
 
@@ -116,6 +77,7 @@ public class FileLoader {
     }
 
     public static FileLoader getInstance(int num) {
+        Throwable th;
         FileLoader localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (FileLoader.class) {
@@ -127,15 +89,15 @@ public class FileLoader {
                         try {
                             fileLoaderArr[num] = localInstance2;
                             localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
+                        } catch (Throwable th2) {
+                            th = th2;
                             localInstance = localInstance2;
-                            throw th2;
+                            throw th;
                         }
                     }
                 } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                    th = th3;
+                    throw th;
                 }
             }
         }
@@ -237,11 +199,11 @@ public class FileLoader {
             fileLoaderQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.FileLoader$4$1 */
-                class C03311 implements FileUploadOperationDelegate {
+                class C04211 implements FileUploadOperationDelegate {
 
                     /* renamed from: org.telegram.messenger.FileLoader$4$1$2 */
-                    class C03302 implements Runnable {
-                        C03302() {
+                    class C04202 implements Runnable {
+                        C04202() {
                         }
 
                         public void run() {
@@ -278,7 +240,7 @@ public class FileLoader {
                         }
                     }
 
-                    C03311() {
+                    C04211() {
                     }
 
                     public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
@@ -322,7 +284,7 @@ public class FileLoader {
                     }
 
                     public void didFailedUploadingFile(FileUploadOperation operation) {
-                        FileLoader.fileLoaderQueue.postRunnable(new C03302());
+                        FileLoader.fileLoaderQueue.postRunnable(new C04202());
                     }
 
                     public void didChangedUploadProgress(FileUploadOperation operation, float progress) {
@@ -351,7 +313,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, operation);
                     }
-                    operation.setDelegate(new C03311());
+                    operation.setDelegate(new C04211());
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;
@@ -535,459 +497,211 @@ public class FileLoader {
         }
     }
 
-    private org.telegram.messenger.FileLoadOperation loadFileInternal(org.telegram.tgnet.TLRPC.Document r25, org.telegram.messenger.SecureDocument r26, org.telegram.messenger.WebFile r27, org.telegram.tgnet.TLRPC.FileLocation r28, java.lang.String r29, int r30, boolean r31, org.telegram.messenger.FileStreamLoadOperation r32, int r33, int r34) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r19_2 'operation' org.telegram.messenger.FileLoadOperation) in PHI: PHI: (r19_3 'operation' org.telegram.messenger.FileLoadOperation) = (r19_2 'operation' org.telegram.messenger.FileLoadOperation), (r19_4 'operation' org.telegram.messenger.FileLoadOperation), (r19_5 'operation' org.telegram.messenger.FileLoadOperation), (r19_5 'operation' org.telegram.messenger.FileLoadOperation), (r19_5 'operation' org.telegram.messenger.FileLoadOperation), (r19_1 'operation' org.telegram.messenger.FileLoadOperation), (r19_6 'operation' org.telegram.messenger.FileLoadOperation), (r19_6 'operation' org.telegram.messenger.FileLoadOperation), (r19_6 'operation' org.telegram.messenger.FileLoadOperation), (r19_6 'operation' org.telegram.messenger.FileLoadOperation) binds: {(r19_2 'operation' org.telegram.messenger.FileLoadOperation)=B:67:0x0166, (r19_4 'operation' org.telegram.messenger.FileLoadOperation)=B:83:0x01e8, (r19_5 'operation' org.telegram.messenger.FileLoadOperation)=B:87:0x020a, (r19_5 'operation' org.telegram.messenger.FileLoadOperation)=B:90:0x0214, (r19_5 'operation' org.telegram.messenger.FileLoadOperation)=B:91:0x0218, (r19_1 'operation' org.telegram.messenger.FileLoadOperation)=B:92:0x021c, (r19_6 'operation' org.telegram.messenger.FileLoadOperation)=B:95:0x0231, (r19_6 'operation' org.telegram.messenger.FileLoadOperation)=B:98:0x023b, (r19_6 'operation' org.telegram.messenger.FileLoadOperation)=B:101:0x0245, (r19_6 'operation' org.telegram.messenger.FileLoadOperation)=B:102:0x0249}
-	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
-	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
-	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
-	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r24 = this;
-        r15 = 0;
-        if (r28 == 0) goto L_0x0015;
-    L_0x0003:
-        r15 = getAttachFileName(r28, r29);
-    L_0x0007:
-        if (r15 == 0) goto L_0x0012;
-    L_0x0009:
-        r5 = "-2147483648";
-        r5 = r15.contains(r5);
-        if (r5 == 0) goto L_0x002a;
-    L_0x0012:
-        r19 = 0;
-    L_0x0014:
-        return r19;
-    L_0x0015:
-        if (r26 == 0) goto L_0x001c;
-    L_0x0017:
-        r15 = getAttachFileName(r26);
-        goto L_0x0007;
-    L_0x001c:
-        if (r25 == 0) goto L_0x0023;
-    L_0x001e:
-        r15 = getAttachFileName(r25);
-        goto L_0x0007;
-    L_0x0023:
-        if (r27 == 0) goto L_0x0007;
-    L_0x0025:
-        r15 = getAttachFileName(r27);
-        goto L_0x0007;
-    L_0x002a:
-        r5 = android.text.TextUtils.isEmpty(r15);
-        if (r5 != 0) goto L_0x0045;
-    L_0x0030:
-        r5 = "-2147483648";
-        r5 = r15.contains(r5);
-        if (r5 != 0) goto L_0x0045;
-    L_0x0039:
-        r0 = r24;
-        r5 = r0.loadOperationPathsUI;
-        r8 = 1;
-        r8 = java.lang.Boolean.valueOf(r8);
-        r5.put(r15, r8);
-    L_0x0045:
-        r0 = r24;
-        r5 = r0.loadOperationPaths;
-        r19 = r5.get(r15);
-        r19 = (org.telegram.messenger.FileLoadOperation) r19;
-        if (r19 == 0) goto L_0x015b;
-    L_0x0051:
-        if (r33 != 0) goto L_0x0055;
-    L_0x0053:
-        if (r31 == 0) goto L_0x0014;
-    L_0x0055:
-        r13 = r19.getDatacenterId();
-        r0 = r24;
-        r11 = r0.getAudioLoadOperationQueue(r13);
-        r0 = r24;
-        r20 = r0.getPhotoLoadOperationQueue(r13);
-        r0 = r24;
-        r17 = r0.getLoadOperationQueue(r13);
-        r5 = 1;
-        r0 = r19;
-        r0.setForceRequest(r5);
-        r5 = org.telegram.messenger.MessageObject.isVoiceDocument(r25);
-        if (r5 != 0) goto L_0x007d;
-    L_0x0077:
-        r5 = org.telegram.messenger.MessageObject.isVoiceWebDocument(r27);
-        if (r5 == 0) goto L_0x00b0;
-    L_0x007d:
-        r14 = r11;
-    L_0x007e:
-        if (r14 == 0) goto L_0x0014;
-    L_0x0080:
-        r0 = r19;
-        r16 = r14.indexOf(r0);
-        if (r16 <= 0) goto L_0x012e;
-    L_0x0088:
-        r0 = r16;
-        r14.remove(r0);
-        if (r33 == 0) goto L_0x0126;
-    L_0x008f:
-        if (r14 != r11) goto L_0x00c0;
-    L_0x0091:
-        r0 = r19;
-        r1 = r32;
-        r2 = r33;
-        r5 = r0.start(r1, r2);
-        if (r5 == 0) goto L_0x0014;
-    L_0x009d:
-        r0 = r24;
-        r5 = r0.currentAudioLoadOperationsCount;
-        r0 = r24;
-        r8 = r0.currentAudioLoadOperationsCount;
-        r8 = r8.get(r13);
-        r8 = r8 + 1;
-        r5.put(r13, r8);
-        goto L_0x0014;
-    L_0x00b0:
-        if (r26 != 0) goto L_0x00ba;
-    L_0x00b2:
-        if (r28 != 0) goto L_0x00ba;
-    L_0x00b4:
-        r5 = org.telegram.messenger.MessageObject.isImageWebDocument(r27);
-        if (r5 == 0) goto L_0x00bd;
-    L_0x00ba:
-        r14 = r20;
-        goto L_0x007e;
-    L_0x00bd:
-        r14 = r17;
-        goto L_0x007e;
-    L_0x00c0:
-        r0 = r20;
-        if (r14 != r0) goto L_0x00e3;
-    L_0x00c4:
-        r0 = r19;
-        r1 = r32;
-        r2 = r33;
-        r5 = r0.start(r1, r2);
-        if (r5 == 0) goto L_0x0014;
-    L_0x00d0:
-        r0 = r24;
-        r5 = r0.currentPhotoLoadOperationsCount;
-        r0 = r24;
-        r8 = r0.currentPhotoLoadOperationsCount;
-        r8 = r8.get(r13);
-        r8 = r8 + 1;
-        r5.put(r13, r8);
-        goto L_0x0014;
-    L_0x00e3:
-        r0 = r19;
-        r1 = r32;
-        r2 = r33;
-        r5 = r0.start(r1, r2);
-        if (r5 == 0) goto L_0x0100;
-    L_0x00ef:
-        r0 = r24;
-        r5 = r0.currentLoadOperationsCount;
-        r0 = r24;
-        r8 = r0.currentLoadOperationsCount;
-        r8 = r8.get(r13);
-        r8 = r8 + 1;
-        r5.put(r13, r8);
-    L_0x0100:
-        r5 = r19.wasStarted();
-        if (r5 == 0) goto L_0x0014;
-    L_0x0106:
-        r0 = r24;
-        r5 = r0.activeFileLoadOperation;
-        r0 = r19;
-        r5 = r5.contains(r0);
-        if (r5 != 0) goto L_0x0014;
-    L_0x0112:
-        if (r32 == 0) goto L_0x011b;
-    L_0x0114:
-        r0 = r24;
-        r1 = r19;
-        r0.pauseCurrentFileLoadOperations(r1);
-    L_0x011b:
-        r0 = r24;
-        r5 = r0.activeFileLoadOperation;
-        r0 = r19;
-        r5.add(r0);
-        goto L_0x0014;
-    L_0x0126:
-        r5 = 0;
-        r0 = r19;
-        r14.add(r5, r0);
-        goto L_0x0014;
-    L_0x012e:
-        if (r32 == 0) goto L_0x0137;
-    L_0x0130:
-        r0 = r24;
-        r1 = r19;
-        r0.pauseCurrentFileLoadOperations(r1);
-    L_0x0137:
-        r0 = r19;
-        r1 = r32;
-        r2 = r33;
-        r0.start(r1, r2);
-        r0 = r17;
-        if (r14 != r0) goto L_0x0014;
-    L_0x0144:
-        r0 = r24;
-        r5 = r0.activeFileLoadOperation;
-        r0 = r19;
-        r5 = r5.contains(r0);
-        if (r5 != 0) goto L_0x0014;
-    L_0x0150:
-        r0 = r24;
-        r5 = r0.activeFileLoadOperation;
-        r0 = r19;
-        r5.add(r0);
-        goto L_0x0014;
-    L_0x015b:
-        r5 = 4;
-        r22 = getDirectory(r5);
-        r21 = r22;
-        r23 = 4;
-        if (r26 == 0) goto L_0x01e6;
-    L_0x0166:
-        r19 = new org.telegram.messenger.FileLoadOperation;
-        r0 = r19;
-        r1 = r26;
-        r0.<init>(r1);
-        r23 = 3;
-    L_0x0171:
-        if (r34 != 0) goto L_0x024d;
-    L_0x0173:
-        r21 = getDirectory(r23);
-    L_0x0177:
-        r0 = r24;
-        r5 = r0.currentAccount;
-        r0 = r19;
-        r1 = r21;
-        r2 = r22;
-        r0.setPaths(r5, r1, r2);
-        r6 = r15;
-        r7 = r23;
-        r4 = new org.telegram.messenger.FileLoader$6;
-        r5 = r24;
-        r8 = r25;
-        r9 = r27;
-        r10 = r28;
-        r4.<init>(r6, r7, r8, r9, r10);
-        r0 = r19;
-        r0.setDelegate(r4);
-        r13 = r19.getDatacenterId();
-        r0 = r24;
-        r11 = r0.getAudioLoadOperationQueue(r13);
-        r0 = r24;
-        r20 = r0.getPhotoLoadOperationQueue(r13);
-        r0 = r24;
-        r17 = r0.getLoadOperationQueue(r13);
-        r0 = r24;
-        r5 = r0.loadOperationPaths;
-        r0 = r19;
-        r5.put(r15, r0);
-        if (r31 == 0) goto L_0x025a;
-    L_0x01ba:
-        r18 = 3;
-    L_0x01bc:
-        r5 = 1;
-        r0 = r23;
-        if (r0 != r5) goto L_0x026f;
-    L_0x01c1:
-        r0 = r24;
-        r5 = r0.currentAudioLoadOperationsCount;
-        r12 = r5.get(r13);
-        if (r33 != 0) goto L_0x01cf;
-    L_0x01cb:
-        r0 = r18;
-        if (r12 >= r0) goto L_0x025e;
-    L_0x01cf:
-        r0 = r19;
-        r1 = r32;
-        r2 = r33;
-        r5 = r0.start(r1, r2);
-        if (r5 == 0) goto L_0x0014;
-    L_0x01db:
-        r0 = r24;
-        r5 = r0.currentAudioLoadOperationsCount;
-        r8 = r12 + 1;
-        r5.put(r13, r8);
-        goto L_0x0014;
-    L_0x01e6:
-        if (r28 == 0) goto L_0x01f9;
-    L_0x01e8:
-        r19 = new org.telegram.messenger.FileLoadOperation;
-        r0 = r19;
-        r1 = r28;
-        r2 = r29;
-        r3 = r30;
-        r0.<init>(r1, r2, r3);
-        r23 = 0;
-        goto L_0x0171;
-    L_0x01f9:
-        if (r25 == 0) goto L_0x021c;
-    L_0x01fb:
-        r19 = new org.telegram.messenger.FileLoadOperation;
-        r0 = r19;
-        r1 = r25;
-        r0.<init>(r1);
-        r5 = org.telegram.messenger.MessageObject.isVoiceDocument(r25);
-        if (r5 == 0) goto L_0x020e;
-    L_0x020a:
-        r23 = 1;
-        goto L_0x0171;
-    L_0x020e:
-        r5 = org.telegram.messenger.MessageObject.isVideoDocument(r25);
-        if (r5 == 0) goto L_0x0218;
-    L_0x0214:
-        r23 = 2;
-        goto L_0x0171;
-    L_0x0218:
-        r23 = 3;
-        goto L_0x0171;
-    L_0x021c:
-        if (r27 == 0) goto L_0x0171;
-    L_0x021e:
-        r19 = new org.telegram.messenger.FileLoadOperation;
-        r0 = r24;
-        r5 = r0.currentAccount;
-        r0 = r19;
-        r1 = r27;
-        r0.<init>(r5, r1);
-        r5 = org.telegram.messenger.MessageObject.isVoiceWebDocument(r27);
-        if (r5 == 0) goto L_0x0235;
-    L_0x0231:
-        r23 = 1;
-        goto L_0x0171;
-    L_0x0235:
-        r5 = org.telegram.messenger.MessageObject.isVideoWebDocument(r27);
-        if (r5 == 0) goto L_0x023f;
-    L_0x023b:
-        r23 = 2;
-        goto L_0x0171;
-    L_0x023f:
-        r5 = org.telegram.messenger.MessageObject.isImageWebDocument(r27);
-        if (r5 == 0) goto L_0x0249;
-    L_0x0245:
-        r23 = 0;
-        goto L_0x0171;
-    L_0x0249:
-        r23 = 3;
-        goto L_0x0171;
-    L_0x024d:
-        r5 = 2;
-        r0 = r34;
-        if (r0 != r5) goto L_0x0177;
-    L_0x0252:
-        r5 = 1;
-        r0 = r19;
-        r0.setEncryptFile(r5);
-        goto L_0x0177;
-    L_0x025a:
-        r18 = 1;
-        goto L_0x01bc;
-    L_0x025e:
-        if (r31 == 0) goto L_0x0268;
-    L_0x0260:
-        r5 = 0;
-        r0 = r19;
-        r11.add(r5, r0);
-        goto L_0x0014;
-    L_0x0268:
-        r0 = r19;
-        r11.add(r0);
-        goto L_0x0014;
-    L_0x026f:
-        if (r28 != 0) goto L_0x0277;
-    L_0x0271:
-        r5 = org.telegram.messenger.MessageObject.isImageWebDocument(r27);
-        if (r5 == 0) goto L_0x02b1;
-    L_0x0277:
-        r0 = r24;
-        r5 = r0.currentPhotoLoadOperationsCount;
-        r12 = r5.get(r13);
-        if (r33 != 0) goto L_0x0285;
-    L_0x0281:
-        r0 = r18;
-        if (r12 >= r0) goto L_0x029c;
-    L_0x0285:
-        r0 = r19;
-        r1 = r32;
-        r2 = r33;
-        r5 = r0.start(r1, r2);
-        if (r5 == 0) goto L_0x0014;
-    L_0x0291:
-        r0 = r24;
-        r5 = r0.currentPhotoLoadOperationsCount;
-        r8 = r12 + 1;
-        r5.put(r13, r8);
-        goto L_0x0014;
-    L_0x029c:
-        if (r31 == 0) goto L_0x02a8;
-    L_0x029e:
-        r5 = 0;
-        r0 = r20;
-        r1 = r19;
-        r0.add(r5, r1);
-        goto L_0x0014;
-    L_0x02a8:
-        r0 = r20;
-        r1 = r19;
-        r0.add(r1);
-        goto L_0x0014;
-    L_0x02b1:
-        r0 = r24;
-        r5 = r0.currentLoadOperationsCount;
-        r12 = r5.get(r13);
-        if (r33 != 0) goto L_0x02bf;
-    L_0x02bb:
-        r0 = r18;
-        if (r12 >= r0) goto L_0x02ee;
-    L_0x02bf:
-        r0 = r19;
-        r1 = r32;
-        r2 = r33;
-        r5 = r0.start(r1, r2);
-        if (r5 == 0) goto L_0x02dd;
-    L_0x02cb:
-        r0 = r24;
-        r5 = r0.currentLoadOperationsCount;
-        r8 = r12 + 1;
-        r5.put(r13, r8);
-        r0 = r24;
-        r5 = r0.activeFileLoadOperation;
-        r0 = r19;
-        r5.add(r0);
-    L_0x02dd:
-        r5 = r19.wasStarted();
-        if (r5 == 0) goto L_0x0014;
-    L_0x02e3:
-        if (r32 == 0) goto L_0x0014;
-    L_0x02e5:
-        r0 = r24;
-        r1 = r19;
-        r0.pauseCurrentFileLoadOperations(r1);
-        goto L_0x0014;
-    L_0x02ee:
-        if (r31 == 0) goto L_0x02fa;
-    L_0x02f0:
-        r5 = 0;
-        r0 = r17;
-        r1 = r19;
-        r0.add(r5, r1);
-        goto L_0x0014;
-    L_0x02fa:
-        r0 = r17;
-        r1 = r19;
-        r0.add(r1);
-        goto L_0x0014;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.loadFileInternal(org.telegram.tgnet.TLRPC$Document, org.telegram.messenger.SecureDocument, org.telegram.messenger.WebFile, org.telegram.tgnet.TLRPC$FileLocation, java.lang.String, int, boolean, org.telegram.messenger.FileStreamLoadOperation, int, int):org.telegram.messenger.FileLoadOperation");
+    private FileLoadOperation loadFileInternal(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, String locationExt, int locationSize, boolean force, FileStreamLoadOperation stream, int streamOffset, int cacheType) {
+        String fileName = null;
+        if (location != null) {
+            fileName = getAttachFileName(location, locationExt);
+        } else if (secureDocument != null) {
+            fileName = getAttachFileName(secureDocument);
+        } else if (document != null) {
+            fileName = getAttachFileName(document);
+        } else if (webDocument != null) {
+            fileName = getAttachFileName(webDocument);
+        }
+        if (fileName == null || fileName.contains("-2147483648")) {
+            return null;
+        }
+        if (!(TextUtils.isEmpty(fileName) || fileName.contains("-2147483648"))) {
+            this.loadOperationPathsUI.put(fileName, Boolean.valueOf(true));
+        }
+        FileLoadOperation operation = (FileLoadOperation) this.loadOperationPaths.get(fileName);
+        int datacenterId;
+        LinkedList<FileLoadOperation> audioLoadOperationQueue;
+        LinkedList<FileLoadOperation> photoLoadOperationQueue;
+        LinkedList<FileLoadOperation> loadOperationQueue;
+        if (operation == null) {
+            File tempDir = getDirectory(4);
+            File storeDir = tempDir;
+            int type = 4;
+            FileLoadOperation fileLoadOperation;
+            if (secureDocument != null) {
+                fileLoadOperation = new FileLoadOperation(secureDocument);
+                type = 3;
+            } else if (location != null) {
+                fileLoadOperation = new FileLoadOperation(location, locationExt, locationSize);
+                type = 0;
+            } else if (document != null) {
+                fileLoadOperation = new FileLoadOperation(document);
+                if (MessageObject.isVoiceDocument(document)) {
+                    type = 1;
+                } else if (MessageObject.isVideoDocument(document)) {
+                    type = 2;
+                } else {
+                    type = 3;
+                }
+            } else if (webDocument != null) {
+                fileLoadOperation = new FileLoadOperation(this.currentAccount, webDocument);
+                if (MessageObject.isVoiceWebDocument(webDocument)) {
+                    type = 1;
+                } else if (MessageObject.isVideoWebDocument(webDocument)) {
+                    type = 2;
+                } else if (MessageObject.isImageWebDocument(webDocument)) {
+                    type = 0;
+                } else {
+                    type = 3;
+                }
+            }
+            if (cacheType == 0) {
+                storeDir = getDirectory(type);
+            } else if (cacheType == 2) {
+                operation.setEncryptFile(true);
+            }
+            operation.setPaths(this.currentAccount, storeDir, tempDir);
+            final String finalFileName = fileName;
+            final int finalType = type;
+            final Document document2 = document;
+            final WebFile webFile = webDocument;
+            final FileLocation fileLocation = location;
+            operation.setDelegate(new FileLoadOperationDelegate() {
+                public void didFinishLoadingFile(FileLoadOperation operation, File finalFile) {
+                    FileLoader.this.loadOperationPathsUI.remove(finalFileName);
+                    if (FileLoader.this.delegate != null) {
+                        FileLoader.this.delegate.fileDidLoaded(finalFileName, finalFile, finalType);
+                    }
+                    FileLoader.this.checkDownloadQueue(operation.getDatacenterId(), document2, webFile, fileLocation, finalFileName);
+                }
+
+                public void didFailedLoadingFile(FileLoadOperation operation, int reason) {
+                    FileLoader.this.loadOperationPathsUI.remove(finalFileName);
+                    FileLoader.this.checkDownloadQueue(operation.getDatacenterId(), document2, webFile, fileLocation, finalFileName);
+                    if (FileLoader.this.delegate != null) {
+                        FileLoader.this.delegate.fileDidFailedLoad(finalFileName, reason);
+                    }
+                }
+
+                public void didChangedLoadProgress(FileLoadOperation operation, float progress) {
+                    if (FileLoader.this.delegate != null) {
+                        FileLoader.this.delegate.fileLoadProgressChanged(finalFileName, progress);
+                    }
+                }
+            });
+            datacenterId = operation.getDatacenterId();
+            audioLoadOperationQueue = getAudioLoadOperationQueue(datacenterId);
+            photoLoadOperationQueue = getPhotoLoadOperationQueue(datacenterId);
+            loadOperationQueue = getLoadOperationQueue(datacenterId);
+            this.loadOperationPaths.put(fileName, operation);
+            int maxCount = force ? 3 : 1;
+            int count;
+            if (type == 1) {
+                count = this.currentAudioLoadOperationsCount.get(datacenterId);
+                if (streamOffset != 0 || count < maxCount) {
+                    if (!operation.start(stream, streamOffset)) {
+                        return operation;
+                    }
+                    this.currentAudioLoadOperationsCount.put(datacenterId, count + 1);
+                    return operation;
+                } else if (force) {
+                    audioLoadOperationQueue.add(0, operation);
+                    return operation;
+                } else {
+                    audioLoadOperationQueue.add(operation);
+                    return operation;
+                }
+            } else if (location != null || MessageObject.isImageWebDocument(webDocument)) {
+                count = this.currentPhotoLoadOperationsCount.get(datacenterId);
+                if (streamOffset != 0 || count < maxCount) {
+                    if (!operation.start(stream, streamOffset)) {
+                        return operation;
+                    }
+                    this.currentPhotoLoadOperationsCount.put(datacenterId, count + 1);
+                    return operation;
+                } else if (force) {
+                    photoLoadOperationQueue.add(0, operation);
+                    return operation;
+                } else {
+                    photoLoadOperationQueue.add(operation);
+                    return operation;
+                }
+            } else {
+                count = this.currentLoadOperationsCount.get(datacenterId);
+                if (streamOffset != 0 || count < maxCount) {
+                    if (operation.start(stream, streamOffset)) {
+                        this.currentLoadOperationsCount.put(datacenterId, count + 1);
+                        this.activeFileLoadOperation.add(operation);
+                    }
+                    if (!operation.wasStarted() || stream == null) {
+                        return operation;
+                    }
+                    pauseCurrentFileLoadOperations(operation);
+                    return operation;
+                } else if (force) {
+                    loadOperationQueue.add(0, operation);
+                    return operation;
+                } else {
+                    loadOperationQueue.add(operation);
+                    return operation;
+                }
+            }
+        } else if (streamOffset == 0 && !force) {
+            return operation;
+        } else {
+            LinkedList<FileLoadOperation> downloadQueue;
+            datacenterId = operation.getDatacenterId();
+            audioLoadOperationQueue = getAudioLoadOperationQueue(datacenterId);
+            photoLoadOperationQueue = getPhotoLoadOperationQueue(datacenterId);
+            loadOperationQueue = getLoadOperationQueue(datacenterId);
+            operation.setForceRequest(true);
+            if (MessageObject.isVoiceDocument(document) || MessageObject.isVoiceWebDocument(webDocument)) {
+                downloadQueue = audioLoadOperationQueue;
+            } else if (secureDocument == null && location == null && !MessageObject.isImageWebDocument(webDocument)) {
+                downloadQueue = loadOperationQueue;
+            } else {
+                downloadQueue = photoLoadOperationQueue;
+            }
+            if (downloadQueue == null) {
+                return operation;
+            }
+            int index = downloadQueue.indexOf(operation);
+            if (index > 0) {
+                downloadQueue.remove(index);
+                if (streamOffset == 0) {
+                    downloadQueue.add(0, operation);
+                    return operation;
+                } else if (downloadQueue == audioLoadOperationQueue) {
+                    if (!operation.start(stream, streamOffset)) {
+                        return operation;
+                    }
+                    this.currentAudioLoadOperationsCount.put(datacenterId, this.currentAudioLoadOperationsCount.get(datacenterId) + 1);
+                    return operation;
+                } else if (downloadQueue != photoLoadOperationQueue) {
+                    if (operation.start(stream, streamOffset)) {
+                        this.currentLoadOperationsCount.put(datacenterId, this.currentLoadOperationsCount.get(datacenterId) + 1);
+                    }
+                    if (!operation.wasStarted() || this.activeFileLoadOperation.contains(operation)) {
+                        return operation;
+                    }
+                    if (stream != null) {
+                        pauseCurrentFileLoadOperations(operation);
+                    }
+                    this.activeFileLoadOperation.add(operation);
+                    return operation;
+                } else if (!operation.start(stream, streamOffset)) {
+                    return operation;
+                } else {
+                    this.currentPhotoLoadOperationsCount.put(datacenterId, this.currentPhotoLoadOperationsCount.get(datacenterId) + 1);
+                    return operation;
+                }
+            }
+            if (stream != null) {
+                pauseCurrentFileLoadOperations(operation);
+            }
+            operation.start(stream, streamOffset);
+            if (downloadQueue != loadOperationQueue || this.activeFileLoadOperation.contains(operation)) {
+                return operation;
+            }
+            this.activeFileLoadOperation.add(operation);
+            return operation;
+        }
     }
 
     private void loadFile(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, String locationExt, int locationSize, boolean force, int cacheType) {
@@ -1034,7 +748,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         try {
             semaphore.await();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
         return result[0];
     }
@@ -1326,13 +1040,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (obj != null) {
                 int currentSide;
                 if (byMinSide) {
-                    currentSide = obj.f33h >= obj.f34w ? obj.f34w : obj.f33h;
+                    currentSide = obj.f144h >= obj.f145w ? obj.f145w : obj.f144h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (side > lastSide && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
                     }
                 } else {
-                    currentSide = obj.f34w >= obj.f33h ? obj.f34w : obj.f33h;
+                    currentSide = obj.f145w >= obj.f144h ? obj.f145w : obj.f144h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (currentSide <= side && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
@@ -1411,6 +1125,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     public static String getAttachFileName(TLObject attach, String ext) {
         Object obj = -1;
+        StringBuilder append;
+        FileLocation location;
         if (attach instanceof Document) {
             Document document = (Document) attach;
             String docExt = null;
@@ -1430,18 +1146,18 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     switch (str.hashCode()) {
                         case 187091926:
                             if (str.equals("audio/ogg")) {
-                                int i = 1;
+                                int obj2 = 1;
                                 break;
                             }
                             break;
                         case 1331848029:
                             if (str.equals(MimeTypes.VIDEO_MP4)) {
-                                obj = null;
+                                obj2 = null;
                                 break;
                             }
                             break;
                     }
-                    switch (obj) {
+                    switch (obj2) {
                         case null:
                             docExt = ".mp4";
                             break;
@@ -1457,20 +1173,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             if (document.version == 0) {
                 if (docExt.length() > 1) {
-                    return document.dc_id + "_" + document.id + docExt;
+                    return document.dc_id + "_" + document.f119id + docExt;
                 }
-                return document.dc_id + "_" + document.id;
+                return document.dc_id + "_" + document.f119id;
             } else if (docExt.length() > 1) {
-                return document.dc_id + "_" + document.id + "_" + document.version + docExt;
+                return document.dc_id + "_" + document.f119id + "_" + document.version + docExt;
             } else {
-                return document.dc_id + "_" + document.id + "_" + document.version;
+                return document.dc_id + "_" + document.f119id + "_" + document.version;
             }
         } else if (attach instanceof SecureDocument) {
             SecureDocument secureDocument = (SecureDocument) attach;
-            return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.id + ".jpg";
+            return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.f223id + ".jpg";
         } else if (attach instanceof TL_secureFile) {
             TL_secureFile secureFile = (TL_secureFile) attach;
-            return secureFile.dc_id + "_" + secureFile.id + ".jpg";
+            return secureFile.dc_id + "_" + secureFile.f223id + ".jpg";
         } else if (attach instanceof WebFile) {
             WebFile document2 = (WebFile) attach;
             return Utilities.MD5(document2.url) + "." + ImageLoader.getHttpUrlExtension(document2.url, getExtensionByMime(document2.mime_type));
@@ -1479,30 +1195,30 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (photo.location == null || (photo.location instanceof TL_fileLocationUnavailable)) {
                 return TtmlNode.ANONYMOUS_REGION_ID;
             }
-            r7 = new StringBuilder().append(photo.location.volume_id).append("_").append(photo.location.local_id).append(".");
+            append = new StringBuilder().append(photo.location.volume_id).append("_").append(photo.location.local_id).append(".");
             if (ext == null) {
                 ext = "jpg";
             }
-            return r7.append(ext).toString();
+            return append.append(ext).toString();
         } else if (attach instanceof FileLocation) {
             if (attach instanceof TL_fileLocationUnavailable) {
                 return TtmlNode.ANONYMOUS_REGION_ID;
             }
             location = (FileLocation) attach;
-            r7 = new StringBuilder().append(location.volume_id).append("_").append(location.local_id).append(".");
+            append = new StringBuilder().append(location.volume_id).append("_").append(location.local_id).append(".");
             if (ext == null) {
                 ext = "jpg";
             }
-            return r7.append(ext).toString();
+            return append.append(ext).toString();
         } else if (!(attach instanceof Photo)) {
             return TtmlNode.ANONYMOUS_REGION_ID;
         } else {
             location = (FileLocation) attach;
-            r7 = new StringBuilder().append(location.volume_id).append("_").append(location.local_id).append(".");
+            append = new StringBuilder().append(location.volume_id).append("_").append(location.local_id).append(".");
             if (ext == null) {
                 ext = "jpg";
             }
-            return r7.append(ext).toString();
+            return append.append(ext).toString();
         }
     }
 
@@ -1519,7 +1235,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     encrypted.deleteOnExit();
                                 }
                             } catch (Throwable e) {
-                                FileLog.m8e(e);
+                                FileLog.m14e(e);
                             }
                             try {
                                 File key = new File(FileLoader.getInternalCacheDir(), file.getName() + ".enc.key");
@@ -1527,7 +1243,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     key.deleteOnExit();
                                 }
                             } catch (Throwable e2) {
-                                FileLog.m8e(e2);
+                                FileLog.m14e(e2);
                             }
                         } else if (file.exists()) {
                             try {
@@ -1535,7 +1251,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     file.deleteOnExit();
                                 }
                             } catch (Throwable e22) {
-                                FileLog.m8e(e22);
+                                FileLog.m14e(e22);
                             }
                         }
                         try {
@@ -1544,7 +1260,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 qFile.deleteOnExit();
                             }
                         } catch (Throwable e222) {
-                            FileLog.m8e(e222);
+                            FileLog.m14e(e222);
                         }
                     }
                     if (type == 2) {

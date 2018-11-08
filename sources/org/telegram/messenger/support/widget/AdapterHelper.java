@@ -1,7 +1,7 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.v4.util.Pools.Pool;
-import android.support.v4.util.Pools.SimplePool;
+import android.support.p000v4.util.Pools.Pool;
+import android.support.p000v4.util.Pools.SimplePool;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -260,6 +260,7 @@ class AdapterHelper implements Callback {
             throw new IllegalArgumentException("should not dispatch add or move for pre layout");
         }
         int positionMultiplier;
+        UpdateOp tmp;
         int tmpStart = updatePositionWithPostponed(op.positionStart, op.cmd);
         int tmpCnt = 1;
         int offsetPositionForPartial = op.positionStart;
@@ -278,20 +279,26 @@ class AdapterHelper implements Callback {
             boolean continuous = false;
             switch (op.cmd) {
                 case 2:
-                    continuous = updatedPos == tmpStart;
-                    break;
-                case 4:
-                    if (updatedPos == tmpStart + 1) {
-                        continuous = true;
-                    } else {
+                    if (updatedPos != tmpStart) {
                         continuous = false;
+                        break;
+                    } else {
+                        continuous = true;
+                        break;
                     }
-                    break;
+                case 4:
+                    if (updatedPos != tmpStart + 1) {
+                        continuous = false;
+                        break;
+                    } else {
+                        continuous = true;
+                        break;
+                    }
             }
             if (continuous) {
                 tmpCnt++;
             } else {
-                UpdateOp tmp = obtainUpdateOp(op.cmd, tmpStart, tmpCnt, op.payload);
+                tmp = obtainUpdateOp(op.cmd, tmpStart, tmpCnt, op.payload);
                 dispatchFirstPassAndUpdateViewHolders(tmp, offsetPositionForPartial);
                 recycleUpdateOp(tmp);
                 if (op.cmd == 4) {

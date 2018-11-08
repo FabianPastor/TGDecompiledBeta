@@ -1,8 +1,8 @@
 package org.telegram.messenger;
 
+import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.tgnet.TLRPC.TL_channels_editBanned;
 import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class MessagesController$$Lambda$231 implements Runnable {
     private final MessagesController arg$1;

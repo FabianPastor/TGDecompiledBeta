@@ -87,18 +87,18 @@ class ChildHelper {
                 return this.mNext.remove(index - 64);
             }
             long mask = 1 << index;
-            boolean z = (this.mData & mask) != 0;
+            boolean value = (this.mData & mask) != 0;
             this.mData &= -1 ^ mask;
             mask--;
             this.mData = (this.mData & mask) | Long.rotateRight(this.mData & (-1 ^ mask), 1);
             if (this.mNext == null) {
-                return z;
+                return value;
             }
             if (this.mNext.get(0)) {
                 set(63);
             }
             this.mNext.remove(0);
-            return z;
+            return value;
         }
 
         int countOnesBefore(int index) {
@@ -329,17 +329,16 @@ class ChildHelper {
     boolean removeViewIfHidden(View view) {
         int index = this.mCallback.indexOfChild(view);
         if (index == -1) {
-            return unhideViewInternal(view) ? true : true;
-        } else {
-            if (!this.mBucket.get(index)) {
-                return false;
-            }
-            this.mBucket.remove(index);
             if (unhideViewInternal(view)) {
-                this.mCallback.removeViewAt(index);
-            } else {
-                this.mCallback.removeViewAt(index);
             }
+            return true;
+        } else if (!this.mBucket.get(index)) {
+            return false;
+        } else {
+            this.mBucket.remove(index);
+            if (!unhideViewInternal(view)) {
+            }
+            this.mCallback.removeViewAt(index);
             return true;
         }
     }

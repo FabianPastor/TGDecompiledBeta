@@ -117,8 +117,8 @@ public class ArrayUtils {
             end = 0;
             Object[] result2 = (Object[]) Array.newInstance(kind, 1);
         }
-        result[end] = element;
-        return result;
+        result2[end] = element;
+        return result2;
     }
 
     public static <T> T[] removeElement(Class<T> kind, T[] array, T element) {
