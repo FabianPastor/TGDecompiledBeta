@@ -510,14 +510,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:164:0x04eb  */
-        /* JADX WARNING: Removed duplicated region for block: B:145:0x0474  */
-        /* JADX WARNING: Removed duplicated region for block: B:165:0x04f6  */
+        /* JADX WARNING: Removed duplicated region for block: B:145:0x0467  */
+        /* JADX WARNING: Removed duplicated region for block: B:165:0x04f7  */
         /* JADX WARNING: Removed duplicated region for block: B:148:0x0483  */
-        /* JADX WARNING: Removed duplicated region for block: B:168:0x050e  */
+        /* JADX WARNING: Removed duplicated region for block: B:168:0x0510  */
         /* JADX WARNING: Removed duplicated region for block: B:151:0x0499  */
-        /* JADX WARNING: Removed duplicated region for block: B:169:0x0512  */
-        /* JADX WARNING: Removed duplicated region for block: B:154:0x04a7  */
-        /* JADX WARNING: Removed duplicated region for block: B:170:0x0516  */
+        /* JADX WARNING: Removed duplicated region for block: B:169:0x0514  */
+        /* JADX WARNING: Removed duplicated region for block: B:154:0x04a1  */
+        /* JADX WARNING: Removed duplicated region for block: B:170:0x0518  */
         /* JADX WARNING: Removed duplicated region for block: B:157:0x04af  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean onItemClick(View view, int position, float x, float y) {
@@ -586,33 +586,33 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         chat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id));
                         int[] icons = new int[4];
                         icons[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
-                        icons[1] = R.drawable.chats_clear;
-                        icons[2] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
+                        icons[1] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
+                        icons[2] = R.drawable.chats_clear;
                         icons[3] = R.drawable.chats_leave;
                         if (MessagesController.getInstance(DialogsActivity.this.currentAccount).isProxyDialog(dialog.f130id)) {
                             items = new CharSequence[4];
                             items[0] = null;
-                            items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
-                            items[2] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                            items[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                            items[2] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                             items[3] = null;
                         } else if (chat == null || !chat.megagroup) {
                             items = new CharSequence[4];
                             string = (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
                             items[0] = string;
-                            items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                             if (hasUnread) {
                                 string = LocaleController.getString("MarkAsRead", R.string.MarkAsRead);
                             } else {
                                 string = LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
                             }
-                            items[2] = string;
+                            items[1] = string;
+                            items[2] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                             items[3] = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
                         } else {
                             items = new CharSequence[4];
                             string = (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
                             items[0] = string;
-                            items[1] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", R.string.ClearHistory) : LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
-                            items[2] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                            items[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                            items[2] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", R.string.ClearHistory) : LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                             items[3] = LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu);
                         }
                         builder.setItems(items, icons, new DialogsActivity$5$$Lambda$1(this, pinned, hasUnread, dialog, chat));
@@ -630,14 +630,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             if (!MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(lower_id == 0)) {
                                 string = null;
                                 charSequenceArr[0] = string;
-                                charSequenceArr[1] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
-                                charSequenceArr[2] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                                charSequenceArr[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                                charSequenceArr[2] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
                                 string = isChat ? LocaleController.getString("DeleteChat", R.string.DeleteChat) : isBot ? LocaleController.getString("DeleteAndStop", R.string.DeleteAndStop) : LocaleController.getString("Delete", R.string.Delete);
                                 charSequenceArr[3] = string;
                                 iArr = new int[4];
                                 iArr[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
-                                iArr[1] = R.drawable.chats_clear;
-                                iArr[2] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
+                                iArr[1] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
+                                iArr[2] = R.drawable.chats_clear;
                                 iArr[3] = isChat ? R.drawable.chats_leave : R.drawable.chats_delete;
                                 builder.setItems(charSequenceArr, iArr, new DialogsActivity$5$$Lambda$2(this, pinned, hasUnread, dialog, isChat, isBot));
                                 DialogsActivity.this.showDialog(builder.create());
@@ -645,10 +645,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         }
                         string = dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop);
                         charSequenceArr[0] = string;
-                        charSequenceArr[1] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
                         if (hasUnread) {
                         }
-                        charSequenceArr[2] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                        charSequenceArr[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                        charSequenceArr[2] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
                         if (isChat) {
                         }
                         charSequenceArr[3] = string;
@@ -656,10 +656,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         if (dialog.pinned) {
                         }
                         iArr[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
-                        iArr[1] = R.drawable.chats_clear;
                         if (hasUnread) {
                         }
-                        iArr[2] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
+                        iArr[1] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
+                        iArr[2] = R.drawable.chats_clear;
                         if (isChat) {
                         }
                         iArr[3] = isChat ? R.drawable.chats_leave : R.drawable.chats_delete;
@@ -700,10 +700,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     DialogsActivity.this.hideFloatingButton(false);
                     DialogsActivity.this.listView.smoothScrollToPosition(0);
                 }
-            } else if (which != 2) {
+            } else if (which != 1) {
                 Builder builder1 = new Builder(DialogsActivity.this.getParentActivity());
                 builder1.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                if (which == 1) {
+                if (which == 2) {
                     if (chat == null || !chat.megagroup) {
                         builder1.setMessage(LocaleController.getString("AreYouSureClearHistoryChannel", R.string.AreYouSureClearHistoryChannel));
                     } else if (TextUtils.isEmpty(chat.username)) {
@@ -751,10 +751,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     DialogsActivity.this.hideFloatingButton(false);
                     DialogsActivity.this.listView.smoothScrollToPosition(0);
                 }
-            } else if (which != 2) {
+            } else if (which != 1) {
                 Builder builder12 = new Builder(DialogsActivity.this.getParentActivity());
                 builder12.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                if (which == 1) {
+                if (which == 2) {
                     builder12.setMessage(LocaleController.getString("AreYouSureClearHistory", R.string.AreYouSureClearHistory));
                 } else if (isChat) {
                     builder12.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
@@ -773,7 +773,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
 
         final /* synthetic */ void lambda$null$4$DialogsActivity$5(int which, boolean isChat, boolean isBot, DialogInterface dialogInterface, int i) {
-            if (which != 1) {
+            if (which != 2) {
                 if (isChat) {
                     Chat currentChat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf((int) (-DialogsActivity.this.selectedDialog)));
                     if (currentChat == null || !ChatObject.isNotInChat(currentChat)) {

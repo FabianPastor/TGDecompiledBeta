@@ -4023,32 +4023,32 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x053d A:{Splitter: B:127:0x03d6, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x01e9 A:{Catch:{ Exception -> 0x0943, all -> 0x053d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x01ee A:{Catch:{ Exception -> 0x0943, all -> 0x053d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x01f3 A:{Catch:{ Exception -> 0x0943, all -> 0x053d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x01fb A:{Catch:{ Exception -> 0x0943, all -> 0x053d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{Splitter: B:122:0x03b6, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x01e9 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x01ee A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x01f3 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x01fb A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
     /* JADX WARNING: Removed duplicated region for block: B:73:0x0206  */
     /* JADX WARNING: Removed duplicated region for block: B:75:0x020b A:{SYNTHETIC, Splitter: B:75:0x020b} */
-    /* JADX WARNING: Removed duplicated region for block: B:386:0x09b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:381:0x0993  */
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0212  */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x053d A:{Splitter: B:127:0x03d6, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x01e9 A:{Catch:{ Exception -> 0x0943, all -> 0x053d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x01ee A:{Catch:{ Exception -> 0x0943, all -> 0x053d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x01f3 A:{Catch:{ Exception -> 0x0943, all -> 0x053d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x01fb A:{Catch:{ Exception -> 0x0943, all -> 0x053d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{Splitter: B:122:0x03b6, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x01e9 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x01ee A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x01f3 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x01fb A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
     /* JADX WARNING: Removed duplicated region for block: B:73:0x0206  */
     /* JADX WARNING: Removed duplicated region for block: B:75:0x020b A:{SYNTHETIC, Splitter: B:75:0x020b} */
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0212  */
-    /* JADX WARNING: Removed duplicated region for block: B:386:0x09b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x053d A:{Splitter: B:127:0x03d6, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:381:0x0993  */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{Splitter: B:122:0x03b6, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Missing block: B:90:0x027e, code:
             if (r61.equals("nokia") != false) goto L_0x0280;
      */
-    /* JADX WARNING: Missing block: B:194:0x053d, code:
+    /* JADX WARNING: Missing block: B:189:0x051d, code:
             r6 = th;
      */
-    /* JADX WARNING: Missing block: B:195:0x053e, code:
+    /* JADX WARNING: Missing block: B:190:0x051e, code:
             r49 = r50;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -4235,12 +4235,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             }
                             outputFormat.setInteger(str, framerate);
                             outputFormat.setInteger("i-frame-interval", 10);
-                            if (VERSION.SDK_INT >= 21) {
-                                outputFormat.setInteger("profile", 8);
-                                if (VERSION.SDK_INT >= 23) {
-                                    outputFormat.setInteger("level", MessagesController.UPDATE_MASK_CHAT_ADMINS);
-                                }
-                            }
                             if (VERSION.SDK_INT < 18) {
                                 outputFormat.setInteger("stride", resultWidth + 32);
                                 outputFormat.setInteger("slice-height", resultHeight);

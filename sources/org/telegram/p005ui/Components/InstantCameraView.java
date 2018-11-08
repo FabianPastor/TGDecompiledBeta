@@ -74,7 +74,6 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.PhotoEntry;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SharedConfig;
@@ -1083,12 +1082,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 mediaFormat.setInteger("bitrate", this.videoBitrate);
                 format.setInteger("frame-rate", 30);
                 format.setInteger("i-frame-interval", 1);
-                if (VERSION.SDK_INT >= 21) {
-                    format.setInteger("profile", 8);
-                    if (VERSION.SDK_INT >= 23) {
-                        format.setInteger("level", MessagesController.UPDATE_MASK_CHAT_ADMINS);
-                    }
-                }
                 this.videoEncoder.configure(format, null, null, 1);
                 this.surface = this.videoEncoder.createInputSurface();
                 this.videoEncoder.start();

@@ -95,7 +95,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             if (holder.getItemViewType() == 0) {
-                User user = MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).getUser(Integer.valueOf(MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).blockedUsers.get(position)));
+                User user = MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).getUser(Integer.valueOf(MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).blockedUsers.keyAt(position)));
                 if (user != null) {
                     String number;
                     if (user.bot) {
@@ -171,14 +171,14 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     final /* synthetic */ void lambda$createView$0$BlockedUsersActivity(View view, int position) {
         if (position < MessagesController.getInstance(this.currentAccount).blockedUsers.size()) {
             Bundle args = new Bundle();
-            args.putInt("user_id", MessagesController.getInstance(this.currentAccount).blockedUsers.get(position));
+            args.putInt("user_id", MessagesController.getInstance(this.currentAccount).blockedUsers.keyAt(position));
             presentFragment(new ProfileActivity(args));
         }
     }
 
     final /* synthetic */ boolean lambda$createView$2$BlockedUsersActivity(View view, int position) {
         if (position < MessagesController.getInstance(this.currentAccount).blockedUsers.size() && getParentActivity() != null) {
-            this.selectedUserId = MessagesController.getInstance(this.currentAccount).blockedUsers.get(position);
+            this.selectedUserId = MessagesController.getInstance(this.currentAccount).blockedUsers.keyAt(position);
             Builder builder = new Builder(getParentActivity());
             builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", R.string.Unblock)}, new BlockedUsersActivity$$Lambda$3(this));
             showDialog(builder.create());
