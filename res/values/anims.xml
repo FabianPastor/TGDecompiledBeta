@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <anim name="no_animation">res/anim/no_animation.xml</anim>
-    <anim name="popup_in">res/anim/popup_in.xml</anim>
-    <anim name="popup_out">res/anim/popup_out.xml</anim>
-</resources>

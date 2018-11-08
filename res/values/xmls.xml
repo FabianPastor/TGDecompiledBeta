@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <xml name="auth">res/xml/auth.xml</xml>
-    <xml name="auth_menu">res/xml/auth_menu.xml</xml>
-    <xml name="automotive_app_desc">res/xml/automotive_app_desc.xml</xml>
-    <xml name="contacts">res/xml/contacts.xml</xml>
-    <xml name="provider_paths">res/xml/provider_paths.xml</xml>
-    <xml name="sync_contacts">res/xml/sync_contacts.xml</xml>
-</resources>
