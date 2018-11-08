@@ -1,6 +1,6 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.v4.os.TraceCompat;
+import android.support.p000v4.p001os.TraceCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,15 +13,15 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 
 final class GapWorker implements Runnable {
     static final ThreadLocal<GapWorker> sGapWorker = new ThreadLocal();
-    static Comparator<Task> sTaskComparator = new C04161();
+    static Comparator<Task> sTaskComparator = new C05751();
     long mFrameIntervalNs;
     long mPostTimeNs;
     ArrayList<RecyclerView> mRecyclerViews = new ArrayList();
     private ArrayList<Task> mTasks = new ArrayList();
 
     /* renamed from: org.telegram.messenger.support.widget.GapWorker$1 */
-    static class C04161 implements Comparator<Task> {
-        C04161() {
+    static class C05751 implements Comparator<Task> {
+        C05751() {
         }
 
         public int compare(Task lhs, Task rhs) {
@@ -162,10 +162,11 @@ final class GapWorker implements Runnable {
 
     private void buildTaskList() {
         int i;
+        RecyclerView view;
         int viewCount = this.mRecyclerViews.size();
         int totalTaskCount = 0;
         for (i = 0; i < viewCount; i++) {
-            RecyclerView view = (RecyclerView) this.mRecyclerViews.get(i);
+            view = (RecyclerView) this.mRecyclerViews.get(i);
             if (view.getWindowVisibility() == 0) {
                 view.mPrefetchRegistry.collectPrefetchPositionsFromView(view, false);
                 totalTaskCount += view.mPrefetchRegistry.mCount;

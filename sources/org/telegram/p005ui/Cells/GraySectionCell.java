@@ -1,0 +1,46 @@
+package org.telegram.p005ui.Cells;
+
+import android.content.Context;
+import android.view.View;
+import android.view.View.MeasureSpec;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
+import org.telegram.p005ui.ActionBar.Theme;
+import org.telegram.p005ui.Components.LayoutHelper;
+
+/* renamed from: org.telegram.ui.Cells.GraySectionCell */
+public class GraySectionCell extends FrameLayout {
+    private TextView textView = new TextView(getContext());
+
+    public GraySectionCell(Context context) {
+        int i;
+        int i2 = 5;
+        super(context);
+        setBackgroundColor(Theme.getColor(Theme.key_graySection));
+        this.textView.setTextSize(1, 13.0f);
+        this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.textView.setTextColor(Theme.getColor(Theme.key_graySectionText));
+        TextView textView = this.textView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        textView.setGravity(i | 16);
+        View view = this.textView;
+        if (!LocaleController.isRTL) {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 16.0f, 0.0f, 16.0f, 0.0f));
+    }
+
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(32.0f), NUM));
+    }
+
+    public void setText(String text) {
+        this.textView.setText(text);
+    }
+}

@@ -72,8 +72,6 @@ public class MessageKeyData {
                     keyData.aesIv = data.toByteArray();
                     data.cleanup();
                     break;
-                default:
-                    break;
             }
         }
         keyData.aesIv = null;

@@ -84,31 +84,34 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
 
     void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
         View view;
+        int size;
         int otherDirSpecMode = this.mOrientationHelper.getModeInOther();
         boolean layingOutInPrimaryDirection = layoutState.mItemDirection == 1;
         boolean working = true;
         result.mConsumed = 0;
         int startPosition = layoutState.mCurrentPosition;
         if (layoutState.mLayoutDirection != -1) {
-            if (hasSiblingChild(layoutState.mCurrentPosition) && findViewByPosition(layoutState.mCurrentPosition + 1) == null) {
-                if (hasSiblingChild(layoutState.mCurrentPosition + 1)) {
-                    layoutState.mCurrentPosition += 3;
-                } else {
-                    layoutState.mCurrentPosition += 2;
-                }
-                int backupPosition = layoutState.mCurrentPosition;
-                for (int a = layoutState.mCurrentPosition; a > startPosition; a--) {
-                    view = layoutState.next(recycler);
-                    this.additionalViews.add(view);
-                    if (a != backupPosition) {
-                        calculateItemDecorationsForChild(view, this.mDecorInsets);
-                        measureChild(view, otherDirSpecMode, false);
-                        int size = this.mOrientationHelper.getDecoratedMeasurement(view);
-                        layoutState.mOffset -= size;
-                        layoutState.mAvailable += size;
+            if (hasSiblingChild(layoutState.mCurrentPosition)) {
+                if (findViewByPosition(layoutState.mCurrentPosition + 1) == null) {
+                    if (hasSiblingChild(layoutState.mCurrentPosition + 1)) {
+                        layoutState.mCurrentPosition += 3;
+                    } else {
+                        layoutState.mCurrentPosition += 2;
                     }
+                    int backupPosition = layoutState.mCurrentPosition;
+                    for (int a = layoutState.mCurrentPosition; a > startPosition; a--) {
+                        view = layoutState.next(recycler);
+                        this.additionalViews.add(view);
+                        if (a != backupPosition) {
+                            calculateItemDecorationsForChild(view, this.mDecorInsets);
+                            measureChild(view, otherDirSpecMode, false);
+                            size = this.mOrientationHelper.getDecoratedMeasurement(view);
+                            layoutState.mOffset -= size;
+                            layoutState.mAvailable += size;
+                        }
+                    }
+                    layoutState.mCurrentPosition = backupPosition;
                 }
-                layoutState.mCurrentPosition = backupPosition;
             }
         }
         while (working) {

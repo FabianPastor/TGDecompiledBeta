@@ -138,10 +138,11 @@ public class NotificationCenter {
 
     private class DelayedPost {
         private Object[] args;
-        private int id;
+        /* renamed from: id */
+        private int f56id;
 
         private DelayedPost(int id, Object[] args) {
-            this.id = id;
+            this.f56id = id;
             this.args = args;
         }
     }
@@ -515,6 +516,7 @@ public class NotificationCenter {
     }
 
     public static NotificationCenter getInstance(int num) {
+        Throwable th;
         NotificationCenter localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (NotificationCenter.class) {
@@ -526,15 +528,15 @@ public class NotificationCenter {
                         try {
                             notificationCenterArr[num] = localInstance2;
                             localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
+                        } catch (Throwable th2) {
+                            th = th2;
                             localInstance = localInstance2;
-                            throw th2;
+                            throw th;
                         }
                     }
                 } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                    th = th3;
+                    throw th;
                 }
             }
         }
@@ -542,6 +544,7 @@ public class NotificationCenter {
     }
 
     public static NotificationCenter getGlobalInstance() {
+        Throwable th;
         NotificationCenter localInstance = globalInstance;
         if (localInstance == null) {
             synchronized (NotificationCenter.class) {
@@ -552,15 +555,15 @@ public class NotificationCenter {
                         try {
                             globalInstance = localInstance2;
                             localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
+                        } catch (Throwable th2) {
+                            th = th2;
                             localInstance = localInstance2;
-                            throw th2;
+                            throw th;
                         }
                     }
                 } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                    th = th3;
+                    throw th;
                 }
             }
         }
@@ -580,7 +583,7 @@ public class NotificationCenter {
         if (!this.animationInProgress && !this.delayedPosts.isEmpty()) {
             for (int a = 0; a < this.delayedPosts.size(); a++) {
                 DelayedPost delayedPost = (DelayedPost) this.delayedPosts.get(a);
-                postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
+                postNotificationNameInternal(delayedPost.f56id, true, delayedPost.args);
             }
             this.delayedPosts.clear();
         }
@@ -644,7 +647,7 @@ public class NotificationCenter {
         } else {
             this.delayedPosts.add(new DelayedPost(id, args));
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m6e("delay post notification " + id + " with args count = " + args.length);
+                FileLog.m12e("delay post notification " + id + " with args count = " + args.length);
             }
         }
     }

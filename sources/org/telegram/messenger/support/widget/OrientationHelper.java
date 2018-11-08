@@ -43,6 +43,10 @@ public abstract class OrientationHelper {
 
     public abstract void offsetChildren(int i);
 
+    /* synthetic */ OrientationHelper(LayoutManager x0, C05771 x1) {
+        this(x0);
+    }
+
     private OrientationHelper(LayoutManager layoutManager) {
         this.mLastTotalSpace = Integer.MIN_VALUE;
         this.mTmpRect = new Rect();

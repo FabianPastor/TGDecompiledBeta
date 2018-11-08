@@ -24,30 +24,33 @@ public class NativeLoader {
     private static native void init(String str, boolean z);
 
     private static File getNativeLibraryDir(Context context) {
-        File file = null;
+        File f = null;
         if (context != null) {
             try {
-                file = new File((String) ApplicationInfo.class.getField("nativeLibraryDir").get(context.getApplicationInfo()));
+                f = new File((String) ApplicationInfo.class.getField("nativeLibraryDir").get(context.getApplicationInfo()));
             } catch (Throwable th) {
                 ThrowableExtension.printStackTrace(th);
             }
         }
-        if (file == null) {
-            file = new File(context.getApplicationInfo().dataDir, "lib");
+        if (f == null) {
+            f = new File(context.getApplicationInfo().dataDir, "lib");
         }
-        return file.isDirectory() ? file : null;
+        return f.isDirectory() ? f : null;
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00a1 A:{SYNTHETIC, Splitter: B:35:0x00a1} */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00a6 A:{SYNTHETIC, Splitter: B:38:0x00a6} */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     @SuppressLint({"UnsafeDynamicallyLoadedCode", "SetWorldReadable"})
     private static boolean loadFromZip(Context context, File destDir, File destLocalFile, String folder) {
+        Throwable e;
         Throwable th;
         try {
             for (File file : destDir.listFiles()) {
                 file.delete();
             }
-        } catch (Throwable e) {
-            Throwable e2;
-            FileLog.m8e(e2);
+        } catch (Throwable e2) {
+            FileLog.m14e(e2);
         }
         ZipFile zipFile = null;
         InputStream stream = null;
@@ -77,20 +80,20 @@ public class NativeLoader {
                     System.load(destLocalFile.getAbsolutePath());
                     nativeLoaded = true;
                 } catch (Throwable e22) {
-                    FileLog.m8e(e22);
+                    FileLog.m14e(e22);
                 }
                 if (stream != null) {
                     try {
                         stream.close();
                     } catch (Throwable e222) {
-                        FileLog.m8e(e222);
+                        FileLog.m14e(e222);
                     }
                 }
                 if (zipFile2 != null) {
                     try {
                         zipFile2.close();
                     } catch (Throwable e2222) {
-                        FileLog.m8e(e2222);
+                        FileLog.m14e(e2222);
                     }
                 }
                 zipFile = zipFile2;
@@ -98,66 +101,59 @@ public class NativeLoader {
             } catch (Exception e3) {
                 e2222 = e3;
                 zipFile = zipFile2;
-                try {
-                    FileLog.m8e(e2222);
-                    if (stream != null) {
-                        try {
-                            stream.close();
-                        } catch (Throwable e22222) {
-                            FileLog.m8e(e22222);
-                        }
-                    }
-                    if (zipFile != null) {
-                        try {
-                            zipFile.close();
-                        } catch (Throwable e222222) {
-                            FileLog.m8e(e222222);
-                        }
-                    }
-                    return false;
-                } catch (Throwable th2) {
-                    th = th2;
-                    if (stream != null) {
-                        try {
-                            stream.close();
-                        } catch (Throwable e2222222) {
-                            FileLog.m8e(e2222222);
-                        }
-                    }
-                    if (zipFile != null) {
-                        try {
-                            zipFile.close();
-                        } catch (Throwable e22222222) {
-                            FileLog.m8e(e22222222);
-                        }
-                    }
-                    throw th;
-                }
-            } catch (Throwable th3) {
-                th = th3;
+            } catch (Throwable th2) {
+                th = th2;
                 zipFile = zipFile2;
                 if (stream != null) {
-                    stream.close();
                 }
                 if (zipFile != null) {
-                    zipFile.close();
                 }
                 throw th;
             }
         } catch (Exception e4) {
-            e22222222 = e4;
-            FileLog.m8e(e22222222);
-            if (stream != null) {
-                stream.close();
+            e2222 = e4;
+            try {
+                FileLog.m14e(e2222);
+                if (stream != null) {
+                    try {
+                        stream.close();
+                    } catch (Throwable e22222) {
+                        FileLog.m14e(e22222);
+                    }
+                }
+                if (zipFile != null) {
+                    try {
+                        zipFile.close();
+                    } catch (Throwable e222222) {
+                        FileLog.m14e(e222222);
+                    }
+                }
+                return false;
+            } catch (Throwable th3) {
+                th = th3;
+                if (stream != null) {
+                    try {
+                        stream.close();
+                    } catch (Throwable e2222222) {
+                        FileLog.m14e(e2222222);
+                    }
+                }
+                if (zipFile != null) {
+                    try {
+                        zipFile.close();
+                    } catch (Throwable e22222222) {
+                        FileLog.m14e(e22222222);
+                    }
+                }
+                throw th;
             }
-            if (zipFile != null) {
-                zipFile.close();
-            }
-            return false;
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x0086 A:{Catch:{ Error -> 0x0020, Throwable -> 0x0132 }} */
+    /* JADX WARNING: Missing block: B:40:0x00a1, code:
+            if (loadFromZip(r9, r0, r1, r3) == false) goto L_0x00a3;
+     */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     @SuppressLint({"UnsafeDynamicallyLoadedCode"})
     public static synchronized void initNativeLibs(Context context) {
@@ -169,10 +165,10 @@ public class NativeLoader {
                     System.loadLibrary(LIB_NAME);
                     nativeLoaded = true;
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m5d("loaded normal lib");
+                        FileLog.m11d("loaded normal lib");
                     }
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                     try {
                         String str = Build.CPU_ABI;
                         if (Build.CPU_ABI.equalsIgnoreCase("x86_64")) {
@@ -190,11 +186,11 @@ public class NativeLoader {
                         } else {
                             folder = "armeabi";
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m6e("Unsupported arch: " + Build.CPU_ABI);
+                                FileLog.m12e("Unsupported arch: " + Build.CPU_ABI);
                             }
                         }
                     } catch (Throwable e2) {
-                        FileLog.m8e(e2);
+                        FileLog.m14e(e2);
                         folder = "armeabi";
                     }
                     String javaArch = System.getProperty("os.arch");
@@ -207,31 +203,32 @@ public class NativeLoader {
                     if (destLocalFile.exists()) {
                         try {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m5d("Load local lib");
+                                FileLog.m11d("Load local lib");
                             }
                             System.load(destLocalFile.getAbsolutePath());
                             nativeLoaded = true;
                         } catch (Throwable e22) {
-                            FileLog.m8e(e22);
+                            FileLog.m14e(e22);
                             destLocalFile.delete();
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m6e("Library not found, arch = " + folder);
                             }
                         }
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m6e("Library not found, arch = " + folder);
+                        FileLog.m12e("Library not found, arch = " + folder);
                     }
                 } catch (Throwable e222) {
                     ThrowableExtension.printStackTrace(e222);
                 }
             }
         }
+        return;
         try {
             System.loadLibrary(LIB_NAME);
             nativeLoaded = true;
         } catch (Throwable e2222) {
-            FileLog.m8e(e2222);
+            FileLog.m14e(e2222);
         }
+        return;
     }
 }

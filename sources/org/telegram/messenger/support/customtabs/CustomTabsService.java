@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IBinder.DeathRecipient;
 import android.os.RemoteException;
-import android.support.v4.util.ArrayMap;
+import android.support.p000v4.util.ArrayMap;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
@@ -22,7 +22,7 @@ public abstract class CustomTabsService extends Service {
     public static final int RESULT_FAILURE_MESSAGING_ERROR = -3;
     public static final int RESULT_FAILURE_REMOTE_ERROR = -2;
     public static final int RESULT_SUCCESS = 0;
-    private Stub mBinder = new C17491();
+    private Stub mBinder = new C05551();
     private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
 
     @Retention(RetentionPolicy.SOURCE)
@@ -30,8 +30,8 @@ public abstract class CustomTabsService extends Service {
     }
 
     /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsService$1 */
-    class C17491 extends Stub {
-        C17491() {
+    class C05551 extends Stub {
+        C05551() {
         }
 
         public boolean warmup(long flags) {
@@ -51,10 +51,10 @@ public abstract class CustomTabsService extends Service {
                     callback.asBinder().linkToDeath(deathRecipient, 0);
                     CustomTabsService.this.mDeathRecipientMap.put(callback.asBinder(), deathRecipient);
                 }
-                z = CustomTabsService.this.newSession(sessionToken);
+                return CustomTabsService.this.newSession(sessionToken);
             } catch (RemoteException e) {
+                return z;
             }
-            return z;
         }
 
         public boolean mayLaunchUrl(ICustomTabsCallback callback, Uri url, Bundle extras, List<Bundle> otherLikelyBundles) {

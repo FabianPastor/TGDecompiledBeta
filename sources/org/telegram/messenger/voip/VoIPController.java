@@ -12,8 +12,8 @@ import java.util.Locale;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.MessagesController;
+import org.telegram.p005ui.Components.voip.VoIPHelper;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
-import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class VoIPController {
     public static final int DATA_SAVING_ALWAYS = 2;
@@ -141,7 +141,7 @@ public class VoIPController {
         int a = 0;
         while (a < endpoints.length) {
             TL_phoneConnection endpoint = endpoints[a];
-            if (endpoint.ip == null || endpoint.ip.length() == 0) {
+            if (endpoint.f168ip == null || endpoint.f168ip.length() == 0) {
                 throw new IllegalArgumentException("endpoint " + endpoint + " has empty/null ipv4");
             } else if (endpoint.peer_tag == null || endpoint.peer_tag.length == 16) {
                 a++;

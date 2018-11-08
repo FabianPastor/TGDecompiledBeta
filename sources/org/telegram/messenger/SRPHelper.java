@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 import java.math.BigInteger;
-import org.telegram.tgnet.TLRPC.C1757xb6caa888;
+import org.telegram.tgnet.TLRPC.C0643xb6caa888;
 import org.telegram.tgnet.TLRPC.TL_inputCheckPasswordSRP;
 
 public class SRPHelper {
@@ -24,33 +24,33 @@ public class SRPHelper {
         }
     }
 
-    public static byte[] getX(byte[] passwordBytes, C1757xb6caa888 algo) {
+    public static byte[] getX(byte[] passwordBytes, C0643xb6caa888 algo) {
         byte[] x_bytes = Utilities.computeSHA256(algo.salt1, passwordBytes, algo.salt1);
         x_bytes = Utilities.computePBKDF2(Utilities.computeSHA256(algo.salt2, x_bytes, algo.salt2), algo.salt1);
         return Utilities.computeSHA256(algo.salt2, x_bytes, algo.salt2);
     }
 
-    public static BigInteger getV(byte[] passwordBytes, C1757xb6caa888 algo) {
-        BigInteger g = BigInteger.valueOf((long) algo.f67g);
+    public static BigInteger getV(byte[] passwordBytes, C0643xb6caa888 algo) {
+        BigInteger g = BigInteger.valueOf((long) algo.f198g);
         byte[] g_bytes = getBigIntegerBytes(g);
-        return g.modPow(new BigInteger(1, getX(passwordBytes, algo)), new BigInteger(1, algo.f68p));
+        return g.modPow(new BigInteger(1, getX(passwordBytes, algo)), new BigInteger(1, algo.f199p));
     }
 
-    public static byte[] getVBytes(byte[] passwordBytes, C1757xb6caa888 algo) {
-        if (Utilities.isGoodPrime(algo.f68p, algo.f67g)) {
+    public static byte[] getVBytes(byte[] passwordBytes, C0643xb6caa888 algo) {
+        if (Utilities.isGoodPrime(algo.f199p, algo.f198g)) {
             return getBigIntegerBytes(getV(passwordBytes, algo));
         }
         return null;
     }
 
-    public static TL_inputCheckPasswordSRP startCheck(byte[] x_bytes, long srp_id, byte[] srp_B, C1757xb6caa888 algo) {
-        if (x_bytes == null || srp_B == null || srp_B.length == 0 || !Utilities.isGoodPrime(algo.f68p, algo.f67g)) {
+    public static TL_inputCheckPasswordSRP startCheck(byte[] x_bytes, long srp_id, byte[] srp_B, C0643xb6caa888 algo) {
+        if (x_bytes == null || srp_B == null || srp_B.length == 0 || !Utilities.isGoodPrime(algo.f199p, algo.f198g)) {
             return null;
         }
-        BigInteger g = BigInteger.valueOf((long) algo.f67g);
+        BigInteger g = BigInteger.valueOf((long) algo.f198g);
         byte[] g_bytes = getBigIntegerBytes(g);
-        BigInteger bigInteger = new BigInteger(1, algo.f68p);
-        bigInteger = new BigInteger(1, Utilities.computeSHA256(algo.f68p, g_bytes));
+        BigInteger bigInteger = new BigInteger(1, algo.f199p);
+        bigInteger = new BigInteger(1, Utilities.computeSHA256(algo.f199p, g_bytes));
         bigInteger = new BigInteger(1, x_bytes);
         byte[] a_bytes = new byte[256];
         Utilities.random.nextBytes(a_bytes);
@@ -73,14 +73,14 @@ public class SRPHelper {
             return null;
         }
         byte[] K_bytes = Utilities.computeSHA256(getBigIntegerBytes(B_kgx.modPow(a.add(bigInteger.multiply(bigInteger)), bigInteger)));
-        byte[] p_hash = Utilities.computeSHA256(algo.f68p);
+        byte[] p_hash = Utilities.computeSHA256(algo.f199p);
         byte[] g_hash = Utilities.computeSHA256(g_bytes);
         for (int i = 0; i < p_hash.length; i++) {
             p_hash[i] = (byte) (g_hash[i] ^ p_hash[i]);
         }
         TL_inputCheckPasswordSRP result = new TL_inputCheckPasswordSRP();
-        result.M1 = Utilities.computeSHA256(p_hash, Utilities.computeSHA256(algo.salt1), Utilities.computeSHA256(algo.salt2), A_bytes, B_bytes, K_bytes);
-        result.f64A = A_bytes;
+        result.f188M1 = Utilities.computeSHA256(p_hash, Utilities.computeSHA256(algo.salt1), Utilities.computeSHA256(algo.salt2), A_bytes, B_bytes, K_bytes);
+        result.f187A = A_bytes;
         result.srp_id = srp_id;
         return result;
     }

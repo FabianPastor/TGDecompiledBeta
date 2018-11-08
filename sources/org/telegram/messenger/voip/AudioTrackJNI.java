@@ -16,8 +16,8 @@ public class AudioTrackJNI {
     private Thread thread;
 
     /* renamed from: org.telegram.messenger.voip.AudioTrackJNI$1 */
-    class C04321 implements Runnable {
-        C04321() {
+    class C05951 implements Runnable {
+        C05951() {
         }
 
         public void run() {
@@ -54,13 +54,13 @@ public class AudioTrackJNI {
                             break;
                         }
                     } catch (Throwable e) {
-                        FileLog.m8e(e);
+                        FileLog.m14e(e);
                     }
                 }
                 Log.i("tg-voip", "audiotrack thread exits");
             } catch (Exception x) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m7e("error starting AudioTrack", x);
+                    FileLog.m13e("error starting AudioTrack", x);
                 }
             }
         }
@@ -91,7 +91,7 @@ public class AudioTrackJNI {
             }
             size = getBufferSize(bufferSize * 6, 44100);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m5d("buffer size: " + size);
+                FileLog.m11d("buffer size: " + size);
             }
             if (channels == 1) {
                 i = 4;
@@ -118,7 +118,7 @@ public class AudioTrackJNI {
             try {
                 this.thread.join();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
             this.thread = null;
         }
@@ -141,7 +141,7 @@ public class AudioTrackJNI {
             throw new IllegalStateException("thread already started");
         }
         this.running = true;
-        this.thread = new Thread(new C04321());
+        this.thread = new Thread(new C05951());
         this.thread.start();
     }
 }

@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
+import android.support.p000v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import com.google.android.exoplayer2.C0012C;
+import com.google.android.exoplayer2.C0016C;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +21,8 @@ public class EmuDetector {
     private static final String[] DEVICE_IDS = new String[]{"000000000000000", "e21833235b6eef10", "012345678912345"};
     private static final String[] GENY_FILES = new String[]{"/dev/socket/genyd", "/dev/socket/baseband_genyd"};
     private static final String[] IMSI_IDS = new String[]{"310260000000000"};
-    private static final String IP = "10.0.2.15";
+    /* renamed from: IP */
+    private static final String f48IP = "10.0.2.15";
     private static final int MIN_PROPERTIES_THRESHOLD = 5;
     private static final String[] NOX_FILES = new String[]{"fstab.nox", "init.nox.rc", "ueventd.nox.rc"};
     private static final String[] PHONE_NUMBERS = new String[]{"15555215554", "15555215556", "15555215558", "15555215560", "15555215562", "15555215564", "15555215566", "15555215568", "15555215570", "15555215572", "15555215574", "15555215576", "15555215578", "15555215580", "15555215582", "15555215584"};
@@ -133,8 +134,9 @@ public class EmuDetector {
             i = 1;
         }
         result |= i;
+        boolean z;
         if (result) {
-            boolean z = result;
+            z = result;
             return true;
         }
         result |= "google_sdk".equals(Build.PRODUCT);
@@ -156,7 +158,7 @@ public class EmuDetector {
         PackageManager packageManager = this.mContext.getPackageManager();
         for (String pkgName : this.mListPackageName) {
             Intent tryIntent = packageManager.getLaunchIntentForPackage(pkgName);
-            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, C0012C.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
+            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, C0016C.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
                 return true;
             }
         }
@@ -277,7 +279,7 @@ public class EmuDetector {
         int length = array.length;
         while (i < length) {
             String lan = array[i];
-            if ((lan.contains("wlan0") || lan.contains("tunl0") || lan.contains("eth0")) && lan.contains(IP)) {
+            if ((lan.contains("wlan0") || lan.contains("tunl0") || lan.contains("eth0")) && lan.contains(f48IP)) {
                 return true;
             }
             i++;

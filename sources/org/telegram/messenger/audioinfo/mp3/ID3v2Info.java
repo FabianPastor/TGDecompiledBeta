@@ -72,7 +72,7 @@ public class ID3v2Info extends AudioInfo {
             while (tagBody.getRemainingLength() > 10) {
                 ID3v2FrameHeader frameHeader = new ID3v2FrameHeader(tagBody);
                 if (frameHeader.isPadding()) {
-                    break loop0;
+                    break;
                 } else if (((long) frameHeader.getBodySize()) > tagBody.getRemainingLength()) {
                     if (LOGGER.isLoggable(debugLevel)) {
                         LOGGER.log(debugLevel, "ID3 frame claims to extend frames area");
@@ -85,10 +85,10 @@ public class ID3v2Info extends AudioInfo {
                         parseFrame(frameBody);
                         frameBody.getData().skipFully(frameBody.getRemainingLength());
                     } catch (ID3v2Exception e) {
+                        if (LOGGER.isLoggable(debugLevel)) {
+                            LOGGER.log(debugLevel, String.format("ID3 exception occured in frame %s: %s", new Object[]{frameHeader.getFrameId(), e.getMessage()}));
+                        }
                         try {
-                            if (LOGGER.isLoggable(debugLevel)) {
-                                LOGGER.log(debugLevel, String.format("ID3 exception occured in frame %s: %s", new Object[]{frameHeader.getFrameId(), e.getMessage()}));
-                            }
                             frameBody.getData().skipFully(frameBody.getRemainingLength());
                         } catch (ID3v2Exception e2) {
                             if (LOGGER.isLoggable(debugLevel)) {
@@ -212,13 +212,13 @@ public class ID3v2Info extends AudioInfo {
                 }
                 break;
             case 2015625:
-                if (frameId.equals(ApicFrame.ID)) {
+                if (frameId.equals(ApicFrame.f256ID)) {
                     obj = 1;
                     break;
                 }
                 break;
             case 2074380:
-                if (frameId.equals(CommentFrame.ID)) {
+                if (frameId.equals(CommentFrame.f259ID)) {
                     obj = 3;
                     break;
                 }

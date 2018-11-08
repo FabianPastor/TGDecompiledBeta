@@ -60,7 +60,7 @@ public class Utilities {
             sUrandomIn.close();
             random.setSeed(buffer);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
@@ -84,7 +84,7 @@ public class Utilities {
             }
             return val;
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return val;
         }
     }
@@ -101,7 +101,7 @@ public class Utilities {
             }
             return val;
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return val;
         }
     }
@@ -145,6 +145,7 @@ public class Utilities {
             return false;
         }
         BigInteger dhBI = new BigInteger(1, prime);
+        int val;
         if (g == 2) {
             if (dhBI.mod(BigInteger.valueOf(8)).intValue() != 7) {
                 return false;
@@ -202,7 +203,7 @@ public class Utilities {
             md.update(convertme, offset, len);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new byte[20];
         }
     }
@@ -218,7 +219,7 @@ public class Utilities {
             byte[] digest = md.digest();
             return digest;
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new byte[20];
         } finally {
             convertme.limit(oldl);
@@ -244,7 +245,7 @@ public class Utilities {
             md.update(convertme, offset, len);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new byte[32];
         }
     }
@@ -257,7 +258,7 @@ public class Utilities {
             }
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new byte[32];
         }
     }
@@ -268,7 +269,7 @@ public class Utilities {
             md.update(convertme, 0, convertme.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new byte[64];
         }
     }
@@ -280,7 +281,7 @@ public class Utilities {
             md.update(convertme2, 0, convertme2.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new byte[64];
         }
     }
@@ -299,7 +300,7 @@ public class Utilities {
             md.update(convertme3, 0, convertme3.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new byte[64];
         }
     }
@@ -316,7 +317,7 @@ public class Utilities {
             byte[] digest = md.digest();
             return digest;
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return new byte[32];
         } finally {
             b2.limit(oldl);
@@ -329,19 +330,19 @@ public class Utilities {
     }
 
     public static String MD5(String md5) {
-        String str = null;
-        if (md5 != null) {
-            try {
-                byte[] array = MessageDigest.getInstance("MD5").digest(AndroidUtilities.getStringBytes(md5));
-                StringBuilder sb = new StringBuilder();
-                for (byte b : array) {
-                    sb.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
-                }
-                str = sb.toString();
-            } catch (Throwable e) {
-                FileLog.m8e(e);
-            }
+        if (md5 == null) {
+            return null;
         }
-        return str;
+        try {
+            byte[] array = MessageDigest.getInstance("MD5").digest(AndroidUtilities.getStringBytes(md5));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : array) {
+                sb.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
+            }
+            return sb.toString();
+        } catch (Throwable e) {
+            FileLog.m14e(e);
+            return null;
+        }
     }
 }

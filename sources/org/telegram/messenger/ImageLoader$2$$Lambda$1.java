@@ -1,11 +1,11 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.ImageLoader.C13482;
+import org.telegram.messenger.ImageLoader.C04252;
 import org.telegram.tgnet.TLRPC.InputEncryptedFile;
 import org.telegram.tgnet.TLRPC.InputFile;
 
 final /* synthetic */ class ImageLoader$2$$Lambda$1 implements Runnable {
-    private final C13482 arg$1;
+    private final C04252 arg$1;
     private final int arg$2;
     private final String arg$3;
     private final InputFile arg$4;
@@ -14,8 +14,8 @@ final /* synthetic */ class ImageLoader$2$$Lambda$1 implements Runnable {
     private final byte[] arg$7;
     private final long arg$8;
 
-    ImageLoader$2$$Lambda$1(C13482 c13482, int i, String str, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, long j) {
-        this.arg$1 = c13482;
+    ImageLoader$2$$Lambda$1(C04252 c04252, int i, String str, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, long j) {
+        this.arg$1 = c04252;
         this.arg$2 = i;
         this.arg$3 = str;
         this.arg$4 = inputFile;

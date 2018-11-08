@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
-import android.support.v4.view.ViewCompat;
+import android.support.p000v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import java.util.ArrayList;
@@ -433,10 +433,8 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         if (this.mChangeAnimations.remove(item)) {
         }
         if (this.mMoveAnimations.remove(item)) {
-            dispatchFinishedWhenDone();
-        } else {
-            dispatchFinishedWhenDone();
         }
+        dispatchFinishedWhenDone();
     }
 
     private void resetAnimation(ViewHolder holder) {
@@ -462,12 +460,14 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
 
     public void endAnimations() {
         int i;
+        View view;
+        ViewHolder item;
         for (i = this.mPendingMoves.size() - 1; i >= 0; i--) {
-            MoveInfo item = (MoveInfo) this.mPendingMoves.get(i);
-            View view = item.holder.itemView;
+            MoveInfo item2 = (MoveInfo) this.mPendingMoves.get(i);
+            view = item2.holder.itemView;
             view.setTranslationY(0.0f);
             view.setTranslationX(0.0f);
-            dispatchMoveFinished(item.holder);
+            dispatchMoveFinished(item2.holder);
             this.mPendingMoves.remove(i);
         }
         for (i = this.mPendingRemovals.size() - 1; i >= 0; i--) {
@@ -475,9 +475,9 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
             this.mPendingRemovals.remove(i);
         }
         for (i = this.mPendingAdditions.size() - 1; i >= 0; i--) {
-            ViewHolder item2 = (ViewHolder) this.mPendingAdditions.get(i);
-            item2.itemView.setAlpha(1.0f);
-            dispatchAddFinished(item2);
+            item = (ViewHolder) this.mPendingAdditions.get(i);
+            item.itemView.setAlpha(1.0f);
+            dispatchAddFinished(item);
             this.mPendingAdditions.remove(i);
         }
         for (i = this.mPendingChanges.size() - 1; i >= 0; i--) {
@@ -503,9 +503,9 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
             for (i = this.mAdditionsList.size() - 1; i >= 0; i--) {
                 ArrayList<ViewHolder> additions = (ArrayList) this.mAdditionsList.get(i);
                 for (j = additions.size() - 1; j >= 0; j--) {
-                    item2 = (ViewHolder) additions.get(j);
-                    item2.itemView.setAlpha(1.0f);
-                    dispatchAddFinished(item2);
+                    item = (ViewHolder) additions.get(j);
+                    item.itemView.setAlpha(1.0f);
+                    dispatchAddFinished(item);
                     additions.remove(j);
                     if (additions.isEmpty()) {
                         this.mAdditionsList.remove(additions);

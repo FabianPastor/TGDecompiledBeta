@@ -85,23 +85,22 @@ public class SQLiteCursor {
         if (res == -1) {
             int repeatCount = 6;
             while (true) {
-                int repeatCount2 = repeatCount - 1;
-                if (repeatCount == 0) {
+                int repeatCount2 = repeatCount;
+                repeatCount = repeatCount2 - 1;
+                if (repeatCount2 == 0) {
                     break;
                 }
                 try {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m5d("sqlite busy, waiting...");
+                        FileLog.m11d("sqlite busy, waiting...");
                     }
                     Thread.sleep(500);
                     res = this.preparedStatement.step();
                     if (res == 0) {
                         break;
                     }
-                    repeatCount = repeatCount2;
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
-                    repeatCount = repeatCount2;
+                    FileLog.m14e(e);
                 }
             }
             if (res == -1) {

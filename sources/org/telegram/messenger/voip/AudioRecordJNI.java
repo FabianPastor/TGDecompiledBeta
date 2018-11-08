@@ -18,7 +18,8 @@ public class AudioRecordJNI {
     private int bufferSize;
     private long nativeInst;
     private boolean needResampling = false;
-    private NoiseSuppressor ns;
+    /* renamed from: ns */
+    private NoiseSuppressor f73ns;
     private boolean running;
     private Thread thread;
 
@@ -59,12 +60,12 @@ public class AudioRecordJNI {
             }
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m5d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
+            FileLog.m11d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
         }
         try {
             this.audioRecord = new AudioRecord(source, sampleRate, 16, 2, getBufferSize(this.bufferSize, 48000));
         } catch (Exception x) {
-            FileLog.m7e("AudioRecord init failed!", x);
+            FileLog.m13e("AudioRecord init failed!", x);
         }
         if (sampleRate != 48000) {
             z = true;
@@ -90,7 +91,7 @@ public class AudioRecordJNI {
             try {
                 this.thread.join();
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
             this.thread = null;
         }
@@ -102,9 +103,9 @@ public class AudioRecordJNI {
             this.agc.release();
             this.agc = null;
         }
-        if (this.ns != null) {
-            this.ns.release();
-            this.ns = null;
+        if (this.f73ns != null) {
+            this.f73ns.release();
+            this.f73ns = null;
         }
         if (this.aec != null) {
             this.aec.release();
@@ -128,25 +129,25 @@ public class AudioRecordJNI {
                                 this.agc.setEnabled(false);
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m9w("AutomaticGainControl is not available on this device :(");
+                            FileLog.m15w("AutomaticGainControl is not available on this device :(");
                         }
                     } catch (Throwable x) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m7e("error creating AutomaticGainControl", x);
+                            FileLog.m13e("error creating AutomaticGainControl", x);
                         }
                     }
                     try {
                         if (NoiseSuppressor.isAvailable()) {
-                            this.ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
-                            if (this.ns != null) {
-                                this.ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
+                            this.f73ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
+                            if (this.f73ns != null) {
+                                this.f73ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m9w("NoiseSuppressor is not available on this device :(");
+                            FileLog.m15w("NoiseSuppressor is not available on this device :(");
                         }
                     } catch (Throwable x2) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m7e("error creating NoiseSuppressor", x2);
+                            FileLog.m13e("error creating NoiseSuppressor", x2);
                         }
                     }
                     try {
@@ -156,11 +157,11 @@ public class AudioRecordJNI {
                                 this.aec.setEnabled(VoIPServerConfig.getBoolean("use_system_aec", true));
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m9w("AcousticEchoCanceler is not available on this device");
+                            FileLog.m15w("AcousticEchoCanceler is not available on this device");
                         }
                     } catch (Throwable x22) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m7e("error creating AcousticEchoCanceler", x22);
+                            FileLog.m13e("error creating AcousticEchoCanceler", x22);
                         }
                     }
                 }
@@ -171,7 +172,7 @@ public class AudioRecordJNI {
             if (!BuildVars.LOGS_ENABLED) {
                 return false;
             }
-            FileLog.m7e("Error initializing AudioRecord", x3);
+            FileLog.m13e("Error initializing AudioRecord", x3);
             return false;
         }
     }
@@ -198,7 +199,7 @@ public class AudioRecordJNI {
                         }
                         AudioRecordJNI.this.nativeCallback(AudioRecordJNI.this.buffer);
                     } catch (Throwable e) {
-                        FileLog.m8e(e);
+                        FileLog.m14e(e);
                     }
                 }
                 if (BuildVars.LOGS_ENABLED) {

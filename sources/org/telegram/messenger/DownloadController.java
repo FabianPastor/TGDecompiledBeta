@@ -55,8 +55,8 @@ public class DownloadController implements NotificationCenterDelegate {
     public int[] wifiMaxFileSize = new int[7];
 
     /* renamed from: org.telegram.messenger.DownloadController$1 */
-    class C02601 implements Runnable {
-        C02601() {
+    class C03791 implements Runnable {
+        C03791() {
         }
 
         public void run() {
@@ -70,8 +70,8 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.DownloadController$2 */
-    class C02612 extends BroadcastReceiver {
-        C02612() {
+    class C03802 extends BroadcastReceiver {
+        C03802() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -92,6 +92,7 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     public static DownloadController getInstance(int num) {
+        Throwable th;
         DownloadController localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (DownloadController.class) {
@@ -103,15 +104,15 @@ public class DownloadController implements NotificationCenterDelegate {
                         try {
                             downloadControllerArr[num] = localInstance2;
                             localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
+                        } catch (Throwable th2) {
+                            th = th2;
                             localInstance = localInstance2;
-                            throw th2;
+                            throw th;
                         }
                     }
                 } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                    th = th3;
+                    throw th;
                 }
             }
         }
@@ -157,8 +158,8 @@ public class DownloadController implements NotificationCenterDelegate {
             this.roamingMaxFileSize[a] = preferences.getInt("roamingMaxDownloadSize" + a, sdefault);
         }
         this.globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
-        AndroidUtilities.runOnUIThread(new C02601());
-        ApplicationLoader.applicationContext.registerReceiver(new C02612(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        AndroidUtilities.runOnUIThread(new C03791());
+        ApplicationLoader.applicationContext.registerReceiver(new C03802(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             checkAutodownloadSettings();
         }
@@ -525,7 +526,7 @@ public class DownloadController implements NotificationCenterDelegate {
         if (downloadObject != null) {
             this.downloadQueueKeys.remove(fileName);
             if (state == 0 || state == 2) {
-                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.id, downloadObject.type, false);
+                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.f47id, downloadObject.type, false);
             }
             if (downloadObject.type == 1) {
                 this.photoDownloadQueue.remove(downloadObject);
@@ -643,6 +644,7 @@ public class DownloadController implements NotificationCenterDelegate {
         int size;
         int a;
         WeakReference<FileDownloadProgressListener> reference;
+        Float progress;
         if (id == NotificationCenter.FileDidFailedLoad || id == NotificationCenter.httpFileDidFailedLoad) {
             this.listenerInProgress = true;
             fileName = args[0];
@@ -761,7 +763,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
         }
     }

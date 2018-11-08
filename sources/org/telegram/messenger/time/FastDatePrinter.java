@@ -1,6 +1,6 @@
 package org.telegram.messenger.time;
 
-import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -18,18 +18,18 @@ import android.os.Parcelable;
 import android.os.Parcelable.ClassLoaderCreator;
 import android.os.Parcelable.Creator;
 import android.os.SystemClock;
-import android.support.v4.os.TraceCompat;
-import android.support.v4.view.AbsSavedState;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.NestedScrollingChild2;
-import android.support.v4.view.NestedScrollingChildHelper;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionInfoCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
-import android.support.v4.widget.EdgeEffectCompat;
+import android.support.p000v4.p001os.TraceCompat;
+import android.support.p000v4.view.AbsSavedState;
+import android.support.p000v4.view.MotionEventCompat;
+import android.support.p000v4.view.NestedScrollingChild2;
+import android.support.p000v4.view.NestedScrollingChildHelper;
+import android.support.p000v4.view.ViewCompat;
+import android.support.p000v4.view.ViewConfigurationCompat;
+import android.support.p000v4.view.accessibility.AccessibilityEventCompat;
+import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionInfoCompat;
+import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
+import android.support.p000v4.widget.EdgeEffectCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -48,7 +48,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.animation.Interpolator;
 import android.widget.EdgeEffect;
 import android.widget.OverScroller;
-import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
@@ -97,7 +97,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     static final String TRACE_SCROLL_TAG = "RV Scroll";
     static final boolean VERBOSE_TRACING = false;
     public static final int VERTICAL = 1;
-    static final Interpolator sQuinticInterpolator = new C04203();
+    static final Interpolator sQuinticInterpolator = new C05813();
     private int bottomGlowOffset;
     private int glowColor;
     RecyclerViewAccessibilityDelegate mAccessibilityDelegate;
@@ -176,8 +176,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     private int topGlowOffset;
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$1 */
-    class C04181 implements Runnable {
-        C04181() {
+    class C05791 implements Runnable {
+        C05791() {
         }
 
         public void run() {
@@ -194,8 +194,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$2 */
-    class C04192 implements Runnable {
-        C04192() {
+    class C05802 implements Runnable {
+        C05802() {
         }
 
         public void run() {
@@ -207,8 +207,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$3 */
-    static class C04203 implements Interpolator {
-        C04203() {
+    static class C05813 implements Interpolator {
+        C05813() {
         }
 
         public float getInterpolation(float t) {
@@ -640,7 +640,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         private int mHeight;
         private int mHeightMode;
         ViewBoundsCheck mHorizontalBoundCheck = new ViewBoundsCheck(this.mHorizontalBoundCheckCallback);
-        private final Callback mHorizontalBoundCheckCallback = new C13731();
+        private final Callback mHorizontalBoundCheckCallback = new C05821();
         boolean mIsAttachedToWindow = false;
         private boolean mItemPrefetchEnabled = true;
         private boolean mMeasurementCacheEnabled = true;
@@ -650,7 +650,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         boolean mRequestedSimpleAnimations = false;
         SmoothScroller mSmoothScroller;
         ViewBoundsCheck mVerticalBoundCheck = new ViewBoundsCheck(this.mVerticalBoundCheckCallback);
-        private final Callback mVerticalBoundCheckCallback = new C13742();
+        private final Callback mVerticalBoundCheckCallback = new C05832();
         private int mWidth;
         private int mWidthMode;
 
@@ -666,8 +666,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         }
 
         /* renamed from: org.telegram.messenger.support.widget.RecyclerView$LayoutManager$1 */
-        class C13731 implements Callback {
-            C13731() {
+        class C05821 implements Callback {
+            C05821() {
             }
 
             public int getChildCount() {
@@ -700,8 +700,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         }
 
         /* renamed from: org.telegram.messenger.support.widget.RecyclerView$LayoutManager$2 */
-        class C13742 implements Callback {
-            C13742() {
+        class C05832 implements Callback {
+            C05832() {
             }
 
             public int getChildCount() {
@@ -1397,8 +1397,6 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
                         case 0:
                             resultSize = 0;
                             resultMode = 0;
-                            break;
-                        default:
                             break;
                     }
                 } else if (childDimension == -2) {
@@ -2270,9 +2268,9 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
                 android.view.ViewGroup.LayoutParams rvLayoutParams2 = (LayoutParams) RecyclerView.this.generateLayoutParams(lp);
                 holder2.itemView.setLayoutParams(rvLayoutParams2);
             }
-            rvLayoutParams.mViewHolder = holder2;
+            rvLayoutParams2.mViewHolder = holder2;
             boolean z = fromScrapOrHiddenOrCache && bound;
-            rvLayoutParams.mPendingInvalidate = z;
+            rvLayoutParams2.mPendingInvalidate = z;
             holder = holder2;
             return holder2;
         }
@@ -2504,10 +2502,11 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         }
 
         ViewHolder getScrapOrHiddenOrCachedHolderForPosition(int position, boolean dryRun) {
+            ViewHolder holder;
             int scrapCount = this.mAttachedScrap.size();
             int i = 0;
             while (i < scrapCount) {
-                ViewHolder holder = (ViewHolder) this.mAttachedScrap.get(i);
+                holder = (ViewHolder) this.mAttachedScrap.get(i);
                 if (holder.wasReturnedFromScrap() || holder.getLayoutPosition() != position || holder.isInvalid() || (!RecyclerView.this.mState.mInPreLayout && holder.isRemoved())) {
                     i++;
                 } else {
@@ -2548,8 +2547,9 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
 
         ViewHolder getScrapOrCachedViewForId(long id, int type, boolean dryRun) {
             int i;
+            ViewHolder holder;
             for (i = this.mAttachedScrap.size() - 1; i >= 0; i--) {
-                ViewHolder holder = (ViewHolder) this.mAttachedScrap.get(i);
+                holder = (ViewHolder) this.mAttachedScrap.get(i);
                 if (holder.getItemId() == id && !holder.wasReturnedFromScrap()) {
                     if (type == holder.getItemViewType()) {
                         holder.addFlags(32);
@@ -3620,8 +3620,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$4 */
-    class C13704 implements ProcessCallback {
-        C13704() {
+    class C18454 implements ProcessCallback {
+        C18454() {
         }
 
         public void processDisappeared(ViewHolder viewHolder, ItemHolderInfo info, ItemHolderInfo postInfo) {
@@ -3650,8 +3650,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$5 */
-    class C13715 implements Callback {
-        C13715() {
+    class C18465 implements Callback {
+        C18465() {
         }
 
         public int getChildCount() {
@@ -3737,8 +3737,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     /* renamed from: org.telegram.messenger.support.widget.RecyclerView$6 */
-    class C13726 implements Callback {
-        C13726() {
+    class C18476 implements Callback {
+        C18476() {
         }
 
         public ViewHolder findViewHolder(int position) {
@@ -3875,12 +3875,12 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     public static class SavedState extends AbsSavedState {
-        public static final Creator<SavedState> CREATOR = new C04211();
+        public static final Creator<SavedState> CREATOR = new C05841();
         Parcelable mLayoutState;
 
         /* renamed from: org.telegram.messenger.support.widget.RecyclerView$SavedState$1 */
-        static class C04211 implements ClassLoaderCreator<SavedState> {
-            C04211() {
+        static class C05841 implements ClassLoaderCreator<SavedState> {
+            C05841() {
             }
 
             public SavedState createFromParcel(Parcel in, ClassLoader loader) {
@@ -4027,7 +4027,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         this.mObserver = new RecyclerViewDataObserver();
         this.mRecycler = new Recycler();
         this.mViewInfoStore = new ViewInfoStore();
-        this.mUpdateChildViewsRunnable = new C04181();
+        this.mUpdateChildViewsRunnable = new C05791();
         this.mTempRect = new Rect();
         this.mTempRect2 = new Rect();
         this.mTempRectF = new RectF();
@@ -4060,8 +4060,8 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         this.bottomGlowOffset = 0;
         this.glowColor = 0;
         this.mPendingAccessibilityImportanceChange = new ArrayList();
-        this.mItemAnimatorRunner = new C04192();
-        this.mViewInfoProcessCallback = new C13704();
+        this.mItemAnimatorRunner = new C05802();
+        this.mViewInfoProcessCallback = new C18454();
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, CLIP_TO_PADDING_ATTR, defStyle, 0);
             this.mClipToPadding = a.getBoolean(0, true);
@@ -4157,11 +4157,11 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     private void initChildrenHelper() {
-        this.mChildHelper = new ChildHelper(new C13715());
+        this.mChildHelper = new ChildHelper(new C18465());
     }
 
     void initAdapterManager() {
-        this.mAdapterHelper = new AdapterHelper(new C13726());
+        this.mAdapterHelper = new AdapterHelper(new C18476());
     }
 
     public void setHasFixedSize(boolean hasFixedSize) {
@@ -5419,7 +5419,9 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         super.requestDisallowInterceptTouchEvent(disallowIntercept);
     }
 
-    /* JADX WARNING: inconsistent code. */
+    /* JADX WARNING: Missing block: B:82:0x0284, code:
+            if (fling((int) r17, (int) r19) == false) goto L_0x0286;
+     */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(MotionEvent e) {
         if (this.mLayoutFrozen || this.mIgnoreMotionEventTillDown) {
@@ -5871,11 +5873,12 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     private View findNextViewToFocus() {
+        ViewHolder nextFocus;
         int startFocusSearchIndex = this.mState.mFocusedItemPosition != -1 ? this.mState.mFocusedItemPosition : 0;
         int itemCount = this.mState.getItemCount();
         int i = startFocusSearchIndex;
         while (i < itemCount) {
-            ViewHolder nextFocus = findViewHolderForAdapterPosition(i);
+            nextFocus = findViewHolderForAdapterPosition(i);
             if (nextFocus == null) {
                 break;
             } else if (nextFocus.itemView.hasFocusable()) {
@@ -6234,6 +6237,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
     }
 
     public void draw(Canvas c) {
+        int restore;
         int padding;
         int i;
         int i2 = 1;
@@ -6244,7 +6248,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         }
         boolean needsInvalidate = false;
         if (!(this.mLeftGlow == null || this.mLeftGlow.isFinished())) {
-            int restore = c.save();
+            restore = c.save();
             if (this.mClipToPadding) {
                 padding = getPaddingBottom();
             } else {
@@ -6842,7 +6846,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
             throw new IllegalArgumentException("Trying to set fast scroller without both required drawables." + exceptionLabel());
         }
         Resources resources = getContext().getResources();
-        FastScroller fastScroller = new FastScroller(this, verticalThumbDrawable, verticalTrackDrawable, horizontalThumbDrawable, horizontalTrackDrawable, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(50.0f), 0);
+        FastScroller fastScroller = new FastScroller(this, verticalThumbDrawable, verticalTrackDrawable, horizontalThumbDrawable, horizontalTrackDrawable, AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(50.0f), 0);
     }
 
     public void setNestedScrollingEnabled(boolean enabled) {

@@ -16,6 +16,7 @@ public class RuleSet {
         if (str.length() < this.matchLen) {
             return null;
         }
+        PhoneRule rule;
         int val = 0;
         Matcher matcher = pattern.matcher(str.substring(0, this.matchLen));
         if (matcher.find()) {
@@ -23,7 +24,7 @@ public class RuleSet {
         }
         Iterator it = this.rules.iterator();
         while (it.hasNext()) {
-            PhoneRule rule = (PhoneRule) it.next();
+            rule = (PhoneRule) it.next();
             if (val >= rule.minVal && val <= rule.maxVal && str.length() <= rule.maxLen) {
                 if (prefixRequired) {
                     if (((rule.flag12 & 3) == 0 && trunkPrefix == null && intlPrefix == null) || !((trunkPrefix == null || (rule.flag12 & 1) == 0) && (intlPrefix == null || (rule.flag12 & 2) == 0))) {
@@ -68,6 +69,7 @@ public class RuleSet {
         if (str.length() < this.matchLen) {
             return false;
         }
+        PhoneRule rule;
         int val = 0;
         Matcher matcher = pattern.matcher(str.substring(0, this.matchLen));
         if (matcher.find()) {
@@ -75,7 +77,7 @@ public class RuleSet {
         }
         Iterator it = this.rules.iterator();
         while (it.hasNext()) {
-            PhoneRule rule = (PhoneRule) it.next();
+            rule = (PhoneRule) it.next();
             if (val >= rule.minVal && val <= rule.maxVal && str.length() == rule.maxLen) {
                 if (prefixRequired) {
                     if ((rule.flag12 & 3) == 0 && trunkPrefix == null && intlPrefix == null) {
@@ -105,10 +107,7 @@ public class RuleSet {
                 while (it.hasNext()) {
                     rule = (PhoneRule) it.next();
                     if (val >= rule.minVal && val <= rule.maxVal && str.length() == rule.maxLen) {
-                        if (trunkPrefix == null) {
-                            return true;
-                        }
-                        if ((rule.flag12 & 1) != 0) {
+                        if (trunkPrefix == null || (rule.flag12 & 1) != 0) {
                             return true;
                         }
                     }
@@ -118,10 +117,7 @@ public class RuleSet {
                 while (it.hasNext()) {
                     rule = (PhoneRule) it.next();
                     if (val >= rule.minVal && val <= rule.maxVal && str.length() == rule.maxLen) {
-                        if (intlPrefix == null) {
-                            return true;
-                        }
-                        if ((rule.flag12 & 2) != 0) {
+                        if (intlPrefix == null || (rule.flag12 & 2) != 0) {
                             return true;
                         }
                     }

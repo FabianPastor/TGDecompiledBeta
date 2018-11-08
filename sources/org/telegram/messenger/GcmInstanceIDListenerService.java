@@ -8,13 +8,13 @@ public class GcmInstanceIDListenerService extends FirebaseInstanceIdService {
         try {
             AndroidUtilities.runOnUIThread(new GcmInstanceIDListenerService$$Lambda$0(FirebaseInstanceId.getInstance().getToken()));
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 
     static final /* synthetic */ void lambda$onTokenRefresh$0$GcmInstanceIDListenerService(String refreshedToken) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m5d("Refreshed token: " + refreshedToken);
+            FileLog.m11d("Refreshed token: " + refreshedToken);
         }
         ApplicationLoader.postInitApplication();
         sendRegistrationToServer(refreshedToken);

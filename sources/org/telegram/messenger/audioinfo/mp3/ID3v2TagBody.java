@@ -34,7 +34,7 @@ public class ID3v2TagBody {
 
     public ID3v2FrameBody frameBody(ID3v2FrameHeader frameHeader) throws IOException, ID3v2Exception {
         int dataLength = frameHeader.getBodySize();
-        InputStream inputStream = this.input;
+        InputStream input = this.input;
         if (frameHeader.isUnsynchronization()) {
             byte[] bytes = this.data.readFully(frameHeader.getBodySize());
             boolean ff = false;
@@ -59,16 +59,16 @@ public class ID3v2TagBody {
                 len = len2;
             }
             dataLength = len;
-            inputStream = new ByteArrayInputStream(bytes, 0, len);
+            input = new ByteArrayInputStream(bytes, 0, len);
         }
         if (frameHeader.isEncryption()) {
             throw new ID3v2Exception("Frame encryption is not supported");
         }
         if (frameHeader.isCompression()) {
             dataLength = frameHeader.getDataLengthIndicator();
-            inputStream = new InflaterInputStream(inputStream);
+            input = new InflaterInputStream(input);
         }
-        return new ID3v2FrameBody(inputStream, (long) frameHeader.getHeaderSize(), dataLength, this.tagHeader, frameHeader);
+        return new ID3v2FrameBody(input, (long) frameHeader.getHeaderSize(), dataLength, this.tagHeader, frameHeader);
     }
 
     public String toString() {

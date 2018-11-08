@@ -1,7 +1,7 @@
 package androidx.core.graphics.drawable;
 
 import android.content.res.ColorStateList;
-import android.support.v4.graphics.drawable.IconCompat;
+import android.support.p000v4.graphics.drawable.IconCompat;
 import androidx.versionedparcelable.VersionedParcel;
 
 public class IconCompatParcelizer {

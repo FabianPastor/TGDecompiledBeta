@@ -1,9 +1,9 @@
 package org.telegram.messenger;
 
 import android.os.Bundle;
+import org.telegram.p005ui.ActionBar.AlertDialog;
+import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class MessagesController$$Lambda$148 implements Runnable {
     private final MessagesController arg$1;

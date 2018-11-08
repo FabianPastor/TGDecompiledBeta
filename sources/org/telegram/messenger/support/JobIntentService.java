@@ -227,7 +227,18 @@ public abstract class JobIntentService extends Service {
             return result;
         }
 
-        /* JADX WARNING: inconsistent code. */
+        /* JADX WARNING: Missing block: B:10:0x0012, code:
+            if (r0 == null) goto L_?;
+     */
+        /* JADX WARNING: Missing block: B:11:0x0014, code:
+            r0.getIntent().setExtrasClassLoader(r4.mService.getClassLoader());
+     */
+        /* JADX WARNING: Missing block: B:21:?, code:
+            return null;
+     */
+        /* JADX WARNING: Missing block: B:22:?, code:
+            return new org.telegram.messenger.support.JobIntentService.JobServiceEngineImpl.WrapperWorkItem(r4, r0);
+     */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public GenericWorkItem dequeueWork() {
             JobWorkItem work = null;

@@ -6,14 +6,14 @@ import android.graphics.Rect;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
+import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.accessibility.AccessibilityEvent;
-import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -37,7 +37,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private static final String TAG = "StaggeredGridLManager";
     public static final int VERTICAL = 1;
     private final AnchorInfo mAnchorInfo = new AnchorInfo();
-    private final Runnable mCheckForGapsRunnable = new C04221();
+    private final Runnable mCheckForGapsRunnable = new C05851();
     private int mFullSizeSpec;
     private int mGapStrategy = 2;
     private boolean mLaidOutInvalidFullSpan = false;
@@ -62,8 +62,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private final Rect mTmpRect = new Rect();
 
     /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$1 */
-    class C04221 implements Runnable {
-        C04221() {
+    class C05851 implements Runnable {
+        C05851() {
         }
 
         public void run() {
@@ -129,15 +129,15 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         List<FullSpanItem> mFullSpanItems;
 
         static class FullSpanItem implements Parcelable {
-            public static final Creator<FullSpanItem> CREATOR = new C04231();
+            public static final Creator<FullSpanItem> CREATOR = new C05861();
             int mGapDir;
             int[] mGapPerSpan;
             boolean mHasUnwantedGapAfter;
             int mPosition;
 
             /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$LazySpanLookup$FullSpanItem$1 */
-            static class C04231 implements Creator<FullSpanItem> {
-                C04231() {
+            static class C05861 implements Creator<FullSpanItem> {
+                C05861() {
                 }
 
                 public FullSpanItem createFromParcel(Parcel in) {
@@ -382,7 +382,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new C04241();
+        public static final Creator<SavedState> CREATOR = new C05871();
         boolean mAnchorLayoutFromEnd;
         int mAnchorPosition;
         List<FullSpanItem> mFullSpanItems;
@@ -395,8 +395,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         int mVisibleAnchorPosition;
 
         /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$SavedState$1 */
-        static class C04241 implements Creator<SavedState> {
-            C04241() {
+        static class C05871 implements Creator<SavedState> {
+            C05871() {
             }
 
             public SavedState createFromParcel(Parcel in) {
@@ -2007,6 +2007,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
 
     private void recycle(Recycler recycler, LayoutState layoutState) {
         if (layoutState.mRecycle && !layoutState.mInfinite) {
+            int scrolled;
+            int line;
             if (layoutState.mAvailable == 0) {
                 if (layoutState.mLayoutDirection == -1) {
                     recycleFromEnd(recycler, layoutState.mEndLine);

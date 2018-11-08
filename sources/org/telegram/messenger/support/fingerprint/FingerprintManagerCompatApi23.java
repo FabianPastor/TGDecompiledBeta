@@ -84,7 +84,7 @@ public final class FingerprintManagerCompatApi23 {
         try {
             return getFingerprintManager(context).hasEnrolledFingerprints();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return false;
         }
     }
@@ -93,7 +93,7 @@ public final class FingerprintManagerCompatApi23 {
         try {
             return getFingerprintManager(context).isHardwareDetected();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
             return false;
         }
     }
@@ -102,7 +102,7 @@ public final class FingerprintManagerCompatApi23 {
         try {
             getFingerprintManager(context).authenticate(wrapCryptoObject(crypto), (CancellationSignal) cancel, flags, wrapCallback(callback), handler);
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 

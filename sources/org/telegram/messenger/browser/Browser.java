@@ -33,14 +33,14 @@ import org.telegram.messenger.support.customtabs.CustomTabsSession;
 import org.telegram.messenger.support.customtabsclient.shared.CustomTabsHelper;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnection;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnectionCallback;
+import org.telegram.p005ui.ActionBar.AlertDialog;
+import org.telegram.p005ui.ActionBar.Theme;
+import org.telegram.p005ui.LaunchActivity;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messages_getWebPagePreview;
 import org.telegram.tgnet.TLRPC.TL_webPage;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.LaunchActivity;
 
 public class Browser {
     private static WeakReference<Activity> currentCustomTabsActivity;
@@ -51,8 +51,8 @@ public class Browser {
     private static CustomTabsSession customTabsSession;
 
     /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class C13581 implements ServiceConnectionCallback {
-        C13581() {
+    static class C05281 implements ServiceConnectionCallback {
+        C05281() {
         }
 
         public void onServiceConnected(CustomTabsClient client) {
@@ -61,7 +61,7 @@ public class Browser {
                 try {
                     Browser.customTabsClient.warmup(0);
                 } catch (Throwable e) {
-                    FileLog.m8e(e);
+                    FileLog.m14e(e);
                 }
             }
         }
@@ -73,6 +73,10 @@ public class Browser {
 
     private static class NavigationCallback extends CustomTabsCallback {
         private NavigationCallback() {
+        }
+
+        /* synthetic */ NavigationCallback(C05281 x0) {
+            this();
         }
 
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
@@ -114,12 +118,12 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new C13581());
+                customTabsServiceConnection = new ServiceConnection(new C05281());
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }
             } catch (Throwable e) {
-                FileLog.m8e(e);
+                FileLog.m14e(e);
             }
         }
     }
@@ -193,7 +197,7 @@ public class Browser {
                                 for (a = 0; a < list.size(); a++) {
                                     browserPackageNames[a] = ((ResolveInfo) list.get(a)).activityInfo.packageName;
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m5d("default browser name = " + browserPackageNames[a]);
+                                        FileLog.m11d("default browser name = " + browserPackageNames[a]);
                                     }
                                 }
                             }
@@ -226,7 +230,7 @@ public class Browser {
                             }
                             if (BuildVars.LOGS_ENABLED) {
                                 for (a = 0; a < allActivities.size(); a++) {
-                                    FileLog.m5d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
+                                    FileLog.m11d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
                                 }
                             }
                         } catch (Exception e3) {
@@ -248,7 +252,7 @@ public class Browser {
                     }
                 }
             } catch (Throwable e4) {
-                FileLog.m8e(e4);
+                FileLog.m14e(e4);
             }
             try {
                 intent = new Intent("android.intent.action.VIEW", uri);
@@ -259,7 +263,7 @@ public class Browser {
                 intent.putExtra("com.android.browser.application_id", context.getPackageName());
                 context.startActivity(intent);
             } catch (Throwable e42) {
-                FileLog.m8e(e42);
+                FileLog.m14e(e42);
             }
         }
     }
@@ -301,7 +305,7 @@ public class Browser {
         try {
             dialog.dismiss();
         } catch (Throwable e) {
-            FileLog.m8e(e);
+            FileLog.m14e(e);
         }
     }
 

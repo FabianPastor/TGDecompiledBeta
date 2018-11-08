@@ -7,11 +7,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.BundleCompat;
-import android.support.v4.content.ContextCompat;
+import android.support.p000v4.app.ActivityOptionsCompat;
+import android.support.p000v4.app.BundleCompat;
+import android.support.p000v4.content.ContextCompat;
 import android.widget.RemoteViews;
-import com.google.android.exoplayer2.C0012C;
+import com.google.android.exoplayer2.C0016C;
 import java.util.ArrayList;
 
 public final class CustomTabsIntent {
@@ -200,17 +200,17 @@ public final class CustomTabsIntent {
         if (intent == null) {
             intent = new Intent("android.intent.action.VIEW");
         }
-        intent.addFlags(C0012C.ENCODING_PCM_MU_LAW);
+        intent.addFlags(C0016C.ENCODING_PCM_MU_LAW);
         intent.putExtra(EXTRA_USER_OPT_OUT_FROM_CUSTOM_TABS, true);
         return intent;
     }
 
     public void setUseNewTask() {
-        this.intent.addFlags(C0012C.ENCODING_PCM_MU_LAW);
+        this.intent.addFlags(C0016C.ENCODING_PCM_MU_LAW);
     }
 
     public static boolean shouldAlwaysUseBrowserUI(Intent intent) {
-        if (!intent.getBooleanExtra(EXTRA_USER_OPT_OUT_FROM_CUSTOM_TABS, false) || (intent.getFlags() & C0012C.ENCODING_PCM_MU_LAW) == 0) {
+        if (!intent.getBooleanExtra(EXTRA_USER_OPT_OUT_FROM_CUSTOM_TABS, false) || (intent.getFlags() & C0016C.ENCODING_PCM_MU_LAW) == 0) {
             return false;
         }
         return true;

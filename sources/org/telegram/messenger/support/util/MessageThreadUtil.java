@@ -19,14 +19,14 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
         }
 
         synchronized SyncQueueItem next() {
-            SyncQueueItem syncQueueItem;
+            SyncQueueItem next;
             if (this.mRoot == null) {
-                syncQueueItem = null;
+                next = null;
             } else {
-                syncQueueItem = this.mRoot;
+                next = this.mRoot;
                 this.mRoot = this.mRoot.next;
             }
-            return syncQueueItem;
+            return next;
         }
 
         synchronized void sendMessageAtFrontOfQueue(SyncQueueItem item) {
@@ -47,8 +47,9 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
         }
 
         synchronized void removeMessages(int what) {
+            SyncQueueItem item;
             while (this.mRoot != null && this.mRoot.what == what) {
-                SyncQueueItem item = this.mRoot;
+                item = this.mRoot;
                 this.mRoot = this.mRoot.next;
                 item.recycle();
             }
@@ -140,16 +141,16 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
             static final int REMOVE_TILE = 3;
             static final int UPDATE_ITEM_COUNT = 1;
             private final Handler mMainThreadHandler = new Handler(Looper.getMainLooper());
-            private Runnable mMainThreadRunnable = new C04051();
+            private Runnable mMainThreadRunnable = new C05641();
             final MessageQueue mQueue = new MessageQueue();
 
             /* renamed from: org.telegram.messenger.support.util.MessageThreadUtil$1$1 */
-            class C04051 implements Runnable {
-                C04051() {
+            class C05641 implements Runnable {
+                C05641() {
                 }
 
                 public void run() {
-                    SyncQueueItem msg = C13651.this.mQueue.next();
+                    SyncQueueItem msg = C18421.this.mQueue.next();
                     while (msg != null) {
                         switch (msg.what) {
                             case 1:
@@ -165,7 +166,7 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                                 Log.e("ThreadUtil", "Unsupported message, what=" + msg.what);
                                 break;
                         }
-                        msg = C13651.this.mQueue.next();
+                        msg = C18421.this.mQueue.next();
                     }
                 }
             }
@@ -195,28 +196,28 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
             static final int RECYCLE_TILE = 4;
             static final int REFRESH = 1;
             static final int UPDATE_RANGE = 2;
-            private Runnable mBackgroundRunnable = new C04061();
+            private Runnable mBackgroundRunnable = new C05651();
             AtomicBoolean mBackgroundRunning = new AtomicBoolean(false);
             private final Executor mExecutor = AsyncTask.THREAD_POOL_EXECUTOR;
             final MessageQueue mQueue = new MessageQueue();
 
             /* renamed from: org.telegram.messenger.support.util.MessageThreadUtil$2$1 */
-            class C04061 implements Runnable {
-                C04061() {
+            class C05651 implements Runnable {
+                C05651() {
                 }
 
                 public void run() {
                     while (true) {
-                        SyncQueueItem msg = C13662.this.mQueue.next();
+                        SyncQueueItem msg = C18432.this.mQueue.next();
                         if (msg != null) {
                             switch (msg.what) {
                                 case 1:
-                                    C13662.this.mQueue.removeMessages(1);
+                                    C18432.this.mQueue.removeMessages(1);
                                     callback.refresh(msg.arg1);
                                     break;
                                 case 2:
-                                    C13662.this.mQueue.removeMessages(2);
-                                    C13662.this.mQueue.removeMessages(3);
+                                    C18432.this.mQueue.removeMessages(2);
+                                    C18432.this.mQueue.removeMessages(3);
                                     callback.updateRange(msg.arg1, msg.arg2, msg.arg3, msg.arg4, msg.arg5);
                                     break;
                                 case 3:
@@ -230,7 +231,7 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                                     break;
                             }
                         }
-                        C13662.this.mBackgroundRunning.set(false);
+                        C18432.this.mBackgroundRunning.set(false);
                         return;
                     }
                 }

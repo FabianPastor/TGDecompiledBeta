@@ -1,6 +1,6 @@
 package org.telegram.messenger.time;
 
-import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -77,6 +77,10 @@ public class FastDateParser implements Serializable, DateParser {
         abstract boolean addRegex(FastDateParser fastDateParser, StringBuilder stringBuilder);
 
         private Strategy() {
+        }
+
+        /* synthetic */ Strategy(C18541 x0) {
+            this();
         }
 
         boolean isNumber() {
@@ -174,7 +178,8 @@ public class FastDateParser implements Serializable, DateParser {
     }
 
     private static class TimeZoneStrategy extends Strategy {
-        private static final int ID = 0;
+        /* renamed from: ID */
+        private static final int f251ID = 0;
         private static final int LONG_DST = 3;
         private static final int LONG_STD = 1;
         private static final int SHORT_DST = 4;
@@ -369,7 +374,10 @@ public class FastDateParser implements Serializable, DateParser {
         return cal.getTime();
     }
 
-    /* JADX WARNING: inconsistent code. */
+    /* JADX WARNING: Missing block: B:5:0x0014, code:
+            r3.append(r0);
+            r1 = r1 + 1;
+     */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static StringBuilder escapeRegex(StringBuilder regex, String value, boolean unquote) {
         regex.append("\\Q");

@@ -6,7 +6,7 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.os.Build.VERSION;
-import com.google.android.exoplayer2.extractor.ts.PsExtractor;
+import com.google.android.exoplayer2.extractor.p003ts.PsExtractor;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -84,7 +84,7 @@ public class JNIUtilities {
             }
             return null;
         } catch (Throwable x) {
-            FileLog.m8e(x);
+            FileLog.m14e(x);
             return null;
         }
     }

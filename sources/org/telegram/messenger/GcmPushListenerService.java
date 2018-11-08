@@ -2,8 +2,8 @@ package org.telegram.messenger;
 
 import android.text.TextUtils;
 import android.util.Base64;
-import com.google.android.exoplayer2.C0012C;
-import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
@@ -39,19 +39,23 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         final Map data = message.getData();
         final long time = message.getSentTime();
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m5d("GCM received data: " + data + " from: " + from);
+            FileLog.m11d("GCM received data: " + data + " from: " + from);
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.GcmPushListenerService$1$1 */
-            class C02921 implements Runnable {
-                C02921() {
+            class C04201 implements Runnable {
+                C04201() {
                 }
 
+                /* JADX WARNING: Removed duplicated region for block: B:588:0x1d88  */
+                /* JADX WARNING: Removed duplicated region for block: B:48:0x022e  */
+                /* JADX WARNING: Removed duplicated region for block: B:51:0x023c  */
+                /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void run() {
                     Throwable e;
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m5d("GCM START PROCESSING");
+                        FileLog.m11d("GCM START PROCESSING");
                     }
                     int currentAccount;
                     try {
@@ -74,24 +78,24 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                 MessageKeyData messageKeyData = MessageKeyData.generateMessageKeyData(SharedConfig.pushAuthKey, messageKey, true, 2);
                                 Utilities.aesIgeEncryption(nativeByteBuffer.buffer, messageKeyData.aesKey, messageKeyData.aesIv, false, false, 24, bytes.length - 24);
                                 if (Utilities.arraysEquals(messageKey, 0, Utilities.computeSHA256(SharedConfig.pushAuthKey, 96, 32, nativeByteBuffer.buffer, 24, nativeByteBuffer.buffer.limit()), 8)) {
-                                    Object obj;
+                                    Object userIdObject;
                                     int accountUserId;
                                     int a;
                                     byte[] strBytes = new byte[nativeByteBuffer.readInt32(true)];
                                     nativeByteBuffer.readBytes(strBytes, true);
-                                    JSONObject json = new JSONObject(new String(strBytes, C0012C.UTF8_NAME));
+                                    JSONObject json = new JSONObject(new String(strBytes, C0016C.UTF8_NAME));
                                     JSONObject custom = json.getJSONObject("custom");
                                     if (json.has("user_id")) {
-                                        obj = json.get("user_id");
+                                        userIdObject = json.get("user_id");
                                     } else {
-                                        obj = null;
+                                        userIdObject = null;
                                     }
-                                    if (obj == null) {
+                                    if (userIdObject == null) {
                                         accountUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-                                    } else if (obj instanceof Integer) {
-                                        accountUserId = ((Integer) obj).intValue();
-                                    } else if (obj instanceof String) {
-                                        accountUserId = Utilities.parseInt((String) obj).intValue();
+                                    } else if (userIdObject instanceof Integer) {
+                                        accountUserId = ((Integer) userIdObject).intValue();
+                                    } else if (userIdObject instanceof String) {
+                                        accountUserId = Utilities.parseInt((String) userIdObject).intValue();
                                     } else {
                                         accountUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
                                     }
@@ -112,23 +116,23 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                             } else {
                                                 loc_key = TtmlNode.ANONYMOUS_REGION_ID;
                                             }
-                                            Object obj2 = data.get("google.sent_time");
-                                            Object obj3 = -1;
+                                            Object obj = data.get("google.sent_time");
+                                            Object obj2 = -1;
                                             switch (loc_key.hashCode()) {
                                                 case -920689527:
                                                     if (loc_key.equals("DC_UPDATE")) {
-                                                        obj3 = null;
+                                                        obj2 = null;
                                                         break;
                                                     }
                                                     break;
                                                 case 633004703:
                                                     if (loc_key.equals("MESSAGE_ANNOUNCEMENT")) {
-                                                        obj3 = 1;
+                                                        obj2 = 1;
                                                         break;
                                                     }
                                                     break;
                                             }
-                                            switch (obj3) {
+                                            switch (obj2) {
                                                 case null:
                                                     int dc = custom.getInt("dc");
                                                     String[] parts = custom.getString("addr").split(":");
@@ -256,528 +260,528 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                     channel = true;
                                                                 }
                                                                 if (BuildVars.LOGS_ENABLED) {
-                                                                    FileLog.m5d("GCM received message notification " + loc_key + " for dialogId = " + dialog_id + " mid = " + msg_id);
+                                                                    FileLog.m11d("GCM received message notification " + loc_key + " for dialogId = " + dialog_id + " mid = " + msg_id);
                                                                 }
-                                                                obj3 = -1;
+                                                                obj2 = -1;
                                                                 switch (loc_key.hashCode()) {
                                                                     case -2091498420:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_CONTACT")) {
-                                                                            obj3 = 28;
+                                                                            obj2 = 28;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -2053872415:
                                                                         if (loc_key.equals("CHAT_CREATED")) {
-                                                                            obj3 = 50;
+                                                                            obj2 = 50;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -2039746363:
                                                                         if (loc_key.equals("MESSAGE_STICKER")) {
-                                                                            obj3 = 9;
+                                                                            obj2 = 9;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1979538588:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_DOC")) {
-                                                                            obj3 = 25;
+                                                                            obj2 = 25;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1979536003:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_GEO")) {
-                                                                            obj3 = 29;
+                                                                            obj2 = 29;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1979535888:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_GIF")) {
-                                                                            obj3 = 31;
+                                                                            obj2 = 31;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1969004705:
                                                                         if (loc_key.equals("CHAT_ADD_MEMBER")) {
-                                                                            obj3 = 53;
+                                                                            obj2 = 53;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1946699248:
                                                                         if (loc_key.equals("CHAT_JOINED")) {
-                                                                            obj3 = 59;
+                                                                            obj2 = 59;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1528047021:
                                                                         if (loc_key.equals("CHAT_MESSAGES")) {
-                                                                            obj3 = 62;
+                                                                            obj2 = 62;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1493579426:
                                                                         if (loc_key.equals("MESSAGE_AUDIO")) {
-                                                                            obj3 = 10;
+                                                                            obj2 = 10;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1480102982:
                                                                         if (loc_key.equals("MESSAGE_PHOTO")) {
-                                                                            obj3 = 2;
+                                                                            obj2 = 2;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1478041834:
                                                                         if (loc_key.equals("MESSAGE_ROUND")) {
-                                                                            obj3 = 7;
+                                                                            obj2 = 7;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1474543101:
                                                                         if (loc_key.equals("MESSAGE_VIDEO")) {
-                                                                            obj3 = 4;
+                                                                            obj2 = 4;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1465695932:
                                                                         if (loc_key.equals("ENCRYPTION_ACCEPT")) {
-                                                                            obj3 = 82;
+                                                                            obj2 = 82;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1374906292:
                                                                         if (loc_key.equals("ENCRYPTED_MESSAGE")) {
-                                                                            obj3 = 80;
+                                                                            obj2 = 80;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1372940586:
                                                                         if (loc_key.equals("CHAT_RETURNED")) {
-                                                                            obj3 = 58;
+                                                                            obj2 = 58;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1264245338:
                                                                         if (loc_key.equals("PINNED_INVOICE")) {
-                                                                            obj3 = 75;
+                                                                            obj2 = 75;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1236086700:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_FWDS")) {
-                                                                            obj3 = 33;
+                                                                            obj2 = 33;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1236077786:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_GAME")) {
-                                                                            obj3 = 32;
+                                                                            obj2 = 32;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1235686303:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_TEXT")) {
-                                                                            obj3 = 20;
+                                                                            obj2 = 20;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1198046100:
                                                                         if (loc_key.equals("MESSAGE_VIDEO_SECRET")) {
-                                                                            obj3 = 5;
+                                                                            obj2 = 5;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1124254527:
                                                                         if (loc_key.equals("CHAT_MESSAGE_CONTACT")) {
-                                                                            obj3 = 44;
+                                                                            obj2 = 44;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1085137927:
                                                                         if (loc_key.equals("PINNED_GAME")) {
-                                                                            obj3 = 74;
+                                                                            obj2 = 74;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -1084746444:
                                                                         if (loc_key.equals("PINNED_TEXT")) {
-                                                                            obj3 = 63;
+                                                                            obj2 = 63;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -819729482:
                                                                         if (loc_key.equals("PINNED_STICKER")) {
-                                                                            obj3 = 69;
+                                                                            obj2 = 69;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -772141857:
                                                                         if (loc_key.equals("PHONE_CALL_REQUEST")) {
-                                                                            obj3 = 84;
+                                                                            obj2 = 84;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -638310039:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_STICKER")) {
-                                                                            obj3 = 26;
+                                                                            obj2 = 26;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -589196239:
                                                                         if (loc_key.equals("PINNED_DOC")) {
-                                                                            obj3 = 68;
+                                                                            obj2 = 68;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -589193654:
                                                                         if (loc_key.equals("PINNED_GEO")) {
-                                                                            obj3 = 72;
+                                                                            obj2 = 72;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -589193539:
                                                                         if (loc_key.equals("PINNED_GIF")) {
-                                                                            obj3 = 76;
+                                                                            obj2 = 76;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -440169325:
                                                                         if (loc_key.equals("AUTH_UNKNOWN")) {
-                                                                            obj3 = 78;
+                                                                            obj2 = 78;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -412748110:
                                                                         if (loc_key.equals("CHAT_DELETE_YOU")) {
-                                                                            obj3 = 56;
+                                                                            obj2 = 56;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -228518075:
                                                                         if (loc_key.equals("MESSAGE_GEOLIVE")) {
-                                                                            obj3 = 13;
+                                                                            obj2 = 13;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -213586509:
                                                                         if (loc_key.equals("ENCRYPTION_REQUEST")) {
-                                                                            obj3 = 81;
+                                                                            obj2 = 81;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -115582002:
                                                                         if (loc_key.equals("CHAT_MESSAGE_INVOICE")) {
-                                                                            obj3 = 49;
+                                                                            obj2 = 49;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -112621464:
                                                                         if (loc_key.equals("CONTACT_JOINED")) {
-                                                                            obj3 = 77;
+                                                                            obj2 = 77;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -108522133:
                                                                         if (loc_key.equals("AUTH_REGION")) {
-                                                                            obj3 = 79;
+                                                                            obj2 = 79;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -107572034:
                                                                         if (loc_key.equals("MESSAGE_SCREENSHOT")) {
-                                                                            obj3 = 6;
+                                                                            obj2 = 6;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case -40534265:
                                                                         if (loc_key.equals("CHAT_DELETE_MEMBER")) {
-                                                                            obj3 = 55;
+                                                                            obj2 = 55;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 65254746:
                                                                         if (loc_key.equals("CHAT_ADD_YOU")) {
-                                                                            obj3 = 54;
+                                                                            obj2 = 54;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 141040782:
                                                                         if (loc_key.equals("CHAT_LEFT")) {
-                                                                            obj3 = 57;
+                                                                            obj2 = 57;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 309993049:
                                                                         if (loc_key.equals("CHAT_MESSAGE_DOC")) {
-                                                                            obj3 = 41;
+                                                                            obj2 = 41;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 309995634:
                                                                         if (loc_key.equals("CHAT_MESSAGE_GEO")) {
-                                                                            obj3 = 45;
+                                                                            obj2 = 45;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 309995749:
                                                                         if (loc_key.equals("CHAT_MESSAGE_GIF")) {
-                                                                            obj3 = 47;
+                                                                            obj2 = 47;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 320532812:
                                                                         if (loc_key.equals("MESSAGES")) {
-                                                                            obj3 = 19;
+                                                                            obj2 = 19;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 328933854:
                                                                         if (loc_key.equals("CHAT_MESSAGE_STICKER")) {
-                                                                            obj3 = 42;
+                                                                            obj2 = 42;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 331340546:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_AUDIO")) {
-                                                                            obj3 = 27;
+                                                                            obj2 = 27;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 344816990:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_PHOTO")) {
-                                                                            obj3 = 22;
+                                                                            obj2 = 22;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 346878138:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_ROUND")) {
-                                                                            obj3 = 24;
+                                                                            obj2 = 24;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 350376871:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_VIDEO")) {
-                                                                            obj3 = 23;
+                                                                            obj2 = 23;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 615714517:
                                                                         if (loc_key.equals("MESSAGE_PHOTO_SECRET")) {
-                                                                            obj3 = 3;
+                                                                            obj2 = 3;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 715508879:
                                                                         if (loc_key.equals("PINNED_AUDIO")) {
-                                                                            obj3 = 70;
+                                                                            obj2 = 70;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 728985323:
                                                                         if (loc_key.equals("PINNED_PHOTO")) {
-                                                                            obj3 = 65;
+                                                                            obj2 = 65;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 731046471:
                                                                         if (loc_key.equals("PINNED_ROUND")) {
-                                                                            obj3 = 67;
+                                                                            obj2 = 67;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 734545204:
                                                                         if (loc_key.equals("PINNED_VIDEO")) {
-                                                                            obj3 = 66;
+                                                                            obj2 = 66;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 802032552:
                                                                         if (loc_key.equals("MESSAGE_CONTACT")) {
-                                                                            obj3 = 11;
+                                                                            obj2 = 11;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 991498806:
                                                                         if (loc_key.equals("PINNED_GEOLIVE")) {
-                                                                            obj3 = 73;
+                                                                            obj2 = 73;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1019917311:
                                                                         if (loc_key.equals("CHAT_MESSAGE_FWDS")) {
-                                                                            obj3 = 60;
+                                                                            obj2 = 60;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1019926225:
                                                                         if (loc_key.equals("CHAT_MESSAGE_GAME")) {
-                                                                            obj3 = 48;
+                                                                            obj2 = 48;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1020317708:
                                                                         if (loc_key.equals("CHAT_MESSAGE_TEXT")) {
-                                                                            obj3 = 36;
+                                                                            obj2 = 36;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1060349560:
                                                                         if (loc_key.equals("MESSAGE_FWDS")) {
-                                                                            obj3 = 17;
+                                                                            obj2 = 17;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1060358474:
                                                                         if (loc_key.equals("MESSAGE_GAME")) {
-                                                                            obj3 = 15;
+                                                                            obj2 = 15;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1060749957:
                                                                         if (loc_key.equals("MESSAGE_TEXT")) {
-                                                                            obj3 = null;
+                                                                            obj2 = null;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1073049781:
                                                                         if (loc_key.equals("PINNED_NOTEXT")) {
-                                                                            obj3 = 64;
+                                                                            obj2 = 64;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1078101399:
                                                                         if (loc_key.equals("CHAT_TITLE_EDITED")) {
-                                                                            obj3 = 51;
+                                                                            obj2 = 51;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1110103437:
                                                                         if (loc_key.equals("CHAT_MESSAGE_NOTEXT")) {
-                                                                            obj3 = 37;
+                                                                            obj2 = 37;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1160762272:
                                                                         if (loc_key.equals("CHAT_MESSAGE_PHOTOS")) {
-                                                                            obj3 = 61;
+                                                                            obj2 = 61;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1172918249:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_GEOLIVE")) {
-                                                                            obj3 = 30;
+                                                                            obj2 = 30;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1281128640:
                                                                         if (loc_key.equals("MESSAGE_DOC")) {
-                                                                            obj3 = 8;
+                                                                            obj2 = 8;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1281131225:
                                                                         if (loc_key.equals("MESSAGE_GEO")) {
-                                                                            obj3 = 12;
+                                                                            obj2 = 12;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1281131340:
                                                                         if (loc_key.equals("MESSAGE_GIF")) {
-                                                                            obj3 = 14;
+                                                                            obj2 = 14;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1310789062:
                                                                         if (loc_key.equals("MESSAGE_NOTEXT")) {
-                                                                            obj3 = 1;
+                                                                            obj2 = 1;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1361447897:
                                                                         if (loc_key.equals("MESSAGE_PHOTOS")) {
-                                                                            obj3 = 18;
+                                                                            obj2 = 18;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1498266155:
                                                                         if (loc_key.equals("PHONE_CALL_MISSED")) {
-                                                                            obj3 = 85;
+                                                                            obj2 = 85;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1547988151:
                                                                         if (loc_key.equals("CHAT_MESSAGE_AUDIO")) {
-                                                                            obj3 = 43;
+                                                                            obj2 = 43;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1561464595:
                                                                         if (loc_key.equals("CHAT_MESSAGE_PHOTO")) {
-                                                                            obj3 = 38;
+                                                                            obj2 = 38;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1563525743:
                                                                         if (loc_key.equals("CHAT_MESSAGE_ROUND")) {
-                                                                            obj3 = 40;
+                                                                            obj2 = 40;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1567024476:
                                                                         if (loc_key.equals("CHAT_MESSAGE_VIDEO")) {
-                                                                            obj3 = 39;
+                                                                            obj2 = 39;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1810705077:
                                                                         if (loc_key.equals("MESSAGE_INVOICE")) {
-                                                                            obj3 = 16;
+                                                                            obj2 = 16;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1815177512:
                                                                         if (loc_key.equals("CHANNEL_MESSAGES")) {
-                                                                            obj3 = 35;
+                                                                            obj2 = 35;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 1963241394:
                                                                         if (loc_key.equals("LOCKED_MESSAGE")) {
-                                                                            obj3 = 83;
+                                                                            obj2 = 83;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 2014789757:
                                                                         if (loc_key.equals("CHAT_PHOTO_EDITED")) {
-                                                                            obj3 = 52;
+                                                                            obj2 = 52;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 2022049433:
                                                                         if (loc_key.equals("PINNED_CONTACT")) {
-                                                                            obj3 = 71;
+                                                                            obj2 = 71;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 2048733346:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_NOTEXT")) {
-                                                                            obj3 = 21;
+                                                                            obj2 = 21;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 2099392181:
                                                                         if (loc_key.equals("CHANNEL_MESSAGE_PHOTOS")) {
-                                                                            obj3 = 34;
+                                                                            obj2 = 34;
                                                                             break;
                                                                         }
                                                                         break;
                                                                     case 2140162142:
                                                                         if (loc_key.equals("CHAT_MESSAGE_GEOLIVE")) {
-                                                                            obj3 = 46;
+                                                                            obj2 = 46;
                                                                             break;
                                                                         }
                                                                         break;
                                                                 }
-                                                                switch (obj3) {
+                                                                switch (obj2) {
                                                                     case null:
                                                                         messageText = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, args[0], args[1]);
                                                                         message = args[1];
@@ -1173,14 +1177,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                                         break;
                                                                     default:
                                                                         if (BuildVars.LOGS_ENABLED) {
-                                                                            FileLog.m9w("unhandled loc_key = " + loc_key);
+                                                                            FileLog.m15w("unhandled loc_key = " + loc_key);
                                                                             break;
                                                                         }
                                                                         break;
                                                                 }
                                                                 if (messageText != null) {
                                                                     TL_message messageOwner = new TL_message();
-                                                                    messageOwner.id = msg_id;
+                                                                    messageOwner.f104id = msg_id;
                                                                     messageOwner.random_id = random_id;
                                                                     if (message == null) {
                                                                         message = messageText;
@@ -1216,7 +1220,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                             int max_id = custom.getInt("max_id");
                                                             ArrayList<Update> updates2 = new ArrayList();
                                                             if (BuildVars.LOGS_ENABLED) {
-                                                                FileLog.m5d("GCM received read notification max_id = " + max_id + " for dialogId = " + dialog_id);
+                                                                FileLog.m11d("GCM received read notification max_id = " + max_id + " for dialogId = " + dialog_id);
                                                             }
                                                             if (channel_id != 0) {
                                                                 TL_updateReadChannelInbox update2 = new TL_updateReadChannelInbox();
@@ -1243,7 +1247,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                     return;
                                             }
                                         } else if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.m5d("GCM ACCOUNT NOT ACTIVATED");
+                                            FileLog.m11d("GCM ACCOUNT NOT ACTIVATED");
                                             return;
                                         } else {
                                             return;
@@ -1257,27 +1261,27 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                             GcmPushListenerService.this.onDecryptError();
                                         }
                                         if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.m6e("error in loc_key = " + null);
+                                            FileLog.m12e("error in loc_key = " + null);
                                         }
-                                        FileLog.m8e(e);
+                                        FileLog.m14e(e);
                                     }
                                 }
                                 GcmPushListenerService.this.onDecryptError();
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m5d(String.format("GCM DECRYPT ERROR 3, key = %s", new Object[]{Utilities.bytesToHex(SharedConfig.pushAuthKey)}));
+                                    FileLog.m11d(String.format("GCM DECRYPT ERROR 3, key = %s", new Object[]{Utilities.bytesToHex(SharedConfig.pushAuthKey)}));
                                 }
                                 currentAccount = -1;
                                 return;
                             }
                             GcmPushListenerService.this.onDecryptError();
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m5d(String.format(Locale.US, "GCM DECRYPT ERROR 2 k1=%s k2=%s, key=%s", new Object[]{Utilities.bytesToHex(SharedConfig.pushAuthKeyId), Utilities.bytesToHex(inAuthKeyId), Utilities.bytesToHex(SharedConfig.pushAuthKey)}));
+                                FileLog.m11d(String.format(Locale.US, "GCM DECRYPT ERROR 2 k1=%s k2=%s, key=%s", new Object[]{Utilities.bytesToHex(SharedConfig.pushAuthKeyId), Utilities.bytesToHex(inAuthKeyId), Utilities.bytesToHex(SharedConfig.pushAuthKey)}));
                             }
                             currentAccount = -1;
                             return;
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m5d("GCM DECRYPT ERROR 1");
+                            FileLog.m11d("GCM DECRYPT ERROR 1");
                         }
                         GcmPushListenerService.this.onDecryptError();
                         currentAccount = -1;
@@ -1285,22 +1289,17 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                         e = th2;
                         currentAccount = -1;
                         if (currentAccount == -1) {
-                            GcmPushListenerService.this.onDecryptError();
-                        } else {
-                            ConnectionsManager.onInternalPushReceived(currentAccount);
-                            ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m6e("error in loc_key = " + null);
                         }
-                        FileLog.m8e(e);
+                        FileLog.m14e(e);
                     }
                 }
             }
 
             public void run() {
                 ApplicationLoader.postInitApplication();
-                Utilities.stageQueue.postRunnable(new C02921());
+                Utilities.stageQueue.postRunnable(new C04201());
             }
         });
     }

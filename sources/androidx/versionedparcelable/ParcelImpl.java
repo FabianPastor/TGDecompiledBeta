@@ -5,12 +5,12 @@ import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 
 public class ParcelImpl implements Parcelable {
-    public static final Creator<ParcelImpl> CREATOR = new C00101();
+    public static final Creator<ParcelImpl> CREATOR = new C00141();
     private final VersionedParcelable mParcel;
 
     /* renamed from: androidx.versionedparcelable.ParcelImpl$1 */
-    static class C00101 implements Creator<ParcelImpl> {
-        C00101() {
+    static class C00141 implements Creator<ParcelImpl> {
+        C00141() {
         }
 
         public ParcelImpl createFromParcel(Parcel in) {

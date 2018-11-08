@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 import android.text.TextUtils;
-import com.google.android.exoplayer2.C0012C;
+import com.google.android.exoplayer2.C0016C;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.Builder;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,8 +38,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
     private int currentAccount = UserConfig.selectedAccount;
 
     /* renamed from: org.telegram.messenger.WearDataLayerListenerService$9 */
-    static class C13569 implements OnCompleteListener<CapabilityInfo> {
-        C13569() {
+    static class C18409 implements OnCompleteListener<CapabilityInfo> {
+        C18409() {
         }
 
         public void onComplete(Task<CapabilityInfo> task) {
@@ -61,36 +61,41 @@ public class WearDataLayerListenerService extends WearableListenerService {
     public void onCreate() {
         super.onCreate();
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m5d("WearableDataLayer service created");
+            FileLog.m11d("WearableDataLayer service created");
         }
     }
 
     public void onDestroy() {
         super.onDestroy();
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m5d("WearableDataLayer service destroyed");
+            FileLog.m11d("WearableDataLayer service destroyed");
         }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:116:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x018e  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x018e  */
+    /* JADX WARNING: Removed duplicated region for block: B:116:? A:{SYNTHETIC, RETURN} */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onChannelOpened(Channel ch) {
         GoogleApiClient apiClient = new Builder(this).addApi(Wearable.API).build();
         if (apiClient.blockingConnect().isSuccess()) {
             String path = ch.getPath();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m5d("wear channel path: " + path);
+                FileLog.m11d("wear channel path: " + path);
             }
             DataOutputStream dataOutputStream;
             DataInputStream dataInputStream;
             try {
                 User user;
                 final CyclicBarrier barrier;
-                NotificationCenterDelegate c13531;
+                NotificationCenterDelegate c18371;
                 final NotificationCenterDelegate notificationCenterDelegate;
                 if ("/getCurrentUser".equals(path)) {
                     dataOutputStream = new DataOutputStream(new BufferedOutputStream(((GetOutputStreamResult) ch.getOutputStream(apiClient).await()).getOutputStream()));
                     if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
                         user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
-                        dataOutputStream.writeInt(user.id);
+                        dataOutputStream.writeInt(user.f177id);
                         dataOutputStream.writeUTF(user.first_name);
                         dataOutputStream.writeUTF(user.last_name);
                         dataOutputStream.writeUTF(user.phone);
@@ -99,15 +104,15 @@ public class WearDataLayerListenerService extends WearableListenerService {
                             barrier = new CyclicBarrier(2);
                             if (!photo.exists()) {
                                 final File file = photo;
-                                c13531 = new NotificationCenterDelegate() {
+                                c18371 = new NotificationCenterDelegate() {
                                     public void didReceivedNotification(int id, int account, Object... args) {
                                         if (id == NotificationCenter.FileDidLoaded) {
                                             if (BuildVars.LOGS_ENABLED) {
-                                                FileLog.m5d("file loaded: " + args[0] + " " + args[0].getClass().getName());
+                                                FileLog.m11d("file loaded: " + args[0] + " " + args[0].getClass().getName());
                                             }
                                             if (args[0].equals(file.getName())) {
                                                 if (BuildVars.LOGS_ENABLED) {
-                                                    FileLog.m6e("LOADED USER PHOTO");
+                                                    FileLog.m12e("LOADED USER PHOTO");
                                                 }
                                                 try {
                                                     barrier.await(10, TimeUnit.MILLISECONDS);
@@ -117,7 +122,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                                         }
                                     }
                                 };
-                                notificationCenterDelegate = c13531;
+                                notificationCenterDelegate = c18371;
                                 final User user2 = user;
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
@@ -129,7 +134,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                                     barrier.await(10, TimeUnit.SECONDS);
                                 } catch (Exception e) {
                                 }
-                                notificationCenterDelegate = c13531;
+                                notificationCenterDelegate = c18371;
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
                                         NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.FileDidLoaded);
@@ -156,14 +161,14 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     dataOutputStream.close();
                     ch.close(apiClient).await();
                     apiClient.disconnect();
-                    if (!BuildVars.LOGS_ENABLED) {
-                        FileLog.m5d("WearableDataLayer channel thread exiting");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m11d("WearableDataLayer channel thread exiting");
                     }
                 } else if ("/waitForAuthCode".equals(path)) {
                     ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
                     final String[] code = new String[]{null};
                     barrier = new CyclicBarrier(2);
-                    c13531 = new NotificationCenterDelegate() {
+                    c18371 = new NotificationCenterDelegate() {
                         public void didReceivedNotification(int id, int account, Object... args) {
                             if (id == NotificationCenter.didReceivedNewMessages && ((Long) args[0]).longValue() == 777000) {
                                 ArrayList<MessageObject> arr = args[1];
@@ -183,7 +188,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                             }
                         }
                     };
-                    notificationCenterDelegate = c13531;
+                    notificationCenterDelegate = c18371;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.didReceivedNewMessages);
@@ -193,7 +198,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                         barrier.await(15, TimeUnit.SECONDS);
                     } catch (Exception e2) {
                     }
-                    notificationCenterDelegate = c13531;
+                    notificationCenterDelegate = c18371;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.didReceivedNewMessages);
@@ -210,8 +215,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
                     ch.close(apiClient).await();
                     apiClient.disconnect();
-                    if (!BuildVars.LOGS_ENABLED) {
-                        FileLog.m5d("WearableDataLayer channel thread exiting");
+                    if (BuildVars.LOGS_ENABLED) {
                     }
                 } else {
                     if ("/getChatPhoto".equals(path)) {
@@ -269,8 +273,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     }
                     ch.close(apiClient).await();
                     apiClient.disconnect();
-                    if (!BuildVars.LOGS_ENABLED) {
-                        FileLog.m5d("WearableDataLayer channel thread exiting");
+                    if (BuildVars.LOGS_ENABLED) {
                     }
                 }
             } catch (Exception e3) {
@@ -278,14 +281,14 @@ public class WearDataLayerListenerService extends WearableListenerService {
                 dataOutputStream.close();
             } catch (Throwable x) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m7e("error processing wear request", x);
+                    FileLog.m13e("error processing wear request", x);
                 }
             } catch (Throwable th) {
                 dataInputStream.close();
                 dataOutputStream.close();
             }
         } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.m6e("failed to connect google api client");
+            FileLog.m12e("failed to connect google api client");
         }
     }
 
@@ -295,7 +298,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                 public void run() {
                     try {
                         ApplicationLoader.postInitApplication();
-                        JSONObject jSONObject = new JSONObject(new String(messageEvent.getData(), C0012C.UTF8_NAME));
+                        JSONObject jSONObject = new JSONObject(new String(messageEvent.getData(), C0016C.UTF8_NAME));
                         CharSequence text = jSONObject.getString("text");
                         if (text != null && text.length() != 0) {
                             long dialog_id = jSONObject.getLong("chat_id");
@@ -315,7 +318,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                         }
                     } catch (Throwable x) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m8e(x);
+                            FileLog.m14e(x);
                         }
                     }
                 }
@@ -350,7 +353,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
 
     public static void updateWatchConnectionState() {
         try {
-            Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(new C13569());
+            Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(new C18409());
         } catch (Throwable th) {
         }
     }
