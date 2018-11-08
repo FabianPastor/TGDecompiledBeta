@@ -16,8 +16,9 @@ final /* synthetic */ class LaunchActivity$$Lambda$39 implements RequestDelegate
     private final TL_account_getAuthorizationForm arg$5;
     private final String arg$6;
     private final String arg$7;
+    private final String arg$8;
 
-    LaunchActivity$$Lambda$39(LaunchActivity launchActivity, AlertDialog alertDialog, int i, TL_account_authorizationForm tL_account_authorizationForm, TL_account_getAuthorizationForm tL_account_getAuthorizationForm, String str, String str2) {
+    LaunchActivity$$Lambda$39(LaunchActivity launchActivity, AlertDialog alertDialog, int i, TL_account_authorizationForm tL_account_authorizationForm, TL_account_getAuthorizationForm tL_account_getAuthorizationForm, String str, String str2, String str3) {
         this.arg$1 = launchActivity;
         this.arg$2 = alertDialog;
         this.arg$3 = i;
@@ -25,9 +26,10 @@ final /* synthetic */ class LaunchActivity$$Lambda$39 implements RequestDelegate
         this.arg$5 = tL_account_getAuthorizationForm;
         this.arg$6 = str;
         this.arg$7 = str2;
+        this.arg$8 = str3;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$null$20$LaunchActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, tLObject, tL_error);
+        this.arg$1.lambda$null$20$LaunchActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, tLObject, tL_error);
     }
 }
