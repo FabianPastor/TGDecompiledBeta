@@ -8,6 +8,6 @@ final /* synthetic */ class NotificationsController$$Lambda$11 implements Runnab
     }
 
     public void run() {
-        this.arg$1.lambda$setBadgeEnabled$22$NotificationsController();
+        this.arg$1.lambda$updateBadge$22$NotificationsController();
     }
 }

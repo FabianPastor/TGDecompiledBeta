@@ -8,6 +8,6 @@ final /* synthetic */ class ApplicationLoader$$Lambda$1 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$initPlayServices$1$ApplicationLoader();
+        this.arg$1.lambda$initPlayServices$2$ApplicationLoader();
     }
 }

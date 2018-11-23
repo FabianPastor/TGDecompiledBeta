@@ -5,12 +5,13 @@ import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.Cells.ArchivedStickerSetCell$$Lambda$0 */
 final /* synthetic */ class ArchivedStickerSetCell$$Lambda$0 implements OnClickListener {
-    static final OnClickListener $instance = new ArchivedStickerSetCell$$Lambda$0();
+    private final ArchivedStickerSetCell arg$1;
 
-    private ArchivedStickerSetCell$$Lambda$0() {
+    ArchivedStickerSetCell$$Lambda$0(ArchivedStickerSetCell archivedStickerSetCell) {
+        this.arg$1 = archivedStickerSetCell;
     }
 
     public void onClick(View view) {
-        ArchivedStickerSetCell.lambda$setOnCheckClick$0$ArchivedStickerSetCell(view);
+        this.arg$1.lambda$setOnCheckClick$0$ArchivedStickerSetCell(view);
     }
 }

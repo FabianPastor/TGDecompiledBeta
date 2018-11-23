@@ -35,8 +35,8 @@ public class CropRotationWheel extends FrameLayout {
     private Paint whitePaint = new Paint();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$1 */
-    class C10441 implements OnClickListener {
-        C10441() {
+    class C06731 implements OnClickListener {
+        C06731() {
         }
 
         public void onClick(View v) {
@@ -47,8 +47,8 @@ public class CropRotationWheel extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$2 */
-    class C10452 implements OnClickListener {
-        C10452() {
+    class C06742 implements OnClickListener {
+        C06742() {
         }
 
         public void onClick(View v) {
@@ -86,13 +86,13 @@ public class CropRotationWheel extends FrameLayout {
         this.aspectRatioButton.setImageResource(R.drawable.tool_cropfix);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.aspectRatioButton.setScaleType(ScaleType.CENTER);
-        this.aspectRatioButton.setOnClickListener(new C10441());
+        this.aspectRatioButton.setOnClickListener(new C06731());
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
         this.rotation90Button = new ImageView(context);
         this.rotation90Button.setImageResource(R.drawable.tool_rotate);
         this.rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.rotation90Button.setScaleType(ScaleType.CENTER);
-        this.rotation90Button.setOnClickListener(new C10452());
+        this.rotation90Button.setOnClickListener(new C06742());
         addView(this.rotation90Button, LayoutHelper.createFrame(70, 64, 21));
         this.degreesLabel = new TextView(context);
         this.degreesLabel.setTextColor(-1);
@@ -106,7 +106,7 @@ public class CropRotationWheel extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(Math.min(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m10dp(400.0f)), NUM), heightMeasureSpec);
+        super.onMeasure(MeasureSpec.makeMeasureSpec(Math.min(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m9dp(400.0f)), NUM), heightMeasureSpec);
     }
 
     public void reset() {
@@ -186,15 +186,15 @@ public class CropRotationWheel extends FrameLayout {
             }
         }
         this.bluePaint.setAlpha(255);
-        this.tempRect.left = (float) ((width - AndroidUtilities.m10dp(2.5f)) / 2);
-        this.tempRect.top = (float) ((height - AndroidUtilities.m10dp(22.0f)) / 2);
-        this.tempRect.right = (float) ((AndroidUtilities.m10dp(2.5f) + width) / 2);
-        this.tempRect.bottom = (float) ((AndroidUtilities.m10dp(22.0f) + height) / 2);
-        canvas.drawRoundRect(this.tempRect, (float) AndroidUtilities.m10dp(2.0f), (float) AndroidUtilities.m10dp(2.0f), this.bluePaint);
+        this.tempRect.left = (float) ((width - AndroidUtilities.m9dp(2.5f)) / 2);
+        this.tempRect.top = (float) ((height - AndroidUtilities.m9dp(22.0f)) / 2);
+        this.tempRect.right = (float) ((AndroidUtilities.m9dp(2.5f) + width) / 2);
+        this.tempRect.bottom = (float) ((AndroidUtilities.m9dp(22.0f) + height) / 2);
+        canvas.drawRoundRect(this.tempRect, (float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(2.0f), this.bluePaint);
     }
 
     protected void drawLine(Canvas canvas, int i, float delta, int width, int height, boolean center, Paint paint) {
-        int radius = (int) ((((float) width) / 2.0f) - ((float) AndroidUtilities.m10dp(70.0f)));
+        int radius = (int) ((((float) width) / 2.0f) - ((float) AndroidUtilities.m9dp(70.0f)));
         int val = (int) (((double) radius) * Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + delta)))));
         int x = (width / 2) + val;
         float f = ((float) Math.abs(val)) / ((float) radius);
@@ -204,7 +204,7 @@ public class CropRotationWheel extends FrameLayout {
         }
         paint.setAlpha(alpha);
         int w = center ? 4 : 2;
-        int h = center ? AndroidUtilities.m10dp(16.0f) : AndroidUtilities.m10dp(12.0f);
+        int h = center ? AndroidUtilities.m9dp(16.0f) : AndroidUtilities.m9dp(12.0f);
         canvas.drawRect((float) (x - (w / 2)), (float) ((height - h) / 2), (float) ((w / 2) + x), (float) ((height + h) / 2), paint);
     }
 }

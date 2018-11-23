@@ -41,7 +41,7 @@ import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.HeaderCell;
@@ -102,10 +102,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     private EditTextBoldCursor usernameTextView;
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$3 */
-    class C14163 implements TextWatcher {
+    class C09523 implements TextWatcher {
         boolean ignoreTextChange;
 
-        C14163() {
+        C09523() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -140,8 +140,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$4 */
-    class C14174 implements OnClickListener {
-        C14174() {
+    class C09534 implements OnClickListener {
+        C09534() {
         }
 
         public void onClick(View v) {
@@ -153,8 +153,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$9 */
-    class C14219 implements Runnable {
-        C14219() {
+    class C09579 implements Runnable {
+        C09579() {
         }
 
         public void run() {
@@ -166,8 +166,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$10 */
-    class C213010 implements RequestDelegate {
-        C213010() {
+    class C144810 implements RequestDelegate {
+        C144810() {
         }
 
         public void run(TLObject response, final TL_error error) {
@@ -187,8 +187,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                             GroupStickersActivity.this.info.flags &= -257;
                         }
                         MessagesStorage.getInstance(GroupStickersActivity.this.currentAccount).updateChatInfo(GroupStickersActivity.this.info, false);
-                        NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
-                        GroupStickersActivity.this.lambda$checkDiscard$69$PassportActivity();
+                        NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
+                        GroupStickersActivity.this.lambda$checkDiscard$70$PassportActivity();
                         return;
                     }
                     Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text, 0).show();
@@ -200,13 +200,13 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$1 */
-    class C21311 extends ActionBarMenuOnItemClick {
-        C21311() {
+    class C14491 extends ActionBarMenuOnItemClick {
+        C14491() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                GroupStickersActivity.this.lambda$checkDiscard$69$PassportActivity();
+                GroupStickersActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 1 && !GroupStickersActivity.this.donePressed) {
                 GroupStickersActivity.this.donePressed = true;
                 if (GroupStickersActivity.this.searching) {
@@ -219,8 +219,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$6 */
-    class C21326 implements OnItemClickListener {
-        C21326() {
+    class C14506 implements OnItemClickListener {
+        C14506() {
         }
 
         public void onItemClick(View view, int position) {
@@ -258,8 +258,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.GroupStickersActivity$7 */
-    class C21337 extends OnScrollListener {
-        C21337() {
+    class C14517 extends OnScrollListener {
+        C14517() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -296,13 +296,13 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     TL_messages_stickerSet set = (TL_messages_stickerSet) arrayList.get(row);
                     cell.setStickersSet((TL_messages_stickerSet) arrayList.get(row), row != arrayList.size() + -1);
                     if (GroupStickersActivity.this.selectedStickerSet != null) {
-                        id = GroupStickersActivity.this.selectedStickerSet.set.f111id;
+                        id = GroupStickersActivity.this.selectedStickerSet.set.f109id;
                     } else if (GroupStickersActivity.this.info == null || GroupStickersActivity.this.info.stickerset == null) {
                         id = 0;
                     } else {
-                        id = GroupStickersActivity.this.info.stickerset.f111id;
+                        id = GroupStickersActivity.this.info.stickerset.f109id;
                     }
-                    if (set.set.f111id == id) {
+                    if (set.set.f109id == id) {
                         z = true;
                     } else {
                         z = false;
@@ -325,7 +325,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                                 ((TextInfoPrivacyCell) holder.itemView).setText(stringBuilder);
                                 return;
                             } catch (Throwable e) {
-                                FileLog.m14e(e);
+                                FileLog.m13e(e);
                                 ((TextInfoPrivacyCell) holder.itemView).setText(text);
                                 return;
                             }
@@ -369,14 +369,14 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = GroupStickersActivity.this.nameContainer;
                     break;
                 case 3:
                     view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 4:
                     view = new HeaderCell(this.mContext);
@@ -417,32 +417,32 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         DataQuery.getInstance(this.currentAccount).checkStickers(0);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoad);
         updateRows();
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoad);
     }
 
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("GroupStickers", R.string.GroupStickers));
-        this.actionBar.setActionBarMenuOnItemClick(new C21311());
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new C14491());
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressView.setVisibility(4);
         this.nameContainer = new LinearLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(42.0f), NUM));
+                super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(42.0f), NUM));
             }
 
             protected void onDraw(Canvas canvas) {
@@ -455,7 +455,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.nameContainer.setWillNotDraw(false);
         this.nameContainer.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         this.nameContainer.setOrientation(0);
-        this.nameContainer.setPadding(AndroidUtilities.m10dp(17.0f), 0, AndroidUtilities.m10dp(14.0f), 0);
+        this.nameContainer.setPadding(AndroidUtilities.m9dp(17.0f), 0, AndroidUtilities.m9dp(14.0f), 0);
         this.editText = new EditText(context);
         this.editText.setText(MessagesController.getInstance(this.currentAccount).linkPrefix + "/addstickers/");
         this.editText.setTextSize(1, 17.0f);
@@ -475,7 +475,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.usernameTextView = new EditTextBoldCursor(context);
         this.usernameTextView.setTextSize(1, 17.0f);
         this.usernameTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.usernameTextView.setCursorSize(AndroidUtilities.m10dp(20.0f));
+        this.usernameTextView.setCursorSize(AndroidUtilities.m9dp(20.0f));
         this.usernameTextView.setCursorWidth(1.5f);
         this.usernameTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -488,15 +488,15 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.usernameTextView.setInputType(163872);
         this.usernameTextView.setImeOptions(6);
         this.usernameTextView.setHint(LocaleController.getString("ChooseStickerSetPlaceholder", R.string.ChooseStickerSetPlaceholder));
-        this.usernameTextView.addTextChangedListener(new C14163());
+        this.usernameTextView.addTextChangedListener(new C09523());
         this.nameContainer.addView(this.usernameTextView, LayoutHelper.createLinear(0, 42, 1.0f));
         this.eraseImageView = new ImageView(context);
         this.eraseImageView.setScaleType(ScaleType.CENTER);
         this.eraseImageView.setImageResource(R.drawable.ic_close_white);
-        this.eraseImageView.setPadding(AndroidUtilities.m10dp(16.0f), 0, 0, 0);
+        this.eraseImageView.setPadding(AndroidUtilities.m9dp(16.0f), 0, 0, 0);
         this.eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
         this.eraseImageView.setVisibility(4);
-        this.eraseImageView.setOnClickListener(new C14174());
+        this.eraseImageView.setOnClickListener(new C09534());
         this.nameContainer.addView(this.eraseImageView, LayoutHelper.createLinear(42, 42, 0.0f));
         if (!(this.info == null || this.info.stickerset == null)) {
             this.ignoreTextChanges = true;
@@ -525,17 +525,17 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C21326());
-        this.listView.setOnScrollListener(new C21337());
+        this.listView.setOnItemClickListener(new C14506());
+        this.listView.setOnScrollListener(new C14517());
         return this.fragmentView;
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.stickersDidLoaded) {
+        if (id == NotificationCenter.stickersDidLoad) {
             if (((Integer) args[0]).intValue() == 0) {
                 updateRows();
             }
-        } else if (id == NotificationCenter.chatInfoDidLoaded) {
+        } else if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
             if (chatFull.f79id == this.chatId) {
                 if (this.info == null && chatFull.stickerset != null) {
@@ -544,9 +544,9 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.info = chatFull;
                 updateRows();
             }
-        } else if (id == NotificationCenter.groupStickersDidLoaded) {
+        } else if (id == NotificationCenter.groupStickersDidLoad) {
             long setId = ((Long) args[0]).longValue();
-            if (this.info != null && this.info.stickerset != null && this.info.stickerset.f111id == ((long) id)) {
+            if (this.info != null && this.info.stickerset != null && this.info.stickerset.f109id == ((long) id)) {
                 updateRows();
             }
         }
@@ -595,11 +595,11 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.searching = false;
                 return;
             }
-            Runnable c14198 = new Runnable() {
+            Runnable c09558 = new Runnable() {
 
                 /* renamed from: org.telegram.ui.GroupStickersActivity$8$1 */
-                class C14201 implements RequestDelegate {
-                    C14201() {
+                class C09561 implements RequestDelegate {
+                    C09561() {
                     }
 
                     public void run(final TLObject response, TL_error error) {
@@ -638,24 +638,24 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                         req.stickerset = new TL_inputStickerSetShortName();
                         req.stickerset.short_name = query;
-                        GroupStickersActivity.this.reqId = ConnectionsManager.getInstance(GroupStickersActivity.this.currentAccount).sendRequest(req, new C14201());
+                        GroupStickersActivity.this.reqId = ConnectionsManager.getInstance(GroupStickersActivity.this.currentAccount).sendRequest(req, new C09561());
                     }
                 }
             };
-            this.queryRunnable = c14198;
-            AndroidUtilities.runOnUIThread(c14198, 500);
+            this.queryRunnable = c09558;
+            AndroidUtilities.runOnUIThread(c09558, 500);
         }
     }
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
-            AndroidUtilities.runOnUIThread(new C14219(), 100);
+            AndroidUtilities.runOnUIThread(new C09579(), 100);
         }
     }
 
     private void saveStickerSet() {
-        if (this.info == null || (!(this.info.stickerset == null || this.selectedStickerSet == null || this.selectedStickerSet.set.f111id != this.info.stickerset.f111id) || (this.info.stickerset == null && this.selectedStickerSet == null))) {
-            lambda$checkDiscard$69$PassportActivity();
+        if (this.info == null || (!(this.info.stickerset == null || this.selectedStickerSet == null || this.selectedStickerSet.set.f109id != this.info.stickerset.f109id) || (this.info.stickerset == null && this.selectedStickerSet == null))) {
+            lambda$checkDiscard$70$PassportActivity();
             return;
         }
         showEditDoneProgress(true);
@@ -666,10 +666,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         } else {
             MessagesController.getEmojiSettings(this.currentAccount).edit().remove("group_hide_stickers_" + this.info.f79id).commit();
             req.stickerset = new TL_inputStickerSetID();
-            req.stickerset.f103id = this.selectedStickerSet.set.f111id;
+            req.stickerset.f103id = this.selectedStickerSet.set.f109id;
             req.stickerset.access_hash = this.selectedStickerSet.set.access_hash;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C213010());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C144810());
     }
 
     private void updateRows() {

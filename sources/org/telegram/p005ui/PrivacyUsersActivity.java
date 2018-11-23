@@ -2,7 +2,6 @@ package org.telegram.p005ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.telegram.PhoneFormat.C0195PhoneFormat;
+import org.telegram.PhoneFormat.C0194PhoneFormat;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -21,7 +20,7 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -31,10 +30,7 @@ import org.telegram.p005ui.Components.EmptyTextProgressView;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
-import org.telegram.p005ui.GroupCreateActivity.GroupCreateActivityDelegate;
 import org.telegram.tgnet.TLRPC.User;
 
 /* renamed from: org.telegram.ui.PrivacyUsersActivity */
@@ -55,107 +51,34 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$1 */
-    class C22611 extends ActionBarMenuOnItemClick {
-
-        /* renamed from: org.telegram.ui.PrivacyUsersActivity$1$1 */
-        class C22601 implements GroupCreateActivityDelegate {
-            C22601() {
-            }
-
-            public void didSelectUsers(ArrayList<Integer> ids) {
-                Iterator it = ids.iterator();
-                while (it.hasNext()) {
-                    Integer id = (Integer) it.next();
-                    if (!PrivacyUsersActivity.this.uidArray.contains(id)) {
-                        PrivacyUsersActivity.this.uidArray.add(id);
-                    }
-                }
-                PrivacyUsersActivity.this.listViewAdapter.notifyDataSetChanged();
-                if (PrivacyUsersActivity.this.delegate != null) {
-                    PrivacyUsersActivity.this.delegate.didUpdatedUserList(PrivacyUsersActivity.this.uidArray, true);
-                }
-            }
-        }
-
-        C22611() {
+    class C15531 extends ActionBarMenuOnItemClick {
+        C15531() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                PrivacyUsersActivity.this.lambda$checkDiscard$69$PassportActivity();
+                PrivacyUsersActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 1) {
                 Bundle args = new Bundle();
                 args.putBoolean(PrivacyUsersActivity.this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
                 args.putBoolean("isGroup", PrivacyUsersActivity.this.isGroup);
                 GroupCreateActivity fragment = new GroupCreateActivity(args);
-                fragment.setDelegate(new C22601());
+                fragment.setDelegate(new PrivacyUsersActivity$1$$Lambda$0(this));
                 PrivacyUsersActivity.this.presentFragment(fragment);
             }
         }
-    }
 
-    /* renamed from: org.telegram.ui.PrivacyUsersActivity$2 */
-    class C22622 implements OnItemClickListener {
-        C22622() {
-        }
-
-        public void onItemClick(View view, int position) {
-            if (position < PrivacyUsersActivity.this.uidArray.size()) {
-                Bundle args = new Bundle();
-                args.putInt("user_id", ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue());
-                PrivacyUsersActivity.this.presentFragment(new ProfileActivity(args));
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PrivacyUsersActivity$3 */
-    class C22633 implements OnItemLongClickListener {
-
-        /* renamed from: org.telegram.ui.PrivacyUsersActivity$3$1 */
-        class C16731 implements OnClickListener {
-            C16731() {
-            }
-
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == 0) {
-                    PrivacyUsersActivity.this.uidArray.remove(Integer.valueOf(PrivacyUsersActivity.this.selectedUserId));
-                    PrivacyUsersActivity.this.listViewAdapter.notifyDataSetChanged();
-                    if (PrivacyUsersActivity.this.delegate != null) {
-                        PrivacyUsersActivity.this.delegate.didUpdatedUserList(PrivacyUsersActivity.this.uidArray, false);
-                    }
+        final /* synthetic */ void lambda$onItemClick$0$PrivacyUsersActivity$1(ArrayList ids) {
+            Iterator it = ids.iterator();
+            while (it.hasNext()) {
+                Integer id1 = (Integer) it.next();
+                if (!PrivacyUsersActivity.this.uidArray.contains(id1)) {
+                    PrivacyUsersActivity.this.uidArray.add(id1);
                 }
             }
-        }
-
-        C22633() {
-        }
-
-        public boolean onItemClick(View view, int position) {
-            if (position < 0 || position >= PrivacyUsersActivity.this.uidArray.size() || PrivacyUsersActivity.this.getParentActivity() == null) {
-                return false;
-            }
-            PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
-            Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new C16731());
-            PrivacyUsersActivity.this.showDialog(builder.create());
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PrivacyUsersActivity$4 */
-    class C22644 implements ThemeDescriptionDelegate {
-        C22644() {
-        }
-
-        public void didSetColor() {
-            if (PrivacyUsersActivity.this.listView != null) {
-                int count = PrivacyUsersActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = PrivacyUsersActivity.this.listView.getChildAt(a);
-                    if (child instanceof UserCell) {
-                        ((UserCell) child).update(0);
-                    }
-                }
+            PrivacyUsersActivity.this.listViewAdapter.notifyDataSetChanged();
+            if (PrivacyUsersActivity.this.delegate != null) {
+                PrivacyUsersActivity.this.delegate.didUpdatedUserList(PrivacyUsersActivity.this.uidArray, true);
             }
         }
     }
@@ -197,7 +120,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             if (holder.getItemViewType() == 0) {
                 User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
                 UserCell userCell = (UserCell) holder.itemView;
-                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", R.string.NumberUnknown) : C0195PhoneFormat.getInstance().format("+" + user.phone);
+                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", R.string.NumberUnknown) : C0194PhoneFormat.getInstance().format("+" + user.phone);
                 userCell.setData(user, null, string, 0);
             }
         }
@@ -242,7 +165,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         } else {
             this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22611());
+        this.actionBar.setActionBarMenuOnItemClick(new C15531());
         this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -264,9 +187,38 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C22622());
-        this.listView.setOnItemLongClickListener(new C22633());
+        this.listView.setOnItemClickListener(new PrivacyUsersActivity$$Lambda$0(this));
+        this.listView.setOnItemLongClickListener(new PrivacyUsersActivity$$Lambda$1(this));
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$0$PrivacyUsersActivity(View view, int position) {
+        if (position < this.uidArray.size()) {
+            Bundle args = new Bundle();
+            args.putInt("user_id", ((Integer) this.uidArray.get(position)).intValue());
+            presentFragment(new ProfileActivity(args));
+        }
+    }
+
+    final /* synthetic */ boolean lambda$createView$2$PrivacyUsersActivity(View view, int position) {
+        if (position < 0 || position >= this.uidArray.size() || getParentActivity() == null) {
+            return false;
+        }
+        this.selectedUserId = ((Integer) this.uidArray.get(position)).intValue();
+        Builder builder = new Builder(getParentActivity());
+        builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new PrivacyUsersActivity$$Lambda$3(this));
+        showDialog(builder.create());
+        return true;
+    }
+
+    final /* synthetic */ void lambda$null$1$PrivacyUsersActivity(DialogInterface dialogInterface, int i) {
+        if (i == 0) {
+            this.uidArray.remove(Integer.valueOf(this.selectedUserId));
+            this.listViewAdapter.notifyDataSetChanged();
+            if (this.delegate != null) {
+                this.delegate.didUpdatedUserList(this.uidArray, false);
+            }
+        }
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -302,12 +254,12 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new C22644();
+        ThemeDescriptionDelegate cellDelegate = new PrivacyUsersActivity$$Lambda$2(this);
         r10 = new ThemeDescription[19];
         r10[8] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
         r10[9] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         r10[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteGrayText);
-        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
+        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         r10[12] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
         r10[13] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
         r10[14] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
@@ -316,5 +268,17 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         r10[17] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
         r10[18] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         return r10;
+    }
+
+    final /* synthetic */ void lambda$getThemeDescriptions$3$PrivacyUsersActivity() {
+        if (this.listView != null) {
+            int count = this.listView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = this.listView.getChildAt(a);
+                if (child instanceof UserCell) {
+                    ((UserCell) child).update(0);
+                }
+            }
+        }
     }
 }

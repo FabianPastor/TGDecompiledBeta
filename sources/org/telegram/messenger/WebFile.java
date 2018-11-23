@@ -18,7 +18,7 @@ public class WebFile extends TLObject {
     public ArrayList<DocumentAttribute> attributes;
     public InputGeoPoint geo_point;
     /* renamed from: h */
-    public int f247h;
+    public int f261h;
     public InputWebFileLocation location;
     public String mime_type;
     public int msg_id;
@@ -27,7 +27,7 @@ public class WebFile extends TLObject {
     public int size;
     public String url;
     /* renamed from: w */
-    public int f248w;
+    public int f262w;
     public int zoom;
 
     public static WebFile createWithGeoPoint(GeoPoint point, int w, int h, int zoom, int scale) {
@@ -44,10 +44,10 @@ public class WebFile extends TLObject {
         location.access_hash = access_hash;
         webFile.geo_point.lat = lat;
         webFile.geo_point._long = _long;
-        webFile.f248w = w;
-        location.f197w = w;
-        webFile.f247h = h;
-        location.f196h = h;
+        webFile.f262w = w;
+        location.f196w = w;
+        webFile.f261h = h;
+        location.f195h = h;
         webFile.zoom = zoom;
         location.zoom = zoom;
         webFile.scale = scale;

@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import org.telegram.PhoneFormat.C0195PhoneFormat;
+import org.telegram.PhoneFormat.C0194PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
@@ -52,7 +52,7 @@ public class DrawerProfileCell extends FrameLayout {
         this.shadowView.setImageResource(R.drawable.bottom_shadow);
         addView(this.shadowView, LayoutHelper.createFrame(-1, 70, 83));
         this.avatarImageView = new BackupImageView(context);
-        this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.m10dp(32.0f));
+        this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.m9dp(32.0f));
         addView(this.avatarImageView, LayoutHelper.createFrame(64, 64.0f, 83, 16.0f, 0.0f, 0.0f, 67.0f));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextSize(1, 15.0f);
@@ -77,14 +77,14 @@ public class DrawerProfileCell extends FrameLayout {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (VERSION.SDK_INT >= 21) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(148.0f) + AndroidUtilities.statusBarHeight, NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(148.0f) + AndroidUtilities.statusBarHeight, NUM));
             return;
         }
         try {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(148.0f), NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(148.0f), NUM));
         } catch (Throwable e) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m10dp(148.0f));
-            FileLog.m14e(e);
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m9dp(148.0f));
+            FileLog.m13e(e);
         }
     }
 
@@ -131,7 +131,7 @@ public class DrawerProfileCell extends FrameLayout {
             try {
                 canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -147,14 +147,14 @@ public class DrawerProfileCell extends FrameLayout {
         }
     }
 
-    public void setOnArrowClickListener(final OnClickListener onClickListener) {
-        this.arrowView.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                DrawerProfileCell.this.accountsShowed = !DrawerProfileCell.this.accountsShowed;
-                DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
-                onClickListener.onClick(DrawerProfileCell.this);
-            }
-        });
+    public void setOnArrowClickListener(OnClickListener onClickListener) {
+        this.arrowView.setOnClickListener(new DrawerProfileCell$$Lambda$0(this, onClickListener));
+    }
+
+    final /* synthetic */ void lambda$setOnArrowClickListener$0$DrawerProfileCell(OnClickListener onClickListener, View v) {
+        this.accountsShowed = !this.accountsShowed;
+        this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
+        onClickListener.onClick(this);
     }
 
     public void setUser(User user, boolean accounts) {
@@ -166,10 +166,10 @@ public class DrawerProfileCell extends FrameLayout {
             this.accountsShowed = accounts;
             this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
             this.nameTextView.setText(UserObject.getUserName(user));
-            this.phoneTextView.setText(C0195PhoneFormat.getInstance().format("+" + user.phone));
+            this.phoneTextView.setText(C0194PhoneFormat.getInstance().format("+" + user.phone));
             Drawable avatarDrawable = new AvatarDrawable(user);
             avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
-            this.avatarImageView.setImage(photo, "50_50", avatarDrawable);
+            this.avatarImageView.setImage(photo, "50_50", avatarDrawable, (Object) user);
         }
     }
 }

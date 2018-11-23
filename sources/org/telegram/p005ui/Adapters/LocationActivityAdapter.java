@@ -80,7 +80,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         this.currentLiveLocations = new ArrayList(liveLocations);
         int uid = UserConfig.getInstance(this.currentAccount).getClientUserId();
         for (int a = 0; a < this.currentLiveLocations.size(); a++) {
-            if (((LiveLocation) this.currentLiveLocations.get(a)).f236id == uid) {
+            if (((LiveLocation) this.currentLiveLocations.get(a)).f250id == uid) {
                 this.currentLiveLocations.remove(a);
                 break;
             }

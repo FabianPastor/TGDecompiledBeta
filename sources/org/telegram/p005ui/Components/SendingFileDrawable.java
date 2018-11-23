@@ -50,26 +50,26 @@ public class SendingFileDrawable extends StatusDrawable {
             } else {
                 Theme.chat_statusRecordPaint.setAlpha(255);
             }
-            float side = ((float) (AndroidUtilities.m10dp(5.0f) * a)) + (((float) AndroidUtilities.m10dp(5.0f)) * this.progress);
+            float side = ((float) (AndroidUtilities.m9dp(5.0f) * a)) + (((float) AndroidUtilities.m9dp(5.0f)) * this.progress);
             if (this.isChat) {
                 f = 3.0f;
             } else {
                 f = 4.0f;
             }
-            canvas.drawLine(side, (float) AndroidUtilities.m10dp(f), side + ((float) AndroidUtilities.m10dp(4.0f)), (float) AndroidUtilities.m10dp(this.isChat ? 7.0f : 8.0f), Theme.chat_statusRecordPaint);
+            canvas.drawLine(side, (float) AndroidUtilities.m9dp(f), side + ((float) AndroidUtilities.m9dp(4.0f)), (float) AndroidUtilities.m9dp(this.isChat ? 7.0f : 8.0f), Theme.chat_statusRecordPaint);
             if (this.isChat) {
                 f = 11.0f;
             } else {
                 f = 12.0f;
             }
-            float dp = (float) AndroidUtilities.m10dp(f);
-            float dp2 = side + ((float) AndroidUtilities.m10dp(4.0f));
+            float dp = (float) AndroidUtilities.m9dp(f);
+            float dp2 = side + ((float) AndroidUtilities.m9dp(4.0f));
             if (this.isChat) {
                 f = 7.0f;
             } else {
                 f = 8.0f;
             }
-            canvas.drawLine(side, dp, dp2, (float) AndroidUtilities.m10dp(f), Theme.chat_statusRecordPaint);
+            canvas.drawLine(side, dp, dp2, (float) AndroidUtilities.m9dp(f), Theme.chat_statusRecordPaint);
         }
         if (this.started) {
             update();
@@ -87,10 +87,10 @@ public class SendingFileDrawable extends StatusDrawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(18.0f);
+        return AndroidUtilities.m9dp(18.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(14.0f);
+        return AndroidUtilities.m9dp(14.0f);
     }
 }

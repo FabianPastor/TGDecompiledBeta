@@ -25,24 +25,24 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private float currentPositionOffset = 0.0f;
     private LayoutParams defaultTabLayoutParams;
     public OnPageChangeListener delegatePageListener;
-    private int dividerPadding = AndroidUtilities.m10dp(12.0f);
+    private int dividerPadding = AndroidUtilities.m9dp(12.0f);
     private int indicatorColor = -10066330;
-    private int indicatorHeight = AndroidUtilities.m10dp(8.0f);
+    private int indicatorHeight = AndroidUtilities.m9dp(8.0f);
     private int lastScrollX = 0;
     private final PageListener pageListener = new PageListener(this, null);
     private ViewPager pager;
     private Paint rectPaint;
-    private int scrollOffset = AndroidUtilities.m10dp(52.0f);
+    private int scrollOffset = AndroidUtilities.m9dp(52.0f);
     private boolean shouldExpand = false;
     private int tabCount;
-    private int tabPadding = AndroidUtilities.m10dp(24.0f);
+    private int tabPadding = AndroidUtilities.m9dp(24.0f);
     private LinearLayout tabsContainer;
     private int underlineColor = 436207616;
-    private int underlineHeight = AndroidUtilities.m10dp(2.0f);
+    private int underlineHeight = AndroidUtilities.m9dp(2.0f);
 
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$1 */
-    class C11461 implements OnGlobalLayoutListener {
-        C11461() {
+    class C07311 implements OnGlobalLayoutListener {
+        C07311() {
         }
 
         public void onGlobalLayout() {
@@ -53,8 +53,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$4 */
-    class C11494 implements Runnable {
-        C11494() {
+    class C07344 implements Runnable {
+        C07344() {
         }
 
         public void run() {
@@ -76,7 +76,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         private PageListener() {
         }
 
-        /* synthetic */ PageListener(PagerSlidingTabStrip x0, C11461 x1) {
+        /* synthetic */ PageListener(PagerSlidingTabStrip x0, C07311 x1) {
             this();
         }
 
@@ -147,7 +147,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             }
         }
         updateTabStyles();
-        getViewTreeObserver().addOnGlobalLayoutListener(new C11461());
+        getViewTreeObserver().addOnGlobalLayoutListener(new C07311());
     }
 
     public View getTab(int position) {
@@ -241,7 +241,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public void onSizeChanged(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         if (!this.shouldExpand) {
-            post(new C11494());
+            post(new C07344());
         }
     }
 

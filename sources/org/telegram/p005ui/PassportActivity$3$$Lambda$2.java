@@ -1,14 +1,14 @@
 package org.telegram.p005ui;
 
 import java.util.Comparator;
-import org.telegram.p005ui.PassportActivity.C21963;
+import org.telegram.p005ui.PassportActivity.C14983;
 
 /* renamed from: org.telegram.ui.PassportActivity$3$$Lambda$2 */
 final /* synthetic */ class PassportActivity$3$$Lambda$2 implements Comparator {
-    private final C21963 arg$1;
+    private final C14983 arg$1;
 
-    PassportActivity$3$$Lambda$2(C21963 c21963) {
-        this.arg$1 = c21963;
+    PassportActivity$3$$Lambda$2(C14983 c14983) {
+        this.arg$1 = c14983;
     }
 
     public int compare(Object obj, Object obj2) {

@@ -9,6 +9,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -30,7 +31,7 @@ import org.telegram.tgnet.TLRPC.User;
 
 /* renamed from: org.telegram.ui.Cells.UserCell */
 public class UserCell extends FrameLayout {
-    private ImageView adminImage;
+    private TextView adminTextView;
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImageView;
     private CheckBox checkBox;
@@ -55,7 +56,7 @@ public class UserCell extends FrameLayout {
         float f2;
         super(context);
         this.avatarImageView = new BackupImageView(context);
-        this.avatarImageView.setRoundRadius(AndroidUtilities.m10dp(24.0f));
+        this.avatarImageView.setRoundRadius(AndroidUtilities.m9dp(24.0f));
         addView(this.avatarImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 7), 8.0f, LocaleController.isRTL ? (float) (padding + 7) : 0.0f, 0.0f));
         this.nameTextView = new SimpleTextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -93,31 +94,44 @@ public class UserCell extends FrameLayout {
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 37), 38.0f, LocaleController.isRTL ? (float) (padding + 37) : 0.0f, 0.0f));
         }
         if (admin) {
-            this.adminImage = new ImageView(context);
-            this.adminImage.setImageResource(R.drawable.admin_star);
-            addView(this.adminImage, LayoutHelper.createFrame(16, 16.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 24.0f : 0.0f, 13.5f, LocaleController.isRTL ? 0.0f : 24.0f, 0.0f));
+            this.adminTextView = new TextView(context);
+            this.adminTextView.setTextSize(1, 14.0f);
+            addView(this.adminTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 23.0f : 0.0f, 12.0f, LocaleController.isRTL ? 0.0f : 23.0f, 0.0f));
         }
     }
 
     public void setIsAdmin(int value) {
-        if (this.adminImage != null) {
-            int i;
-            this.adminImage.setVisibility(value != 0 ? 0 : 8);
-            SimpleTextView simpleTextView = this.nameTextView;
-            if (!LocaleController.isRTL || value == 0) {
-                i = 0;
-            } else {
-                i = AndroidUtilities.m10dp(16.0f);
-            }
-            int dp = (LocaleController.isRTL || value == 0) ? 0 : AndroidUtilities.m10dp(16.0f);
-            simpleTextView.setPadding(i, 0, dp, 0);
+        if (this.adminTextView != null) {
+            this.adminTextView.setVisibility(value != 0 ? 0 : 8);
             if (value == 1) {
+                this.adminTextView.setText(LocaleController.getString("ChannelCreator", R.string.ChannelCreator));
+                this.adminTextView.setTextColor(Theme.getColor(Theme.key_profile_creatorIcon));
                 setTag(Theme.key_profile_creatorIcon);
-                this.adminImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_creatorIcon), Mode.MULTIPLY));
             } else if (value == 2) {
+                this.adminTextView.setText(LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin));
+                this.adminTextView.setTextColor(Theme.getColor(Theme.key_profile_adminIcon));
                 setTag(Theme.key_profile_adminIcon);
-                this.adminImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_adminIcon), Mode.MULTIPLY));
             }
+            if (value != 0) {
+                int dp;
+                int i;
+                CharSequence text = this.adminTextView.getText();
+                int size = (int) Math.ceil((double) this.adminTextView.getPaint().measureText(text, 0, text.length()));
+                SimpleTextView simpleTextView = this.nameTextView;
+                if (LocaleController.isRTL) {
+                    dp = AndroidUtilities.m9dp(6.0f) + size;
+                } else {
+                    dp = 0;
+                }
+                if (LocaleController.isRTL) {
+                    i = 0;
+                } else {
+                    i = AndroidUtilities.m9dp(6.0f) + size;
+                }
+                simpleTextView.setPadding(dp, 0, i, 0);
+                return;
+            }
+            this.nameTextView.setPadding(0, 0, 0, 0);
         }
     }
 
@@ -167,7 +181,7 @@ public class UserCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(64.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(64.0f), NUM));
     }
 
     public void setStatusColors(int color, int onlineColor) {
@@ -263,12 +277,12 @@ public class UserCell extends FrameLayout {
         } else if (currentUser != null) {
             if (currentUser.bot) {
                 this.statusTextView.setTextColor(this.statusColor);
-                if (currentUser.bot_chat_history || (this.adminImage != null && this.adminImage.getVisibility() == 0)) {
+                if (currentUser.bot_chat_history || (this.adminTextView != null && this.adminTextView.getVisibility() == 0)) {
                     this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
                 } else {
                     this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                 }
-            } else if (currentUser.f177id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.f177id)))) {
+            } else if (currentUser.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.f176id)))) {
                 this.statusTextView.setTextColor(this.statusOnlineColor);
                 this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
             } else {
@@ -280,7 +294,7 @@ public class UserCell extends FrameLayout {
             this.imageView.setVisibility(this.currentDrawable == 0 ? 8 : 0);
             this.imageView.setImageResource(this.currentDrawable);
         }
-        this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
+        this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable, this.currentObject);
     }
 
     public boolean hasOverlappingRendering() {

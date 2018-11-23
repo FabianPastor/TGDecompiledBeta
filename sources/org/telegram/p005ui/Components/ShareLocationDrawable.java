@@ -50,7 +50,7 @@ public class ShareLocationDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        int size = AndroidUtilities.m10dp(this.isSmall ? 30.0f : 120.0f);
+        int size = AndroidUtilities.m9dp(this.isSmall ? 30.0f : 120.0f);
         int y = getBounds().top + ((getIntrinsicHeight() - size) / 2);
         int x = getBounds().left + ((getIntrinsicWidth() - size) / 2);
         this.drawable.setBounds(x, y, this.drawable.getIntrinsicWidth() + x, this.drawable.getIntrinsicHeight() + y);
@@ -59,20 +59,20 @@ public class ShareLocationDrawable extends Drawable {
             if (this.progress[a] >= 0.0f) {
                 float alpha;
                 float scale = 0.5f + (0.5f * this.progress[a]);
-                int w = AndroidUtilities.m10dp((this.isSmall ? 2.5f : 5.0f) * scale);
-                int h = AndroidUtilities.m10dp((this.isSmall ? 6.5f : 18.0f) * scale);
-                int tx = AndroidUtilities.m10dp((this.isSmall ? 6.0f : 15.0f) * this.progress[a]);
+                int w = AndroidUtilities.m9dp((this.isSmall ? 2.5f : 5.0f) * scale);
+                int h = AndroidUtilities.m9dp((this.isSmall ? 6.5f : 18.0f) * scale);
+                int tx = AndroidUtilities.m9dp((this.isSmall ? 6.0f : 15.0f) * this.progress[a]);
                 if (this.progress[a] < 0.5f) {
                     alpha = this.progress[a] / 0.5f;
                 } else {
                     alpha = 1.0f - ((this.progress[a] - 0.5f) / 0.5f);
                 }
-                int cx = (AndroidUtilities.m10dp(this.isSmall ? 7.0f : 42.0f) + x) - tx;
-                int cy = (y + (this.drawable.getIntrinsicHeight() / 2)) - (this.isSmall ? 0 : AndroidUtilities.m10dp(7.0f));
+                int cx = (AndroidUtilities.m9dp(this.isSmall ? 7.0f : 42.0f) + x) - tx;
+                int cy = (y + (this.drawable.getIntrinsicHeight() / 2)) - (this.isSmall ? 0 : AndroidUtilities.m9dp(7.0f));
                 this.drawableLeft.setAlpha((int) (255.0f * alpha));
                 this.drawableLeft.setBounds(cx - w, cy - h, cx + w, cy + h);
                 this.drawableLeft.draw(canvas);
-                cx = ((x + this.drawable.getIntrinsicWidth()) - AndroidUtilities.m10dp(this.isSmall ? 7.0f : 42.0f)) + tx;
+                cx = ((x + this.drawable.getIntrinsicWidth()) - AndroidUtilities.m9dp(this.isSmall ? 7.0f : 42.0f)) + tx;
                 this.drawableRight.setAlpha((int) (255.0f * alpha));
                 this.drawableRight.setBounds(cx - w, cy - h, cx + w, cy + h);
                 this.drawableRight.draw(canvas);
@@ -95,10 +95,10 @@ public class ShareLocationDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(this.isSmall ? 40.0f : 120.0f);
+        return AndroidUtilities.m9dp(this.isSmall ? 40.0f : 120.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(this.isSmall ? 40.0f : 180.0f);
+        return AndroidUtilities.m9dp(this.isSmall ? 40.0f : 180.0f);
     }
 }

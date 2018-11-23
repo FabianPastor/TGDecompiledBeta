@@ -30,7 +30,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,7 +51,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -66,7 +65,6 @@ import org.telegram.p005ui.Components.GroupCreateSpan;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 
 /* renamed from: org.telegram.ui.InviteContactsActivity */
@@ -92,55 +90,9 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     private SpansContainer spansContainer;
     private TextView textView;
 
-    /* renamed from: org.telegram.ui.InviteContactsActivity$10 */
-    class C143510 implements OnClickListener {
-        C143510() {
-        }
-
-        public void onClick(View v) {
-            try {
-                StringBuilder builder = new StringBuilder();
-                int num = 0;
-                for (int a = 0; a < InviteContactsActivity.this.allSpans.size(); a++) {
-                    Contact contact = ((GroupCreateSpan) InviteContactsActivity.this.allSpans.get(a)).getContact();
-                    if (builder.length() != 0) {
-                        builder.append(';');
-                    }
-                    builder.append((String) contact.phones.get(0));
-                    if (a == 0 && InviteContactsActivity.this.allSpans.size() == 1) {
-                        num = contact.imported;
-                    }
-                }
-                Intent intent = new Intent("android.intent.action.SENDTO", Uri.parse("smsto:" + builder.toString()));
-                intent.putExtra("sms_body", ContactsController.getInstance(InviteContactsActivity.this.currentAccount).getInviteText(num));
-                InviteContactsActivity.this.getParentActivity().startActivityForResult(intent, 500);
-                MediaController.getInstance().startSmsObserver();
-            } catch (Throwable e) {
-                FileLog.m14e(e);
-            }
-            InviteContactsActivity.this.lambda$checkDiscard$69$PassportActivity();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.InviteContactsActivity$11 */
-    class C143611 implements Comparator<Contact> {
-        C143611() {
-        }
-
-        public int compare(Contact o1, Contact o2) {
-            if (o1.imported > o2.imported) {
-                return -1;
-            }
-            if (o1.imported < o2.imported) {
-                return 1;
-            }
-            return 0;
-        }
-    }
-
     /* renamed from: org.telegram.ui.InviteContactsActivity$5 */
-    class C14395 implements Callback {
-        C14395() {
+    class C09665 implements Callback {
+        C09665() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -160,10 +112,10 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$6 */
-    class C14406 implements OnKeyListener {
+    class C09676 implements OnKeyListener {
         private boolean wasEmpty;
 
-        C14406() {
+        C09676() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -180,8 +132,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$7 */
-    class C14417 implements TextWatcher {
-        C14417() {
+    class C09687 implements TextWatcher {
+        C09687() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -214,8 +166,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         private View removingSpan;
 
         /* renamed from: org.telegram.ui.InviteContactsActivity$SpansContainer$1 */
-        class C14461 extends AnimatorListenerAdapter {
-            C14461() {
+        class C09701 extends AnimatorListenerAdapter {
+            C09701() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -234,27 +186,27 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             int minWidth;
             int count = getChildCount();
             int width = MeasureSpec.getSize(widthMeasureSpec);
-            int maxWidth = width - AndroidUtilities.m10dp(32.0f);
+            int maxWidth = width - AndroidUtilities.m9dp(32.0f);
             int currentLineWidth = 0;
-            int y = AndroidUtilities.m10dp(12.0f);
+            int y = AndroidUtilities.m9dp(12.0f);
             int allCurrentLineWidth = 0;
-            int allY = AndroidUtilities.m10dp(12.0f);
+            int allY = AndroidUtilities.m9dp(12.0f);
             for (int a = 0; a < count; a++) {
                 View child = getChildAt(a);
                 if (child instanceof GroupCreateSpan) {
-                    child.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(32.0f), NUM));
+                    child.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(32.0f), NUM));
                     if (child != this.removingSpan && child.getMeasuredWidth() + currentLineWidth > maxWidth) {
-                        y += child.getMeasuredHeight() + AndroidUtilities.m10dp(12.0f);
+                        y += child.getMeasuredHeight() + AndroidUtilities.m9dp(12.0f);
                         currentLineWidth = 0;
                     }
                     if (child.getMeasuredWidth() + allCurrentLineWidth > maxWidth) {
-                        allY += child.getMeasuredHeight() + AndroidUtilities.m10dp(12.0f);
+                        allY += child.getMeasuredHeight() + AndroidUtilities.m9dp(12.0f);
                         allCurrentLineWidth = 0;
                     }
-                    int x = AndroidUtilities.m10dp(16.0f) + currentLineWidth;
+                    int x = AndroidUtilities.m9dp(16.0f) + currentLineWidth;
                     if (!this.animationStarted) {
                         if (child == this.removingSpan) {
-                            child.setTranslationX((float) (AndroidUtilities.m10dp(16.0f) + allCurrentLineWidth));
+                            child.setTranslationX((float) (AndroidUtilities.m9dp(16.0f) + allCurrentLineWidth));
                             child.setTranslationY((float) allY);
                         } else if (this.removingSpan != null) {
                             if (child.getTranslationX() != ((float) x)) {
@@ -269,30 +221,30 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                         }
                     }
                     if (child != this.removingSpan) {
-                        currentLineWidth += child.getMeasuredWidth() + AndroidUtilities.m10dp(9.0f);
+                        currentLineWidth += child.getMeasuredWidth() + AndroidUtilities.m9dp(9.0f);
                     }
-                    allCurrentLineWidth += child.getMeasuredWidth() + AndroidUtilities.m10dp(9.0f);
+                    allCurrentLineWidth += child.getMeasuredWidth() + AndroidUtilities.m9dp(9.0f);
                 }
             }
             if (AndroidUtilities.isTablet()) {
-                minWidth = AndroidUtilities.m10dp(366.0f) / 3;
+                minWidth = AndroidUtilities.m9dp(366.0f) / 3;
             } else {
-                minWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(164.0f)) / 3;
+                minWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(164.0f)) / 3;
             }
             if (maxWidth - currentLineWidth < minWidth) {
                 currentLineWidth = 0;
-                y += AndroidUtilities.m10dp(44.0f);
+                y += AndroidUtilities.m9dp(44.0f);
             }
             if (maxWidth - allCurrentLineWidth < minWidth) {
-                allY += AndroidUtilities.m10dp(44.0f);
+                allY += AndroidUtilities.m9dp(44.0f);
             }
-            InviteContactsActivity.this.editText.measure(MeasureSpec.makeMeasureSpec(maxWidth - currentLineWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(32.0f), NUM));
+            InviteContactsActivity.this.editText.measure(MeasureSpec.makeMeasureSpec(maxWidth - currentLineWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(32.0f), NUM));
             if (!this.animationStarted) {
-                int currentHeight = allY + AndroidUtilities.m10dp(44.0f);
-                int fieldX = currentLineWidth + AndroidUtilities.m10dp(16.0f);
+                int currentHeight = allY + AndroidUtilities.m9dp(44.0f);
+                int fieldX = currentLineWidth + AndroidUtilities.m9dp(16.0f);
                 InviteContactsActivity.this.fieldY = y;
                 if (this.currentAnimation != null) {
-                    if (InviteContactsActivity.this.containerHeight != y + AndroidUtilities.m10dp(44.0f)) {
+                    if (InviteContactsActivity.this.containerHeight != y + AndroidUtilities.m9dp(44.0f)) {
                         this.animators.add(ObjectAnimator.ofInt(InviteContactsActivity.this, "containerHeight", new int[]{resultHeight}));
                     }
                     if (InviteContactsActivity.this.editText.getTranslationX() != ((float) fieldX)) {
@@ -334,7 +286,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             }
             this.animationStarted = false;
             this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C14461());
+            this.currentAnimation.addListener(new C09701());
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
@@ -377,85 +329,21 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         }
     }
 
-    /* renamed from: org.telegram.ui.InviteContactsActivity$12 */
-    class C213912 implements ThemeDescriptionDelegate {
-        C213912() {
-        }
-
-        public void didSetColor() {
-            if (InviteContactsActivity.this.listView != null) {
-                int count = InviteContactsActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = InviteContactsActivity.this.listView.getChildAt(a);
-                    if (child instanceof InviteUserCell) {
-                        ((InviteUserCell) child).update(0);
-                    }
-                }
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.InviteContactsActivity$1 */
-    class C21401 extends ActionBarMenuOnItemClick {
-        C21401() {
+    class C14561 extends ActionBarMenuOnItemClick {
+        C14561() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                InviteContactsActivity.this.lambda$checkDiscard$69$PassportActivity();
+                InviteContactsActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.InviteContactsActivity$8 */
-    class C21428 implements OnItemClickListener {
-        C21428() {
-        }
-
-        public void onItemClick(View view, int position) {
-            boolean z = false;
-            if (position == 0 && !InviteContactsActivity.this.searching) {
-                try {
-                    Intent intent = new Intent("android.intent.action.SEND");
-                    intent.setType("text/plain");
-                    String text = ContactsController.getInstance(InviteContactsActivity.this.currentAccount).getInviteText(0);
-                    intent.putExtra("android.intent.extra.TEXT", text);
-                    InviteContactsActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, text), 500);
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
-                }
-            } else if (view instanceof InviteUserCell) {
-                InviteUserCell cell = (InviteUserCell) view;
-                Contact contact = cell.getContact();
-                if (contact != null) {
-                    boolean exists = InviteContactsActivity.this.selectedContacts.containsKey(contact.key);
-                    if (exists) {
-                        InviteContactsActivity.this.spansContainer.removeSpan((GroupCreateSpan) InviteContactsActivity.this.selectedContacts.get(contact.key));
-                    } else {
-                        GroupCreateSpan span = new GroupCreateSpan(InviteContactsActivity.this.editText.getContext(), contact);
-                        InviteContactsActivity.this.spansContainer.addSpan(span);
-                        span.setOnClickListener(InviteContactsActivity.this);
-                    }
-                    InviteContactsActivity.this.updateHint();
-                    if (InviteContactsActivity.this.searching || InviteContactsActivity.this.searchWas) {
-                        AndroidUtilities.showKeyboard(InviteContactsActivity.this.editText);
-                    } else {
-                        if (!exists) {
-                            z = true;
-                        }
-                        cell.setChecked(z, true);
-                    }
-                    if (InviteContactsActivity.this.editText.length() > 0) {
-                        InviteContactsActivity.this.editText.setText(null);
-                    }
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.InviteContactsActivity$9 */
-    class C21439 extends OnScrollListener {
-        C21439() {
+    class C14588 extends OnScrollListener {
+        C14588() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -549,7 +437,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (query == null) {
                 this.searchResult.clear();
@@ -559,83 +447,70 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             }
             this.searchTimer = new Timer();
             this.searchTimer.schedule(new TimerTask() {
-
-                /* renamed from: org.telegram.ui.InviteContactsActivity$InviteAdapter$1$1 */
-                class C14431 implements Runnable {
-
-                    /* renamed from: org.telegram.ui.InviteContactsActivity$InviteAdapter$1$1$1 */
-                    class C14421 implements Runnable {
-                        C14421() {
-                        }
-
-                        public void run() {
-                            String search1 = query.trim().toLowerCase();
-                            if (search1.length() == 0) {
-                                InviteAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
-                                return;
-                            }
-                            String search2 = LocaleController.getInstance().getTranslitString(search1);
-                            if (search1.equals(search2) || search2.length() == 0) {
-                                search2 = null;
-                            }
-                            String[] search = new String[((search2 != null ? 1 : 0) + 1)];
-                            search[0] = search1;
-                            if (search2 != null) {
-                                search[1] = search2;
-                            }
-                            ArrayList<Contact> resultArray = new ArrayList();
-                            ArrayList<CharSequence> resultArrayNames = new ArrayList();
-                            for (int a = 0; a < InviteContactsActivity.this.phoneBookContacts.size(); a++) {
-                                Contact contact = (Contact) InviteContactsActivity.this.phoneBookContacts.get(a);
-                                String name = ContactsController.formatName(contact.first_name, contact.last_name).toLowerCase();
-                                String tName = LocaleController.getInstance().getTranslitString(name);
-                                if (name.equals(tName)) {
-                                    tName = null;
-                                }
-                                int found = 0;
-                                for (String q : search) {
-                                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
-                                        found = 1;
-                                    }
-                                    if (found != 0) {
-                                        resultArrayNames.add(AndroidUtilities.generateSearchName(contact.first_name, contact.last_name, q));
-                                        resultArray.add(contact);
-                                        break;
-                                    }
-                                }
-                            }
-                            InviteAdapter.this.updateSearchResults(resultArray, resultArrayNames);
-                        }
-                    }
-
-                    C14431() {
-                    }
-
-                    public void run() {
-                        Utilities.searchQueue.postRunnable(new C14421());
-                    }
-                }
-
                 public void run() {
                     try {
                         InviteAdapter.this.searchTimer.cancel();
                         InviteAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C14431());
+                    AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$1$$Lambda$0(this, query));
+                }
+
+                final /* synthetic */ void lambda$run$1$InviteContactsActivity$InviteAdapter$1(String query) {
+                    Utilities.searchQueue.postRunnable(new InviteContactsActivity$InviteAdapter$1$$Lambda$1(this, query));
+                }
+
+                final /* synthetic */ void lambda$null$0$InviteContactsActivity$InviteAdapter$1(String query) {
+                    String search1 = query.trim().toLowerCase();
+                    if (search1.length() == 0) {
+                        InviteAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
+                        return;
+                    }
+                    String search2 = LocaleController.getInstance().getTranslitString(search1);
+                    if (search1.equals(search2) || search2.length() == 0) {
+                        search2 = null;
+                    }
+                    String[] search = new String[((search2 != null ? 1 : 0) + 1)];
+                    search[0] = search1;
+                    if (search2 != null) {
+                        search[1] = search2;
+                    }
+                    ArrayList<Contact> resultArray = new ArrayList();
+                    ArrayList<CharSequence> resultArrayNames = new ArrayList();
+                    for (int a = 0; a < InviteContactsActivity.this.phoneBookContacts.size(); a++) {
+                        Contact contact = (Contact) InviteContactsActivity.this.phoneBookContacts.get(a);
+                        String name = ContactsController.formatName(contact.first_name, contact.last_name).toLowerCase();
+                        String tName = LocaleController.getInstance().getTranslitString(name);
+                        if (name.equals(tName)) {
+                            tName = null;
+                        }
+                        int found = 0;
+                        for (String q : search) {
+                            if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
+                                found = 1;
+                            }
+                            if (found != 0) {
+                                resultArrayNames.add(AndroidUtilities.generateSearchName(contact.first_name, contact.last_name, q));
+                                resultArray.add(contact);
+                                break;
+                            }
+                        }
+                    }
+                    InviteAdapter.this.updateSearchResults(resultArray, resultArrayNames);
                 }
             }, 200, 300);
         }
 
-        private void updateSearchResults(final ArrayList<Contact> users, final ArrayList<CharSequence> names) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    InviteAdapter.this.searchResult = users;
-                    InviteAdapter.this.searchResultNames = names;
-                    InviteAdapter.this.notifyDataSetChanged();
-                }
-            });
+        private void updateSearchResults(ArrayList<Contact> users, ArrayList<CharSequence> names) {
+            AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$$Lambda$0(this, users, names));
+        }
+
+        /* renamed from: lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter */
+        final /* synthetic */ void mo16997xf72d2e5d(ArrayList users, ArrayList names) {
+            this.searchResult = users;
+            this.searchResultNames = names;
+            notifyDataSetChanged();
         }
 
         public void notifyDataSetChanged() {
@@ -643,11 +518,11 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             super.notifyDataSetChanged();
             int count = getItemCount();
             InviteContactsActivity.this.emptyView.setVisibility(count == 1 ? 0 : 4);
-            GroupCreateDividerItemDecoration access$3100 = InviteContactsActivity.this.decoration;
+            GroupCreateDividerItemDecoration access$2700 = InviteContactsActivity.this.decoration;
             if (count == 1) {
                 z = true;
             }
-            access$3100.setSingle(z);
+            access$2700.setSingle(z);
         }
     }
 
@@ -692,7 +567,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("InviteFriends", R.string.InviteFriends));
-        this.actionBar.setActionBarMenuOnItemClick(new C21401());
+        this.actionBar.setActionBarMenuOnItemClick(new C14561());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int maxSize;
@@ -701,12 +576,12 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                 int height = MeasureSpec.getSize(heightMeasureSpec);
                 setMeasuredDimension(width, height);
                 if (AndroidUtilities.isTablet() || height > width) {
-                    maxSize = AndroidUtilities.m10dp(144.0f);
+                    maxSize = AndroidUtilities.m9dp(144.0f);
                 } else {
-                    maxSize = AndroidUtilities.m10dp(56.0f);
+                    maxSize = AndroidUtilities.m9dp(56.0f);
                 }
                 InviteContactsActivity.this.infoTextView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(maxSize, Integer.MIN_VALUE));
-                InviteContactsActivity.this.counterView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(48.0f), NUM));
+                InviteContactsActivity.this.counterView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f), NUM));
                 if (InviteContactsActivity.this.infoTextView.getVisibility() == 0) {
                     h = InviteContactsActivity.this.infoTextView.getMeasuredHeight();
                 } else {
@@ -714,13 +589,13 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                 }
                 InviteContactsActivity.this.scrollView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(maxSize, Integer.MIN_VALUE));
                 InviteContactsActivity.this.listView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec((height - InviteContactsActivity.this.scrollView.getMeasuredHeight()) - h, NUM));
-                InviteContactsActivity.this.emptyView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec((height - InviteContactsActivity.this.scrollView.getMeasuredHeight()) - AndroidUtilities.m10dp(72.0f), NUM));
+                InviteContactsActivity.this.emptyView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec((height - InviteContactsActivity.this.scrollView.getMeasuredHeight()) - AndroidUtilities.m9dp(72.0f), NUM));
             }
 
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 InviteContactsActivity.this.scrollView.layout(0, 0, InviteContactsActivity.this.scrollView.getMeasuredWidth(), InviteContactsActivity.this.scrollView.getMeasuredHeight());
                 InviteContactsActivity.this.listView.layout(0, InviteContactsActivity.this.scrollView.getMeasuredHeight(), InviteContactsActivity.this.listView.getMeasuredWidth(), InviteContactsActivity.this.scrollView.getMeasuredHeight() + InviteContactsActivity.this.listView.getMeasuredHeight());
-                InviteContactsActivity.this.emptyView.layout(0, InviteContactsActivity.this.scrollView.getMeasuredHeight() + AndroidUtilities.m10dp(72.0f), InviteContactsActivity.this.emptyView.getMeasuredWidth(), InviteContactsActivity.this.scrollView.getMeasuredHeight() + InviteContactsActivity.this.emptyView.getMeasuredHeight());
+                InviteContactsActivity.this.emptyView.layout(0, InviteContactsActivity.this.scrollView.getMeasuredHeight() + AndroidUtilities.m9dp(72.0f), InviteContactsActivity.this.emptyView.getMeasuredWidth(), InviteContactsActivity.this.scrollView.getMeasuredHeight() + InviteContactsActivity.this.emptyView.getMeasuredHeight());
                 int y = (bottom - top) - InviteContactsActivity.this.infoTextView.getMeasuredHeight();
                 InviteContactsActivity.this.infoTextView.layout(0, y, InviteContactsActivity.this.infoTextView.getMeasuredWidth(), InviteContactsActivity.this.infoTextView.getMeasuredHeight() + y);
                 y = (bottom - top) - InviteContactsActivity.this.counterView.getMeasuredHeight();
@@ -743,8 +618,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     return false;
                 }
                 rectangle.offset(child.getLeft() - child.getScrollX(), child.getTop() - child.getScrollY());
-                rectangle.top += InviteContactsActivity.this.fieldY + AndroidUtilities.m10dp(20.0f);
-                rectangle.bottom += InviteContactsActivity.this.fieldY + AndroidUtilities.m10dp(50.0f);
+                rectangle.top += InviteContactsActivity.this.fieldY + AndroidUtilities.m9dp(20.0f);
+                rectangle.bottom += InviteContactsActivity.this.fieldY + AndroidUtilities.m9dp(50.0f);
                 return super.requestChildRectangleOnScreen(child, rectangle, immediate);
             }
         };
@@ -778,9 +653,9 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         this.editText.setHintText(LocaleController.getString("SearchFriends", R.string.SearchFriends));
-        this.editText.setCustomSelectionActionModeCallback(new C14395());
-        this.editText.setOnKeyListener(new C14406());
-        this.editText.addTextChangedListener(new C14417());
+        this.editText.setCustomSelectionActionModeCallback(new C09665());
+        this.editText.setOnKeyListener(new C09676());
+        this.editText.addTextChangedListener(new C09687());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -804,8 +679,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.decoration = groupCreateDividerItemDecoration;
         recyclerListView.addItemDecoration(groupCreateDividerItemDecoration);
         frameLayout.addView(this.listView);
-        this.listView.setOnItemClickListener(new C21428());
-        this.listView.setOnScrollListener(new C21439());
+        this.listView.setOnItemClickListener(new InviteContactsActivity$$Lambda$0(this));
+        this.listView.setOnScrollListener(new C14588());
         this.infoTextView = new TextView(context);
         this.infoTextView.setBackgroundColor(Theme.getColor(Theme.key_contacts_inviteBackground));
         this.infoTextView.setTextColor(Theme.getColor(Theme.key_contacts_inviteText));
@@ -813,13 +688,13 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.infoTextView.setText(LocaleController.getString("InviteFriendsHelp", R.string.InviteFriendsHelp));
         this.infoTextView.setTextSize(1, 13.0f);
         this.infoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.infoTextView.setPadding(AndroidUtilities.m10dp(17.0f), AndroidUtilities.m10dp(9.0f), AndroidUtilities.m10dp(17.0f), AndroidUtilities.m10dp(9.0f));
+        this.infoTextView.setPadding(AndroidUtilities.m9dp(17.0f), AndroidUtilities.m9dp(9.0f), AndroidUtilities.m9dp(17.0f), AndroidUtilities.m9dp(9.0f));
         frameLayout.addView(this.infoTextView, LayoutHelper.createFrame(-1, -2, 83));
         this.counterView = new FrameLayout(context);
         this.counterView.setBackgroundColor(Theme.getColor(Theme.key_contacts_inviteBackground));
         this.counterView.setVisibility(4);
         frameLayout.addView(this.counterView, LayoutHelper.createFrame(-1, 48, 83));
-        this.counterView.setOnClickListener(new C143510());
+        this.counterView.setOnClickListener(new InviteContactsActivity$$Lambda$1(this));
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(0);
         this.counterView.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 17));
@@ -828,21 +703,85 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.counterTextView.setTextSize(1, 14.0f);
         this.counterTextView.setTextColor(Theme.getColor(Theme.key_contacts_inviteBackground));
         this.counterTextView.setGravity(17);
-        this.counterTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m10dp(10.0f), Theme.getColor(Theme.key_contacts_inviteText)));
-        this.counterTextView.setMinWidth(AndroidUtilities.m10dp(20.0f));
-        this.counterTextView.setPadding(AndroidUtilities.m10dp(6.0f), 0, AndroidUtilities.m10dp(6.0f), AndroidUtilities.m10dp(1.0f));
+        this.counterTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m9dp(10.0f), Theme.getColor(Theme.key_contacts_inviteText)));
+        this.counterTextView.setMinWidth(AndroidUtilities.m9dp(20.0f));
+        this.counterTextView.setPadding(AndroidUtilities.m9dp(6.0f), 0, AndroidUtilities.m9dp(6.0f), AndroidUtilities.m9dp(1.0f));
         linearLayout.addView(this.counterTextView, LayoutHelper.createLinear(-2, 20, 16, 0, 0, 10, 0));
         this.textView = new TextView(context);
         this.textView.setTextSize(1, 14.0f);
         this.textView.setTextColor(Theme.getColor(Theme.key_contacts_inviteText));
         this.textView.setGravity(17);
-        this.textView.setCompoundDrawablePadding(AndroidUtilities.m10dp(8.0f));
+        this.textView.setCompoundDrawablePadding(AndroidUtilities.m9dp(8.0f));
         this.textView.setText(LocaleController.getString("InviteToTelegram", R.string.InviteToTelegram).toUpperCase());
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2, 16));
         updateHint();
         this.adapter.notifyDataSetChanged();
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$0$InviteContactsActivity(View view, int position) {
+        boolean z = false;
+        if (position == 0 && !this.searching) {
+            try {
+                Intent intent = new Intent("android.intent.action.SEND");
+                intent.setType("text/plain");
+                String text = ContactsController.getInstance(this.currentAccount).getInviteText(0);
+                intent.putExtra("android.intent.extra.TEXT", text);
+                getParentActivity().startActivityForResult(Intent.createChooser(intent, text), 500);
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+        } else if (view instanceof InviteUserCell) {
+            InviteUserCell cell = (InviteUserCell) view;
+            Contact contact = cell.getContact();
+            if (contact != null) {
+                boolean exists = this.selectedContacts.containsKey(contact.key);
+                if (exists) {
+                    this.spansContainer.removeSpan((GroupCreateSpan) this.selectedContacts.get(contact.key));
+                } else {
+                    GroupCreateSpan span = new GroupCreateSpan(this.editText.getContext(), contact);
+                    this.spansContainer.addSpan(span);
+                    span.setOnClickListener(this);
+                }
+                updateHint();
+                if (this.searching || this.searchWas) {
+                    AndroidUtilities.showKeyboard(this.editText);
+                } else {
+                    if (!exists) {
+                        z = true;
+                    }
+                    cell.setChecked(z, true);
+                }
+                if (this.editText.length() > 0) {
+                    this.editText.setText(null);
+                }
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$createView$1$InviteContactsActivity(View v) {
+        try {
+            StringBuilder builder = new StringBuilder();
+            int num = 0;
+            for (int a = 0; a < this.allSpans.size(); a++) {
+                Contact contact = ((GroupCreateSpan) this.allSpans.get(a)).getContact();
+                if (builder.length() != 0) {
+                    builder.append(';');
+                }
+                builder.append((String) contact.phones.get(0));
+                if (a == 0 && this.allSpans.size() == 1) {
+                    num = contact.imported;
+                }
+            }
+            Intent intent = new Intent("android.intent.action.SENDTO", Uri.parse("smsto:" + builder.toString()));
+            intent.putExtra("sms_body", ContactsController.getInstance(this.currentAccount).getInviteText(num));
+            getParentActivity().startActivityForResult(intent, 500);
+            MediaController.getInstance().startSmsObserver();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+        lambda$checkDiscard$70$PassportActivity();
     }
 
     public void onResume() {
@@ -907,7 +846,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
 
     private void fetchContacts() {
         this.phoneBookContacts = new ArrayList(ContactsController.getInstance(this.currentAccount).phoneBookContacts);
-        Collections.sort(this.phoneBookContacts, new C143611());
+        Collections.sort(this.phoneBookContacts, InviteContactsActivity$$Lambda$2.$instance);
         if (this.emptyView != null) {
             this.emptyView.showTextView();
         }
@@ -916,8 +855,18 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         }
     }
 
+    static final /* synthetic */ int lambda$fetchContacts$2$InviteContactsActivity(Contact o1, Contact o2) {
+        if (o1.imported > o2.imported) {
+            return -1;
+        }
+        if (o1.imported < o2.imported) {
+            return 1;
+        }
+        return 0;
+    }
+
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new C213912();
+        ThemeDescriptionDelegate cellDelegate = new InviteContactsActivity$$Lambda$3(this);
         r10 = new ThemeDescription[45];
         r10[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
         r10[12] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
@@ -933,7 +882,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         r10[22] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_groupcreate_checkboxCheck);
         r10[23] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_onlineText);
         r10[24] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_offlineText);
-        r10[25] = new ThemeDescription(this.listView, 0, new Class[]{InviteUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
+        r10[25] = new ThemeDescription(this.listView, 0, new Class[]{InviteUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         r10[26] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
         r10[27] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
         r10[28] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
@@ -954,5 +903,17 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         r10[43] = new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_contacts_inviteText);
         r10[44] = new ThemeDescription(this.counterTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_contacts_inviteText);
         return r10;
+    }
+
+    final /* synthetic */ void lambda$getThemeDescriptions$3$InviteContactsActivity() {
+        if (this.listView != null) {
+            int count = this.listView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = this.listView.getChildAt(a);
+                if (child instanceof InviteUserCell) {
+                    ((InviteUserCell) child).update(0);
+                }
+            }
+        }
     }
 }

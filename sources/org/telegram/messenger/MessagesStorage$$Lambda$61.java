@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
+import org.telegram.messenger.MessagesStorage.IntCallback;
 
 final /* synthetic */ class MessagesStorage$$Lambda$61 implements Runnable {
     private final MessagesStorage arg$1;
-    private final String arg$2;
-    private final TLObject arg$3;
-    private final int arg$4;
+    private final long arg$2;
+    private final IntCallback arg$3;
 
-    MessagesStorage$$Lambda$61(MessagesStorage messagesStorage, String str, TLObject tLObject, int i) {
+    MessagesStorage$$Lambda$61(MessagesStorage messagesStorage, long j, IntCallback intCallback) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = str;
-        this.arg$3 = tLObject;
-        this.arg$4 = i;
+        this.arg$2 = j;
+        this.arg$3 = intCallback;
     }
 
     public void run() {
-        this.arg$1.lambda$putSentFile$85$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$getUnreadMention$85$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

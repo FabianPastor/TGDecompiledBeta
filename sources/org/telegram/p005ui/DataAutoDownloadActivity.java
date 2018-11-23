@@ -14,7 +14,7 @@ import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.HeaderCell;
@@ -24,7 +24,6 @@ import org.telegram.p005ui.Cells.TextCheckBoxCell;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 
 /* renamed from: org.telegram.ui.DataAutoDownloadActivity */
@@ -73,13 +72,13 @@ public class DataAutoDownloadActivity extends BaseFragment {
     private int wifiSectionRow;
 
     /* renamed from: org.telegram.ui.DataAutoDownloadActivity$1 */
-    class C20971 extends ActionBarMenuOnItemClick {
-        C20971() {
+    class C14221 extends ActionBarMenuOnItemClick {
+        C14221() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                DataAutoDownloadActivity.this.lambda$checkDiscard$69$PassportActivity();
+                DataAutoDownloadActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 1) {
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[0] = DataAutoDownloadActivity.this.mobileDataDownloadMask;
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[1] = DataAutoDownloadActivity.this.mobileDataPrivateDownloadMask;
@@ -109,28 +108,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 editor.putInt("roamingMaxDownloadSize" + DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.roamingMaxSize);
                 editor.commit();
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).checkAutodownloadSettings();
-                DataAutoDownloadActivity.this.lambda$checkDiscard$69$PassportActivity();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DataAutoDownloadActivity$2 */
-    class C20982 implements OnItemClickListener {
-        C20982() {
-        }
-
-        public void onItemClick(View view, int position) {
-            if (view instanceof TextCheckBoxCell) {
-                int mask = DataAutoDownloadActivity.this.getMaskForRow(position);
-                TextCheckBoxCell textCell = (TextCheckBoxCell) view;
-                boolean isChecked = !textCell.isChecked();
-                if (isChecked) {
-                    mask |= DataAutoDownloadActivity.this.currentType;
-                } else {
-                    mask &= DataAutoDownloadActivity.this.currentType ^ -1;
-                }
-                DataAutoDownloadActivity.this.setMaskForRow(position, mask);
-                textCell.setChecked(isChecked);
+                DataAutoDownloadActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
@@ -153,10 +131,10 @@ public class DataAutoDownloadActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == DataAutoDownloadActivity.this.mobileSection2Row || position == DataAutoDownloadActivity.this.wifiSection2Row) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     }
                 case 1:
@@ -411,8 +389,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C20971());
-        this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new C14221());
+        this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -422,9 +400,24 @@ public class DataAutoDownloadActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C20982());
+        this.listView.setOnItemClickListener(new DataAutoDownloadActivity$$Lambda$0(this));
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$0$DataAutoDownloadActivity(View view, int position) {
+        if (view instanceof TextCheckBoxCell) {
+            int mask = getMaskForRow(position);
+            TextCheckBoxCell textCell = (TextCheckBoxCell) view;
+            boolean isChecked = !textCell.isChecked();
+            if (isChecked) {
+                mask |= this.currentType;
+            } else {
+                mask &= this.currentType ^ -1;
+            }
+            setMaskForRow(position, mask);
+            textCell.setChecked(isChecked);
+        }
     }
 
     public void onResume() {

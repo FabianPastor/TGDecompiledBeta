@@ -30,9 +30,9 @@ public class DrawerUserCell extends FrameLayout {
 
     public DrawerUserCell(Context context) {
         super(context);
-        this.avatarDrawable.setTextSize(AndroidUtilities.m10dp(12.0f));
+        this.avatarDrawable.setTextSize(AndroidUtilities.m9dp(12.0f));
         this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.m10dp(18.0f));
+        this.imageView.setRoundRadius(AndroidUtilities.m9dp(18.0f));
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, 51, 14.0f, 6.0f, 0.0f, 0.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
@@ -47,14 +47,14 @@ public class DrawerUserCell extends FrameLayout {
         this.checkBox = new GroupCreateCheckBox(context);
         this.checkBox.setChecked(true, false);
         this.checkBox.setCheckScale(0.9f);
-        this.checkBox.setInnerRadDiff(AndroidUtilities.m10dp(1.5f));
+        this.checkBox.setInnerRadDiff(AndroidUtilities.m9dp(1.5f));
         this.checkBox.setColorKeysOverrides(Theme.key_chats_unreadCounterText, Theme.key_chats_unreadCounter, Theme.key_chats_menuBackground);
         addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, 51, 37.0f, 27.0f, 0.0f, 0.0f));
         setWillNotDraw(false);
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f), NUM));
     }
 
     protected void onAttachedToWindow() {
@@ -64,10 +64,10 @@ public class DrawerUserCell extends FrameLayout {
 
     public void setAccount(int account) {
         this.accountNumber = account;
-        User user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
+        Object user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
         if (user != null) {
             TLObject avatar;
-            this.avatarDrawable.setInfo(user);
+            this.avatarDrawable.setInfo((User) user);
             this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
             if (user.photo == null || user.photo.photo_small == null || user.photo.photo_small.volume_id == 0 || user.photo.photo_small.local_id == 0) {
                 avatar = null;
@@ -75,7 +75,7 @@ public class DrawerUserCell extends FrameLayout {
                 avatar = user.photo.photo_small;
             }
             this.imageView.getImageReceiver().setCurrentAccount(account);
-            this.imageView.setImage(avatar, "50_50", this.avatarDrawable);
+            this.imageView.setImage(avatar, "50_50", this.avatarDrawable, user);
             this.checkBox.setVisibility(account == UserConfig.selectedAccount ? 0 : 4);
         }
     }
@@ -87,13 +87,13 @@ public class DrawerUserCell extends FrameLayout {
     protected void onDraw(Canvas canvas) {
         if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount() > 0) {
             String text = String.format("%d", new Object[]{Integer.valueOf(NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount())});
-            int countTop = AndroidUtilities.m10dp(12.5f);
-            int textWidth = (int) Math.ceil((double) Theme.chat_livePaint.measureText(text));
-            int countWidth = Math.max(AndroidUtilities.m10dp(12.0f), textWidth);
-            int x = ((getMeasuredWidth() - countWidth) - AndroidUtilities.m10dp(25.0f)) - AndroidUtilities.m10dp(5.5f);
-            this.rect.set((float) x, (float) countTop, (float) ((x + countWidth) + AndroidUtilities.m10dp(11.0f)), (float) (AndroidUtilities.m10dp(23.0f) + countTop));
+            int countTop = AndroidUtilities.m9dp(12.5f);
+            int textWidth = (int) Math.ceil((double) Theme.dialogs_countTextPaint.measureText(text));
+            int countWidth = Math.max(AndroidUtilities.m9dp(10.0f), textWidth);
+            int x = ((getMeasuredWidth() - countWidth) - AndroidUtilities.m9dp(25.0f)) - AndroidUtilities.m9dp(5.5f);
+            this.rect.set((float) x, (float) countTop, (float) ((x + countWidth) + AndroidUtilities.m9dp(14.0f)), (float) (AndroidUtilities.m9dp(23.0f) + countTop));
             canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, AndroidUtilities.density * 11.5f, Theme.dialogs_countPaint);
-            canvas.drawText(text, (this.rect.left + ((this.rect.width() - ((float) textWidth)) / 2.0f)) - ((float) AndroidUtilities.m10dp(0.5f)), (float) (AndroidUtilities.m10dp(16.0f) + countTop), Theme.dialogs_countTextPaint);
+            canvas.drawText(text, this.rect.left + ((this.rect.width() - ((float) textWidth)) / 2.0f), (float) (AndroidUtilities.m9dp(16.0f) + countTop), Theme.dialogs_countTextPaint);
         }
     }
 }

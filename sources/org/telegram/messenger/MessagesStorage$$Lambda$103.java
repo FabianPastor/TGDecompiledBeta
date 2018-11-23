@@ -1,15 +1,22 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC.Message;
+import java.util.concurrent.CountDownLatch;
+import org.telegram.tgnet.TLRPC.Chat;
 
-final /* synthetic */ class MessagesStorage$$Lambda$103 implements Comparator {
-    static final Comparator $instance = new MessagesStorage$$Lambda$103();
+final /* synthetic */ class MessagesStorage$$Lambda$103 implements Runnable {
+    private final MessagesStorage arg$1;
+    private final Chat[] arg$2;
+    private final int arg$3;
+    private final CountDownLatch arg$4;
 
-    private MessagesStorage$$Lambda$103() {
+    MessagesStorage$$Lambda$103(MessagesStorage messagesStorage, Chat[] chatArr, int i, CountDownLatch countDownLatch) {
+        this.arg$1 = messagesStorage;
+        this.arg$2 = chatArr;
+        this.arg$3 = i;
+        this.arg$4 = countDownLatch;
     }
 
-    public int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$null$81$MessagesStorage((Message) obj, (Message) obj2);
+    public void run() {
+        this.arg$1.lambda$getChatSync$132$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

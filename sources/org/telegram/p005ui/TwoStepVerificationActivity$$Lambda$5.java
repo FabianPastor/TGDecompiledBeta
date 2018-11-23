@@ -9,6 +9,6 @@ final /* synthetic */ class TwoStepVerificationActivity$$Lambda$5 implements Run
     }
 
     public void run() {
-        this.arg$1.lambda$startShortpoll$12$TwoStepVerificationActivity();
+        this.arg$1.lambda$onResume$12$TwoStepVerificationActivity();
     }
 }

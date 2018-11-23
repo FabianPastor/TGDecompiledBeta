@@ -28,7 +28,7 @@ public class LetterDrawable extends Drawable {
             namePaint = new TextPaint(1);
             namePaint.setColor(Theme.getColor(Theme.key_sharedMedia_linkPlaceholderText));
         }
-        namePaint.setTextSize((float) AndroidUtilities.m10dp(28.0f));
+        namePaint.setTextSize((float) AndroidUtilities.m9dp(28.0f));
     }
 
     public void setBackgroundColor(int value) {
@@ -46,7 +46,7 @@ public class LetterDrawable extends Drawable {
         }
         if (this.stringBuilder.length() > 0) {
             try {
-                this.textLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), namePaint, AndroidUtilities.m10dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.textLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), namePaint, AndroidUtilities.m9dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (this.textLayout.getLineCount() > 0) {
                     this.textLeft = this.textLayout.getLineLeft(0);
                     this.textWidth = this.textLayout.getLineWidth(0);
@@ -55,7 +55,7 @@ public class LetterDrawable extends Drawable {
                 }
                 return;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 return;
             }
         }

@@ -25,7 +25,7 @@ import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.camera.CameraView.CameraViewDelegate;
 import org.telegram.messenger.camera.Size;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Components.CubicBezierInterpolator;
@@ -44,8 +44,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     private TextView titleTextView;
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$3 */
-    class C14833 implements OnTouchListener {
-        C14833() {
+    class C09933 implements OnTouchListener {
+        C09933() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -54,8 +54,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$5 */
-    class C14845 implements Runnable {
-        C14845() {
+    class C09945 implements Runnable {
+        C09945() {
         }
 
         public void run() {
@@ -72,20 +72,20 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$1 */
-    class C21751 extends ActionBarMenuOnItemClick {
-        C21751() {
+    class C14811 extends ActionBarMenuOnItemClick {
+        C14811() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                MrzCameraActivity.this.lambda$checkDiscard$69$PassportActivity();
+                MrzCameraActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.MrzCameraActivity$4 */
-    class C21764 implements CameraViewDelegate {
-        C21764() {
+    class C14824 implements CameraViewDelegate {
+        C14824() {
         }
 
         public void onCameraCreated(Camera camera) {
@@ -116,7 +116,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         if (!AndroidUtilities.isTablet()) {
             this.actionBar.showActionModeTop();
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21751());
+        this.actionBar.setActionBarMenuOnItemClick(new C14811());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -142,9 +142,9 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         };
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         ViewGroup viewGroup = this.fragmentView;
-        viewGroup.setOnTouchListener(new C14833());
+        viewGroup.setOnTouchListener(new C09933());
         this.cameraView = new CameraView(context, false);
-        this.cameraView.setDelegate(new C21764());
+        this.cameraView.setDelegate(new C14824());
         viewGroup.addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -190,7 +190,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     private void startRecognizing() {
         this.backgroundHandlerThread.start();
         this.handler = new Handler(this.backgroundHandlerThread.getLooper());
-        AndroidUtilities.runOnUIThread(new C14845());
+        AndroidUtilities.runOnUIThread(new C09945());
     }
 
     public void onPreviewFrame(final byte[] data, final Camera camera) {
@@ -206,12 +206,12 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.ui.MrzCameraActivity$6$1$1 */
-                                class C14851 implements Runnable {
-                                    C14851() {
+                                class C09951 implements Runnable {
+                                    C09951() {
                                     }
 
                                     public void run() {
-                                        MrzCameraActivity.this.lambda$checkDiscard$69$PassportActivity();
+                                        MrzCameraActivity.this.lambda$checkDiscard$70$PassportActivity();
                                     }
                                 }
 
@@ -221,7 +221,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                                     if (MrzCameraActivity.this.delegate != null) {
                                         MrzCameraActivity.this.delegate.didFindMrzInfo(res);
                                     }
-                                    AndroidUtilities.runOnUIThread(new C14851(), 1200);
+                                    AndroidUtilities.runOnUIThread(new C09951(), 1200);
                                 }
                             });
                         }

@@ -23,38 +23,63 @@ public class RadioCell extends FrameLayout {
     private TextView textView;
 
     public RadioCell(Context context) {
+        this(context, false, 21);
+    }
+
+    public RadioCell(Context context, boolean dialog, int padding) {
         int i;
-        int i2 = 3;
+        int i2;
+        int i3 = 0;
+        int i4 = 3;
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        if (dialog) {
+            this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        } else {
+            this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        }
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        textView.setGravity(i | 16);
+        View view = this.textView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) padding, 0.0f, (float) padding, 0.0f));
         this.radioButton = new RadioButton(context);
-        this.radioButton.setSize(AndroidUtilities.m10dp(20.0f));
-        this.radioButton.setColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_radioBackgroundChecked));
+        this.radioButton.setSize(AndroidUtilities.m9dp(20.0f));
+        if (dialog) {
+            this.radioButton.setColor(Theme.getColor(Theme.key_dialogRadioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+        } else {
+            this.radioButton.setColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_radioBackgroundChecked));
+        }
         View view2 = this.radioButton;
         if (!LocaleController.isRTL) {
-            i2 = 5;
+            i4 = 5;
         }
-        addView(view2, LayoutHelper.createFrame(22, 22.0f, i2 | 48, (float) (LocaleController.isRTL ? 18 : 0), 13.0f, (float) (LocaleController.isRTL ? 0 : 18), 0.0f));
+        int i5 = i4 | 48;
+        float f = (float) (LocaleController.isRTL ? padding + 1 : 0);
+        if (!LocaleController.isRTL) {
+            i3 = padding + 1;
+        }
+        addView(view2, LayoutHelper.createFrame(22, 22.0f, i5, f, 14.0f, (float) i3, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f));
-        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m10dp(34.0f);
-        this.radioButton.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(22.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(22.0f), NUM));
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f));
+        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m9dp(34.0f);
+        this.radioButton.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(22.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(22.0f), NUM));
         this.textView.measure(MeasureSpec.makeMeasureSpec(availableWidth, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
@@ -118,7 +143,7 @@ public class RadioCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

@@ -120,8 +120,8 @@ public class PhotoFilterView extends FrameLayout {
     private float warmthValue;
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$10 */
-    class C119810 implements OnClickListener {
-        C119810() {
+    class C078310 implements OnClickListener {
+        C078310() {
         }
 
         public void onClick(View v) {
@@ -136,11 +136,11 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$1 */
-    class C11991 implements SurfaceTextureListener {
+    class C07841 implements SurfaceTextureListener {
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$1$1 */
-        class C11971 implements Runnable {
-            C11971() {
+        class C07821 implements Runnable {
+            C07821() {
             }
 
             public void run() {
@@ -150,7 +150,7 @@ public class PhotoFilterView extends FrameLayout {
             }
         }
 
-        C11991() {
+        C07841() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -165,7 +165,7 @@ public class PhotoFilterView extends FrameLayout {
             if (PhotoFilterView.this.eglThread != null) {
                 PhotoFilterView.this.eglThread.setSurfaceTextureSize(width, height);
                 PhotoFilterView.this.eglThread.requestRender(false, true);
-                PhotoFilterView.this.eglThread.postRunnable(new C11971());
+                PhotoFilterView.this.eglThread.postRunnable(new C07821());
             }
         }
 
@@ -182,8 +182,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$4 */
-    class C12004 implements OnClickListener {
-        C12004() {
+    class C07854 implements OnClickListener {
+        C07854() {
         }
 
         public void onClick(View v) {
@@ -196,8 +196,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$5 */
-    class C12015 implements OnClickListener {
-        C12015() {
+    class C07865 implements OnClickListener {
+        C07865() {
         }
 
         public void onClick(View v) {
@@ -210,8 +210,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$6 */
-    class C12026 implements OnClickListener {
-        C12026() {
+    class C07876 implements OnClickListener {
+        C07876() {
         }
 
         public void onClick(View v) {
@@ -224,8 +224,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$7 */
-    class C12037 implements OnClickListener {
-        C12037() {
+    class C07887 implements OnClickListener {
+        C07887() {
         }
 
         public void onClick(View v) {
@@ -241,8 +241,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$8 */
-    class C12048 implements OnClickListener {
-        C12048() {
+    class C07898 implements OnClickListener {
+        C07898() {
         }
 
         public void onClick(View v) {
@@ -256,8 +256,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$9 */
-    class C12059 implements OnClickListener {
-        C12059() {
+    class C07909 implements OnClickListener {
+        C07909() {
         }
 
         public void onClick(View v) {
@@ -404,8 +404,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$2 */
-    class C12112 implements PhotoFilterLinearBlurControlDelegate {
-        C12112() {
+    class C07962 implements PhotoFilterLinearBlurControlDelegate {
+        C07962() {
         }
 
         public void valueChanged(Point centerPoint, float falloff, float size, float angle) {
@@ -420,8 +420,8 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$3 */
-    class C12123 implements PhotoFilterCurvesControlDelegate {
-        C12123() {
+    class C07973 implements PhotoFilterCurvesControlDelegate {
+        C07973() {
         }
 
         public void valueChanged() {
@@ -459,7 +459,7 @@ public class PhotoFilterView extends FrameLayout {
         private Bitmap currentBitmap;
         private int[] curveTextures = new int[1];
         private int curvesImageHandle;
-        private Runnable drawRunnable = new C12061();
+        private Runnable drawRunnable = new C07911();
         private EGL10 egl10;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
@@ -475,7 +475,7 @@ public class PhotoFilterView extends FrameLayout {
         private int exposureHandle;
         private int fadeAmountHandle;
         /* renamed from: gl */
-        private GL f227gl;
+        private GL f239gl;
         private int grainHandle;
         private int heightHandle;
         private int highlightsHandle;
@@ -543,8 +543,8 @@ public class PhotoFilterView extends FrameLayout {
         private int widthHandle;
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$EGLThread$1 */
-        class C12061 implements Runnable {
-            C12061() {
+        class C07911 implements Runnable {
+            C07911() {
             }
 
             public void run() {
@@ -571,14 +571,14 @@ public class PhotoFilterView extends FrameLayout {
                     GLES20.glDrawArrays(5, 0, 4);
                     EGLThread.this.egl10.eglSwapBuffers(EGLThread.this.eglDisplay, EGLThread.this.eglSurface);
                 } else if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m12e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
+                    FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
                 }
             }
         }
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$EGLThread$3 */
-        class C12083 implements Runnable {
-            C12083() {
+        class C07933 implements Runnable {
+            C07933() {
             }
 
             public void run() {
@@ -607,7 +607,7 @@ public class PhotoFilterView extends FrameLayout {
                 return shader;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m12e(GLES20.glGetShaderInfoLog(shader));
+                FileLog.m11e(GLES20.glGetShaderInfoLog(shader));
             }
             GLES20.glDeleteShader(shader);
             return 0;
@@ -618,7 +618,7 @@ public class PhotoFilterView extends FrameLayout {
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m12e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    FileLog.m11e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
@@ -628,7 +628,7 @@ public class PhotoFilterView extends FrameLayout {
                 EGLConfig[] configs = new EGLConfig[1];
                 if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12326, 0, 12344}, configs, 1, configsCount)) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        FileLog.m11e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     }
                     finish();
                     return false;
@@ -637,7 +637,7 @@ public class PhotoFilterView extends FrameLayout {
                     this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                     if (this.eglContext == null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            FileLog.m11e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
@@ -645,13 +645,13 @@ public class PhotoFilterView extends FrameLayout {
                         this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surfaceTexture, null);
                         if (this.eglSurface == null || this.eglSurface == EGL10.EGL_NO_SURFACE) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m12e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                                FileLog.m11e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             }
                             finish();
                             return false;
                         }
                         if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                            this.f227gl = this.eglContext.getGL();
+                            this.f239gl = this.eglContext.getGL();
                             float[] squareCoordinates = new float[]{-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
                             ByteBuffer bb = ByteBuffer.allocateDirect(squareCoordinates.length * 4);
                             bb.order(ByteOrder.nativeOrder());
@@ -889,7 +889,7 @@ public class PhotoFilterView extends FrameLayout {
                             return true;
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
@@ -899,14 +899,14 @@ public class PhotoFilterView extends FrameLayout {
                     }
                 } else {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("eglConfig not initialized");
+                        FileLog.m11e("eglConfig not initialized");
                     }
                     finish();
                     return false;
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m12e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                FileLog.m11e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
             }
             finish();
             return false;
@@ -955,7 +955,7 @@ public class PhotoFilterView extends FrameLayout {
                     buffer = ByteBuffer.allocateDirect(MessagesController.UPDATE_MASK_CHAT_ADMINS);
                     Utilities.calcCDT(hsvBuffer, this.renderBufferWidth, this.renderBufferHeight, buffer);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 GLES20.glBindTexture(3553, this.enhanceTextures[1]);
                 GLES20.glTexParameteri(3553, 10241, 9729);
@@ -1112,7 +1112,7 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glUniform1i(this.radialBlurSourceImage2Handle, 1);
                 GLES20.glUniform1f(this.radialBlurExcludeSizeHandle, PhotoFilterView.this.blurExcludeSize);
                 GLES20.glUniform1f(this.radialBlurExcludeBlurSizeHandle, PhotoFilterView.this.blurExcludeBlurSize);
-                GLES20.glUniform2f(this.radialBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f228x, PhotoFilterView.this.blurExcludePoint.f229y);
+                GLES20.glUniform2f(this.radialBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f240x, PhotoFilterView.this.blurExcludePoint.f241y);
                 GLES20.glUniform1f(this.radialBlurAspectRatioHandle, ((float) this.renderBufferHeight) / ((float) this.renderBufferWidth));
                 GLES20.glEnableVertexAttribArray(this.radialBlurInputTexCoordHandle);
                 GLES20.glVertexAttribPointer(this.radialBlurInputTexCoordHandle, 2, 5126, false, 8, this.textureBuffer);
@@ -1125,7 +1125,7 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glUniform1f(this.linearBlurExcludeSizeHandle, PhotoFilterView.this.blurExcludeSize);
                 GLES20.glUniform1f(this.linearBlurExcludeBlurSizeHandle, PhotoFilterView.this.blurExcludeBlurSize);
                 GLES20.glUniform1f(this.linearBlurAngleHandle, PhotoFilterView.this.blurAngle);
-                GLES20.glUniform2f(this.linearBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f228x, PhotoFilterView.this.blurExcludePoint.f229y);
+                GLES20.glUniform2f(this.linearBlurExcludePointHandle, PhotoFilterView.this.blurExcludePoint.f240x, PhotoFilterView.this.blurExcludePoint.f241y);
                 GLES20.glUniform1f(this.linearBlurAspectRatioHandle, ((float) this.renderBufferHeight) / ((float) this.renderBufferWidth));
                 GLES20.glEnableVertexAttribArray(this.linearBlurInputTexCoordHandle);
                 GLES20.glVertexAttribPointer(this.linearBlurInputTexCoordHandle, 2, 5126, false, 8, this.textureBuffer);
@@ -1173,7 +1173,7 @@ public class PhotoFilterView extends FrameLayout {
                 });
                 countDownLatch.await();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             return object[0];
         }
@@ -1234,7 +1234,7 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         public void shutdown() {
-            postRunnable(new C12083());
+            postRunnable(new C07933());
         }
 
         public void setSurfaceTextureSize(int width, int height) {
@@ -1272,8 +1272,8 @@ public class PhotoFilterView extends FrameLayout {
         private Context mContext;
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$2 */
-        class C12102 implements OnClickListener {
-            C12102() {
+        class C07952 implements OnClickListener {
+            C07952() {
             }
 
             public void onClick(View v) {
@@ -1290,8 +1290,8 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$1 */
-        class C12131 implements PhotoEditorSeekBarDelegate {
-            C12131() {
+        class C07981 implements PhotoEditorSeekBarDelegate {
+            C07981() {
             }
 
             public void onProgressChanged(int i, int progress) {
@@ -1341,10 +1341,10 @@ public class PhotoFilterView extends FrameLayout {
             if (i == 0) {
                 View cell = new PhotoEditToolCell(this.mContext);
                 view = cell;
-                cell.setSeekBarDelegate(new C12131());
+                cell.setSeekBarDelegate(new C07981());
             } else {
                 view = new PhotoEditRadioCell(this.mContext);
-                view.setOnClickListener(new C12102());
+                view.setOnClickListener(new C07952());
             }
             return new Holder(view);
         }
@@ -1454,13 +1454,13 @@ public class PhotoFilterView extends FrameLayout {
         this.textureView = new TextureView(context);
         addView(this.textureView, LayoutHelper.createFrame(-1, -1, 51));
         this.textureView.setVisibility(4);
-        this.textureView.setSurfaceTextureListener(new C11991());
+        this.textureView.setSurfaceTextureListener(new C07841());
         this.blurControl = new PhotoFilterBlurControl(context);
         this.blurControl.setVisibility(4);
         addView(this.blurControl, LayoutHelper.createFrame(-1, -1, 51));
-        this.blurControl.setDelegate(new C12112());
+        this.blurControl.setDelegate(new C07962());
         this.curvesControl = new PhotoFilterCurvesControl(context, this.curvesToolValue);
-        this.curvesControl.setDelegate(new C12123());
+        this.curvesControl.setDelegate(new C07973());
         this.curvesControl.setVisibility(4);
         addView(this.curvesControl, LayoutHelper.createFrame(-1, -1, 51));
         this.toolsView = new FrameLayout(context);
@@ -1473,7 +1473,7 @@ public class PhotoFilterView extends FrameLayout {
         this.cancelTextView.setTextColor(-1);
         this.cancelTextView.setGravity(17);
         this.cancelTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
-        this.cancelTextView.setPadding(AndroidUtilities.m10dp(20.0f), 0, AndroidUtilities.m10dp(20.0f), 0);
+        this.cancelTextView.setPadding(AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f), 0);
         this.cancelTextView.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         this.cancelTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(this.cancelTextView, LayoutHelper.createFrame(-2, -1, 51));
@@ -1482,7 +1482,7 @@ public class PhotoFilterView extends FrameLayout {
         this.doneTextView.setTextColor(-11420173);
         this.doneTextView.setGravity(17);
         this.doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
-        this.doneTextView.setPadding(AndroidUtilities.m10dp(20.0f), 0, AndroidUtilities.m10dp(20.0f), 0);
+        this.doneTextView.setPadding(AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f), 0);
         this.doneTextView.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
         this.doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(this.doneTextView, LayoutHelper.createFrame(-2, -1, 53));
@@ -1494,19 +1494,19 @@ public class PhotoFilterView extends FrameLayout {
         this.tuneItem.setColorFilter(new PorterDuffColorFilter(-9649153, Mode.MULTIPLY));
         this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
-        this.tuneItem.setOnClickListener(new C12004());
+        this.tuneItem.setOnClickListener(new C07854());
         this.blurItem = new ImageView(context);
         this.blurItem.setScaleType(ScaleType.CENTER);
         this.blurItem.setImageResource(R.drawable.tool_blur);
         this.blurItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.blurItem, LayoutHelper.createLinear(56, 48));
-        this.blurItem.setOnClickListener(new C12015());
+        this.blurItem.setOnClickListener(new C07865());
         this.curveItem = new ImageView(context);
         this.curveItem.setScaleType(ScaleType.CENTER);
         this.curveItem.setImageResource(R.drawable.tool_curve);
         this.curveItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(this.curveItem, LayoutHelper.createLinear(56, 48));
-        this.curveItem.setOnClickListener(new C12026());
+        this.curveItem.setOnClickListener(new C07876());
         this.recyclerListView = new RecyclerListView(context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(1);
@@ -1526,7 +1526,7 @@ public class PhotoFilterView extends FrameLayout {
             FrameLayout frameLayout1 = new FrameLayout(context);
             frameLayout1.setTag(Integer.valueOf(a));
             this.curveRadioButton[a] = new RadioButton(context);
-            this.curveRadioButton[a].setSize(AndroidUtilities.m10dp(20.0f));
+            this.curveRadioButton[a].setSize(AndroidUtilities.m9dp(20.0f));
             frameLayout1.addView(this.curveRadioButton[a], LayoutHelper.createFrame(30, 30, 49));
             TextView curveTextView = new TextView(context);
             curveTextView.setTextSize(1, 12.0f);
@@ -1555,33 +1555,33 @@ public class PhotoFilterView extends FrameLayout {
             }
             frameLayout1.addView(curveTextView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 38.0f, 0.0f, 0.0f));
             curveTextViewContainer.addView(frameLayout1, LayoutHelper.createLinear(-2, -2, a == 0 ? 0.0f : 30.0f, 0.0f, 0.0f, 0.0f));
-            frameLayout1.setOnClickListener(new C12037());
+            frameLayout1.setOnClickListener(new C07887());
             a++;
         }
         this.blurLayout = new FrameLayout(context);
         this.blurLayout.setVisibility(4);
         this.toolsView.addView(this.blurLayout, LayoutHelper.createFrame(280, 60.0f, 1, 0.0f, 40.0f, 0.0f, 0.0f));
         this.blurOffButton = new TextView(context);
-        this.blurOffButton.setCompoundDrawablePadding(AndroidUtilities.m10dp(2.0f));
+        this.blurOffButton.setCompoundDrawablePadding(AndroidUtilities.m9dp(2.0f));
         this.blurOffButton.setTextSize(1, 13.0f);
         this.blurOffButton.setGravity(1);
         this.blurOffButton.setText(LocaleController.getString("BlurOff", R.string.BlurOff));
         this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, 60.0f));
-        this.blurOffButton.setOnClickListener(new C12048());
+        this.blurOffButton.setOnClickListener(new C07898());
         this.blurRadialButton = new TextView(context);
-        this.blurRadialButton.setCompoundDrawablePadding(AndroidUtilities.m10dp(2.0f));
+        this.blurRadialButton.setCompoundDrawablePadding(AndroidUtilities.m9dp(2.0f));
         this.blurRadialButton.setTextSize(1, 13.0f);
         this.blurRadialButton.setGravity(1);
         this.blurRadialButton.setText(LocaleController.getString("BlurRadial", R.string.BlurRadial));
         this.blurLayout.addView(this.blurRadialButton, LayoutHelper.createFrame(80, 80.0f, 51, 100.0f, 0.0f, 0.0f, 0.0f));
-        this.blurRadialButton.setOnClickListener(new C12059());
+        this.blurRadialButton.setOnClickListener(new C07909());
         this.blurLinearButton = new TextView(context);
-        this.blurLinearButton.setCompoundDrawablePadding(AndroidUtilities.m10dp(2.0f));
+        this.blurLinearButton.setCompoundDrawablePadding(AndroidUtilities.m9dp(2.0f));
         this.blurLinearButton.setTextSize(1, 13.0f);
         this.blurLinearButton.setGravity(1);
         this.blurLinearButton.setText(LocaleController.getString("BlurLinear", R.string.BlurLinear));
         this.blurLayout.addView(this.blurLinearButton, LayoutHelper.createFrame(80, 80.0f, 51, 200.0f, 0.0f, 0.0f, 0.0f));
-        this.blurLinearButton.setOnClickListener(new C119810());
+        this.blurLinearButton.setOnClickListener(new C078310());
         updateSelectedBlurType();
         if (VERSION.SDK_INT >= 21) {
             ((LayoutParams) this.textureView.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
@@ -1734,8 +1734,8 @@ public class PhotoFilterView extends FrameLayout {
         if (this.bitmapToEdit != null) {
             float bitmapW;
             float bitmapH;
-            viewWidth -= AndroidUtilities.m10dp(28.0f);
-            viewHeight -= (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.m10dp(214.0f);
+            viewWidth -= AndroidUtilities.m9dp(28.0f);
+            viewHeight -= (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.m9dp(214.0f);
             if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
                 bitmapW = (float) this.bitmapToEdit.getHeight();
                 bitmapH = (float) this.bitmapToEdit.getWidth();
@@ -1752,8 +1752,8 @@ public class PhotoFilterView extends FrameLayout {
                 bitmapW = (float) viewWidth;
                 bitmapH = (float) ((int) Math.ceil((double) (bitmapH * scaleX)));
             }
-            int bitmapX = (int) Math.ceil((double) (((((float) viewWidth) - bitmapW) / 2.0f) + ((float) AndroidUtilities.m10dp(14.0f))));
-            int bitmapY = (int) Math.ceil((double) (((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) + (((float) AndroidUtilities.m10dp(14.0f)) + ((((float) viewHeight) - bitmapH) / 2.0f))));
+            int bitmapX = (int) Math.ceil((double) (((((float) viewWidth) - bitmapW) / 2.0f) + ((float) AndroidUtilities.m9dp(14.0f))));
+            int bitmapY = (int) Math.ceil((double) (((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) + (((float) AndroidUtilities.m9dp(14.0f)) + ((((float) viewHeight) - bitmapH) / 2.0f))));
             LayoutParams layoutParams = (LayoutParams) this.textureView.getLayoutParams();
             layoutParams.leftMargin = bitmapX;
             layoutParams.topMargin = bitmapY;
@@ -1761,10 +1761,10 @@ public class PhotoFilterView extends FrameLayout {
             layoutParams.height = (int) bitmapH;
             this.curvesControl.setActualArea((float) bitmapX, (float) (bitmapY - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)), (float) layoutParams.width, (float) layoutParams.height);
             this.blurControl.setActualAreaSize((float) layoutParams.width, (float) layoutParams.height);
-            ((LayoutParams) this.blurControl.getLayoutParams()).height = AndroidUtilities.m10dp(38.0f) + viewHeight;
-            ((LayoutParams) this.curvesControl.getLayoutParams()).height = AndroidUtilities.m10dp(28.0f) + viewHeight;
+            ((LayoutParams) this.blurControl.getLayoutParams()).height = AndroidUtilities.m9dp(38.0f) + viewHeight;
+            ((LayoutParams) this.curvesControl.getLayoutParams()).height = AndroidUtilities.m9dp(28.0f) + viewHeight;
             if (AndroidUtilities.isTablet()) {
-                int total = AndroidUtilities.m10dp(86.0f) * 10;
+                int total = AndroidUtilities.m9dp(86.0f) * 10;
                 layoutParams = (LayoutParams) this.recyclerListView.getLayoutParams();
                 if (total < viewWidth) {
                     layoutParams.width = total;

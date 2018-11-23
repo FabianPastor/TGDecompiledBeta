@@ -1,19 +1,25 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import java.util.HashMap;
+import org.telegram.messenger.LocaleController.LocaleInfo;
+import org.telegram.tgnet.TLRPC.TL_langPackDifference;
 
-final /* synthetic */ class LocaleController$$Lambda$4 implements RequestDelegate {
+final /* synthetic */ class LocaleController$$Lambda$4 implements Runnable {
     private final LocaleController arg$1;
-    private final int arg$2;
+    private final LocaleInfo arg$2;
+    private final int arg$3;
+    private final TL_langPackDifference arg$4;
+    private final HashMap arg$5;
 
-    LocaleController$$Lambda$4(LocaleController localeController, int i) {
+    LocaleController$$Lambda$4(LocaleController localeController, LocaleInfo localeInfo, int i, TL_langPackDifference tL_langPackDifference, HashMap hashMap) {
         this.arg$1 = localeController;
-        this.arg$2 = i;
+        this.arg$2 = localeInfo;
+        this.arg$3 = i;
+        this.arg$4 = tL_langPackDifference;
+        this.arg$5 = hashMap;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$loadRemoteLanguages$5$LocaleController(this.arg$2, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$saveRemoteLocaleStrings$4$LocaleController(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
     }
 }

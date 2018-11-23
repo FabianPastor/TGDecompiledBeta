@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class NotificationsController$$Lambda$21 implements Runnable {
-    private final NotificationsController arg$1;
-    private final int arg$2;
+import android.graphics.Canvas;
+import android.graphics.PostProcessor;
 
-    NotificationsController$$Lambda$21(NotificationsController notificationsController, int i) {
-        this.arg$1 = notificationsController;
-        this.arg$2 = i;
+final /* synthetic */ class NotificationsController$$Lambda$21 implements PostProcessor {
+    static final PostProcessor $instance = new NotificationsController$$Lambda$21();
+
+    private NotificationsController$$Lambda$21() {
     }
 
-    public void run() {
-        this.arg$1.lambda$null$20$NotificationsController(this.arg$2);
+    public int onPostProcess(Canvas canvas) {
+        return NotificationsController.lambda$null$27$NotificationsController(canvas);
     }
 }

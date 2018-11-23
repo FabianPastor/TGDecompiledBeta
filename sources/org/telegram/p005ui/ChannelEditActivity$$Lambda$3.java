@@ -1,23 +1,18 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.view.KeyEvent;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 /* renamed from: org.telegram.ui.ChannelEditActivity$$Lambda$3 */
-final /* synthetic */ class ChannelEditActivity$$Lambda$3 implements RequestDelegate {
+final /* synthetic */ class ChannelEditActivity$$Lambda$3 implements OnEditorActionListener {
     private final ChannelEditActivity arg$1;
-    private final TL_channels_getParticipants arg$2;
-    private final int arg$3;
 
-    ChannelEditActivity$$Lambda$3(ChannelEditActivity channelEditActivity, TL_channels_getParticipants tL_channels_getParticipants, int i) {
+    ChannelEditActivity$$Lambda$3(ChannelEditActivity channelEditActivity) {
         this.arg$1 = channelEditActivity;
-        this.arg$2 = tL_channels_getParticipants;
-        this.arg$3 = i;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$getChannelParticipants$4$ChannelEditActivity(this.arg$2, this.arg$3, tLObject, tL_error);
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.arg$1.lambda$createView$4$ChannelEditActivity(textView, i, keyEvent);
     }
 }

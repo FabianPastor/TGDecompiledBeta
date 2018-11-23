@@ -32,7 +32,7 @@ public class LocationCell extends FrameLayout {
         super(context);
         this.imageView = new BackupImageView(context);
         this.imageView.setBackgroundResource(R.drawable.round_grey);
-        this.imageView.setSize(AndroidUtilities.m10dp(30.0f), AndroidUtilities.m10dp(30.0f));
+        this.imageView.setSize(AndroidUtilities.m9dp(30.0f), AndroidUtilities.m9dp(30.0f));
         this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 8.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
@@ -82,7 +82,7 @@ public class LocationCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(56.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(56.0f), NUM));
     }
 
     public void setLocation(TL_messageMediaVenue location, String icon, boolean divider) {
@@ -95,7 +95,7 @@ public class LocationCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) AndroidUtilities.m10dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine((float) AndroidUtilities.m9dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

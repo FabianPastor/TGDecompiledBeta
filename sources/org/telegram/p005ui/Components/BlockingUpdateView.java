@@ -60,11 +60,11 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         int top = VERSION.SDK_INT >= 21 ? (int) (((float) AndroidUtilities.statusBarHeight) / AndroidUtilities.density) : 0;
         FrameLayout view = new FrameLayout(context);
         view.setBackgroundColor(-11556378);
-        addView(view, new LayoutParams(-1, (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.m10dp(176.0f)));
+        addView(view, new LayoutParams(-1, (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.m9dp(176.0f)));
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.intro_tg_plane);
         imageView.setScaleType(ScaleType.CENTER);
-        imageView.setPadding(0, 0, 0, AndroidUtilities.m10dp(14.0f));
+        imageView.setPadding(0, 0, 0, AndroidUtilities.m9dp(14.0f));
         view.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) top, 0.0f, 0.0f));
         imageView.setOnClickListener(new BlockingUpdateView$$Lambda$0(this));
         ScrollView scrollView = new ScrollView(context);
@@ -85,17 +85,17 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.textView.setTextSize(1, 15.0f);
         this.textView.setMovementMethod(new LinkMovementMethodMy());
         this.textView.setGravity(49);
-        this.textView.setLineSpacing((float) AndroidUtilities.m10dp(2.0f), 1.0f);
+        this.textView.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
         container.addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 44.0f, 0.0f, 0.0f));
         this.acceptButton = new FrameLayout(context);
         this.acceptButton.setBackgroundResource(R.drawable.regbtn_states);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
-            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.acceptButton, "translationZ", new float[]{(float) AndroidUtilities.m10dp(2.0f), (float) AndroidUtilities.m10dp(4.0f)}).setDuration(200));
-            animator.addState(new int[0], ObjectAnimator.ofFloat(this.acceptButton, "translationZ", new float[]{(float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(2.0f)}).setDuration(200));
+            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.acceptButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
+            animator.addState(new int[0], ObjectAnimator.ofFloat(this.acceptButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             this.acceptButton.setStateListAnimator(animator);
         }
-        this.acceptButton.setPadding(AndroidUtilities.m10dp(20.0f), 0, AndroidUtilities.m10dp(20.0f), 0);
+        this.acceptButton.setPadding(AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f), 0);
         addView(this.acceptButton, LayoutHelper.createFrame(-2, 56.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
         this.acceptButton.setOnClickListener(new BlockingUpdateView$$Lambda$1(this));
         this.acceptTextView = new TextView(context);
@@ -109,7 +109,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 super.onLayout(changed, left, top, right, bottom);
                 int width = right - left;
                 int height = bottom - top;
-                int w = AndroidUtilities.m10dp(36.0f);
+                int w = AndroidUtilities.m9dp(36.0f);
                 int l = (width - w) / 2;
                 int t = (height - w) / 2;
                 BlockingUpdateView.this.radialProgress.setProgressRect(l, t, l + w, t + w);
@@ -145,7 +145,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
         if (this.appUpdate.document instanceof TL_document) {
             if (!BlockingUpdateView.openApkInstall((Activity) getContext(), this.appUpdate.document)) {
-                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, true, 1);
+                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", true, 1);
                 showProgress(true);
             }
         } else if (this.appUpdate.url != null) {
@@ -156,21 +156,21 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
         if (visibility == 8) {
-            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileDidLoaded);
-            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileDidFailedLoad);
+            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailedLoad);
             NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
         }
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
         String location;
-        if (id == NotificationCenter.FileDidLoaded) {
+        if (id == NotificationCenter.fileDidLoad) {
             location = args[0];
             if (this.fileName != null && this.fileName.equals(location)) {
                 showProgress(false);
                 BlockingUpdateView.openApkInstall((Activity) getContext(), this.appUpdate.document);
             }
-        } else if (id == NotificationCenter.FileDidFailedLoad) {
+        } else if (id == NotificationCenter.fileDidFailedLoad) {
             location = (String) args[0];
             if (this.fileName != null && this.fileName.equals(location)) {
                 showProgress(false);
@@ -200,7 +200,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         try {
             context.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName())));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -221,11 +221,11 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 try {
                     activity.startActivityForResult(intent, 500);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
         } catch (Throwable e2) {
-            FileLog.m14e(e2);
+            FileLog.m13e(e2);
         }
         return exists;
     }
@@ -301,8 +301,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         } else {
             this.acceptTextView.setText(LocaleController.getString("Update", R.string.Update).toUpperCase());
         }
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
     }
 }

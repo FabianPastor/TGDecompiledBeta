@@ -12,6 +12,6 @@ final /* synthetic */ class PrivacySettingsActivity$$Lambda$10 implements OnClic
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$null$14$PrivacySettingsActivity(view);
+        this.arg$1.lambda$null$16$PrivacySettingsActivity(view);
     }
 }

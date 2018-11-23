@@ -55,15 +55,15 @@ public class FeaturedStickerSetCell extends FrameLayout {
     private boolean wasLayout;
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$2 */
-    class C08032 extends Drawable {
+    class C05002 extends Drawable {
         Paint paint = new Paint(1);
 
-        C08032() {
+        C05002() {
         }
 
         public void draw(Canvas canvas) {
             this.paint.setColor(-12277526);
-            canvas.drawCircle((float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(5.0f), (float) AndroidUtilities.m10dp(3.0f), this.paint);
+            canvas.drawCircle((float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(5.0f), (float) AndroidUtilities.m9dp(3.0f), this.paint);
         }
 
         public void setAlpha(int alpha) {
@@ -77,17 +77,17 @@ public class FeaturedStickerSetCell extends FrameLayout {
         }
 
         public int getIntrinsicWidth() {
-            return AndroidUtilities.m10dp(12.0f);
+            return AndroidUtilities.m9dp(12.0f);
         }
 
         public int getIntrinsicHeight() {
-            return AndroidUtilities.m10dp(8.0f);
+            return AndroidUtilities.m9dp(8.0f);
         }
     }
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$3 */
-    class C08043 extends AnimatorListenerAdapter {
-        C08043() {
+    class C05013 extends AnimatorListenerAdapter {
+        C05013() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -104,8 +104,8 @@ public class FeaturedStickerSetCell extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetCell$4 */
-    class C08054 extends AnimatorListenerAdapter {
-        C08054() {
+    class C05024 extends AnimatorListenerAdapter {
+        C05024() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -131,7 +131,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.progressPaint.setColor(Theme.getColor(Theme.key_featuredStickers_buttonProgress));
         this.progressPaint.setStrokeCap(Cap.ROUND);
         this.progressPaint.setStyle(Style.STROKE);
-        this.progressPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.progressPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
@@ -146,7 +146,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 100.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 100.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 22.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 22.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
@@ -193,10 +193,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 super.onDraw(canvas);
                 if (FeaturedStickerSetCell.this.drawProgress || !(FeaturedStickerSetCell.this.drawProgress || FeaturedStickerSetCell.this.progressAlpha == 0.0f)) {
                     FeaturedStickerSetCell.this.progressPaint.setAlpha(Math.min(255, (int) (FeaturedStickerSetCell.this.progressAlpha * 255.0f)));
-                    int x = getMeasuredWidth() - AndroidUtilities.m10dp(11.0f);
-                    FeaturedStickerSetCell.this.progressRect.set((float) x, (float) AndroidUtilities.m10dp(3.0f), (float) (AndroidUtilities.m10dp(8.0f) + x), (float) AndroidUtilities.m10dp(11.0f));
+                    int x = getMeasuredWidth() - AndroidUtilities.m9dp(11.0f);
+                    FeaturedStickerSetCell.this.progressRect.set((float) x, (float) AndroidUtilities.m9dp(3.0f), (float) (AndroidUtilities.m9dp(8.0f) + x), (float) AndroidUtilities.m9dp(11.0f));
                     canvas.drawArc(FeaturedStickerSetCell.this.progressRect, (float) FeaturedStickerSetCell.this.angle, 220.0f, false, FeaturedStickerSetCell.this.progressPaint);
-                    invalidate(((int) FeaturedStickerSetCell.this.progressRect.left) - AndroidUtilities.m10dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.top) - AndroidUtilities.m10dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.right) + AndroidUtilities.m10dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.bottom) + AndroidUtilities.m10dp(2.0f));
+                    invalidate(((int) FeaturedStickerSetCell.this.progressRect.left) - AndroidUtilities.m9dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.top) - AndroidUtilities.m9dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.right) + AndroidUtilities.m9dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.bottom) + AndroidUtilities.m9dp(2.0f));
                     long newTime = System.currentTimeMillis();
                     if (Math.abs(FeaturedStickerSetCell.this.lastUpdateTime - System.currentTimeMillis()) < 1000) {
                         long delta = newTime - FeaturedStickerSetCell.this.lastUpdateTime;
@@ -225,9 +225,9 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.m10dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
+        this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.m9dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         this.addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
-        this.addButton.setPadding(AndroidUtilities.m10dp(17.0f), 0, AndroidUtilities.m10dp(17.0f), 0);
+        this.addButton.setPadding(AndroidUtilities.m9dp(17.0f), 0, AndroidUtilities.m9dp(17.0f), 0);
         view = this.addButton;
         if (!LocaleController.isRTL) {
             i3 = 5;
@@ -240,7 +240,16 @@ public class FeaturedStickerSetCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(64.0f), NUM));
+        int i;
+        int makeMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM);
+        int dp = AndroidUtilities.m9dp(64.0f);
+        if (this.needDivider) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        super.onMeasure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(i + dp, NUM));
+        measureChildWithMargins(this.textView, widthMeasureSpec, this.addButton.getMeasuredWidth(), heightMeasureSpec, 0);
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -257,22 +266,11 @@ public class FeaturedStickerSetCell extends FrameLayout {
     }
 
     public void setStickersSet(StickerSetCovered set, boolean divider, boolean unread) {
-        boolean sameSet;
-        boolean z;
-        if (set == this.stickersSet && this.wasLayout) {
-            sameSet = true;
-        } else {
-            sameSet = false;
-        }
+        boolean sameSet = set == this.stickersSet && this.wasLayout;
         this.needDivider = divider;
         this.stickersSet = set;
         this.lastUpdateTime = System.currentTimeMillis();
-        if (this.needDivider) {
-            z = false;
-        } else {
-            z = true;
-        }
-        setWillNotDraw(z);
+        setWillNotDraw(!this.needDivider);
         if (this.currentAnimation != null) {
             this.currentAnimation.cancel();
             this.currentAnimation = null;
@@ -280,7 +278,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.textView.setText(this.stickersSet.set.title);
         if (unread) {
             Drawable drawable;
-            Drawable drawable2 = new C08032();
+            Drawable drawable2 = new C05002();
             TextView textView = this.textView;
             if (LocaleController.isRTL) {
                 drawable = null;
@@ -296,22 +294,23 @@ public class FeaturedStickerSetCell extends FrameLayout {
         }
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", set.set.count));
         if (set.cover != null && set.cover.thumb != null && set.cover.thumb.location != null) {
-            this.imageView.setImage(set.cover.thumb.location, null, "webp", null);
+            this.imageView.setImage(set.cover.thumb.location, null, "webp", null, (Object) set);
         } else if (!(set.covers.isEmpty() || ((Document) set.covers.get(0)).thumb == null)) {
-            this.imageView.setImage(((Document) set.covers.get(0)).thumb.location, null, "webp", null);
+            this.imageView.setImage(((Document) set.covers.get(0)).thumb.location, null, "webp", null, (Object) set);
         }
+        boolean isStickerPackInstalled;
         if (sameSet) {
             boolean wasInstalled = this.isInstalled;
-            z = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.f111id);
-            this.isInstalled = z;
-            if (z) {
+            isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.f109id);
+            this.isInstalled = isStickerPackInstalled;
+            if (isStickerPackInstalled) {
                 if (!wasInstalled) {
                     this.checkImage.setVisibility(0);
                     this.addButton.setClickable(false);
                     this.currentAnimation = new AnimatorSet();
                     this.currentAnimation.setDuration(200);
                     this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{0.01f, 1.0f})});
-                    this.currentAnimation.addListener(new C08043());
+                    this.currentAnimation.addListener(new C05013());
                     this.currentAnimation.start();
                     return;
                 }
@@ -322,16 +321,16 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.setDuration(200);
                 this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{0.01f, 1.0f})});
-                this.currentAnimation.addListener(new C08054());
+                this.currentAnimation.addListener(new C05024());
                 this.currentAnimation.start();
                 return;
             } else {
                 return;
             }
         }
-        z = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.f111id);
-        this.isInstalled = z;
-        if (z) {
+        isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.f109id);
+        this.isInstalled = isStickerPackInstalled;
+        if (isStickerPackInstalled) {
             this.addButton.setVisibility(4);
             this.addButton.setClickable(false);
             this.checkImage.setVisibility(0);

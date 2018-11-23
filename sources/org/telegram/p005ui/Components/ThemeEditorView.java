@@ -63,7 +63,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.ActionBarLayout;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
-import org.telegram.p005ui.ActionBar.C0646ActionBar;
+import org.telegram.p005ui.ActionBar.C0403ActionBar;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.TextColorThemeCell;
@@ -82,8 +82,8 @@ public class ThemeEditorView {
     private String currentThemeName;
     private DecelerateInterpolator decelerateInterpolator;
     private EditorAlert editorAlert;
-    private final int editorHeight = AndroidUtilities.m10dp(54.0f);
-    private final int editorWidth = AndroidUtilities.m10dp(54.0f);
+    private final int editorHeight = AndroidUtilities.m9dp(54.0f);
+    private final int editorWidth = AndroidUtilities.m9dp(54.0f);
     private boolean hidden;
     private Activity parentActivity;
     private SharedPreferences preferences;
@@ -93,8 +93,8 @@ public class ThemeEditorView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.ThemeEditorView$3 */
-    class C13213 extends AnimatorListenerAdapter {
-        C13213() {
+    class C08723 extends AnimatorListenerAdapter {
+        C08723() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -105,8 +105,8 @@ public class ThemeEditorView {
     }
 
     /* renamed from: org.telegram.ui.Components.ThemeEditorView$4 */
-    class C13224 extends AnimatorListenerAdapter {
-        C13224() {
+    class C08734 extends AnimatorListenerAdapter {
+        C08734() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -137,8 +137,8 @@ public class ThemeEditorView {
         private int topBeforeSwitch;
 
         /* renamed from: org.telegram.ui.Components.ThemeEditorView$EditorAlert$10 */
-        class C132310 extends AnimatorListenerAdapter {
-            C132310() {
+        class C087410 extends AnimatorListenerAdapter {
+            C087410() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -149,8 +149,8 @@ public class ThemeEditorView {
         }
 
         /* renamed from: org.telegram.ui.Components.ThemeEditorView$EditorAlert$9 */
-        class C13309 extends AnimatorListenerAdapter {
-            C13309() {
+        class C08819 extends AnimatorListenerAdapter {
+            C08819() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -178,7 +178,7 @@ public class ThemeEditorView {
             private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
             private float[] hsvTemp = new float[3];
             private LinearLayout linearLayout;
-            private final int paramValueSliderWidth = AndroidUtilities.m10dp(20.0f);
+            private final int paramValueSliderWidth = AndroidUtilities.m9dp(20.0f);
             private Paint valueSliderPaint;
 
             public ColorPicker(Context context) {
@@ -201,7 +201,7 @@ public class ThemeEditorView {
                     this.colorEditText[a].setInputType(2);
                     this.colorEditText[a].setTextColor(-14606047);
                     this.colorEditText[a].setCursorColor(-14606047);
-                    this.colorEditText[a].setCursorSize(AndroidUtilities.m10dp(20.0f));
+                    this.colorEditText[a].setCursorSize(AndroidUtilities.m9dp(20.0f));
                     this.colorEditText[a].setCursorWidth(1.5f);
                     this.colorEditText[a].setTextSize(1, 18.0f);
                     this.colorEditText[a].setBackgroundDrawable(Theme.createEditTextDrawable(context, true));
@@ -280,7 +280,7 @@ public class ThemeEditorView {
 
             protected void onDraw(Canvas canvas) {
                 int centerX = (getWidth() / 2) - (this.paramValueSliderWidth * 2);
-                int centerY = (getHeight() / 2) - AndroidUtilities.m10dp(8.0f);
+                int centerY = (getHeight() / 2) - AndroidUtilities.m9dp(8.0f);
                 canvas.drawBitmap(this.colorWheelBitmap, (float) (centerX - this.colorWheelRadius), (float) (centerY - this.colorWheelRadius), null);
                 float hueAngle = (float) Math.toRadians((double) this.colorHSV[0]);
                 int colorPointX = ((int) (((-Math.cos((double) hueAngle)) * ((double) this.colorHSV[1])) * ((double) this.colorWheelRadius))) + centerX;
@@ -292,7 +292,7 @@ public class ThemeEditorView {
                 drawPointerArrow(canvas, colorPointX, colorPointY, Color.HSVToColor(this.hsvTemp));
                 int x = (this.colorWheelRadius + centerX) + this.paramValueSliderWidth;
                 int y = centerY - this.colorWheelRadius;
-                int width = AndroidUtilities.m10dp(9.0f);
+                int width = AndroidUtilities.m9dp(9.0f);
                 int height = this.colorWheelRadius * 2;
                 if (this.colorGradient == null) {
                     this.colorGradient = new LinearGradient((float) x, (float) y, (float) (x + width), (float) (y + height), new int[]{Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Color.HSVToColor(this.hsvTemp)}, null, TileMode.CLAMP);
@@ -311,17 +311,17 @@ public class ThemeEditorView {
             }
 
             private void drawPointerArrow(Canvas canvas, int x, int y, int color) {
-                int side = AndroidUtilities.m10dp(13.0f);
+                int side = AndroidUtilities.m9dp(13.0f);
                 this.circleDrawable.setBounds(x - side, y - side, x + side, y + side);
                 this.circleDrawable.draw(canvas);
                 this.circlePaint.setColor(-1);
-                canvas.drawCircle((float) x, (float) y, (float) AndroidUtilities.m10dp(11.0f), this.circlePaint);
+                canvas.drawCircle((float) x, (float) y, (float) AndroidUtilities.m9dp(11.0f), this.circlePaint);
                 this.circlePaint.setColor(color);
-                canvas.drawCircle((float) x, (float) y, (float) AndroidUtilities.m10dp(9.0f), this.circlePaint);
+                canvas.drawCircle((float) x, (float) y, (float) AndroidUtilities.m9dp(9.0f), this.circlePaint);
             }
 
             protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-                this.colorWheelRadius = Math.max(1, ((width / 2) - (this.paramValueSliderWidth * 2)) - AndroidUtilities.m10dp(20.0f));
+                this.colorWheelRadius = Math.max(1, ((width / 2) - (this.paramValueSliderWidth * 2)) - AndroidUtilities.m9dp(20.0f));
                 this.colorWheelBitmap = createColorWheelBitmap(this.colorWheelRadius * 2, this.colorWheelRadius * 2);
                 this.colorGradient = null;
                 this.alphaGradient = null;
@@ -374,7 +374,7 @@ public class ThemeEditorView {
                         int x = (int) event.getX();
                         int y = (int) event.getY();
                         int centerX = (getWidth() / 2) - (this.paramValueSliderWidth * 2);
-                        int centerY = (getHeight() / 2) - AndroidUtilities.m10dp(8.0f);
+                        int centerY = (getHeight() / 2) - AndroidUtilities.m9dp(8.0f);
                         int cx = x - centerX;
                         int cy = y - centerY;
                         double d = Math.sqrt((double) ((cx * cx) + (cy * cy)));
@@ -538,7 +538,7 @@ public class ThemeEditorView {
                     if (ev.getAction() != 0 || EditorAlert.this.scrollOffsetY == 0 || ev.getY() >= ((float) EditorAlert.this.scrollOffsetY)) {
                         return super.onInterceptTouchEvent(ev);
                     }
-                    EditorAlert.this.dismiss();
+                    EditorAlert.this.lambda$new$4$EmbedBottomSheet();
                     return true;
                 }
 
@@ -556,7 +556,7 @@ public class ThemeEditorView {
                     if (EditorAlert.this.listView.getPaddingTop() != padding) {
                         this.ignoreLayout = true;
                         int previousPadding = EditorAlert.this.listView.getPaddingTop();
-                        EditorAlert.this.listView.setPadding(0, padding, 0, AndroidUtilities.m10dp(48.0f));
+                        EditorAlert.this.listView.setPadding(0, padding, 0, AndroidUtilities.m9dp(48.0f));
                         if (EditorAlert.this.colorPicker.getVisibility() == 0) {
                             EditorAlert.this.scrollOffsetY = EditorAlert.this.listView.getPaddingTop();
                             EditorAlert.this.listView.setTopGlowOffset(EditorAlert.this.scrollOffsetY);
@@ -587,7 +587,7 @@ public class ThemeEditorView {
             this.containerView.setWillNotDraw(false);
             this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
             this.listView = new RecyclerListView(context);
-            this.listView.setPadding(0, 0, 0, AndroidUtilities.m10dp(48.0f));
+            this.listView.setPadding(0, 0, 0, AndroidUtilities.m9dp(48.0f));
             this.listView.setClipToPadding(false);
             RecyclerListView recyclerListView = this.listView;
             LayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -640,13 +640,13 @@ public class ThemeEditorView {
             closeButton.setTextColor(-15095832);
             closeButton.setGravity(17);
             closeButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            closeButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+            closeButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
             closeButton.setText(LocaleController.getString("CloseEditor", R.string.CloseEditor).toUpperCase());
             closeButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.bottomSaveLayout.addView(closeButton, LayoutHelper.createFrame(-2, -1, 51));
             closeButton.setOnClickListener(new OnClickListener(ThemeEditorView.this) {
                 public void onClick(View v) {
-                    EditorAlert.this.dismiss();
+                    EditorAlert.this.lambda$new$4$EmbedBottomSheet();
                 }
             });
             TextView saveButton = new TextView(context);
@@ -654,7 +654,7 @@ public class ThemeEditorView {
             saveButton.setTextColor(-15095832);
             saveButton.setGravity(17);
             saveButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            saveButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+            saveButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
             saveButton.setText(LocaleController.getString("SaveTheme", R.string.SaveTheme).toUpperCase());
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.bottomSaveLayout.addView(saveButton, LayoutHelper.createFrame(-2, -1, 53));
@@ -662,7 +662,7 @@ public class ThemeEditorView {
                 public void onClick(View v) {
                     Theme.saveCurrentTheme(ThemeEditorView.this.currentThemeName, true);
                     EditorAlert.this.setOnDismissListener(null);
-                    EditorAlert.this.dismiss();
+                    EditorAlert.this.lambda$new$4$EmbedBottomSheet();
                     ThemeEditorView.this.close();
                 }
             });
@@ -675,7 +675,7 @@ public class ThemeEditorView {
             this.cancelButton.setTextColor(-15095832);
             this.cancelButton.setGravity(17);
             this.cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            this.cancelButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+            this.cancelButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
             this.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
             this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.bottomLayout.addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
@@ -695,7 +695,7 @@ public class ThemeEditorView {
             this.defaultButtom.setTextColor(-15095832);
             this.defaultButtom.setGravity(17);
             this.defaultButtom.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            this.defaultButtom.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+            this.defaultButtom.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
             this.defaultButtom.setText(LocaleController.getString("Default", R.string.Default).toUpperCase());
             this.defaultButtom.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(this.defaultButtom, LayoutHelper.createFrame(-2, -1, 51));
@@ -712,7 +712,7 @@ public class ThemeEditorView {
             saveButton.setTextColor(-15095832);
             saveButton.setGravity(17);
             saveButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            saveButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+            saveButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
             saveButton.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(saveButton, LayoutHelper.createFrame(-2, -1, 51));
@@ -742,7 +742,7 @@ public class ThemeEditorView {
                 animatorSet.playTogether(animatorArr);
                 animatorSet.setDuration(150);
                 animatorSet.setInterpolator(ThemeEditorView.this.decelerateInterpolator);
-                animatorSet.addListener(new C13309());
+                animatorSet.addListener(new C08819());
                 animatorSet.start();
                 this.previousScrollPosition = this.scrollOffsetY;
                 return;
@@ -766,7 +766,7 @@ public class ThemeEditorView {
             animatorSet.playTogether(animatorArr);
             animatorSet.setDuration(150);
             animatorSet.setInterpolator(ThemeEditorView.this.decelerateInterpolator);
-            animatorSet.addListener(new C132310());
+            animatorSet.addListener(new C087410());
             animatorSet.start();
             this.listAdapter.notifyItemChanged(ThemeEditorView.this.currentThemeDesriptionPosition);
         }
@@ -801,7 +801,7 @@ public class ThemeEditorView {
                 if (this.listView.getVisibility() != 0 || this.animationInProgress) {
                     top = this.listView.getPaddingTop();
                 } else {
-                    top = child.getTop() - AndroidUtilities.m10dp(8.0f);
+                    top = child.getTop() - AndroidUtilities.m9dp(8.0f);
                 }
                 if (top > 0 && holder != null && holder.getAdapterPosition() == 0) {
                     newOffset = top;
@@ -837,15 +837,15 @@ public class ThemeEditorView {
                 this.windowManager.removeViewImmediate(this.windowView);
                 this.windowView = null;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             try {
                 if (this.editorAlert != null) {
-                    this.editorAlert.dismiss();
+                    this.editorAlert.lambda$new$4$EmbedBottomSheet();
                     this.editorAlert = null;
                 }
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
             this.parentActivity = null;
             Instance = null;
@@ -864,8 +864,8 @@ public class ThemeEditorView {
             private float startY;
 
             /* renamed from: org.telegram.ui.Components.ThemeEditorView$1$1 */
-            class C13181 implements OnDismissListener {
-                C13181() {
+            class C08691 implements OnDismissListener {
+                C08691() {
                 }
 
                 public void onDismiss(DialogInterface dialog) {
@@ -873,8 +873,8 @@ public class ThemeEditorView {
             }
 
             /* renamed from: org.telegram.ui.Components.ThemeEditorView$1$2 */
-            class C13192 implements OnDismissListener {
-                C13192() {
+            class C08702 implements OnDismissListener {
+                C08702() {
                 }
 
                 public void onDismiss(DialogInterface dialog) {
@@ -923,8 +923,8 @@ public class ThemeEditorView {
                                 ThemeDescription[] items = fragment.getThemeDescriptions();
                                 if (items != null) {
                                     ThemeEditorView.this.editorAlert = new EditorAlert(ThemeEditorView.this.parentActivity, items);
-                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C13181());
-                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C13192());
+                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C08691());
+                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C08702());
                                     ThemeEditorView.this.editorAlert.show();
                                     ThemeEditorView.this.hide();
                                 }
@@ -1013,7 +1013,7 @@ public class ThemeEditorView {
             this.parentActivity = activity;
             showWithAnimation();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -1031,19 +1031,19 @@ public class ThemeEditorView {
         if (isX) {
             total = AndroidUtilities.displaySize.x - sideSize;
         } else {
-            total = (AndroidUtilities.displaySize.y - sideSize) - C0646ActionBar.getCurrentActionBarHeight();
+            total = (AndroidUtilities.displaySize.y - sideSize) - C0403ActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
-            result = AndroidUtilities.m10dp(10.0f);
+            result = AndroidUtilities.m9dp(10.0f);
         } else if (side == 1) {
-            result = total - AndroidUtilities.m10dp(10.0f);
+            result = total - AndroidUtilities.m9dp(10.0f);
         } else {
-            result = Math.round(((float) (total - AndroidUtilities.m10dp(20.0f))) * p) + AndroidUtilities.m10dp(10.0f);
+            result = Math.round(((float) (total - AndroidUtilities.m9dp(20.0f))) * p) + AndroidUtilities.m9dp(10.0f);
         }
         if (isX) {
             return result;
         }
-        return result + C0646ActionBar.getCurrentActionBarHeight();
+        return result + C0403ActionBar.getCurrentActionBarHeight();
     }
 
     private void hide() {
@@ -1053,7 +1053,7 @@ public class ThemeEditorView {
                 animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleX", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleY", new float[]{1.0f, 0.0f})});
                 animatorSet.setInterpolator(this.decelerateInterpolator);
                 animatorSet.setDuration(150);
-                animatorSet.addListener(new C13213());
+                animatorSet.addListener(new C08723());
                 animatorSet.start();
                 this.hidden = true;
             } catch (Exception e) {
@@ -1092,7 +1092,7 @@ public class ThemeEditorView {
                 this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -1109,7 +1109,7 @@ public class ThemeEditorView {
         int endY = ThemeEditorView.getSideCoord(false, 1, 0.0f, this.editorHeight);
         ArrayList<Animator> animators = null;
         Editor editor = this.preferences.edit();
-        int maxDiff = AndroidUtilities.m10dp(20.0f);
+        int maxDiff = AndroidUtilities.m9dp(20.0f);
         boolean slideOut = false;
         if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.editorWidth) / 4)) {
             if (null == null) {
@@ -1144,7 +1144,7 @@ public class ThemeEditorView {
             editor.putInt("sidex", 2);
         }
         if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= C0646ActionBar.getCurrentActionBarHeight()) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= C0403ActionBar.getCurrentActionBarHeight()) {
                 if (animators == null) {
                     animators = new ArrayList();
                 }
@@ -1171,7 +1171,7 @@ public class ThemeEditorView {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C13224());
+                animatorSet.addListener(new C08734());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

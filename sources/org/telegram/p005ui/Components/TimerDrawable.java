@@ -25,8 +25,8 @@ public class TimerDrawable extends Drawable {
 
     public TimerDrawable(Context context) {
         this.timePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.timePaint.setTextSize((float) AndroidUtilities.m10dp(11.0f));
-        this.linePaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+        this.timePaint.setTextSize((float) AndroidUtilities.m9dp(11.0f));
+        this.linePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
         this.linePaint.setStyle(Style.STROKE);
     }
 
@@ -67,7 +67,7 @@ public class TimerDrawable extends Drawable {
             this.timeHeight = this.timeLayout.getHeight();
         } catch (Throwable e) {
             this.timeLayout = null;
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         invalidateSelf();
     }
@@ -81,13 +81,13 @@ public class TimerDrawable extends Drawable {
             canvas.drawCircle(AndroidUtilities.dpf2(9.0f), AndroidUtilities.dpf2(9.0f), AndroidUtilities.dpf2(7.5f), this.paint);
             canvas.drawCircle(AndroidUtilities.dpf2(9.0f), AndroidUtilities.dpf2(9.0f), AndroidUtilities.dpf2(8.0f), this.linePaint);
             this.paint.setColor(Theme.getColor(Theme.key_chat_secretTimerText));
-            canvas.drawLine((float) AndroidUtilities.m10dp(9.0f), (float) AndroidUtilities.m10dp(9.0f), (float) AndroidUtilities.m10dp(13.0f), (float) AndroidUtilities.m10dp(9.0f), this.linePaint);
-            canvas.drawLine((float) AndroidUtilities.m10dp(9.0f), (float) AndroidUtilities.m10dp(5.0f), (float) AndroidUtilities.m10dp(9.0f), (float) AndroidUtilities.m10dp(9.5f), this.linePaint);
+            canvas.drawLine((float) AndroidUtilities.m9dp(9.0f), (float) AndroidUtilities.m9dp(9.0f), (float) AndroidUtilities.m9dp(13.0f), (float) AndroidUtilities.m9dp(9.0f), this.linePaint);
+            canvas.drawLine((float) AndroidUtilities.m9dp(9.0f), (float) AndroidUtilities.m9dp(5.0f), (float) AndroidUtilities.m9dp(9.0f), (float) AndroidUtilities.m9dp(9.5f), this.linePaint);
             canvas.drawRect(AndroidUtilities.dpf2(7.0f), AndroidUtilities.dpf2(0.0f), AndroidUtilities.dpf2(11.0f), AndroidUtilities.dpf2(1.5f), this.paint);
         } else {
             this.paint.setColor(Theme.getColor(Theme.key_chat_secretTimerBackground));
             this.timePaint.setColor(Theme.getColor(Theme.key_chat_secretTimerText));
-            canvas.drawCircle((float) AndroidUtilities.m10dp(9.5f), (float) AndroidUtilities.m10dp(9.5f), (float) AndroidUtilities.m10dp(9.5f), this.paint);
+            canvas.drawCircle((float) AndroidUtilities.m9dp(9.5f), (float) AndroidUtilities.m9dp(9.5f), (float) AndroidUtilities.m9dp(9.5f), this.paint);
         }
         if (this.time != 0 && this.timeLayout != null) {
             int xOffxet = 0;
@@ -110,10 +110,10 @@ public class TimerDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(19.0f);
+        return AndroidUtilities.m9dp(19.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(19.0f);
+        return AndroidUtilities.m9dp(19.0f);
     }
 }

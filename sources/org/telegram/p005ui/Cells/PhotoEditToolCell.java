@@ -17,18 +17,18 @@ import org.telegram.p005ui.Components.PhotoEditorSeekBar.PhotoEditorSeekBarDeleg
 
 /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell */
 public class PhotoEditToolCell extends FrameLayout {
-    private Runnable hideValueRunnable = new C08131();
+    private Runnable hideValueRunnable = new C05081();
     private TextView nameTextView;
     private PhotoEditorSeekBar seekBar;
     private AnimatorSet valueAnimation;
     private TextView valueTextView;
 
     /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$1 */
-    class C08131 implements Runnable {
+    class C05081 implements Runnable {
 
         /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$1$1 */
-        class C08121 extends AnimatorListenerAdapter {
-            C08121() {
+        class C05071 extends AnimatorListenerAdapter {
+            C05071() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -38,7 +38,7 @@ public class PhotoEditToolCell extends FrameLayout {
             }
         }
 
-        C08131() {
+        C05081() {
         }
 
         public void run() {
@@ -51,7 +51,7 @@ public class PhotoEditToolCell extends FrameLayout {
             access$100.playTogether(r1);
             PhotoEditToolCell.this.valueAnimation.setDuration(180);
             PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-            PhotoEditToolCell.this.valueAnimation.addListener(new C08121());
+            PhotoEditToolCell.this.valueAnimation.addListener(new C05071());
             PhotoEditToolCell.this.valueAnimation.start();
         }
     }
@@ -80,8 +80,8 @@ public class PhotoEditToolCell extends FrameLayout {
         this.seekBar.setDelegate(new PhotoEditorSeekBarDelegate() {
 
             /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$2$1 */
-            class C08141 extends AnimatorListenerAdapter {
-                C08141() {
+            class C05091 extends AnimatorListenerAdapter {
+                C05091() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -109,7 +109,7 @@ public class PhotoEditToolCell extends FrameLayout {
                     access$100.playTogether(r1);
                     PhotoEditToolCell.this.valueAnimation.setDuration(180);
                     PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-                    PhotoEditToolCell.this.valueAnimation.addListener(new C08141());
+                    PhotoEditToolCell.this.valueAnimation.addListener(new C05091());
                     PhotoEditToolCell.this.valueAnimation.start();
                     return;
                 }
@@ -125,7 +125,7 @@ public class PhotoEditToolCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(40.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(40.0f), NUM));
     }
 
     public void setIconAndTextAndValue(String text, float value, int min, int max) {

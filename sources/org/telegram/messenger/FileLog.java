@@ -101,7 +101,7 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m13e(final String message, final Throwable exception) {
+    public static void m12e(final String message, final Throwable exception) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.e(tag, message, exception);
@@ -122,7 +122,7 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m12e(final String message) {
+    public static void m11e(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.e(tag, message);
@@ -142,7 +142,7 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m14e(final Throwable e) {
+    public static void m13e(final Throwable e) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             ThrowableExtension.printStackTrace(e);
@@ -168,7 +168,7 @@ public class FileLog {
     }
 
     /* renamed from: d */
-    public static void m11d(final String message) {
+    public static void m10d(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.d(tag, message);
@@ -188,7 +188,7 @@ public class FileLog {
     }
 
     /* renamed from: w */
-    public static void m15w(final String message) {
+    public static void m14w(final String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.w(tag, message);

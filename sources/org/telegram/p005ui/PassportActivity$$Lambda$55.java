@@ -1,27 +1,35 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.messenger.SecureDocument;
-import org.telegram.p005ui.PassportActivity.SecureDocumentCell;
+import java.util.ArrayList;
+import org.telegram.p005ui.PassportActivity.ErrorRunnable;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_secureRequiredType;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$55 */
-final /* synthetic */ class PassportActivity$$Lambda$55 implements OnClickListener {
+final /* synthetic */ class PassportActivity$$Lambda$55 implements Runnable {
     private final PassportActivity arg$1;
-    private final SecureDocument arg$2;
-    private final int arg$3;
-    private final SecureDocumentCell arg$4;
-    private final String arg$5;
+    private final TL_error arg$2;
+    private final ErrorRunnable arg$3;
+    private final boolean arg$4;
+    private final TL_secureRequiredType arg$5;
+    private final TL_secureRequiredType arg$6;
+    private final boolean arg$7;
+    private final ArrayList arg$8;
+    private final Runnable arg$9;
 
-    PassportActivity$$Lambda$55(PassportActivity passportActivity, SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str) {
+    PassportActivity$$Lambda$55(PassportActivity passportActivity, TL_error tL_error, ErrorRunnable errorRunnable, boolean z, TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable) {
         this.arg$1 = passportActivity;
-        this.arg$2 = secureDocument;
-        this.arg$3 = i;
-        this.arg$4 = secureDocumentCell;
-        this.arg$5 = str;
+        this.arg$2 = tL_error;
+        this.arg$3 = errorRunnable;
+        this.arg$4 = z;
+        this.arg$5 = tL_secureRequiredType;
+        this.arg$6 = tL_secureRequiredType2;
+        this.arg$7 = z2;
+        this.arg$8 = arrayList;
+        this.arg$9 = runnable;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$56$PassportActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, dialogInterface, i);
+    public void run() {
+        this.arg$1.lambda$null$60$PassportActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9);
     }
 }

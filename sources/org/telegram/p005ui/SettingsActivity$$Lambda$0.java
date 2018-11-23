@@ -13,7 +13,7 @@ final /* synthetic */ class SettingsActivity$$Lambda$0 implements ImageUpdaterDe
         this.arg$1 = settingsActivity;
     }
 
-    public void didUploadedPhoto(InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2, TL_secureFile tL_secureFile) {
-        this.arg$1.lambda$onFragmentCreate$2$SettingsActivity(inputFile, photoSize, photoSize2, tL_secureFile);
+    public void didUploadedPhoto(InputFile inputFile, PhotoSize photoSize, TL_secureFile tL_secureFile) {
+        this.arg$1.lambda$onFragmentCreate$2$SettingsActivity(inputFile, photoSize, tL_secureFile);
     }
 }

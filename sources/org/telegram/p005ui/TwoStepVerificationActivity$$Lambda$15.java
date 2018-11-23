@@ -13,6 +13,6 @@ final /* synthetic */ class TwoStepVerificationActivity$$Lambda$15 implements Ru
     }
 
     public void run() {
-        this.arg$1.lambda$null$26$TwoStepVerificationActivity(this.arg$2);
+        this.arg$1.lambda$null$38$TwoStepVerificationActivity(this.arg$2);
     }
 }

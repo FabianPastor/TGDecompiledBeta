@@ -37,7 +37,7 @@ public class WallpaperCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(102.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(102.0f), NUM));
     }
 
     public void setWallpaper(WallPaper wallpaper, int selectedBackground, Drawable themedWallpaper, boolean themed) {
@@ -66,7 +66,7 @@ public class WallpaperCell extends FrameLayout {
         this.imageView.setVisibility(0);
         this.imageView2.setVisibility(4);
         View view2 = this.selectionView;
-        if (selectedBackground != wallpaper.f182id) {
+        if (selectedBackground != wallpaper.f181id) {
             i = 4;
         }
         view2.setVisibility(i);
@@ -75,19 +75,19 @@ public class WallpaperCell extends FrameLayout {
             this.imageView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR | wallpaper.bg_color);
             return;
         }
-        int side = AndroidUtilities.m10dp(100.0f);
+        int side = AndroidUtilities.m9dp(100.0f);
         PhotoSize size = null;
         for (int a = 0; a < wallpaper.sizes.size(); a++) {
             PhotoSize obj = (PhotoSize) wallpaper.sizes.get(a);
             if (obj != null) {
-                int currentSide = obj.f110w >= obj.f109h ? obj.f110w : obj.f109h;
+                int currentSide = obj.f108w >= obj.f107h ? obj.f108w : obj.f107h;
                 if (size == null || ((side > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || currentSide <= side)) {
                     size = obj;
                 }
             }
         }
         if (!(size == null || size.location == null)) {
-            this.imageView.setImage(size.location, "100_100", (Drawable) null);
+            this.imageView.setImage(size.location, "100_100", (Drawable) null, (Object) "wallpaper");
         }
         this.imageView.setBackgroundColor(NUM);
     }

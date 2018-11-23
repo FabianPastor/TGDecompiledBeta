@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.annotation.Keep;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -49,9 +50,10 @@ public class TextColorCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
+    @Keep
     public void setAlpha(float value) {
         this.alpha = value;
         invalidate();
@@ -62,7 +64,7 @@ public class TextColorCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f), NUM));
     }
 
     public void setTextAndColor(String text, int color, boolean divider) {
@@ -76,6 +78,7 @@ public class TextColorCell extends FrameLayout {
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
         float f = 1.0f;
+        super.setEnabled(value);
         TextView textView;
         if (animators != null) {
             textView = this.textView;
@@ -108,12 +111,12 @@ public class TextColorCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
         if (this.currentColor != 0) {
             colorPaint.setColor(this.currentColor);
             colorPaint.setAlpha((int) (255.0f * this.alpha));
-            canvas.drawCircle(LocaleController.isRTL ? (float) AndroidUtilities.m10dp(29.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m10dp(29.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m10dp(10.0f), colorPaint);
+            canvas.drawCircle(LocaleController.isRTL ? (float) AndroidUtilities.m9dp(33.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m9dp(33.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(10.0f), colorPaint);
         }
     }
 }

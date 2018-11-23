@@ -39,7 +39,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, 17.0f, 10.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, 21.0f, 10.0f, 21.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
@@ -58,7 +58,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, 17.0f, 35.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, 21.0f, 35.0f, 21.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -68,7 +68,7 @@ public class TextDetailSettingsCell extends FrameLayout {
             return;
         }
         int makeMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM);
-        int dp = AndroidUtilities.m10dp(64.0f);
+        int dp = AndroidUtilities.m9dp(64.0f);
         if (this.needDivider) {
             i = 1;
         }
@@ -89,7 +89,7 @@ public class TextDetailSettingsCell extends FrameLayout {
             this.valueTextView.setLines(0);
             this.valueTextView.setMaxLines(0);
             this.valueTextView.setSingleLine(false);
-            this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.m10dp(12.0f));
+            this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.m9dp(12.0f));
             return;
         }
         this.valueTextView.setLines(1);
@@ -111,7 +111,7 @@ public class TextDetailSettingsCell extends FrameLayout {
 
     public void setTextWithEmojiAndValue(String text, CharSequence value, boolean divider) {
         boolean z = false;
-        this.textView.setText(Emoji.replaceEmoji(text, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(14.0f), false));
+        this.textView.setText(Emoji.replaceEmoji(text, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(14.0f), false));
         this.valueTextView.setText(value);
         this.needDivider = divider;
         if (!divider) {
@@ -127,7 +127,7 @@ public class TextDetailSettingsCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

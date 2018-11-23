@@ -110,7 +110,6 @@ import org.telegram.tgnet.TLRPC.TL_channels_readMessageContents;
 import org.telegram.tgnet.TLRPC.TL_channels_toggleInvites;
 import org.telegram.tgnet.TLRPC.TL_channels_togglePreHistoryHidden;
 import org.telegram.tgnet.TLRPC.TL_channels_toggleSignatures;
-import org.telegram.tgnet.TLRPC.TL_channels_updatePinnedMessage;
 import org.telegram.tgnet.TLRPC.TL_channels_updateUsername;
 import org.telegram.tgnet.TLRPC.TL_chat;
 import org.telegram.tgnet.TLRPC.TL_chatFull;
@@ -151,6 +150,7 @@ import org.telegram.tgnet.TLRPC.TL_inputDialogPeer;
 import org.telegram.tgnet.TLRPC.TL_inputDocument;
 import org.telegram.tgnet.TLRPC.TL_inputEncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterChatPhotos;
+import org.telegram.tgnet.TLRPC.TL_inputNotifyBroadcasts;
 import org.telegram.tgnet.TLRPC.TL_inputNotifyChats;
 import org.telegram.tgnet.TLRPC.TL_inputNotifyUsers;
 import org.telegram.tgnet.TLRPC.TL_inputPeerChannel;
@@ -220,6 +220,8 @@ import org.telegram.tgnet.TLRPC.TL_messages_setTyping;
 import org.telegram.tgnet.TLRPC.TL_messages_startBot;
 import org.telegram.tgnet.TLRPC.TL_messages_toggleChatAdmins;
 import org.telegram.tgnet.TLRPC.TL_messages_toggleDialogPin;
+import org.telegram.tgnet.TLRPC.TL_messages_updatePinnedMessage;
+import org.telegram.tgnet.TLRPC.TL_notifyBroadcasts;
 import org.telegram.tgnet.TLRPC.TL_notifyChats;
 import org.telegram.tgnet.TLRPC.TL_notifyPeer;
 import org.telegram.tgnet.TLRPC.TL_notifyUsers;
@@ -241,6 +243,7 @@ import org.telegram.tgnet.TLRPC.TL_photos_updateProfilePhoto;
 import org.telegram.tgnet.TLRPC.TL_photos_uploadProfilePhoto;
 import org.telegram.tgnet.TLRPC.TL_privacyKeyChatInvite;
 import org.telegram.tgnet.TLRPC.TL_privacyKeyPhoneCall;
+import org.telegram.tgnet.TLRPC.TL_privacyKeyPhoneP2P;
 import org.telegram.tgnet.TLRPC.TL_privacyKeyStatusTimestamp;
 import org.telegram.tgnet.TLRPC.TL_replyKeyboardHide;
 import org.telegram.tgnet.TLRPC.TL_sendMessageCancelAction;
@@ -266,6 +269,7 @@ import org.telegram.tgnet.TLRPC.TL_updateChatParticipantAdd;
 import org.telegram.tgnet.TLRPC.TL_updateChatParticipantAdmin;
 import org.telegram.tgnet.TLRPC.TL_updateChatParticipantDelete;
 import org.telegram.tgnet.TLRPC.TL_updateChatParticipants;
+import org.telegram.tgnet.TLRPC.TL_updateChatPinnedMessage;
 import org.telegram.tgnet.TLRPC.TL_updateChatUserTyping;
 import org.telegram.tgnet.TLRPC.TL_updateConfig;
 import org.telegram.tgnet.TLRPC.TL_updateContactLink;
@@ -314,6 +318,7 @@ import org.telegram.tgnet.TLRPC.TL_updateUserBlocked;
 import org.telegram.tgnet.TLRPC.TL_updateUserName;
 import org.telegram.tgnet.TLRPC.TL_updateUserPhone;
 import org.telegram.tgnet.TLRPC.TL_updateUserPhoto;
+import org.telegram.tgnet.TLRPC.TL_updateUserPinnedMessage;
 import org.telegram.tgnet.TLRPC.TL_updateUserStatus;
 import org.telegram.tgnet.TLRPC.TL_updateUserTyping;
 import org.telegram.tgnet.TLRPC.TL_updateWebPage;
@@ -403,7 +408,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private int currentDeletingTaskTime;
     public String dcDomainName;
     public boolean defaultP2pContacts;
-    private final Comparator<TL_dialog> dialogComparator = new C04952();
+    private final Comparator<TL_dialog> dialogComparator = new C02522();
     public LongSparseArray<MessageObject> dialogMessage = new LongSparseArray();
     public SparseArray<MessageObject> dialogMessagesByIds = new SparseArray();
     public LongSparseArray<MessageObject> dialogMessagesByRandomIds = new LongSparseArray();
@@ -472,7 +477,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private ConcurrentHashMap<String, TLObject> objectsByUsernames = new ConcurrentHashMap(100, 1.0f, 2);
     private boolean offlineSent;
     public ConcurrentHashMap<Integer, Integer> onlinePrivacy = new ConcurrentHashMap(20, 1.0f, 2);
-    private Runnable passwordCheckRunnable = new C04941();
+    private Runnable passwordCheckRunnable = new C02511();
     public boolean preloadFeaturedStickers;
     public LongSparseArray<CharSequence> printingStrings = new LongSparseArray();
     public LongSparseArray<Integer> printingStringsTypes = new LongSparseArray();
@@ -498,6 +503,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private int statusRequest;
     private int statusSettingState;
     public boolean suggestContacts = true;
+    public String suggestedLangCode;
     private Runnable themeCheckRunnable = MessagesController$$Lambda$0.$instance;
     public int unreadUnmutedDialogs;
     private final Comparator<Update> updatesComparator = new MessagesController$$Lambda$1(this);
@@ -517,8 +523,8 @@ public class MessagesController implements NotificationCenterDelegate {
     public int webFileDatacenterId;
 
     /* renamed from: org.telegram.messenger.MessagesController$1 */
-    class C04941 implements Runnable {
-        C04941() {
+    class C02511 implements Runnable {
+        C02511() {
         }
 
         public void run() {
@@ -527,8 +533,8 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.MessagesController$2 */
-    class C04952 implements Comparator<TL_dialog> {
-        C04952() {
+    class C02522 implements Comparator<TL_dialog> {
+        C02522() {
         }
 
         public int compare(TL_dialog dialog1, TL_dialog dialog2) {
@@ -539,9 +545,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 return -1;
             }
             if (!dialog1.pinned || !dialog2.pinned) {
-                DraftMessage draftMessage = DataQuery.getInstance(MessagesController.this.currentAccount).getDraft(dialog1.f130id);
+                DraftMessage draftMessage = DataQuery.getInstance(MessagesController.this.currentAccount).getDraft(dialog1.f128id);
                 int date1 = (draftMessage == null || draftMessage.date < dialog1.last_message_date) ? dialog1.last_message_date : draftMessage.date;
-                draftMessage = DataQuery.getInstance(MessagesController.this.currentAccount).getDraft(dialog2.f130id);
+                draftMessage = DataQuery.getInstance(MessagesController.this.currentAccount).getDraft(dialog2.f128id);
                 int date2 = (draftMessage == null || draftMessage.date < dialog2.last_message_date) ? dialog2.last_message_date : draftMessage.date;
                 if (date1 < date2) {
                     return 1;
@@ -576,7 +582,7 @@ public class MessagesController implements NotificationCenterDelegate {
         private ReadTask() {
         }
 
-        /* synthetic */ ReadTask(MessagesController x0, C04941 x1) {
+        /* synthetic */ ReadTask(MessagesController x0, C02511 x1) {
             this();
         }
     }
@@ -585,7 +591,7 @@ public class MessagesController implements NotificationCenterDelegate {
         private UserActionUpdatesPts() {
         }
 
-        /* synthetic */ UserActionUpdatesPts(MessagesController x0, C04941 x1) {
+        /* synthetic */ UserActionUpdatesPts(MessagesController x0, C02511 x1) {
             this();
         }
     }
@@ -594,7 +600,7 @@ public class MessagesController implements NotificationCenterDelegate {
         private UserActionUpdatesSeq() {
         }
 
-        /* synthetic */ UserActionUpdatesSeq(MessagesController x0, C04941 x1) {
+        /* synthetic */ UserActionUpdatesSeq(MessagesController x0, C02511 x1) {
             this();
         }
     }
@@ -706,7 +712,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.callPacketTimeout = this.mainPreferences.getInt("callPacketTimeout", 10000);
         this.maxPinnedDialogsCount = this.mainPreferences.getInt("maxPinnedDialogsCount", 5);
         this.maxMessageLength = this.mainPreferences.getInt("maxMessageLength", 4096);
-        this.maxCaptionLength = this.mainPreferences.getInt("maxCaptionLength", Callback.DEFAULT_DRAG_ANIMATION_DURATION);
+        this.maxCaptionLength = this.mainPreferences.getInt("maxCaptionLength", 1024);
         this.mapProvider = this.mainPreferences.getInt("mapProvider", 0);
         this.availableMapProviders = this.mainPreferences.getInt("availableMapProviders", 3);
         this.mapKey = this.mainPreferences.getString("pk", null);
@@ -724,14 +730,15 @@ public class MessagesController implements NotificationCenterDelegate {
         this.blockedCountry = this.mainPreferences.getBoolean("blockedCountry", false);
         this.dcDomainName = this.mainPreferences.getString("dcDomainName", ConnectionsManager.native_isTestBackend(this.currentAccount) != 0 ? "tapv2.stel.com" : "apv2.stel.com");
         this.webFileDatacenterId = this.mainPreferences.getInt("webFileDatacenterId", ConnectionsManager.native_isTestBackend(this.currentAccount) != 0 ? 2 : 4);
+        this.suggestedLangCode = this.mainPreferences.getString("suggestedLangCode", "en");
     }
 
     final /* synthetic */ void lambda$new$1$MessagesController() {
         MessagesController messagesController = getInstance(this.currentAccount);
         NotificationCenter.getInstance(this.currentAccount).addObserver(messagesController, NotificationCenter.FileDidUpload);
         NotificationCenter.getInstance(this.currentAccount).addObserver(messagesController, NotificationCenter.FileDidFailUpload);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(messagesController, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(messagesController, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(messagesController, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(messagesController, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(messagesController, NotificationCenter.messageReceivedByServer);
         NotificationCenter.getInstance(this.currentAccount).addObserver(messagesController, NotificationCenter.updateMessageMedia);
     }
@@ -782,6 +789,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.blockedCountry = config.blocked_mode;
         this.dcDomainName = config.dc_txt_domain_name;
         this.webFileDatacenterId = config.webfile_dc_id;
+        this.suggestedLangCode = config.suggested_lang_code;
         if (config.static_maps_provider == null) {
             config.static_maps_provider = "google";
         }
@@ -853,14 +861,16 @@ public class MessagesController implements NotificationCenterDelegate {
         editor.putString("imageSearchBot", this.imageSearchBot);
         editor.putString("dcDomainName", this.dcDomainName);
         editor.putInt("webFileDatacenterId", this.webFileDatacenterId);
+        editor.putString("suggestedLangCode", this.suggestedLangCode);
         editor.commit();
-        LocaleController.getInstance().checkUpdateForCurrentRemoteLocale(this.currentAccount, config.lang_pack_version);
+        LocaleController.getInstance().checkUpdateForCurrentRemoteLocale(this.currentAccount, config.lang_pack_version, config.base_lang_pack_version);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.configLoaded, new Object[0]);
     }
 
     public void addSupportUser() {
         TL_userForeign_old2 user = new TL_userForeign_old2();
         user.phone = "333";
-        user.f177id = 333000;
+        user.f176id = 333000;
         user.first_name = "Telegram";
         user.last_name = TtmlNode.ANONYMOUS_REGION_ID;
         user.status = null;
@@ -868,7 +878,7 @@ public class MessagesController implements NotificationCenterDelegate {
         putUser(user, true);
         user = new TL_userForeign_old2();
         user.phone = "42777";
-        user.f177id = 777000;
+        user.f176id = 777000;
         user.first_name = "Telegram";
         user.last_name = "Notifications";
         user.status = null;
@@ -880,11 +890,11 @@ public class MessagesController implements NotificationCenterDelegate {
         if (user == null) {
             return new TL_inputUserEmpty();
         }
-        if (user.f177id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+        if (user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
             return new TL_inputUserSelf();
         }
         InputUser inputUser = new TL_inputUser();
-        inputUser.user_id = user.f177id;
+        inputUser.user_id = user.f176id;
         inputUser.access_hash = user.access_hash;
         return inputUser;
     }
@@ -1015,7 +1025,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 PhotoSize smallSize = FileLoader.getClosestPhotoSizeWithSize(sizes, 100);
                 PhotoSize bigSize = FileLoader.getClosestPhotoSizeWithSize(sizes, 1000);
                 user.photo = new TL_userProfilePhoto();
-                user.photo.photo_id = photo.photo.f108id;
+                user.photo.photo_id = photo.photo.f106id;
                 if (smallSize != null) {
                     user.photo.photo_small = smallSize.location;
                 }
@@ -1024,11 +1034,11 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else if (smallSize != null) {
                     user.photo.photo_small = smallSize.location;
                 }
-                MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user.f177id);
+                MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user.f176id);
                 ArrayList<User> users = new ArrayList();
                 users.add(user);
                 MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, false, true);
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$241(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$242(this));
             }
         }
     }
@@ -1188,7 +1198,7 @@ public class MessagesController implements NotificationCenterDelegate {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (result.size() != 2) {
             return chat;
@@ -1243,12 +1253,12 @@ public class MessagesController implements NotificationCenterDelegate {
         if (user == null) {
             return false;
         }
-        if (!fromCache || user.f177id / 1000 == 333 || user.f177id == 777000) {
+        if (!fromCache || user.f176id / 1000 == 333 || user.f176id == 777000) {
             fromCache = false;
         } else {
             fromCache = true;
         }
-        User oldUser = (User) this.users.get(Integer.valueOf(user.f177id));
+        User oldUser = (User) this.users.get(Integer.valueOf(user.f176id));
         if (oldUser == user) {
             return false;
         }
@@ -1260,7 +1270,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         if (user.min) {
             if (oldUser == null) {
-                this.users.put(Integer.valueOf(user.f177id), user);
+                this.users.put(Integer.valueOf(user.f176id), user);
                 return false;
             } else if (fromCache) {
                 return false;
@@ -1284,8 +1294,8 @@ public class MessagesController implements NotificationCenterDelegate {
                 return false;
             }
         } else if (!fromCache) {
-            this.users.put(Integer.valueOf(user.f177id), user);
-            if (user.f177id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+            this.users.put(Integer.valueOf(user.f176id), user);
+            if (user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                 UserConfig.getInstance(this.currentAccount).setCurrentUser(user);
                 UserConfig.getInstance(this.currentAccount).saveConfig(true);
             }
@@ -1294,7 +1304,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             return true;
         } else if (oldUser == null) {
-            this.users.put(Integer.valueOf(user.f177id), user);
+            this.users.put(Integer.valueOf(user.f176id), user);
             return false;
         } else if (!oldUser.min) {
             return false;
@@ -1316,7 +1326,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 user.flags &= -33;
                 user.photo = null;
             }
-            this.users.put(Integer.valueOf(user.f177id), user);
+            this.users.put(Integer.valueOf(user.f176id), user);
             return false;
         }
     }
@@ -1482,7 +1492,7 @@ public class MessagesController implements NotificationCenterDelegate {
             TL_inputDialogPeer inputDialogPeer;
             if (dialogs != null) {
                 for (int a = 0; a < dialogs.size(); a++) {
-                    inputPeer = getInputPeer((int) ((TL_dialog) dialogs.get(a)).f130id);
+                    inputPeer = getInputPeer((int) ((TL_dialog) dialogs.get(a)).f128id);
                     if (!(inputPeer instanceof TL_inputPeerChannel) || inputPeer.access_hash != 0) {
                         inputDialogPeer = new TL_inputDialogPeer();
                         inputDialogPeer.peer = inputPeer;
@@ -1517,20 +1527,20 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (dialog.read_outbox_max_id == 0) {
                     dialog.read_outbox_max_id = 1;
                 }
-                if (dialog.f130id == 0 && dialog.peer != null) {
+                if (dialog.f128id == 0 && dialog.peer != null) {
                     if (dialog.peer.user_id != 0) {
-                        dialog.f130id = (long) dialog.peer.user_id;
+                        dialog.f128id = (long) dialog.peer.user_id;
                     } else if (dialog.peer.chat_id != 0) {
-                        dialog.f130id = (long) (-dialog.peer.chat_id);
+                        dialog.f128id = (long) (-dialog.peer.chat_id);
                     } else if (dialog.peer.channel_id != 0) {
-                        dialog.f130id = (long) (-dialog.peer.channel_id);
+                        dialog.f128id = (long) (-dialog.peer.channel_id);
                     }
                 }
-                Integer value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(dialog.f130id));
+                Integer value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(dialog.f128id));
                 if (value == null) {
                     value = Integer.valueOf(0);
                 }
-                this.dialogs_read_inbox_max.put(Long.valueOf(dialog.f130id), Integer.valueOf(Math.max(dialog.read_inbox_max_id, value.intValue())));
+                this.dialogs_read_inbox_max.put(Long.valueOf(dialog.f128id), Integer.valueOf(Math.max(dialog.read_inbox_max_id, value.intValue())));
                 if (value.intValue() == 0) {
                     if (dialog.peer.channel_id != 0) {
                         TL_updateReadChannelInbox update = new TL_updateReadChannelInbox();
@@ -1544,11 +1554,11 @@ public class MessagesController implements NotificationCenterDelegate {
                         arrayList.add(update2);
                     }
                 }
-                value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(dialog.f130id));
+                value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(dialog.f128id));
                 if (value == null) {
                     value = Integer.valueOf(0);
                 }
-                this.dialogs_read_outbox_max.put(Long.valueOf(dialog.f130id), Integer.valueOf(Math.max(dialog.read_outbox_max_id, value.intValue())));
+                this.dialogs_read_outbox_max.put(Long.valueOf(dialog.f128id), Integer.valueOf(Math.max(dialog.read_outbox_max_id, value.intValue())));
                 if (value.intValue() == 0) {
                     if (dialog.peer.channel_id != 0) {
                         TL_updateReadChannelOutbox update3 = new TL_updateReadChannelOutbox();
@@ -1690,10 +1700,10 @@ public class MessagesController implements NotificationCenterDelegate {
                     processUpdateArray(arrayList, null, null, false);
                 }
             }
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$239(this, chat_id, res, classGuid));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$240(this, chat_id, res, classGuid));
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$240(this, error, chat_id));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$241(this, error, chat_id));
     }
 
     final /* synthetic */ void lambda$null$13$MessagesController(int chat_id, TL_messages_chatFull res, int classGuid) {
@@ -1709,7 +1719,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (res.full_chat.stickerset != null) {
             DataQuery.getInstance(this.currentAccount).getGroupStickerSetById(res.full_chat.stickerset);
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, res.full_chat, Integer.valueOf(classGuid), Boolean.valueOf(false), null);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, res.full_chat, Integer.valueOf(classGuid), Boolean.valueOf(false), null);
     }
 
     final /* synthetic */ void lambda$null$14$MessagesController(TL_error error, int chat_id) {
@@ -1718,12 +1728,12 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void loadFullUser(User user, int classGuid, boolean force) {
-        if (user != null && !this.loadingFullUsers.contains(Integer.valueOf(user.f177id))) {
-            if (force || !this.loadedFullUsers.contains(Integer.valueOf(user.f177id))) {
-                this.loadingFullUsers.add(Integer.valueOf(user.f177id));
+        if (user != null && !this.loadingFullUsers.contains(Integer.valueOf(user.f176id))) {
+            if (force || !this.loadedFullUsers.contains(Integer.valueOf(user.f176id))) {
+                this.loadingFullUsers.add(Integer.valueOf(user.f176id));
                 TL_users_getFullUser req = new TL_users_getFullUser();
-                req.f173id = getInputUser(user);
-                long dialog_id = (long) user.f177id;
+                req.f172id = getInputUser(user);
+                long dialog_id = (long) user.f176id;
                 if (this.dialogs_read_inbox_max.get(Long.valueOf(dialog_id)) == null || this.dialogs_read_outbox_max.get(Long.valueOf(dialog_id)) == null) {
                     reloadDialogsReadValue(null, dialog_id);
                 }
@@ -1734,35 +1744,36 @@ public class MessagesController implements NotificationCenterDelegate {
 
     final /* synthetic */ void lambda$loadFullUser$18$MessagesController(User user, int classGuid, TLObject response, TL_error error) {
         if (error == null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$237(this, response, user, classGuid));
-        } else {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$238(this, user));
+            TL_userFull userFull = (TL_userFull) response;
+            MessagesStorage.getInstance(this.currentAccount).updateUserInfo(userFull, false);
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$238(this, user, userFull, classGuid));
+            return;
         }
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$239(this, user));
     }
 
-    final /* synthetic */ void lambda$null$16$MessagesController(TLObject response, User user, int classGuid) {
-        TL_userFull userFull = (TL_userFull) response;
-        applyDialogNotificationsSettings((long) user.f177id, userFull.notify_settings);
+    final /* synthetic */ void lambda$null$16$MessagesController(User user, TL_userFull userFull, int classGuid) {
+        applyDialogNotificationsSettings((long) user.f176id, userFull.notify_settings);
         if (userFull.bot_info instanceof TL_botInfo) {
             DataQuery.getInstance(this.currentAccount).putBotInfo(userFull.bot_info);
         }
-        int index = this.blockedUsers.indexOfKey(user.f177id);
+        int index = this.blockedUsers.indexOfKey(user.f176id);
         if (userFull.blocked) {
             if (index < 0) {
                 SparseIntArray ids = new SparseIntArray();
-                ids.put(user.f177id, 1);
+                ids.put(user.f176id, 1);
                 MessagesStorage.getInstance(this.currentAccount).putBlockedUsers(ids, false);
-                this.blockedUsers.put(user.f177id, 1);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoaded, new Object[0]);
+                this.blockedUsers.put(user.f176id, 1);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
             }
         } else if (index >= 0) {
-            MessagesStorage.getInstance(this.currentAccount).deleteBlockedUser(user.f177id);
+            MessagesStorage.getInstance(this.currentAccount).deleteBlockedUser(user.f176id);
             this.blockedUsers.removeAt(index);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoaded, new Object[0]);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
         }
-        this.fullUsers.put(user.f177id, userFull);
-        this.loadingFullUsers.remove(Integer.valueOf(user.f177id));
-        this.loadedFullUsers.add(Integer.valueOf(user.f177id));
+        this.fullUsers.put(user.f176id, userFull);
+        this.loadingFullUsers.remove(Integer.valueOf(user.f176id));
+        this.loadedFullUsers.add(Integer.valueOf(user.f176id));
         String names = user.first_name + user.last_name + user.username;
         ArrayList<User> users = new ArrayList();
         users.add(userFull.user);
@@ -1772,13 +1783,13 @@ public class MessagesController implements NotificationCenterDelegate {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
         }
         if (userFull.bot_info instanceof TL_botInfo) {
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botInfoDidLoaded, userFull.bot_info, Integer.valueOf(classGuid));
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botInfoDidLoad, userFull.bot_info, Integer.valueOf(classGuid));
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoaded, Integer.valueOf(user.f177id), userFull);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(user.f176id), userFull, null);
     }
 
     final /* synthetic */ void lambda$null$17$MessagesController(User user) {
-        this.loadingFullUsers.remove(Integer.valueOf(user.f177id));
+        this.loadingFullUsers.remove(Integer.valueOf(user.f176id));
     }
 
     private void reloadMessages(ArrayList<Integer> mids, long dialog_id) {
@@ -1790,11 +1801,11 @@ public class MessagesController implements NotificationCenterDelegate {
             if (ChatObject.isChannel(chat)) {
                 req = new TL_channels_getMessages();
                 req.channel = getInputChannel(chat);
-                req.f120id = result;
+                req.f118id = result;
                 request = req;
             } else {
                 req = new TL_messages_getMessages();
-                req.f151id = result;
+                req.f149id = result;
                 request = req;
             }
             ArrayList<Integer> arrayList = (ArrayList) this.reloadingMessages.get(dialog_id);
@@ -1822,7 +1833,7 @@ public class MessagesController implements NotificationCenterDelegate {
             SparseArray usersLocal = new SparseArray();
             for (a = 0; a < messagesRes.users.size(); a++) {
                 User u = (User) messagesRes.users.get(a);
-                usersLocal.put(u.f177id, u);
+                usersLocal.put(u.f176id, u);
             }
             SparseArray chatsLocal = new SparseArray();
             for (a = 0; a < messagesRes.chats.size(); a++) {
@@ -1857,7 +1868,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             ImageLoader.saveMessagesThumbs(messagesRes.messages);
             MessagesStorage.getInstance(this.currentAccount).putMessages(messagesRes, dialog_id, -1, 0, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$236(this, dialog_id, result, objects));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$237(this, dialog_id, result, objects));
         }
     }
 
@@ -1900,7 +1911,7 @@ public class MessagesController implements NotificationCenterDelegate {
             if (((int) dialogId) != 0) {
                 TL_messages_hideReportSpam req = new TL_messages_hideReportSpam();
                 if (currentUser != null) {
-                    req.peer = getInputPeer(currentUser.f177id);
+                    req.peer = getInputPeer(currentUser.f176id);
                 } else if (currentChat != null) {
                     req.peer = getInputPeer(-currentChat.f78id);
                 }
@@ -1922,7 +1933,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (currentChat != null) {
                     req.peer = getInputPeer(-currentChat.f78id);
                 } else if (currentUser != null) {
-                    req.peer = getInputPeer(currentUser.f177id);
+                    req.peer = getInputPeer(currentUser.f176id);
                 }
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$18.$instance, 2);
             } else if (currentEncryptedChat != null && currentEncryptedChat.access_hash != 0) {
@@ -1945,23 +1956,23 @@ public class MessagesController implements NotificationCenterDelegate {
         if (currentUser != null || currentChat != null) {
             long dialogId;
             if (currentUser != null) {
-                dialogId = (long) currentUser.f177id;
+                dialogId = (long) currentUser.f176id;
             } else {
                 dialogId = (long) (-currentChat.f78id);
             }
             if (this.loadingPeerSettings.indexOfKey(dialogId) < 0) {
                 this.loadingPeerSettings.put(dialogId, Boolean.valueOf(true));
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("request spam button for " + dialogId);
+                    FileLog.m10d("request spam button for " + dialogId);
                 }
                 if (this.notificationsPreferences.getInt("spam3_" + dialogId, 0) == 1) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("spam button already hidden for " + dialogId);
+                        FileLog.m10d("spam button already hidden for " + dialogId);
                     }
                 } else if (this.notificationsPreferences.getBoolean("spam_" + dialogId, false)) {
                     TL_messages_hideReportSpam req = new TL_messages_hideReportSpam();
                     if (currentUser != null) {
-                        req.peer = getInputPeer(currentUser.f177id);
+                        req.peer = getInputPeer(currentUser.f176id);
                     } else if (currentChat != null) {
                         req.peer = getInputPeer(-currentChat.f78id);
                     }
@@ -1969,7 +1980,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     TL_messages_getPeerSettings req2 = new TL_messages_getPeerSettings();
                     if (currentUser != null) {
-                        req2.peer = getInputPeer(currentUser.f177id);
+                        req2.peer = getInputPeer(currentUser.f176id);
                     } else if (currentChat != null) {
                         req2.peer = getInputPeer(-currentChat.f78id);
                     }
@@ -1980,7 +1991,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$loadPeerSettings$25$MessagesController(long dialogId, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$235(this, dialogId));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$236(this, dialogId));
     }
 
     final /* synthetic */ void lambda$null$24$MessagesController(long dialogId) {
@@ -1992,7 +2003,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$loadPeerSettings$27$MessagesController(long dialogId, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$234(this, dialogId, response));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$235(this, dialogId, response));
     }
 
     final /* synthetic */ void lambda$null$26$MessagesController(long dialogId, TLObject response) {
@@ -2002,15 +2013,15 @@ public class MessagesController implements NotificationCenterDelegate {
             Editor editor = this.notificationsPreferences.edit();
             if (res.report_spam) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("show spam button for " + dialogId);
+                    FileLog.m10d("show spam button for " + dialogId);
                 }
                 editor.putInt("spam3_" + dialogId, 2);
                 editor.commit();
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf(dialogId));
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.peerSettingsDidLoad, Long.valueOf(dialogId));
                 return;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("don't show spam button for " + dialogId);
+                FileLog.m10d("don't show spam button for " + dialogId);
             }
             editor.putInt("spam3_" + dialogId, 1);
             editor.commit();
@@ -2019,7 +2030,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void processNewChannelDifferenceParams(int pts, int pts_count, int channelId) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("processNewChannelDifferenceParams pts = " + pts + " pts_count = " + pts_count + " channeldId = " + channelId);
+            FileLog.m10d("processNewChannelDifferenceParams pts = " + pts + " pts_count = " + pts_count + " channeldId = " + channelId);
         }
         int channelPts = this.channelsPts.get(channelId);
         if (channelPts == 0) {
@@ -2031,7 +2042,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         if (channelPts + pts_count == pts) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("APPLY CHANNEL PTS");
+                FileLog.m10d("APPLY CHANNEL PTS");
             }
             this.channelsPts.put(channelId, pts);
             MessagesStorage.getInstance(this.currentAccount).saveChannelPts(channelId, pts);
@@ -2039,7 +2050,7 @@ public class MessagesController implements NotificationCenterDelegate {
             long updatesStartWaitTime = this.updatesStartWaitTimeChannels.get(channelId);
             if (this.gettingDifferenceChannels.get(channelId) || updatesStartWaitTime == 0 || Math.abs(System.currentTimeMillis() - updatesStartWaitTime) <= 1500) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("ADD CHANNEL UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
+                    FileLog.m10d("ADD CHANNEL UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
                 }
                 if (updatesStartWaitTime == 0) {
                     this.updatesStartWaitTimeChannels.put(channelId, System.currentTimeMillis());
@@ -2062,19 +2073,19 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void processNewDifferenceParams(int seq, int pts, int date, int pts_count) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("processNewDifferenceParams seq = " + seq + " pts = " + pts + " date = " + date + " pts_count = " + pts_count);
+            FileLog.m10d("processNewDifferenceParams seq = " + seq + " pts = " + pts + " date = " + date + " pts_count = " + pts_count);
         }
         if (pts != -1) {
             if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + pts_count == pts) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("APPLY PTS");
+                    FileLog.m10d("APPLY PTS");
                 }
                 MessagesStorage.getInstance(this.currentAccount).setLastPtsValue(pts);
                 MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue());
             } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() != pts) {
                 if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("ADD UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
+                        FileLog.m10d("ADD UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
                     }
                     if (this.updatesStartWaitTimePts == 0) {
                         this.updatesStartWaitTimePts = System.currentTimeMillis();
@@ -2093,7 +2104,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         if (MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + 1 == seq) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("APPLY SEQ");
+                FileLog.m10d("APPLY SEQ");
             }
             MessagesStorage.getInstance(this.currentAccount).setLastSeqValue(seq);
             if (date != -1) {
@@ -2104,7 +2115,7 @@ public class MessagesController implements NotificationCenterDelegate {
         } else {
             if (this.gettingDifference || this.updatesStartWaitTimeSeq == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeSeq) <= 1500) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("ADD UPDATE TO QUEUE seq = " + seq);
+                    FileLog.m10d("ADD UPDATE TO QUEUE seq = " + seq);
                 }
                 if (this.updatesStartWaitTimeSeq == 0) {
                     this.updatesStartWaitTimeSeq = System.currentTimeMillis();
@@ -2165,7 +2176,7 @@ public class MessagesController implements NotificationCenterDelegate {
         } else {
             MessagesStorage.getInstance(this.currentAccount).emptyMessagesMedia(mids);
         }
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$233(this, mids));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$234(this, mids));
     }
 
     final /* synthetic */ void lambda$null$31$MessagesController(ArrayList mids) {
@@ -2188,7 +2199,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 this.currentDeleteTaskRunnable = null;
             }
             if (!checkDeletingTask(false)) {
-                this.currentDeleteTaskRunnable = new MessagesController$$Lambda$232(this);
+                this.currentDeleteTaskRunnable = new MessagesController$$Lambda$233(this);
                 Utilities.stageQueue.postRunnable(this.currentDeleteTaskRunnable, ((long) Math.abs(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - this.currentDeletingTaskTime)) * 1000);
                 return;
             }
@@ -2220,7 +2231,7 @@ public class MessagesController implements NotificationCenterDelegate {
             req2.filter = new TL_inputMessagesFilterChatPhotos();
             req2.limit = count;
             req2.offset_id = (int) max_id;
-            req2.f158q = TtmlNode.ANONYMOUS_REGION_ID;
+            req2.f156q = TtmlNode.ANONYMOUS_REGION_ID;
             req2.peer = getInputPeer(did);
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$27(this, did, count, max_id, classGuid)), classGuid);
         }
@@ -2257,9 +2268,9 @@ public class MessagesController implements NotificationCenterDelegate {
             } else {
                 DataQuery.getInstance(this.currentAccount).removePeer(user_id);
             }
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoaded, new Object[0]);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
             TL_contacts_block req = new TL_contacts_block();
-            req.f124id = getInputUser(user);
+            req.f122id = getInputUser(user);
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$28(this, user));
         }
     }
@@ -2267,7 +2278,7 @@ public class MessagesController implements NotificationCenterDelegate {
     final /* synthetic */ void lambda$blockUser$37$MessagesController(User user, TLObject response, TL_error error) {
         if (error == null) {
             SparseIntArray ids = new SparseIntArray();
-            ids.put(user.f177id, 1);
+            ids.put(user.f176id, 1);
             MessagesStorage.getInstance(this.currentAccount).putBlockedUsers(ids, false);
         }
     }
@@ -2285,10 +2296,10 @@ public class MessagesController implements NotificationCenterDelegate {
     final /* synthetic */ void lambda$setUserBannedRole$40$MessagesController(int chatId, BaseFragment parentFragment, TL_channels_editBanned req, boolean isMegagroup, TLObject response, TL_error error) {
         if (error == null) {
             processUpdates((Updates) response, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$230(this, chatId), 1000);
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$231(this, chatId), 1000);
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$231(this, error, parentFragment, req, isMegagroup));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$232(this, error, parentFragment, req, isMegagroup));
     }
 
     final /* synthetic */ void lambda$null$38$MessagesController(int chatId) {
@@ -2319,10 +2330,10 @@ public class MessagesController implements NotificationCenterDelegate {
     final /* synthetic */ void lambda$setUserAdminRole$43$MessagesController(int chatId, BaseFragment parentFragment, TL_channels_editAdmin req, boolean isMegagroup, TLObject response, TL_error error) {
         if (error == null) {
             processUpdates((Updates) response, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$228(this, chatId), 1000);
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$229(this, chatId), 1000);
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$229(this, error, parentFragment, req, isMegagroup));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$230(this, error, parentFragment, req, isMegagroup));
     }
 
     final /* synthetic */ void lambda$null$41$MessagesController(int chatId) {
@@ -2344,15 +2355,15 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_contacts_unblock req = new TL_contacts_unblock();
         User user = getUser(Integer.valueOf(user_id));
         if (user != null) {
-            this.blockedUsers.delete(user.f177id);
-            req.f128id = getInputUser(user);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoaded, new Object[0]);
+            this.blockedUsers.delete(user.f176id);
+            req.f126id = getInputUser(user);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$31(this, user));
         }
     }
 
     final /* synthetic */ void lambda$unblockUser$44$MessagesController(User user, TLObject response, TL_error error) {
-        MessagesStorage.getInstance(this.currentAccount).deleteBlockedUser(user.f177id);
+        MessagesStorage.getInstance(this.currentAccount).deleteBlockedUser(user.f176id);
     }
 
     public void getBlockedUsers(boolean cache) {
@@ -2403,13 +2414,13 @@ public class MessagesController implements NotificationCenterDelegate {
             UserConfig.getInstance(this.currentAccount).saveConfig(false);
         }
         this.blockedUsers = ids;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoaded, new Object[0]);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
     }
 
     public void deleteUserPhoto(InputPhoto photo) {
         if (photo == null) {
             TL_photos_updateProfilePhoto req = new TL_photos_updateProfilePhoto();
-            req.f170id = new TL_inputPhotoEmpty();
+            req.f169id = new TL_inputPhotoEmpty();
             UserConfig.getInstance(this.currentAccount).getCurrentUser().photo = new TL_userProfilePhotoEmpty();
             User user = getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
             if (user == null) {
@@ -2425,7 +2436,7 @@ public class MessagesController implements NotificationCenterDelegate {
             return;
         }
         TL_photos_deletePhotos req2 = new TL_photos_deletePhotos();
-        req2.f169id.add(photo);
+        req2.f168id.add(photo);
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, MessagesController$$Lambda$35.$instance);
     }
 
@@ -2439,12 +2450,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 UserConfig.getInstance(this.currentAccount).setCurrentUser(user1);
             }
             if (user1 != null) {
-                MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user1.f177id);
+                MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user1.f176id);
                 ArrayList<User> users = new ArrayList();
                 users.add(user1);
                 MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, false, true);
                 user1.photo = (UserProfilePhoto) response;
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$227(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$228(this));
             }
         }
     }
@@ -2534,7 +2545,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     newTaskId = taskId;
                 } else {
                     req = new TL_channels_deleteMessages();
-                    req.f116id = toSend;
+                    req.f114id = toSend;
                     req.channel = getInputChannel(channelId);
                     data = null;
                     try {
@@ -2547,14 +2558,14 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                             newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$37(this, channelId, newTaskId));
                             return;
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                         newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$37(this, channelId, newTaskId));
                         return;
@@ -2573,7 +2584,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 newTaskId = taskId;
             } else {
                 req2 = new TL_messages_deleteMessages();
-                req2.f142id = toSend;
+                req2.f140id = toSend;
                 req2.revoke = forAll;
                 data = null;
                 try {
@@ -2586,13 +2597,13 @@ public class MessagesController implements NotificationCenterDelegate {
                     } catch (Exception e4) {
                         e = e4;
                         data = data2;
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                         newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$38(this, newTaskId));
                     }
                 } catch (Exception e5) {
                     e = e5;
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                     newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$38(this, newTaskId));
                 }
@@ -2622,15 +2633,17 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    public void pinChannelMessage(Chat chat, int id, boolean notify) {
-        TL_channels_updatePinnedMessage req = new TL_channels_updatePinnedMessage();
-        req.channel = getInputChannel(chat);
-        req.f123id = id;
-        req.silent = !notify;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$39(this));
+    public void pinMessage(Chat chat, User user, int id, boolean notify) {
+        if (chat != null || user != null) {
+            TL_messages_updatePinnedMessage req = new TL_messages_updatePinnedMessage();
+            req.peer = getInputPeer(chat != null ? -chat.f78id : user.f176id);
+            req.f163id = id;
+            req.silent = !notify;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$39(this));
+        }
     }
 
-    final /* synthetic */ void lambda$pinChannelMessage$53$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$pinMessage$53$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             processUpdates((Updates) response, false);
         }
@@ -2638,7 +2651,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void deleteUserChannelHistory(Chat chat, User user, int offset) {
         if (offset == 0) {
-            MessagesStorage.getInstance(this.currentAccount).deleteUserChannelHistory(chat.f78id, user.f177id);
+            MessagesStorage.getInstance(this.currentAccount).deleteUserChannelHistory(chat.f78id, user.f176id);
         }
         TL_channels_deleteUserHistory req = new TL_channels_deleteUserHistory();
         req.channel = getInputChannel(chat);
@@ -2680,11 +2693,11 @@ public class MessagesController implements NotificationCenterDelegate {
                     max_id_delete = Math.max(0, dialog.top_message);
                 }
                 if (onlyHistory == 0 || onlyHistory == 3) {
-                    isProxyDialog = this.proxyDialog != null && this.proxyDialog.f130id == did;
+                    isProxyDialog = this.proxyDialog != null && this.proxyDialog.f128id == did;
                     if (isProxyDialog) {
                         this.isLeftProxyChannel = true;
-                        if (this.proxyDialog.f130id < 0) {
-                            Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f130id)));
+                        if (this.proxyDialog.f128id < 0) {
+                            Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f128id)));
                             if (chat != null) {
                                 chat.left = true;
                             }
@@ -2705,8 +2718,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     dialog.unread_count = 0;
                 }
                 if (!isProxyDialog) {
-                    MessageObject object = (MessageObject) this.dialogMessage.get(dialog.f130id);
-                    this.dialogMessage.remove(dialog.f130id);
+                    MessageObject object = (MessageObject) this.dialogMessage.get(dialog.f128id);
+                    this.dialogMessage.remove(dialog.f128id);
                     int lastMessageId;
                     if (object != null) {
                         lastMessageId = object.getId();
@@ -2801,7 +2814,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$deleteDialog$57$MessagesController(long did) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$226(this, did));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$227(this, did));
     }
 
     final /* synthetic */ void lambda$null$56$MessagesController(long did) {
@@ -2821,29 +2834,47 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    public void saveGif(Document document) {
-        TL_messages_saveGif req = new TL_messages_saveGif();
-        req.f156id = new TL_inputDocument();
-        req.f156id.f95id = document.f84id;
-        req.f156id.access_hash = document.access_hash;
-        req.unsave = false;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$45.$instance);
+    public void saveGif(Object parentObject, Document document) {
+        if (parentObject != null && document != null) {
+            TL_messages_saveGif req = new TL_messages_saveGif();
+            req.f154id = new TL_inputDocument();
+            req.f154id.f95id = document.f84id;
+            req.f154id.access_hash = document.access_hash;
+            req.f154id.file_reference = document.file_reference;
+            if (req.f154id.file_reference == null) {
+                req.f154id.file_reference = new byte[0];
+            }
+            req.unsave = false;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$45(this, parentObject, req));
+        }
     }
 
-    static final /* synthetic */ void lambda$saveGif$60$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$saveGif$60$MessagesController(Object parentObject, TL_messages_saveGif req, TLObject response, TL_error error) {
+        if (error != null && FileRefController.isFileRefError(error.text) && parentObject != null) {
+            FileRefController.getInstance(this.currentAccount).requestReference(parentObject, req);
+        }
     }
 
-    public void saveRecentSticker(Document document, boolean asMask) {
-        TL_messages_saveRecentSticker req = new TL_messages_saveRecentSticker();
-        req.f157id = new TL_inputDocument();
-        req.f157id.f95id = document.f84id;
-        req.f157id.access_hash = document.access_hash;
-        req.unsave = false;
-        req.attached = asMask;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$46.$instance);
+    public void saveRecentSticker(Object parentObject, Document document, boolean asMask) {
+        if (parentObject != null && document != null) {
+            TL_messages_saveRecentSticker req = new TL_messages_saveRecentSticker();
+            req.f155id = new TL_inputDocument();
+            req.f155id.f95id = document.f84id;
+            req.f155id.access_hash = document.access_hash;
+            req.f155id.file_reference = document.file_reference;
+            if (req.f155id.file_reference == null) {
+                req.f155id.file_reference = new byte[0];
+            }
+            req.unsave = false;
+            req.attached = asMask;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$46(this, parentObject, req));
+        }
     }
 
-    static final /* synthetic */ void lambda$saveRecentSticker$61$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$saveRecentSticker$61$MessagesController(Object parentObject, TL_messages_saveRecentSticker req, TLObject response, TL_error error) {
+        if (error != null && FileRefController.isFileRefError(error.text) && parentObject != null) {
+            FileRefController.getInstance(this.currentAccount).requestReference(parentObject, req);
+        }
     }
 
     public void loadChannelParticipants(Integer chat_id) {
@@ -2859,7 +2890,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$loadChannelParticipants$63$MessagesController(Integer chat_id, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$225(this, error, response, chat_id));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$226(this, error, response, chat_id));
     }
 
     final /* synthetic */ void lambda$null$62$MessagesController(TL_error error, TLObject response, Integer chat_id) {
@@ -2891,7 +2922,24 @@ public class MessagesController implements NotificationCenterDelegate {
         if (info.stickerset != null) {
             DataQuery.getInstance(this.currentAccount).getGroupStickerSetById(info.stickerset);
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, info, Integer.valueOf(0), Boolean.valueOf(byChannelUsers), pinnedMessageObject);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, info, Integer.valueOf(0), Boolean.valueOf(byChannelUsers), pinnedMessageObject);
+    }
+
+    public void loadUserInfo(User user, CountDownLatch countDownLatch, boolean force) {
+        MessagesStorage.getInstance(this.currentAccount).loadUserInfo(user, countDownLatch, force);
+    }
+
+    public void processUserInfo(User user, TL_userFull info, boolean fromCache, boolean force, MessageObject pinnedMessageObject) {
+        if (fromCache) {
+            loadFullUser(user, 0, force);
+        }
+        if (info != null) {
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$49(this, user, info, pinnedMessageObject));
+        }
+    }
+
+    final /* synthetic */ void lambda$processUserInfo$65$MessagesController(User user, TL_userFull info, MessageObject pinnedMessageObject) {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(user.f176id), info, pinnedMessageObject);
     }
 
     public void updateTimerProc() {
@@ -2910,7 +2958,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                     req = new TL_account_updateStatus();
                     req.offline = false;
-                    this.statusRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$49(this));
+                    this.statusRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$50(this));
                 }
             } else if (!(this.statusSettingState == 2 || this.offlineSent || Math.abs(System.currentTimeMillis() - ConnectionsManager.getInstance(this.currentAccount).getPauseTime()) < AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS)) {
                 this.statusSettingState = 2;
@@ -2919,14 +2967,14 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 req = new TL_account_updateStatus();
                 req.offline = true;
-                this.statusRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$50(this));
+                this.statusRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$51(this));
             }
             if (this.updatesQueueChannels.size() != 0) {
                 for (a = 0; a < this.updatesQueueChannels.size(); a++) {
                     key = this.updatesQueueChannels.keyAt(a);
                     if (1500 + this.updatesStartWaitTimeChannels.valueAt(a) < currentTime) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d("QUEUE CHANNEL " + key + " UPDATES WAIT TIMEOUT - CHECK QUEUE");
+                            FileLog.m10d("QUEUE CHANNEL " + key + " UPDATES WAIT TIMEOUT - CHECK QUEUE");
                         }
                         processChannelsUpdatesQueue(key, 0);
                     }
@@ -2936,7 +2984,7 @@ public class MessagesController implements NotificationCenterDelegate {
             while (a < 3) {
                 if (getUpdatesStartTime(a) != 0 && getUpdatesStartTime(a) + 1500 < currentTime) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d(a + " QUEUE UPDATES WAIT TIMEOUT - CHECK QUEUE");
+                        FileLog.m10d(a + " QUEUE UPDATES WAIT TIMEOUT - CHECK QUEUE");
                     }
                     processUpdatesQueue(a, 0);
                 }
@@ -2950,9 +2998,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 key = this.channelViewsToSend.keyAt(a);
                 TL_messages_getMessagesViews req2 = new TL_messages_getMessagesViews();
                 req2.peer = getInputPeer(key);
-                req2.f152id = (ArrayList) this.channelViewsToSend.valueAt(a);
+                req2.f150id = (ArrayList) this.channelViewsToSend.valueAt(a);
                 req2.increment = a == 0;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$51(this, key, req2));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$52(this, key, req2));
                 a++;
             }
             this.channelViewsToSend.clear();
@@ -2973,7 +3021,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 while (it.hasNext()) {
                     this.onlinePrivacy.remove((Integer) it.next());
                 }
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$52(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$53(this));
             }
         }
         if (this.shortPollChannels.size() != 0) {
@@ -3021,7 +3069,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             updatePrintingStrings();
             if (updated) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$53(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$54(this));
             }
         }
         if (Theme.selectedAutoNightType == 1 && Math.abs(currentTime - lastThemeCheckTime) >= 60) {
@@ -3033,14 +3081,14 @@ public class MessagesController implements NotificationCenterDelegate {
             lastPasswordCheckTime = currentTime;
         }
         if (this.lastPushRegisterSendTime != 0 && Math.abs(SystemClock.elapsedRealtime() - this.lastPushRegisterSendTime) >= 10800000) {
-            GcmInstanceIDListenerService.sendRegistrationToServer(SharedConfig.pushString);
+            GcmPushListenerService.sendRegistrationToServer(SharedConfig.pushString);
         }
         LocationController.getInstance(this.currentAccount).update();
         checkProxyInfoInternal(false);
         checkTosUpdate();
     }
 
-    final /* synthetic */ void lambda$updateTimerProc$65$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$updateTimerProc$66$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             this.lastStatusUpdateTime = System.currentTimeMillis();
             this.offlineSent = false;
@@ -3051,7 +3099,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.statusRequest = 0;
     }
 
-    final /* synthetic */ void lambda$updateTimerProc$66$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$updateTimerProc$67$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             this.offlineSent = true;
         } else if (this.lastStatusUpdateTime != 0) {
@@ -3060,7 +3108,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.statusRequest = 0;
     }
 
-    final /* synthetic */ void lambda$updateTimerProc$68$MessagesController(int key, TL_messages_getMessagesViews req, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$updateTimerProc$69$MessagesController(int key, TL_messages_getMessagesViews req, TLObject response, TL_error error) {
         if (error == null) {
             Vector vector = (Vector) response;
             SparseArray<SparseIntArray> channelViews = new SparseArray();
@@ -3070,54 +3118,54 @@ public class MessagesController implements NotificationCenterDelegate {
                 channelViews.put(key, array);
             }
             int a1 = 0;
-            while (a1 < req.f152id.size() && a1 < vector.objects.size()) {
-                array.put(((Integer) req.f152id.get(a1)).intValue(), ((Integer) vector.objects.get(a1)).intValue());
+            while (a1 < req.f150id.size() && a1 < vector.objects.size()) {
+                array.put(((Integer) req.f150id.get(a1)).intValue(), ((Integer) vector.objects.get(a1)).intValue());
                 a1++;
             }
             MessagesStorage.getInstance(this.currentAccount).putChannelViews(channelViews, req.peer instanceof TL_inputPeerChannel);
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$224(this, channelViews));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$225(this, channelViews));
         }
     }
 
-    final /* synthetic */ void lambda$null$67$MessagesController(SparseArray channelViews) {
+    final /* synthetic */ void lambda$null$68$MessagesController(SparseArray channelViews) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didUpdatedMessagesViews, channelViews);
     }
 
-    final /* synthetic */ void lambda$updateTimerProc$69$MessagesController() {
+    final /* synthetic */ void lambda$updateTimerProc$70$MessagesController() {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(4));
     }
 
-    final /* synthetic */ void lambda$updateTimerProc$70$MessagesController() {
+    final /* synthetic */ void lambda$updateTimerProc$71$MessagesController() {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(64));
     }
 
     private void checkTosUpdate() {
         if (this.nextTosCheckTime <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() && !this.checkingTosUpdate && UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             this.checkingTosUpdate = true;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getTermsOfServiceUpdate(), new MessagesController$$Lambda$54(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getTermsOfServiceUpdate(), new MessagesController$$Lambda$55(this));
         }
     }
 
-    final /* synthetic */ void lambda$checkTosUpdate$72$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$checkTosUpdate$73$MessagesController(TLObject response, TL_error error) {
         this.checkingTosUpdate = false;
         if (response instanceof TL_help_termsOfServiceUpdateEmpty) {
             this.nextTosCheckTime = ((TL_help_termsOfServiceUpdateEmpty) response).expires;
         } else if (response instanceof TL_help_termsOfServiceUpdate) {
             TL_help_termsOfServiceUpdate res = (TL_help_termsOfServiceUpdate) response;
             this.nextTosCheckTime = res.expires;
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$223(this, res));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$224(this, res));
         } else {
             this.nextTosCheckTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + 3600;
         }
         this.notificationsPreferences.edit().putInt("nextTosCheckTime", this.nextTosCheckTime).commit();
     }
 
-    final /* synthetic */ void lambda$null$71$MessagesController(TL_help_termsOfServiceUpdate res) {
+    final /* synthetic */ void lambda$null$72$MessagesController(TL_help_termsOfServiceUpdate res) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(4), res.terms_of_service);
     }
 
     public void checkProxyInfo(boolean reset) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$55(this, reset));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$56(this, reset));
     }
 
     private void checkProxyInfoInternal(boolean reset) {
@@ -3138,15 +3186,15 @@ public class MessagesController implements NotificationCenterDelegate {
                     ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkingProxyInfoRequestId, true);
                     this.checkingProxyInfoRequestId = 0;
                 }
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$57(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$58(this));
                 return;
             }
             this.checkingProxyInfo = true;
-            this.checkingProxyInfoRequestId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getProxyData(), new MessagesController$$Lambda$56(this));
+            this.checkingProxyInfoRequestId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getProxyData(), new MessagesController$$Lambda$57(this));
         }
     }
 
-    final /* synthetic */ void lambda$checkProxyInfoInternal$79$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$checkProxyInfoInternal$80$MessagesController(TLObject response, TL_error error) {
         if (this.checkingProxyInfoRequestId != 0) {
             boolean noDialog = false;
             if (response instanceof TL_help_proxyDataEmpty) {
@@ -3186,7 +3234,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 getGlobalMainSettings().edit().putLong("proxy_dialog", this.proxyDialogId).commit();
                 this.nextProxyInfoCheckTime = res.expires;
                 if (!noDialog) {
-                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$218(this, did, res));
+                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$219(this, did, res));
                 }
             } else {
                 this.nextProxyInfoCheckTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + 3600;
@@ -3197,12 +3245,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 getGlobalMainSettings().edit().putLong("proxy_dialog", this.proxyDialogId).commit();
                 this.checkingProxyInfoRequestId = 0;
                 this.checkingProxyInfo = false;
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$219(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$220(this));
             }
         }
     }
 
-    final /* synthetic */ void lambda$null$77$MessagesController(long did, TL_help_proxyDataPromo res) {
+    final /* synthetic */ void lambda$null$78$MessagesController(long did, TL_help_proxyDataPromo res) {
         this.proxyDialog = (TL_dialog) this.dialogs_dict.get(did);
         if (this.proxyDialog != null) {
             this.checkingProxyInfo = false;
@@ -3215,7 +3263,7 @@ public class MessagesController implements NotificationCenterDelegate {
         SparseArray<Chat> chatsDict = new SparseArray();
         for (a = 0; a < res.users.size(); a++) {
             User u = (User) res.users.get(a);
-            usersDict.put(u.f177id, u);
+            usersDict.put(u.f176id, u);
         }
         for (a = 0; a < res.chats.size(); a++) {
             Chat c = (Chat) res.chats.get(a);
@@ -3247,15 +3295,15 @@ public class MessagesController implements NotificationCenterDelegate {
             }
         }
         req1.peers.add(peer);
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req1, new MessagesController$$Lambda$220(this, res, did));
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req1, new MessagesController$$Lambda$221(this, res, did));
     }
 
-    final /* synthetic */ void lambda$null$76$MessagesController(TL_help_proxyDataPromo res, long did, TLObject response1, TL_error error1) {
+    final /* synthetic */ void lambda$null$77$MessagesController(TL_help_proxyDataPromo res, long did, TLObject response1, TL_error error1) {
         if (this.checkingProxyInfoRequestId != 0) {
             this.checkingProxyInfoRequestId = 0;
             TL_messages_peerDialogs res2 = (TL_messages_peerDialogs) response1;
             if (res2 == null || res2.dialogs.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$222(this));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$223(this));
             } else {
                 MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
                 TL_messages_dialogs dialogs = new TL_messages_dialogs();
@@ -3264,32 +3312,32 @@ public class MessagesController implements NotificationCenterDelegate {
                 dialogs.dialogs = res2.dialogs;
                 dialogs.messages = res2.messages;
                 MessagesStorage.getInstance(this.currentAccount).putDialogs(dialogs, 2);
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$221(this, res, res2, did));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$222(this, res, res2, did));
             }
             this.checkingProxyInfo = false;
         }
     }
 
-    final /* synthetic */ void lambda$null$74$MessagesController(TL_help_proxyDataPromo res, TL_messages_peerDialogs res2, long did) {
+    final /* synthetic */ void lambda$null$75$MessagesController(TL_help_proxyDataPromo res, TL_messages_peerDialogs res2, long did) {
         putUsers(res.users, false);
         putChats(res.chats, false);
         putUsers(res2.users, false);
         putChats(res2.chats, false);
         this.proxyDialog = (TL_dialog) res2.dialogs.get(0);
-        this.proxyDialog.f130id = did;
+        this.proxyDialog.f128id = did;
         if (DialogObject.isChannel(this.proxyDialog)) {
-            this.channelsPts.put(-((int) this.proxyDialog.f130id), this.proxyDialog.pts);
+            this.channelsPts.put(-((int) this.proxyDialog.f128id), this.proxyDialog.pts);
         }
-        Integer value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(this.proxyDialog.f130id));
+        Integer value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(this.proxyDialog.f128id));
         if (value == null) {
             value = Integer.valueOf(0);
         }
-        this.dialogs_read_inbox_max.put(Long.valueOf(this.proxyDialog.f130id), Integer.valueOf(Math.max(value.intValue(), this.proxyDialog.read_inbox_max_id)));
-        value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(this.proxyDialog.f130id));
+        this.dialogs_read_inbox_max.put(Long.valueOf(this.proxyDialog.f128id), Integer.valueOf(Math.max(value.intValue(), this.proxyDialog.read_inbox_max_id)));
+        value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(this.proxyDialog.f128id));
         if (value == null) {
             value = Integer.valueOf(0);
         }
-        this.dialogs_read_outbox_max.put(Long.valueOf(this.proxyDialog.f130id), Integer.valueOf(Math.max(value.intValue(), this.proxyDialog.read_outbox_max_id)));
+        this.dialogs_read_outbox_max.put(Long.valueOf(this.proxyDialog.f128id), Integer.valueOf(Math.max(value.intValue(), this.proxyDialog.read_outbox_max_id)));
         this.dialogs_dict.put(did, this.proxyDialog);
         if (!res2.messages.isEmpty()) {
             int a;
@@ -3297,7 +3345,7 @@ public class MessagesController implements NotificationCenterDelegate {
             SparseArray chatsDict1 = new SparseArray();
             for (a = 0; a < res2.users.size(); a++) {
                 User u = (User) res2.users.get(a);
-                usersDict1.put(u.f177id, u);
+                usersDict1.put(u.f176id, u);
             }
             for (a = 0; a < res2.chats.size(); a++) {
                 Chat c = (Chat) res2.chats.get(a);
@@ -3313,12 +3361,12 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, Boolean.valueOf(true));
     }
 
-    final /* synthetic */ void lambda$null$75$MessagesController() {
+    final /* synthetic */ void lambda$null$76$MessagesController() {
         if (this.proxyDialog != null) {
-            if (this.proxyDialog.f130id < 0) {
-                Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f130id)));
+            if (this.proxyDialog.f128id < 0) {
+                Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f128id)));
                 if (chat == null || chat.left || chat.kicked || chat.restricted) {
-                    this.dialogs_dict.remove(this.proxyDialog.f130id);
+                    this.dialogs_dict.remove(this.proxyDialog.f128id);
                     this.dialogs.remove(this.proxyDialog);
                 }
             }
@@ -3328,12 +3376,12 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$78$MessagesController() {
+    final /* synthetic */ void lambda$null$79$MessagesController() {
         if (this.proxyDialog != null) {
-            if (this.proxyDialog.f130id < 0) {
-                Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f130id)));
+            if (this.proxyDialog.f128id < 0) {
+                Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f128id)));
                 if (chat == null || chat.left || chat.kicked || chat.restricted) {
-                    this.dialogs_dict.remove(this.proxyDialog.f130id);
+                    this.dialogs_dict.remove(this.proxyDialog.f128id);
                     this.dialogs.remove(this.proxyDialog);
                 }
             }
@@ -3343,12 +3391,12 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$checkProxyInfoInternal$80$MessagesController() {
+    final /* synthetic */ void lambda$checkProxyInfoInternal$81$MessagesController() {
         if (this.proxyDialog != null) {
-            if (this.proxyDialog.f130id < 0) {
-                Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f130id)));
+            if (this.proxyDialog.f128id < 0) {
+                Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f128id)));
                 if (chat == null || chat.left || chat.kicked || chat.restricted) {
-                    this.dialogs_dict.remove(this.proxyDialog.f130id);
+                    this.dialogs_dict.remove(this.proxyDialog.f128id);
                     this.dialogs.remove(this.proxyDialog);
                 }
             }
@@ -3359,7 +3407,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public boolean isProxyDialog(long did) {
-        return this.proxyDialog != null && this.proxyDialog.f130id == did && this.isLeftProxyChannel;
+        return this.proxyDialog != null && this.proxyDialog.f128id == did && this.isLeftProxyChannel;
     }
 
     private String getUserNameForTyping(User user) {
@@ -3475,10 +3523,10 @@ public class MessagesController implements NotificationCenterDelegate {
             }
         }
         this.lastPrintingStringCount = newPrintingStrings.size();
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$58(this, newPrintingStrings, newPrintingStringsTypes));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$59(this, newPrintingStrings, newPrintingStringsTypes));
     }
 
-    final /* synthetic */ void lambda$updatePrintingStrings$81$MessagesController(LongSparseArray newPrintingStrings, LongSparseArray newPrintingStringsTypes) {
+    final /* synthetic */ void lambda$updatePrintingStrings$82$MessagesController(LongSparseArray newPrintingStrings, LongSparseArray newPrintingStringsTypes) {
         this.printingStrings = newPrintingStrings;
         this.printingStringsTypes = newPrintingStringsTypes;
     }
@@ -3534,7 +3582,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 req.action = new TL_sendMessageUploadAudioAction();
                             }
                             typings.put(dialog_id, Boolean.valueOf(true));
-                            reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$59(this, action, dialog_id), 2);
+                            reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$60(this, action, dialog_id), 2);
                             if (classGuid != 0) {
                                 ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, classGuid);
                             }
@@ -3549,7 +3597,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         req2.peer.access_hash = chat2.access_hash;
                         req2.typing = true;
                         typings.put(dialog_id, Boolean.valueOf(true));
-                        reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$60(this, action, dialog_id), 2);
+                        reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$61(this, action, dialog_id), 2);
                         if (classGuid != 0) {
                             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, classGuid);
                         }
@@ -3559,22 +3607,22 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$sendTyping$83$MessagesController(int action, long dialog_id, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$217(this, action, dialog_id));
+    final /* synthetic */ void lambda$sendTyping$84$MessagesController(int action, long dialog_id, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$218(this, action, dialog_id));
     }
 
-    final /* synthetic */ void lambda$null$82$MessagesController(int action, long dialog_id) {
+    final /* synthetic */ void lambda$null$83$MessagesController(int action, long dialog_id) {
         LongSparseArray<Boolean> typings1 = (LongSparseArray) this.sendingTypings.get(action);
         if (typings1 != null) {
             typings1.remove(dialog_id);
         }
     }
 
-    final /* synthetic */ void lambda$sendTyping$85$MessagesController(int action, long dialog_id, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$216(this, action, dialog_id));
+    final /* synthetic */ void lambda$sendTyping$86$MessagesController(int action, long dialog_id, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$217(this, action, dialog_id));
     }
 
-    final /* synthetic */ void lambda$null$84$MessagesController(int action, long dialog_id) {
+    final /* synthetic */ void lambda$null$85$MessagesController(int action, long dialog_id) {
         LongSparseArray<Boolean> typings12 = (LongSparseArray) this.sendingTypings.get(action);
         if (typings12 != null) {
             typings12.remove(dialog_id);
@@ -3591,7 +3639,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     private void loadMessagesInternal(long dialog_id, int count, int max_id, int offset_date, boolean fromCache, int midDate, int classGuid, int load_type, int last_message_id, boolean isChannel, int loadIndex, int first_unread, int unread_count, int last_date, boolean queryFromServer, int mentionsCount, boolean loadDialog) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("load messages in chat " + dialog_id + " count " + count + " max_id " + max_id + " cache " + fromCache + " mindate = " + midDate + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " index " + loadIndex + " firstUnread " + first_unread + " unread_count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
+            FileLog.m10d("load messages in chat " + dialog_id + " count " + count + " max_id " + max_id + " cache " + fromCache + " mindate = " + midDate + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " index " + loadIndex + " firstUnread " + first_unread + " unread_count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
         }
         int lower_part = (int) dialog_id;
         TLObject req;
@@ -3603,7 +3651,7 @@ public class MessagesController implements NotificationCenterDelegate {
             TL_inputDialogPeer inputDialogPeer = new TL_inputDialogPeer();
             inputDialogPeer.peer = inputPeer;
             req.peers.add(inputDialogPeer);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$61(this, dialog_id, count, max_id, offset_date, midDate, classGuid, load_type, isChannel, loadIndex, first_unread, last_date, queryFromServer));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$62(this, dialog_id, count, max_id, offset_date, midDate, classGuid, load_type, isChannel, loadIndex, first_unread, last_date, queryFromServer));
         } else {
             req = new TL_messages_getHistory();
             req.peer = getInputPeer(lower_part);
@@ -3624,11 +3672,11 @@ public class MessagesController implements NotificationCenterDelegate {
             req.limit = count;
             req.offset_id = max_id;
             req.offset_date = offset_date;
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$62(this, count, max_id, offset_date, dialog_id, classGuid, first_unread, last_message_id, unread_count, last_date, load_type, isChannel, loadIndex, queryFromServer, mentionsCount)), classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$63(this, count, max_id, offset_date, dialog_id, classGuid, first_unread, last_message_id, unread_count, last_date, load_type, isChannel, loadIndex, queryFromServer, mentionsCount)), classGuid);
         }
     }
 
-    final /* synthetic */ void lambda$loadMessagesInternal$86$MessagesController(long dialog_id, int count, int max_id, int offset_date, int midDate, int classGuid, int load_type, boolean isChannel, int loadIndex, int first_unread, int last_date, boolean queryFromServer, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$loadMessagesInternal$87$MessagesController(long dialog_id, int count, int max_id, int offset_date, int midDate, int classGuid, int load_type, boolean isChannel, int loadIndex, int first_unread, int last_date, boolean queryFromServer, TLObject response, TL_error error) {
         if (response != null) {
             TL_messages_peerDialogs res = (TL_messages_peerDialogs) response;
             if (!res.dialogs.isEmpty()) {
@@ -3646,7 +3694,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$loadMessagesInternal$87$MessagesController(int count, int max_id, int offset_date, long dialog_id, int classGuid, int first_unread, int last_message_id, int unread_count, int last_date, int load_type, boolean isChannel, int loadIndex, boolean queryFromServer, int mentionsCount, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$loadMessagesInternal$88$MessagesController(int count, int max_id, int offset_date, long dialog_id, int classGuid, int first_unread, int last_message_id, int unread_count, int last_date, int load_type, boolean isChannel, int loadIndex, boolean queryFromServer, int mentionsCount, TLObject response, TL_error error) {
         if (response != null) {
             messages_Messages res = (messages_Messages) response;
             if (res.messages.size() > count) {
@@ -3679,15 +3727,15 @@ public class MessagesController implements NotificationCenterDelegate {
             arrayList.addAll(messages);
             TL_messages_getWebPagePreview req = new TL_messages_getWebPagePreview();
             req.message = url;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$63(this, url, dialog_id));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$64(this, url, dialog_id));
         }
     }
 
-    final /* synthetic */ void lambda$reloadWebPages$89$MessagesController(String url, long dialog_id, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$215(this, url, response, dialog_id));
+    final /* synthetic */ void lambda$reloadWebPages$90$MessagesController(String url, long dialog_id, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$216(this, url, response, dialog_id));
     }
 
-    final /* synthetic */ void lambda$null$88$MessagesController(String url, TLObject response, long dialog_id) {
+    final /* synthetic */ void lambda$null$89$MessagesController(String url, TLObject response, long dialog_id) {
         ArrayList<MessageObject> arrayList1 = (ArrayList) this.reloadingWebpages.remove(url);
         if (arrayList1 != null) {
             messages_Messages messagesRes = new TL_messages_messages();
@@ -3703,7 +3751,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         messagesRes.messages.add(((MessageObject) arrayList1.get(a)).messageOwner);
                     }
                 } else {
-                    this.reloadingWebpagesPending.put(media.webpage.f183id, arrayList1);
+                    this.reloadingWebpagesPending.put(media.webpage.f182id, arrayList1);
                 }
             } else {
                 for (a = 0; a < arrayList1.size(); a++) {
@@ -3720,12 +3768,12 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void processLoadedMessages(messages_Messages messagesRes, long dialog_id, int count, int max_id, int offset_date, boolean isCache, int classGuid, int first_unread, int last_message_id, int unread_count, int last_date, int load_type, boolean isChannel, boolean isEnd, int loadIndex, boolean queryFromServer, int mentionsCount) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("processLoadedMessages size " + messagesRes.messages.size() + " in chat " + dialog_id + " count " + count + " max_id " + max_id + " cache " + isCache + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " isChannel " + isChannel + " index " + loadIndex + " firstUnread " + first_unread + " unread_count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
+            FileLog.m10d("processLoadedMessages size " + messagesRes.messages.size() + " in chat " + dialog_id + " count " + count + " max_id " + max_id + " cache " + isCache + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " isChannel " + isChannel + " index " + loadIndex + " firstUnread " + first_unread + " unread_count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
         }
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$64(this, messagesRes, dialog_id, isCache, count, load_type, queryFromServer, first_unread, max_id, offset_date, classGuid, last_message_id, isChannel, loadIndex, unread_count, last_date, mentionsCount, isEnd));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$65(this, messagesRes, dialog_id, isCache, count, load_type, queryFromServer, first_unread, max_id, offset_date, classGuid, last_message_id, isChannel, loadIndex, unread_count, last_date, mentionsCount, isEnd));
     }
 
-    final /* synthetic */ void lambda$processLoadedMessages$92$MessagesController(messages_Messages messagesRes, long dialog_id, boolean isCache, int count, int load_type, boolean queryFromServer, int first_unread, int max_id, int offset_date, int classGuid, int last_message_id, boolean isChannel, int loadIndex, int unread_count, int last_date, int mentionsCount, boolean isEnd) {
+    final /* synthetic */ void lambda$processLoadedMessages$93$MessagesController(messages_Messages messagesRes, long dialog_id, boolean isCache, int count, int load_type, boolean queryFromServer, int first_unread, int max_id, int offset_date, int classGuid, int last_message_id, boolean isChannel, int loadIndex, int unread_count, int last_date, int mentionsCount, boolean isEnd) {
         int a;
         boolean createDialog = false;
         boolean isMegagroup = false;
@@ -3759,7 +3807,7 @@ public class MessagesController implements NotificationCenterDelegate {
             SparseArray<Chat> chatsDict = new SparseArray();
             for (a = 0; a < messagesRes.users.size(); a++) {
                 User u = (User) messagesRes.users.get(a);
-                usersDict.put(u.f177id, u);
+                usersDict.put(u.f176id, u);
             }
             for (a = 0; a < messagesRes.chats.size(); a++) {
                 Chat c = (Chat) messagesRes.chats.get(a);
@@ -3808,7 +3856,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 objects.add(messageObject);
                 if (isCache) {
                     if (message.media instanceof TL_messageMediaUnsupported) {
-                        if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 85))) {
+                        if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 89))) {
                             messagesToReload.add(Integer.valueOf(message.f104id));
                         }
                     } else if (message.media instanceof TL_messageMediaWebPage) {
@@ -3825,18 +3873,18 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 }
             }
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$214(this, messagesRes, isCache, queryFromServer, load_type, first_unread, dialog_id, count, objects, last_message_id, unread_count, last_date, isEnd, classGuid, loadIndex, max_id, mentionsCount, messagesToReload, webpagesToReload));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$215(this, messagesRes, isCache, queryFromServer, load_type, first_unread, dialog_id, count, objects, last_message_id, unread_count, last_date, isEnd, classGuid, loadIndex, max_id, mentionsCount, messagesToReload, webpagesToReload));
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$213(this, dialog_id, count, load_type, queryFromServer, first_unread, max_id, offset_date, classGuid, last_message_id, isChannel, loadIndex, unread_count, last_date, mentionsCount));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$214(this, dialog_id, count, load_type, queryFromServer, first_unread, max_id, offset_date, classGuid, last_message_id, isChannel, loadIndex, unread_count, last_date, mentionsCount));
     }
 
-    final /* synthetic */ void lambda$null$90$MessagesController(long dialog_id, int count, int load_type, boolean queryFromServer, int first_unread, int max_id, int offset_date, int classGuid, int last_message_id, boolean isChannel, int loadIndex, int unread_count, int last_date, int mentionsCount) {
+    final /* synthetic */ void lambda$null$91$MessagesController(long dialog_id, int count, int load_type, boolean queryFromServer, int first_unread, int max_id, int offset_date, int classGuid, int last_message_id, boolean isChannel, int loadIndex, int unread_count, int last_date, int mentionsCount) {
         int i = (load_type == 2 && queryFromServer) ? first_unread : max_id;
         loadMessages(dialog_id, count, i, offset_date, false, 0, classGuid, load_type, last_message_id, isChannel, loadIndex, first_unread, unread_count, last_date, queryFromServer, mentionsCount);
     }
 
-    final /* synthetic */ void lambda$null$91$MessagesController(messages_Messages messagesRes, boolean isCache, boolean queryFromServer, int load_type, int first_unread, long dialog_id, int count, ArrayList objects, int last_message_id, int unread_count, int last_date, boolean isEnd, int classGuid, int loadIndex, int max_id, int mentionsCount, ArrayList messagesToReload, HashMap webpagesToReload) {
+    final /* synthetic */ void lambda$null$92$MessagesController(messages_Messages messagesRes, boolean isCache, boolean queryFromServer, int load_type, int first_unread, long dialog_id, int count, ArrayList objects, int last_message_id, int unread_count, int last_date, boolean isEnd, int classGuid, int loadIndex, int max_id, int mentionsCount, ArrayList messagesToReload, HashMap webpagesToReload) {
         putUsers(messagesRes.users, isCache);
         putChats(messagesRes.chats, isCache);
         int first_unread_final = ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -3851,7 +3899,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (first_unread_final == ConnectionsManager.DEFAULT_DATACENTER_ID) {
             first_unread_final = first_unread;
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDidLoaded, Long.valueOf(dialog_id), Integer.valueOf(count), objects, Boolean.valueOf(isCache), Integer.valueOf(first_unread_final), Integer.valueOf(last_message_id), Integer.valueOf(unread_count), Integer.valueOf(last_date), Integer.valueOf(load_type), Boolean.valueOf(isEnd), Integer.valueOf(classGuid), Integer.valueOf(loadIndex), Integer.valueOf(max_id), Integer.valueOf(mentionsCount));
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDidLoad, Long.valueOf(dialog_id), Integer.valueOf(count), objects, Boolean.valueOf(isCache), Integer.valueOf(first_unread_final), Integer.valueOf(last_message_id), Integer.valueOf(unread_count), Integer.valueOf(last_date), Integer.valueOf(load_type), Boolean.valueOf(isEnd), Integer.valueOf(classGuid), Integer.valueOf(loadIndex), Integer.valueOf(max_id), Integer.valueOf(mentionsCount));
         if (!messagesToReload.isEmpty()) {
             reloadMessages(messagesToReload, dialog_id);
         }
@@ -3864,17 +3912,17 @@ public class MessagesController implements NotificationCenterDelegate {
         if (this.hintDialogs.isEmpty() && !TextUtils.isEmpty(this.installReferer)) {
             TL_help_getRecentMeUrls req = new TL_help_getRecentMeUrls();
             req.referer = this.installReferer;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$65(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$66(this));
         }
     }
 
-    final /* synthetic */ void lambda$loadHintDialogs$94$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$loadHintDialogs$95$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$212(this, response));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$213(this, response));
         }
     }
 
-    final /* synthetic */ void lambda$null$93$MessagesController(TLObject response) {
+    final /* synthetic */ void lambda$null$94$MessagesController(TLObject response) {
         TL_help_recentMeUrls res = (TL_help_recentMeUrls) response;
         putUsers(res.users, false);
         putChats(res.chats, false);
@@ -3890,7 +3938,7 @@ public class MessagesController implements NotificationCenterDelegate {
             this.loadingDialogs = true;
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("load cacheOffset = " + offset + " count = " + count + " cache = " + fromCache);
+                FileLog.m10d("load cacheOffset = " + offset + " count = " + count + " cache = " + fromCache);
             }
             if (fromCache) {
                 MessagesStorage.getInstance(this.currentAccount).getDialogs(offset == 0 ? 0 : this.nextDialogsCacheOffset, count);
@@ -3904,9 +3952,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 for (int a = this.dialogs.size() - 1; a >= 0; a--) {
                     TL_dialog dialog = (TL_dialog) this.dialogs.get(a);
                     if (!dialog.pinned) {
-                        int high_id = (int) (dialog.f130id >> 32);
-                        if (!(((int) dialog.f130id) == 0 || high_id == 1 || dialog.top_message <= 0)) {
-                            MessageObject message = (MessageObject) this.dialogMessage.get(dialog.f130id);
+                        int high_id = (int) (dialog.f128id >> 32);
+                        if (!(((int) dialog.f128id) == 0 || high_id == 1 || dialog.top_message <= 0)) {
+                            MessageObject message = (MessageObject) this.dialogMessage.get(dialog.f128id);
                             if (message != null && message.getId() > 0) {
                                 int id;
                                 req.offset_date = message.messageOwner.date;
@@ -3954,11 +4002,11 @@ public class MessagesController implements NotificationCenterDelegate {
                     req.offset_peer.access_hash = UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess;
                 }
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$66(this, count));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$67(this, count));
         }
     }
 
-    final /* synthetic */ void lambda$loadDialogs$95$MessagesController(int count, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$loadDialogs$96$MessagesController(int count, TLObject response, TL_error error) {
         if (error == null) {
             processLoadedDialogs((messages_Dialogs) response, null, 0, count, 0, false, false, false);
         }
@@ -3966,24 +4014,53 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void loadGlobalNotificationsSettings() {
         if (this.loadingNotificationSettings == 0 && !UserConfig.getInstance(this.currentAccount).notificationsSettingsLoaded) {
-            this.loadingNotificationSettings = 2;
-            for (int a = 0; a < 2; a++) {
+            boolean enabled;
+            SharedPreferences preferences = getNotificationsSettings(this.currentAccount);
+            Editor editor1 = null;
+            if (preferences.contains("EnableGroup")) {
+                enabled = preferences.getBoolean("EnableGroup", true);
+                if (null == null) {
+                    editor1 = preferences.edit();
+                }
+                if (!enabled) {
+                    editor1.putInt("EnableGroup2", ConnectionsManager.DEFAULT_DATACENTER_ID);
+                    editor1.putInt("EnableChannel2", ConnectionsManager.DEFAULT_DATACENTER_ID);
+                }
+                editor1.remove("EnableGroup").commit();
+            }
+            if (preferences.contains("EnableAll")) {
+                enabled = preferences.getBoolean("EnableAll", true);
+                if (editor1 == null) {
+                    editor1 = preferences.edit();
+                }
+                if (!enabled) {
+                    editor1.putInt("EnableAll2", ConnectionsManager.DEFAULT_DATACENTER_ID);
+                }
+                editor1.remove("EnableAll").commit();
+            }
+            if (editor1 != null) {
+                editor1.commit();
+            }
+            this.loadingNotificationSettings = 3;
+            for (int a = 0; a < 3; a++) {
                 TL_account_getNotifySettings req = new TL_account_getNotifySettings();
                 if (a == 0) {
                     req.peer = new TL_inputNotifyChats();
                 } else if (a == 1) {
                     req.peer = new TL_inputNotifyUsers();
+                } else if (a == 2) {
+                    req.peer = new TL_inputNotifyBroadcasts();
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$67(this, a));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$68(this, a));
             }
         }
     }
 
-    final /* synthetic */ void lambda$loadGlobalNotificationsSettings$97$MessagesController(int type, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$211(this, response, type));
+    final /* synthetic */ void lambda$loadGlobalNotificationsSettings$98$MessagesController(int type, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$212(this, response, type));
     }
 
-    final /* synthetic */ void lambda$null$96$MessagesController(TLObject response, int type) {
+    final /* synthetic */ void lambda$null$97$MessagesController(TLObject response, int type) {
         if (response != null) {
             this.loadingNotificationSettings--;
             TL_peerNotifySettings notify_settings = (TL_peerNotifySettings) response;
@@ -3995,23 +4072,25 @@ public class MessagesController implements NotificationCenterDelegate {
                 if ((notify_settings.flags & 2) != 0) {
                 }
                 if ((notify_settings.flags & 4) != 0) {
-                    boolean z;
-                    String str = "EnableGroup";
-                    if (notify_settings.mute_until < ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
-                        z = true;
-                    } else {
-                        z = false;
-                    }
-                    editor.putBoolean(str, z);
+                    editor.putInt("EnableGroup2", notify_settings.mute_until);
                 }
-            } else {
+            } else if (type == 1) {
                 if ((notify_settings.flags & 1) != 0) {
                     editor.putBoolean("EnablePreviewAll", notify_settings.show_previews);
                 }
                 if ((notify_settings.flags & 2) != 0) {
                 }
                 if ((notify_settings.flags & 4) != 0) {
-                    editor.putBoolean("EnableAll", notify_settings.mute_until < ConnectionsManager.getInstance(this.currentAccount).getCurrentTime());
+                    editor.putInt("EnableAll2", notify_settings.mute_until);
+                }
+            } else if (type == 2) {
+                if ((notify_settings.flags & 1) != 0) {
+                    editor.putBoolean("EnablePreviewChannel", notify_settings.show_previews);
+                }
+                if ((notify_settings.flags & 2) != 0) {
+                }
+                if ((notify_settings.flags & 4) != 0) {
+                    editor.putInt("EnableChannel2", notify_settings.mute_until);
                 }
             }
             editor.commit();
@@ -4030,12 +4109,12 @@ public class MessagesController implements NotificationCenterDelegate {
         if (query) {
             if (!this.resetingDialogs) {
                 this.resetingDialogs = true;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getPinnedDialogs(), new MessagesController$$Lambda$68(this, seq, newPts, date, qts));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getPinnedDialogs(), new MessagesController$$Lambda$69(this, seq, newPts, date, qts));
                 TLObject req2 = new TL_messages_getDialogs();
                 req2.limit = 100;
                 req2.exclude_pinned = true;
                 req2.offset_peer = new TL_inputPeerEmpty();
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$69(this, seq, newPts, date, qts));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$70(this, seq, newPts, date, qts));
             }
         } else if (this.resetDialogsPinned != null && this.resetDialogsAll != null) {
             int a;
@@ -4054,7 +4133,7 @@ public class MessagesController implements NotificationCenterDelegate {
             SparseArray chatsDict = new SparseArray();
             for (a = 0; a < this.resetDialogsAll.users.size(); a++) {
                 User u = (User) this.resetDialogsAll.users.get(a);
-                usersDict.put(u.f177id, u);
+                usersDict.put(u.f176id, u);
             }
             for (a = 0; a < this.resetDialogsAll.chats.size(); a++) {
                 Chat c = (Chat) this.resetDialogsAll.chats.get(a);
@@ -4088,43 +4167,43 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             for (a = 0; a < this.resetDialogsAll.dialogs.size(); a++) {
                 TL_dialog d = (TL_dialog) this.resetDialogsAll.dialogs.get(a);
-                if (d.f130id == 0 && d.peer != null) {
+                if (d.f128id == 0 && d.peer != null) {
                     if (d.peer.user_id != 0) {
-                        d.f130id = (long) d.peer.user_id;
+                        d.f128id = (long) d.peer.user_id;
                     } else if (d.peer.chat_id != 0) {
-                        d.f130id = (long) (-d.peer.chat_id);
+                        d.f128id = (long) (-d.peer.chat_id);
                     } else if (d.peer.channel_id != 0) {
-                        d.f130id = (long) (-d.peer.channel_id);
+                        d.f128id = (long) (-d.peer.channel_id);
                     }
                 }
-                if (d.f130id != 0) {
+                if (d.f128id != 0) {
                     if (d.last_message_date == 0) {
-                        MessageObject mess = (MessageObject) new_dialogMessage.get(d.f130id);
+                        MessageObject mess = (MessageObject) new_dialogMessage.get(d.f128id);
                         if (mess != null) {
                             d.last_message_date = mess.messageOwner.date;
                         }
                     }
                     if (DialogObject.isChannel(d)) {
-                        chat = (Chat) chatsDict.get(-((int) d.f130id));
+                        chat = (Chat) chatsDict.get(-((int) d.f128id));
                         if (chat == null || !chat.left) {
-                            this.channelsPts.put(-((int) d.f130id), d.pts);
+                            this.channelsPts.put(-((int) d.f128id), d.pts);
                         }
-                    } else if (((int) d.f130id) < 0) {
-                        chat = (Chat) chatsDict.get(-((int) d.f130id));
+                    } else if (((int) d.f128id) < 0) {
+                        chat = (Chat) chatsDict.get(-((int) d.f128id));
                         if (!(chat == null || chat.migrated_to == null)) {
                         }
                     }
-                    new_dialogs_dict.put(d.f130id, d);
-                    value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f130id));
+                    new_dialogs_dict.put(d.f128id, d);
+                    value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f128id));
                     if (value == null) {
                         value = Integer.valueOf(0);
                     }
-                    this.dialogs_read_inbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
-                    value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f130id));
+                    this.dialogs_read_inbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
+                    value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f128id));
                     if (value == null) {
                         value = Integer.valueOf(0);
                     }
-                    this.dialogs_read_outbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
+                    this.dialogs_read_outbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
                 }
             }
             ImageLoader.saveMessagesThumbs(this.resetDialogsAll.messages);
@@ -4162,14 +4241,14 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$resetDialogs$98$MessagesController(int seq, int newPts, int date, int qts, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$resetDialogs$99$MessagesController(int seq, int newPts, int date, int qts, TLObject response, TL_error error) {
         if (response != null) {
             this.resetDialogsPinned = (TL_messages_peerDialogs) response;
             resetDialogs(false, seq, newPts, date, qts);
         }
     }
 
-    final /* synthetic */ void lambda$resetDialogs$99$MessagesController(int seq, int newPts, int date, int qts, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$resetDialogs$100$MessagesController(int seq, int newPts, int date, int qts, TLObject response, TL_error error) {
         if (error == null) {
             this.resetDialogsAll = (messages_Dialogs) response;
             resetDialogs(false, seq, newPts, date, qts);
@@ -4177,19 +4256,19 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void completeDialogsReset(messages_Dialogs dialogsRes, int messagesCount, int seq, int newPts, int date, int qts, LongSparseArray<TL_dialog> new_dialogs_dict, LongSparseArray<MessageObject> new_dialogMessage, Message lastMessage) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$70(this, newPts, date, qts, dialogsRes, new_dialogs_dict, new_dialogMessage));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$71(this, newPts, date, qts, dialogsRes, new_dialogs_dict, new_dialogMessage));
     }
 
-    final /* synthetic */ void lambda$completeDialogsReset$101$MessagesController(int newPts, int date, int qts, messages_Dialogs dialogsRes, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage) {
+    final /* synthetic */ void lambda$completeDialogsReset$102$MessagesController(int newPts, int date, int qts, messages_Dialogs dialogsRes, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage) {
         this.gettingDifference = false;
         MessagesStorage.getInstance(this.currentAccount).setLastPtsValue(newPts);
         MessagesStorage.getInstance(this.currentAccount).setLastDateValue(date);
         MessagesStorage.getInstance(this.currentAccount).setLastQtsValue(qts);
         getDifference();
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$210(this, dialogsRes, new_dialogs_dict, new_dialogMessage));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$211(this, dialogsRes, new_dialogs_dict, new_dialogMessage));
     }
 
-    final /* synthetic */ void lambda$null$100$MessagesController(messages_Dialogs dialogsRes, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage) {
+    final /* synthetic */ void lambda$null$101$MessagesController(messages_Dialogs dialogsRes, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage) {
         int a;
         MessageObject messageObject;
         this.resetingDialogs = false;
@@ -4201,10 +4280,10 @@ public class MessagesController implements NotificationCenterDelegate {
         putChats(dialogsRes.chats, false);
         for (a = 0; a < this.dialogs.size(); a++) {
             TL_dialog oldDialog = (TL_dialog) this.dialogs.get(a);
-            if (((int) oldDialog.f130id) != 0) {
-                this.dialogs_dict.remove(oldDialog.f130id);
-                messageObject = (MessageObject) this.dialogMessage.get(oldDialog.f130id);
-                this.dialogMessage.remove(oldDialog.f130id);
+            if (((int) oldDialog.f128id) != 0) {
+                this.dialogs_dict.remove(oldDialog.f128id);
+                messageObject = (MessageObject) this.dialogMessage.get(oldDialog.f128id);
+                this.dialogMessage.remove(oldDialog.f128id);
                 if (messageObject != null) {
                     this.dialogMessagesByIds.remove(messageObject.getId());
                     if (messageObject.messageOwner.random_id != 0) {
@@ -4217,10 +4296,10 @@ public class MessagesController implements NotificationCenterDelegate {
             long key = new_dialogs_dict.keyAt(a);
             TL_dialog value = (TL_dialog) new_dialogs_dict.valueAt(a);
             if (value.draft instanceof TL_draftMessage) {
-                DataQuery.getInstance(this.currentAccount).saveDraft(value.f130id, value.draft, null, false);
+                DataQuery.getInstance(this.currentAccount).saveDraft(value.f128id, value.draft, null, false);
             }
             this.dialogs_dict.put(key, value);
-            messageObject = (MessageObject) new_dialogMessage.get(value.f130id);
+            messageObject = (MessageObject) new_dialogMessage.get(value.f128id);
             this.dialogMessage.put(key, messageObject);
             if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
                 this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
@@ -4252,7 +4331,7 @@ public class MessagesController implements NotificationCenterDelegate {
             req.offset_id = offset;
             req.offset_date = offsetDate;
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("start migrate with id " + offset + " date " + LocaleController.getInstance().formatterStats.format(((long) offsetDate) * 1000));
+                FileLog.m10d("start migrate with id " + offset + " date " + LocaleController.getInstance().formatterStats.format(((long) offsetDate) * 1000));
             }
             if (offset == 0) {
                 req.offset_peer = new TL_inputPeerEmpty();
@@ -4269,19 +4348,19 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 req.offset_peer.access_hash = accessPeer;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$71(this, offset));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$72(this, offset));
         }
     }
 
-    final /* synthetic */ void lambda$migrateDialogs$105$MessagesController(int offset, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$migrateDialogs$106$MessagesController(int offset, TLObject response, TL_error error) {
         if (error == null) {
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$207(this, (messages_Dialogs) response, offset));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$208(this, (messages_Dialogs) response, offset));
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$208(this));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$209(this));
     }
 
-    final /* synthetic */ void lambda$null$103$MessagesController(messages_Dialogs dialogsRes, int offset) {
+    final /* synthetic */ void lambda$null$104$MessagesController(messages_Dialogs dialogsRes, int offset) {
         try {
             int a;
             Message message;
@@ -4294,20 +4373,20 @@ public class MessagesController implements NotificationCenterDelegate {
             for (a = 0; a < dialogsRes.messages.size(); a++) {
                 message = (Message) dialogsRes.messages.get(a);
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("search migrate id " + message.f104id + " date " + LocaleController.getInstance().formatterStats.format(((long) message.date) * 1000));
+                    FileLog.m10d("search migrate id " + message.f104id + " date " + LocaleController.getInstance().formatterStats.format(((long) message.date) * 1000));
                 }
                 if (lastMessage == null || message.date < lastMessage.date) {
                     lastMessage = message;
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("migrate step with id " + lastMessage.f104id + " date " + LocaleController.getInstance().formatterStats.format(((long) lastMessage.date) * 1000));
+                FileLog.m10d("migrate step with id " + lastMessage.f104id + " date " + LocaleController.getInstance().formatterStats.format(((long) lastMessage.date) * 1000));
             }
             if (dialogsRes.dialogs.size() >= 100) {
                 offsetId = lastMessage.f104id;
             } else {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("migrate stop due to not 100 dialogs");
+                    FileLog.m10d("migrate stop due to not 100 dialogs");
                 }
                 UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = ConnectionsManager.DEFAULT_DATACENTER_ID;
                 UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetDate = UserConfig.getInstance(this.currentAccount).migrateOffsetDate;
@@ -4322,17 +4401,17 @@ public class MessagesController implements NotificationCenterDelegate {
             for (a = 0; a < dialogsRes.dialogs.size(); a++) {
                 dialog = (TL_dialog) dialogsRes.dialogs.get(a);
                 if (dialog.peer.channel_id != 0) {
-                    dialog.f130id = (long) (-dialog.peer.channel_id);
+                    dialog.f128id = (long) (-dialog.peer.channel_id);
                 } else if (dialog.peer.chat_id != 0) {
-                    dialog.f130id = (long) (-dialog.peer.chat_id);
+                    dialog.f128id = (long) (-dialog.peer.chat_id);
                 } else {
-                    dialog.f130id = (long) dialog.peer.user_id;
+                    dialog.f128id = (long) dialog.peer.user_id;
                 }
                 if (stringBuilder.length() > 0) {
                     stringBuilder.append(",");
                 }
-                stringBuilder.append(dialog.f130id);
-                dialogHashMap.put(dialog.f130id, dialog);
+                stringBuilder.append(dialog.f128id);
+                dialogHashMap.put(dialog.f128id, dialog);
             }
             SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs WHERE did IN (%s)", new Object[]{stringBuilder.toString()}), new Object[0]);
             while (cursor.next()) {
@@ -4358,7 +4437,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             cursor.dispose();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("migrate found missing dialogs " + dialogsRes.dialogs.size());
+                FileLog.m10d("migrate found missing dialogs " + dialogsRes.dialogs.size());
             }
             cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT min(date) FROM dialogs WHERE date != 0 AND did >> 32 IN (0, -1)", new Object[0]);
             if (cursor.next()) {
@@ -4376,7 +4455,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = UserConfig.getInstance(this.currentAccount).migrateOffsetAccess;
                             offsetId = -1;
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11d("migrate stop due to reached loaded dialogs " + LocaleController.getInstance().formatterStats.format(((long) date) * 1000));
+                                FileLog.m10d("migrate stop due to reached loaded dialogs " + LocaleController.getInstance().formatterStats.format(((long) date) * 1000));
                             }
                         }
                         dialogsRes.messages.remove(a);
@@ -4399,7 +4478,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = UserConfig.getInstance(this.currentAccount).migrateOffsetAccess;
                     offsetId = -1;
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("migrate stop due to reached loaded dialogs " + LocaleController.getInstance().formatterStats.format(((long) date) * 1000));
+                        FileLog.m10d("migrate stop due to reached loaded dialogs " + LocaleController.getInstance().formatterStats.format(((long) date) * 1000));
                     }
                 }
             }
@@ -4434,7 +4513,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 UserConfig.getInstance(this.currentAccount).migrateOffsetChannelId = 0;
                 for (a = 0; a < dialogsRes.users.size(); a++) {
                     User user = (User) dialogsRes.users.get(a);
-                    if (user.f177id == UserConfig.getInstance(this.currentAccount).migrateOffsetUserId) {
+                    if (user.f176id == UserConfig.getInstance(this.currentAccount).migrateOffsetUserId) {
                         UserConfig.getInstance(this.currentAccount).migrateOffsetAccess = user.access_hash;
                         break;
                     }
@@ -4442,33 +4521,33 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             processLoadedDialogs(dialogsRes, null, offsetId, 0, 0, false, true, false);
         } catch (Throwable e) {
-            FileLog.m14e(e);
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$209(this));
+            FileLog.m13e(e);
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$210(this));
         }
     }
 
-    final /* synthetic */ void lambda$null$102$MessagesController() {
+    final /* synthetic */ void lambda$null$103$MessagesController() {
         this.migratingDialogs = false;
     }
 
-    final /* synthetic */ void lambda$null$104$MessagesController() {
+    final /* synthetic */ void lambda$null$105$MessagesController() {
         this.migratingDialogs = false;
     }
 
     public void processLoadedDialogs(messages_Dialogs dialogsRes, ArrayList<EncryptedChat> encChats, int offset, int count, int loadType, boolean resetEnd, boolean migrate, boolean fromCache) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$72(this, loadType, dialogsRes, resetEnd, count, offset, fromCache, migrate, encChats));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$73(this, loadType, dialogsRes, resetEnd, count, offset, fromCache, migrate, encChats));
     }
 
-    final /* synthetic */ void lambda$processLoadedDialogs$108$MessagesController(int loadType, messages_Dialogs dialogsRes, boolean resetEnd, int count, int offset, boolean fromCache, boolean migrate, ArrayList encChats) {
+    final /* synthetic */ void lambda$processLoadedDialogs$109$MessagesController(int loadType, messages_Dialogs dialogsRes, boolean resetEnd, int count, int offset, boolean fromCache, boolean migrate, ArrayList encChats) {
         if (!this.firstGettingTask) {
             getNewDeleteTask(null, 0);
             this.firstGettingTask = true;
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("loaded loadType " + loadType + " count " + dialogsRes.dialogs.size());
+            FileLog.m10d("loaded loadType " + loadType + " count " + dialogsRes.dialogs.size());
         }
         if (loadType == 1 && dialogsRes.dialogs.size() == 0) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$205(this, dialogsRes, resetEnd, count));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$206(this, dialogsRes, resetEnd, count));
             return;
         }
         int a;
@@ -4482,7 +4561,7 @@ public class MessagesController implements NotificationCenterDelegate {
         SparseArray chatsDict = new SparseArray();
         for (a = 0; a < dialogsRes.users.size(); a++) {
             User u = (User) dialogsRes.users.get(a);
-            usersDict.put(u.f177id, u);
+            usersDict.put(u.f176id, u);
         }
         for (a = 0; a < dialogsRes.chats.size(); a++) {
             Chat c = (Chat) dialogsRes.chats.get(a);
@@ -4553,7 +4632,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChannelId = 0;
                     for (a = 0; a < dialogsRes.users.size(); a++) {
                         user = (User) dialogsRes.users.get(a);
-                        if (user.f177id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId) {
+                        if (user.f176id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId) {
                             UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = user.access_hash;
                             break;
                         }
@@ -4565,59 +4644,59 @@ public class MessagesController implements NotificationCenterDelegate {
         ArrayList<TL_dialog> dialogsToReload = new ArrayList();
         for (a = 0; a < dialogsRes.dialogs.size(); a++) {
             TL_dialog d = (TL_dialog) dialogsRes.dialogs.get(a);
-            if (d.f130id == 0 && d.peer != null) {
+            if (d.f128id == 0 && d.peer != null) {
                 if (d.peer.user_id != 0) {
-                    d.f130id = (long) d.peer.user_id;
+                    d.f128id = (long) d.peer.user_id;
                 } else if (d.peer.chat_id != 0) {
-                    d.f130id = (long) (-d.peer.chat_id);
+                    d.f128id = (long) (-d.peer.chat_id);
                 } else if (d.peer.channel_id != 0) {
-                    d.f130id = (long) (-d.peer.channel_id);
+                    d.f128id = (long) (-d.peer.channel_id);
                 }
             }
-            if (d.f130id != 0) {
-                if (this.proxyDialogId != 0 && this.proxyDialogId == d.f130id) {
+            if (d.f128id != 0) {
+                if (this.proxyDialogId != 0 && this.proxyDialogId == d.f128id) {
                     this.proxyDialog = d;
                 }
                 if (d.last_message_date == 0) {
-                    MessageObject mess = (MessageObject) new_dialogMessage.get(d.f130id);
+                    MessageObject mess = (MessageObject) new_dialogMessage.get(d.f128id);
                     if (mess != null) {
                         d.last_message_date = mess.messageOwner.date;
                     }
                 }
                 boolean allowCheck = true;
                 if (DialogObject.isChannel(d)) {
-                    chat = (Chat) chatsDict.get(-((int) d.f130id));
+                    chat = (Chat) chatsDict.get(-((int) d.f128id));
                     if (chat != null) {
                         if (!chat.megagroup) {
                             allowCheck = false;
                         }
                         if (chat.left) {
                             if (this.proxyDialogId != 0) {
-                                if (this.proxyDialogId != d.f130id) {
+                                if (this.proxyDialogId != d.f128id) {
                                 }
                             }
                         }
                     }
-                    this.channelsPts.put(-((int) d.f130id), d.pts);
-                } else if (((int) d.f130id) < 0) {
-                    chat = (Chat) chatsDict.get(-((int) d.f130id));
+                    this.channelsPts.put(-((int) d.f128id), d.pts);
+                } else if (((int) d.f128id) < 0) {
+                    chat = (Chat) chatsDict.get(-((int) d.f128id));
                     if (!(chat == null || chat.migrated_to == null)) {
                     }
                 }
-                new_dialogs_dict.put(d.f130id, d);
+                new_dialogs_dict.put(d.f128id, d);
                 if (allowCheck && loadType == 1 && ((d.read_outbox_max_id == 0 || d.read_inbox_max_id == 0) && d.top_message != 0)) {
                     dialogsToReload.add(d);
                 }
-                value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f130id));
+                value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f128id));
                 if (value == null) {
                     value = Integer.valueOf(0);
                 }
-                this.dialogs_read_inbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
-                value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f130id));
+                this.dialogs_read_inbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
+                value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f128id));
                 if (value == null) {
                     value = Integer.valueOf(0);
                 }
-                this.dialogs_read_outbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
+                this.dialogs_read_outbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
             }
         }
         if (loadType != 1) {
@@ -4657,10 +4736,10 @@ public class MessagesController implements NotificationCenterDelegate {
             getChannelDifference(chat.f78id);
             checkChannelInviter(chat.f78id);
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$206(this, loadType, dialogsRes, encChats, migrate, new_dialogs_dict, new_dialogMessage, chatsDict, count, fromCache, offset, dialogsToReload));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$207(this, loadType, dialogsRes, encChats, migrate, new_dialogs_dict, new_dialogMessage, chatsDict, count, fromCache, offset, dialogsToReload));
     }
 
-    final /* synthetic */ void lambda$null$106$MessagesController(messages_Dialogs dialogsRes, boolean resetEnd, int count) {
+    final /* synthetic */ void lambda$null$107$MessagesController(messages_Dialogs dialogsRes, boolean resetEnd, int count) {
         putUsers(dialogsRes.users, true);
         this.loadingDialogs = false;
         if (resetEnd) {
@@ -4675,7 +4754,7 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$107$MessagesController(int loadType, messages_Dialogs dialogsRes, ArrayList encChats, boolean migrate, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage, SparseArray chatsDict, int count, boolean fromCache, int offset, ArrayList dialogsToReload) {
+    final /* synthetic */ void lambda$null$108$MessagesController(int loadType, messages_Dialogs dialogsRes, ArrayList encChats, boolean migrate, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage, SparseArray chatsDict, int count, boolean fromCache, int offset, ArrayList dialogsToReload) {
         int a;
         if (loadType != 1) {
             applyDialogsNotificationsSettings(dialogsRes.dialogs);
@@ -4705,13 +4784,13 @@ public class MessagesController implements NotificationCenterDelegate {
             if (!migrate || lastDialogDate == 0 || value.last_message_date >= lastDialogDate) {
                 TL_dialog currentDialog = (TL_dialog) this.dialogs_dict.get(key);
                 if (loadType != 1 && (value.draft instanceof TL_draftMessage)) {
-                    DataQuery.getInstance(this.currentAccount).saveDraft(value.f130id, value.draft, null, false);
+                    DataQuery.getInstance(this.currentAccount).saveDraft(value.f128id, value.draft, null, false);
                 }
                 MessageObject messageObject;
                 if (currentDialog == null) {
                     added = true;
                     this.dialogs_dict.put(key, value);
-                    messageObject = (MessageObject) new_dialogMessage.get(value.f130id);
+                    messageObject = (MessageObject) new_dialogMessage.get(value.f128id);
                     this.dialogMessage.put(key, messageObject);
                     if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
                         this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
@@ -4727,7 +4806,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     currentDialog.pinnedNum = value.pinnedNum;
                     MessageObject oldMsg = (MessageObject) this.dialogMessage.get(key);
                     if ((oldMsg == null || !oldMsg.deleted) && oldMsg != null && currentDialog.top_message <= 0) {
-                        MessageObject newMsg = (MessageObject) new_dialogMessage.get(value.f130id);
+                        MessageObject newMsg = (MessageObject) new_dialogMessage.get(value.f128id);
                         if (oldMsg.deleted || newMsg == null || newMsg.messageOwner.date > oldMsg.messageOwner.date) {
                             this.dialogs_dict.put(key, value);
                             this.dialogMessage.put(key, newMsg);
@@ -4744,7 +4823,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     } else if (value.top_message >= currentDialog.top_message) {
                         this.dialogs_dict.put(key, value);
-                        messageObject = (MessageObject) new_dialogMessage.get(value.f130id);
+                        messageObject = (MessageObject) new_dialogMessage.get(value.f128id);
                         this.dialogMessage.put(key, messageObject);
                         if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
                             this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
@@ -4802,62 +4881,64 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     private void applyDialogNotificationsSettings(long dialog_id, PeerNotifySettings notify_settings) {
-        int currentValue = this.notificationsPreferences.getInt("notify2_" + dialog_id, -1);
-        int currentValue2 = this.notificationsPreferences.getInt("notifyuntil_" + dialog_id, 0);
-        Editor editor = this.notificationsPreferences.edit();
-        boolean updated = false;
-        TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(dialog_id);
-        if (dialog != null) {
-            dialog.notify_settings = notify_settings;
-        }
-        if ((notify_settings.flags & 2) != 0) {
-            editor.putBoolean("silent_" + dialog_id, notify_settings.silent);
-        } else {
-            editor.remove("silent_" + dialog_id);
-        }
-        if ((notify_settings.flags & 4) == 0) {
-            if (currentValue != -1) {
-                updated = true;
-                if (dialog != null) {
-                    dialog.notify_settings.mute_until = 0;
-                }
-                editor.remove("notify2_" + dialog_id);
+        if (notify_settings != null) {
+            int currentValue = this.notificationsPreferences.getInt("notify2_" + dialog_id, -1);
+            int currentValue2 = this.notificationsPreferences.getInt("notifyuntil_" + dialog_id, 0);
+            Editor editor = this.notificationsPreferences.edit();
+            boolean updated = false;
+            TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(dialog_id);
+            if (dialog != null) {
+                dialog.notify_settings = notify_settings;
             }
-            MessagesStorage.getInstance(this.currentAccount).setDialogFlags(dialog_id, 0);
-        } else if (notify_settings.mute_until > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
-            int until = 0;
-            if (notify_settings.mute_until <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + 31536000) {
-                if (!(currentValue == 3 && currentValue2 == notify_settings.mute_until)) {
+            if ((notify_settings.flags & 2) != 0) {
+                editor.putBoolean("silent_" + dialog_id, notify_settings.silent);
+            } else {
+                editor.remove("silent_" + dialog_id);
+            }
+            if ((notify_settings.flags & 4) == 0) {
+                if (currentValue != -1) {
                     updated = true;
-                    editor.putInt("notify2_" + dialog_id, 3);
-                    editor.putInt("notifyuntil_" + dialog_id, notify_settings.mute_until);
                     if (dialog != null) {
                         dialog.notify_settings.mute_until = 0;
                     }
+                    editor.remove("notify2_" + dialog_id);
                 }
-                until = notify_settings.mute_until;
-            } else if (currentValue != 2) {
-                updated = true;
-                editor.putInt("notify2_" + dialog_id, 2);
-                if (dialog != null) {
-                    dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                MessagesStorage.getInstance(this.currentAccount).setDialogFlags(dialog_id, 0);
+            } else if (notify_settings.mute_until > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
+                int until = 0;
+                if (notify_settings.mute_until <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + 31536000) {
+                    if (!(currentValue == 3 && currentValue2 == notify_settings.mute_until)) {
+                        updated = true;
+                        editor.putInt("notify2_" + dialog_id, 3);
+                        editor.putInt("notifyuntil_" + dialog_id, notify_settings.mute_until);
+                        if (dialog != null) {
+                            dialog.notify_settings.mute_until = 0;
+                        }
+                    }
+                    until = notify_settings.mute_until;
+                } else if (currentValue != 2) {
+                    updated = true;
+                    editor.putInt("notify2_" + dialog_id, 2);
+                    if (dialog != null) {
+                        dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                    }
                 }
+                MessagesStorage.getInstance(this.currentAccount).setDialogFlags(dialog_id, (((long) until) << 32) | 1);
+                NotificationsController.getInstance(this.currentAccount).removeNotificationsForDialog(dialog_id);
+            } else {
+                if (!(currentValue == 0 || currentValue == 1)) {
+                    updated = true;
+                    if (dialog != null) {
+                        dialog.notify_settings.mute_until = 0;
+                    }
+                    editor.putInt("notify2_" + dialog_id, 0);
+                }
+                MessagesStorage.getInstance(this.currentAccount).setDialogFlags(dialog_id, 0);
             }
-            MessagesStorage.getInstance(this.currentAccount).setDialogFlags(dialog_id, (((long) until) << 32) | 1);
-            NotificationsController.getInstance(this.currentAccount).removeNotificationsForDialog(dialog_id);
-        } else {
-            if (!(currentValue == 0 || currentValue == 1)) {
-                updated = true;
-                if (dialog != null) {
-                    dialog.notify_settings.mute_until = 0;
-                }
-                editor.putInt("notify2_" + dialog_id, 0);
+            editor.commit();
+            if (updated) {
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.notificationsSettingsUpdated, new Object[0]);
             }
-            MessagesStorage.getInstance(this.currentAccount).setDialogFlags(dialog_id, 0);
-        }
-        editor.commit();
-        if (updated) {
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.notificationsSettingsUpdated, new Object[0]);
         }
     }
 
@@ -4901,24 +4982,24 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void reloadMentionsCountForChannels(ArrayList<Integer> arrayList) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$73(this, arrayList));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$74(this, arrayList));
     }
 
-    final /* synthetic */ void lambda$reloadMentionsCountForChannels$111$MessagesController(ArrayList arrayList) {
+    final /* synthetic */ void lambda$reloadMentionsCountForChannels$112$MessagesController(ArrayList arrayList) {
         for (int a = 0; a < arrayList.size(); a++) {
             long dialog_id = (long) (-((Integer) arrayList.get(a)).intValue());
             TL_messages_getUnreadMentions req = new TL_messages_getUnreadMentions();
             req.peer = getInputPeer((int) dialog_id);
             req.limit = 1;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$203(this, dialog_id));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$204(this, dialog_id));
         }
     }
 
-    final /* synthetic */ void lambda$null$110$MessagesController(long dialog_id, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$204(this, response, dialog_id));
+    final /* synthetic */ void lambda$null$111$MessagesController(long dialog_id, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$205(this, response, dialog_id));
     }
 
-    final /* synthetic */ void lambda$null$109$MessagesController(TLObject response, long dialog_id) {
+    final /* synthetic */ void lambda$null$110$MessagesController(TLObject response, long dialog_id) {
         messages_Messages res = (messages_Messages) response;
         if (res != null) {
             int newCount;
@@ -4932,10 +5013,10 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void processDialogsUpdateRead(LongSparseArray<Integer> dialogsToUpdate, LongSparseArray<Integer> dialogsMentionsToUpdate) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$74(this, dialogsToUpdate, dialogsMentionsToUpdate));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$75(this, dialogsToUpdate, dialogsMentionsToUpdate));
     }
 
-    final /* synthetic */ void lambda$processDialogsUpdateRead$112$MessagesController(LongSparseArray dialogsToUpdate, LongSparseArray dialogsMentionsToUpdate) {
+    final /* synthetic */ void lambda$processDialogsUpdateRead$113$MessagesController(LongSparseArray dialogsToUpdate, LongSparseArray dialogsMentionsToUpdate) {
         int a;
         TL_dialog currentDialog;
         if (dialogsToUpdate != null) {
@@ -4958,8 +5039,8 @@ public class MessagesController implements NotificationCenterDelegate {
                 currentDialog = (TL_dialog) this.dialogs_dict.get(dialogsMentionsToUpdate.keyAt(a));
                 if (currentDialog != null) {
                     currentDialog.unread_mentions_count = ((Integer) dialogsMentionsToUpdate.valueAt(a)).intValue();
-                    if (this.createdDialogMainThreadIds.contains(Long.valueOf(currentDialog.f130id))) {
-                        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateMentionsCount, Long.valueOf(currentDialog.f130id), Integer.valueOf(currentDialog.unread_mentions_count));
+                    if (this.createdDialogMainThreadIds.contains(Long.valueOf(currentDialog.f128id))) {
+                        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateMentionsCount, Long.valueOf(currentDialog.f128id), Integer.valueOf(currentDialog.unread_mentions_count));
                     }
                 }
             }
@@ -4973,7 +5054,7 @@ public class MessagesController implements NotificationCenterDelegate {
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
         long newTaskId;
-        int lower_id = (int) dialog.f130id;
+        int lower_id = (int) dialog.f128id;
         if (lower_id != 0 && this.checkingLastMessagesDialogs.indexOfKey(lower_id) < 0) {
             InputPeer inputPeer;
             TL_messages_getHistory req = new TL_messages_getHistory();
@@ -4992,7 +5073,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         NativeByteBuffer data2 = new NativeByteBuffer(req.peer.getObjectSize() + 48);
                         try {
                             data2.writeInt32(10);
-                            data2.writeInt64(dialog.f130id);
+                            data2.writeInt64(dialog.f128id);
                             data2.writeInt32(dialog.top_message);
                             data2.writeInt32(dialog.read_inbox_max_id);
                             data2.writeInt32(dialog.read_outbox_max_id);
@@ -5009,30 +5090,30 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                             newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$75(this, dialog, newTaskId, lower_id));
+                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$76(this, dialog, newTaskId, lower_id));
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                         newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$75(this, dialog, newTaskId, lower_id));
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$76(this, dialog, newTaskId, lower_id));
                     }
                     newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                 } else {
                     newTaskId = taskId;
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$75(this, dialog, newTaskId, lower_id));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$76(this, dialog, newTaskId, lower_id));
             }
         }
     }
 
-    final /* synthetic */ void lambda$checkLastDialogMessage$115$MessagesController(TL_dialog dialog, long newTaskId, int lower_id, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$checkLastDialogMessage$116$MessagesController(TL_dialog dialog, long newTaskId, int lower_id, TLObject response, TL_error error) {
         if (response != null) {
             messages_Messages res = (messages_Messages) response;
             if (res.messages.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$201(this, dialog));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$202(this, dialog));
             } else {
                 TL_messages_dialogs dialogs = new TL_messages_dialogs();
                 Message newMessage = (Message) res.messages.get(0);
@@ -5049,8 +5130,8 @@ public class MessagesController implements NotificationCenterDelegate {
                 newDialog.read_outbox_max_id = dialog.read_outbox_max_id;
                 newDialog.pinned = dialog.pinned;
                 newDialog.pinnedNum = dialog.pinnedNum;
-                long j = dialog.f130id;
-                newDialog.f130id = j;
+                long j = dialog.f128id;
+                newDialog.f128id = j;
                 newMessage.dialog_id = j;
                 dialogs.users.addAll(res.users);
                 dialogs.chats.addAll(res.chats);
@@ -5064,25 +5145,25 @@ public class MessagesController implements NotificationCenterDelegate {
         if (newTaskId != 0) {
             MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$202(this, lower_id));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$203(this, lower_id));
     }
 
-    final /* synthetic */ void lambda$null$113$MessagesController(TL_dialog dialog) {
-        TL_dialog currentDialog = (TL_dialog) this.dialogs_dict.get(dialog.f130id);
+    final /* synthetic */ void lambda$null$114$MessagesController(TL_dialog dialog) {
+        TL_dialog currentDialog = (TL_dialog) this.dialogs_dict.get(dialog.f128id);
         if (currentDialog != null && currentDialog.top_message == 0) {
-            deleteDialog(dialog.f130id, 3);
+            deleteDialog(dialog.f128id, 3);
         }
     }
 
-    final /* synthetic */ void lambda$null$114$MessagesController(int lower_id) {
+    final /* synthetic */ void lambda$null$115$MessagesController(int lower_id) {
         this.checkingLastMessagesDialogs.delete(lower_id);
     }
 
     public void processDialogsUpdate(messages_Dialogs dialogsRes, ArrayList<EncryptedChat> arrayList) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$76(this, dialogsRes));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$77(this, dialogsRes));
     }
 
-    final /* synthetic */ void lambda$processDialogsUpdate$117$MessagesController(messages_Dialogs dialogsRes) {
+    final /* synthetic */ void lambda$processDialogsUpdate$118$MessagesController(messages_Dialogs dialogsRes) {
         int a;
         Chat chat;
         LongSparseArray<TL_dialog> new_dialogs_dict = new LongSparseArray();
@@ -5092,7 +5173,7 @@ public class MessagesController implements NotificationCenterDelegate {
         LongSparseArray<Integer> dialogsToUpdate = new LongSparseArray();
         for (a = 0; a < dialogsRes.users.size(); a++) {
             User u = (User) dialogsRes.users.get(a);
-            usersDict.put(u.f177id, u);
+            usersDict.put(u.f176id, u);
         }
         for (a = 0; a < dialogsRes.chats.size(); a++) {
             Chat c = (Chat) dialogsRes.chats.get(a);
@@ -5116,49 +5197,49 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         for (a = 0; a < dialogsRes.dialogs.size(); a++) {
             TL_dialog d = (TL_dialog) dialogsRes.dialogs.get(a);
-            if (d.f130id == 0) {
+            if (d.f128id == 0) {
                 if (d.peer.user_id != 0) {
-                    d.f130id = (long) d.peer.user_id;
+                    d.f128id = (long) d.peer.user_id;
                 } else if (d.peer.chat_id != 0) {
-                    d.f130id = (long) (-d.peer.chat_id);
+                    d.f128id = (long) (-d.peer.chat_id);
                 } else if (d.peer.channel_id != 0) {
-                    d.f130id = (long) (-d.peer.channel_id);
+                    d.f128id = (long) (-d.peer.channel_id);
                 }
             }
-            if (this.proxyDialogId == 0 || this.proxyDialogId != d.f130id) {
+            if (this.proxyDialogId == 0 || this.proxyDialogId != d.f128id) {
                 if (DialogObject.isChannel(d)) {
-                    chat = (Chat) chatsDict.get(-((int) d.f130id));
+                    chat = (Chat) chatsDict.get(-((int) d.f128id));
                     if (chat != null && chat.left) {
                     }
-                } else if (((int) d.f130id) < 0) {
-                    chat = (Chat) chatsDict.get(-((int) d.f130id));
+                } else if (((int) d.f128id) < 0) {
+                    chat = (Chat) chatsDict.get(-((int) d.f128id));
                     if (!(chat == null || chat.migrated_to == null)) {
                     }
                 }
             }
             if (d.last_message_date == 0) {
-                MessageObject mess = (MessageObject) new_dialogMessage.get(d.f130id);
+                MessageObject mess = (MessageObject) new_dialogMessage.get(d.f128id);
                 if (mess != null) {
                     d.last_message_date = mess.messageOwner.date;
                 }
             }
-            new_dialogs_dict.put(d.f130id, d);
-            dialogsToUpdate.put(d.f130id, Integer.valueOf(d.unread_count));
-            Integer value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f130id));
+            new_dialogs_dict.put(d.f128id, d);
+            dialogsToUpdate.put(d.f128id, Integer.valueOf(d.unread_count));
+            Integer value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f128id));
             if (value == null) {
                 value = Integer.valueOf(0);
             }
-            this.dialogs_read_inbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
-            value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f130id));
+            this.dialogs_read_inbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
+            value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f128id));
             if (value == null) {
                 value = Integer.valueOf(0);
             }
-            this.dialogs_read_outbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
+            this.dialogs_read_outbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$200(this, dialogsRes, new_dialogs_dict, new_dialogMessage, dialogsToUpdate));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$201(this, dialogsRes, new_dialogs_dict, new_dialogMessage, dialogsToUpdate));
     }
 
-    final /* synthetic */ void lambda$null$116$MessagesController(messages_Dialogs dialogsRes, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage, LongSparseArray dialogsToUpdate) {
+    final /* synthetic */ void lambda$null$117$MessagesController(messages_Dialogs dialogsRes, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage, LongSparseArray dialogsToUpdate) {
         int a;
         putUsers(dialogsRes.users, true);
         putChats(dialogsRes.chats, true);
@@ -5170,7 +5251,7 @@ public class MessagesController implements NotificationCenterDelegate {
             if (currentDialog == null) {
                 this.nextDialogsCacheOffset++;
                 this.dialogs_dict.put(key, value);
-                messageObject = (MessageObject) new_dialogMessage.get(value.f130id);
+                messageObject = (MessageObject) new_dialogMessage.get(value.f128id);
                 this.dialogMessage.put(key, messageObject);
                 if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
                     this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
@@ -5182,13 +5263,13 @@ public class MessagesController implements NotificationCenterDelegate {
                 currentDialog.unread_count = value.unread_count;
                 if (currentDialog.unread_mentions_count != value.unread_mentions_count) {
                     currentDialog.unread_mentions_count = value.unread_mentions_count;
-                    if (this.createdDialogMainThreadIds.contains(Long.valueOf(currentDialog.f130id))) {
-                        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateMentionsCount, Long.valueOf(currentDialog.f130id), Integer.valueOf(currentDialog.unread_mentions_count));
+                    if (this.createdDialogMainThreadIds.contains(Long.valueOf(currentDialog.f128id))) {
+                        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateMentionsCount, Long.valueOf(currentDialog.f128id), Integer.valueOf(currentDialog.unread_mentions_count));
                     }
                 }
                 MessageObject oldMsg = (MessageObject) this.dialogMessage.get(key);
                 if (oldMsg != null && currentDialog.top_message <= 0) {
-                    MessageObject newMsg = (MessageObject) new_dialogMessage.get(value.f130id);
+                    MessageObject newMsg = (MessageObject) new_dialogMessage.get(value.f128id);
                     if (oldMsg.deleted || newMsg == null || newMsg.messageOwner.date > oldMsg.messageOwner.date) {
                         this.dialogs_dict.put(key, value);
                         this.dialogMessage.put(key, newMsg);
@@ -5205,7 +5286,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 } else if ((oldMsg != null && oldMsg.deleted) || value.top_message > currentDialog.top_message) {
                     this.dialogs_dict.put(key, value);
-                    messageObject = (MessageObject) new_dialogMessage.get(value.f130id);
+                    messageObject = (MessageObject) new_dialogMessage.get(value.f128id);
                     this.dialogMessage.put(key, messageObject);
                     if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
                         this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
@@ -5236,10 +5317,10 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void addToViewsQueue(Message message) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$77(this, message));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$78(this, message));
     }
 
-    final /* synthetic */ void lambda$addToViewsQueue$118$MessagesController(Message message) {
+    final /* synthetic */ void lambda$addToViewsQueue$119$MessagesController(Message message) {
         int peer;
         if (message.to_id.channel_id != 0) {
             peer = -message.to_id.channel_id;
@@ -5276,20 +5357,20 @@ public class MessagesController implements NotificationCenterDelegate {
             TL_channels_readMessageContents req = new TL_channels_readMessageContents();
             req.channel = getInputChannel(messageObject.messageOwner.to_id.channel_id);
             if (req.channel != null) {
-                req.f121id.add(Integer.valueOf(messageObject.getId()));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$78.$instance);
+                req.f119id.add(Integer.valueOf(messageObject.getId()));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$79.$instance);
             }
         } else {
             TL_messages_readMessageContents req2 = new TL_messages_readMessageContents();
-            req2.f154id.add(Integer.valueOf(messageObject.getId()));
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$79(this));
+            req2.f152id.add(Integer.valueOf(messageObject.getId()));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$80(this));
         }
     }
 
-    static final /* synthetic */ void lambda$markMessageContentAsRead$119$MessagesController(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$markMessageContentAsRead$120$MessagesController(TLObject response, TL_error error) {
     }
 
-    final /* synthetic */ void lambda$markMessageContentAsRead$120$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$markMessageContentAsRead$121$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
             processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
@@ -5302,21 +5383,21 @@ public class MessagesController implements NotificationCenterDelegate {
             TL_channels_readMessageContents req = new TL_channels_readMessageContents();
             req.channel = getInputChannel(channelId);
             if (req.channel != null) {
-                req.f121id.add(Integer.valueOf(mid));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$80.$instance);
+                req.f119id.add(Integer.valueOf(mid));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$81.$instance);
                 return;
             }
             return;
         }
         TL_messages_readMessageContents req2 = new TL_messages_readMessageContents();
-        req2.f154id.add(Integer.valueOf(mid));
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$81(this));
+        req2.f152id.add(Integer.valueOf(mid));
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$82(this));
     }
 
-    static final /* synthetic */ void lambda$markMentionMessageAsRead$121$MessagesController(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$markMentionMessageAsRead$122$MessagesController(TLObject response, TL_error error) {
     }
 
-    final /* synthetic */ void lambda$markMentionMessageAsRead$122$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$markMentionMessageAsRead$123$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
             processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
@@ -5330,20 +5411,20 @@ public class MessagesController implements NotificationCenterDelegate {
             if (channelId != 0) {
                 TL_channels_readMessageContents req = new TL_channels_readMessageContents();
                 req.channel = getInputChannel(channelId);
-                req.f121id.add(Integer.valueOf(mid));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$82.$instance);
+                req.f119id.add(Integer.valueOf(mid));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$83.$instance);
                 return;
             }
             TL_messages_readMessageContents req2 = new TL_messages_readMessageContents();
-            req2.f154id.add(Integer.valueOf(mid));
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$83(this));
+            req2.f152id.add(Integer.valueOf(mid));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new MessagesController$$Lambda$84(this));
         }
     }
 
-    static final /* synthetic */ void lambda$markMessageAsRead$123$MessagesController(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$markMessageAsRead$124$MessagesController(TLObject response, TL_error error) {
     }
 
-    final /* synthetic */ void lambda$markMessageAsRead$124$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$markMessageAsRead$125$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
             processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
@@ -5388,7 +5469,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 request.max_id = task.maxId;
                 req = request;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$84(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$85(this));
             return;
         }
         EncryptedChat chat = getEncryptedChat(Integer.valueOf(high_id));
@@ -5398,18 +5479,18 @@ public class MessagesController implements NotificationCenterDelegate {
             req2.peer.chat_id = chat.f88id;
             req2.peer.access_hash = chat.access_hash;
             req2.max_date = task.maxDate;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, MessagesController$$Lambda$85.$instance);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, MessagesController$$Lambda$86.$instance);
         }
     }
 
-    final /* synthetic */ void lambda$completeReadTask$125$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$completeReadTask$126$MessagesController(TLObject response, TL_error error) {
         if (error == null && (response instanceof TL_messages_affectedMessages)) {
             TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
             processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
         }
     }
 
-    static final /* synthetic */ void lambda$completeReadTask$126$MessagesController(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$completeReadTask$127$MessagesController(TLObject response, TL_error error) {
     }
 
     private void checkReadTasks() {
@@ -5430,10 +5511,10 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void markDialogAsReadNow(long dialogId) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$86(this, dialogId));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$87(this, dialogId));
     }
 
-    final /* synthetic */ void lambda$markDialogAsReadNow$127$MessagesController(long dialogId) {
+    final /* synthetic */ void lambda$markDialogAsReadNow$128$MessagesController(long dialogId) {
         ReadTask currentReadTask = (ReadTask) this.readTasksMap.get(dialogId);
         if (currentReadTask != null) {
             completeReadTask(currentReadTask);
@@ -5447,11 +5528,11 @@ public class MessagesController implements NotificationCenterDelegate {
             MessagesStorage.getInstance(this.currentAccount).resetMentionsCount(dialogId, 0);
             TL_messages_readMentions req = new TL_messages_readMentions();
             req.peer = getInstance(this.currentAccount).getInputPeer((int) dialogId);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$87.$instance);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$88.$instance);
         }
     }
 
-    static final /* synthetic */ void lambda$markMentionsAsRead$128$MessagesController(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$markMentionsAsRead$129$MessagesController(TLObject response, TL_error error) {
     }
 
     public void markDialogAsRead(long dialogId, int maxPositiveId, int maxNegativeId, int maxDate, boolean popup, int countDiff, boolean readNow) {
@@ -5476,7 +5557,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 this.dialogs_read_inbox_max.put(Long.valueOf(dialogId), Integer.valueOf(Math.max(value.intValue(), maxPositiveId)));
                 MessagesStorage.getInstance(this.currentAccount).processPendingRead(dialogId, maxMessageId, minMessageId, maxDate, isChannel);
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$88(this, dialogId, countDiff, maxPositiveId, popup));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$89(this, dialogId, countDiff, maxPositiveId, popup));
                 createReadTask = maxPositiveId != Integer.MAX_VALUE;
             } else {
                 return;
@@ -5485,7 +5566,7 @@ public class MessagesController implements NotificationCenterDelegate {
             createReadTask = true;
             EncryptedChat chat = getEncryptedChat(Integer.valueOf(high_id));
             MessagesStorage.getInstance(this.currentAccount).processPendingRead(dialogId, (long) maxPositiveId, (long) maxNegativeId, maxDate, false);
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$89(this, dialogId, maxDate, popup, countDiff, maxNegativeId));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$90(this, dialogId, maxDate, popup, countDiff, maxNegativeId));
             if (chat != null && chat.ttl > 0) {
                 int serverTime = Math.max(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime(), maxDate);
                 MessagesStorage.getInstance(this.currentAccount).createTaskForSecretChat(chat.f88id, serverTime, serverTime, 0, null);
@@ -5494,15 +5575,15 @@ public class MessagesController implements NotificationCenterDelegate {
             return;
         }
         if (createReadTask) {
-            Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$90(this, dialogId, readNow, maxDate, maxPositiveId));
+            Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$91(this, dialogId, readNow, maxDate, maxPositiveId));
         }
     }
 
-    final /* synthetic */ void lambda$markDialogAsRead$130$MessagesController(long dialogId, int countDiff, int maxPositiveId, boolean popup) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$199(this, dialogId, countDiff, maxPositiveId, popup));
+    final /* synthetic */ void lambda$markDialogAsRead$131$MessagesController(long dialogId, int countDiff, int maxPositiveId, boolean popup) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$200(this, dialogId, countDiff, maxPositiveId, popup));
     }
 
-    final /* synthetic */ void lambda$null$129$MessagesController(long dialogId, int countDiff, int maxPositiveId, boolean popup) {
+    final /* synthetic */ void lambda$null$130$MessagesController(long dialogId, int countDiff, int maxPositiveId, boolean popup) {
         TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(dialogId);
         if (dialog != null) {
             int prevCount = dialog.unread_count;
@@ -5519,7 +5600,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             if (dialog.unread_mark) {
                 dialog.unread_mark = false;
-                MessagesStorage.getInstance(this.currentAccount).setDialogUnread(dialog.f130id, false);
+                MessagesStorage.getInstance(this.currentAccount).setDialogUnread(dialog.f128id, false);
             }
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(256));
         }
@@ -5537,11 +5618,11 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationsController.getInstance(this.currentAccount).processDialogsUpdateRead(dialogsToUpdate);
     }
 
-    final /* synthetic */ void lambda$markDialogAsRead$132$MessagesController(long dialogId, int maxDate, boolean popup, int countDiff, int maxNegativeId) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$198(this, dialogId, maxDate, popup, countDiff, maxNegativeId));
+    final /* synthetic */ void lambda$markDialogAsRead$133$MessagesController(long dialogId, int maxDate, boolean popup, int countDiff, int maxNegativeId) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$199(this, dialogId, maxDate, popup, countDiff, maxNegativeId));
     }
 
-    final /* synthetic */ void lambda$null$131$MessagesController(long dialogId, int maxDate, boolean popup, int countDiff, int maxNegativeId) {
+    final /* synthetic */ void lambda$null$132$MessagesController(long dialogId, int maxDate, boolean popup, int countDiff, int maxNegativeId) {
         NotificationsController.getInstance(this.currentAccount).processReadMessages(null, dialogId, maxDate, 0, popup);
         TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(dialogId);
         if (dialog != null) {
@@ -5559,7 +5640,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             if (dialog.unread_mark) {
                 dialog.unread_mark = false;
-                MessagesStorage.getInstance(this.currentAccount).setDialogUnread(dialog.f130id, false);
+                MessagesStorage.getInstance(this.currentAccount).setDialogUnread(dialog.f128id, false);
             }
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(256));
         }
@@ -5568,7 +5649,7 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationsController.getInstance(this.currentAccount).processDialogsUpdateRead(dialogsToUpdate);
     }
 
-    final /* synthetic */ void lambda$markDialogAsRead$133$MessagesController(long dialogId, boolean readNow, int maxDate, int maxPositiveId) {
+    final /* synthetic */ void lambda$markDialogAsRead$134$MessagesController(long dialogId, boolean readNow, int maxDate, int maxPositiveId) {
         ReadTask currentReadTask = (ReadTask) this.readTasksMap.get(dialogId);
         if (currentReadTask == null) {
             currentReadTask = new ReadTask(this, null);
@@ -5653,7 +5734,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     req.users.add(getInputUser(user));
                 }
             }
-            return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$91(this, fragment, req), 2);
+            return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$92(this, fragment, req), 2);
         } else if (type != 2 && type != 4) {
             return 0;
         } else {
@@ -5665,26 +5746,26 @@ public class MessagesController implements NotificationCenterDelegate {
             } else {
                 req.broadcast = true;
             }
-            return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$92(this, fragment, req), 2);
+            return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$93(this, fragment, req), 2);
         }
     }
 
-    final /* synthetic */ void lambda$createChat$136$MessagesController(BaseFragment fragment, TL_messages_createChat req, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$createChat$137$MessagesController(BaseFragment fragment, TL_messages_createChat req, TLObject response, TL_error error) {
         if (error != null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$196(this, error, fragment, req));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$197(this, error, fragment, req));
             return;
         }
         Updates updates = (Updates) response;
         processUpdates(updates, false);
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$197(this, updates));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$198(this, updates));
     }
 
-    final /* synthetic */ void lambda$null$134$MessagesController(TL_error error, BaseFragment fragment, TL_messages_createChat req) {
+    final /* synthetic */ void lambda$null$135$MessagesController(TL_error error, BaseFragment fragment, TL_messages_createChat req) {
         AlertsCreator.processError(this.currentAccount, error, fragment, req, new Object[0]);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatDidFailCreate, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$135$MessagesController(Updates updates) {
+    final /* synthetic */ void lambda$null$136$MessagesController(Updates updates) {
         putUsers(updates.users, false);
         putChats(updates.chats, false);
         if (updates.chats == null || updates.chats.isEmpty()) {
@@ -5694,22 +5775,22 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatDidCreated, Integer.valueOf(((Chat) updates.chats.get(0)).f78id));
     }
 
-    final /* synthetic */ void lambda$createChat$139$MessagesController(BaseFragment fragment, TL_channels_createChannel req, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$createChat$140$MessagesController(BaseFragment fragment, TL_channels_createChannel req, TLObject response, TL_error error) {
         if (error != null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$194(this, error, fragment, req));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$195(this, error, fragment, req));
             return;
         }
         Updates updates = (Updates) response;
         processUpdates(updates, false);
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$195(this, updates));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$196(this, updates));
     }
 
-    final /* synthetic */ void lambda$null$137$MessagesController(TL_error error, BaseFragment fragment, TL_channels_createChannel req) {
+    final /* synthetic */ void lambda$null$138$MessagesController(TL_error error, BaseFragment fragment, TL_channels_createChannel req) {
         AlertsCreator.processError(this.currentAccount, error, fragment, req, new Object[0]);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatDidFailCreate, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$138$MessagesController(Updates updates) {
+    final /* synthetic */ void lambda$null$139$MessagesController(Updates updates) {
         putUsers(updates.users, false);
         putChats(updates.chats, false);
         if (updates.chats == null || updates.chats.isEmpty()) {
@@ -5726,31 +5807,21 @@ public class MessagesController implements NotificationCenterDelegate {
         progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
-        progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$94(this, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$93(this, context, progressDialog))));
+        progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$95(this, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$94(this, context, progressDialog))));
         try {
             progressDialog.show();
         } catch (Exception e) {
         }
     }
 
-    final /* synthetic */ void lambda$convertToMegaGroup$142$MessagesController(Context context, AlertDialog progressDialog, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$convertToMegaGroup$143$MessagesController(Context context, AlertDialog progressDialog, TLObject response, TL_error error) {
         if (error == null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$192(context, progressDialog));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$193(context, progressDialog));
             Updates updates = (Updates) response;
             processUpdates((Updates) response, false);
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$193(context, progressDialog));
-    }
-
-    static final /* synthetic */ void lambda$null$140$MessagesController(Context context, AlertDialog progressDialog) {
-        if (!((Activity) context).isFinishing()) {
-            try {
-                progressDialog.dismiss();
-            } catch (Throwable e) {
-                FileLog.m14e(e);
-            }
-        }
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$194(context, progressDialog));
     }
 
     static final /* synthetic */ void lambda$null$141$MessagesController(Context context, AlertDialog progressDialog) {
@@ -5758,7 +5829,17 @@ public class MessagesController implements NotificationCenterDelegate {
             try {
                 progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
+            }
+        }
+    }
+
+    static final /* synthetic */ void lambda$null$142$MessagesController(Context context, AlertDialog progressDialog) {
+        if (!((Activity) context).isFinishing()) {
+            try {
+                progressDialog.dismiss();
+            } catch (Throwable e) {
+                FileLog.m13e(e);
             }
             Builder builder = new Builder(context);
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -5768,12 +5849,12 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$convertToMegaGroup$143$MessagesController(int reqId, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$convertToMegaGroup$144$MessagesController(int reqId, DialogInterface dialog, int which) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
         try {
             dialog.dismiss();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -5782,19 +5863,19 @@ public class MessagesController implements NotificationCenterDelegate {
             TL_channels_inviteToChannel req = new TL_channels_inviteToChannel();
             req.channel = getInputChannel(chat_id);
             req.users = users;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$95(this, fragment, req));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$96(this, fragment, req));
         }
     }
 
-    final /* synthetic */ void lambda$addUsersToChannel$145$MessagesController(BaseFragment fragment, TL_channels_inviteToChannel req, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$addUsersToChannel$146$MessagesController(BaseFragment fragment, TL_channels_inviteToChannel req, TLObject response, TL_error error) {
         if (error != null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$191(this, error, fragment, req));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$192(this, error, fragment, req));
         } else {
             processUpdates((Updates) response, false);
         }
     }
 
-    final /* synthetic */ void lambda$null$144$MessagesController(TL_error error, BaseFragment fragment, TL_channels_inviteToChannel req) {
+    final /* synthetic */ void lambda$null$145$MessagesController(TL_error error, BaseFragment fragment, TL_channels_inviteToChannel req) {
         AlertsCreator.processError(this.currentAccount, error, fragment, req, Boolean.valueOf(true));
     }
 
@@ -5802,10 +5883,10 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_channels_toggleInvites req = new TL_channels_toggleInvites();
         req.channel = getInputChannel(chat_id);
         req.enabled = enabled;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$96(this), 64);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$97(this), 64);
     }
 
-    final /* synthetic */ void lambda$toogleChannelInvites$146$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$toogleChannelInvites$147$MessagesController(TLObject response, TL_error error) {
         if (response != null) {
             processUpdates((Updates) response, false);
         }
@@ -5815,17 +5896,17 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_channels_toggleSignatures req = new TL_channels_toggleSignatures();
         req.channel = getInputChannel(chat_id);
         req.enabled = enabled;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$97(this), 64);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$98(this), 64);
     }
 
-    final /* synthetic */ void lambda$toogleChannelSignatures$148$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$toogleChannelSignatures$149$MessagesController(TLObject response, TL_error error) {
         if (response != null) {
             processUpdates((Updates) response, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$190(this));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$191(this));
         }
     }
 
-    final /* synthetic */ void lambda$null$147$MessagesController() {
+    final /* synthetic */ void lambda$null$148$MessagesController() {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(UPDATE_MASK_CHANNEL));
     }
 
@@ -5833,17 +5914,17 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_channels_togglePreHistoryHidden req = new TL_channels_togglePreHistoryHidden();
         req.channel = getInputChannel(chat_id);
         req.enabled = enabled;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$98(this), 64);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$99(this), 64);
     }
 
-    final /* synthetic */ void lambda$toogleChannelInvitesHistory$150$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$toogleChannelInvitesHistory$151$MessagesController(TLObject response, TL_error error) {
         if (response != null) {
             processUpdates((Updates) response, false);
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$189(this));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$190(this));
         }
     }
 
-    final /* synthetic */ void lambda$null$149$MessagesController() {
+    final /* synthetic */ void lambda$null$150$MessagesController() {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(UPDATE_MASK_CHANNEL));
     }
 
@@ -5852,36 +5933,36 @@ public class MessagesController implements NotificationCenterDelegate {
             TL_channels_editAbout req = new TL_channels_editAbout();
             req.channel = getInputChannel(chat_id);
             req.about = about;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$99(this, info, about), 64);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$100(this, info, about), 64);
         }
     }
 
-    final /* synthetic */ void lambda$updateChannelAbout$152$MessagesController(ChatFull info, String about, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$updateChannelAbout$153$MessagesController(ChatFull info, String about, TLObject response, TL_error error) {
         if (response instanceof TL_boolTrue) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$188(this, info, about));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$189(this, info, about));
         }
     }
 
-    final /* synthetic */ void lambda$null$151$MessagesController(ChatFull info, String about) {
+    final /* synthetic */ void lambda$null$152$MessagesController(ChatFull info, String about) {
         info.about = about;
         MessagesStorage.getInstance(this.currentAccount).updateChatInfo(info, false);
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, info, Integer.valueOf(0), Boolean.valueOf(false), null);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, info, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public void updateChannelUserName(int chat_id, String userName) {
         TL_channels_updateUsername req = new TL_channels_updateUsername();
         req.channel = getInputChannel(chat_id);
         req.username = userName;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$100(this, chat_id, userName), 64);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$101(this, chat_id, userName), 64);
     }
 
-    final /* synthetic */ void lambda$updateChannelUserName$154$MessagesController(int chat_id, String userName, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$updateChannelUserName$155$MessagesController(int chat_id, String userName, TLObject response, TL_error error) {
         if (response instanceof TL_boolTrue) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$187(this, chat_id, userName));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$188(this, chat_id, userName));
         }
     }
 
-    final /* synthetic */ void lambda$null$153$MessagesController(int chat_id, String userName) {
+    final /* synthetic */ void lambda$null$154$MessagesController(int chat_id, String userName) {
         Chat chat = getChat(Integer.valueOf(chat_id));
         if (userName.length() != 0) {
             chat.flags |= 64;
@@ -5899,14 +5980,14 @@ public class MessagesController implements NotificationCenterDelegate {
         if (user != null) {
             TL_messages_startBot req = new TL_messages_startBot();
             req.bot = getInputUser(user);
-            req.peer = getInputPeer(user.f177id);
+            req.peer = getInputPeer(user.f176id);
             req.start_param = botHash;
             req.random_id = Utilities.random.nextLong();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$101(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$102(this));
         }
     }
 
-    final /* synthetic */ void lambda$sendBotStart$155$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$sendBotStart$156$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             processUpdates((Updates) response, false);
         }
@@ -5916,10 +5997,10 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_messages_toggleChatAdmins req = new TL_messages_toggleChatAdmins();
         req.chat_id = chat_id;
         req.enabled = enabled;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$102(this, chat_id));
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$103(this, chat_id));
     }
 
-    final /* synthetic */ void lambda$toggleAdminMode$156$MessagesController(int chat_id, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$toggleAdminMode$157$MessagesController(int chat_id, TLObject response, TL_error error) {
         if (error == null) {
             processUpdates((Updates) response, false);
             loadFullChat(chat_id, 0, true);
@@ -5931,10 +6012,14 @@ public class MessagesController implements NotificationCenterDelegate {
         req.chat_id = chat_id;
         req.user_id = getInputUser(user_id);
         req.is_admin = admin;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$103.$instance);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$104.$instance);
     }
 
-    static final /* synthetic */ void lambda$toggleUserAdmin$157$MessagesController(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$toggleUserAdmin$158$MessagesController(TLObject response, TL_error error) {
+    }
+
+    public boolean isJoiningChannel(int chat_id) {
+        return this.joiningToChannels.contains(Integer.valueOf(chat_id));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0084  */
@@ -5983,7 +6068,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         } else {
                             return;
                         }
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$104(this, isChannel, inputUser, chat_id, fragment, request, isMegagroup));
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$105(this, isChannel, inputUser, chat_id, fragment, request, isMegagroup));
                     }
                 }
                 isMegagroup = false;
@@ -5992,11 +6077,11 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 if (isChannel) {
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$104(this, isChannel, inputUser, chat_id, fragment, request, isMegagroup));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$105(this, isChannel, inputUser, chat_id, fragment, request, isMegagroup));
             } else if (info instanceof TL_chatFull) {
                 int a = 0;
                 while (a < info.participants.participants.size()) {
-                    if (((ChatParticipant) info.participants.participants.get(a)).user_id != user.f177id) {
+                    if (((ChatParticipant) info.participants.participants.get(a)).user_id != user.f176id) {
                         a++;
                     } else {
                         return;
@@ -6008,23 +6093,23 @@ public class MessagesController implements NotificationCenterDelegate {
                 chatArrayList.add(chat);
                 MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(null, chatArrayList, true, true);
                 TL_chatParticipant newPart = new TL_chatParticipant();
-                newPart.user_id = user.f177id;
+                newPart.user_id = user.f176id;
                 newPart.inviter_id = UserConfig.getInstance(this.currentAccount).getClientUserId();
                 newPart.date = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                 info.participants.participants.add(0, newPart);
                 MessagesStorage.getInstance(this.currentAccount).updateChatInfo(info, true);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, info, Integer.valueOf(0), Boolean.valueOf(false), null);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, info, Integer.valueOf(0), Boolean.valueOf(false), null);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(32));
             }
         }
     }
 
-    final /* synthetic */ void lambda$addUserToChat$161$MessagesController(boolean isChannel, InputUser inputUser, int chat_id, BaseFragment fragment, TLObject request, boolean isMegagroup, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$addUserToChat$162$MessagesController(boolean isChannel, InputUser inputUser, int chat_id, BaseFragment fragment, TLObject request, boolean isMegagroup, TLObject response, TL_error error) {
         if (isChannel && (inputUser instanceof TL_inputUserSelf)) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$184(this, chat_id));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$185(this, chat_id));
         }
         if (error != null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$185(this, error, fragment, request, isChannel, isMegagroup));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$186(this, error, fragment, request, isChannel, isMegagroup));
             return;
         }
         boolean hasJoinMessage = false;
@@ -6041,18 +6126,18 @@ public class MessagesController implements NotificationCenterDelegate {
             if (!hasJoinMessage && (inputUser instanceof TL_inputUserSelf)) {
                 generateJoinMessage(chat_id, true);
             }
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$186(this, chat_id), 1000);
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$187(this, chat_id), 1000);
         }
         if (isChannel && (inputUser instanceof TL_inputUserSelf)) {
             MessagesStorage.getInstance(this.currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), null, true, chat_id);
         }
     }
 
-    final /* synthetic */ void lambda$null$158$MessagesController(int chat_id) {
+    final /* synthetic */ void lambda$null$159$MessagesController(int chat_id) {
         this.joiningToChannels.remove(Integer.valueOf(chat_id));
     }
 
-    final /* synthetic */ void lambda$null$159$MessagesController(TL_error error, BaseFragment fragment, TLObject request, boolean isChannel, boolean isMegagroup) {
+    final /* synthetic */ void lambda$null$160$MessagesController(TL_error error, BaseFragment fragment, TLObject request, boolean isChannel, boolean isMegagroup) {
         boolean z = true;
         int i = this.currentAccount;
         Object[] objArr = new Object[1];
@@ -6063,7 +6148,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AlertsCreator.processError(i, error, fragment, request, objArr);
     }
 
-    final /* synthetic */ void lambda$null$160$MessagesController(int chat_id) {
+    final /* synthetic */ void lambda$null$161$MessagesController(int chat_id) {
         loadFullChat(chat_id, 0, true);
     }
 
@@ -6108,7 +6193,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     req.channel = getInputChannel(chat);
                     request = req;
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$105(this, user, chat_id, isChannel, inputUser), 64);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$106(this, user, chat_id, isChannel, inputUser), 64);
             } else if (info instanceof TL_chatFull) {
                 chat = getChat(Integer.valueOf(chat_id));
                 chat.participants_count--;
@@ -6117,7 +6202,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(null, chatArrayList, true, true);
                 boolean changed = false;
                 for (int a = 0; a < info.participants.participants.size(); a++) {
-                    if (((ChatParticipant) info.participants.participants.get(a)).user_id == user.f177id) {
+                    if (((ChatParticipant) info.participants.participants.get(a)).user_id == user.f176id) {
                         info.participants.participants.remove(a);
                         changed = true;
                         break;
@@ -6125,30 +6210,30 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 if (changed) {
                     MessagesStorage.getInstance(this.currentAccount).updateChatInfo(info, true);
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, info, Integer.valueOf(0), Boolean.valueOf(false), null);
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, info, Integer.valueOf(0), Boolean.valueOf(false), null);
                 }
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(32));
             }
         }
     }
 
-    final /* synthetic */ void lambda$deleteUserFromChat$164$MessagesController(User user, int chat_id, boolean isChannel, InputUser inputUser, TLObject response, TL_error error) {
-        if (user.f177id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$182(this, chat_id));
+    final /* synthetic */ void lambda$deleteUserFromChat$165$MessagesController(User user, int chat_id, boolean isChannel, InputUser inputUser, TLObject response, TL_error error) {
+        if (user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$183(this, chat_id));
         }
         if (error == null) {
             processUpdates((Updates) response, false);
             if (isChannel && !(inputUser instanceof TL_inputUserSelf)) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$183(this, chat_id), 1000);
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$184(this, chat_id), 1000);
             }
         }
     }
 
-    final /* synthetic */ void lambda$null$162$MessagesController(int chat_id) {
+    final /* synthetic */ void lambda$null$163$MessagesController(int chat_id) {
         deleteDialog((long) (-chat_id), 0);
     }
 
-    final /* synthetic */ void lambda$null$163$MessagesController(int chat_id) {
+    final /* synthetic */ void lambda$null$164$MessagesController(int chat_id) {
         loadFullChat(chat_id, 0, true);
     }
 
@@ -6167,7 +6252,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 req.title = title;
                 request = req;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$106(this), 64);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$107(this), 64);
             return;
         }
         Chat chat = getChat(Integer.valueOf(chat_id));
@@ -6179,7 +6264,7 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(16));
     }
 
-    final /* synthetic */ void lambda$changeChatTitle$165$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$changeChatTitle$166$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             processUpdates((Updates) response, false);
         }
@@ -6209,10 +6294,10 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             request = req;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$107(this), 64);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$108(this), 64);
     }
 
-    final /* synthetic */ void lambda$changeChatAvatar$166$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$changeChatAvatar$167$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             processUpdates((Updates) response, false);
         }
@@ -6229,18 +6314,18 @@ public class MessagesController implements NotificationCenterDelegate {
                     req.other_uids.add(Integer.valueOf(userConfig.getClientUserId()));
                 }
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$108.$instance);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$109.$instance);
         }
     }
 
-    static final /* synthetic */ void lambda$unregistedPush$167$MessagesController(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$unregistedPush$168$MessagesController(TLObject response, TL_error error) {
     }
 
     public void performLogout(int type) {
         boolean z = true;
         if (type == 1) {
             unregistedPush();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_auth_logOut(), new MessagesController$$Lambda$109(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_auth_logOut(), new MessagesController$$Lambda$110(this));
         } else {
             ConnectionsManager instance = ConnectionsManager.getInstance(this.currentAccount);
             if (type != 2) {
@@ -6255,7 +6340,7 @@ public class MessagesController implements NotificationCenterDelegate {
         ContactsController.getInstance(this.currentAccount).deleteUnknownAppAccounts();
     }
 
-    final /* synthetic */ void lambda$performLogout$168$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$performLogout$169$MessagesController(TLObject response, TL_error error) {
         ConnectionsManager.getInstance(this.currentAccount).cleanup(false);
     }
 
@@ -6263,11 +6348,11 @@ public class MessagesController implements NotificationCenterDelegate {
         if (!BuildVars.DEBUG_VERSION && SharedConfig.lastUpdateVersion != null && !SharedConfig.lastUpdateVersion.equals(BuildVars.BUILD_VERSION_STRING)) {
             TL_help_getAppChangelog req = new TL_help_getAppChangelog();
             req.prev_app_version = SharedConfig.lastUpdateVersion;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$110(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$111(this));
         }
     }
 
-    final /* synthetic */ void lambda$generateUpdateMessage$169$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$generateUpdateMessage$170$MessagesController(TLObject response, TL_error error) {
         if (error == null) {
             SharedConfig.lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
             SharedConfig.saveConfig();
@@ -6297,39 +6382,39 @@ public class MessagesController implements NotificationCenterDelegate {
                         int uid = userConfig.getClientUserId();
                         req.other_uids.add(Integer.valueOf(uid));
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d("add other uid = " + uid + " for account " + this.currentAccount);
+                            FileLog.m10d("add other uid = " + uid + " for account " + this.currentAccount);
                         }
                     }
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$111(this, regid));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$112(this, regid));
             }
         }
     }
 
-    final /* synthetic */ void lambda$registerForPush$171$MessagesController(String regid, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$registerForPush$172$MessagesController(String regid, TLObject response, TL_error error) {
         if (response instanceof TL_boolTrue) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("account " + this.currentAccount + " registered for push");
+                FileLog.m10d("account " + this.currentAccount + " registered for push");
             }
             UserConfig.getInstance(this.currentAccount).registeredForPush = true;
             SharedConfig.pushString = regid;
             UserConfig.getInstance(this.currentAccount).saveConfig(false);
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$181(this));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$182(this));
     }
 
-    final /* synthetic */ void lambda$null$170$MessagesController() {
+    final /* synthetic */ void lambda$null$171$MessagesController() {
         this.registeringForPush = false;
     }
 
     public void loadCurrentState() {
         if (!this.updatingState) {
             this.updatingState = true;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_updates_getState(), new MessagesController$$Lambda$112(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_updates_getState(), new MessagesController$$Lambda$113(this));
         }
     }
 
-    final /* synthetic */ void lambda$loadCurrentState$172$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$loadCurrentState$173$MessagesController(TLObject response, TL_error error) {
         this.updatingState = false;
         if (error == null) {
             TL_updates_state res = (TL_updates_state) response;
@@ -6415,7 +6500,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 this.updatesQueueChannels.remove(channelId);
                 return;
             }
-            Collections.sort(updatesQueue, MessagesController$$Lambda$113.$instance);
+            Collections.sort(updatesQueue, MessagesController$$Lambda$114.$instance);
             boolean anyProceed = false;
             if (state == 2) {
                 this.channelsPts.put(channelId, ((Updates) updatesQueue.get(0)).pts);
@@ -6439,7 +6524,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     long updatesStartWaitTime = this.updatesStartWaitTimeChannels.get(channelId);
                     if (updatesStartWaitTime == 0 || (!anyProceed && Math.abs(System.currentTimeMillis() - updatesStartWaitTime) > 1500)) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d("HOLE IN CHANNEL " + channelId + " UPDATES QUEUE - getChannelDifference ");
+                            FileLog.m10d("HOLE IN CHANNEL " + channelId + " UPDATES QUEUE - getChannelDifference ");
                         }
                         this.updatesStartWaitTimeChannels.delete(channelId);
                         this.updatesQueueChannels.remove(channelId);
@@ -6447,7 +6532,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         return;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("HOLE IN CHANNEL " + channelId + " UPDATES QUEUE - will wait more time");
+                        FileLog.m10d("HOLE IN CHANNEL " + channelId + " UPDATES QUEUE - will wait more time");
                     }
                     if (anyProceed) {
                         this.updatesStartWaitTimeChannels.put(channelId, System.currentTimeMillis());
@@ -6462,7 +6547,7 @@ public class MessagesController implements NotificationCenterDelegate {
             this.updatesQueueChannels.remove(channelId);
             this.updatesStartWaitTimeChannels.delete(channelId);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("UPDATES CHANNEL " + channelId + " QUEUE PROCEED - OK");
+                FileLog.m10d("UPDATES CHANNEL " + channelId + " QUEUE PROCEED - OK");
             }
         }
     }
@@ -6471,13 +6556,13 @@ public class MessagesController implements NotificationCenterDelegate {
         ArrayList<Updates> updatesQueue = null;
         if (type == 0) {
             updatesQueue = this.updatesQueueSeq;
-            Collections.sort(updatesQueue, new MessagesController$$Lambda$114(this));
+            Collections.sort(updatesQueue, new MessagesController$$Lambda$115(this));
         } else if (type == 1) {
             updatesQueue = this.updatesQueuePts;
-            Collections.sort(updatesQueue, MessagesController$$Lambda$115.$instance);
+            Collections.sort(updatesQueue, MessagesController$$Lambda$116.$instance);
         } else if (type == 2) {
             updatesQueue = this.updatesQueueQts;
-            Collections.sort(updatesQueue, MessagesController$$Lambda$116.$instance);
+            Collections.sort(updatesQueue, MessagesController$$Lambda$117.$instance);
         }
         if (!(updatesQueue == null || updatesQueue.isEmpty())) {
             Updates updates;
@@ -6504,7 +6589,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     updatesQueue.remove(a);
                 } else if (getUpdatesStartTime(type) == 0 || (!anyProceed && Math.abs(System.currentTimeMillis() - getUpdatesStartTime(type)) > 1500)) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("HOLE IN UPDATES QUEUE - getDifference");
+                        FileLog.m10d("HOLE IN UPDATES QUEUE - getDifference");
                     }
                     setUpdatesStartTime(type, 0);
                     updatesQueue.clear();
@@ -6512,7 +6597,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 } else {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("HOLE IN UPDATES QUEUE - will wait more time");
+                        FileLog.m10d("HOLE IN UPDATES QUEUE - will wait more time");
                     }
                     if (anyProceed) {
                         setUpdatesStartTime(type, System.currentTimeMillis());
@@ -6524,13 +6609,13 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             updatesQueue.clear();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("UPDATES QUEUE PROCEED - OK");
+                FileLog.m10d("UPDATES QUEUE PROCEED - OK");
             }
         }
         setUpdatesStartTime(type, 0);
     }
 
-    final /* synthetic */ int lambda$processUpdatesQueue$174$MessagesController(Updates updates, Updates updates2) {
+    final /* synthetic */ int lambda$processUpdatesQueue$175$MessagesController(Updates updates, Updates updates2) {
         return AndroidUtilities.compare(getUpdateSeq(updates), getUpdateSeq(updates2));
     }
 
@@ -6558,28 +6643,28 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                             newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$117(this, newTaskId, channel));
+                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$118(this, newTaskId, channel));
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                         newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$117(this, newTaskId, channel));
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$118(this, newTaskId, channel));
                     }
                     newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                 } else {
                     newTaskId = taskId;
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$117(this, newTaskId, channel));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$118(this, newTaskId, channel));
             } else if (taskId != 0) {
                 MessagesStorage.getInstance(this.currentAccount).removePendingTask(taskId);
             }
         }
     }
 
-    final /* synthetic */ void lambda$loadUnknownChannel$177$MessagesController(long newTaskId, Chat channel, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$loadUnknownChannel$178$MessagesController(long newTaskId, Chat channel, TLObject response, TL_error error) {
         if (response != null) {
             TL_messages_peerDialogs res = (TL_messages_peerDialogs) response;
             if (!(res.dialogs.isEmpty() || res.chats.isEmpty())) {
@@ -6598,10 +6683,10 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void startShortPoll(int channelId, boolean stop) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$118(this, stop, channelId));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$119(this, stop, channelId));
     }
 
-    final /* synthetic */ void lambda$startShortPoll$178$MessagesController(boolean stop, int channelId) {
+    final /* synthetic */ void lambda$startShortPoll$179$MessagesController(boolean stop, int channelId) {
         if (stop) {
             this.needShortPollChannels.delete(channelId);
             return;
@@ -6678,7 +6763,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                             newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                             this.gettingDifferenceChannels.put(channelId, true);
                             req = new TL_updates_getChannelDifference();
@@ -6691,11 +6776,11 @@ public class MessagesController implements NotificationCenterDelegate {
                             req.force = newDialogType != 3;
                             if (BuildVars.LOGS_ENABLED) {
                             }
-                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$119(this, channelId, newDialogType, newTaskId));
+                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$120(this, channelId, newDialogType, newTaskId));
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                         newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                         this.gettingDifferenceChannels.put(channelId, true);
                         req = new TL_updates_getChannelDifference();
@@ -6708,7 +6793,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         req.force = newDialogType != 3;
                         if (BuildVars.LOGS_ENABLED) {
                         }
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$119(this, channelId, newDialogType, newTaskId));
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$120(this, channelId, newDialogType, newTaskId));
                     }
                     newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                 } else {
@@ -6722,23 +6807,23 @@ public class MessagesController implements NotificationCenterDelegate {
                 req.limit = limit;
                 req.force = newDialogType != 3;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
+                    FileLog.m10d("start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$119(this, channelId, newDialogType, newTaskId));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$120(this, channelId, newDialogType, newTaskId));
             } else if (taskId != 0) {
                 MessagesStorage.getInstance(this.currentAccount).removePendingTask(taskId);
             }
         }
     }
 
-    final /* synthetic */ void lambda$getChannelDifference$187$MessagesController(int channelId, int newDialogType, long newTaskId, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$getChannelDifference$188$MessagesController(int channelId, int newDialogType, long newTaskId, TLObject response, TL_error error) {
         if (error == null) {
             int a;
             updates_ChannelDifference res = (updates_ChannelDifference) response;
             SparseArray<User> usersDict = new SparseArray();
             for (a = 0; a < res.users.size(); a++) {
                 User user = (User) res.users.get(a);
-                usersDict.put(user.f177id, user);
+                usersDict.put(user.f176id, user);
             }
             Chat channel = null;
             for (a = 0; a < res.chats.size(); a++) {
@@ -6763,41 +6848,41 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             }
             MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$173(this, res));
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$174(this, msgUpdates, channelId, res, channelFinal, usersDict, newDialogType, newTaskId));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$174(this, res));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$175(this, msgUpdates, channelId, res, channelFinal, usersDict, newDialogType, newTaskId));
             return;
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$175(this, error, channelId));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$176(this, error, channelId));
         this.gettingDifferenceChannels.delete(channelId);
         if (newTaskId != 0) {
             MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
         }
     }
 
-    final /* synthetic */ void lambda$null$179$MessagesController(updates_ChannelDifference res) {
+    final /* synthetic */ void lambda$null$180$MessagesController(updates_ChannelDifference res) {
         putUsers(res.users, false);
         putChats(res.chats, false);
     }
 
-    final /* synthetic */ void lambda$null$185$MessagesController(ArrayList msgUpdates, int channelId, updates_ChannelDifference res, Chat channelFinal, SparseArray usersDict, int newDialogType, long newTaskId) {
+    final /* synthetic */ void lambda$null$186$MessagesController(ArrayList msgUpdates, int channelId, updates_ChannelDifference res, Chat channelFinal, SparseArray usersDict, int newDialogType, long newTaskId) {
         if (!msgUpdates.isEmpty()) {
             SparseArray<long[]> corrected = new SparseArray();
             Iterator it = msgUpdates.iterator();
             while (it.hasNext()) {
                 TL_updateMessageID update = (TL_updateMessageID) it.next();
-                long[] ids = MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(update.random_id, null, update.f203id, 0, false, channelId);
+                long[] ids = MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(update.random_id, null, update.f209id, 0, false, channelId);
                 if (ids != null) {
-                    corrected.put(update.f203id, ids);
+                    corrected.put(update.f209id, ids);
                 }
             }
             if (corrected.size() != 0) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$176(this, corrected));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$177(this, corrected));
             }
         }
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$177(this, res, channelId, channelFinal, usersDict, newDialogType, newTaskId));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$178(this, res, channelId, channelFinal, usersDict, newDialogType, newTaskId));
     }
 
-    final /* synthetic */ void lambda$null$180$MessagesController(SparseArray corrected) {
+    final /* synthetic */ void lambda$null$181$MessagesController(SparseArray corrected) {
         for (int a = 0; a < corrected.size(); a++) {
             int newId = corrected.keyAt(a);
             SendMessagesHelper.getInstance(this.currentAccount).processSentMessage((int) ((long[]) corrected.valueAt(a))[1]);
@@ -6808,7 +6893,7 @@ public class MessagesController implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:93:0x015e A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:39:0x0154  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$null$184$MessagesController(updates_ChannelDifference res, int channelId, Chat channelFinal, SparseArray usersDict, int newDialogType, long newTaskId) {
+    final /* synthetic */ void lambda$null$185$MessagesController(updates_ChannelDifference res, int channelId, Chat channelFinal, SparseArray usersDict, int newDialogType, long newTaskId) {
         long dialog_id;
         Integer inboxValue;
         Integer outboxValue;
@@ -6873,8 +6958,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                     arr.add(obj);
                 }
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$178(this, messages));
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$179(this, pushMessages, res));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$179(this, messages));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$180(this, pushMessages, res));
             }
             if (!res.other_updates.isEmpty()) {
                 processUpdateArray(res.other_updates, res.users, res.chats, true);
@@ -6925,33 +7010,33 @@ public class MessagesController implements NotificationCenterDelegate {
             getChannelDifference(channelId);
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("received channel difference with pts = " + res.pts + " channelId = " + channelId);
-            FileLog.m11d("new_messages = " + res.new_messages.size() + " messages = " + res.messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
+            FileLog.m10d("received channel difference with pts = " + res.pts + " channelId = " + channelId);
+            FileLog.m10d("new_messages = " + res.new_messages.size() + " messages = " + res.messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
         }
         if (newTaskId != 0) {
             MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
         }
     }
 
-    final /* synthetic */ void lambda$null$181$MessagesController(LongSparseArray messages) {
+    final /* synthetic */ void lambda$null$182$MessagesController(LongSparseArray messages) {
         for (int a = 0; a < messages.size(); a++) {
             updateInterfaceWithMessages(messages.keyAt(a), (ArrayList) messages.valueAt(a));
         }
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$183$MessagesController(ArrayList pushMessages, updates_ChannelDifference res) {
+    final /* synthetic */ void lambda$null$184$MessagesController(ArrayList pushMessages, updates_ChannelDifference res) {
         if (!pushMessages.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$180(this, pushMessages));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$181(this, pushMessages));
         }
         MessagesStorage.getInstance(this.currentAccount).putMessages(res.new_messages, true, false, false, DownloadController.getInstance(this.currentAccount).getAutodownloadMask());
     }
 
-    final /* synthetic */ void lambda$null$182$MessagesController(ArrayList pushMessages) {
-        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessages, true, false);
+    final /* synthetic */ void lambda$null$183$MessagesController(ArrayList pushMessages) {
+        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessages, true, false, null);
     }
 
-    final /* synthetic */ void lambda$null$186$MessagesController(TL_error error, int channelId) {
+    final /* synthetic */ void lambda$null$187$MessagesController(TL_error error, int channelId) {
         checkChannelError(error.text, channelId);
     }
 
@@ -7019,18 +7104,18 @@ public class MessagesController implements NotificationCenterDelegate {
                 req.date = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("start getDifference with date = " + date + " pts = " + pts + " qts = " + qts);
+                FileLog.m10d("start getDifference with date = " + date + " pts = " + pts + " qts = " + qts);
             }
             ConnectionsManager.getInstance(this.currentAccount).setIsUpdating(true);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$120(this, date, qts));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$121(this, date, qts));
         }
     }
 
-    final /* synthetic */ void lambda$getDifference$196$MessagesController(int date, int qts, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$getDifference$197$MessagesController(int date, int qts, TLObject response, TL_error error) {
         if (error == null) {
             updates_Difference res = (updates_Difference) response;
             if (res instanceof TL_updates_differenceTooLong) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$165(this, res, date, qts));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$166(this, res, date, qts));
                 return;
             }
             int a;
@@ -7041,7 +7126,7 @@ public class MessagesController implements NotificationCenterDelegate {
             SparseArray<Chat> chatsDict = new SparseArray();
             for (a = 0; a < res.users.size(); a++) {
                 User user = (User) res.users.get(a);
-                usersDict.put(user.f177id, user);
+                usersDict.put(user.f176id, user);
             }
             for (a = 0; a < res.chats.size(); a++) {
                 Chat chat = (Chat) res.chats.get(a);
@@ -7073,46 +7158,46 @@ public class MessagesController implements NotificationCenterDelegate {
                     a++;
                 }
             }
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$166(this, res));
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$167(this, res, msgUpdates, usersDict, chatsDict));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$167(this, res));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$168(this, res, msgUpdates, usersDict, chatsDict));
             return;
         }
         this.gettingDifference = false;
         ConnectionsManager.getInstance(this.currentAccount).setIsUpdating(false);
     }
 
-    final /* synthetic */ void lambda$null$188$MessagesController(updates_Difference res, int date, int qts) {
+    final /* synthetic */ void lambda$null$189$MessagesController(updates_Difference res, int date, int qts) {
         this.loadedFullUsers.clear();
         this.loadedFullChats.clear();
         resetDialogs(true, MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), res.pts, date, qts);
     }
 
-    final /* synthetic */ void lambda$null$189$MessagesController(updates_Difference res) {
+    final /* synthetic */ void lambda$null$190$MessagesController(updates_Difference res) {
         this.loadedFullUsers.clear();
         this.loadedFullChats.clear();
         putUsers(res.users, false);
         putChats(res.chats, false);
     }
 
-    final /* synthetic */ void lambda$null$195$MessagesController(updates_Difference res, ArrayList msgUpdates, SparseArray usersDict, SparseArray chatsDict) {
+    final /* synthetic */ void lambda$null$196$MessagesController(updates_Difference res, ArrayList msgUpdates, SparseArray usersDict, SparseArray chatsDict) {
         MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, false);
         if (!msgUpdates.isEmpty()) {
             SparseArray<long[]> corrected = new SparseArray();
             for (int a = 0; a < msgUpdates.size(); a++) {
                 TL_updateMessageID update = (TL_updateMessageID) msgUpdates.get(a);
-                long[] ids = MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(update.random_id, null, update.f203id, 0, false, 0);
+                long[] ids = MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(update.random_id, null, update.f209id, 0, false, 0);
                 if (ids != null) {
-                    corrected.put(update.f203id, ids);
+                    corrected.put(update.f209id, ids);
                 }
             }
             if (corrected.size() != 0) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$168(this, corrected));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$169(this, corrected));
             }
         }
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$169(this, res, usersDict, chatsDict));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$170(this, res, usersDict, chatsDict));
     }
 
-    final /* synthetic */ void lambda$null$190$MessagesController(SparseArray corrected) {
+    final /* synthetic */ void lambda$null$191$MessagesController(SparseArray corrected) {
         for (int a = 0; a < corrected.size(); a++) {
             int newId = corrected.keyAt(a);
             SendMessagesHelper.getInstance(this.currentAccount).processSentMessage((int) ((long[]) corrected.valueAt(a))[1]);
@@ -7120,7 +7205,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$194$MessagesController(updates_Difference res, SparseArray usersDict, SparseArray chatsDict) {
+    final /* synthetic */ void lambda$null$195$MessagesController(updates_Difference res, SparseArray usersDict, SparseArray chatsDict) {
         int a;
         if (!(res.new_messages.isEmpty() && res.new_encrypted_messages.isEmpty())) {
             LongSparseArray<ArrayList<MessageObject>> messages = new LongSparseArray();
@@ -7188,8 +7273,8 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 arr.add(obj);
             }
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$170(this, messages));
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$171(this, pushMessages, res));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$171(this, messages));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$172(this, pushMessages, res));
             SecretChatHelper.getInstance(this.currentAccount).processPendingEncMessages();
         }
         if (!res.other_updates.isEmpty()) {
@@ -7220,33 +7305,33 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue());
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("received difference with date = " + MessagesStorage.getInstance(this.currentAccount).getLastDateValue() + " pts = " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " seq = " + MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + " messages = " + res.new_messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
+            FileLog.m10d("received difference with date = " + MessagesStorage.getInstance(this.currentAccount).getLastDateValue() + " pts = " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " seq = " + MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + " messages = " + res.new_messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
         }
     }
 
-    final /* synthetic */ void lambda$null$191$MessagesController(LongSparseArray messages) {
+    final /* synthetic */ void lambda$null$192$MessagesController(LongSparseArray messages) {
         for (int a = 0; a < messages.size(); a++) {
             updateInterfaceWithMessages(messages.keyAt(a), (ArrayList) messages.valueAt(a));
         }
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$193$MessagesController(ArrayList pushMessages, updates_Difference res) {
+    final /* synthetic */ void lambda$null$194$MessagesController(ArrayList pushMessages, updates_Difference res) {
         if (!pushMessages.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$172(this, pushMessages, res));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$173(this, pushMessages, res));
         }
         MessagesStorage.getInstance(this.currentAccount).putMessages(res.new_messages, true, false, false, DownloadController.getInstance(this.currentAccount).getAutodownloadMask());
     }
 
-    final /* synthetic */ void lambda$null$192$MessagesController(ArrayList pushMessages, updates_Difference res) {
-        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessages, !(res instanceof TL_updates_differenceSlice), false);
+    final /* synthetic */ void lambda$null$193$MessagesController(ArrayList pushMessages, updates_Difference res) {
+        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessages, !(res instanceof TL_updates_differenceSlice), false, null);
     }
 
     public boolean canPinDialog(boolean secret) {
         int count = 0;
         for (int a = 0; a < this.dialogs.size(); a++) {
             TL_dialog dialog = (TL_dialog) this.dialogs.get(a);
-            int lower_id = (int) dialog.f130id;
+            int lower_id = (int) dialog.f128id;
             if ((!secret || lower_id == 0) && ((secret || lower_id != 0) && dialog.pinned)) {
                 count++;
             }
@@ -7289,26 +7374,26 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                             newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$121(this, newTaskId));
+                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$122(this, newTaskId));
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                         newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$121(this, newTaskId));
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$122(this, newTaskId));
                     }
                     newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
                 } else {
                     newTaskId = taskId;
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$121(this, newTaskId));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$122(this, newTaskId));
             }
         }
     }
 
-    final /* synthetic */ void lambda$markDialogAsUnread$197$MessagesController(long newTaskId, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$markDialogAsUnread$198$MessagesController(long newTaskId, TLObject response, TL_error error) {
         if (newTaskId != 0) {
             MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
         }
@@ -7317,15 +7402,15 @@ public class MessagesController implements NotificationCenterDelegate {
     public void loadUnreadDialogs() {
         if (!this.loadingUnreadDialogs && !UserConfig.getInstance(this.currentAccount).unreadDialogsLoaded) {
             this.loadingUnreadDialogs = true;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getDialogUnreadMarks(), new MessagesController$$Lambda$122(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getDialogUnreadMarks(), new MessagesController$$Lambda$123(this));
         }
     }
 
-    final /* synthetic */ void lambda$loadUnreadDialogs$199$MessagesController(TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$164(this, response));
+    final /* synthetic */ void lambda$loadUnreadDialogs$200$MessagesController(TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$165(this, response));
     }
 
-    final /* synthetic */ void lambda$null$198$MessagesController(TLObject response) {
+    final /* synthetic */ void lambda$null$199$MessagesController(TLObject response) {
         if (response != null) {
             Vector vector = (Vector) response;
             int size = vector.objects.size();
@@ -7410,17 +7495,17 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                             newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$123(this, newTaskId));
+                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$124(this, newTaskId));
                             MessagesStorage.getInstance(this.currentAccount).setDialogPinned(did, dialog.pinnedNum);
                             return true;
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                         newTaskId = MessagesStorage.getInstance(this.currentAccount).createPendingTask(data);
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$123(this, newTaskId));
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$124(this, newTaskId));
                         MessagesStorage.getInstance(this.currentAccount).setDialogPinned(did, dialog.pinnedNum);
                         return true;
                     }
@@ -7428,7 +7513,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     newTaskId = taskId;
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$123(this, newTaskId));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$124(this, newTaskId));
             }
             MessagesStorage.getInstance(this.currentAccount).setDialogPinned(did, dialog.pinnedNum);
             return true;
@@ -7439,7 +7524,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$pinDialog$200$MessagesController(long newTaskId, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$pinDialog$201$MessagesController(long newTaskId, TLObject response, TL_error error) {
         if (newTaskId != 0) {
             MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
         }
@@ -7447,7 +7532,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void loadPinnedDialogs(long newDialogId, ArrayList<Long> order) {
         if (!UserConfig.getInstance(this.currentAccount).pinnedDialogsLoaded) {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getPinnedDialogs(), new MessagesController$$Lambda$124(this, order, newDialogId));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getPinnedDialogs(), new MessagesController$$Lambda$125(this, order, newDialogId));
         }
     }
 
@@ -7455,7 +7540,7 @@ public class MessagesController implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:60:0x01aa  */
     /* JADX WARNING: Removed duplicated region for block: B:63:0x01e2  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$loadPinnedDialogs$203$MessagesController(ArrayList order, long newDialogId, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$loadPinnedDialogs$204$MessagesController(ArrayList order, long newDialogId, TLObject response, TL_error error) {
         if (response != null) {
             int a;
             Chat chat;
@@ -7471,7 +7556,7 @@ public class MessagesController implements NotificationCenterDelegate {
             ArrayList<Long> newPinnedOrder = new ArrayList();
             for (a = 0; a < res.users.size(); a++) {
                 User u = (User) res.users.get(a);
-                usersDict.put(u.f177id, u);
+                usersDict.put(u.f176id, u);
             }
             for (a = 0; a < res.chats.size(); a++) {
                 Chat c = (Chat) res.chats.get(a);
@@ -7498,64 +7583,64 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             for (a = 0; a < res.dialogs.size(); a++) {
                 TL_dialog d = (TL_dialog) res.dialogs.get(a);
-                if (d.f130id == 0) {
+                if (d.f128id == 0) {
                     if (d.peer.user_id != 0) {
-                        d.f130id = (long) d.peer.user_id;
+                        d.f128id = (long) d.peer.user_id;
                     } else if (d.peer.chat_id != 0) {
-                        d.f130id = (long) (-d.peer.chat_id);
+                        d.f128id = (long) (-d.peer.chat_id);
                     } else if (d.peer.channel_id != 0) {
-                        d.f130id = (long) (-d.peer.channel_id);
+                        d.f128id = (long) (-d.peer.channel_id);
                     }
                 }
-                newPinnedOrder.add(Long.valueOf(d.f130id));
+                newPinnedOrder.add(Long.valueOf(d.f128id));
                 Integer value;
                 if (DialogObject.isChannel(d)) {
-                    chat = (Chat) chatsDict.get(-((int) d.f130id));
+                    chat = (Chat) chatsDict.get(-((int) d.f128id));
                     if (chat != null && chat.left) {
                     }
                     if (d.last_message_date == 0) {
-                        MessageObject mess = (MessageObject) new_dialogMessage.get(d.f130id);
+                        MessageObject mess = (MessageObject) new_dialogMessage.get(d.f128id);
                         if (mess != null) {
                             d.last_message_date = mess.messageOwner.date;
                         }
                     }
-                    value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f130id));
+                    value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f128id));
                     if (value == null) {
                         value = Integer.valueOf(0);
                     }
-                    this.dialogs_read_inbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
-                    value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f130id));
+                    this.dialogs_read_inbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
+                    value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f128id));
                     if (value == null) {
                         value = Integer.valueOf(0);
                     }
-                    this.dialogs_read_outbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
+                    this.dialogs_read_outbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
                 } else {
-                    if (((int) d.f130id) < 0) {
-                        chat = (Chat) chatsDict.get(-((int) d.f130id));
+                    if (((int) d.f128id) < 0) {
+                        chat = (Chat) chatsDict.get(-((int) d.f128id));
                         if (!(chat == null || chat.migrated_to == null)) {
                         }
                     }
                     if (d.last_message_date == 0) {
                     }
-                    value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f130id));
+                    value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.f128id));
                     if (value == null) {
                     }
-                    this.dialogs_read_inbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
-                    value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f130id));
+                    this.dialogs_read_inbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
+                    value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.f128id));
                     if (value == null) {
                     }
-                    this.dialogs_read_outbox_max.put(Long.valueOf(d.f130id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
+                    this.dialogs_read_outbox_max.put(Long.valueOf(d.f128id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
                 }
             }
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$162(this, res, order, newPinnedOrder, newDialogId, new_dialogMessage, toCache));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$163(this, res, order, newPinnedOrder, newDialogId, new_dialogMessage, toCache));
         }
     }
 
-    final /* synthetic */ void lambda$null$202$MessagesController(TL_messages_peerDialogs res, ArrayList order, ArrayList newPinnedOrder, long newDialogId, LongSparseArray new_dialogMessage, TL_messages_dialogs toCache) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$163(this, res, order, newPinnedOrder, newDialogId, new_dialogMessage, toCache));
+    final /* synthetic */ void lambda$null$203$MessagesController(TL_messages_peerDialogs res, ArrayList order, ArrayList newPinnedOrder, long newDialogId, LongSparseArray new_dialogMessage, TL_messages_dialogs toCache) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$164(this, res, order, newPinnedOrder, newDialogId, new_dialogMessage, toCache));
     }
 
-    final /* synthetic */ void lambda$null$201$MessagesController(TL_messages_peerDialogs res, ArrayList order, ArrayList newPinnedOrder, long newDialogId, LongSparseArray new_dialogMessage, TL_messages_dialogs toCache) {
+    final /* synthetic */ void lambda$null$202$MessagesController(TL_messages_peerDialogs res, ArrayList order, ArrayList newPinnedOrder, long newDialogId, LongSparseArray new_dialogMessage, TL_messages_dialogs toCache) {
         int a;
         TL_dialog dialog;
         ArrayList<Long> orderArrayList;
@@ -7567,13 +7652,13 @@ public class MessagesController implements NotificationCenterDelegate {
         ArrayList<Long> oldPinnedOrder = new ArrayList();
         for (a = 0; a < this.dialogs.size(); a++) {
             dialog = (TL_dialog) this.dialogs.get(a);
-            if (((int) dialog.f130id) != 0) {
+            if (((int) dialog.f128id) != 0) {
                 if (!dialog.pinned) {
                     break;
                 }
                 maxPinnedNum = Math.max(dialog.pinnedNum, maxPinnedNum);
-                oldPinnedDialogNums.put(dialog.f130id, Integer.valueOf(dialog.pinnedNum));
-                oldPinnedOrder.add(Long.valueOf(dialog.f130id));
+                oldPinnedDialogNums.put(dialog.f128id, Integer.valueOf(dialog.pinnedNum));
+                oldPinnedOrder.add(Long.valueOf(dialog.f128id));
                 dialog.pinned = false;
                 dialog.pinnedNum = 0;
                 changed = true;
@@ -7598,16 +7683,16 @@ public class MessagesController implements NotificationCenterDelegate {
                 dialog = (TL_dialog) res.dialogs.get(a);
                 Integer oldNum;
                 if (newDialogId != 0) {
-                    oldNum = (Integer) oldPinnedDialogNums.get(dialog.f130id);
+                    oldNum = (Integer) oldPinnedDialogNums.get(dialog.f128id);
                     if (oldNum != null) {
                         dialog.pinnedNum = oldNum.intValue();
                     }
                 } else {
-                    int oldIdx = oldPinnedOrder.indexOf(Long.valueOf(dialog.f130id));
-                    int newIdx = orderArrayList.indexOf(Long.valueOf(dialog.f130id));
+                    int oldIdx = oldPinnedOrder.indexOf(Long.valueOf(dialog.f128id));
+                    int newIdx = orderArrayList.indexOf(Long.valueOf(dialog.f128id));
                     if (!(oldIdx == -1 || newIdx == -1)) {
                         if (oldIdx == newIdx) {
-                            oldNum = (Integer) oldPinnedDialogNums.get(dialog.f130id);
+                            oldNum = (Integer) oldPinnedDialogNums.get(dialog.f128id);
                             if (oldNum != null) {
                                 dialog.pinnedNum = oldNum.intValue();
                             }
@@ -7622,17 +7707,17 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (dialog.pinnedNum == 0) {
                     dialog.pinnedNum = (res.dialogs.size() - a) + maxPinnedNum;
                 }
-                pinnedDialogs.add(Long.valueOf(dialog.f130id));
-                TL_dialog d = (TL_dialog) this.dialogs_dict.get(dialog.f130id);
+                pinnedDialogs.add(Long.valueOf(dialog.f128id));
+                TL_dialog d = (TL_dialog) this.dialogs_dict.get(dialog.f128id);
                 if (d != null) {
                     d.pinned = true;
                     d.pinnedNum = dialog.pinnedNum;
-                    MessagesStorage.getInstance(this.currentAccount).setDialogPinned(dialog.f130id, dialog.pinnedNum);
+                    MessagesStorage.getInstance(this.currentAccount).setDialogPinned(dialog.f128id, dialog.pinnedNum);
                 } else {
                     added = true;
-                    this.dialogs_dict.put(dialog.f130id, dialog);
-                    MessageObject messageObject = (MessageObject) new_dialogMessage.get(dialog.f130id);
-                    this.dialogMessage.put(dialog.f130id, messageObject);
+                    this.dialogs_dict.put(dialog.f128id, dialog);
+                    MessageObject messageObject = (MessageObject) new_dialogMessage.get(dialog.f128id);
+                    this.dialogMessage.put(dialog.f128id, messageObject);
                     if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
                         this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
                         if (messageObject.messageOwner.random_id != 0) {
@@ -7685,45 +7770,45 @@ public class MessagesController implements NotificationCenterDelegate {
                 ArrayList messagesArr = new ArrayList();
                 messagesArr.add(message);
                 pushMessages.add(new MessageObject(this.currentAccount, message, true));
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$125(this, pushMessages));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$126(this, pushMessages));
                 MessagesStorage.getInstance(this.currentAccount).putMessages(messagesArr, true, true, false, 0);
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$126(this, chat_id, pushMessages));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$127(this, chat_id, pushMessages));
             }
         }
     }
 
-    final /* synthetic */ void lambda$generateJoinMessage$205$MessagesController(ArrayList pushMessages) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$161(this, pushMessages));
+    final /* synthetic */ void lambda$generateJoinMessage$206$MessagesController(ArrayList pushMessages) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$162(this, pushMessages));
     }
 
-    final /* synthetic */ void lambda$null$204$MessagesController(ArrayList pushMessages) {
-        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessages, true, false);
+    final /* synthetic */ void lambda$null$205$MessagesController(ArrayList pushMessages) {
+        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessages, true, false, null);
     }
 
-    final /* synthetic */ void lambda$generateJoinMessage$206$MessagesController(int chat_id, ArrayList pushMessages) {
+    final /* synthetic */ void lambda$generateJoinMessage$207$MessagesController(int chat_id, ArrayList pushMessages) {
         updateInterfaceWithMessages((long) (-chat_id), pushMessages);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
     public void checkChannelInviter(int chat_id) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$127(this, chat_id));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$128(this, chat_id));
     }
 
-    final /* synthetic */ void lambda$checkChannelInviter$212$MessagesController(int chat_id) {
+    final /* synthetic */ void lambda$checkChannelInviter$213$MessagesController(int chat_id) {
         Chat chat = getChat(Integer.valueOf(chat_id));
         if (chat != null && ChatObject.isChannel(chat_id, this.currentAccount) && !chat.creator) {
             TL_channels_getParticipant req = new TL_channels_getParticipant();
             req.channel = getInputChannel(chat_id);
             req.user_id = new TL_inputUserSelf();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$156(this, chat, chat_id));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$157(this, chat, chat_id));
         }
     }
 
-    final /* synthetic */ void lambda$null$211$MessagesController(Chat chat, int chat_id, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$null$212$MessagesController(Chat chat, int chat_id, TLObject response, TL_error error) {
         TL_channels_channelParticipant res = (TL_channels_channelParticipant) response;
         if (res != null && (res.participant instanceof TL_channelParticipantSelf) && res.participant.inviter_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
             if (!chat.megagroup || !MessagesStorage.getInstance(this.currentAccount).isMigratedChat(chat.f78id)) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$157(this, res));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$158(this, res));
                 MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, null, true, true);
                 Message message = new TL_messageService();
                 message.media_unread = true;
@@ -7749,30 +7834,30 @@ public class MessagesController implements NotificationCenterDelegate {
                 AbstractMap usersDict = new ConcurrentHashMap();
                 for (int a = 0; a < res.users.size(); a++) {
                     User user = (User) res.users.get(a);
-                    usersDict.put(Integer.valueOf(user.f177id), user);
+                    usersDict.put(Integer.valueOf(user.f176id), user);
                 }
                 messagesArr.add(message);
                 pushMessages.add(new MessageObject(this.currentAccount, message, usersDict, true));
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$158(this, pushMessages));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$159(this, pushMessages));
                 MessagesStorage.getInstance(this.currentAccount).putMessages(messagesArr, true, true, false, 0);
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$159(this, chat_id, pushMessages));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$160(this, chat_id, pushMessages));
             }
         }
     }
 
-    final /* synthetic */ void lambda$null$207$MessagesController(TL_channels_channelParticipant res) {
+    final /* synthetic */ void lambda$null$208$MessagesController(TL_channels_channelParticipant res) {
         putUsers(res.users, false);
     }
 
-    final /* synthetic */ void lambda$null$208$MessagesController(ArrayList pushMessages) {
-        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessages, true, false);
-    }
-
     final /* synthetic */ void lambda$null$209$MessagesController(ArrayList pushMessages) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$160(this, pushMessages));
+        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessages, true, false, null);
     }
 
-    final /* synthetic */ void lambda$null$210$MessagesController(int chat_id, ArrayList pushMessages) {
+    final /* synthetic */ void lambda$null$210$MessagesController(ArrayList pushMessages) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$161(this, pushMessages));
+    }
+
+    final /* synthetic */ void lambda$null$211$MessagesController(int chat_id, ArrayList pushMessages) {
         updateInterfaceWithMessages((long) (-chat_id), pushMessages);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
@@ -7912,7 +7997,7 @@ public class MessagesController implements NotificationCenterDelegate {
             return ((TL_updateReadChannelInbox) update).channel_id;
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m12e("trying to get unknown update channel_id for " + update);
+            FileLog.m11e("trying to get unknown update channel_id for " + update);
         }
         return 0;
     }
@@ -8008,14 +8093,14 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             }
             if (!(user == null || user.status == null || user.status.expires > 0)) {
-                this.onlinePrivacy.put(Integer.valueOf(user.f177id), Integer.valueOf(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
+                this.onlinePrivacy.put(Integer.valueOf(user.f176id), Integer.valueOf(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
                 updateStatus = true;
             }
             if (missingData) {
                 needGetDiff = true;
             } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + updates.pts_count == updates.pts) {
                 Message message = new TL_message();
-                message.f104id = updates.f176id;
+                message.f104id = updates.f175id;
                 int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
                 if (updates instanceof TL_updateShortMessage) {
                     if (updates.out) {
@@ -8070,34 +8155,34 @@ public class MessagesController implements NotificationCenterDelegate {
                             if (printUpdate) {
                                 updatePrintingStrings();
                             }
-                            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$128(this, printUpdate, user_id, objArr));
+                            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$129(this, printUpdate, user_id, objArr));
                         }
                     }
                     printUpdate = false;
                     if (printUpdate) {
                     }
-                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$128(this, printUpdate, user_id, objArr));
+                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$129(this, printUpdate, user_id, objArr));
                 } else {
                     printUpdate = updatePrintingUsersWithNewMessages((long) (-updates.chat_id), objArr);
                     if (printUpdate) {
                         updatePrintingStrings();
                     }
-                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$129(this, printUpdate, updates, objArr));
+                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$130(this, printUpdate, updates, objArr));
                 }
                 if (!messageObject.isOut()) {
-                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$130(this, objArr));
+                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$131(this, objArr));
                 }
                 MessagesStorage.getInstance(this.currentAccount).putMessages(arr2, false, true, false, 0);
             } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() != updates.pts) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("need get diff short message, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updates.pts + " count = " + updates.pts_count);
+                    FileLog.m10d("need get diff short message, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updates.pts + " count = " + updates.pts_count);
                 }
                 if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500) {
                     if (this.updatesStartWaitTimePts == 0) {
                         this.updatesStartWaitTimePts = System.currentTimeMillis();
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("add to queue");
+                        FileLog.m10d("add to queue");
                     }
                     this.updatesQueuePts.add(updates);
                 } else {
@@ -8132,7 +8217,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         channelId = ((TL_updateNewChannelMessage) update).message.to_id.channel_id;
                         if (minChannels.indexOfKey(channelId) >= 0) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11d("need get diff because of min channel " + channelId);
+                                FileLog.m10d("need get diff because of min channel " + channelId);
                             }
                             needGetDiff = true;
                         }
@@ -8191,7 +8276,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             }
                             if (skipUpdate) {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11d("need load unknown channel = " + channelId);
+                                    FileLog.m10d("need load unknown channel = " + channelId);
                                 }
                             } else if (updatesNew.pts_count + channelPts == updatesNew.pts) {
                                 if (processUpdateArray(updatesNew.updates, updates.users, updates.chats, false)) {
@@ -8199,7 +8284,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     MessagesStorage.getInstance(this.currentAccount).saveChannelPts(channelId, updatesNew.pts);
                                 } else {
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m11d("need get channel diff inner TL_updates, channel_id = " + channelId);
+                                        FileLog.m10d("need get channel diff inner TL_updates, channel_id = " + channelId);
                                     }
                                     if (needGetChannelsDiff == null) {
                                         needGetChannelsDiff = new ArrayList();
@@ -8211,7 +8296,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 }
                             } else if (channelPts != updatesNew.pts) {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11d(update + " need get channel diff, pts: " + channelPts + " " + updatesNew.pts + " count = " + updatesNew.pts_count + " channelId = " + channelId);
+                                    FileLog.m10d(update + " need get channel diff, pts: " + channelPts + " " + updatesNew.pts + " count = " + updatesNew.pts_count + " channelId = " + channelId);
                                 }
                                 long updatesStartWaitTime = this.updatesStartWaitTimeChannels.get(channelId);
                                 if (this.gettingDifferenceChannels.get(channelId) || updatesStartWaitTime == 0 || Math.abs(System.currentTimeMillis() - updatesStartWaitTime) <= 1500) {
@@ -8219,7 +8304,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                         this.updatesStartWaitTimeChannels.put(channelId, System.currentTimeMillis());
                                     }
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m11d("add to queue");
+                                        FileLog.m10d("add to queue");
                                     }
                                     ArrayList<Updates> arrayList = (ArrayList) this.updatesQueueChannels.get(channelId);
                                     if (arrayList == null) {
@@ -8255,14 +8340,14 @@ public class MessagesController implements NotificationCenterDelegate {
                                 needReceivedQueue = true;
                             } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() != updatesNew.pts) {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11d(update + " need get diff, qts: " + MessagesStorage.getInstance(this.currentAccount).getLastQtsValue() + " " + updatesNew.pts);
+                                    FileLog.m10d(update + " need get diff, qts: " + MessagesStorage.getInstance(this.currentAccount).getLastQtsValue() + " " + updatesNew.pts);
                                 }
                                 if (this.gettingDifference || this.updatesStartWaitTimeQts == 0 || (this.updatesStartWaitTimeQts != 0 && Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeQts) <= 1500)) {
                                     if (this.updatesStartWaitTimeQts == 0) {
                                         this.updatesStartWaitTimeQts = System.currentTimeMillis();
                                     }
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m11d("add to queue");
+                                        FileLog.m10d("add to queue");
                                     }
                                     this.updatesQueueQts.add(updatesNew);
                                 } else {
@@ -8292,20 +8377,20 @@ public class MessagesController implements NotificationCenterDelegate {
                                 MessagesStorage.getInstance(this.currentAccount).setLastPtsValue(updatesNew.pts);
                             } else {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11d("need get diff inner TL_updates, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updates.seq);
+                                    FileLog.m10d("need get diff inner TL_updates, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updates.seq);
                                 }
                                 needGetDiff = true;
                             }
                         } else if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() != updatesNew.pts) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11d(update + " need get diff, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updatesNew.pts + " count = " + updatesNew.pts_count);
+                                FileLog.m10d(update + " need get diff, pts: " + MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + " " + updatesNew.pts + " count = " + updatesNew.pts_count);
                             }
                             if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || (this.updatesStartWaitTimePts != 0 && Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500)) {
                                 if (this.updatesStartWaitTimePts == 0) {
                                     this.updatesStartWaitTimePts = System.currentTimeMillis();
                                 }
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11d("add to queue");
+                                    FileLog.m10d("add to queue");
                                 }
                                 this.updatesQueuePts.add(updatesNew);
                             } else {
@@ -8328,9 +8413,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     if (BuildVars.LOGS_ENABLED) {
                         if (updates instanceof TL_updatesCombined) {
-                            FileLog.m11d("need get diff TL_updatesCombined, seq: " + MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + " " + updates.seq_start);
+                            FileLog.m10d("need get diff TL_updatesCombined, seq: " + MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + " " + updates.seq_start);
                         } else {
-                            FileLog.m11d("need get diff TL_updates, seq: " + MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + " " + updates.seq);
+                            FileLog.m10d("need get diff TL_updates, seq: " + MessagesStorage.getInstance(this.currentAccount).getLastSeqValue() + " " + updates.seq);
                         }
                     }
                     if (this.gettingDifference || this.updatesStartWaitTimeSeq == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeSeq) <= 1500) {
@@ -8338,7 +8423,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             this.updatesStartWaitTimeSeq = System.currentTimeMillis();
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d("add TL_updates/Combined to queue");
+                            FileLog.m10d("add TL_updates/Combined to queue");
                         }
                         this.updatesQueueSeq.add(updates);
                     } else {
@@ -8348,7 +8433,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
         } else if (updates instanceof TL_updatesTooLong) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("need get diff TL_updatesTooLong");
+                FileLog.m10d("need get diff TL_updatesTooLong");
             }
             needGetDiff = true;
         } else if (updates instanceof UserActionUpdatesSeq) {
@@ -8383,15 +8468,15 @@ public class MessagesController implements NotificationCenterDelegate {
         if (needReceivedQueue) {
             TLObject req = new TL_messages_receivedQueue();
             req.max_qts = MessagesStorage.getInstance(this.currentAccount).getLastQtsValue();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$131.$instance);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$132.$instance);
         }
         if (updateStatus) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$132(this));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$133(this));
         }
         MessagesStorage.getInstance(this.currentAccount).saveDiffParams(MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue());
     }
 
-    final /* synthetic */ void lambda$processUpdates$213$MessagesController(boolean printUpdate, int user_id, ArrayList objArr) {
+    final /* synthetic */ void lambda$processUpdates$214$MessagesController(boolean printUpdate, int user_id, ArrayList objArr) {
         if (printUpdate) {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(64));
         }
@@ -8399,7 +8484,7 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$processUpdates$214$MessagesController(boolean printUpdate, Updates updates, ArrayList objArr) {
+    final /* synthetic */ void lambda$processUpdates$215$MessagesController(boolean printUpdate, Updates updates, ArrayList objArr) {
         if (printUpdate) {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(64));
         }
@@ -8407,18 +8492,18 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$215$MessagesController(ArrayList objArr) {
-        NotificationsController.getInstance(this.currentAccount).processNewMessages(objArr, true, false);
+    final /* synthetic */ void lambda$null$216$MessagesController(ArrayList objArr) {
+        NotificationsController.getInstance(this.currentAccount).processNewMessages(objArr, true, false, null);
     }
 
-    final /* synthetic */ void lambda$processUpdates$216$MessagesController(ArrayList objArr) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$155(this, objArr));
+    final /* synthetic */ void lambda$processUpdates$217$MessagesController(ArrayList objArr) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$156(this, objArr));
     }
 
-    static final /* synthetic */ void lambda$processUpdates$217$MessagesController(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$processUpdates$218$MessagesController(TLObject response, TL_error error) {
     }
 
-    final /* synthetic */ void lambda$processUpdates$218$MessagesController() {
+    final /* synthetic */ void lambda$processUpdates$219$MessagesController() {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(4));
     }
 
@@ -8427,7 +8512,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public boolean processUpdateArray(ArrayList<Update> updates, ArrayList<User> usersArr, ArrayList<Chat> chatsArr, boolean fromGetDifference) {
         if (updates.isEmpty()) {
             if (!(usersArr == null && chatsArr == null)) {
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$133(this, usersArr, chatsArr));
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$134(this, usersArr, chatsArr));
             }
             return true;
         }
@@ -8462,7 +8547,7 @@ public class MessagesController implements NotificationCenterDelegate {
             size = usersArr.size();
             for (a = 0; a < size; a++) {
                 user = (User) usersArr.get(a);
-                usersDict.put(Integer.valueOf(user.f177id), user);
+                usersDict.put(Integer.valueOf(user.f176id), user);
             }
         } else {
             checkForUsers = false;
@@ -8483,14 +8568,14 @@ public class MessagesController implements NotificationCenterDelegate {
             checkForUsers = false;
         }
         if (!(usersArr == null && chatsArr == null)) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$134(this, usersArr, chatsArr));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$135(this, usersArr, chatsArr));
         }
         int interfaceUpdateMask = 0;
         int size3 = updates.size();
         for (int c = 0; c < size3; c++) {
             Update baseUpdate = (Update) updates.get(c);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("process update " + baseUpdate);
+                FileLog.m10d("process update " + baseUpdate);
             }
             Message message;
             int chat_id;
@@ -8519,7 +8604,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     message = ((TL_updateNewChannelMessage) baseUpdate).message;
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d(baseUpdate + " channelId = " + message.to_id.channel_id);
+                        FileLog.m10d(baseUpdate + " channelId = " + message.to_id.channel_id);
                     }
                     if (!message.out && message.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                         message.out = true;
@@ -8577,7 +8662,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 }
                                 if (user == null) {
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m11d("not found user " + user_id);
+                                        FileLog.m10d("not found user " + user_id);
                                     }
                                     return false;
                                 } else if (a == 1 && user.status != null && user.status.expires <= 0) {
@@ -8588,7 +8673,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     } else {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d("not found chat " + chat_id);
+                            FileLog.m10d("not found chat " + chat_id);
                         }
                         return false;
                     }
@@ -8953,7 +9038,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     MessagesStorage.getInstance(this.currentAccount).deleteBlockedUser(finalUpdate.user_id);
                 }
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$135(this, finalUpdate));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$136(this, finalUpdate));
             } else if (baseUpdate instanceof TL_updateNotifySettings) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
@@ -8962,7 +9047,7 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (baseUpdate instanceof TL_updateServiceNotification) {
                 TL_updateServiceNotification update15 = (TL_updateServiceNotification) baseUpdate;
                 if (update15.popup && update15.message != null && update15.message.length() > 0) {
-                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$136(this, update15));
+                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$137(this, update15));
                 }
                 if ((update15.flags & 2) != 0) {
                     newMessage = new TL_message();
@@ -9028,17 +9113,17 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (webPages == null) {
                     webPages = new LongSparseArray();
                 }
-                webPages.put(update16.webpage.f183id, update16.webpage);
+                webPages.put(update16.webpage.f182id, update16.webpage);
             } else if (baseUpdate instanceof TL_updateChannelWebPage) {
                 TL_updateChannelWebPage update17 = (TL_updateChannelWebPage) baseUpdate;
                 if (webPages == null) {
                     webPages = new LongSparseArray();
                 }
-                webPages.put(update17.webpage.f183id, update17.webpage);
+                webPages.put(update17.webpage.f182id, update17.webpage);
             } else if (baseUpdate instanceof TL_updateChannelTooLong) {
                 TL_updateChannelTooLong update18 = (TL_updateChannelTooLong) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d(baseUpdate + " channelId = " + update18.channel_id);
+                    FileLog.m10d(baseUpdate + " channelId = " + update18.channel_id);
                 }
                 int channelPts = this.channelsPts.get(update18.channel_id);
                 if (channelPts == 0) {
@@ -9095,7 +9180,7 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (baseUpdate instanceof TL_updateDeleteChannelMessages) {
                 TL_updateDeleteChannelMessages update21 = (TL_updateDeleteChannelMessages) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d(baseUpdate + " channelId = " + update21.channel_id);
+                    FileLog.m10d(baseUpdate + " channelId = " + update21.channel_id);
                 }
                 if (deletedMessages == null) {
                     deletedMessages = new SparseArray();
@@ -9108,7 +9193,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 arrayList.addAll(update21.messages);
             } else if (baseUpdate instanceof TL_updateChannel) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d(baseUpdate + " channelId = " + ((TL_updateChannel) baseUpdate).channel_id);
+                    FileLog.m10d(baseUpdate + " channelId = " + ((TL_updateChannel) baseUpdate).channel_id);
                 }
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
@@ -9117,7 +9202,7 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (baseUpdate instanceof TL_updateChannelMessageViews) {
                 TL_updateChannelMessageViews update22 = (TL_updateChannelMessageViews) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d(baseUpdate + " channelId = " + update22.channel_id);
+                    FileLog.m10d(baseUpdate + " channelId = " + update22.channel_id);
                 }
                 if (channelViews == null) {
                     channelViews = new SparseArray();
@@ -9127,7 +9212,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     array = new SparseIntArray();
                     channelViews.put(update22.channel_id, array);
                 }
-                array.put(update22.f201id, update22.views);
+                array.put(update22.f206id, update22.views);
             } else if (baseUpdate instanceof TL_updateChatParticipantAdmin) {
                 TL_updateChatParticipantAdmin update23 = (TL_updateChatParticipantAdmin) baseUpdate;
                 MessagesStorage.getInstance(this.currentAccount).updateChatInfo(update23.chat_id, update23.user_id, 2, update23.is_admin ? 1 : 0, update23.version);
@@ -9250,9 +9335,15 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (baseUpdate instanceof TL_updateChannelPinnedMessage) {
                 TL_updateChannelPinnedMessage update24 = (TL_updateChannelPinnedMessage) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d(baseUpdate + " channelId = " + update24.channel_id);
+                    FileLog.m10d(baseUpdate + " channelId = " + update24.channel_id);
                 }
-                MessagesStorage.getInstance(this.currentAccount).updateChannelPinnedMessage(update24.channel_id, update24.f202id);
+                MessagesStorage.getInstance(this.currentAccount).updateChatPinnedMessage(update24.channel_id, update24.f207id);
+            } else if (baseUpdate instanceof TL_updateChatPinnedMessage) {
+                TL_updateChatPinnedMessage update25 = (TL_updateChatPinnedMessage) baseUpdate;
+                MessagesStorage.getInstance(this.currentAccount).updateChatPinnedMessage(update25.chat_id, update25.f208id);
+            } else if (baseUpdate instanceof TL_updateUserPinnedMessage) {
+                TL_updateUserPinnedMessage update26 = (TL_updateUserPinnedMessage) baseUpdate;
+                MessagesStorage.getInstance(this.currentAccount).updateUserPinnedMessage(update26.user_id, update26.f210id);
             } else if (baseUpdate instanceof TL_updateReadFeaturedStickers) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
@@ -9264,9 +9355,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 updatesOnMainThread.add(baseUpdate);
             } else if (baseUpdate instanceof TL_updateLangPack) {
-                LocaleController.getInstance().lambda$null$8$LocaleController(((TL_updateLangPack) baseUpdate).difference, this.currentAccount);
+                LocaleController.getInstance().saveRemoteLocaleStringsForCurrentLocale(((TL_updateLangPack) baseUpdate).difference, this.currentAccount);
             } else if (baseUpdate instanceof TL_updateLangPackTooLong) {
-                LocaleController.getInstance().lambda$applyLanguage$2$LocaleController(this.currentAccount);
+                LocaleController.getInstance().reloadCurrentRemoteLocale(this.currentAccount, ((TL_updateLangPackTooLong) baseUpdate).lang_code);
             } else if (baseUpdate instanceof TL_updateFavedStickers) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
@@ -9278,13 +9369,13 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 updatesOnMainThread.add(baseUpdate);
             } else if (baseUpdate instanceof TL_updateChannelAvailableMessages) {
-                TL_updateChannelAvailableMessages update25 = (TL_updateChannelAvailableMessages) baseUpdate;
+                TL_updateChannelAvailableMessages update27 = (TL_updateChannelAvailableMessages) baseUpdate;
                 if (clearHistoryMessages == null) {
                     clearHistoryMessages = new SparseIntArray();
                 }
-                int currentValue = clearHistoryMessages.get(update25.channel_id);
-                if (currentValue == 0 || currentValue < update25.available_min_id) {
-                    clearHistoryMessages.put(update25.channel_id, update25.available_min_id);
+                int currentValue = clearHistoryMessages.get(update27.channel_id);
+                if (currentValue == 0 || currentValue < update27.available_min_id) {
+                    clearHistoryMessages.put(update27.channel_id, update27.available_min_id);
                 }
             } else if (baseUpdate instanceof TL_updateDialogUnreadMark) {
                 if (updatesOnMainThread == null) {
@@ -9310,7 +9401,7 @@ public class MessagesController implements NotificationCenterDelegate {
             ContactsController.getInstance(this.currentAccount).processContactsUpdates(contactsIds, usersDict);
         }
         if (pushMessages != null) {
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$137(this, pushMessages));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$138(this, pushMessages));
         }
         if (messagesArr != null) {
             StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, messagesArr.size());
@@ -9331,8 +9422,8 @@ public class MessagesController implements NotificationCenterDelegate {
         if (channelViews != null) {
             MessagesStorage.getInstance(this.currentAccount).putChannelViews(channelViews, true);
         }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$138(this, interfaceUpdateMaskFinal, updatesOnMainThread, webPages, messages, editingMessages, printChangedArg, contactsIds, chatInfoToUpdate, channelViews));
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$139(this, markAsReadMessagesInbox, markAsReadMessagesOutbox, markAsReadEncrypted, markAsReadMessages, deletedMessages, clearHistoryMessages));
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$139(this, interfaceUpdateMaskFinal, updatesOnMainThread, webPages, messages, editingMessages, printChangedArg, contactsIds, chatInfoToUpdate, channelViews));
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$140(this, markAsReadMessagesInbox, markAsReadMessagesOutbox, markAsReadEncrypted, markAsReadMessages, deletedMessages, clearHistoryMessages));
         if (webPages != null) {
             MessagesStorage.getInstance(this.currentAccount).putWebPages(webPages);
         }
@@ -9348,13 +9439,13 @@ public class MessagesController implements NotificationCenterDelegate {
         if (deletedMessages != null) {
             size = deletedMessages.size();
             for (a = 0; a < size; a++) {
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$140(this, (ArrayList) deletedMessages.valueAt(a), deletedMessages.keyAt(a)));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$141(this, (ArrayList) deletedMessages.valueAt(a), deletedMessages.keyAt(a)));
             }
         }
         if (clearHistoryMessages != null) {
             size = clearHistoryMessages.size();
             for (a = 0; a < size; a++) {
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$141(this, clearHistoryMessages.keyAt(a), clearHistoryMessages.valueAt(a)));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$142(this, clearHistoryMessages.keyAt(a), clearHistoryMessages.valueAt(a)));
             }
         }
         if (tasks != null) {
@@ -9367,42 +9458,42 @@ public class MessagesController implements NotificationCenterDelegate {
         return true;
     }
 
-    final /* synthetic */ void lambda$processUpdateArray$219$MessagesController(ArrayList usersArr, ArrayList chatsArr) {
-        putUsers(usersArr, false);
-        putChats(chatsArr, false);
-    }
-
     final /* synthetic */ void lambda$processUpdateArray$220$MessagesController(ArrayList usersArr, ArrayList chatsArr) {
         putUsers(usersArr, false);
         putChats(chatsArr, false);
     }
 
-    final /* synthetic */ void lambda$processUpdateArray$222$MessagesController(TL_updateUserBlocked finalUpdate) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$154(this, finalUpdate));
+    final /* synthetic */ void lambda$processUpdateArray$221$MessagesController(ArrayList usersArr, ArrayList chatsArr) {
+        putUsers(usersArr, false);
+        putChats(chatsArr, false);
     }
 
-    final /* synthetic */ void lambda$null$221$MessagesController(TL_updateUserBlocked finalUpdate) {
+    final /* synthetic */ void lambda$processUpdateArray$223$MessagesController(TL_updateUserBlocked finalUpdate) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$155(this, finalUpdate));
+    }
+
+    final /* synthetic */ void lambda$null$222$MessagesController(TL_updateUserBlocked finalUpdate) {
         if (!finalUpdate.blocked) {
             this.blockedUsers.delete(finalUpdate.user_id);
         } else if (this.blockedUsers.indexOfKey(finalUpdate.user_id) < 0) {
             this.blockedUsers.put(finalUpdate.user_id, 1);
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoaded, new Object[0]);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.blockedUsersDidLoad, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$processUpdateArray$223$MessagesController(TL_updateServiceNotification update) {
+    final /* synthetic */ void lambda$processUpdateArray$224$MessagesController(TL_updateServiceNotification update) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(2), update.message, update.type);
     }
 
-    final /* synthetic */ void lambda$null$224$MessagesController(ArrayList pushMessagesFinal) {
-        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessagesFinal, true, false);
+    final /* synthetic */ void lambda$null$225$MessagesController(ArrayList pushMessagesFinal) {
+        NotificationsController.getInstance(this.currentAccount).processNewMessages(pushMessagesFinal, true, false, null);
     }
 
-    final /* synthetic */ void lambda$processUpdateArray$225$MessagesController(ArrayList pushMessagesFinal) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$153(this, pushMessagesFinal));
+    final /* synthetic */ void lambda$processUpdateArray$226$MessagesController(ArrayList pushMessagesFinal) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$154(this, pushMessagesFinal));
     }
 
-    final /* synthetic */ void lambda$processUpdateArray$229$MessagesController(int interfaceUpdateMaskFinal, ArrayList updatesOnMainThreadFinal, LongSparseArray webPagesFinal, LongSparseArray messagesFinal, LongSparseArray editingMessagesFinal, boolean printChangedArg, ArrayList contactsIdsFinal, ArrayList chatInfoToUpdateFinal, SparseArray channelViewsFinal) {
+    final /* synthetic */ void lambda$processUpdateArray$230$MessagesController(int interfaceUpdateMaskFinal, ArrayList updatesOnMainThreadFinal, LongSparseArray webPagesFinal, LongSparseArray messagesFinal, LongSparseArray editingMessagesFinal, boolean printChangedArg, ArrayList contactsIdsFinal, ArrayList chatInfoToUpdateFinal, SparseArray channelViewsFinal) {
         int size;
         int a;
         int size2;
@@ -9431,6 +9522,8 @@ public class MessagesController implements NotificationCenterDelegate {
                         ContactsController.getInstance(this.currentAccount).setPrivacyRules(update.rules, 1);
                     } else if (update.key instanceof TL_privacyKeyPhoneCall) {
                         ContactsController.getInstance(this.currentAccount).setPrivacyRules(update.rules, 2);
+                    } else if (update.key instanceof TL_privacyKeyPhoneP2P) {
+                        ContactsController.getInstance(this.currentAccount).setPrivacyRules(update.rules, 3);
                     }
                 } else if (baseUpdate instanceof TL_updateUserStatus) {
                     TL_updateUserStatus update2 = (TL_updateUserStatus) baseUpdate;
@@ -9443,11 +9536,11 @@ public class MessagesController implements NotificationCenterDelegate {
                         update2.status.expires = -102;
                     }
                     if (currentUser != null) {
-                        currentUser.f177id = update2.user_id;
+                        currentUser.f176id = update2.user_id;
                         currentUser.status = update2.status;
                     }
                     toDbUser = new TL_user();
-                    toDbUser.f177id = update2.user_id;
+                    toDbUser.f176id = update2.user_id;
                     toDbUser.status = update2.status;
                     dbUsersStatus.add(toDbUser);
                     if (update2.user_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
@@ -9470,7 +9563,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         currentUser.username = update3.username;
                     }
                     toDbUser = new TL_user();
-                    toDbUser.f177id = update3.user_id;
+                    toDbUser.f176id = update3.user_id;
                     toDbUser.first_name = update3.first_name;
                     toDbUser.last_name = update3.last_name;
                     toDbUser.username = update3.username;
@@ -9530,7 +9623,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         currentUser.photo = update5.photo;
                     }
                     toDbUser = new TL_user();
-                    toDbUser.f177id = update5.user_id;
+                    toDbUser.f176id = update5.user_id;
                     toDbUser.photo = update5.photo;
                     dbUsers.add(toDbUser);
                 } else if (baseUpdate instanceof TL_updateUserPhone) {
@@ -9538,10 +9631,10 @@ public class MessagesController implements NotificationCenterDelegate {
                     currentUser = getUser(Integer.valueOf(update6.user_id));
                     if (currentUser != null) {
                         currentUser.phone = update6.phone;
-                        Utilities.phoneBookQueue.postRunnable(new MessagesController$$Lambda$150(this, currentUser));
+                        Utilities.phoneBookQueue.postRunnable(new MessagesController$$Lambda$151(this, currentUser));
                     }
                     toDbUser = new TL_user();
-                    toDbUser.f177id = update6.user_id;
+                    toDbUser.f176id = update6.user_id;
                     toDbUser.phone = update6.phone;
                     dbUsers.add(toDbUser);
                 } else if (baseUpdate instanceof TL_updateNotifySettings) {
@@ -9552,12 +9645,13 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                         int currentTime1 = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                         if (update7.peer instanceof TL_notifyPeer) {
-                            if (update7.peer.peer.user_id != 0) {
-                                dialog_id = (long) update7.peer.peer.user_id;
-                            } else if (update7.peer.peer.chat_id != 0) {
-                                dialog_id = (long) (-update7.peer.peer.chat_id);
+                            TL_notifyPeer notifyPeer = (TL_notifyPeer) update7.peer;
+                            if (notifyPeer.peer.user_id != 0) {
+                                dialog_id = (long) notifyPeer.peer.user_id;
+                            } else if (notifyPeer.peer.chat_id != 0) {
+                                dialog_id = (long) (-notifyPeer.peer.chat_id);
                             } else {
-                                dialog_id = (long) (-update7.peer.peer.channel_id);
+                                dialog_id = (long) (-notifyPeer.peer.channel_id);
                             }
                             dialog = (TL_dialog) this.dialogs_dict.get(dialog_id);
                             if (dialog != null) {
@@ -9605,7 +9699,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             if ((update7.notify_settings.flags & 2) != 0) {
                             }
                             if ((update7.notify_settings.flags & 4) != 0) {
-                                editor.putBoolean("EnableGroup", update7.notify_settings.mute_until < currentTime1);
+                                editor.putInt("EnableGroup2", update7.notify_settings.mute_until);
                             }
                         } else if (update7.peer instanceof TL_notifyUsers) {
                             if ((update7.notify_settings.flags & 1) != 0) {
@@ -9614,7 +9708,16 @@ public class MessagesController implements NotificationCenterDelegate {
                             if ((update7.notify_settings.flags & 2) != 0) {
                             }
                             if ((update7.notify_settings.flags & 4) != 0) {
-                                editor.putBoolean("EnableAll", update7.notify_settings.mute_until < currentTime1);
+                                editor.putInt("EnableAll2", update7.notify_settings.mute_until);
+                            }
+                        } else if (update7.peer instanceof TL_notifyBroadcasts) {
+                            if ((update7.notify_settings.flags & 1) != 0) {
+                                editor.putBoolean("EnablePreviewChannel", update7.notify_settings.show_previews);
+                            }
+                            if ((update7.notify_settings.flags & 2) != 0) {
+                            }
+                            if ((update7.notify_settings.flags & 4) != 0) {
+                                editor.putInt("EnableChannel2", update7.notify_settings.mute_until);
                             }
                         }
                     }
@@ -9624,9 +9727,9 @@ public class MessagesController implements NotificationCenterDelegate {
                     Chat chat = getChat(Integer.valueOf(update8.channel_id));
                     if (chat != null) {
                         if (dialog == null && (chat instanceof TL_channel) && !chat.left) {
-                            Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$151(this, update8));
-                        } else if (chat.left && dialog != null && (this.proxyDialog == null || this.proxyDialog.f130id != dialog.f130id)) {
-                            deleteDialog(dialog.f130id, 0);
+                            Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$152(this, update8));
+                        } else if (chat.left && dialog != null && (this.proxyDialog == null || this.proxyDialog.f128id != dialog.f128id)) {
+                            deleteDialog(dialog.f128id, 0);
                         }
                     }
                     updateMask |= UPDATE_MASK_CHANNEL;
@@ -9666,15 +9769,15 @@ public class MessagesController implements NotificationCenterDelegate {
                     PhoneCall call = ((TL_updatePhoneCall) baseUpdate).phone_call;
                     VoIPService svc = VoIPService.getSharedInstance();
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("Received call in update: " + call);
-                        FileLog.m11d("call id " + call.f107id);
+                        FileLog.m10d("Received call in update: " + call);
+                        FileLog.m10d("call id " + call.f105id);
                     }
                     if (call instanceof TL_phoneCallRequested) {
                         if (call.date + (this.callRingTimeout / 1000) >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
                             TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                             if (svc == null && VoIPService.callIShouldHavePutIntoIntent == null && tm.getCallState() == 0) {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11d("Starting service for call " + call.f107id);
+                                    FileLog.m10d("Starting service for call " + call.f105id);
                                 }
                                 VoIPService.callIShouldHavePutIntoIntent = call;
                                 Intent intent = new Intent(ApplicationLoader.applicationContext, VoIPService.class);
@@ -9688,29 +9791,29 @@ public class MessagesController implements NotificationCenterDelegate {
                                         ApplicationLoader.applicationContext.startService(intent);
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.m14e(e);
+                                    FileLog.m13e(e);
                                 }
                             } else {
                                 if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11d("Auto-declining call " + call.f107id + " because there's already active one");
+                                    FileLog.m10d("Auto-declining call " + call.f105id + " because there's already active one");
                                 }
                                 TLObject req = new TL_phone_discardCall();
                                 req.peer = new TL_inputPhoneCall();
                                 req.peer.access_hash = call.access_hash;
-                                req.peer.f138id = call.f107id;
+                                req.peer.f136id = call.f105id;
                                 req.reason = new TL_phoneCallDiscardReasonBusy();
-                                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$152(this));
+                                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$153(this));
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d("ignoring too old call");
+                            FileLog.m10d("ignoring too old call");
                         }
                     } else if (svc != null && call != null) {
                         svc.onCallUpdated(call);
                     } else if (VoIPService.callIShouldHavePutIntoIntent != null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d("Updated the call while the service is starting");
+                            FileLog.m10d("Updated the call while the service is starting");
                         }
-                        if (call.f107id == VoIPService.callIShouldHavePutIntoIntent.f107id) {
+                        if (call.f105id == VoIPService.callIShouldHavePutIntoIntent.f105id) {
                             VoIPService.callIShouldHavePutIntoIntent = call;
                         }
                     }
@@ -9773,7 +9876,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             arr.add(((MessageObject) arrayList.get(a)).messageOwner);
                         }
                     } else {
-                        this.reloadingWebpagesPending.put(webpage.f183id, arrayList);
+                        this.reloadingWebpagesPending.put(webpage.f182id, arrayList);
                     }
                     if (!arr.isEmpty()) {
                         MessagesStorage.getInstance(this.currentAccount).putMessages(arr, true, true, false, DownloadController.getInstance(this.currentAccount).getAutodownloadMask());
@@ -9848,25 +9951,25 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$226$MessagesController(User currentUser) {
+    final /* synthetic */ void lambda$null$227$MessagesController(User currentUser) {
         ContactsController.getInstance(this.currentAccount).addContactToPhoneBook(currentUser, true);
     }
 
-    final /* synthetic */ void lambda$null$227$MessagesController(TL_updateChannel update) {
+    final /* synthetic */ void lambda$null$228$MessagesController(TL_updateChannel update) {
         getChannelDifference(update.channel_id, 1, 0, null);
     }
 
-    final /* synthetic */ void lambda$null$228$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$null$229$MessagesController(TLObject response, TL_error error) {
         if (response != null) {
             processUpdates((Updates) response, false);
         }
     }
 
-    final /* synthetic */ void lambda$processUpdateArray$231$MessagesController(SparseLongArray markAsReadMessagesInboxFinal, SparseLongArray markAsReadMessagesOutboxFinal, SparseIntArray markAsReadEncryptedFinal, ArrayList markAsReadMessagesFinal, SparseArray deletedMessagesFinal, SparseIntArray clearHistoryMessagesFinal) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$149(this, markAsReadMessagesInboxFinal, markAsReadMessagesOutboxFinal, markAsReadEncryptedFinal, markAsReadMessagesFinal, deletedMessagesFinal, clearHistoryMessagesFinal));
+    final /* synthetic */ void lambda$processUpdateArray$232$MessagesController(SparseLongArray markAsReadMessagesInboxFinal, SparseLongArray markAsReadMessagesOutboxFinal, SparseIntArray markAsReadEncryptedFinal, ArrayList markAsReadMessagesFinal, SparseArray deletedMessagesFinal, SparseIntArray clearHistoryMessagesFinal) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$150(this, markAsReadMessagesInboxFinal, markAsReadMessagesOutboxFinal, markAsReadEncryptedFinal, markAsReadMessagesFinal, deletedMessagesFinal, clearHistoryMessagesFinal));
     }
 
-    final /* synthetic */ void lambda$null$230$MessagesController(SparseLongArray markAsReadMessagesInboxFinal, SparseLongArray markAsReadMessagesOutboxFinal, SparseIntArray markAsReadEncryptedFinal, ArrayList markAsReadMessagesFinal, SparseArray deletedMessagesFinal, SparseIntArray clearHistoryMessagesFinal) {
+    final /* synthetic */ void lambda$null$231$MessagesController(SparseLongArray markAsReadMessagesInboxFinal, SparseLongArray markAsReadMessagesOutboxFinal, SparseIntArray markAsReadEncryptedFinal, ArrayList markAsReadMessagesFinal, SparseArray deletedMessagesFinal, SparseIntArray clearHistoryMessagesFinal) {
         int size;
         int b;
         int key;
@@ -9886,7 +9989,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     messageId = (int) markAsReadMessagesInboxFinal.valueAt(b);
                     dialog = (TL_dialog) this.dialogs_dict.get((long) key);
                     if (dialog != null && dialog.top_message > 0 && dialog.top_message <= messageId) {
-                        obj = (MessageObject) this.dialogMessage.get(dialog.f130id);
+                        obj = (MessageObject) this.dialogMessage.get(dialog.f128id);
                         if (!(obj == null || obj.isOut())) {
                             obj.setIsRead();
                             updateMask |= 256;
@@ -9905,7 +10008,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     messageId = (int) markAsReadMessagesOutboxFinal.valueAt(b);
                     dialog = (TL_dialog) this.dialogs_dict.get((long) markAsReadMessagesOutboxFinal.keyAt(b));
                     if (dialog != null && dialog.top_message > 0 && dialog.top_message <= messageId) {
-                        obj = (MessageObject) this.dialogMessage.get(dialog.f130id);
+                        obj = (MessageObject) this.dialogMessage.get(dialog.f128id);
                         if (obj != null && obj.isOut()) {
                             obj.setIsRead();
                             updateMask |= 256;
@@ -9985,32 +10088,29 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$processUpdateArray$232$MessagesController(ArrayList arrayList, int key) {
+    final /* synthetic */ void lambda$processUpdateArray$233$MessagesController(ArrayList arrayList, int key) {
         MessagesStorage.getInstance(this.currentAccount).updateDialogsWithDeletedMessages(arrayList, MessagesStorage.getInstance(this.currentAccount).markMessagesAsDeleted(arrayList, false, key), false, key);
     }
 
-    final /* synthetic */ void lambda$processUpdateArray$233$MessagesController(int key, int id) {
+    final /* synthetic */ void lambda$processUpdateArray$234$MessagesController(int key, int id) {
         MessagesStorage.getInstance(this.currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), MessagesStorage.getInstance(this.currentAccount).markMessagesAsDeleted(key, id, false), false, key);
     }
 
     public boolean isDialogMuted(long dialog_id) {
         int mute_type = this.notificationsPreferences.getInt("notify2_" + dialog_id, -1);
         if (mute_type == -1) {
-            if (((int) dialog_id) < 0) {
-                if (!this.notificationsPreferences.getBoolean("EnableGroup", true)) {
-                    return true;
-                }
-            } else if (!this.notificationsPreferences.getBoolean("EnableAll", true)) {
-                return true;
+            if (NotificationsController.getInstance(this.currentAccount).isGlobalNotificationsEnabled(dialog_id)) {
+                return false;
             }
-        }
-        if (mute_type == 2) {
+            return true;
+        } else if (mute_type == 2) {
+            return true;
+        } else {
+            if (mute_type != 3 || this.notificationsPreferences.getInt("notifyuntil_" + dialog_id, 0) < ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
+                return false;
+            }
             return true;
         }
-        if (mute_type != 3 || this.notificationsPreferences.getInt("notifyuntil_" + dialog_id, 0) < ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
-            return false;
-        }
-        return true;
     }
 
     private boolean updatePrintingUsersWithNewMessages(long uid, ArrayList<MessageObject> messages) {
@@ -10073,7 +10173,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     if (message.isNewGif()) {
                         DataQuery.getInstance(this.currentAccount).addRecentGif(message.messageOwner.media.document, message.messageOwner.date);
                     } else if (message.isSticker()) {
-                        DataQuery.getInstance(this.currentAccount).addRecentSticker(0, message.messageOwner.media.document, message.messageOwner.date, false);
+                        DataQuery.getInstance(this.currentAccount).addRecentSticker(0, message, message.messageOwner.media.document, message.messageOwner.date, false);
                     }
                 }
                 if (message.isOut() && message.isSent()) {
@@ -10095,7 +10195,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             }
                             if (chat == null || !chat.left) {
                                 dialog = new TL_dialog();
-                                dialog.f130id = uid;
+                                dialog.f128id = uid;
                                 dialog.unread_count = 0;
                                 dialog.top_message = lastMessage.getId();
                                 dialog.last_message_date = lastMessage.messageOwner.date;
@@ -10144,18 +10244,18 @@ public class MessagesController implements NotificationCenterDelegate {
                     this.dialogs.remove(dialog);
                     this.dialogsServerOnly.remove(dialog);
                     this.dialogsGroupsOnly.remove(dialog);
-                    this.dialogs_dict.remove(dialog.f130id);
-                    this.dialogs_read_inbox_max.remove(Long.valueOf(dialog.f130id));
-                    this.dialogs_read_outbox_max.remove(Long.valueOf(dialog.f130id));
+                    this.dialogs_dict.remove(dialog.f128id);
+                    this.dialogs_read_inbox_max.remove(Long.valueOf(dialog.f128id));
+                    this.dialogs_read_outbox_max.remove(Long.valueOf(dialog.f128id));
                     this.nextDialogsCacheOffset--;
-                    this.dialogMessage.remove(dialog.f130id);
+                    this.dialogMessage.remove(dialog.f128id);
                     object = (MessageObject) this.dialogMessagesByIds.get(dialog.top_message);
                     this.dialogMessagesByIds.remove(dialog.top_message);
                     if (!(object == null || object.messageOwner.random_id == 0)) {
                         this.dialogMessagesByRandomIds.remove(object.messageOwner.random_id);
                     }
                     dialog.top_message = 0;
-                    NotificationsController.getInstance(this.currentAccount).removeNotificationsForDialog(dialog.f130id);
+                    NotificationsController.getInstance(this.currentAccount).removeNotificationsForDialog(dialog.f128id);
                     NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.needReloadRecentDialogsSearch, new Object[0]);
                 }
             }
@@ -10172,8 +10272,8 @@ public class MessagesController implements NotificationCenterDelegate {
         int selfId = UserConfig.getInstance(this.currentAccount).getClientUserId();
         Collections.sort(this.dialogs, this.dialogComparator);
         this.isLeftProxyChannel = true;
-        if (this.proxyDialog != null && this.proxyDialog.f130id < 0) {
-            chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f130id)));
+        if (this.proxyDialog != null && this.proxyDialog.f128id < 0) {
+            chat = getChat(Integer.valueOf(-((int) this.proxyDialog.f128id)));
             if (!(chat == null || chat.left)) {
                 this.isLeftProxyChannel = false;
             }
@@ -10181,8 +10281,8 @@ public class MessagesController implements NotificationCenterDelegate {
         int a = 0;
         while (a < this.dialogs.size()) {
             TL_dialog d = (TL_dialog) this.dialogs.get(a);
-            int high_id = (int) (d.f130id >> 32);
-            int lower_id = (int) d.f130id;
+            int high_id = (int) (d.f128id >> 32);
+            int lower_id = (int) d.f128id;
             if (lower_id == selfId) {
                 this.dialogsForward.add(0, d);
                 selfAdded = true;
@@ -10208,11 +10308,11 @@ public class MessagesController implements NotificationCenterDelegate {
                     this.dialogsGroupsOnly.add(d);
                 }
             }
-            if (this.proxyDialog != null && d.f130id == this.proxyDialog.f130id && this.isLeftProxyChannel) {
+            if (this.proxyDialog != null && d.f128id == this.proxyDialog.f128id && this.isLeftProxyChannel) {
                 this.dialogs.remove(a);
                 a--;
             }
-            if ((d.unread_count != 0 || d.unread_mark) && !isDialogMuted(d.f130id)) {
+            if ((d.unread_count != 0 || d.unread_mark) && !isDialogMuted(d.f128id)) {
                 this.unreadUnmutedDialogs++;
             }
             a++;
@@ -10224,10 +10324,10 @@ public class MessagesController implements NotificationCenterDelegate {
             User user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
             if (user != null) {
                 TL_dialog dialog = new TL_dialog();
-                dialog.f130id = (long) user.f177id;
+                dialog.f128id = (long) user.f176id;
                 dialog.notify_settings = new TL_peerNotifySettings();
                 dialog.peer = new TL_peerUser();
-                dialog.peer.user_id = user.f177id;
+                dialog.peer.user_id = user.f176id;
                 this.dialogsForward.add(0, dialog);
             }
         }
@@ -10303,17 +10403,17 @@ public class MessagesController implements NotificationCenterDelegate {
                 TLObject request;
                 if (did > 0 || !ChatObject.isChannel(chat)) {
                     request = new TL_messages_getMessages();
-                    request.f151id.add(Integer.valueOf(originalMessage.getId()));
+                    request.f149id.add(Integer.valueOf(originalMessage.getId()));
                     req = request;
                 } else {
                     chat = getChat(Integer.valueOf(-did));
                     request = new TL_channels_getMessages();
                     request.channel = getInputChannel(chat);
-                    request.f120id.add(Integer.valueOf(originalMessage.getId()));
+                    request.f118id.add(Integer.valueOf(originalMessage.getId()));
                     req = request;
                 }
-                int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$142(this, progressDialog, fragment, bundle));
-                progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$143(this, reqId, fragment));
+                int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$143(this, progressDialog, fragment, bundle));
+                progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$144(this, reqId, fragment));
                 fragment.setVisibleDialog(progressDialog);
                 progressDialog.show();
                 return false;
@@ -10322,17 +10422,17 @@ public class MessagesController implements NotificationCenterDelegate {
         return true;
     }
 
-    final /* synthetic */ void lambda$checkCanOpenChat$235$MessagesController(AlertDialog progressDialog, BaseFragment fragment, Bundle bundle, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$checkCanOpenChat$236$MessagesController(AlertDialog progressDialog, BaseFragment fragment, Bundle bundle, TLObject response, TL_error error) {
         if (response != null) {
-            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$148(this, progressDialog, response, fragment, bundle));
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$149(this, progressDialog, response, fragment, bundle));
         }
     }
 
-    final /* synthetic */ void lambda$null$234$MessagesController(AlertDialog progressDialog, TLObject response, BaseFragment fragment, Bundle bundle) {
+    final /* synthetic */ void lambda$null$235$MessagesController(AlertDialog progressDialog, TLObject response, BaseFragment fragment, Bundle bundle) {
         try {
             progressDialog.dismiss();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         messages_Messages res = (messages_Messages) response;
         putUsers(res.users, false);
@@ -10341,12 +10441,12 @@ public class MessagesController implements NotificationCenterDelegate {
         fragment.presentFragment(new ChatActivity(bundle), true);
     }
 
-    final /* synthetic */ void lambda$checkCanOpenChat$236$MessagesController(int reqId, BaseFragment fragment, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$checkCanOpenChat$237$MessagesController(int reqId, BaseFragment fragment, DialogInterface dialog, int which) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
         try {
             dialog.dismiss();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (fragment != null) {
             fragment.setVisibleDialog(null);
@@ -10373,7 +10473,7 @@ public class MessagesController implements NotificationCenterDelegate {
             if (chat != null) {
                 args.putInt("chat_id", chat.f78id);
             } else {
-                args.putInt("user_id", user.f177id);
+                args.putInt("user_id", user.f176id);
             }
             if (type == 0) {
                 fragment.presentFragment(new ProfileActivity(args));
@@ -10409,16 +10509,16 @@ public class MessagesController implements NotificationCenterDelegate {
                 AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(fragment.getParentActivity(), 1)};
                 TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                 req.username = username;
-                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$145(this, progressDialog, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$144(this, progressDialog, fragment, type)), fragment), 500);
+                AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$146(this, progressDialog, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$145(this, progressDialog, fragment, type)), fragment), 500);
             }
         }
     }
 
-    final /* synthetic */ void lambda$openByUserName$238$MessagesController(AlertDialog[] progressDialog, BaseFragment fragment, int type, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$147(this, progressDialog, fragment, error, response, type));
+    final /* synthetic */ void lambda$openByUserName$239$MessagesController(AlertDialog[] progressDialog, BaseFragment fragment, int type, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$148(this, progressDialog, fragment, error, response, type));
     }
 
-    final /* synthetic */ void lambda$null$237$MessagesController(AlertDialog[] progressDialog, BaseFragment fragment, TL_error error, TLObject response, int type) {
+    final /* synthetic */ void lambda$null$238$MessagesController(AlertDialog[] progressDialog, BaseFragment fragment, TL_error error, TLObject response, int type) {
         try {
             progressDialog[0].dismiss();
         } catch (Exception e) {
@@ -10439,27 +10539,27 @@ public class MessagesController implements NotificationCenterDelegate {
             try {
                 Toast.makeText(fragment.getParentActivity(), LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound), 0).show();
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
         }
     }
 
-    final /* synthetic */ void lambda$openByUserName$240$MessagesController(AlertDialog[] progressDialog, int reqId, BaseFragment fragment) {
+    final /* synthetic */ void lambda$openByUserName$241$MessagesController(AlertDialog[] progressDialog, int reqId, BaseFragment fragment) {
         if (progressDialog[0] != null) {
             progressDialog[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
             progressDialog[0].setCanceledOnTouchOutside(false);
             progressDialog[0].setCancelable(false);
-            progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$146(this, reqId));
+            progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$147(this, reqId));
             fragment.showDialog(progressDialog[0]);
         }
     }
 
-    final /* synthetic */ void lambda$null$239$MessagesController(int reqId, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$null$240$MessagesController(int reqId, DialogInterface dialog, int which) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
         try {
             dialog.dismiss();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 }

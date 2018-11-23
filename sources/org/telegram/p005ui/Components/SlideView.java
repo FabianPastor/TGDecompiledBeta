@@ -17,7 +17,8 @@ public class SlideView extends LinearLayout {
     public void setParams(Bundle params, boolean restore) {
     }
 
-    public void onBackPressed() {
+    public boolean onBackPressed(boolean force) {
+        return true;
     }
 
     public void onShow() {

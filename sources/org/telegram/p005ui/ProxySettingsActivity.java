@@ -16,7 +16,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -24,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import com.google.android.exoplayer2.C0016C;
 import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import java.net.URLEncoder;
@@ -39,7 +37,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.HeaderCell;
@@ -73,19 +71,8 @@ public class ProxySettingsActivity extends BaseFragment {
     private TypeCell[] typeCell;
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$2 */
-    class C16852 implements OnClickListener {
-        C16852() {
-        }
-
-        public void onClick(View view) {
-            ProxySettingsActivity.this.currentType = ((Integer) view.getTag()).intValue();
-            ProxySettingsActivity.this.updateUiForType();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ProxySettingsActivity$3 */
-    class C16863 implements TextWatcher {
-        C16863() {
+    class C11152 implements TextWatcher {
+        C11152() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,9 +86,9 @@ public class ProxySettingsActivity extends BaseFragment {
         }
     }
 
-    /* renamed from: org.telegram.ui.ProxySettingsActivity$4 */
-    class C16874 implements TextWatcher {
-        C16874() {
+    /* renamed from: org.telegram.ui.ProxySettingsActivity$3 */
+    class C11163 implements TextWatcher {
+        C11163() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -145,84 +132,6 @@ public class ProxySettingsActivity extends BaseFragment {
         }
     }
 
-    /* renamed from: org.telegram.ui.ProxySettingsActivity$5 */
-    class C16885 implements OnEditorActionListener {
-        C16885() {
-        }
-
-        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-            if (i == 5) {
-                int num = ((Integer) textView.getTag()).intValue();
-                if (num + 1 < ProxySettingsActivity.this.inputFields.length) {
-                    ProxySettingsActivity.this.inputFields[num + 1].requestFocus();
-                }
-                return true;
-            } else if (i != 6) {
-                return false;
-            } else {
-                ProxySettingsActivity.this.lambda$checkDiscard$69$PassportActivity();
-                return true;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ProxySettingsActivity$6 */
-    class C16896 implements OnClickListener {
-        C16896() {
-        }
-
-        public void onClick(View v) {
-            StringBuilder params = new StringBuilder(TtmlNode.ANONYMOUS_REGION_ID);
-            String address = ProxySettingsActivity.this.inputFields[0].getText().toString();
-            String password = ProxySettingsActivity.this.inputFields[3].getText().toString();
-            String user = ProxySettingsActivity.this.inputFields[2].getText().toString();
-            String port = ProxySettingsActivity.this.inputFields[1].getText().toString();
-            String secret = ProxySettingsActivity.this.inputFields[4].getText().toString();
-            try {
-                String url;
-                if (!TextUtils.isEmpty(address)) {
-                    params.append("server=").append(URLEncoder.encode(address, C0016C.UTF8_NAME));
-                }
-                if (!TextUtils.isEmpty(port)) {
-                    if (params.length() != 0) {
-                        params.append("&");
-                    }
-                    params.append("port=").append(URLEncoder.encode(port, C0016C.UTF8_NAME));
-                }
-                if (ProxySettingsActivity.this.currentType == 1) {
-                    url = "https://t.me/proxy?";
-                    if (params.length() != 0) {
-                        params.append("&");
-                    }
-                    params.append("secret=").append(URLEncoder.encode(secret, C0016C.UTF8_NAME));
-                } else {
-                    url = "https://t.me/socks?";
-                    if (!TextUtils.isEmpty(user)) {
-                        if (params.length() != 0) {
-                            params.append("&");
-                        }
-                        params.append("user=").append(URLEncoder.encode(user, C0016C.UTF8_NAME));
-                    }
-                    if (!TextUtils.isEmpty(password)) {
-                        if (params.length() != 0) {
-                            params.append("&");
-                        }
-                        params.append("pass=").append(URLEncoder.encode(password, C0016C.UTF8_NAME));
-                    }
-                }
-                if (params.length() != 0) {
-                    Intent shareIntent = new Intent("android.intent.action.SEND");
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra("android.intent.extra.TEXT", url + params.toString());
-                    Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareLink", R.string.ShareLink));
-                    chooserIntent.setFlags(C0016C.ENCODING_PCM_MU_LAW);
-                    ProxySettingsActivity.this.getParentActivity().startActivity(chooserIntent);
-                }
-            } catch (Exception e) {
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.ProxySettingsActivity$TypeCell */
     public class TypeCell extends FrameLayout {
         private ImageView checkImage;
@@ -232,7 +141,6 @@ public class ProxySettingsActivity extends BaseFragment {
 
         public TypeCell(ProxySettingsActivity this$0, Context context) {
             int i;
-            float f = 17.0f;
             int i2 = 3;
             this.this$0 = this$0;
             super(context);
@@ -251,12 +159,7 @@ public class ProxySettingsActivity extends BaseFragment {
             } else {
                 i = 3;
             }
-            i |= 48;
-            float f2 = LocaleController.isRTL ? 71.0f : 17.0f;
-            if (!LocaleController.isRTL) {
-                f = 23.0f;
-            }
-            addView(view, LayoutHelper.createFrame(-1, -1.0f, i, f2, 0.0f, f, 0.0f));
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 71.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 23.0f, 0.0f));
             this.checkImage = new ImageView(context);
             this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
             this.checkImage.setImageResource(R.drawable.sticker_added);
@@ -264,11 +167,11 @@ public class ProxySettingsActivity extends BaseFragment {
             if (!LocaleController.isRTL) {
                 i2 = 5;
             }
-            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 18.0f, 0.0f, 18.0f, 0.0f));
+            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f), NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f), NUM));
         }
 
         public void setValue(String name, boolean checked, boolean divider) {
@@ -283,19 +186,19 @@ public class ProxySettingsActivity extends BaseFragment {
 
         protected void onDraw(Canvas canvas) {
             if (this.needDivider) {
-                canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$1 */
-    class C22791 extends ActionBarMenuOnItemClick {
-        C22791() {
+    class C15661 extends ActionBarMenuOnItemClick {
+        C15661() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ProxySettingsActivity.this.lambda$checkDiscard$69$PassportActivity();
+                ProxySettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 1 && ProxySettingsActivity.this.getParentActivity() != null) {
                 boolean enabled;
                 ProxySettingsActivity.this.currentProxyInfo.address = ProxySettingsActivity.this.inputFields[0].getText().toString();
@@ -330,7 +233,7 @@ public class ProxySettingsActivity extends BaseFragment {
                 }
                 editor.commit();
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
-                ProxySettingsActivity.this.lambda$checkDiscard$69$PassportActivity();
+                ProxySettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
@@ -361,8 +264,8 @@ public class ProxySettingsActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22791());
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new C15661());
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -383,8 +286,8 @@ public class ProxySettingsActivity extends BaseFragment {
             } else if (a == 1) {
                 this.typeCell[a].setValue(LocaleController.getString("UseProxyTelegram", R.string.UseProxyTelegram), a == this.currentType, false);
             }
-            this.linearLayout2.addView(this.typeCell[a], LayoutHelper.createLinear(-1, 48));
-            this.typeCell[a].setOnClickListener(new C16852());
+            this.linearLayout2.addView(this.typeCell[a], LayoutHelper.createLinear(-1, 50));
+            this.typeCell[a].setOnClickListener(new ProxySettingsActivity$$Lambda$0(this));
             a++;
         }
         this.sectionCell[0] = new ShadowSectionCell(context);
@@ -401,7 +304,7 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.inputFields[a].setBackgroundDrawable(null);
             this.inputFields[a].setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            this.inputFields[a].setCursorSize(AndroidUtilities.m10dp(20.0f));
+            this.inputFields[a].setCursorSize(AndroidUtilities.m9dp(20.0f));
             this.inputFields[a].setCursorWidth(1.5f);
             this.inputFields[a].setSingleLine(true);
             this.inputFields[a].setGravity((LocaleController.isRTL ? 5 : 3) | 16);
@@ -410,10 +313,10 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
             if (a == 0) {
                 this.inputFields[a].setInputType(524305);
-                this.inputFields[a].addTextChangedListener(new C16863());
+                this.inputFields[a].addTextChangedListener(new C11152());
             } else if (a == 1) {
                 this.inputFields[a].setInputType(2);
-                this.inputFields[a].addTextChangedListener(new C16874());
+                this.inputFields[a].addTextChangedListener(new C11163());
             } else if (a == 3) {
                 this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                 this.inputFields[a].setTypeface(Typeface.DEFAULT);
@@ -449,10 +352,10 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setSelection(this.inputFields[a].length());
             this.inputFields[a].setPadding(0, 0, 0, 0);
             container.addView(this.inputFields[a], LayoutHelper.createFrame(-1, -1.0f, 51, 17.0f, 0.0f, 17.0f, 0.0f));
-            this.inputFields[a].setOnEditorActionListener(new C16885());
+            this.inputFields[a].setOnEditorActionListener(new ProxySettingsActivity$$Lambda$1(this));
         }
         this.bottomCell = new TextInfoPrivacyCell(context);
-        this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+        this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.bottomCell.setText(LocaleController.getString("UseProxyInfo", R.string.UseProxyInfo));
         this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
         this.shareCell = new TextSettingsCell(context);
@@ -460,13 +363,84 @@ public class ProxySettingsActivity extends BaseFragment {
         this.shareCell.setText(LocaleController.getString("ShareFile", R.string.ShareFile), false);
         this.shareCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
         this.linearLayout2.addView(this.shareCell, LayoutHelper.createLinear(-1, -2));
-        this.shareCell.setOnClickListener(new C16896());
+        this.shareCell.setOnClickListener(new ProxySettingsActivity$$Lambda$2(this));
         this.sectionCell[1] = new ShadowSectionCell(context);
-        this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+        this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));
         checkShareButton();
         updateUiForType();
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$0$ProxySettingsActivity(View view) {
+        this.currentType = ((Integer) view.getTag()).intValue();
+        updateUiForType();
+    }
+
+    final /* synthetic */ boolean lambda$createView$1$ProxySettingsActivity(TextView textView, int i, KeyEvent keyEvent) {
+        if (i == 5) {
+            int num = ((Integer) textView.getTag()).intValue();
+            if (num + 1 < this.inputFields.length) {
+                this.inputFields[num + 1].requestFocus();
+            }
+            return true;
+        } else if (i != 6) {
+            return false;
+        } else {
+            lambda$checkDiscard$70$PassportActivity();
+            return true;
+        }
+    }
+
+    final /* synthetic */ void lambda$createView$2$ProxySettingsActivity(View v) {
+        StringBuilder params = new StringBuilder(TtmlNode.ANONYMOUS_REGION_ID);
+        String address = this.inputFields[0].getText().toString();
+        String password = this.inputFields[3].getText().toString();
+        String user = this.inputFields[2].getText().toString();
+        String port = this.inputFields[1].getText().toString();
+        String secret = this.inputFields[4].getText().toString();
+        try {
+            String url;
+            if (!TextUtils.isEmpty(address)) {
+                params.append("server=").append(URLEncoder.encode(address, C0016C.UTF8_NAME));
+            }
+            if (!TextUtils.isEmpty(port)) {
+                if (params.length() != 0) {
+                    params.append("&");
+                }
+                params.append("port=").append(URLEncoder.encode(port, C0016C.UTF8_NAME));
+            }
+            if (this.currentType == 1) {
+                url = "https://t.me/proxy?";
+                if (params.length() != 0) {
+                    params.append("&");
+                }
+                params.append("secret=").append(URLEncoder.encode(secret, C0016C.UTF8_NAME));
+            } else {
+                url = "https://t.me/socks?";
+                if (!TextUtils.isEmpty(user)) {
+                    if (params.length() != 0) {
+                        params.append("&");
+                    }
+                    params.append("user=").append(URLEncoder.encode(user, C0016C.UTF8_NAME));
+                }
+                if (!TextUtils.isEmpty(password)) {
+                    if (params.length() != 0) {
+                        params.append("&");
+                    }
+                    params.append("pass=").append(URLEncoder.encode(password, C0016C.UTF8_NAME));
+                }
+            }
+            if (params.length() != 0) {
+                Intent shareIntent = new Intent("android.intent.action.SEND");
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra("android.intent.extra.TEXT", url + params.toString());
+                Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareLink", R.string.ShareLink));
+                chooserIntent.setFlags(C0016C.ENCODING_PCM_MU_LAW);
+                getParentActivity().startActivity(chooserIntent);
+            }
+        } catch (Exception e) {
+        }
     }
 
     private void checkShareButton() {

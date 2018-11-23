@@ -56,8 +56,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     private VelocityTracker velocityTracker;
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$1 */
-    class C06761 extends AnimatorListenerAdapter {
-        C06761() {
+    class C04331 extends AnimatorListenerAdapter {
+        C04331() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -66,8 +66,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$2 */
-    class C06772 extends AnimatorListenerAdapter {
-        C06772() {
+    class C04342 extends AnimatorListenerAdapter {
+        C04342() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -188,7 +188,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             } else {
                 animatorSet.setDuration(300);
             }
-            animatorSet.addListener(new C06761());
+            animatorSet.addListener(new C04331());
             animatorSet.start();
             this.currentAnimation = animatorSet;
         }
@@ -206,7 +206,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         } else {
             animatorSet.setDuration(300);
         }
-        animatorSet.addListener(new C06772());
+        animatorSet.addListener(new C04342());
         animatorSet.start();
     }
 
@@ -380,7 +380,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                             child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
                         }
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 } else if (this.drawerLayout != child) {
                     child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
@@ -472,7 +472,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             if (this.shadowLeft == null) {
                 return result;
             }
-            float alpha = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.m10dp(20.0f)), 1.0f));
+            float alpha = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.m9dp(20.0f)), 1.0f));
             if (alpha == 0.0f) {
                 return result;
             }

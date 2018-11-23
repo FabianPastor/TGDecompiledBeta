@@ -14,6 +14,6 @@ final /* synthetic */ class LocaleController$$Lambda$5 implements RequestDelegat
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$applyRemoteLanguage$7$LocaleController(this.arg$2, tLObject, tL_error);
+        this.arg$1.lambda$loadRemoteLanguages$6$LocaleController(this.arg$2, tLObject, tL_error);
     }
 }

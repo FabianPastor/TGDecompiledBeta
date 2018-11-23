@@ -13,6 +13,6 @@ final /* synthetic */ class ChannelEditInfoActivity$$Lambda$15 implements Reques
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$generateLink$26$ChannelEditInfoActivity(tLObject, tL_error);
+        this.arg$1.lambda$null$7$ChannelEditInfoActivity(tLObject, tL_error);
     }
 }

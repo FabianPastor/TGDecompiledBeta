@@ -1,26 +1,25 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.PassportActivity.PassportActivityDelegate;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_account_sendVerifyPhoneCode;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.view.View;
+import android.view.View.OnClickListener;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC.TL_secureRequiredType;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$42 */
-final /* synthetic */ class PassportActivity$$Lambda$42 implements RequestDelegate {
+final /* synthetic */ class PassportActivity$$Lambda$42 implements OnClickListener {
     private final PassportActivity arg$1;
-    private final String arg$2;
-    private final PassportActivityDelegate arg$3;
-    private final TL_account_sendVerifyPhoneCode arg$4;
+    private final ArrayList arg$2;
+    private final TL_secureRequiredType arg$3;
+    private final boolean arg$4;
 
-    PassportActivity$$Lambda$42(PassportActivity passportActivity, String str, PassportActivityDelegate passportActivityDelegate, TL_account_sendVerifyPhoneCode tL_account_sendVerifyPhoneCode) {
+    PassportActivity$$Lambda$42(PassportActivity passportActivity, ArrayList arrayList, TL_secureRequiredType tL_secureRequiredType, boolean z) {
         this.arg$1 = passportActivity;
-        this.arg$2 = str;
-        this.arg$3 = passportActivityDelegate;
-        this.arg$4 = tL_account_sendVerifyPhoneCode;
+        this.arg$2 = arrayList;
+        this.arg$3 = tL_secureRequiredType;
+        this.arg$4 = z;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$startPhoneVerification$66$PassportActivity(this.arg$2, this.arg$3, this.arg$4, tLObject, tL_error);
+    public void onClick(View view) {
+        this.arg$1.lambda$addField$65$PassportActivity(this.arg$2, this.arg$3, this.arg$4, view);
     }
 }

@@ -32,7 +32,7 @@ public class ShareDialogCell extends FrameLayout {
     public ShareDialogCell(Context context) {
         super(context);
         this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.m10dp(27.0f));
+        this.imageView.setRoundRadius(AndroidUtilities.m9dp(27.0f));
         addView(this.imageView, LayoutHelper.createFrame(54, 54.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -44,17 +44,18 @@ public class ShareDialogCell extends FrameLayout {
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 64.0f, 6.0f, 0.0f));
         this.checkBox = new CheckBox(context, R.drawable.round_check2);
         this.checkBox.setSize(24);
-        this.checkBox.setCheckOffset(AndroidUtilities.m10dp(1.0f));
+        this.checkBox.setCheckOffset(AndroidUtilities.m9dp(1.0f));
         this.checkBox.setVisibility(0);
         this.checkBox.setColor(Theme.getColor(Theme.key_dialogRoundCheckBox), Theme.getColor(Theme.key_dialogRoundCheckBoxCheck));
         addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 17.0f, 39.0f, 0.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(100.0f), NUM));
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), NUM));
     }
 
     public void setDialog(int uid, boolean checked, CharSequence name) {
+        Object parentObject;
         TLObject photo = null;
         if (uid > 0) {
             User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
@@ -74,6 +75,7 @@ public class ShareDialogCell extends FrameLayout {
                     photo = user.photo.photo_small;
                 }
             }
+            parentObject = user;
         } else {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-uid));
             if (name != null) {
@@ -87,8 +89,9 @@ public class ShareDialogCell extends FrameLayout {
             if (!(chat == null || chat.photo == null)) {
                 photo = chat.photo.photo_small;
             }
+            Chat parentObject2 = chat;
         }
-        this.imageView.setImage(photo, "50_50", this.avatarDrawable);
+        this.imageView.setImage(photo, "50_50", this.avatarDrawable, parentObject2);
         this.checkBox.setChecked(checked, false);
     }
 

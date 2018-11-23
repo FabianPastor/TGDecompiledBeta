@@ -11,13 +11,14 @@ import org.telegram.p005ui.ActionBar.Theme;
 public class DividerCell extends View {
     public DividerCell(Context context) {
         super(context);
+        setPadding(0, AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m10dp(16.0f) + 1);
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (getPaddingTop() + getPaddingBottom()) + 1);
     }
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawLine((float) getPaddingLeft(), (float) AndroidUtilities.m10dp(8.0f), (float) (getWidth() - getPaddingRight()), (float) AndroidUtilities.m10dp(8.0f), Theme.dividerPaint);
+        canvas.drawLine((float) getPaddingLeft(), (float) getPaddingTop(), (float) (getWidth() - getPaddingRight()), (float) getPaddingTop(), Theme.dividerPaint);
     }
 }

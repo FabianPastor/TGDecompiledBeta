@@ -36,20 +36,20 @@ public class InviteTextCell extends FrameLayout {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = AndroidUtilities.m10dp(72.0f);
-        this.textView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.m10dp(95.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(20.0f), NUM));
+        int height = AndroidUtilities.m9dp(72.0f);
+        this.textView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.m9dp(95.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(20.0f), NUM));
         this.imageView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(height, Integer.MIN_VALUE));
-        setMeasuredDimension(width, AndroidUtilities.m10dp(72.0f));
+        setMeasuredDimension(width, AndroidUtilities.m9dp(72.0f));
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int height = bottom - top;
         int width = right - left;
         int viewTop = (height - this.textView.getTextHeight()) / 2;
-        int viewLeft = !LocaleController.isRTL ? AndroidUtilities.m10dp(71.0f) : AndroidUtilities.m10dp(24.0f);
+        int viewLeft = !LocaleController.isRTL ? AndroidUtilities.m9dp(71.0f) : AndroidUtilities.m9dp(24.0f);
         this.textView.layout(viewLeft, viewTop, this.textView.getMeasuredWidth() + viewLeft, this.textView.getMeasuredHeight() + viewTop);
         viewTop = (height - this.imageView.getMeasuredHeight()) / 2;
-        viewLeft = !LocaleController.isRTL ? AndroidUtilities.m10dp(20.0f) : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.m10dp(20.0f);
+        viewLeft = !LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.m9dp(20.0f);
         this.imageView.layout(viewLeft, viewTop, this.imageView.getMeasuredWidth() + viewLeft, this.imageView.getMeasuredHeight() + viewTop);
     }
 

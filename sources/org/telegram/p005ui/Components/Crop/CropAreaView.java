@@ -41,21 +41,21 @@ public class CropAreaView extends View {
     Paint linePaint;
     private AreaViewListener listener;
     private float lockAspectRatio;
-    private float minWidth = ((float) AndroidUtilities.m10dp(32.0f));
+    private float minWidth = ((float) AndroidUtilities.m9dp(32.0f));
     private GridType previousGridType;
     private int previousX;
     private int previousY;
     private RectF rightEdge = new RectF();
     Paint shadowPaint;
-    private float sidePadding = ((float) AndroidUtilities.m10dp(16.0f));
+    private float sidePadding = ((float) AndroidUtilities.m9dp(16.0f));
     private RectF tempRect = new RectF();
     private RectF topEdge = new RectF();
     private RectF topLeftCorner = new RectF();
     private RectF topRightCorner = new RectF();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropAreaView$1 */
-    class C10401 extends AnimatorListenerAdapter {
-        C10401() {
+    class C06691 extends AnimatorListenerAdapter {
+        C06691() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -98,11 +98,11 @@ public class CropAreaView extends View {
         this.shadowPaint = new Paint();
         this.shadowPaint.setStyle(Style.FILL);
         this.shadowPaint.setColor(436207616);
-        this.shadowPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.shadowPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.linePaint = new Paint();
         this.linePaint.setStyle(Style.FILL);
         this.linePaint.setColor(-1);
-        this.linePaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+        this.linePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
         this.handlePaint = new Paint();
         this.handlePaint.setStyle(Style.FILL);
         this.handlePaint.setColor(-1);
@@ -164,9 +164,9 @@ public class CropAreaView extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        int lineThickness = AndroidUtilities.m10dp(2.0f);
-        int handleSize = AndroidUtilities.m10dp(16.0f);
-        int handleThickness = AndroidUtilities.m10dp(3.0f);
+        int lineThickness = AndroidUtilities.m9dp(2.0f);
+        int handleSize = AndroidUtilities.m9dp(16.0f);
+        int handleThickness = AndroidUtilities.m9dp(3.0f);
         int originX = ((int) this.actualRect.left) - lineThickness;
         int originY = ((int) this.actualRect.top) - lineThickness;
         int width = ((int) (this.actualRect.right - this.actualRect.left)) + (lineThickness * 2);
@@ -224,7 +224,7 @@ public class CropAreaView extends View {
     }
 
     private void updateTouchAreas() {
-        int touchPadding = AndroidUtilities.m10dp(16.0f);
+        int touchPadding = AndroidUtilities.m9dp(16.0f);
         this.topLeftCorner.set(this.actualRect.left - ((float) touchPadding), this.actualRect.top - ((float) touchPadding), this.actualRect.left + ((float) touchPadding), this.actualRect.top + ((float) touchPadding));
         this.topRightCorner.set(this.actualRect.right - ((float) touchPadding), this.actualRect.top - ((float) touchPadding), this.actualRect.right + ((float) touchPadding), this.actualRect.top + ((float) touchPadding));
         this.bottomLeftCorner.set(this.actualRect.left - ((float) touchPadding), this.actualRect.bottom - ((float) touchPadding), this.actualRect.left + ((float) touchPadding), this.actualRect.bottom + ((float) touchPadding));
@@ -255,7 +255,7 @@ public class CropAreaView extends View {
             if (animated) {
                 this.gridAnimator = ObjectAnimator.ofFloat(this, "gridProgress", new float[]{this.gridProgress, targetProgress});
                 this.gridAnimator.setDuration(200);
-                this.gridAnimator.addListener(new C10401());
+                this.gridAnimator.addListener(new C06691());
                 if (type == GridType.NONE) {
                     this.gridAnimator.setStartDelay(200);
                 }

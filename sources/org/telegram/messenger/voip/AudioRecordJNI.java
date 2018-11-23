@@ -60,12 +60,12 @@ public class AudioRecordJNI {
             }
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
+            FileLog.m10d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
         }
         try {
             this.audioRecord = new AudioRecord(source, sampleRate, 16, 2, getBufferSize(this.bufferSize, 48000));
         } catch (Exception x) {
-            FileLog.m13e("AudioRecord init failed!", x);
+            FileLog.m12e("AudioRecord init failed!", x);
         }
         if (sampleRate != 48000) {
             z = true;
@@ -91,7 +91,7 @@ public class AudioRecordJNI {
             try {
                 this.thread.join();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.thread = null;
         }
@@ -129,11 +129,11 @@ public class AudioRecordJNI {
                                 this.agc.setEnabled(false);
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m15w("AutomaticGainControl is not available on this device :(");
+                            FileLog.m14w("AutomaticGainControl is not available on this device :(");
                         }
                     } catch (Throwable x) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m13e("error creating AutomaticGainControl", x);
+                            FileLog.m12e("error creating AutomaticGainControl", x);
                         }
                     }
                     try {
@@ -143,11 +143,11 @@ public class AudioRecordJNI {
                                 this.f73ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m15w("NoiseSuppressor is not available on this device :(");
+                            FileLog.m14w("NoiseSuppressor is not available on this device :(");
                         }
                     } catch (Throwable x2) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m13e("error creating NoiseSuppressor", x2);
+                            FileLog.m12e("error creating NoiseSuppressor", x2);
                         }
                     }
                     try {
@@ -157,11 +157,11 @@ public class AudioRecordJNI {
                                 this.aec.setEnabled(VoIPServerConfig.getBoolean("use_system_aec", true));
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m15w("AcousticEchoCanceler is not available on this device");
+                            FileLog.m14w("AcousticEchoCanceler is not available on this device");
                         }
                     } catch (Throwable x22) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m13e("error creating AcousticEchoCanceler", x22);
+                            FileLog.m12e("error creating AcousticEchoCanceler", x22);
                         }
                     }
                 }
@@ -172,7 +172,7 @@ public class AudioRecordJNI {
             if (!BuildVars.LOGS_ENABLED) {
                 return false;
             }
-            FileLog.m13e("Error initializing AudioRecord", x3);
+            FileLog.m12e("Error initializing AudioRecord", x3);
             return false;
         }
     }
@@ -199,7 +199,7 @@ public class AudioRecordJNI {
                         }
                         AudioRecordJNI.this.nativeCallback(AudioRecordJNI.this.buffer);
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
                 if (BuildVars.LOGS_ENABLED) {

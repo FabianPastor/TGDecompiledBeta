@@ -52,7 +52,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     public static final int START = 16;
     static final String TAG = "ItemTouchHelper";
     /* renamed from: UP */
-    public static final int f250UP = 1;
+    public static final int f264UP = 1;
     int mActionState = 0;
     int mActivePointerId = -1;
     Callback mCallback;
@@ -66,13 +66,13 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     float mInitialTouchY;
     private ItemTouchHelperGestureListener mItemTouchHelperGestureListener;
     float mMaxSwipeVelocity;
-    private final OnItemTouchListener mOnItemTouchListener = new C18502();
+    private final OnItemTouchListener mOnItemTouchListener = new C12282();
     View mOverdrawChild = null;
     int mOverdrawChildPosition = -1;
     final List<View> mPendingCleanup = new ArrayList();
     List<RecoverAnimation> mRecoverAnimations = new ArrayList();
     RecyclerView mRecyclerView;
-    final Runnable mScrollRunnable = new C05881();
+    final Runnable mScrollRunnable = new C03441();
     ViewHolder mSelected = null;
     int mSelectedFlags;
     float mSelectedStartX;
@@ -85,8 +85,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     VelocityTracker mVelocityTracker;
 
     /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$1 */
-    class C05881 implements Runnable {
-        C05881() {
+    class C03441 implements Runnable {
+        C03441() {
         }
 
         public void run() {
@@ -106,14 +106,14 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         public static final int DEFAULT_SWIPE_ANIMATION_DURATION = 250;
         private static final long DRAG_SCROLL_ACCELERATION_LIMIT_TIME_MS = 500;
         static final int RELATIVE_DIR_FLAGS = 3158064;
-        private static final Interpolator sDragScrollInterpolator = new C05901();
-        private static final Interpolator sDragViewScrollCapInterpolator = new C05912();
+        private static final Interpolator sDragScrollInterpolator = new C03461();
+        private static final Interpolator sDragViewScrollCapInterpolator = new C03472();
         private static final ItemTouchUIUtil sUICallback;
         private int mCachedMaxScrollSpeed = -1;
 
         /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$Callback$1 */
-        static class C05901 implements Interpolator {
-            C05901() {
+        static class C03461 implements Interpolator {
+            C03461() {
             }
 
             public float getInterpolation(float t) {
@@ -122,8 +122,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         }
 
         /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$Callback$2 */
-        static class C05912 implements Interpolator {
-            C05912() {
+        static class C03472 implements Interpolator {
+            C03472() {
             }
 
             public float getInterpolation(float t) {
@@ -295,7 +295,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
 
         private int getMaxDragScroll(RecyclerView recyclerView) {
             if (this.mCachedMaxScrollSpeed == -1) {
-                this.mCachedMaxScrollSpeed = AndroidUtilities.m10dp(20.0f);
+                this.mCachedMaxScrollSpeed = AndroidUtilities.m9dp(20.0f);
             }
             return this.mCachedMaxScrollSpeed;
         }
@@ -468,8 +468,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         float f70mY;
 
         /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$RecoverAnimation$1 */
-        class C05921 implements AnimatorUpdateListener {
-            C05921() {
+        class C03481 implements AnimatorUpdateListener {
+            C03481() {
             }
 
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -486,7 +486,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
             this.mTargetX = targetX;
             this.mTargetY = targetY;
             this.mValueAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            this.mValueAnimator.addUpdateListener(new C05921());
+            this.mValueAnimator.addUpdateListener(new C03481());
             this.mValueAnimator.setTarget(viewHolder.itemView);
             this.mValueAnimator.addListener(this);
             setFraction(0.0f);
@@ -545,8 +545,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     }
 
     /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$2 */
-    class C18502 implements OnItemTouchListener {
-        C18502() {
+    class C12282 implements OnItemTouchListener {
+        C12282() {
         }
 
         public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent event) {
@@ -651,8 +651,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     }
 
     /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$5 */
-    class C18525 implements ChildDrawingOrderCallback {
-        C18525() {
+    class C12305 implements ChildDrawingOrderCallback {
+        C12305() {
         }
 
         public int onGetChildDrawingOrder(int childCount, int i) {
@@ -717,8 +717,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
             this.mRecyclerView = recyclerView;
             if (this.mRecyclerView != null) {
                 Resources resources = recyclerView.getResources();
-                this.mSwipeEscapeVelocity = (float) AndroidUtilities.m10dp(120.0f);
-                this.mMaxSwipeVelocity = (float) AndroidUtilities.m10dp(800.0f);
+                this.mSwipeEscapeVelocity = (float) AndroidUtilities.m9dp(120.0f);
+                this.mMaxSwipeVelocity = (float) AndroidUtilities.m9dp(800.0f);
                 setupCallbacks();
             }
         }
@@ -1342,7 +1342,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     private void addChildDrawingOrderCallback() {
         if (VERSION.SDK_INT < 21) {
             if (this.mChildDrawingOrderCallback == null) {
-                this.mChildDrawingOrderCallback = new C18525();
+                this.mChildDrawingOrderCallback = new C12305();
             }
             this.mRecyclerView.setChildDrawingOrderCallback(this.mChildDrawingOrderCallback);
         }

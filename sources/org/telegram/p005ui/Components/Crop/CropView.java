@@ -56,8 +56,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     private CropRectangle tempRect = new CropRectangle();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$1 */
-    class C10461 implements OnPreDrawListener {
-        C10461() {
+    class C06751 implements OnPreDrawListener {
+        C06751() {
         }
 
         public boolean onPreDraw() {
@@ -68,8 +68,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$7 */
-    class C10527 implements OnCancelListener {
-        C10527() {
+    class C06817 implements OnCancelListener {
+        C06817() {
         }
 
         public void onCancel(DialogInterface dialog) {
@@ -115,19 +115,19 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         private float scale;
         private float width;
         /* renamed from: x */
-        private float f210x;
+        private float f222x;
         /* renamed from: y */
-        private float f211y;
+        private float f223y;
 
-        /* synthetic */ CropState(CropView x0, Bitmap x1, int x2, C10461 x3) {
+        /* synthetic */ CropState(CropView x0, Bitmap x1, int x2, C06751 x3) {
             this(x1, x2);
         }
 
         private CropState(Bitmap bitmap, int bRotation) {
             this.width = (float) bitmap.getWidth();
             this.height = (float) bitmap.getHeight();
-            this.f210x = 0.0f;
-            this.f211y = 0.0f;
+            this.f222x = 0.0f;
+            this.f223y = 0.0f;
             this.scale = 1.0f;
             this.baseRotation = (float) bRotation;
             this.rotation = 0.0f;
@@ -135,7 +135,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private boolean hasChanges() {
-            return Math.abs(this.f210x) > CropView.EPSILON || Math.abs(this.f211y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
+            return Math.abs(this.f222x) > CropView.EPSILON || Math.abs(this.f223y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
         }
 
         private float getWidth() {
@@ -155,17 +155,17 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private void translate(float x, float y) {
-            this.f210x += x;
-            this.f211y += y;
+            this.f222x += x;
+            this.f223y += y;
             this.matrix.postTranslate(x, y);
         }
 
         private float getX() {
-            return this.f210x;
+            return this.f222x;
         }
 
         private float getY() {
-            return this.f211y;
+            return this.f223y;
         }
 
         private void scale(float s, float pivotX, float pivotY) {
@@ -200,8 +200,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
         private void reset(CropAreaView areaView, float orient, boolean freeform) {
             this.matrix.reset();
-            this.f210x = 0.0f;
-            this.f211y = 0.0f;
+            this.f222x = 0.0f;
+            this.f223y = 0.0f;
             this.rotation = 0.0f;
             this.orientation = orient;
             float w = (this.orientation + this.baseRotation) % 180.0f != 0.0f ? this.height : this.width;
@@ -272,7 +272,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (fform) {
             this.areaView.setDimVisibility(false);
         }
-        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C10461());
+        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C06751());
         this.imageView.setImageBitmap(this.bitmap);
     }
 
@@ -709,7 +709,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 }
             }).create();
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setOnCancelListener(new C10527());
+            dialog.setOnCancelListener(new C06817());
             dialog.show();
         }
     }

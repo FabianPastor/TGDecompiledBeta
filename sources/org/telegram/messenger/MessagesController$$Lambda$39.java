@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesController$$Lambda$39 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$pinChannelMessage$53$MessagesController(tLObject, tL_error);
+        this.arg$1.lambda$pinMessage$53$MessagesController(tLObject, tL_error);
     }
 }

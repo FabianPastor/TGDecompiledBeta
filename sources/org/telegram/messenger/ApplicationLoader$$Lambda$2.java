@@ -7,6 +7,6 @@ final /* synthetic */ class ApplicationLoader$$Lambda$2 implements Runnable {
     }
 
     public void run() {
-        ApplicationLoader.lambda$null$0$ApplicationLoader();
+        ApplicationLoader.lambda$null$1$ApplicationLoader();
     }
 }

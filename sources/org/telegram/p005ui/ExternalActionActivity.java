@@ -63,8 +63,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     private PasscodeView passcodeView;
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$1 */
-    class C13881 implements OnGlobalLayoutListener {
-        C13881() {
+    class C09331 implements OnGlobalLayoutListener {
+        C09331() {
         }
 
         public void onGlobalLayout() {
@@ -76,19 +76,19 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$2 */
-    class C13892 implements Runnable {
-        C13892() {
+    class C09342 implements Runnable {
+        C09342() {
         }
 
         public void run() {
             if (ExternalActionActivity.this.lockRunnable == this) {
                 if (AndroidUtilities.needShowPasscode(true)) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("lock app");
+                        FileLog.m10d("lock app");
                     }
                     ExternalActionActivity.this.showPasscodeActivity();
                 } else if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("didn't pass lock check");
+                    FileLog.m10d("didn't pass lock check");
                 }
                 ExternalActionActivity.this.lockRunnable = null;
             }
@@ -105,7 +105,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             try {
                 getWindow().setFlags(MessagesController.UPDATE_MASK_CHANNEL, MessagesController.UPDATE_MASK_CHANNEL);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
         super.onCreate(savedInstanceState);
@@ -363,7 +363,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         try {
             progressDialog.dismiss();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (response1 != null) {
             TL_account_password accountPassword = (TL_account_password) response1;
@@ -404,7 +404,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                 finish();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -460,8 +460,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             this.layersActionBarLayout.setLayoutParams(relativeLayoutParams);
             if (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == 2) {
                 int leftWidth = (AndroidUtilities.displaySize.x / 100) * 35;
-                if (leftWidth < AndroidUtilities.m10dp(320.0f)) {
-                    leftWidth = AndroidUtilities.m10dp(320.0f);
+                if (leftWidth < AndroidUtilities.m9dp(320.0f)) {
+                    leftWidth = AndroidUtilities.m9dp(320.0f);
                 }
                 relativeLayoutParams = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
                 relativeLayoutParams.width = leftWidth;
@@ -484,7 +484,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
 
     public void fixLayout() {
         if (AndroidUtilities.isTablet() && this.actionBarLayout != null) {
-            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C13881());
+            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C09331());
         }
     }
 
@@ -536,7 +536,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
-            this.lockRunnable = new C13892();
+            this.lockRunnable = new C09342();
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(this.lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {

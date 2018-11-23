@@ -48,7 +48,7 @@ public class ThemeCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setPadding(0, 0, 0, AndroidUtilities.m10dp(1.0f));
+        this.textView.setPadding(0, 0, 0, AndroidUtilities.m9dp(1.0f));
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         View view = this.textView;
@@ -57,7 +57,7 @@ public class ThemeCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 101.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 101.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 105.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 105.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
@@ -66,7 +66,7 @@ public class ThemeCell extends FrameLayout {
             if (!LocaleController.isRTL) {
                 i2 = 5;
             }
-            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
+            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
             return;
         }
         view = this.checkImage;
@@ -75,7 +75,7 @@ public class ThemeCell extends FrameLayout {
         } else {
             i = 5;
         }
-        addView(view, LayoutHelper.createFrame(19, 14.0f, i | 16, 55.0f, 0.0f, 55.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(19, 14.0f, i | 16, 59.0f, 0.0f, 59.0f, 0.0f));
         this.optionsButton = new ImageView(context);
         this.optionsButton.setFocusable(false);
         this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
@@ -96,7 +96,7 @@ public class ThemeCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f), NUM));
     }
 
     public void setOnOptionsClick(OnClickListener listener) {
@@ -193,7 +193,7 @@ public class ThemeCell extends FrameLayout {
                     try {
                         fileInputStream.close();
                     } catch (Throwable e3) {
-                        FileLog.m14e(e3);
+                        FileLog.m13e(e3);
                     }
                 }
             } catch (Throwable th3) {
@@ -206,12 +206,12 @@ public class ThemeCell extends FrameLayout {
         }
         return;
         try {
-            FileLog.m14e(e3);
+            FileLog.m13e(e3);
             if (stream != null) {
                 try {
                     stream.close();
                 } catch (Throwable e32) {
-                    FileLog.m14e(e32);
+                    FileLog.m13e(e32);
                 }
             }
             if (finished) {
@@ -222,7 +222,7 @@ public class ThemeCell extends FrameLayout {
                 try {
                     stream.close();
                 } catch (Throwable e322) {
-                    FileLog.m14e(e322);
+                    FileLog.m13e(e322);
                 }
             }
             throw th;
@@ -244,12 +244,12 @@ public class ThemeCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
-        int x = AndroidUtilities.m10dp(27.0f);
+        int x = AndroidUtilities.m9dp(31.0f);
         if (LocaleController.isRTL) {
             x = getWidth() - x;
         }
-        canvas.drawCircle((float) x, (float) AndroidUtilities.m10dp(24.0f), (float) AndroidUtilities.m10dp(11.0f), this.paint);
+        canvas.drawCircle((float) x, (float) AndroidUtilities.m9dp(24.0f), (float) AndroidUtilities.m9dp(11.0f), this.paint);
     }
 }

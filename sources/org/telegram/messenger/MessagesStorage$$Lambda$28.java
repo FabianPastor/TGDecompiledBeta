@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC.photos_Photos;
 
 final /* synthetic */ class MessagesStorage$$Lambda$28 implements Runnable {
     private final MessagesStorage arg$1;
-    private final ArrayList arg$2;
+    private final int arg$2;
+    private final photos_Photos arg$3;
 
-    MessagesStorage$$Lambda$28(MessagesStorage messagesStorage, ArrayList arrayList) {
+    MessagesStorage$$Lambda$28(MessagesStorage messagesStorage, int i, photos_Photos photos_photos) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = arrayList;
+        this.arg$2 = i;
+        this.arg$3 = photos_photos;
     }
 
     public void run() {
-        this.arg$1.lambda$emptyMessagesMedia$45$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$putDialogPhotos$44$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

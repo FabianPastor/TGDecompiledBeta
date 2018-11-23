@@ -1,17 +1,14 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
-
 /* renamed from: org.telegram.ui.TwoStepVerificationActivity$$Lambda$8 */
-final /* synthetic */ class TwoStepVerificationActivity$$Lambda$8 implements RequestDelegate {
-    static final RequestDelegate $instance = new TwoStepVerificationActivity$$Lambda$8();
+final /* synthetic */ class TwoStepVerificationActivity$$Lambda$8 implements Runnable {
+    private final TwoStepVerificationActivity arg$1;
 
-    private TwoStepVerificationActivity$$Lambda$8() {
+    TwoStepVerificationActivity$$Lambda$8(TwoStepVerificationActivity twoStepVerificationActivity) {
+        this.arg$1 = twoStepVerificationActivity;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        TwoStepVerificationActivity.lambda$checkSecretValues$21$TwoStepVerificationActivity(tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$updateRows$16$TwoStepVerificationActivity();
     }
 }

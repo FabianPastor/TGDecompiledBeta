@@ -20,8 +20,8 @@ public class TypingDotsDrawable extends StatusDrawable {
     private boolean started = false;
 
     /* renamed from: org.telegram.ui.Components.TypingDotsDrawable$1 */
-    class C13361 implements Runnable {
-        C13361() {
+    class C08871 implements Runnable {
+        C08871() {
         }
 
         public void run() {
@@ -81,14 +81,14 @@ public class TypingDotsDrawable extends StatusDrawable {
     public void draw(Canvas canvas) {
         int y;
         if (this.isChat) {
-            y = AndroidUtilities.m10dp(8.5f) + getBounds().top;
+            y = AndroidUtilities.m9dp(8.5f) + getBounds().top;
         } else {
-            y = AndroidUtilities.m10dp(9.3f) + getBounds().top;
+            y = AndroidUtilities.m9dp(9.3f) + getBounds().top;
         }
         Theme.chat_statusPaint.setAlpha(255);
-        canvas.drawCircle((float) AndroidUtilities.m10dp(3.0f), (float) y, this.scales[0] * AndroidUtilities.density, Theme.chat_statusPaint);
-        canvas.drawCircle((float) AndroidUtilities.m10dp(9.0f), (float) y, this.scales[1] * AndroidUtilities.density, Theme.chat_statusPaint);
-        canvas.drawCircle((float) AndroidUtilities.m10dp(15.0f), (float) y, this.scales[2] * AndroidUtilities.density, Theme.chat_statusPaint);
+        canvas.drawCircle((float) AndroidUtilities.m9dp(3.0f), (float) y, this.scales[0] * AndroidUtilities.density, Theme.chat_statusPaint);
+        canvas.drawCircle((float) AndroidUtilities.m9dp(9.0f), (float) y, this.scales[1] * AndroidUtilities.density, Theme.chat_statusPaint);
+        canvas.drawCircle((float) AndroidUtilities.m9dp(15.0f), (float) y, this.scales[2] * AndroidUtilities.density, Theme.chat_statusPaint);
         checkUpdate();
     }
 
@@ -97,7 +97,7 @@ public class TypingDotsDrawable extends StatusDrawable {
             return;
         }
         if (NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
-            AndroidUtilities.runOnUIThread(new C13361(), 100);
+            AndroidUtilities.runOnUIThread(new C08871(), 100);
         } else {
             update();
         }
@@ -114,10 +114,10 @@ public class TypingDotsDrawable extends StatusDrawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(18.0f);
+        return AndroidUtilities.m9dp(18.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(18.0f);
+        return AndroidUtilities.m9dp(18.0f);
     }
 }

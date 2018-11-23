@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="13610" android:versionName="4.9.1" android:installLocation="auto" android:compileSdkVersion="28" android:compileSdkVersionCodename="9" package="org.telegram.messenger.beta" platformBuildVersionCode="13610" platformBuildVersionName="4.9.1">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="14050" android:versionName="5.0.0" android:installLocation="auto" android:compileSdkVersion="28" android:compileSdkVersionCodename="9" package="org.telegram.messenger.beta" platformBuildVersionCode="14050" platformBuildVersionName="5.0.0">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
@@ -70,16 +70,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"/>
-    <application android:theme="@style/Theme_TMessages_Start" android:label="@string/AppNameBeta" android:icon="@c0513drawable/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:debuggable="true" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@c0513drawable/ic_launcher" android:appComponentFactory="android.support.v4.app.CoreComponentFactory">
+    <application android:theme="@style/Theme_TMessages_Start" android:label="@string/AppNameBeta" android:icon="@c0268drawable/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:debuggable="true" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@c0268drawable/ic_launcher" android:appComponentFactory="android.support.v4.app.CoreComponentFactory">
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"/>
         <service android:name="org.telegram.messenger.GcmPushListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-        <service android:name="org.telegram.messenger.GcmInstanceIDListenerService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <uses-library android:name="com.google.android.maps" android:required="false"/>
@@ -143,7 +138,7 @@
                 <data android:scheme="http" android:host="t.me"/>
                 <data android:scheme="https" android:host="t.me"/>
             </intent-filter>
-            <intent-filter android:icon="@c0513drawable/ic_launcher" android:priority="1">
+            <intent-filter android:icon="@c0268drawable/ic_launcher" android:priority="1">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -152,7 +147,7 @@
             <meta-data android:name="android.service.chooser.chooser_target_service" android:value=".TgChooserTargetService"/>
         </activity>
         <activity android:theme="@style/Theme_TMessages_Transparent" android:name="org.telegram.p005ui.ShareActivity" android:stateNotNeeded="true" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
-            <intent-filter android:icon="@c0513drawable/ic_launcher" android:priority="1">
+            <intent-filter android:icon="@c0268drawable/ic_launcher" android:priority="1">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -160,7 +155,7 @@
             </intent-filter>
         </activity>
         <activity android:name="org.telegram.p005ui.ExternalActionActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
-            <intent-filter android:icon="@c0513drawable/ic_launcher">
+            <intent-filter android:icon="@c0268drawable/ic_launcher">
                 <action android:name="org.telegram.passport.AUTHORIZE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
@@ -285,13 +280,14 @@
         <provider android:name="android.support.p000v4.content.FileProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.provider" android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
         </provider>
+        <provider android:name="org.telegram.messenger.NotificationImageProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.notification_image_provider" android:grantUriPermissions="true"/>
         <uses-library android:name="com.sec.android.app.multiwindow" android:required="false"/>
         <meta-data android:name="com.sec.android.support.multiwindow" android:value="true"/>
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W" android:value="632dp"/>
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H" android:value="598dp"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:value="632dp"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:value="598dp"/>
-        <meta-data android:name="com.google.android.gms.car.notification.SmallIcon" android:resource="@c0513drawable/ic_player"/>
+        <meta-data android:name="com.google.android.gms.car.notification.SmallIcon" android:resource="@c0268drawable/ic_player"/>
         <meta-data android:name="com.google.android.gms.car.application" android:resource="@xml/automotive_app_desc"/>
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="face"/>
         <meta-data android:name="com.samsung.android.icon_container.has_icon_container" android:value="true"/>
@@ -302,7 +298,7 @@
             </intent-filter>
         </service>
         <activity android:name="net.hockeyapp.android.UpdateActivity"/>
-        <activity android:name="net.hockeyapp.android.FeedbackActivity" android:windowSoftInputMode="adjustUnspecified|stateVisible|adjustResize"/>
+        <activity android:name="net.hockeyapp.android.FeedbackActivity"/>
         <activity android:name="net.hockeyapp.android.PaintActivity"/>
         <activity android:name="net.hockeyapp.android.LoginActivity"/>
         <activity android:name="net.hockeyapp.android.ExpiryInfoActivity"/>
@@ -326,8 +322,8 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-        <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false"/>
         <provider android:name="com.google.firebase.provider.FirebaseInitProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.firebaseinitprovider" android:initOrder="100"/>
+        <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
     </application>
 </manifest>

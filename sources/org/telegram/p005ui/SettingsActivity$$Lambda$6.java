@@ -1,17 +1,16 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import org.telegram.p005ui.ActionBar.AlertDialog;
 
 /* renamed from: org.telegram.ui.SettingsActivity$$Lambda$6 */
-final /* synthetic */ class SettingsActivity$$Lambda$6 implements OnClickListener {
-    private final SettingsActivity arg$1;
+final /* synthetic */ class SettingsActivity$$Lambda$6 implements Runnable {
+    private final AlertDialog arg$1;
 
-    SettingsActivity$$Lambda$6(SettingsActivity settingsActivity) {
-        this.arg$1 = settingsActivity;
+    SettingsActivity$$Lambda$6(AlertDialog alertDialog) {
+        this.arg$1 = alertDialog;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$4$SettingsActivity(dialogInterface, i);
+    public void run() {
+        SettingsActivity.lambda$null$11$SettingsActivity(this.arg$1);
     }
 }

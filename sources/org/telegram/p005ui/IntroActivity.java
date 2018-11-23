@@ -26,8 +26,6 @@ import android.support.p000v4.view.ViewPager.OnPageChangeListener;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -55,7 +53,6 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.LangPackString;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -84,27 +81,20 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     private ViewPager viewPager;
 
     /* renamed from: org.telegram.ui.IntroActivity$1 */
-    class C14271 implements SurfaceTextureListener {
-
-        /* renamed from: org.telegram.ui.IntroActivity$1$1 */
-        class C14261 implements Runnable {
-            C14261() {
-            }
-
-            public void run() {
-                IntroActivity.this.eglThread.drawRunnable.run();
-            }
-        }
-
-        C14271() {
+    class C09621 implements SurfaceTextureListener {
+        C09621() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             if (IntroActivity.this.eglThread == null && surface != null) {
                 IntroActivity.this.eglThread = new EGLThread(surface);
                 IntroActivity.this.eglThread.setSurfaceTextureSize(width, height);
-                IntroActivity.this.eglThread.postRunnable(new C14261());
+                IntroActivity.this.eglThread.postRunnable(new IntroActivity$1$$Lambda$0(this));
             }
+        }
+
+        final /* synthetic */ void lambda$onSurfaceTextureAvailable$0$IntroActivity$1() {
+            IntroActivity.this.eglThread.drawRunnable.run();
         }
 
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
@@ -122,52 +112,6 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
 
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        }
-    }
-
-    /* renamed from: org.telegram.ui.IntroActivity$3 */
-    class C14283 implements OnClickListener {
-        C14283() {
-        }
-
-        public void onClick(View view) {
-            if (!IntroActivity.this.startPressed) {
-                IntroActivity.this.startPressed = true;
-                Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
-                intent2.putExtra("fromIntro", true);
-                IntroActivity.this.startActivity(intent2);
-                IntroActivity.this.destroyed = true;
-                IntroActivity.this.finish();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.IntroActivity$4 */
-    class C14294 implements OnLongClickListener {
-        C14294() {
-        }
-
-        public boolean onLongClick(View v) {
-            ConnectionsManager.getInstance(IntroActivity.this.currentAccount).switchBackend();
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.IntroActivity$5 */
-    class C14305 implements OnClickListener {
-        C14305() {
-        }
-
-        public void onClick(View v) {
-            if (!IntroActivity.this.startPressed && IntroActivity.this.localeInfo != null) {
-                LocaleController.getInstance().applyLanguage(IntroActivity.this.localeInfo, true, false, IntroActivity.this.currentAccount);
-                IntroActivity.this.startPressed = true;
-                Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
-                intent2.putExtra("fromIntro", true);
-                IntroActivity.this.startActivity(intent2);
-                IntroActivity.this.destroyed = true;
-                IntroActivity.this.finish();
-            }
         }
     }
 
@@ -198,32 +142,32 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
 
         protected void onDraw(Canvas canvas) {
             int x;
-            float d = (float) AndroidUtilities.m10dp(5.0f);
+            float d = (float) AndroidUtilities.m9dp(5.0f);
             this.paint.setColor(-4473925);
             this.currentPage = IntroActivity.this.viewPager.getCurrentItem();
             for (int a = 0; a < 6; a++) {
                 if (a != this.currentPage) {
-                    x = a * AndroidUtilities.m10dp(11.0f);
-                    this.rect.set((float) x, 0.0f, (float) (AndroidUtilities.m10dp(5.0f) + x), (float) AndroidUtilities.m10dp(5.0f));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(2.5f), (float) AndroidUtilities.m10dp(2.5f), this.paint);
+                    x = a * AndroidUtilities.m9dp(11.0f);
+                    this.rect.set((float) x, 0.0f, (float) (AndroidUtilities.m9dp(5.0f) + x), (float) AndroidUtilities.m9dp(5.0f));
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(2.5f), (float) AndroidUtilities.m9dp(2.5f), this.paint);
                 }
             }
             this.paint.setColor(-13851168);
-            x = this.currentPage * AndroidUtilities.m10dp(11.0f);
+            x = this.currentPage * AndroidUtilities.m9dp(11.0f);
             if (this.progress == 0.0f) {
-                this.rect.set((float) x, 0.0f, (float) (AndroidUtilities.m10dp(5.0f) + x), (float) AndroidUtilities.m10dp(5.0f));
+                this.rect.set((float) x, 0.0f, (float) (AndroidUtilities.m9dp(5.0f) + x), (float) AndroidUtilities.m9dp(5.0f));
             } else if (this.scrollPosition >= this.currentPage) {
-                this.rect.set((float) x, 0.0f, ((float) (AndroidUtilities.m10dp(5.0f) + x)) + (((float) AndroidUtilities.m10dp(11.0f)) * this.progress), (float) AndroidUtilities.m10dp(5.0f));
+                this.rect.set((float) x, 0.0f, ((float) (AndroidUtilities.m9dp(5.0f) + x)) + (((float) AndroidUtilities.m9dp(11.0f)) * this.progress), (float) AndroidUtilities.m9dp(5.0f));
             } else {
-                this.rect.set(((float) x) - (((float) AndroidUtilities.m10dp(11.0f)) * (1.0f - this.progress)), 0.0f, (float) (AndroidUtilities.m10dp(5.0f) + x), (float) AndroidUtilities.m10dp(5.0f));
+                this.rect.set(((float) x) - (((float) AndroidUtilities.m9dp(11.0f)) * (1.0f - this.progress)), 0.0f, (float) (AndroidUtilities.m9dp(5.0f) + x), (float) AndroidUtilities.m9dp(5.0f));
             }
-            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(2.5f), (float) AndroidUtilities.m10dp(2.5f), this.paint);
+            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(2.5f), (float) AndroidUtilities.m9dp(2.5f), this.paint);
         }
     }
 
     /* renamed from: org.telegram.ui.IntroActivity$2 */
-    class C21372 implements OnPageChangeListener {
-        C21372() {
+    class C14552 implements OnPageChangeListener {
+        C14552() {
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -254,43 +198,18 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
     }
 
-    /* renamed from: org.telegram.ui.IntroActivity$6 */
-    class C21386 implements RequestDelegate {
-        C21386() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-            if (response != null) {
-                Vector vector = (Vector) response;
-                if (!vector.objects.isEmpty()) {
-                    final LangPackString string = (LangPackString) vector.objects.get(0);
-                    if (string instanceof TL_langPackString) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (!IntroActivity.this.destroyed) {
-                                    IntroActivity.this.textView.setText(string.value);
-                                    MessagesController.getGlobalMainSettings().edit().putString("language_showed2", LocaleController.getSystemLocaleStringIso639().toLowerCase()).commit();
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.IntroActivity$EGLThread */
     public class EGLThread extends DispatchQueue {
         private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
         private final int EGL_OPENGL_ES2_BIT = 4;
-        private Runnable drawRunnable = new C14331();
+        private Runnable drawRunnable = new C09631();
         private EGL10 egl10;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
         private EGLDisplay eglDisplay;
         private EGLSurface eglSurface;
         /* renamed from: gl */
-        private GL f255gl;
+        private GL f269gl;
         private boolean initied;
         private long lastRenderCallTime;
         private int surfaceHeight;
@@ -299,19 +218,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         private int[] textures = new int[23];
 
         /* renamed from: org.telegram.ui.IntroActivity$EGLThread$1 */
-        class C14331 implements Runnable {
-
-            /* renamed from: org.telegram.ui.IntroActivity$EGLThread$1$1 */
-            class C14321 implements Runnable {
-                C14321() {
-                }
-
-                public void run() {
-                    EGLThread.this.drawRunnable.run();
-                }
-            }
-
-            C14331() {
+        class C09631 implements Runnable {
+            C09631() {
             }
 
             public void run() {
@@ -324,24 +232,14 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                     Intro.setDate(time);
                     Intro.onDrawFrame();
                     EGLThread.this.egl10.eglSwapBuffers(EGLThread.this.eglDisplay, EGLThread.this.eglSurface);
-                    EGLThread.this.postRunnable(new C14321(), 16);
+                    EGLThread.this.postRunnable(new IntroActivity$EGLThread$1$$Lambda$0(this), 16);
                 } else if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m12e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
+                    FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
                 }
             }
-        }
 
-        /* renamed from: org.telegram.ui.IntroActivity$EGLThread$2 */
-        class C14342 implements Runnable {
-            C14342() {
-            }
-
-            public void run() {
-                EGLThread.this.finish();
-                Looper looper = Looper.myLooper();
-                if (looper != null) {
-                    looper.quit();
-                }
+            final /* synthetic */ void lambda$run$0$IntroActivity$EGLThread$1() {
+                EGLThread.this.drawRunnable.run();
             }
         }
 
@@ -355,7 +253,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m12e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    FileLog.m11e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
@@ -365,7 +263,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 EGLConfig[] configs = new EGLConfig[1];
                 if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 24, 12326, 0, 12338, 1, 12337, 2, 12344}, configs, 1, configsCount)) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        FileLog.m11e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     }
                     finish();
                     return false;
@@ -375,7 +273,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                     this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                     if (this.eglContext == null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            FileLog.m11e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
@@ -383,12 +281,12 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                         this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surfaceTexture, null);
                         if (this.eglSurface == null || this.eglSurface == EGL10.EGL_NO_SURFACE) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m12e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                                FileLog.m11e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             }
                             finish();
                             return false;
                         } else if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                            this.f255gl = this.eglContext.getGL();
+                            this.f269gl = this.eglContext.getGL();
                             GLES20.glGenTextures(23, this.textures, 0);
                             loadTexture(R.drawable.intro_fast_arrow_shadow, 0);
                             loadTexture(R.drawable.intro_fast_arrow, 1);
@@ -424,7 +322,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                             return true;
                         } else {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m12e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                                FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             }
                             finish();
                             return false;
@@ -435,14 +333,14 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                     }
                 } else {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("eglConfig not initialized");
+                        FileLog.m11e("eglConfig not initialized");
                     }
                     finish();
                     return false;
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m12e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                FileLog.m11e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
             }
             finish();
             return false;
@@ -478,7 +376,15 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
 
         public void shutdown() {
-            postRunnable(new C14342());
+            postRunnable(new IntroActivity$EGLThread$$Lambda$0(this));
+        }
+
+        final /* synthetic */ void lambda$shutdown$0$IntroActivity$EGLThread() {
+            finish();
+            Looper looper = Looper.myLooper();
+            if (looper != null) {
+                looper.quit();
+            }
         }
 
         public void setSurfaceTextureSize(int width, int height) {
@@ -498,7 +404,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         private IntroAdapter() {
         }
 
-        /* synthetic */ IntroAdapter(IntroActivity x0, C14271 x1) {
+        /* synthetic */ IntroAdapter(IntroActivity x0, C09621 x1) {
             this();
         }
 
@@ -568,13 +474,13 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
         scrollView = new TextureView(this);
         frameLayout2.addView(scrollView, LayoutHelper.createFrame(Callback.DEFAULT_DRAG_ANIMATION_DURATION, 150, 17));
-        scrollView.setSurfaceTextureListener(new C14271());
+        scrollView.setSurfaceTextureListener(new C09621());
         this.viewPager = new ViewPager(this);
         this.viewPager.setAdapter(new IntroAdapter(this, null));
         this.viewPager.setPageMargin(0);
         this.viewPager.setOffscreenPageLimit(1);
         frameLayout.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
-        this.viewPager.addOnPageChangeListener(new C21372());
+        this.viewPager.addOnPageChangeListener(new C14552());
         scrollView = new TextView(this);
         scrollView.setText(LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
         scrollView.setGravity(17);
@@ -584,16 +490,16 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             scrollView = scrollView;
-            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(scrollView, "translationZ", new float[]{(float) AndroidUtilities.m10dp(2.0f), (float) AndroidUtilities.m10dp(4.0f)}).setDuration(200));
+            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(scrollView, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
             scrollView = scrollView;
-            animator.addState(new int[0], ObjectAnimator.ofFloat(scrollView, "translationZ", new float[]{(float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(2.0f)}).setDuration(200));
+            animator.addState(new int[0], ObjectAnimator.ofFloat(scrollView, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             scrollView.setStateListAnimator(animator);
         }
-        scrollView.setPadding(AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(10.0f), AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(10.0f));
+        scrollView.setPadding(AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(10.0f));
         frameLayout.addView(scrollView, LayoutHelper.createFrame(-2, -2.0f, 81, 10.0f, 0.0f, 10.0f, 76.0f));
-        scrollView.setOnClickListener(new C14283());
+        scrollView.setOnClickListener(new IntroActivity$$Lambda$0(this));
         if (BuildVars.DEBUG_VERSION) {
-            scrollView.setOnLongClickListener(new C14294());
+            scrollView.setOnLongClickListener(new IntroActivity$$Lambda$1(this));
         }
         this.bottomPages = new BottomPagesView(this);
         frameLayout.addView(this.bottomPages, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
@@ -602,7 +508,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         this.textView.setGravity(17);
         this.textView.setTextSize(1, 16.0f);
         frameLayout.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
-        this.textView.setOnClickListener(new C14305());
+        this.textView.setOnClickListener(new IntroActivity$$Lambda$2(this));
         if (AndroidUtilities.isTablet()) {
             FrameLayout frameLayout3 = new FrameLayout(this);
             setContentView(frameLayout3);
@@ -624,6 +530,34 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         this.justCreated = true;
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         AndroidUtilities.handleProxyIntent(this, getIntent());
+    }
+
+    final /* synthetic */ void lambda$onCreate$0$IntroActivity(View view) {
+        if (!this.startPressed) {
+            this.startPressed = true;
+            Intent intent2 = new Intent(this, LaunchActivity.class);
+            intent2.putExtra("fromIntro", true);
+            startActivity(intent2);
+            this.destroyed = true;
+            finish();
+        }
+    }
+
+    final /* synthetic */ boolean lambda$onCreate$1$IntroActivity(View v) {
+        ConnectionsManager.getInstance(this.currentAccount).switchBackend();
+        return true;
+    }
+
+    final /* synthetic */ void lambda$onCreate$2$IntroActivity(View v) {
+        if (!this.startPressed && this.localeInfo != null) {
+            LocaleController.getInstance().applyLanguage(this.localeInfo, true, false, this.currentAccount);
+            this.startPressed = true;
+            Intent intent2 = new Intent(this, LaunchActivity.class);
+            intent2.putExtra("fromIntro", true);
+            startActivity(intent2);
+            this.destroyed = true;
+            finish();
+        }
     }
 
     protected void onResume() {
@@ -661,7 +595,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         LocaleInfo englishInfo = null;
         LocaleInfo systemInfo = null;
         LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
-        String systemLang = LocaleController.getSystemLocaleStringIso639().toLowerCase();
+        String systemLang = MessagesController.getInstance(this.currentAccount).suggestedLangCode;
         if (systemLang.contains("-")) {
             arg = systemLang.split("-")[0];
         } else {
@@ -683,14 +617,33 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         if (englishInfo != null && systemInfo != null && englishInfo != systemInfo) {
             TL_langpack_getStrings req = new TL_langpack_getStrings();
             if (systemInfo != currentLocaleInfo) {
-                req.lang_code = systemInfo.shortName.replace("_", "-");
+                req.lang_code = systemInfo.getLangCode();
                 this.localeInfo = systemInfo;
             } else {
-                req.lang_code = englishInfo.shortName.replace("_", "-");
+                req.lang_code = englishInfo.getLangCode();
                 this.localeInfo = englishInfo;
             }
             req.keys.add("ContinueOnThisLanguage");
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C21386(), 8);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new IntroActivity$$Lambda$3(this, systemLang), 8);
+        }
+    }
+
+    final /* synthetic */ void lambda$checkContinueText$4$IntroActivity(String systemLang, TLObject response, TL_error error) {
+        if (response != null) {
+            Vector vector = (Vector) response;
+            if (!vector.objects.isEmpty()) {
+                LangPackString string = (LangPackString) vector.objects.get(0);
+                if (string instanceof TL_langPackString) {
+                    AndroidUtilities.runOnUIThread(new IntroActivity$$Lambda$4(this, string, systemLang));
+                }
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$null$3$IntroActivity(LangPackString string, String systemLang) {
+        if (!this.destroyed) {
+            this.textView.setText(string.value);
+            MessagesController.getGlobalMainSettings().edit().putString("language_showed2", systemLang.toLowerCase()).commit();
         }
     }
 

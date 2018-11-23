@@ -1,16 +1,18 @@
 package org.telegram.p005ui;
 
-/* renamed from: org.telegram.ui.TwoStepVerificationActivity$$Lambda$9 */
-final /* synthetic */ class TwoStepVerificationActivity$$Lambda$9 implements Runnable {
-    private final TwoStepVerificationActivity arg$1;
-    private final byte[] arg$2;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-    TwoStepVerificationActivity$$Lambda$9(TwoStepVerificationActivity twoStepVerificationActivity, byte[] bArr) {
+/* renamed from: org.telegram.ui.TwoStepVerificationActivity$$Lambda$9 */
+final /* synthetic */ class TwoStepVerificationActivity$$Lambda$9 implements RequestDelegate {
+    private final TwoStepVerificationActivity arg$1;
+
+    TwoStepVerificationActivity$$Lambda$9(TwoStepVerificationActivity twoStepVerificationActivity) {
         this.arg$1 = twoStepVerificationActivity;
-        this.arg$2 = bArr;
     }
 
-    public void run() {
-        this.arg$1.lambda$processDone$28$TwoStepVerificationActivity(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$setNewPassword$18$TwoStepVerificationActivity(tLObject, tL_error);
     }
 }

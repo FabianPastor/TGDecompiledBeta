@@ -65,9 +65,9 @@ public class WallpaperUpdater {
                 this.parentActivity.startActivityForResult(takePictureIntent, 10);
             } catch (Throwable e) {
                 try {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
             }
         } else if (i == 1) {
@@ -125,7 +125,7 @@ public class WallpaperUpdater {
                         try {
                             stream2.close();
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                             stream = stream2;
                         }
                     }
@@ -134,12 +134,12 @@ public class WallpaperUpdater {
                     e2 = e3;
                     stream = stream2;
                     try {
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                         if (stream != null) {
                             try {
                                 stream.close();
                             } catch (Throwable e22) {
-                                FileLog.m14e(e22);
+                                FileLog.m13e(e22);
                             }
                         }
                         this.currentPicturePath = null;
@@ -149,7 +149,7 @@ public class WallpaperUpdater {
                             try {
                                 stream.close();
                             } catch (Throwable e222) {
-                                FileLog.m14e(e222);
+                                FileLog.m13e(e222);
                             }
                         }
                         throw th;
@@ -163,7 +163,7 @@ public class WallpaperUpdater {
                 }
             } catch (Exception e4) {
                 e222 = e4;
-                FileLog.m14e(e222);
+                FileLog.m13e(e222);
                 if (stream != null) {
                 }
                 this.currentPicturePath = null;
@@ -176,7 +176,7 @@ public class WallpaperUpdater {
                 bitmap.compress(CompressFormat.JPEG, 87, new FileOutputStream(this.currentWallpaperPath));
                 this.delegate.didSelectWallpaper(this.currentWallpaperPath, bitmap);
             } catch (Throwable e2222) {
-                FileLog.m14e(e2222);
+                FileLog.m13e(e2222);
             }
         }
     }

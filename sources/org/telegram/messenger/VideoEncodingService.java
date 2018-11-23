@@ -27,7 +27,7 @@ public class VideoEncodingService extends Service implements NotificationCenterD
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopEncodingService);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("destroy video service");
+            FileLog.m10d("destroy video service");
         }
     }
 
@@ -47,7 +47,7 @@ public class VideoEncodingService extends Service implements NotificationCenterD
                 try {
                     NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
         } else if (id == NotificationCenter.stopEncodingService) {
@@ -75,7 +75,7 @@ public class VideoEncodingService extends Service implements NotificationCenterD
             stopSelf();
         } else {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("start video service");
+                FileLog.m10d("start video service");
             }
             if (this.builder == null) {
                 NotificationsController.checkOtherNotificationsChannel();

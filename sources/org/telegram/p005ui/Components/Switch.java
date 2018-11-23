@@ -1,586 +1,249 @@
 package org.telegram.p005ui.Components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
-import android.graphics.Region.Op;
-import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Cap;
+import android.graphics.Paint.Style;
+import android.graphics.RectF;
 import android.support.annotation.Keep;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
-import android.view.ViewConfiguration;
-import android.widget.CompoundButton;
+import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.Theme;
 
 /* renamed from: org.telegram.ui.Components.Switch */
-public class Switch extends CompoundButton {
-    private static final int THUMB_ANIMATION_DURATION = 250;
-    private static final int TOUCH_MODE_DOWN = 1;
-    private static final int TOUCH_MODE_DRAGGING = 2;
-    private static final int TOUCH_MODE_IDLE = 0;
+public class Switch extends View {
     private boolean attachedToWindow;
-    private int mMinFlingVelocity;
-    private ObjectAnimator mPositionAnimator;
-    private boolean mSplitTrack;
-    private int mSwitchBottom;
-    private int mSwitchHeight;
-    private int mSwitchLeft;
-    private int mSwitchMinWidth;
-    private int mSwitchPadding;
-    private int mSwitchRight;
-    private int mSwitchTop;
-    private int mSwitchWidth;
-    private final Rect mTempRect = new Rect();
-    private Drawable mThumbDrawable;
-    private int mThumbTextPadding;
-    private int mThumbWidth;
-    private int mTouchMode;
-    private int mTouchSlop;
-    private float mTouchX;
-    private float mTouchY;
-    private Drawable mTrackDrawable;
-    private VelocityTracker mVelocityTracker = VelocityTracker.obtain();
-    private float thumbPosition;
-    private boolean wasLayout;
+    private ObjectAnimator checkAnimator;
+    private int drawIconType;
+    private ObjectAnimator iconAnimator;
+    private float iconProgress = 1.0f;
+    private boolean isChecked;
+    private OnCheckedChangeListener onCheckedChangeListener;
+    private Paint paint = new Paint(1);
+    private Paint paint2 = new Paint(1);
+    private float progress;
+    private RectF rectF = new RectF();
+    private String thumbCheckedColorKey = Theme.key_windowBackgroundWhite;
+    private String thumbColorKey = Theme.key_windowBackgroundWhite;
+    private String trackCheckedColorKey = Theme.key_switch2TrackChecked;
+    private String trackColorKey = Theme.key_switch2Track;
 
-    /* renamed from: org.telegram.ui.Components.Switch$Insets */
-    public static class Insets {
-        public static final Insets NONE = new Insets(AndroidUtilities.m10dp(4.0f), 0, AndroidUtilities.m10dp(4.0f), 0);
-        public final int bottom;
-        public final int left;
-        public final int right;
-        public final int top;
+    /* renamed from: org.telegram.ui.Components.Switch$1 */
+    class C08501 extends AnimatorListenerAdapter {
+        C08501() {
+        }
 
-        private Insets(int left, int top, int right, int bottom) {
-            this.left = left;
-            this.top = top;
-            this.right = right;
-            this.bottom = bottom;
+        public void onAnimationEnd(Animator animation) {
+            Switch.this.checkAnimator = null;
         }
     }
 
-    public static float constrain(float amount, float low, float high) {
-        if (amount < low) {
-            return low;
+    /* renamed from: org.telegram.ui.Components.Switch$2 */
+    class C08512 extends AnimatorListenerAdapter {
+        C08512() {
         }
-        return amount > high ? high : amount;
+
+        public void onAnimationEnd(Animator animation) {
+            Switch.this.iconAnimator = null;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.Switch$OnCheckedChangeListener */
+    public interface OnCheckedChangeListener {
+        void onCheckedChanged(Switch switchR, boolean z);
     }
 
     public Switch(Context context) {
         super(context);
-        this.mThumbDrawable = context.getResources().getDrawable(R.drawable.switch_thumb);
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setCallback(this);
-        }
-        this.mTrackDrawable = context.getResources().getDrawable(R.drawable.switch_track);
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setCallback(this);
-        }
-        if (AndroidUtilities.density < 1.0f) {
-            this.mSwitchMinWidth = AndroidUtilities.m10dp(30.0f);
-        } else {
-            this.mSwitchMinWidth = 0;
-        }
-        this.mSwitchPadding = 0;
-        this.mSplitTrack = false;
-        ViewConfiguration config = ViewConfiguration.get(context);
-        this.mTouchSlop = config.getScaledTouchSlop();
-        this.mMinFlingVelocity = config.getScaledMinimumFlingVelocity();
-        refreshDrawableState();
-        setChecked(isChecked());
-    }
-
-    public void setSwitchPadding(int pixels) {
-        this.mSwitchPadding = pixels;
-        requestLayout();
-    }
-
-    public int getSwitchPadding() {
-        return this.mSwitchPadding;
-    }
-
-    public void setSwitchMinWidth(int pixels) {
-        this.mSwitchMinWidth = pixels;
-        requestLayout();
-    }
-
-    public int getSwitchMinWidth() {
-        return this.mSwitchMinWidth;
-    }
-
-    public void setThumbTextPadding(int pixels) {
-        this.mThumbTextPadding = pixels;
-        requestLayout();
-    }
-
-    public int getThumbTextPadding() {
-        return this.mThumbTextPadding;
-    }
-
-    public void setTrackDrawable(Drawable track) {
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setCallback(null);
-        }
-        this.mTrackDrawable = track;
-        if (track != null) {
-            track.setCallback(this);
-        }
-        requestLayout();
-    }
-
-    public Drawable getTrackDrawable() {
-        return this.mTrackDrawable;
-    }
-
-    public void setThumbDrawable(Drawable thumb) {
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setCallback(null);
-        }
-        this.mThumbDrawable = thumb;
-        if (thumb != null) {
-            thumb.setCallback(this);
-        }
-        requestLayout();
-    }
-
-    public Drawable getThumbDrawable() {
-        return this.mThumbDrawable;
-    }
-
-    public void setSplitTrack(boolean splitTrack) {
-        this.mSplitTrack = splitTrack;
-        invalidate();
-    }
-
-    public boolean getSplitTrack() {
-        return this.mSplitTrack;
-    }
-
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int thumbWidth;
-        int thumbHeight;
-        int trackHeight;
-        Rect padding = this.mTempRect;
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.getPadding(padding);
-            thumbWidth = (this.mThumbDrawable.getIntrinsicWidth() - padding.left) - padding.right;
-            thumbHeight = this.mThumbDrawable.getIntrinsicHeight();
-        } else {
-            thumbWidth = 0;
-            thumbHeight = 0;
-        }
-        this.mThumbWidth = thumbWidth;
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.getPadding(padding);
-            trackHeight = this.mTrackDrawable.getIntrinsicHeight();
-        } else {
-            padding.setEmpty();
-            trackHeight = 0;
-        }
-        int paddingLeft = padding.left;
-        int paddingRight = padding.right;
-        if (this.mThumbDrawable != null) {
-            Insets inset = Insets.NONE;
-            paddingLeft = Math.max(paddingLeft, inset.left);
-            paddingRight = Math.max(paddingRight, inset.right);
-        }
-        int switchWidth = Math.max(this.mSwitchMinWidth, ((this.mThumbWidth * 2) + paddingLeft) + paddingRight);
-        int switchHeight = Math.max(trackHeight, thumbHeight);
-        this.mSwitchWidth = switchWidth;
-        this.mSwitchHeight = switchHeight;
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (getMeasuredHeight() < switchHeight) {
-            setMeasuredDimension(switchWidth, switchHeight);
-        }
-    }
-
-    private boolean hitThumb(float x, float y) {
-        int thumbOffset = getThumbOffset();
-        this.mThumbDrawable.getPadding(this.mTempRect);
-        int thumbLeft = (this.mSwitchLeft + thumbOffset) - this.mTouchSlop;
-        return x > ((float) thumbLeft) && x < ((float) ((((this.mThumbWidth + thumbLeft) + this.mTempRect.left) + this.mTempRect.right) + this.mTouchSlop)) && y > ((float) (this.mSwitchTop - this.mTouchSlop)) && y < ((float) (this.mSwitchBottom + this.mTouchSlop));
-    }
-
-    public boolean onTouchEvent(MotionEvent ev) {
-        this.mVelocityTracker.addMovement(ev);
-        float x;
-        float y;
-        switch (ev.getActionMasked()) {
-            case 0:
-                x = ev.getX();
-                y = ev.getY();
-                if (isEnabled() && hitThumb(x, y)) {
-                    this.mTouchMode = 1;
-                    this.mTouchX = x;
-                    this.mTouchY = y;
-                    break;
-                }
-            case 1:
-            case 3:
-                if (this.mTouchMode != 2) {
-                    this.mTouchMode = 0;
-                    this.mVelocityTracker.clear();
-                    break;
-                }
-                stopDrag(ev);
-                super.onTouchEvent(ev);
-                return true;
-            case 2:
-                switch (this.mTouchMode) {
-                    case 1:
-                        x = ev.getX();
-                        y = ev.getY();
-                        if (Math.abs(x - this.mTouchX) > ((float) this.mTouchSlop) || Math.abs(y - this.mTouchY) > ((float) this.mTouchSlop)) {
-                            this.mTouchMode = 2;
-                            getParent().requestDisallowInterceptTouchEvent(true);
-                            this.mTouchX = x;
-                            this.mTouchY = y;
-                            return true;
-                        }
-                    case 2:
-                        x = ev.getX();
-                        int thumbScrollRange = getThumbScrollRange();
-                        float thumbScrollOffset = x - this.mTouchX;
-                        float dPos = thumbScrollRange != 0 ? thumbScrollOffset / ((float) thumbScrollRange) : thumbScrollOffset > 0.0f ? 1.0f : -1.0f;
-                        if (LocaleController.isRTL) {
-                            dPos = -dPos;
-                        }
-                        float newPos = Switch.constrain(this.thumbPosition + dPos, 0.0f, 1.0f);
-                        if (newPos != this.thumbPosition) {
-                            this.mTouchX = x;
-                            setThumbPosition(newPos);
-                        }
-                        return true;
-                }
-                break;
-        }
-        return super.onTouchEvent(ev);
-    }
-
-    private void cancelSuperTouch(MotionEvent ev) {
-        MotionEvent cancel = MotionEvent.obtain(ev);
-        cancel.setAction(3);
-        super.onTouchEvent(cancel);
-        cancel.recycle();
-    }
-
-    private void stopDrag(MotionEvent ev) {
-        boolean commitChange;
-        boolean newState = true;
-        this.mTouchMode = 0;
-        if (ev.getAction() == 1 && isEnabled()) {
-            commitChange = true;
-        } else {
-            commitChange = false;
-        }
-        if (commitChange) {
-            this.mVelocityTracker.computeCurrentVelocity(1000);
-            float xvel = this.mVelocityTracker.getXVelocity();
-            if (Math.abs(xvel) <= ((float) this.mMinFlingVelocity)) {
-                newState = getTargetCheckedState();
-            } else if (LocaleController.isRTL) {
-                if (xvel >= 0.0f) {
-                    newState = false;
-                }
-            } else if (xvel <= 0.0f) {
-                newState = false;
-            }
-        } else {
-            newState = isChecked();
-        }
-        setChecked(newState);
-        cancelSuperTouch(ev);
-    }
-
-    private void animateThumbToCheckedState(boolean newCheckedState) {
-        float targetPosition = newCheckedState ? 1.0f : 0.0f;
-        this.mPositionAnimator = ObjectAnimator.ofFloat(this, "thumbPosition", new float[]{targetPosition});
-        this.mPositionAnimator.setDuration(250);
-        this.mPositionAnimator.start();
-    }
-
-    private void cancelPositionAnimator() {
-        if (this.mPositionAnimator != null) {
-            this.mPositionAnimator.cancel();
-        }
-    }
-
-    private boolean getTargetCheckedState() {
-        return this.thumbPosition > 0.5f;
+        this.paint2.setStyle(Style.STROKE);
+        this.paint2.setStrokeCap(Cap.ROUND);
+        this.paint2.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
     }
 
     @Keep
-    private void setThumbPosition(float position) {
-        this.thumbPosition = position;
-        invalidate();
+    public void setProgress(float value) {
+        if (this.progress != value) {
+            this.progress = value;
+            invalidate();
+        }
     }
 
-    public float getThumbPosition() {
-        return this.thumbPosition;
+    @Keep
+    public float getProgress() {
+        return this.progress;
     }
 
-    public void toggle() {
-        setChecked(!isChecked());
+    @Keep
+    public void setIconProgress(float value) {
+        if (this.iconProgress != value) {
+            this.iconProgress = value;
+            invalidate();
+        }
+    }
+
+    @Keep
+    public float getIconProgress() {
+        return this.iconProgress;
+    }
+
+    private void cancelCheckAnimator() {
+        if (this.checkAnimator != null) {
+            this.checkAnimator.cancel();
+            this.checkAnimator = null;
+        }
+    }
+
+    private void cancelIconAnimator() {
+        if (this.iconAnimator != null) {
+            this.iconAnimator.cancel();
+            this.iconAnimator = null;
+        }
+    }
+
+    public void setDrawIconType(int type) {
+        this.drawIconType = type;
+    }
+
+    public void setColors(String track, String trackChecked, String thumb, String thumbChecked) {
+        this.trackColorKey = track;
+        this.trackCheckedColorKey = trackChecked;
+        this.thumbColorKey = thumb;
+        this.thumbCheckedColorKey = thumbChecked;
+    }
+
+    private void animateToCheckedState(boolean newCheckedState) {
+        String str = "progress";
+        float[] fArr = new float[1];
+        fArr[0] = newCheckedState ? 1.0f : 0.0f;
+        this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
+        this.checkAnimator.setDuration(250);
+        this.checkAnimator.addListener(new C08501());
+        this.checkAnimator.start();
+    }
+
+    private void animateIcon(boolean newCheckedState) {
+        String str = "iconProgress";
+        float[] fArr = new float[1];
+        fArr[0] = newCheckedState ? 1.0f : 0.0f;
+        this.iconAnimator = ObjectAnimator.ofFloat(this, str, fArr);
+        this.iconAnimator.setDuration(250);
+        this.iconAnimator.addListener(new C08512());
+        this.iconAnimator.start();
     }
 
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.attachedToWindow = true;
-        requestLayout();
     }
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attachedToWindow = false;
-        this.wasLayout = false;
     }
 
-    public void resetLayout() {
-        this.wasLayout = false;
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+        this.onCheckedChangeListener = listener;
     }
 
-    public void setChecked(boolean checked) {
-        super.setChecked(checked);
-        checked = isChecked();
-        if (this.attachedToWindow && this.wasLayout) {
-            animateThumbToCheckedState(checked);
-        } else {
-            cancelPositionAnimator();
-            setThumbPosition(checked ? 1.0f : 0.0f);
-        }
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.getColor(Theme.key_switchTrackChecked) : Theme.getColor(Theme.key_switchTrack), Mode.MULTIPLY));
-        }
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.getColor(Theme.key_switchThumbChecked) : Theme.getColor(Theme.key_switchThumb), Mode.MULTIPLY));
-        }
+    public void setChecked(boolean checked, boolean animated) {
+        setChecked(checked, 0, animated);
     }
 
-    public void checkColorFilters() {
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(isChecked() ? Theme.getColor(Theme.key_switchTrackChecked) : Theme.getColor(Theme.key_switchTrack), Mode.MULTIPLY));
-        }
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(isChecked() ? Theme.getColor(Theme.key_switchThumbChecked) : Theme.getColor(Theme.key_switchThumb), Mode.MULTIPLY));
-        }
-    }
-
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int switchLeft;
-        int switchRight;
-        int switchTop;
-        int switchBottom;
-        super.onLayout(changed, left, top, right, bottom);
-        this.wasLayout = true;
-        int opticalInsetLeft = 0;
-        int opticalInsetRight = 0;
-        if (this.mThumbDrawable != null) {
-            Rect trackPadding = this.mTempRect;
-            if (this.mTrackDrawable != null) {
-                this.mTrackDrawable.getPadding(trackPadding);
+    public void setChecked(boolean checked, int iconType, boolean animated) {
+        float f = 1.0f;
+        if (checked != this.isChecked) {
+            this.isChecked = checked;
+            if (this.attachedToWindow && animated) {
+                animateToCheckedState(checked);
             } else {
-                trackPadding.setEmpty();
+                cancelCheckAnimator();
+                setProgress(checked ? 1.0f : 0.0f);
             }
-            Insets insets = Insets.NONE;
-            opticalInsetLeft = Math.max(0, insets.left - trackPadding.left);
-            opticalInsetRight = Math.max(0, insets.right - trackPadding.right);
+            if (this.onCheckedChangeListener != null) {
+                this.onCheckedChangeListener.onCheckedChanged(this, checked);
+            }
         }
-        if (LocaleController.isRTL) {
-            switchLeft = getPaddingLeft() + opticalInsetLeft;
-            switchRight = ((this.mSwitchWidth + switchLeft) - opticalInsetLeft) - opticalInsetRight;
-        } else {
-            switchRight = (getWidth() - getPaddingRight()) - opticalInsetRight;
-            switchLeft = ((switchRight - this.mSwitchWidth) + opticalInsetLeft) + opticalInsetRight;
+        if (this.drawIconType != iconType) {
+            this.drawIconType = iconType;
+            if (this.attachedToWindow && animated) {
+                animateIcon(iconType == 0);
+                return;
+            }
+            cancelIconAnimator();
+            if (iconType != 0) {
+                f = 0.0f;
+            }
+            setIconProgress(f);
         }
-        switch (getGravity() & 112) {
-            case 16:
-                switchTop = (((getPaddingTop() + getHeight()) - getPaddingBottom()) / 2) - (this.mSwitchHeight / 2);
-                switchBottom = switchTop + this.mSwitchHeight;
-                break;
-            case 80:
-                switchBottom = getHeight() - getPaddingBottom();
-                switchTop = switchBottom - this.mSwitchHeight;
-                break;
-            default:
-                switchTop = getPaddingTop();
-                switchBottom = switchTop + this.mSwitchHeight;
-                break;
-        }
-        this.mSwitchLeft = switchLeft;
-        this.mSwitchTop = switchTop;
-        this.mSwitchBottom = switchBottom;
-        this.mSwitchRight = switchRight;
     }
 
-    public void draw(Canvas c) {
-        Insets thumbInsets;
-        Rect padding = this.mTempRect;
-        int switchLeft = this.mSwitchLeft;
-        int switchTop = this.mSwitchTop;
-        int switchRight = this.mSwitchRight;
-        int switchBottom = this.mSwitchBottom;
-        int thumbInitialLeft = switchLeft + getThumbOffset();
-        if (this.mThumbDrawable != null) {
-            thumbInsets = Insets.NONE;
-        } else {
-            thumbInsets = Insets.NONE;
-        }
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.getPadding(padding);
-            thumbInitialLeft += padding.left;
-            int trackLeft = switchLeft;
-            int trackTop = switchTop;
-            int trackRight = switchRight;
-            int trackBottom = switchBottom;
-            if (thumbInsets != Insets.NONE) {
-                if (thumbInsets.left > padding.left) {
-                    trackLeft += thumbInsets.left - padding.left;
-                }
-                if (thumbInsets.top > padding.top) {
-                    trackTop += thumbInsets.top - padding.top;
-                }
-                if (thumbInsets.right > padding.right) {
-                    trackRight -= thumbInsets.right - padding.right;
-                }
-                if (thumbInsets.bottom > padding.bottom) {
-                    trackBottom -= thumbInsets.bottom - padding.bottom;
-                }
-            }
-            this.mTrackDrawable.setBounds(trackLeft, trackTop, trackRight, trackBottom);
-        }
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.getPadding(padding);
-            int thumbLeft = thumbInitialLeft - padding.left;
-            int thumbRight = (this.mThumbWidth + thumbInitialLeft) + padding.right;
-            int offset = AndroidUtilities.density == 1.5f ? AndroidUtilities.m10dp(1.0f) : 0;
-            this.mThumbDrawable.setBounds(thumbLeft, switchTop + offset, thumbRight, switchBottom + offset);
-            Drawable background = getBackground();
-            if (background != null && VERSION.SDK_INT >= 21) {
-                background.setHotspotBounds(thumbLeft, switchTop, thumbRight, switchBottom);
-            }
-        }
-        super.draw(c);
+    public boolean isChecked() {
+        return this.isChecked;
     }
 
     protected void onDraw(Canvas canvas) {
-        int saveCount;
-        super.onDraw(canvas);
-        Rect padding = this.mTempRect;
-        Drawable trackDrawable = this.mTrackDrawable;
-        if (trackDrawable != null) {
-            trackDrawable.getPadding(padding);
-        } else {
-            padding.setEmpty();
-        }
-        int switchTop = this.mSwitchTop;
-        int switchBottom = this.mSwitchBottom;
-        Drawable thumbDrawable = this.mThumbDrawable;
-        if (trackDrawable != null) {
-            if (!this.mSplitTrack || thumbDrawable == null) {
-                trackDrawable.draw(canvas);
-            } else {
-                Insets insets = Insets.NONE;
-                thumbDrawable.copyBounds(padding);
-                padding.left += insets.left;
-                padding.right -= insets.right;
-                saveCount = canvas.save();
-                canvas.clipRect(padding, Op.DIFFERENCE);
-                trackDrawable.draw(canvas);
-                canvas.restoreToCount(saveCount);
+        if (getVisibility() == 0) {
+            int width = AndroidUtilities.m9dp(31.0f);
+            int thumb = AndroidUtilities.m9dp(20.0f);
+            int x = (getMeasuredWidth() - width) / 2;
+            int y = (getMeasuredHeight() - AndroidUtilities.m9dp(14.0f)) / 2;
+            int tx = (AndroidUtilities.m9dp(7.0f) + x) + ((int) (((float) AndroidUtilities.m9dp(17.0f)) * this.progress));
+            int ty = getMeasuredHeight() / 2;
+            int color1 = Theme.getColor(this.trackColorKey);
+            int color2 = Theme.getColor(this.trackCheckedColorKey);
+            int r1 = Color.red(color1);
+            int r2 = Color.red(color2);
+            int g1 = Color.green(color1);
+            int g2 = Color.green(color2);
+            int b1 = Color.blue(color1);
+            int b2 = Color.blue(color2);
+            int a1 = Color.alpha(color1);
+            int color = ((((((int) (((float) a1) + (((float) (Color.alpha(color2) - a1)) * this.progress))) & 255) << 24) | ((((int) (((float) r1) + (((float) (r2 - r1)) * this.progress))) & 255) << 16)) | ((((int) (((float) g1) + (((float) (g2 - g1)) * this.progress))) & 255) << 8)) | (((int) (((float) b1) + (((float) (b2 - b1)) * this.progress))) & 255);
+            this.paint.setColor(color);
+            this.paint2.setColor(color);
+            this.rectF.set((float) x, (float) y, (float) (x + width), (float) (AndroidUtilities.m9dp(14.0f) + y));
+            canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.m9dp(7.0f), (float) AndroidUtilities.m9dp(7.0f), this.paint);
+            canvas.drawCircle((float) tx, (float) ty, (float) AndroidUtilities.m9dp(10.0f), this.paint);
+            color1 = Theme.getColor(this.thumbColorKey);
+            color2 = Theme.getColor(this.thumbCheckedColorKey);
+            r1 = Color.red(color1);
+            r2 = Color.red(color2);
+            g1 = Color.green(color1);
+            g2 = Color.green(color2);
+            b1 = Color.blue(color1);
+            b2 = Color.blue(color2);
+            a1 = Color.alpha(color1);
+            int alpha = (int) (((float) a1) + (((float) (Color.alpha(color2) - a1)) * this.progress));
+            this.paint.setColor(((((alpha & 255) << 24) | ((((int) (((float) r1) + (((float) (r2 - r1)) * this.progress))) & 255) << 16)) | ((((int) (((float) g1) + (((float) (g2 - g1)) * this.progress))) & 255) << 8)) | (((int) (((float) b1) + (((float) (b2 - b1)) * this.progress))) & 255));
+            canvas.drawCircle((float) tx, (float) ty, (float) AndroidUtilities.m9dp(8.0f), this.paint);
+            if (this.drawIconType == 1) {
+                tx = (int) (((float) tx) - (((float) AndroidUtilities.m9dp(10.8f)) - (((float) AndroidUtilities.m9dp(1.3f)) * this.progress)));
+                ty = (int) (((float) ty) - (((float) AndroidUtilities.m9dp(8.5f)) - (((float) AndroidUtilities.m9dp(0.5f)) * this.progress)));
+                int startX2 = ((int) AndroidUtilities.dpf2(4.6f)) + tx;
+                int startY2 = (int) (AndroidUtilities.dpf2(9.5f) + ((float) ty));
+                int startX = ((int) AndroidUtilities.dpf2(7.5f)) + tx;
+                int startY = ((int) AndroidUtilities.dpf2(5.4f)) + ty;
+                int endX = startX + AndroidUtilities.m9dp(7.0f);
+                int endY = startY + AndroidUtilities.m9dp(7.0f);
+                Canvas canvas2 = canvas;
+                canvas2.drawLine((float) ((int) (((float) startX) + (((float) (startX2 - startX)) * this.progress))), (float) ((int) (((float) startY) + (((float) (startY2 - startY)) * this.progress))), (float) ((int) (((float) endX) + (((float) ((startX2 + AndroidUtilities.m9dp(2.0f)) - endX)) * this.progress))), (float) ((int) (((float) endY) + (((float) ((startY2 + AndroidUtilities.m9dp(2.0f)) - endY)) * this.progress))), this.paint2);
+                startX = ((int) AndroidUtilities.dpf2(7.5f)) + tx;
+                startY = ((int) AndroidUtilities.dpf2(12.5f)) + ty;
+                canvas2 = canvas;
+                canvas2.drawLine((float) startX, (float) startY, (float) (startX + AndroidUtilities.m9dp(7.0f)), (float) (startY - AndroidUtilities.m9dp(7.0f)), this.paint2);
+            } else if (this.drawIconType == 2 || this.iconAnimator != null) {
+                this.paint2.setAlpha((int) (255.0f * (1.0f - this.iconProgress)));
+                canvas.drawLine((float) tx, (float) ty, (float) tx, (float) (ty - AndroidUtilities.m9dp(5.0f)), this.paint2);
+                canvas.save();
+                canvas.rotate(-90.0f * this.iconProgress, (float) tx, (float) ty);
+                canvas.drawLine((float) tx, (float) ty, (float) (AndroidUtilities.m9dp(4.0f) + tx), (float) ty, this.paint2);
+                canvas.restore();
             }
-        }
-        saveCount = canvas.save();
-        if (thumbDrawable != null) {
-            thumbDrawable.draw(canvas);
-        }
-        canvas.restoreToCount(saveCount);
-    }
-
-    public int getCompoundPaddingLeft() {
-        if (LocaleController.isRTL) {
-            return super.getCompoundPaddingLeft() + this.mSwitchWidth;
-        }
-        return super.getCompoundPaddingLeft();
-    }
-
-    public int getCompoundPaddingRight() {
-        if (LocaleController.isRTL) {
-            return super.getCompoundPaddingRight();
-        }
-        return super.getCompoundPaddingRight() + this.mSwitchWidth;
-    }
-
-    private int getThumbOffset() {
-        float position;
-        if (LocaleController.isRTL) {
-            position = 1.0f - this.thumbPosition;
-        } else {
-            position = this.thumbPosition;
-        }
-        return (int) ((((float) getThumbScrollRange()) * position) + 0.5f);
-    }
-
-    private int getThumbScrollRange() {
-        if (this.mTrackDrawable == null) {
-            return 0;
-        }
-        Insets insets;
-        Rect padding = this.mTempRect;
-        this.mTrackDrawable.getPadding(padding);
-        if (this.mThumbDrawable != null) {
-            insets = Insets.NONE;
-        } else {
-            insets = Insets.NONE;
-        }
-        return ((((this.mSwitchWidth - this.mThumbWidth) - padding.left) - padding.right) - insets.left) - insets.right;
-    }
-
-    protected void drawableStateChanged() {
-        super.drawableStateChanged();
-        int[] myDrawableState = getDrawableState();
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setState(myDrawableState);
-        }
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setState(myDrawableState);
-        }
-        invalidate();
-    }
-
-    @SuppressLint({"NewApi"})
-    public void drawableHotspotChanged(float x, float y) {
-        super.drawableHotspotChanged(x, y);
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setHotspot(x, y);
-        }
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setHotspot(x, y);
-        }
-    }
-
-    protected boolean verifyDrawable(Drawable who) {
-        return super.verifyDrawable(who) || who == this.mThumbDrawable || who == this.mTrackDrawable;
-    }
-
-    public void jumpDrawablesToCurrentState() {
-        super.jumpDrawablesToCurrentState();
-        if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.jumpToCurrentState();
-        }
-        if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.jumpToCurrentState();
-        }
-        if (this.mPositionAnimator != null && this.mPositionAnimator.isRunning()) {
-            this.mPositionAnimator.end();
-            this.mPositionAnimator = null;
         }
     }
 }

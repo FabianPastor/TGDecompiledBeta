@@ -14,7 +14,6 @@ import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.SeekBarView;
-import org.telegram.p005ui.Components.SeekBarView.SeekBarViewDelegate;
 
 /* renamed from: org.telegram.ui.Cells.MaxFileSizeCell */
 public class MaxFileSizeCell extends FrameLayout {
@@ -22,25 +21,6 @@ public class MaxFileSizeCell extends FrameLayout {
     private SeekBarView seekBarView;
     private SimpleTextView sizeTextView;
     private TextView textView;
-
-    /* renamed from: org.telegram.ui.Cells.MaxFileSizeCell$2 */
-    class C08092 implements SeekBarViewDelegate {
-        C08092() {
-        }
-
-        public void onSeekBarDrag(float progress) {
-            int size;
-            if (MaxFileSizeCell.this.maxSize <= 10485760) {
-                size = (int) (((float) MaxFileSizeCell.this.maxSize) * progress);
-            } else if (progress <= 0.8f) {
-                size = (int) (((float) 104857600) * (progress / 0.8f));
-            } else {
-                size = (int) (((float) 104857600) + ((((float) (MaxFileSizeCell.this.maxSize - ((long) 104857600))) * (progress - 0.8f)) / 0.2f));
-            }
-            MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize((long) size)));
-            MaxFileSizeCell.this.didChangedSizeValue(size);
-        }
-    }
 
     public MaxFileSizeCell(Context context) {
         int i;
@@ -62,7 +42,7 @@ public class MaxFileSizeCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 64.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 64.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 69.0f : 21.0f, 13.0f, LocaleController.isRTL ? 21.0f : 69.0f, 0.0f));
         this.sizeTextView = new SimpleTextView(context);
         this.sizeTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText6));
         this.sizeTextView.setTextSize(16);
@@ -77,7 +57,7 @@ public class MaxFileSizeCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i3 | 48, LocaleController.isRTL ? 17.0f : 64.0f, 13.0f, LocaleController.isRTL ? 64.0f : 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i3 | 48, LocaleController.isRTL ? 21.0f : 69.0f, 13.0f, LocaleController.isRTL ? 69.0f : 21.0f, 0.0f));
         this.seekBarView = new SeekBarView(context) {
             public boolean onTouchEvent(MotionEvent event) {
                 if (event.getAction() == 0) {
@@ -87,15 +67,28 @@ public class MaxFileSizeCell extends FrameLayout {
             }
         };
         this.seekBarView.setReportChanges(true);
-        this.seekBarView.setDelegate(new C08092());
+        this.seekBarView.setDelegate(new MaxFileSizeCell$$Lambda$0(this));
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 4.0f, 40.0f, 4.0f, 0.0f));
+    }
+
+    final /* synthetic */ void lambda$new$0$MaxFileSizeCell(float progress) {
+        int size;
+        if (this.maxSize <= 10485760) {
+            size = (int) (((float) this.maxSize) * progress);
+        } else if (progress <= 0.8f) {
+            size = (int) (((float) 104857600) * (progress / 0.8f));
+        } else {
+            size = (int) (((float) 104857600) + ((((float) (this.maxSize - ((long) 104857600))) * (progress - 0.8f)) / 0.2f));
+        }
+        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize((long) size)));
+        didChangedSizeValue(size);
     }
 
     protected void didChangedSizeValue(int value) {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(80.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(80.0f), NUM));
     }
 
     public void setSize(long size, long max) {

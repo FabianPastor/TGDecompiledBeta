@@ -1,18 +1,16 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.TLObject;
+import org.telegram.messenger.MessagesStorage.IntCallback;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$21 */
-final /* synthetic */ class ProfileActivity$$Lambda$21 implements Runnable {
+final /* synthetic */ class ProfileActivity$$Lambda$21 implements IntCallback {
     private final ProfileActivity arg$1;
-    private final TLObject arg$2;
 
-    ProfileActivity$$Lambda$21(ProfileActivity profileActivity, TLObject tLObject) {
+    ProfileActivity$$Lambda$21(ProfileActivity profileActivity) {
         this.arg$1 = profileActivity;
-        this.arg$2 = tLObject;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$9$ProfileActivity(this.arg$2);
+    public void run(int i) {
+        this.arg$1.lambda$null$1$ProfileActivity(i);
     }
 }

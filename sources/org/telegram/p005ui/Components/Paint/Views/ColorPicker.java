@@ -48,8 +48,8 @@ public class ColorPicker extends FrameLayout {
     private float weight = 0.27f;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.ColorPicker$1 */
-    class C11711 implements OnClickListener {
-        C11711() {
+    class C07561 implements OnClickListener {
+        C07561() {
         }
 
         public void onClick(View v) {
@@ -60,8 +60,8 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.ColorPicker$2 */
-    class C11722 implements OnClickListener {
-        C11722() {
+    class C07572 implements OnClickListener {
+        C07572() {
         }
 
         public void onClick(View v) {
@@ -90,17 +90,17 @@ public class ColorPicker extends FrameLayout {
         this.shadowDrawable = getResources().getDrawable(R.drawable.knob_shadow);
         this.backgroundPaint.setColor(-1);
         this.swatchStrokePaint.setStyle(Style.STROKE);
-        this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+        this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
         this.settingsButton = new ImageView(context);
         this.settingsButton.setScaleType(ScaleType.CENTER);
         this.settingsButton.setImageResource(R.drawable.photo_paint_brush);
         addView(this.settingsButton, LayoutHelper.createFrame(60, 52.0f));
-        this.settingsButton.setOnClickListener(new C11711());
+        this.settingsButton.setOnClickListener(new C07561());
         this.undoButton = new ImageView(context);
         this.undoButton.setScaleType(ScaleType.CENTER);
         this.undoButton.setImageResource(R.drawable.photo_undo);
         addView(this.undoButton, LayoutHelper.createFrame(60, 52.0f));
-        this.undoButton.setOnClickListener(new C11722());
+        this.undoButton.setOnClickListener(new C07572());
         this.location = context.getSharedPreferences("paint", 0).getFloat("last_color_location", 1.0f);
         setLocation(this.location);
     }
@@ -187,7 +187,7 @@ public class ColorPicker extends FrameLayout {
         }
         float x = event.getX() - this.rectF.left;
         float y = event.getY() - this.rectF.top;
-        if (!this.interacting && y < ((float) (-AndroidUtilities.m10dp(10.0f)))) {
+        if (!this.interacting && y < ((float) (-AndroidUtilities.m9dp(10.0f)))) {
             return false;
         }
         int action = event.getActionMasked();
@@ -212,9 +212,9 @@ public class ColorPicker extends FrameLayout {
             }
             setLocation(Math.max(0.0f, Math.min(1.0f, x / this.rectF.width())));
             setDragging(true, true);
-            if (y < ((float) (-AndroidUtilities.m10dp(10.0f)))) {
+            if (y < ((float) (-AndroidUtilities.m9dp(10.0f)))) {
                 this.changingWeight = true;
-                setWeight(Math.max(0.0f, Math.min(1.0f, ((-y) - ((float) AndroidUtilities.m10dp(10.0f))) / ((float) AndroidUtilities.m10dp(190.0f)))));
+                setWeight(Math.max(0.0f, Math.min(1.0f, ((-y) - ((float) AndroidUtilities.m9dp(10.0f))) / ((float) AndroidUtilities.m9dp(190.0f)))));
             }
             if (this.delegate != null) {
                 this.delegate.onColorValueChanged();
@@ -227,24 +227,24 @@ public class ColorPicker extends FrameLayout {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int width = right - left;
         int height = bottom - top;
-        this.gradientPaint.setShader(new LinearGradient((float) AndroidUtilities.m10dp(56.0f), 0.0f, (float) (width - AndroidUtilities.m10dp(56.0f)), 0.0f, COLORS, LOCATIONS, TileMode.REPEAT));
-        int y = height - AndroidUtilities.m10dp(32.0f);
-        this.rectF.set((float) AndroidUtilities.m10dp(56.0f), (float) y, (float) (width - AndroidUtilities.m10dp(56.0f)), (float) (AndroidUtilities.m10dp(12.0f) + y));
-        this.settingsButton.layout(width - this.settingsButton.getMeasuredWidth(), height - AndroidUtilities.m10dp(52.0f), width, height);
-        this.undoButton.layout(0, height - AndroidUtilities.m10dp(52.0f), this.settingsButton.getMeasuredWidth(), height);
+        this.gradientPaint.setShader(new LinearGradient((float) AndroidUtilities.m9dp(56.0f), 0.0f, (float) (width - AndroidUtilities.m9dp(56.0f)), 0.0f, COLORS, LOCATIONS, TileMode.REPEAT));
+        int y = height - AndroidUtilities.m9dp(32.0f);
+        this.rectF.set((float) AndroidUtilities.m9dp(56.0f), (float) y, (float) (width - AndroidUtilities.m9dp(56.0f)), (float) (AndroidUtilities.m9dp(12.0f) + y));
+        this.settingsButton.layout(width - this.settingsButton.getMeasuredWidth(), height - AndroidUtilities.m9dp(52.0f), width, height);
+        this.undoButton.layout(0, height - AndroidUtilities.m9dp(52.0f), this.settingsButton.getMeasuredWidth(), height);
     }
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.m10dp(6.0f), (float) AndroidUtilities.m10dp(6.0f), this.gradientPaint);
+        canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.m9dp(6.0f), (float) AndroidUtilities.m9dp(6.0f), this.gradientPaint);
         int cx = (int) (this.rectF.left + (this.rectF.width() * this.location));
-        int cy = (int) (((this.draggingFactor * ((float) (-AndroidUtilities.m10dp(70.0f)))) + this.rectF.centerY()) - (this.changingWeight ? this.weight * ((float) AndroidUtilities.m10dp(190.0f)) : 0.0f));
-        int side = (int) (((float) AndroidUtilities.m10dp(24.0f)) * ((this.draggingFactor + 1.0f) * 0.5f));
+        int cy = (int) (((this.draggingFactor * ((float) (-AndroidUtilities.m9dp(70.0f)))) + this.rectF.centerY()) - (this.changingWeight ? this.weight * ((float) AndroidUtilities.m9dp(190.0f)) : 0.0f));
+        int side = (int) (((float) AndroidUtilities.m9dp(24.0f)) * ((this.draggingFactor + 1.0f) * 0.5f));
         this.shadowDrawable.setBounds(cx - side, cy - side, cx + side, cy + side);
         this.shadowDrawable.draw(canvas);
-        float swatchRadius = (((float) ((int) Math.floor((double) (((float) AndroidUtilities.m10dp(4.0f)) + (((float) (AndroidUtilities.m10dp(19.0f) - AndroidUtilities.m10dp(4.0f))) * this.weight))))) * (this.draggingFactor + 1.0f)) / 2.0f;
-        canvas.drawCircle((float) cx, (float) cy, ((float) (AndroidUtilities.m10dp(22.0f) / 2)) * (this.draggingFactor + 1.0f), this.backgroundPaint);
+        float swatchRadius = (((float) ((int) Math.floor((double) (((float) AndroidUtilities.m9dp(4.0f)) + (((float) (AndroidUtilities.m9dp(19.0f) - AndroidUtilities.m9dp(4.0f))) * this.weight))))) * (this.draggingFactor + 1.0f)) / 2.0f;
+        canvas.drawCircle((float) cx, (float) cy, ((float) (AndroidUtilities.m9dp(22.0f) / 2)) * (this.draggingFactor + 1.0f), this.backgroundPaint);
         canvas.drawCircle((float) cx, (float) cy, swatchRadius, this.swatchPaint);
-        canvas.drawCircle((float) cx, (float) cy, swatchRadius - ((float) AndroidUtilities.m10dp(0.5f)), this.swatchStrokePaint);
+        canvas.drawCircle((float) cx, (float) cy, swatchRadius - ((float) AndroidUtilities.m9dp(0.5f)), this.swatchStrokePaint);
     }
 
     private void setDraggingFactor(float factor) {

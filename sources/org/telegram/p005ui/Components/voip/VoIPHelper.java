@@ -99,12 +99,12 @@ public class VoIPHelper {
     private static void initiateCall(final User user, final Activity activity) {
         if (activity != null && user != null) {
             if (VoIPService.getSharedInstance() != null) {
-                if (VoIPService.getSharedInstance().getUser().f177id != user.f177id) {
+                if (VoIPService.getSharedInstance().getUser().f176id != user.f176id) {
                     new Builder((Context) activity).setTitle(LocaleController.getString("VoipOngoingAlertTitle", R.string.VoipOngoingAlertTitle)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", R.string.VoipOngoingAlert, ContactsController.formatName(callUser.first_name, callUser.last_name), ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.Components.voip.VoIPHelper$2$1 */
-                        class C13561 implements Runnable {
-                            C13561() {
+                        class C09071 implements Runnable {
+                            C09071() {
                             }
 
                             public void run() {
@@ -114,7 +114,7 @@ public class VoIPHelper {
 
                         public void onClick(DialogInterface dialog, int which) {
                             if (VoIPService.getSharedInstance() != null) {
-                                VoIPService.getSharedInstance().hangUp(new C13561());
+                                VoIPService.getSharedInstance().hangUp(new C09071());
                             } else {
                                 VoIPHelper.doInitiateCall(user, activity);
                             }
@@ -133,14 +133,14 @@ public class VoIPHelper {
         if (activity != null && user != null && System.currentTimeMillis() - lastCallTime >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
             lastCallTime = System.currentTimeMillis();
             Intent intent = new Intent(activity, VoIPService.class);
-            intent.putExtra("user_id", user.f177id);
+            intent.putExtra("user_id", user.f176id);
             intent.putExtra("is_outgoing", true);
             intent.putExtra("start_incall_activity", true);
             intent.putExtra("account", UserConfig.selectedAccount);
             try {
                 activity.startService(intent);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -204,7 +204,7 @@ public class VoIPHelper {
         final File log = VoIPHelper.getLogFile(callID);
         View linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
-        int pad = AndroidUtilities.m10dp(16.0f);
+        int pad = AndroidUtilities.m9dp(16.0f);
         linearLayout.setPadding(pad, pad, pad, 0);
         linearLayout = new TextView(context);
         linearLayout.setTextSize(2, 16.0f);
@@ -220,14 +220,14 @@ public class VoIPHelper {
         linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         linearLayout.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
         linearLayout.setBackgroundDrawable(Theme.createEditTextDrawable(context, true));
-        linearLayout.setPadding(0, AndroidUtilities.m10dp(4.0f), 0, AndroidUtilities.m10dp(4.0f));
+        linearLayout.setPadding(0, AndroidUtilities.m9dp(4.0f), 0, AndroidUtilities.m9dp(4.0f));
         linearLayout.setTextSize(18.0f);
         linearLayout.setVisibility(8);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
         final boolean[] includeLogs = new boolean[]{true};
         linearLayout = new CheckBoxCell(context, 1);
         final View view = linearLayout;
-        View.OnClickListener c13605 = new View.OnClickListener() {
+        View.OnClickListener c09115 = new View.OnClickListener() {
             public void onClick(View v) {
                 boolean z;
                 boolean[] zArr = includeLogs;
@@ -242,14 +242,14 @@ public class VoIPHelper {
         };
         linearLayout.setText(LocaleController.getString("CallReportIncludeLogs", R.string.CallReportIncludeLogs), null, true, false);
         linearLayout.setClipToPadding(false);
-        linearLayout.setOnClickListener(c13605);
+        linearLayout.setOnClickListener(c09115);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
         linearLayout = new TextView(context);
         linearLayout.setTextSize(2, 14.0f);
         linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
         linearLayout.setText(LocaleController.getString("CallReportLogsExplain", R.string.CallReportLogsExplain));
-        linearLayout.setPadding(AndroidUtilities.m10dp(8.0f), 0, AndroidUtilities.m10dp(8.0f), 0);
-        linearLayout.setOnClickListener(c13605);
+        linearLayout.setPadding(AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f), 0);
+        linearLayout.setOnClickListener(c09115);
         linearLayout.addView(linearLayout);
         linearLayout.setVisibility(8);
         linearLayout.setVisibility(8);
@@ -275,15 +275,15 @@ public class VoIPHelper {
                 }
                 req.peer = new TL_inputPhoneCall();
                 req.peer.access_hash = j;
-                req.peer.f138id = j2;
+                req.peer.f136id = j2;
                 ConnectionsManager.getInstance(i).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                         if (response instanceof TL_updates) {
                             MessagesController.getInstance(currentAccount).processUpdates((TL_updates) response, false);
-                            if (includeLogs[0] && log.exists() && req.rating < 4) {
-                                SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, "text/plain", 4244000, null, null, null);
-                                Toast.makeText(context2, LocaleController.getString("CallReportSent", R.string.CallReportSent), 1).show();
-                            }
+                        }
+                        if (includeLogs[0] && log.exists() && req.rating < 4) {
+                            SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, "text/plain", 4244000, null, null, null);
+                            Toast.makeText(context2, LocaleController.getString("CallReportSent", R.string.CallReportSent), 1).show();
                         }
                     }
                 });
@@ -297,7 +297,7 @@ public class VoIPHelper {
         }).create();
         if (BuildVars.DEBUG_VERSION && log.exists()) {
             final Context context3 = context;
-            OnClickListener c13648 = new OnClickListener() {
+            OnClickListener c09158 = new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(context3, LaunchActivity.class);
                     intent.setAction("android.intent.action.SEND");
@@ -305,7 +305,7 @@ public class VoIPHelper {
                     context3.startActivity(intent);
                 }
             };
-            alert.setNeutralButton("Send log", c13648);
+            alert.setNeutralButton("Send log", c09158);
         }
         final AlertDialog alertDialog = alert;
         alert.setOnShowListener(new OnShowListener() {
@@ -365,17 +365,6 @@ public class VoIPHelper {
             }
         }
         return new File(VoIPHelper.getLogsDir(), callID + ".log");
-    }
-
-    public static void upgradeP2pSetting(int account) {
-        SharedPreferences prefs = MessagesController.getMainSettings(account);
-        if (prefs.contains("calls_p2p")) {
-            Editor e = prefs.edit();
-            if (!prefs.getBoolean("calls_p2p", true)) {
-                e.putInt("calls_p2p_new", 2);
-            }
-            e.remove("calls_p2p").commit();
-        }
     }
 
     public static void showCallDebugSettings(Context context) {

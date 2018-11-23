@@ -27,7 +27,7 @@ public class BackDrawable extends Drawable {
     private int rotatedColor = -9079435;
 
     public BackDrawable(boolean close) {
-        this.paint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.alwaysClose = close;
     }
 
@@ -105,11 +105,11 @@ public class BackDrawable extends Drawable {
         } else {
             canvas.rotate(((float) (this.reverseAngle ? -225 : TsExtractor.TS_STREAM_TYPE_E_AC3)) * this.currentRotation);
         }
-        canvas.drawLine(((float) (-AndroidUtilities.m10dp(7.0f))) - (((float) AndroidUtilities.m10dp(1.0f)) * rotation), 0.0f, (float) AndroidUtilities.m10dp(8.0f), 0.0f, this.paint);
-        float startYDiff = (float) (-AndroidUtilities.m10dp(0.5f));
-        float endYDiff = ((float) AndroidUtilities.m10dp(7.0f)) + (((float) AndroidUtilities.m10dp(1.0f)) * rotation);
-        float startXDiff = ((float) (-AndroidUtilities.m10dp(7.0f))) + (((float) AndroidUtilities.m10dp(7.0f)) * rotation);
-        float endXDiff = ((float) AndroidUtilities.m10dp(0.5f)) - (((float) AndroidUtilities.m10dp(0.5f)) * rotation);
+        canvas.drawLine(((float) (-AndroidUtilities.m9dp(7.0f))) - (((float) AndroidUtilities.m9dp(1.0f)) * rotation), 0.0f, (float) AndroidUtilities.m9dp(8.0f), 0.0f, this.paint);
+        float startYDiff = (float) (-AndroidUtilities.m9dp(0.5f));
+        float endYDiff = ((float) AndroidUtilities.m9dp(7.0f)) + (((float) AndroidUtilities.m9dp(1.0f)) * rotation);
+        float startXDiff = ((float) (-AndroidUtilities.m9dp(7.0f))) + (((float) AndroidUtilities.m9dp(7.0f)) * rotation);
+        float endXDiff = ((float) AndroidUtilities.m9dp(0.5f)) - (((float) AndroidUtilities.m9dp(0.5f)) * rotation);
         canvas.drawLine(startXDiff, -startYDiff, endXDiff, -endYDiff, this.paint);
         canvas.drawLine(startXDiff, startYDiff, endXDiff, endYDiff, this.paint);
         canvas.restore();
@@ -126,10 +126,10 @@ public class BackDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(24.0f);
+        return AndroidUtilities.m9dp(24.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(24.0f);
+        return AndroidUtilities.m9dp(24.0f);
     }
 }

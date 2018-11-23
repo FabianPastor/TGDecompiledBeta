@@ -15,6 +15,6 @@ final /* synthetic */ class NotificationsController$$Lambda$5 implements Runnabl
     }
 
     public void run() {
-        this.arg$1.mo6840xbc86816e(this.arg$2, this.arg$3);
+        this.arg$1.mo7077xbc86816e(this.arg$2, this.arg$3);
     }
 }

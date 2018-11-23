@@ -9,8 +9,6 @@ import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -19,6 +17,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.BackupImageView;
@@ -31,39 +30,13 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 
 /* renamed from: org.telegram.ui.Cells.SharedPhotoVideoCell */
 public class SharedPhotoVideoCell extends FrameLayout {
+    private int currentAccount = UserConfig.selectedAccount;
     private SharedPhotoVideoCellDelegate delegate;
     private int[] indeces = new int[6];
     private boolean isFirst;
     private int itemsCount;
     private MessageObject[] messageObjects = new MessageObject[6];
     private PhotoVideoView[] photoVideoViews = new PhotoVideoView[6];
-
-    /* renamed from: org.telegram.ui.Cells.SharedPhotoVideoCell$1 */
-    class C08231 implements OnClickListener {
-        C08231() {
-        }
-
-        public void onClick(View v) {
-            if (SharedPhotoVideoCell.this.delegate != null) {
-                int a = ((Integer) v.getTag()).intValue();
-                SharedPhotoVideoCell.this.delegate.didClickItem(SharedPhotoVideoCell.this, SharedPhotoVideoCell.this.indeces[a], SharedPhotoVideoCell.this.messageObjects[a], a);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Cells.SharedPhotoVideoCell$2 */
-    class C08242 implements OnLongClickListener {
-        C08242() {
-        }
-
-        public boolean onLongClick(View v) {
-            if (SharedPhotoVideoCell.this.delegate == null) {
-                return false;
-            }
-            int a = ((Integer) v.getTag()).intValue();
-            return SharedPhotoVideoCell.this.delegate.didLongClickItem(SharedPhotoVideoCell.this, SharedPhotoVideoCell.this.indeces[a], SharedPhotoVideoCell.this.messageObjects[a], a);
-        }
-    }
 
     /* renamed from: org.telegram.ui.Cells.SharedPhotoVideoCell$PhotoVideoView */
     private class PhotoVideoView extends FrameLayout {
@@ -85,7 +58,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             this.container.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
             this.videoInfoContainer = new FrameLayout(context);
             this.videoInfoContainer.setBackgroundResource(R.drawable.phototime);
-            this.videoInfoContainer.setPadding(AndroidUtilities.m10dp(3.0f), 0, AndroidUtilities.m10dp(3.0f), 0);
+            this.videoInfoContainer.setPadding(AndroidUtilities.m9dp(3.0f), 0, AndroidUtilities.m9dp(3.0f), 0);
             this.container.addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
             ImageView imageView1 = new ImageView(context);
             imageView1.setImageResource(R.drawable.ic_video);
@@ -205,9 +178,24 @@ public class SharedPhotoVideoCell extends FrameLayout {
             addView(this.photoVideoViews[a]);
             this.photoVideoViews[a].setVisibility(4);
             this.photoVideoViews[a].setTag(Integer.valueOf(a));
-            this.photoVideoViews[a].setOnClickListener(new C08231());
-            this.photoVideoViews[a].setOnLongClickListener(new C08242());
+            this.photoVideoViews[a].setOnClickListener(new SharedPhotoVideoCell$$Lambda$0(this));
+            this.photoVideoViews[a].setOnLongClickListener(new SharedPhotoVideoCell$$Lambda$1(this));
         }
+    }
+
+    final /* synthetic */ void lambda$new$0$SharedPhotoVideoCell(View v) {
+        if (this.delegate != null) {
+            int a1 = ((Integer) v.getTag()).intValue();
+            this.delegate.didClickItem(this, this.indeces[a1], this.messageObjects[a1], a1);
+        }
+    }
+
+    final /* synthetic */ boolean lambda$new$1$SharedPhotoVideoCell(View v) {
+        if (this.delegate == null) {
+            return false;
+        }
+        int a12 = ((Integer) v.getTag()).intValue();
+        return this.delegate.didLongClickItem(this, this.indeces[a12], this.messageObjects[a12], a12);
     }
 
     public void updateCheckboxColor() {
@@ -258,7 +246,6 @@ public class SharedPhotoVideoCell extends FrameLayout {
         if (messageObject != null) {
             this.photoVideoViews[a].setVisibility(0);
             PhotoVideoView photoVideoView = this.photoVideoViews[a];
-            photoVideoView.imageView.getImageReceiver().setParentMessageObject(messageObject);
             photoVideoView.imageView.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(messageObject), false);
             if (messageObject.isVideo()) {
                 photoVideoView.videoInfoContainer.setVisibility(0);
@@ -273,7 +260,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 int seconds = duration - ((duration / 60) * 60);
                 photoVideoView.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)}));
                 if (messageObject.getDocument().thumb != null) {
-                    photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, messageObject.getDocument().thumb.location, "b", null, 0);
+                    photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, messageObject.getDocument().thumb.location, "b", null, 0, messageObject);
                     return;
                 } else {
                     photoVideoView.imageView.setImageResource(R.drawable.photo_placeholder_in);
@@ -285,7 +272,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 return;
             } else {
                 photoVideoView.videoInfoContainer.setVisibility(4);
-                photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80).location, "b", null, 0);
+                photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80).location, "b", null, 0, messageObject);
                 return;
             }
         }
@@ -298,21 +285,21 @@ public class SharedPhotoVideoCell extends FrameLayout {
         int itemWidth;
         int i = 0;
         if (AndroidUtilities.isTablet()) {
-            itemWidth = (AndroidUtilities.m10dp(490.0f) - ((this.itemsCount + 1) * AndroidUtilities.m10dp(4.0f))) / this.itemsCount;
+            itemWidth = (AndroidUtilities.m9dp(490.0f) - ((this.itemsCount + 1) * AndroidUtilities.m9dp(4.0f))) / this.itemsCount;
         } else {
-            itemWidth = (AndroidUtilities.displaySize.x - ((this.itemsCount + 1) * AndroidUtilities.m10dp(4.0f))) / this.itemsCount;
+            itemWidth = (AndroidUtilities.displaySize.x - ((this.itemsCount + 1) * AndroidUtilities.m9dp(4.0f))) / this.itemsCount;
         }
         for (int a = 0; a < this.itemsCount; a++) {
             LayoutParams layoutParams = (LayoutParams) this.photoVideoViews[a].getLayoutParams();
-            layoutParams.topMargin = this.isFirst ? 0 : AndroidUtilities.m10dp(4.0f);
-            layoutParams.leftMargin = ((AndroidUtilities.m10dp(4.0f) + itemWidth) * a) + AndroidUtilities.m10dp(4.0f);
+            layoutParams.topMargin = this.isFirst ? 0 : AndroidUtilities.m9dp(4.0f);
+            layoutParams.leftMargin = ((AndroidUtilities.m9dp(4.0f) + itemWidth) * a) + AndroidUtilities.m9dp(4.0f);
             layoutParams.width = itemWidth;
             layoutParams.height = itemWidth;
             layoutParams.gravity = 51;
             this.photoVideoViews[a].setLayoutParams(layoutParams);
         }
         if (!this.isFirst) {
-            i = AndroidUtilities.m10dp(4.0f);
+            i = AndroidUtilities.m9dp(4.0f);
         }
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(i + itemWidth, NUM));
     }

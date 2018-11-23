@@ -43,14 +43,14 @@ public class SearchAdapter extends SelectionAdapter {
     private Context mContext;
     private boolean onlyMutual;
     private SearchAdapterHelper searchAdapterHelper;
-    private ArrayList<User> searchResult = new ArrayList();
+    private ArrayList<TLObject> searchResult = new ArrayList();
     private ArrayList<CharSequence> searchResultNames = new ArrayList();
     private Timer searchTimer;
     private boolean useUserCell;
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapter$1 */
-    class C18721 implements SearchAdapterHelperDelegate {
-        C18721() {
+    class C12501 implements SearchAdapterHelperDelegate {
+        C12501() {
         }
 
         public void onDataSetChanged() {
@@ -58,6 +58,10 @@ public class SearchAdapter extends SelectionAdapter {
         }
 
         public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+        }
+
+        public SparseArray<User> getExcludeUsers() {
+            return SearchAdapter.this.ignoreUsers;
         }
     }
 
@@ -70,7 +74,7 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowBots = bots;
         this.channelId = searchChannelId;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C18721());
+        this.searchAdapterHelper.setDelegate(new C12501());
     }
 
     public void setCheckedMap(SparseArray<?> map) {
@@ -87,7 +91,7 @@ public class SearchAdapter extends SelectionAdapter {
                 this.searchTimer.cancel();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (query == null) {
             this.searchResult.clear();
@@ -105,7 +109,7 @@ public class SearchAdapter extends SelectionAdapter {
                     SearchAdapter.this.searchTimer.cancel();
                     SearchAdapter.this.searchTimer = null;
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 SearchAdapter.this.processSearch(query);
             }
@@ -139,11 +143,12 @@ public class SearchAdapter extends SelectionAdapter {
         if (search2 != null) {
             search[1] = search2;
         }
-        ArrayList<User> resultArray = new ArrayList();
+        ArrayList<TLObject> resultArray = new ArrayList();
         ArrayList<CharSequence> resultArrayNames = new ArrayList();
         for (int a = 0; a < contactsCopy.size(); a++) {
-            User user = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
-            if (user.f177id != UserConfig.getInstance(currentAccount).getClientUserId() && (!this.onlyMutual || user.mutual_contact)) {
+            TL_contact contact = (TL_contact) contactsCopy.get(a);
+            User user = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(contact.user_id));
+            if (user.f176id != UserConfig.getInstance(currentAccount).getClientUserId() && ((!this.onlyMutual || user.mutual_contact) && (this.ignoreUsers == null || this.ignoreUsers.indexOfKey(contact.user_id) < 0))) {
                 String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                 String tName = LocaleController.getInstance().getTranslitString(name);
                 if (name.equals(tName)) {
@@ -175,18 +180,19 @@ public class SearchAdapter extends SelectionAdapter {
         updateSearchResults(resultArray, resultArrayNames);
     }
 
-    private void updateSearchResults(ArrayList<User> users, ArrayList<CharSequence> names) {
+    private void updateSearchResults(ArrayList<TLObject> users, ArrayList<CharSequence> names) {
         AndroidUtilities.runOnUIThread(new SearchAdapter$$Lambda$1(this, users, names));
     }
 
     final /* synthetic */ void lambda$updateSearchResults$2$SearchAdapter(ArrayList users, ArrayList names) {
         this.searchResult = users;
         this.searchResultNames = names;
+        this.searchAdapterHelper.mergeResults(users);
         notifyDataSetChanged();
     }
 
     public boolean isEnabled(ViewHolder holder) {
-        return holder.getAdapterPosition() != this.searchResult.size();
+        return holder.getItemViewType() == 0;
     }
 
     public int getItemCount() {
@@ -249,7 +255,7 @@ public class SearchAdapter extends SelectionAdapter {
                 String un = null;
                 if (object instanceof User) {
                     un = ((User) object).username;
-                    id = ((User) object).f177id;
+                    id = ((User) object).f176id;
                 } else if (object instanceof Chat) {
                     un = ((Chat) object).username;
                     id = ((Chat) object).f78id;
@@ -285,7 +291,7 @@ public class SearchAdapter extends SelectionAdapter {
                         username2 = spannableStringBuilder;
                     } catch (Throwable e) {
                         username2 = un;
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
                 boolean z;

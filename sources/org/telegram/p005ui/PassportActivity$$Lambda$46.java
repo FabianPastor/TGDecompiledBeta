@@ -1,22 +1,17 @@
 package org.telegram.p005ui;
 
-import java.util.ArrayList;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$46 */
-final /* synthetic */ class PassportActivity$$Lambda$46 implements Runnable {
+final /* synthetic */ class PassportActivity$$Lambda$46 implements OnClickListener {
     private final PassportActivity arg$1;
-    private final ArrayList arg$2;
-    private final int arg$3;
-    private final boolean arg$4;
 
-    PassportActivity$$Lambda$46(PassportActivity passportActivity, ArrayList arrayList, int i, boolean z) {
+    PassportActivity$$Lambda$46(PassportActivity passportActivity) {
         this.arg$1 = passportActivity;
-        this.arg$2 = arrayList;
-        this.arg$3 = i;
-        this.arg$4 = z;
     }
 
-    public void run() {
-        this.arg$1.lambda$processSelectedFiles$72$PassportActivity(this.arg$2, this.arg$3, this.arg$4);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$checkDiscard$70$PassportActivity(dialogInterface, i);
     }
 }

@@ -1,20 +1,21 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.tgnet.TLRPC.TL_auth_passwordRecovery;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$72 */
-final /* synthetic */ class PassportActivity$$Lambda$72 implements OnClickListener {
+final /* synthetic */ class PassportActivity$$Lambda$72 implements Runnable {
     private final PassportActivity arg$1;
-    private final TL_auth_passwordRecovery arg$2;
+    private final TL_error arg$2;
+    private final TLObject arg$3;
 
-    PassportActivity$$Lambda$72(PassportActivity passportActivity, TL_auth_passwordRecovery tL_auth_passwordRecovery) {
+    PassportActivity$$Lambda$72(PassportActivity passportActivity, TL_error tL_error, TLObject tLObject) {
         this.arg$1 = passportActivity;
-        this.arg$2 = tL_auth_passwordRecovery;
+        this.arg$2 = tL_error;
+        this.arg$3 = tLObject;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$8$PassportActivity(this.arg$2, dialogInterface, i);
+    public void run() {
+        this.arg$1.lambda$null$9$PassportActivity(this.arg$2, this.arg$3);
     }
 }

@@ -1,13 +1,13 @@
 package org.telegram.p005ui.ActionBar;
 
-import org.telegram.p005ui.ActionBar.BottomSheet.C06736;
+import org.telegram.p005ui.ActionBar.BottomSheet.C04306;
 
 /* renamed from: org.telegram.ui.ActionBar.BottomSheet$6$$Lambda$0 */
 final /* synthetic */ class BottomSheet$6$$Lambda$0 implements Runnable {
-    private final C06736 arg$1;
+    private final C04306 arg$1;
 
-    BottomSheet$6$$Lambda$0(C06736 c06736) {
-        this.arg$1 = c06736;
+    BottomSheet$6$$Lambda$0(C04306 c04306) {
+        this.arg$1 = c04306;
     }
 
     public void run() {

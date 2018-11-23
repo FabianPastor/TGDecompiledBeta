@@ -15,13 +15,13 @@ public class MapPlaceholderDrawable extends Drawable {
         this.paint.setColor(-2172970);
         this.linePaint = new Paint();
         this.linePaint.setColor(-3752002);
-        this.linePaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+        this.linePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
     }
 
     public void draw(Canvas canvas) {
         int a;
         canvas.drawRect(getBounds(), this.paint);
-        int gap = AndroidUtilities.m10dp(9.0f);
+        int gap = AndroidUtilities.m9dp(9.0f);
         int xcount = getBounds().width() / gap;
         int ycount = getBounds().height() / gap;
         int x = getBounds().left;

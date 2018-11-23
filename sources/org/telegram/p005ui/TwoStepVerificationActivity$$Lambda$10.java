@@ -1,18 +1,22 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_account_updatePasswordSettings;
 
 /* renamed from: org.telegram.ui.TwoStepVerificationActivity$$Lambda$10 */
-final /* synthetic */ class TwoStepVerificationActivity$$Lambda$10 implements RequestDelegate {
+final /* synthetic */ class TwoStepVerificationActivity$$Lambda$10 implements Runnable {
     private final TwoStepVerificationActivity arg$1;
+    private final TL_account_updatePasswordSettings arg$2;
+    private final boolean arg$3;
+    private final String arg$4;
 
-    TwoStepVerificationActivity$$Lambda$10(TwoStepVerificationActivity twoStepVerificationActivity) {
+    TwoStepVerificationActivity$$Lambda$10(TwoStepVerificationActivity twoStepVerificationActivity, TL_account_updatePasswordSettings tL_account_updatePasswordSettings, boolean z, String str) {
         this.arg$1 = twoStepVerificationActivity;
+        this.arg$2 = tL_account_updatePasswordSettings;
+        this.arg$3 = z;
+        this.arg$4 = str;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$processDone$31$TwoStepVerificationActivity(tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$setNewPassword$25$TwoStepVerificationActivity(this.arg$2, this.arg$3, this.arg$4);
     }
 }

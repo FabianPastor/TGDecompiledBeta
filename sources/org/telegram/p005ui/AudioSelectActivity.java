@@ -27,7 +27,7 @@ import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.AudioCell;
@@ -65,18 +65,18 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private View shadow;
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$3 */
-    class C07603 implements OnClickListener {
-        C07603() {
+    class C04833 implements OnClickListener {
+        C04833() {
         }
 
         public void onClick(View view) {
-            AudioSelectActivity.this.lambda$checkDiscard$69$PassportActivity();
+            AudioSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
         }
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$4 */
-    class C07614 implements OnClickListener {
-        C07614() {
+    class C04844 implements OnClickListener {
+        C04844() {
         }
 
         public void onClick(View view) {
@@ -87,13 +87,13 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 }
                 AudioSelectActivity.this.delegate.didSelectAudio(audios);
             }
-            AudioSelectActivity.this.lambda$checkDiscard$69$PassportActivity();
+            AudioSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
         }
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$5 */
-    class C07635 implements Runnable {
-        C07635() {
+    class C04865 implements Runnable {
+        C04865() {
         }
 
         public void run() {
@@ -131,6 +131,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     String ext = FileLoader.getFileExtension(file);
                     message.media.document.f84id = 0;
                     message.media.document.access_hash = 0;
+                    message.media.document.file_reference = new byte[0];
                     message.media.document.date = message.date;
                     Document document = message.media.document;
                     StringBuilder append = new StringBuilder().append("audio/");
@@ -159,7 +160,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     cursor.close();
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 if (cursor != null) {
                     cursor.close();
                 }
@@ -185,20 +186,20 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$1 */
-    class C18931 extends ActionBarMenuOnItemClick {
-        C18931() {
+    class C12601 extends ActionBarMenuOnItemClick {
+        C12601() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                AudioSelectActivity.this.lambda$checkDiscard$69$PassportActivity();
+                AudioSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$2 */
-    class C18942 implements OnItemClickListener {
-        C18942() {
+    class C12612 implements OnItemClickListener {
+        C12612() {
         }
 
         public void onItemClick(View view, int position) {
@@ -220,8 +221,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         private Context mContext;
 
         /* renamed from: org.telegram.ui.AudioSelectActivity$ListAdapter$1 */
-        class C18951 implements AudioCellDelegate {
-            C18951() {
+        class C12621 implements AudioCellDelegate {
+            C12621() {
             }
 
             public void startedPlayingAudio(MessageObject messageObject) {
@@ -251,7 +252,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             AudioCell view = new AudioCell(this.mContext);
-            view.setDelegate(new C18951());
+            view.setDelegate(new C12621());
             return new Holder(view);
         }
 
@@ -299,7 +300,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("AttachMusic", R.string.AttachMusic));
-        this.actionBar.setActionBarMenuOnItemClick(new C18931());
+        this.actionBar.setActionBarMenuOnItemClick(new C12601());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.progressView = new EmptyTextProgressView(context);
@@ -319,11 +320,11 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
-        this.listView.setOnItemClickListener(new C18942());
+        this.listView.setOnItemClickListener(new C12612());
         this.bottomLayout = new PickerBottomLayout(context, false);
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.bottomLayout.cancelButton.setOnClickListener(new C07603());
-        this.bottomLayout.doneButton.setOnClickListener(new C07614());
+        this.bottomLayout.cancelButton.setOnClickListener(new C04833());
+        this.bottomLayout.doneButton.setOnClickListener(new C04844());
         View shadow = new View(context);
         shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
         frameLayout.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
@@ -338,7 +339,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.closeChats) {
-            lambda$null$11$ProfileActivity();
+            lambda$null$10$ProfileActivity();
         } else if (id == NotificationCenter.messagePlayingDidReset && this.listViewAdapter != null) {
             this.listViewAdapter.notifyDataSetChanged();
         }
@@ -357,7 +358,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         if (this.progressView != null) {
             this.progressView.showProgress();
         }
-        Utilities.globalQueue.postRunnable(new C07635());
+        Utilities.globalQueue.postRunnable(new C04865());
     }
 
     public ThemeDescription[] getThemeDescriptions() {

@@ -1,24 +1,19 @@
 package org.telegram.p005ui.Components;
 
-import android.view.View;
-import android.view.View.OnClickListener;
-import org.telegram.p005ui.ActionBar.BaseFragment;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import org.telegram.p005ui.CacheControlActivity;
+import org.telegram.p005ui.LaunchActivity;
 
 /* renamed from: org.telegram.ui.Components.AlertsCreator$$Lambda$26 */
 final /* synthetic */ class AlertsCreator$$Lambda$26 implements OnClickListener {
-    private final int[] arg$1;
-    private final boolean arg$2;
-    private final BaseFragment arg$3;
-    private final Runnable arg$4;
+    private final LaunchActivity arg$1;
 
-    AlertsCreator$$Lambda$26(int[] iArr, boolean z, BaseFragment baseFragment, Runnable runnable) {
-        this.arg$1 = iArr;
-        this.arg$2 = z;
-        this.arg$3 = baseFragment;
-        this.arg$4 = runnable;
+    AlertsCreator$$Lambda$26(LaunchActivity launchActivity) {
+        this.arg$1 = launchActivity;
     }
 
-    public void onClick(View view) {
-        AlertsCreator.lambda$createPopupSelectDialog$27$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.presentFragment(new CacheControlActivity());
     }
 }

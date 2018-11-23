@@ -22,7 +22,7 @@ public class RadioColorCell extends FrameLayout {
         int i3 = 5;
         super(context);
         this.radioButton = new RadioButton(context);
-        this.radioButton.setSize(AndroidUtilities.m10dp(20.0f));
+        this.radioButton.setSize(AndroidUtilities.m9dp(20.0f));
         this.radioButton.setColor(Theme.getColor(Theme.key_dialogRadioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
         View view = this.radioButton;
         int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
@@ -30,7 +30,7 @@ public class RadioColorCell extends FrameLayout {
         if (LocaleController.isRTL) {
             i2 = 18;
         }
-        addView(view, LayoutHelper.createFrame(22, 22.0f, i4, f, 13.0f, (float) i2, 0.0f));
+        addView(view, LayoutHelper.createFrame(22, 22.0f, i4, f, 14.0f, (float) i2, 0.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         this.textView.setTextSize(1, 16.0f);
@@ -48,11 +48,11 @@ public class RadioColorCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, (float) (LocaleController.isRTL ? 17 : 51), 12.0f, (float) (LocaleController.isRTL ? 51 : 17), 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, (float) (LocaleController.isRTL ? 21 : 51), 13.0f, (float) (LocaleController.isRTL ? 51 : 21), 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(50.0f), NUM));
     }
 
     public void setCheckColor(int color1, int color2) {

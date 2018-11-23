@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -19,6 +18,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -28,6 +28,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Drawable.Callback;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -40,11 +41,13 @@ import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.text.style.MetricAffectingSpan;
+import android.text.style.URLSpan;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.view.GestureDetector;
@@ -56,9 +59,6 @@ import android.view.TextureView;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnApplyWindowInsetsListener;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
@@ -66,19 +66,21 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.webkit.CookieManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebChromeClient.CustomViewCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.exoplayer2.C0016C;
 import com.google.android.exoplayer2.p004ui.AspectRatioFrameLayout;
+import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.net.URLDecoder;
@@ -86,6 +88,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
+import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DownloadController;
@@ -99,14 +103,20 @@ import org.telegram.messenger.ImageReceiver.BitmapHolder;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessageObject.GroupedMessagePosition;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
+import org.telegram.messenger.WebFile;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger.support.widget.DefaultItemAnimator;
 import org.telegram.messenger.support.widget.GridLayoutManager;
+import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
+import org.telegram.messenger.support.widget.GridLayoutManagerFixed;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -115,46 +125,55 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
+import org.telegram.messenger.support.widget.helper.ItemTouchHelper;
 import org.telegram.p005ui.ActionBar.ActionBarMenu;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.p005ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
-import org.telegram.p005ui.ActionBar.ActionBarPopupWindow.OnDispatchKeyEventListener;
-import org.telegram.p005ui.ActionBar.AlertDialog;
+import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.BottomSheet.Builder;
-import org.telegram.p005ui.ActionBar.C0646ActionBar;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.BottomSheet;
+import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.DrawerLayoutContainer;
+import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.AlertsCreator;
+import org.telegram.p005ui.Components.AnchorSpan;
+import org.telegram.p005ui.Components.AnimatedArrowDrawable;
 import org.telegram.p005ui.Components.AnimatedFileDrawable;
 import org.telegram.p005ui.Components.AvatarDrawable;
 import org.telegram.p005ui.Components.ClippingImageView;
+import org.telegram.p005ui.Components.CombinedDrawable;
 import org.telegram.p005ui.Components.ContextProgressView;
+import org.telegram.p005ui.Components.GroupedPhotosListView;
+import org.telegram.p005ui.Components.GroupedPhotosListView.GroupedPhotosListViewDelegate;
 import org.telegram.p005ui.Components.LayoutHelper;
+import org.telegram.p005ui.Components.LineProgressView;
 import org.telegram.p005ui.Components.LinkPath;
 import org.telegram.p005ui.Components.RadialProgress;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.p005ui.Components.Scroller;
 import org.telegram.p005ui.Components.SeekBar;
-import org.telegram.p005ui.Components.SeekBar.SeekBarDelegate;
 import org.telegram.p005ui.Components.ShareAlert;
+import org.telegram.p005ui.Components.StaticLayoutEx;
+import org.telegram.p005ui.Components.TableLayout;
+import org.telegram.p005ui.Components.TableLayout.Child;
+import org.telegram.p005ui.Components.TableLayout.TableLayoutDelegate;
+import org.telegram.p005ui.Components.TextPaintImageReceiverSpan;
 import org.telegram.p005ui.Components.TextPaintSpan;
 import org.telegram.p005ui.Components.TextPaintUrlSpan;
+import org.telegram.p005ui.Components.TextPaintWebpageUrlSpan;
 import org.telegram.p005ui.Components.TypefaceSpan;
 import org.telegram.p005ui.Components.VideoPlayer;
 import org.telegram.p005ui.Components.VideoPlayer.VideoPlayerDelegate;
 import org.telegram.p005ui.Components.WebPlayerView;
 import org.telegram.p005ui.Components.WebPlayerView.WebPlayerViewDelegate;
+import org.telegram.p005ui.PhotoViewer.LinkMovementMethodMy;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
@@ -163,6 +182,8 @@ import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.PageBlock;
+import org.telegram.tgnet.TLRPC.PageListItem;
+import org.telegram.tgnet.TLRPC.PageListOrderedItem;
 import org.telegram.tgnet.TLRPC.Peer;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -171,6 +192,7 @@ import org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
 import org.telegram.tgnet.TLRPC.TL_contacts_resolveUsername;
 import org.telegram.tgnet.TLRPC.TL_contacts_resolvedPeer;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
+import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_fileLocationUnavailable;
 import org.telegram.tgnet.TLRPC.TL_message;
@@ -178,6 +200,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
 import org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
 import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_messages_getWebPage;
+import org.telegram.tgnet.TLRPC.TL_page;
 import org.telegram.tgnet.TLRPC.TL_pageBlockAnchor;
 import org.telegram.tgnet.TLRPC.TL_pageBlockAudio;
 import org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate;
@@ -185,34 +208,52 @@ import org.telegram.tgnet.TLRPC.TL_pageBlockBlockquote;
 import org.telegram.tgnet.TLRPC.TL_pageBlockChannel;
 import org.telegram.tgnet.TLRPC.TL_pageBlockCollage;
 import org.telegram.tgnet.TLRPC.TL_pageBlockCover;
+import org.telegram.tgnet.TLRPC.TL_pageBlockDetails;
 import org.telegram.tgnet.TLRPC.TL_pageBlockDivider;
 import org.telegram.tgnet.TLRPC.TL_pageBlockEmbed;
 import org.telegram.tgnet.TLRPC.TL_pageBlockEmbedPost;
 import org.telegram.tgnet.TLRPC.TL_pageBlockFooter;
 import org.telegram.tgnet.TLRPC.TL_pageBlockHeader;
+import org.telegram.tgnet.TLRPC.TL_pageBlockKicker;
 import org.telegram.tgnet.TLRPC.TL_pageBlockList;
+import org.telegram.tgnet.TLRPC.TL_pageBlockMap;
+import org.telegram.tgnet.TLRPC.TL_pageBlockOrderedList;
 import org.telegram.tgnet.TLRPC.TL_pageBlockParagraph;
 import org.telegram.tgnet.TLRPC.TL_pageBlockPhoto;
 import org.telegram.tgnet.TLRPC.TL_pageBlockPreformatted;
 import org.telegram.tgnet.TLRPC.TL_pageBlockPullquote;
+import org.telegram.tgnet.TLRPC.TL_pageBlockRelatedArticles;
 import org.telegram.tgnet.TLRPC.TL_pageBlockSlideshow;
 import org.telegram.tgnet.TLRPC.TL_pageBlockSubheader;
 import org.telegram.tgnet.TLRPC.TL_pageBlockSubtitle;
+import org.telegram.tgnet.TLRPC.TL_pageBlockTable;
 import org.telegram.tgnet.TLRPC.TL_pageBlockTitle;
 import org.telegram.tgnet.TLRPC.TL_pageBlockUnsupported;
 import org.telegram.tgnet.TLRPC.TL_pageBlockVideo;
-import org.telegram.tgnet.TLRPC.TL_pageFull;
-import org.telegram.tgnet.TLRPC.TL_pagePart;
+import org.telegram.tgnet.TLRPC.TL_pageListItemBlocks;
+import org.telegram.tgnet.TLRPC.TL_pageListItemText;
+import org.telegram.tgnet.TLRPC.TL_pageListOrderedItemBlocks;
+import org.telegram.tgnet.TLRPC.TL_pageListOrderedItemText;
+import org.telegram.tgnet.TLRPC.TL_pagePart_layer82;
+import org.telegram.tgnet.TLRPC.TL_pageRelatedArticle;
+import org.telegram.tgnet.TLRPC.TL_pageTableCell;
+import org.telegram.tgnet.TLRPC.TL_pageTableRow;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_photo;
+import org.telegram.tgnet.TLRPC.TL_textAnchor;
 import org.telegram.tgnet.TLRPC.TL_textBold;
 import org.telegram.tgnet.TLRPC.TL_textConcat;
 import org.telegram.tgnet.TLRPC.TL_textEmail;
 import org.telegram.tgnet.TLRPC.TL_textEmpty;
 import org.telegram.tgnet.TLRPC.TL_textFixed;
+import org.telegram.tgnet.TLRPC.TL_textImage;
 import org.telegram.tgnet.TLRPC.TL_textItalic;
+import org.telegram.tgnet.TLRPC.TL_textMarked;
+import org.telegram.tgnet.TLRPC.TL_textPhone;
 import org.telegram.tgnet.TLRPC.TL_textPlain;
 import org.telegram.tgnet.TLRPC.TL_textStrike;
+import org.telegram.tgnet.TLRPC.TL_textSubscript;
+import org.telegram.tgnet.TLRPC.TL_textSuperscript;
 import org.telegram.tgnet.TLRPC.TL_textUnderline;
 import org.telegram.tgnet.TLRPC.TL_textUrl;
 import org.telegram.tgnet.TLRPC.TL_updateNewChannelMessage;
@@ -228,51 +269,69 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     @SuppressLint({"StaticFieldLeak"})
     private static volatile ArticleViewer Instance = null;
     private static final int TEXT_FLAG_ITALIC = 2;
+    private static final int TEXT_FLAG_MARKED = 64;
     private static final int TEXT_FLAG_MEDIUM = 1;
     private static final int TEXT_FLAG_MONO = 4;
     private static final int TEXT_FLAG_REGULAR = 0;
     private static final int TEXT_FLAG_STRIKE = 32;
+    private static final int TEXT_FLAG_SUB = 128;
+    private static final int TEXT_FLAG_SUP = 256;
     private static final int TEXT_FLAG_UNDERLINE = 16;
     private static final int TEXT_FLAG_URL = 8;
+    private static final int TEXT_FLAG_WEBPAGE_URL = 512;
     private static TextPaint audioTimePaint = new TextPaint(1);
     private static SparseArray<TextPaint> authorTextPaints = new SparseArray();
-    private static SparseArray<TextPaint> captionTextPaints = new SparseArray();
     private static TextPaint channelNamePaint = null;
     private static Paint colorPaint = null;
     private static DecelerateInterpolator decelerateInterpolator = null;
+    private static SparseArray<TextPaint> detailsTextPaints = new SparseArray();
     private static Paint dividerPaint = null;
     private static Paint dotsPaint = null;
     private static TextPaint embedPostAuthorPaint = null;
     private static SparseArray<TextPaint> embedPostCaptionTextPaints = new SparseArray();
     private static TextPaint embedPostDatePaint = null;
     private static SparseArray<TextPaint> embedPostTextPaints = new SparseArray();
-    private static SparseArray<TextPaint> embedTextPaints = new SparseArray();
     private static TextPaint errorTextPaint = null;
     private static SparseArray<TextPaint> footerTextPaints = new SparseArray();
     private static final int gallery_menu_openin = 3;
     private static final int gallery_menu_save = 1;
     private static final int gallery_menu_share = 2;
     private static SparseArray<TextPaint> headerTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> kickerTextPaints = new SparseArray();
+    private static TextPaint listTextNumPaint;
     private static SparseArray<TextPaint> listTextPaints = new SparseArray();
     private static TextPaint listTextPointerPaint;
+    private static SparseArray<TextPaint> mediaCaptionTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> mediaCreditTextPaints = new SparseArray();
     private static SparseArray<TextPaint> paragraphTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> photoCaptionTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> photoCreditTextPaints = new SparseArray();
     private static Paint preformattedBackgroundPaint;
     private static SparseArray<TextPaint> preformattedTextPaints = new SparseArray();
     private static Drawable[] progressDrawables;
     private static Paint progressPaint;
     private static Paint quoteLinePaint;
     private static SparseArray<TextPaint> quoteTextPaints = new SparseArray();
+    private static TextPaint relatedArticleHeaderPaint;
+    private static TextPaint relatedArticleTextPaint;
+    private static SparseArray<TextPaint> relatedArticleTextPaints = new SparseArray();
     private static Paint selectorPaint;
-    private static SparseArray<TextPaint> slideshowTextPaints = new SparseArray();
     private static SparseArray<TextPaint> subheaderTextPaints = new SparseArray();
-    private static SparseArray<TextPaint> subquoteTextPaints = new SparseArray();
     private static SparseArray<TextPaint> subtitleTextPaints = new SparseArray();
+    private static Paint tableHalfLinePaint;
+    private static Paint tableHeaderPaint;
+    private static Paint tableLinePaint;
+    private static Paint tableStripPaint;
+    private static SparseArray<TextPaint> tableTextPaints = new SparseArray();
     private static SparseArray<TextPaint> titleTextPaints = new SparseArray();
     private static Paint urlPaint;
-    private static SparseArray<TextPaint> videoTextPaints = new SparseArray();
-    private C0646ActionBar actionBar;
+    private static Paint webpageUrlPaint;
+    private C0403ActionBar actionBar;
     private WebpageAdapter adapter;
     private HashMap<String, Integer> anchors = new HashMap();
+    private HashMap<String, Integer> anchorsOffset = new HashMap();
+    private int anchorsOffsetMeasuredWidth;
+    private HashMap<String, PageBlock> anchorsParent = new HashMap();
     private float animateToScale;
     private float animateToX;
     private float animateToY;
@@ -289,15 +348,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private ImageView backButton;
     private BackDrawable backDrawable;
     private Paint backgroundPaint;
-    private View barBackground;
     private Paint blackPaint = new Paint();
     private ArrayList<PageBlock> blocks = new ArrayList();
     private FrameLayout bottomLayout;
     private boolean canDragDown = true;
     private boolean canZoom = true;
     private TextView captionTextView;
-    private TextView captionTextViewNew;
-    private TextView captionTextViewOld;
+    private TextView captionTextViewNext;
     private ImageReceiver centerImage = new ImageReceiver();
     private boolean changingPage;
     private TL_pageBlockChannel channelBlock;
@@ -335,6 +392,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private FrameLayout fullscreenVideoContainer;
     private WebPlayerView fullscreenedVideo;
     private GestureDetector gestureDetector;
+    private GroupedPhotosListView groupedPhotosListView;
     private Paint headerPaint = new Paint();
     private Paint headerProgressPaint = new Paint();
     private FrameLayout headerView;
@@ -346,12 +404,16 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private boolean isActionBarVisible = true;
     private boolean isPhotoVisible;
     private boolean isPlaying;
-    private int isRtl = -1;
+    private boolean isRtl;
     private boolean isVisible;
+    private int lastBlockNum = 1;
     private Object lastInsets;
     private Drawable layerShadowDrawable;
     private LinearLayoutManager layoutManager;
     private ImageReceiver leftImage = new ImageReceiver();
+    private Runnable lineProgressTickRunnable;
+    private LineProgressView lineProgressView;
+    private BottomSheet linkSheet;
     private RecyclerListView listView;
     private Chat loadedChannel;
     private boolean loadingChannel;
@@ -391,7 +453,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private int pressCount = 0;
     private int pressedLayoutY;
     private TextPaintUrlSpan pressedLink;
-    private StaticLayout pressedLinkOwnerLayout;
+    private DrawingText pressedLinkOwnerLayout;
     private View pressedLinkOwnerView;
     private int previewsReqId;
     private ContextProgressView progressView;
@@ -412,10 +474,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private Drawable slideDotDrawable;
     private int switchImageAfterAnimation;
     private boolean textureUploaded;
+    private SimpleTextView titleTextView;
     private long transitionAnimationStartTime;
     private float translationX;
     private float translationY;
-    private Runnable updateProgressRunnable = new C072639();
+    private Runnable updateProgressRunnable = new C045515();
     private LinkPath urlPath = new LinkPath();
     private VelocityTracker velocityTracker;
     private float videoCrossfadeAlpha;
@@ -434,310 +497,66 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private boolean zoomAnimation;
     private boolean zooming;
 
-    /* renamed from: org.telegram.ui.ArticleViewer$13 */
-    class C069713 implements OnTouchListener {
-        C069713() {
+    /* renamed from: org.telegram.ui.ArticleViewer$10 */
+    class C045010 extends AnimatorListenerAdapter {
+        C045010() {
         }
 
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
+        public void onAnimationEnd(Animator animation) {
+            AndroidUtilities.runOnUIThread(new ArticleViewer$10$$Lambda$0(this));
+        }
+
+        final /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$10() {
+            NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(false);
+            if (ArticleViewer.this.animationEndRunnable != null) {
+                ArticleViewer.this.animationEndRunnable.run();
+                ArticleViewer.this.animationEndRunnable = null;
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$12 */
+    class C045212 extends AnimatorListenerAdapter {
+        C045212() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (ArticleViewer.this.animationEndRunnable != null) {
+                ArticleViewer.this.animationEndRunnable.run();
+                ArticleViewer.this.animationEndRunnable = null;
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$13 */
+    class C045313 extends AnimatorListenerAdapter {
+        C045313() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (ArticleViewer.this.animationEndRunnable != null) {
+                ArticleViewer.this.animationEndRunnable.run();
+                ArticleViewer.this.animationEndRunnable = null;
+            }
         }
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$14 */
-    class C069814 implements OnClickListener {
-        C069814() {
+    class C045414 extends AnimatorListenerAdapter {
+        C045414() {
         }
 
-        public void onClick(View v) {
-            ArticleViewer.this.close(true, true);
+        public void onAnimationEnd(Animator animation) {
+            if (ArticleViewer.this.animationEndRunnable != null) {
+                ArticleViewer.this.animationEndRunnable.run();
+                ArticleViewer.this.animationEndRunnable = null;
+            }
         }
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$15 */
-    class C069915 implements OnClickListener {
-        C069915() {
-        }
-
-        public void onClick(View v) {
-            ArticleViewer.this.nightModeEnabled = !ArticleViewer.this.nightModeEnabled;
-            ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putBoolean("nightModeEnabled", ArticleViewer.this.nightModeEnabled).commit();
-            ArticleViewer.this.updateNightModeButton();
-            ArticleViewer.this.updatePaintColors();
-            ArticleViewer.this.adapter.notifyDataSetChanged();
-            if (ArticleViewer.this.nightModeEnabled) {
-                ArticleViewer.this.showNightModeHint();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$16 */
-    class C070016 implements OnClickListener {
-        C070016() {
-        }
-
-        public void onClick(View v) {
-            int num = ((Integer) v.getTag()).intValue();
-            ArticleViewer.this.selectedColor = num;
-            int a = 0;
-            while (a < 3) {
-                ArticleViewer.this.colorCells[a].select(a == num);
-                a++;
-            }
-            ArticleViewer.this.updateNightModeButton();
-            ArticleViewer.this.updatePaintColors();
-            ArticleViewer.this.adapter.notifyDataSetChanged();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$17 */
-    class C070117 implements OnClickListener {
-        C070117() {
-        }
-
-        public void onClick(View v) {
-            int num = ((Integer) v.getTag()).intValue();
-            ArticleViewer.this.selectedFont = num;
-            int a = 0;
-            while (a < 2) {
-                ArticleViewer.this.fontCells[a].select(a == num);
-                a++;
-            }
-            ArticleViewer.this.updatePaintFonts();
-            ArticleViewer.this.adapter.notifyDataSetChanged();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$18 */
-    class C070218 implements OnClickListener {
-        C070218() {
-        }
-
-        public void onClick(View v) {
-            if (ArticleViewer.this.currentPage != null && ArticleViewer.this.parentActivity != null) {
-                ArticleViewer.this.showDialog(new ShareAlert(ArticleViewer.this.parentActivity, null, ArticleViewer.this.currentPage.url, false, ArticleViewer.this.currentPage.url, true));
-                ArticleViewer.this.hideActionBar();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$1 */
-    class C07031 implements OnTouchListener {
-        C07031() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getActionMasked() == 0 && ArticleViewer.this.popupWindow != null && ArticleViewer.this.popupWindow.isShowing()) {
-                v.getHitRect(ArticleViewer.this.popupRect);
-                if (!ArticleViewer.this.popupRect.contains((int) event.getX(), (int) event.getY())) {
-                    ArticleViewer.this.popupWindow.dismiss();
-                }
-            }
-            return false;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$22 */
-    class C070522 implements OnClickListener {
-        C070522() {
-        }
-
-        public void onClick(View v) {
-            if (ArticleViewer.this.videoPlayer == null) {
-                return;
-            }
-            if (ArticleViewer.this.isPlaying) {
-                ArticleViewer.this.videoPlayer.pause();
-            } else {
-                ArticleViewer.this.videoPlayer.play();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$23 */
-    class C070723 extends AnimatorListenerAdapter {
-
-        /* renamed from: org.telegram.ui.ArticleViewer$23$1 */
-        class C07061 implements Runnable {
-            C07061() {
-            }
-
-            public void run() {
-                AnimatorSet animatorSet = new AnimatorSet();
-                Animator[] animatorArr = new Animator[1];
-                animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.nightModeHintView, "translationY", new float[]{(float) AndroidUtilities.m10dp(100.0f)});
-                animatorSet.playTogether(animatorArr);
-                animatorSet.setInterpolator(new DecelerateInterpolator(1.5f));
-                animatorSet.setDuration(250);
-                animatorSet.start();
-            }
-        }
-
-        C070723() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            AndroidUtilities.runOnUIThread(new C07061(), 3000);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$25 */
-    class C070925 implements Runnable {
-        C070925() {
-        }
-
-        public void run() {
-            if (ArticleViewer.this.containerView != null && ArticleViewer.this.windowView != null) {
-                if (VERSION.SDK_INT >= 18) {
-                    ArticleViewer.this.containerView.setLayerType(0, null);
-                }
-                ArticleViewer.this.animationInProgress = 0;
-                AndroidUtilities.hideKeyboard(ArticleViewer.this.parentActivity.getCurrentFocus());
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$26 */
-    class C071126 extends AnimatorListenerAdapter {
-
-        /* renamed from: org.telegram.ui.ArticleViewer$26$1 */
-        class C07101 implements Runnable {
-            C07101() {
-            }
-
-            public void run() {
-                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(false);
-                if (ArticleViewer.this.animationEndRunnable != null) {
-                    ArticleViewer.this.animationEndRunnable.run();
-                    ArticleViewer.this.animationEndRunnable = null;
-                }
-            }
-        }
-
-        C071126() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            AndroidUtilities.runOnUIThread(new C07101());
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$29 */
-    class C071429 implements Runnable {
-        C071429() {
-        }
-
-        public void run() {
-            if (ArticleViewer.this.containerView != null) {
-                if (VERSION.SDK_INT >= 18) {
-                    ArticleViewer.this.containerView.setLayerType(0, null);
-                }
-                ArticleViewer.this.animationInProgress = 0;
-                ((WindowManager) ArticleViewer.this.parentActivity.getSystemService("window")).updateViewLayout(ArticleViewer.this.windowView, ArticleViewer.this.windowLayoutParams);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$30 */
-    class C071530 extends AnimatorListenerAdapter {
-        C071530() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (ArticleViewer.this.animationEndRunnable != null) {
-                ArticleViewer.this.animationEndRunnable.run();
-                ArticleViewer.this.animationEndRunnable = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$31 */
-    class C071631 implements Runnable {
-        C071631() {
-        }
-
-        public void run() {
-            if (ArticleViewer.this.containerView != null) {
-                if (VERSION.SDK_INT >= 18) {
-                    ArticleViewer.this.containerView.setLayerType(0, null);
-                }
-                ArticleViewer.this.animationInProgress = 0;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$32 */
-    class C071732 extends AnimatorListenerAdapter {
-        C071732() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (ArticleViewer.this.animationEndRunnable != null) {
-                ArticleViewer.this.animationEndRunnable.run();
-                ArticleViewer.this.animationEndRunnable = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$33 */
-    class C071833 implements Runnable {
-        C071833() {
-        }
-
-        public void run() {
-            if (ArticleViewer.this.containerView != null) {
-                if (VERSION.SDK_INT >= 18) {
-                    ArticleViewer.this.containerView.setLayerType(0, null);
-                }
-                ArticleViewer.this.animationInProgress = 0;
-                ArticleViewer.this.onClosed();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$34 */
-    class C071934 extends AnimatorListenerAdapter {
-        C071934() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (ArticleViewer.this.animationEndRunnable != null) {
-                ArticleViewer.this.animationEndRunnable.run();
-                ArticleViewer.this.animationEndRunnable = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$35 */
-    class C072035 implements Runnable {
-        C072035() {
-        }
-
-        public void run() {
-            try {
-                if (ArticleViewer.this.windowView.getParent() != null) {
-                    ((WindowManager) ArticleViewer.this.parentActivity.getSystemService("window")).removeView(ArticleViewer.this.windowView);
-                }
-            } catch (Throwable e) {
-                FileLog.m14e(e);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$38 */
-    class C072538 implements OnDismissListener {
-        C072538() {
-        }
-
-        public void onDismiss(DialogInterface dialog) {
-            ArticleViewer.this.showActionBar(120);
-            ArticleViewer.this.visibleDialog = null;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$39 */
-    class C072639 implements Runnable {
-        C072639() {
+    class C045515 implements Runnable {
+        C045515() {
         }
 
         public void run() {
@@ -752,25 +571,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$3 */
-    class C07273 implements OnClickListener {
-        C07273() {
-        }
-
-        public void onClick(View v) {
-            if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
-                AndroidUtilities.addToClipboard(ArticleViewer.this.pressedLinkOwnerLayout.getText());
-                Toast.makeText(ArticleViewer.this.parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
-                if (ArticleViewer.this.popupWindow != null && ArticleViewer.this.popupWindow.isShowing()) {
-                    ArticleViewer.this.popupWindow.dismiss(true);
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$41 */
-    class C072841 extends AnimatorListenerAdapter {
-        C072841() {
+    /* renamed from: org.telegram.ui.ArticleViewer$17 */
+    class C045617 extends AnimatorListenerAdapter {
+        C045617() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -780,124 +583,24 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     ArticleViewer.this.bottomLayout.setVisibility(8);
                 }
                 if (ArticleViewer.this.captionTextView.getTag() != null) {
-                    ArticleViewer.this.captionTextView.setVisibility(4);
+                    ArticleViewer.this.captionTextView.setVisibility(8);
                 }
                 ArticleViewer.this.currentActionBarAnimation = null;
             }
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$42 */
-    class C072942 implements Runnable {
-        C072942() {
-        }
-
-        public void run() {
-            int i = 4;
-            ArticleViewer.this.captionTextViewOld.setTag(null);
-            ArticleViewer.this.captionTextViewOld.setVisibility(4);
-            TextView access$14400 = ArticleViewer.this.captionTextViewNew;
-            if (ArticleViewer.this.actionBar.getVisibility() == 0) {
-                i = 0;
-            }
-            access$14400.setVisibility(i);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$43 */
-    class C073043 implements Runnable {
-        C073043() {
-        }
-
-        public void run() {
-            if (ArticleViewer.this.photoContainerView != null) {
-                if (VERSION.SDK_INT >= 18) {
-                    ArticleViewer.this.photoContainerView.setLayerType(0, null);
-                }
-                ArticleViewer.this.photoAnimationInProgress = 0;
-                ArticleViewer.this.photoTransitionAnimationStartTime = 0;
-                ArticleViewer.this.setImages();
-                ArticleViewer.this.photoContainerView.invalidate();
-                ArticleViewer.this.animatingImageView.setVisibility(8);
-                if (ArticleViewer.this.showAfterAnimation != null) {
-                    ArticleViewer.this.showAfterAnimation.imageReceiver.setVisible(true, true);
-                }
-                if (ArticleViewer.this.hideAfterAnimation != null) {
-                    ArticleViewer.this.hideAfterAnimation.imageReceiver.setVisible(false, true);
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$44 */
-    class C073244 extends AnimatorListenerAdapter {
-
-        /* renamed from: org.telegram.ui.ArticleViewer$44$1 */
-        class C07311 implements Runnable {
-            C07311() {
-            }
-
-            public void run() {
-                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(false);
-                if (ArticleViewer.this.photoAnimationEndRunnable != null) {
-                    ArticleViewer.this.photoAnimationEndRunnable.run();
-                    ArticleViewer.this.photoAnimationEndRunnable = null;
-                }
-            }
-        }
-
-        C073244() {
+    /* renamed from: org.telegram.ui.ArticleViewer$20 */
+    class C046020 extends AnimatorListenerAdapter {
+        C046020() {
         }
 
         public void onAnimationEnd(Animator animation) {
-            AndroidUtilities.runOnUIThread(new C07311());
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$48 */
-    class C073748 extends AnimatorListenerAdapter {
-
-        /* renamed from: org.telegram.ui.ArticleViewer$48$1 */
-        class C07361 implements Runnable {
-            C07361() {
-            }
-
-            public void run() {
-                if (ArticleViewer.this.photoAnimationEndRunnable != null) {
-                    ArticleViewer.this.photoAnimationEndRunnable.run();
-                    ArticleViewer.this.photoAnimationEndRunnable = null;
-                }
-            }
+            AndroidUtilities.runOnUIThread(new ArticleViewer$20$$Lambda$0(this));
         }
 
-        C073748() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            AndroidUtilities.runOnUIThread(new C07361());
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$4 */
-    class C07394 implements PopupWindow.OnDismissListener {
-        C07394() {
-        }
-
-        public void onDismiss() {
-            if (ArticleViewer.this.pressedLinkOwnerView != null) {
-                ArticleViewer.this.pressedLinkOwnerLayout = null;
-                ArticleViewer.this.pressedLinkOwnerView.invalidate();
-                ArticleViewer.this.pressedLinkOwnerView = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$50 */
-    class C074150 extends AnimatorListenerAdapter {
-        C074150() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
+        final /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$20() {
+            NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(false);
             if (ArticleViewer.this.photoAnimationEndRunnable != null) {
                 ArticleViewer.this.photoAnimationEndRunnable.run();
                 ArticleViewer.this.photoAnimationEndRunnable = null;
@@ -905,19 +608,26 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$51 */
-    class C074251 implements Runnable {
-        C074251() {
+    /* renamed from: org.telegram.ui.ArticleViewer$21 */
+    class C046121 extends AnimatorListenerAdapter {
+        C046121() {
         }
 
-        public void run() {
-            ArticleViewer.this.animatingImageView.setImageBitmap(null);
+        public void onAnimationEnd(Animator animation) {
+            AndroidUtilities.runOnUIThread(new ArticleViewer$21$$Lambda$0(this));
+        }
+
+        final /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$21() {
+            if (ArticleViewer.this.photoAnimationEndRunnable != null) {
+                ArticleViewer.this.photoAnimationEndRunnable.run();
+                ArticleViewer.this.photoAnimationEndRunnable = null;
+            }
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$52 */
-    class C074352 extends AnimatorListenerAdapter {
-        C074352() {
+    /* renamed from: org.telegram.ui.ArticleViewer$22 */
+    class C046222 extends AnimatorListenerAdapter {
+        C046222() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -926,29 +636,32 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$6 */
-    class C07446 implements OnApplyWindowInsetsListener {
-        C07446() {
+    /* renamed from: org.telegram.ui.ArticleViewer$9 */
+    class C04659 extends AnimatorListenerAdapter {
+        C04659() {
         }
 
-        @SuppressLint({"NewApi"})
-        public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-            WindowInsets oldInsets = (WindowInsets) ArticleViewer.this.lastInsets;
-            ArticleViewer.this.lastInsets = insets;
-            if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
-                ArticleViewer.this.windowView.requestLayout();
-            }
-            return insets.consumeSystemWindowInsets();
+        public void onAnimationEnd(Animator animation) {
+            AndroidUtilities.runOnUIThread(new ArticleViewer$9$$Lambda$0(this), 3000);
+        }
+
+        final /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$9() {
+            AnimatorSet animatorSet1 = new AnimatorSet();
+            Animator[] animatorArr = new Animator[1];
+            animatorArr[0] = ObjectAnimator.ofFloat(ArticleViewer.this.nightModeHintView, "translationY", new float[]{(float) AndroidUtilities.m9dp(100.0f)});
+            animatorSet1.playTogether(animatorArr);
+            animatorSet1.setInterpolator(new DecelerateInterpolator(1.5f));
+            animatorSet1.setDuration(250);
+            animatorSet1.start();
         }
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$BlockAuthorDateCell */
     private class BlockAuthorDateCell extends View {
         private TL_pageBlockAuthorDate currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
+        private DrawingText textLayout;
         private int textX;
-        private int textY = AndroidUtilities.m10dp(8.0f);
+        private int textY = AndroidUtilities.m9dp(8.0f);
 
         public BlockAuthorDateCell(Context context) {
             super(context);
@@ -956,7 +669,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockAuthorDate block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -967,13 +679,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
+            if (this.currentBlock != null) {
                 Spannable spannableAuthor;
                 MetricAffectingSpan[] spans;
                 CharSequence text;
-                CharSequence author = ArticleViewer.this.getText(this.currentBlock.author, this.currentBlock.author, this.currentBlock);
+                CharSequence author = ArticleViewer.this.getText(this, this.currentBlock.author, this.currentBlock.author, this.currentBlock, width);
                 if (author instanceof Spannable) {
                     spannableAuthor = (Spannable) author;
                     spans = (MetricAffectingSpan[]) spannableAuthor.getSpans(0, author.length(), MetricAffectingSpan.class);
@@ -982,10 +692,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     spans = null;
                 }
                 if (this.currentBlock.published_date != 0 && !TextUtils.isEmpty(author)) {
-                    r16 = new Object[2];
-                    r16[0] = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000);
-                    r16[1] = author;
-                    text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, r16);
+                    text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000), author);
                 } else if (TextUtils.isEmpty(author)) {
                     text = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000);
                 } else {
@@ -999,23 +706,26 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                 Spannable spannable = Factory.getInstance().newSpannable(text);
                                 text = spannable;
                                 for (int a = 0; a < spans.length; a++) {
-                                    spannable.setSpan(spans[a], spannableAuthor.getSpanStart(spans[a]) + idx, spannableAuthor.getSpanEnd(spans[a]) + idx, 33);
+                                    Spannable spannable2 = spannable;
+                                    spannable2.setSpan(spans[a], spannableAuthor.getSpanStart(spans[a]) + idx, spannableAuthor.getSpanEnd(spans[a]) + idx, 33);
                                 }
                             }
                         }
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
-                this.textLayout = ArticleViewer.this.createLayoutForText(text, null, width - AndroidUtilities.m10dp(36.0f), this.currentBlock);
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, text, null, width - AndroidUtilities.m9dp(36.0f), this.currentBlock);
                 if (this.textLayout != null) {
-                    height = 0 + (AndroidUtilities.m10dp(16.0f) + this.textLayout.getHeight());
-                    if (ArticleViewer.this.isRtl == 1) {
-                        this.textX = (int) Math.floor((double) ((((float) width) - this.textLayout.getLineWidth(0)) - ((float) AndroidUtilities.m10dp(16.0f))));
+                    height = 0 + (AndroidUtilities.m9dp(16.0f) + this.textLayout.getHeight());
+                    if (ArticleViewer.this.isRtl) {
+                        this.textX = (int) Math.floor((double) ((((float) width) - this.textLayout.getLineWidth(0)) - ((float) AndroidUtilities.m9dp(16.0f))));
                     } else {
-                        this.textX = AndroidUtilities.m10dp(18.0f);
+                        this.textX = AndroidUtilities.m9dp(18.0f);
                     }
                 }
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
@@ -1024,7 +734,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.currentBlock != null && this.textLayout != null) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -1034,12 +743,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockBlockquoteCell */
     private class BlockBlockquoteCell extends View {
         private TL_pageBlockBlockquote currentBlock;
-        private boolean hasRtl;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
-        private StaticLayout textLayout2;
+        private DrawingText textLayout;
+        private DrawingText textLayout2;
         private int textX;
-        private int textY = AndroidUtilities.m10dp(8.0f);
+        private int textY = AndroidUtilities.m9dp(8.0f);
         private int textY2;
 
         public BlockBlockquoteCell(Context context) {
@@ -1048,7 +755,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockBlockquote block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -1064,45 +770,36 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
-                int textWidth = width - AndroidUtilities.m10dp(50.0f);
+            if (this.currentBlock != null) {
+                int textWidth = width - AndroidUtilities.m9dp(50.0f);
                 if (this.currentBlock.level > 0) {
-                    textWidth -= AndroidUtilities.m10dp((float) (this.currentBlock.level * 14));
+                    textWidth -= AndroidUtilities.m9dp((float) (this.currentBlock.level * 14));
                 }
-                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, textWidth, this.currentBlock);
-                this.hasRtl = false;
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, textWidth, this.currentBlock);
                 if (this.textLayout != null) {
-                    height = 0 + (AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight());
-                    int count = this.textLayout.getLineCount();
-                    for (int a = 0; a < count; a++) {
-                        if (this.textLayout.getLineLeft(a) > 0.0f) {
-                            ArticleViewer.this.isRtl = 1;
-                            this.hasRtl = true;
-                            break;
-                        }
-                    }
+                    height = 0 + (AndroidUtilities.m9dp(8.0f) + this.textLayout.getHeight());
                 }
                 if (this.currentBlock.level > 0) {
-                    if (this.hasRtl) {
-                        this.textX = AndroidUtilities.m10dp((float) ((this.currentBlock.level * 14) + 14));
+                    if (ArticleViewer.this.isRtl) {
+                        this.textX = AndroidUtilities.m9dp((float) ((this.currentBlock.level * 14) + 14));
                     } else {
-                        this.textX = AndroidUtilities.m10dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m10dp(32.0f);
+                        this.textX = AndroidUtilities.m9dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m9dp(32.0f);
                     }
-                } else if (this.hasRtl) {
-                    this.textX = AndroidUtilities.m10dp(14.0f);
+                } else if (ArticleViewer.this.isRtl) {
+                    this.textX = AndroidUtilities.m9dp(14.0f);
                 } else {
-                    this.textX = AndroidUtilities.m10dp(32.0f);
+                    this.textX = AndroidUtilities.m9dp(32.0f);
                 }
-                this.textLayout2 = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
+                this.textLayout2 = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption, textWidth, this.currentBlock);
                 if (this.textLayout2 != null) {
-                    this.textY2 = AndroidUtilities.m10dp(8.0f) + height;
-                    height += AndroidUtilities.m10dp(8.0f) + this.textLayout2.getHeight();
+                    this.textY2 = AndroidUtilities.m9dp(8.0f) + height;
+                    height += AndroidUtilities.m9dp(8.0f) + this.textLayout2.getHeight();
                 }
                 if (height != 0) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
@@ -1112,25 +809,23 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.textLayout2 != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY2);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout2);
                     this.textLayout2.draw(canvas);
                     canvas.restore();
                 }
-                if (this.hasRtl) {
-                    int x = getMeasuredWidth() - AndroidUtilities.m10dp(20.0f);
-                    canvas.drawRect((float) x, (float) AndroidUtilities.m10dp(6.0f), (float) (AndroidUtilities.m10dp(2.0f) + x), (float) (getMeasuredHeight() - AndroidUtilities.m10dp(6.0f)), ArticleViewer.quoteLinePaint);
+                if (ArticleViewer.this.isRtl) {
+                    int x = getMeasuredWidth() - AndroidUtilities.m9dp(20.0f);
+                    canvas.drawRect((float) x, (float) AndroidUtilities.m9dp(6.0f), (float) (AndroidUtilities.m9dp(2.0f) + x), (float) (getMeasuredHeight() - AndroidUtilities.m9dp(6.0f)), ArticleViewer.quoteLinePaint);
                 } else {
-                    canvas.drawRect((float) AndroidUtilities.m10dp((float) ((this.currentBlock.level * 14) + 18)), (float) AndroidUtilities.m10dp(6.0f), (float) AndroidUtilities.m10dp((float) ((this.currentBlock.level * 14) + 20)), (float) (getMeasuredHeight() - AndroidUtilities.m10dp(6.0f)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp((float) ((this.currentBlock.level * 14) + 18)), (float) AndroidUtilities.m9dp(6.0f), (float) AndroidUtilities.m9dp((float) ((this.currentBlock.level * 14) + 20)), (float) (getMeasuredHeight() - AndroidUtilities.m9dp(6.0f)), ArticleViewer.quoteLinePaint);
                 }
                 if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.m10dp(18.0f), 0.0f, (float) AndroidUtilities.m10dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m10dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -1145,14 +840,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         private int currentState;
         private int currentType;
         private ImageView imageView;
-        private int lastCreatedWidth;
         private ContextProgressView progressView;
-        private StaticLayout textLayout;
+        private DrawingText textLayout;
         private TextView textView;
-        private int textX = AndroidUtilities.m10dp(18.0f);
+        private int textX = AndroidUtilities.m9dp(18.0f);
         private int textX2;
-        private int textY = AndroidUtilities.m10dp(11.0f);
-        private int textY2 = AndroidUtilities.m10dp(11.5f);
+        private int textY = AndroidUtilities.m9dp(11.0f);
 
         public BlockChannelCell(Context context, int type) {
             super(context);
@@ -1165,20 +858,20 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.textView.setText(LocaleController.getString("ChannelJoin", R.string.ChannelJoin));
             this.textView.setGravity(19);
             addView(this.textView, LayoutHelper.createFrame(-2, 39, 53));
-            this.textView.setOnClickListener(new OnClickListener(ArticleViewer.this) {
-                public void onClick(View v) {
-                    if (BlockChannelCell.this.currentState == 0) {
-                        BlockChannelCell.this.setState(1, true);
-                        ArticleViewer.this.joinChannel(BlockChannelCell.this, ArticleViewer.this.loadedChannel);
-                    }
-                }
-            });
+            this.textView.setOnClickListener(new ArticleViewer$BlockChannelCell$$Lambda$0(this));
             this.imageView = new ImageView(context);
             this.imageView.setImageResource(R.drawable.list_check);
             this.imageView.setScaleType(ScaleType.CENTER);
             addView(this.imageView, LayoutHelper.createFrame(39, 39, 53));
             this.progressView = new ContextProgressView(context, 0);
             addView(this.progressView, LayoutHelper.createFrame(39, 39, 53));
+        }
+
+        final /* synthetic */ void lambda$new$0$ArticleViewer$BlockChannelCell(View v) {
+            if (this.currentState == 0) {
+                setState(1, true);
+                ArticleViewer.this.joinChannel(this, ArticleViewer.this.loadedChannel);
+            }
         }
 
         public void setBlock(TL_pageBlockChannel block) {
@@ -1191,7 +884,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 } else if (color == 1) {
                     this.backgroundPaint.setColor(-1712440);
                 } else if (color == 2) {
-                    this.backgroundPaint.setColor(-14277082);
+                    this.backgroundPaint.setColor(-15000805);
                 }
                 this.imageView.setColorFilter(new PorterDuffColorFilter(-6710887, Mode.MULTIPLY));
             } else {
@@ -1199,7 +892,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.backgroundPaint.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
                 this.imageView.setColorFilter(new PorterDuffColorFilter(-1, Mode.MULTIPLY));
             }
-            this.lastCreatedWidth = 0;
             Chat channel = MessagesController.getInstance(ArticleViewer.this.currentAccount).getChat(Integer.valueOf(block.channel.f78id));
             if (channel == null || channel.min) {
                 ArticleViewer.this.loadChannel(this, block.channel);
@@ -1358,30 +1050,29 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
-            setMeasuredDimension(width, AndroidUtilities.m10dp(48.0f));
-            this.textView.measure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(39.0f), NUM));
+            setMeasuredDimension(width, AndroidUtilities.m9dp(48.0f));
+            this.textView.measure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(39.0f), NUM));
             this.buttonWidth = this.textView.getMeasuredWidth();
-            this.progressView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(39.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(39.0f), NUM));
-            this.imageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(39.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(39.0f), NUM));
-            if (this.currentBlock != null && this.lastCreatedWidth != width) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(this.currentBlock.channel.title, null, (width - AndroidUtilities.m10dp(52.0f)) - this.buttonWidth, this.currentBlock);
+            this.progressView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(39.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(39.0f), NUM));
+            this.imageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(39.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(39.0f), NUM));
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, this.currentBlock.channel.title, null, (width - AndroidUtilities.m9dp(52.0f)) - this.buttonWidth, this.currentBlock);
                 this.textX2 = (getMeasuredWidth() - this.textX) - this.buttonWidth;
             }
         }
 
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            this.imageView.layout((this.textX2 + (this.buttonWidth / 2)) - AndroidUtilities.m10dp(19.0f), 0, (this.textX2 + (this.buttonWidth / 2)) + AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(39.0f));
-            this.progressView.layout((this.textX2 + (this.buttonWidth / 2)) - AndroidUtilities.m10dp(19.0f), 0, (this.textX2 + (this.buttonWidth / 2)) + AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(39.0f));
+            this.imageView.layout((this.textX2 + (this.buttonWidth / 2)) - AndroidUtilities.m9dp(19.0f), 0, (this.textX2 + (this.buttonWidth / 2)) + AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(39.0f));
+            this.progressView.layout((this.textX2 + (this.buttonWidth / 2)) - AndroidUtilities.m9dp(19.0f), 0, (this.textX2 + (this.buttonWidth / 2)) + AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(39.0f));
             this.textView.layout(this.textX2, 0, this.textX2 + this.textView.getMeasuredWidth(), this.textView.getMeasuredHeight());
         }
 
         protected void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.m10dp(39.0f), this.backgroundPaint);
+                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.m9dp(39.0f), this.backgroundPaint);
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -1392,15 +1083,336 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockCollageCell */
     private class BlockCollageCell extends FrameLayout {
         private Adapter adapter;
+        private DrawingText captionLayout;
+        private DrawingText creditLayout;
+        private int creditOffset;
         private TL_pageBlockCollage currentBlock;
         private GridLayoutManager gridLayoutManager;
+        private GroupedMessages group = new GroupedMessages();
         private boolean inLayout;
         private RecyclerListView innerListView;
-        private int lastCreatedWidth;
         private int listX;
-        private StaticLayout textLayout;
         private int textX;
         private int textY;
+
+        /* renamed from: org.telegram.ui.ArticleViewer$BlockCollageCell$GroupedMessages */
+        public class GroupedMessages {
+            public long groupId;
+            public boolean hasSibling;
+            private int maxSizeWidth = 1000;
+            public ArrayList<GroupedMessagePosition> posArray = new ArrayList();
+            public HashMap<TLObject, GroupedMessagePosition> positions = new HashMap();
+
+            /* renamed from: org.telegram.ui.ArticleViewer$BlockCollageCell$GroupedMessages$MessageGroupedLayoutAttempt */
+            private class MessageGroupedLayoutAttempt {
+                public float[] heights;
+                public int[] lineCounts;
+
+                public MessageGroupedLayoutAttempt(int i1, int i2, float f1, float f2) {
+                    this.lineCounts = new int[]{i1, i2};
+                    this.heights = new float[]{f1, f2};
+                }
+
+                public MessageGroupedLayoutAttempt(int i1, int i2, int i3, float f1, float f2, float f3) {
+                    this.lineCounts = new int[]{i1, i2, i3};
+                    this.heights = new float[]{f1, f2, f3};
+                }
+
+                public MessageGroupedLayoutAttempt(int i1, int i2, int i3, int i4, float f1, float f2, float f3, float f4) {
+                    this.lineCounts = new int[]{i1, i2, i3, i4};
+                    this.heights = new float[]{f1, f2, f3, f4};
+                }
+            }
+
+            private float multiHeight(float[] array, int start, int end) {
+                float sum = 0.0f;
+                for (int a = start; a < end; a++) {
+                    sum += array[a];
+                }
+                return ((float) this.maxSizeWidth) / sum;
+            }
+
+            /* JADX WARNING: Removed duplicated region for block: B:29:0x00e9  */
+            /* JADX WARNING: Removed duplicated region for block: B:13:0x0081  */
+            /* JADX WARNING: Removed duplicated region for block: B:30:0x00eb  */
+            /* JADX WARNING: Removed duplicated region for block: B:16:0x0088  */
+            /* JADX WARNING: Removed duplicated region for block: B:31:0x00f7  */
+            /* JADX WARNING: Removed duplicated region for block: B:19:0x0099  */
+            /* JADX WARNING: Removed duplicated region for block: B:22:0x00b1  */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            public void calculate() {
+                this.posArray.clear();
+                this.positions.clear();
+                int count = BlockCollageCell.this.currentBlock.items.size();
+                if (count > 1) {
+                    GroupedMessagePosition pos;
+                    StringBuilder proportions = new StringBuilder();
+                    float averageAspectRatio = 1.0f;
+                    boolean forceCalc = false;
+                    this.hasSibling = false;
+                    int a = 0;
+                    while (a < count) {
+                        TLObject object = (TLObject) BlockCollageCell.this.currentBlock.items.get(a);
+                        PhotoSize photoSize;
+                        GroupedMessagePosition position;
+                        if (object instanceof TL_pageBlockPhoto) {
+                            Photo photo = ArticleViewer.this.getPhotoWithId(((TL_pageBlockPhoto) object).photo_id);
+                            if (photo != null) {
+                                photoSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize());
+                                position = new GroupedMessagePosition();
+                                position.last = a != count + -1;
+                                position.aspectRatio = photoSize != null ? 1.0f : ((float) photoSize.f108w) / ((float) photoSize.f107h);
+                                if (position.aspectRatio <= 1.2f) {
+                                    proportions.append("w");
+                                } else if (position.aspectRatio < 0.8f) {
+                                    proportions.append("n");
+                                } else {
+                                    proportions.append("q");
+                                }
+                                averageAspectRatio += position.aspectRatio;
+                                if (position.aspectRatio > 2.0f) {
+                                    forceCalc = true;
+                                }
+                                this.positions.put(object, position);
+                                this.posArray.add(position);
+                            }
+                        } else if (object instanceof TL_pageBlockVideo) {
+                            Document document = ArticleViewer.this.getDocumentWithId(((TL_pageBlockVideo) object).video_id);
+                            if (document != null) {
+                                photoSize = document.thumb;
+                                position = new GroupedMessagePosition();
+                                if (a != count + -1) {
+                                }
+                                position.last = a != count + -1;
+                                if (photoSize != null) {
+                                }
+                                position.aspectRatio = photoSize != null ? 1.0f : ((float) photoSize.f108w) / ((float) photoSize.f107h);
+                                if (position.aspectRatio <= 1.2f) {
+                                }
+                                averageAspectRatio += position.aspectRatio;
+                                if (position.aspectRatio > 2.0f) {
+                                }
+                                this.positions.put(object, position);
+                                this.posArray.add(position);
+                            }
+                        }
+                        a++;
+                    }
+                    int minHeight = AndroidUtilities.m9dp(120.0f);
+                    int minWidth = (int) (((float) AndroidUtilities.m9dp(120.0f)) / (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) this.maxSizeWidth)));
+                    int paddingsWidth = (int) (((float) AndroidUtilities.m9dp(40.0f)) / (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) this.maxSizeWidth)));
+                    float maxAspectRatio = ((float) this.maxSizeWidth) / 814.0f;
+                    averageAspectRatio /= (float) count;
+                    float height;
+                    int width;
+                    GroupedMessagePosition position1;
+                    GroupedMessagePosition position2;
+                    GroupedMessagePosition position3;
+                    if (forceCalc || !(count == 2 || count == 3 || count == 4)) {
+                        int firstLine;
+                        int secondLine;
+                        int thirdLine;
+                        float[] croppedRatios = new float[this.posArray.size()];
+                        for (a = 0; a < count; a++) {
+                            if (averageAspectRatio > 1.1f) {
+                                croppedRatios[a] = Math.max(1.0f, ((GroupedMessagePosition) this.posArray.get(a)).aspectRatio);
+                            } else {
+                                croppedRatios[a] = Math.min(1.0f, ((GroupedMessagePosition) this.posArray.get(a)).aspectRatio);
+                            }
+                            croppedRatios[a] = Math.max(0.66667f, Math.min(1.7f, croppedRatios[a]));
+                        }
+                        ArrayList<MessageGroupedLayoutAttempt> attempts = new ArrayList();
+                        for (firstLine = 1; firstLine < croppedRatios.length; firstLine++) {
+                            secondLine = croppedRatios.length - firstLine;
+                            if (firstLine <= 3 && secondLine <= 3) {
+                                attempts.add(new MessageGroupedLayoutAttempt(firstLine, secondLine, multiHeight(croppedRatios, 0, firstLine), multiHeight(croppedRatios, firstLine, croppedRatios.length)));
+                            }
+                        }
+                        for (firstLine = 1; firstLine < croppedRatios.length - 1; firstLine++) {
+                            for (secondLine = 1; secondLine < croppedRatios.length - firstLine; secondLine++) {
+                                thirdLine = (croppedRatios.length - firstLine) - secondLine;
+                                if (firstLine <= 3) {
+                                    if (secondLine <= (averageAspectRatio < 0.85f ? 4 : 3) && thirdLine <= 3) {
+                                        attempts.add(new MessageGroupedLayoutAttempt(firstLine, secondLine, thirdLine, multiHeight(croppedRatios, 0, firstLine), multiHeight(croppedRatios, firstLine, firstLine + secondLine), multiHeight(croppedRatios, firstLine + secondLine, croppedRatios.length)));
+                                    }
+                                }
+                            }
+                        }
+                        for (firstLine = 1; firstLine < croppedRatios.length - 2; firstLine++) {
+                            secondLine = 1;
+                            while (secondLine < croppedRatios.length - firstLine) {
+                                thirdLine = 1;
+                                while (thirdLine < (croppedRatios.length - firstLine) - secondLine) {
+                                    int fourthLine = ((croppedRatios.length - firstLine) - secondLine) - thirdLine;
+                                    if (firstLine <= 3 && secondLine <= 3 && thirdLine <= 3 && fourthLine <= 3) {
+                                        attempts.add(new MessageGroupedLayoutAttempt(firstLine, secondLine, thirdLine, fourthLine, multiHeight(croppedRatios, 0, firstLine), multiHeight(croppedRatios, firstLine, firstLine + secondLine), multiHeight(croppedRatios, firstLine + secondLine, (firstLine + secondLine) + thirdLine), multiHeight(croppedRatios, (firstLine + secondLine) + thirdLine, croppedRatios.length)));
+                                    }
+                                    thirdLine++;
+                                }
+                                secondLine++;
+                            }
+                        }
+                        MessageGroupedLayoutAttempt optimal = null;
+                        float optimalDiff = 0.0f;
+                        float maxHeight = (float) ((this.maxSizeWidth / 3) * 4);
+                        for (a = 0; a < attempts.size(); a++) {
+                            MessageGroupedLayoutAttempt attempt = (MessageGroupedLayoutAttempt) attempts.get(a);
+                            height = 0.0f;
+                            float minLineHeight = Float.MAX_VALUE;
+                            for (int b = 0; b < attempt.heights.length; b++) {
+                                height += attempt.heights[b];
+                                if (attempt.heights[b] < minLineHeight) {
+                                    minLineHeight = attempt.heights[b];
+                                }
+                            }
+                            float diff = Math.abs(height - maxHeight);
+                            if (attempt.lineCounts.length > 1 && (attempt.lineCounts[0] > attempt.lineCounts[1] || ((attempt.lineCounts.length > 2 && attempt.lineCounts[1] > attempt.lineCounts[2]) || (attempt.lineCounts.length > 3 && attempt.lineCounts[2] > attempt.lineCounts[3])))) {
+                                diff *= 1.2f;
+                            }
+                            if (minLineHeight < ((float) minWidth)) {
+                                diff *= 1.5f;
+                            }
+                            if (optimal == null || diff < optimalDiff) {
+                                optimal = attempt;
+                                optimalDiff = diff;
+                            }
+                        }
+                        if (optimal != null) {
+                            int index = 0;
+                            float y = 0.0f;
+                            for (int i = 0; i < optimal.lineCounts.length; i++) {
+                                int c = optimal.lineCounts[i];
+                                float lineHeight = optimal.heights[i];
+                                int spanLeft = this.maxSizeWidth;
+                                GroupedMessagePosition posToFix = null;
+                                for (int k = 0; k < c; k++) {
+                                    width = (int) (croppedRatios[index] * lineHeight);
+                                    spanLeft -= width;
+                                    pos = (GroupedMessagePosition) this.posArray.get(index);
+                                    int flags = 0;
+                                    if (i == 0) {
+                                        flags = 0 | 4;
+                                    }
+                                    if (i == optimal.lineCounts.length - 1) {
+                                        flags |= 8;
+                                    }
+                                    if (k == 0) {
+                                        flags |= 1;
+                                    }
+                                    if (k == c - 1) {
+                                        flags |= 2;
+                                        posToFix = pos;
+                                    }
+                                    pos.set(k, k, i, i, width, lineHeight / 814.0f, flags);
+                                    index++;
+                                }
+                                posToFix.f55pw += spanLeft;
+                                posToFix.spanSize += spanLeft;
+                                y += lineHeight;
+                            }
+                        } else {
+                            return;
+                        }
+                    } else if (count == 2) {
+                        position1 = (GroupedMessagePosition) this.posArray.get(0);
+                        position2 = (GroupedMessagePosition) this.posArray.get(1);
+                        String pString = proportions.toString();
+                        if (!pString.equals("ww") || ((double) averageAspectRatio) <= 1.4d * ((double) maxAspectRatio) || ((double) (position1.aspectRatio - position2.aspectRatio)) >= 0.2d) {
+                            if (!pString.equals("ww")) {
+                                if (!pString.equals("qq")) {
+                                    int secondWidth = (int) Math.max(0.4f * ((float) this.maxSizeWidth), (float) Math.round((((float) this.maxSizeWidth) / position1.aspectRatio) / ((1.0f / position1.aspectRatio) + (1.0f / position2.aspectRatio))));
+                                    int firstWidth = this.maxSizeWidth - secondWidth;
+                                    if (firstWidth < minWidth) {
+                                        int diff2 = minWidth - firstWidth;
+                                        firstWidth = minWidth;
+                                        secondWidth -= diff2;
+                                    }
+                                    height = Math.min(814.0f, (float) Math.round(Math.min(((float) firstWidth) / position1.aspectRatio, ((float) secondWidth) / position2.aspectRatio))) / 814.0f;
+                                    position1.set(0, 0, 0, 0, firstWidth, height, 13);
+                                    position2.set(1, 1, 0, 0, secondWidth, height, 14);
+                                }
+                            }
+                            width = this.maxSizeWidth / 2;
+                            height = ((float) Math.round(Math.min(((float) width) / position1.aspectRatio, Math.min(((float) width) / position2.aspectRatio, 814.0f)))) / 814.0f;
+                            position1.set(0, 0, 0, 0, width, height, 13);
+                            position2.set(1, 1, 0, 0, width, height, 14);
+                        } else {
+                            height = ((float) Math.round(Math.min(((float) this.maxSizeWidth) / position1.aspectRatio, Math.min(((float) this.maxSizeWidth) / position2.aspectRatio, 814.0f / 2.0f)))) / 814.0f;
+                            position1.set(0, 0, 0, 0, this.maxSizeWidth, height, 7);
+                            position2.set(0, 0, 1, 1, this.maxSizeWidth, height, 11);
+                        }
+                    } else if (count == 3) {
+                        position1 = (GroupedMessagePosition) this.posArray.get(0);
+                        position2 = (GroupedMessagePosition) this.posArray.get(1);
+                        position3 = (GroupedMessagePosition) this.posArray.get(2);
+                        float secondHeight;
+                        if (proportions.charAt(0) == 'n') {
+                            float thirdHeight = Math.min(0.5f * 814.0f, (float) Math.round((position2.aspectRatio * ((float) this.maxSizeWidth)) / (position3.aspectRatio + position2.aspectRatio)));
+                            secondHeight = 814.0f - thirdHeight;
+                            int rightWidth = (int) Math.max((float) minWidth, Math.min(((float) this.maxSizeWidth) * 0.5f, (float) Math.round(Math.min(position3.aspectRatio * thirdHeight, position2.aspectRatio * secondHeight))));
+                            int leftWidth = Math.round(Math.min((position1.aspectRatio * 814.0f) + ((float) paddingsWidth), (float) (this.maxSizeWidth - rightWidth)));
+                            position1.set(0, 0, 0, 1, leftWidth, 1.0f, 13);
+                            position2.set(1, 1, 0, 0, rightWidth, secondHeight / 814.0f, 6);
+                            position3.set(0, 1, 1, 1, rightWidth, thirdHeight / 814.0f, 10);
+                            position3.spanSize = this.maxSizeWidth;
+                            position1.siblingHeights = new float[]{thirdHeight / 814.0f, secondHeight / 814.0f};
+                            position2.spanSize = this.maxSizeWidth - leftWidth;
+                            position3.leftSpanOffset = leftWidth;
+                            this.hasSibling = true;
+                        } else {
+                            float firstHeight = ((float) Math.round(Math.min(((float) this.maxSizeWidth) / position1.aspectRatio, 0.66f * 814.0f))) / 814.0f;
+                            position1.set(0, 1, 0, 0, this.maxSizeWidth, firstHeight, 7);
+                            width = this.maxSizeWidth / 2;
+                            secondHeight = Math.min(814.0f - firstHeight, (float) Math.round(Math.min(((float) width) / position2.aspectRatio, ((float) width) / position3.aspectRatio))) / 814.0f;
+                            position2.set(0, 0, 1, 1, width, secondHeight, 9);
+                            position3.set(1, 1, 1, 1, width, secondHeight, 10);
+                        }
+                    } else if (count == 4) {
+                        position1 = (GroupedMessagePosition) this.posArray.get(0);
+                        position2 = (GroupedMessagePosition) this.posArray.get(1);
+                        position3 = (GroupedMessagePosition) this.posArray.get(2);
+                        GroupedMessagePosition position4 = (GroupedMessagePosition) this.posArray.get(3);
+                        float h0;
+                        int w0;
+                        if (proportions.charAt(0) == 'w') {
+                            h0 = ((float) Math.round(Math.min(((float) this.maxSizeWidth) / position1.aspectRatio, 0.66f * 814.0f))) / 814.0f;
+                            position1.set(0, 2, 0, 0, this.maxSizeWidth, h0, 7);
+                            float h = (float) Math.round(((float) this.maxSizeWidth) / ((position2.aspectRatio + position3.aspectRatio) + position4.aspectRatio));
+                            w0 = (int) Math.max((float) minWidth, Math.min(((float) this.maxSizeWidth) * 0.4f, position2.aspectRatio * h));
+                            int w2 = (int) Math.max(Math.max((float) minWidth, ((float) this.maxSizeWidth) * 0.33f), position4.aspectRatio * h);
+                            int w1 = (this.maxSizeWidth - w0) - w2;
+                            h = Math.min(814.0f - h0, h) / 814.0f;
+                            position2.set(0, 0, 1, 1, w0, h, 9);
+                            position3.set(1, 1, 1, 1, w1, h, 8);
+                            position4.set(2, 2, 1, 1, w2, h, 10);
+                        } else {
+                            int w = Math.max(minWidth, Math.round(814.0f / ((1.0f / ((GroupedMessagePosition) this.posArray.get(3)).aspectRatio) + ((1.0f / position3.aspectRatio) + (1.0f / position2.aspectRatio)))));
+                            h0 = Math.min(0.33f, Math.max((float) minHeight, ((float) w) / position2.aspectRatio) / 814.0f);
+                            float h1 = Math.min(0.33f, Math.max((float) minHeight, ((float) w) / position3.aspectRatio) / 814.0f);
+                            float h2 = (1.0f - h0) - h1;
+                            w0 = Math.round(Math.min((position1.aspectRatio * 814.0f) + ((float) paddingsWidth), (float) (this.maxSizeWidth - w)));
+                            position1.set(0, 0, 0, 2, w0, (h0 + h1) + h2, 13);
+                            position2.set(1, 1, 0, 0, w, h0, 6);
+                            position3.set(0, 1, 1, 1, w, h1, 2);
+                            position3.spanSize = this.maxSizeWidth;
+                            position4.set(0, 1, 2, 2, w, h2, 10);
+                            position4.spanSize = this.maxSizeWidth;
+                            position2.spanSize = this.maxSizeWidth - w0;
+                            position3.leftSpanOffset = w0;
+                            position4.leftSpanOffset = w0;
+                            position1.siblingHeights = new float[]{h0, h1, h2};
+                            this.hasSibling = true;
+                        }
+                    }
+                    for (a = 0; a < count; a++) {
+                        pos = (GroupedMessagePosition) this.posArray.get(a);
+                        if ((pos.flags & 1) != 0) {
+                            pos.edge = true;
+                        }
+                    }
+                }
+            }
+        }
 
         public BlockCollageCell(Context context) {
             super(context);
@@ -1413,19 +1425,68 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             };
             this.innerListView.addItemDecoration(new ItemDecoration(ArticleViewer.this) {
                 public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
-                    outRect.left = 0;
-                    outRect.top = 0;
-                    int dp = AndroidUtilities.m10dp(2.0f);
-                    outRect.right = dp;
-                    outRect.bottom = dp;
+                    GroupedMessagePosition position;
+                    outRect.bottom = 0;
+                    if (view instanceof BlockPhotoCell) {
+                        position = (GroupedMessagePosition) BlockCollageCell.this.group.positions.get(((BlockPhotoCell) view).currentBlock);
+                    } else if (view instanceof BlockVideoCell) {
+                        position = (GroupedMessagePosition) BlockCollageCell.this.group.positions.get(((BlockVideoCell) view).currentBlock);
+                    } else {
+                        position = null;
+                    }
+                    if (position != null && position.siblingHeights != null) {
+                        int a;
+                        float maxHeight = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.5f;
+                        int h = 0;
+                        for (float f : position.siblingHeights) {
+                            h += (int) Math.ceil((double) (f * maxHeight));
+                        }
+                        h += (position.maxY - position.minY) * AndroidUtilities.dp2(11.0f);
+                        int count = BlockCollageCell.this.group.posArray.size();
+                        for (a = 0; a < count; a++) {
+                            GroupedMessagePosition pos = (GroupedMessagePosition) BlockCollageCell.this.group.posArray.get(a);
+                            if (pos.minY == position.minY && ((pos.minX != position.minX || pos.maxX != position.maxX || pos.minY != position.minY || pos.maxY != position.maxY) && pos.minY == position.minY)) {
+                                h -= ((int) Math.ceil((double) (pos.f54ph * maxHeight))) - AndroidUtilities.m9dp(4.0f);
+                                break;
+                            }
+                        }
+                        outRect.bottom = -h;
+                    }
                 }
             });
+            final ArticleViewer articleViewer = ArticleViewer.this;
+            this.gridLayoutManager = new GridLayoutManagerFixed(context, 1000, 1, true) {
+                public boolean supportsPredictiveItemAnimations() {
+                    return false;
+                }
+
+                public boolean shouldLayoutChildFromOpositeSide(View child) {
+                    return false;
+                }
+
+                protected boolean hasSiblingChild(int position) {
+                    GroupedMessagePosition pos = (GroupedMessagePosition) BlockCollageCell.this.group.positions.get((TLObject) BlockCollageCell.this.currentBlock.items.get((BlockCollageCell.this.currentBlock.items.size() - position) - 1));
+                    if (pos.minX == pos.maxX || pos.minY != pos.maxY || pos.minY == (byte) 0) {
+                        return false;
+                    }
+                    int count = BlockCollageCell.this.group.posArray.size();
+                    for (int a = 0; a < count; a++) {
+                        GroupedMessagePosition p = (GroupedMessagePosition) BlockCollageCell.this.group.posArray.get(a);
+                        if (p != pos && p.minY <= pos.minY && p.maxY >= pos.minY) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            };
+            this.gridLayoutManager.setSpanSizeLookup(new SpanSizeLookup(ArticleViewer.this) {
+                public int getSpanSize(int position) {
+                    return ((GroupedMessagePosition) BlockCollageCell.this.group.positions.get((TLObject) BlockCollageCell.this.currentBlock.items.get((BlockCollageCell.this.currentBlock.items.size() - position) - 1))).spanSize;
+                }
+            });
+            this.innerListView.setLayoutManager(this.gridLayoutManager);
             RecyclerListView recyclerListView = this.innerListView;
-            LayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
-            this.gridLayoutManager = gridLayoutManager;
-            recyclerListView.setLayoutManager(gridLayoutManager);
-            recyclerListView = this.innerListView;
-            Adapter c07473 = new Adapter(ArticleViewer.this) {
+            Adapter c04685 = new Adapter(ArticleViewer.this) {
                 public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                     View view;
                     switch (viewType) {
@@ -1440,12 +1501,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
 
                 public void onBindViewHolder(ViewHolder holder, int position) {
+                    PageBlock pageBlock = (PageBlock) BlockCollageCell.this.currentBlock.items.get((BlockCollageCell.this.currentBlock.items.size() - position) - 1);
                     switch (holder.getItemViewType()) {
                         case 0:
-                            holder.itemView.setBlock((TL_pageBlockPhoto) BlockCollageCell.this.currentBlock.items.get(position), true, true);
+                            BlockPhotoCell cell = holder.itemView;
+                            cell.groupPosition = (GroupedMessagePosition) BlockCollageCell.this.group.positions.get(pageBlock);
+                            cell.setBlock((TL_pageBlockPhoto) pageBlock, true, true);
                             return;
                         default:
-                            holder.itemView.setBlock((TL_pageBlockVideo) BlockCollageCell.this.currentBlock.items.get(position), true, true);
+                            BlockVideoCell cell2 = holder.itemView;
+                            cell2.groupPosition = (GroupedMessagePosition) BlockCollageCell.this.group.positions.get(pageBlock);
+                            cell2.setBlock((TL_pageBlockVideo) pageBlock, true, true);
                             return;
                     }
                 }
@@ -1458,21 +1524,23 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
 
                 public int getItemViewType(int position) {
-                    if (((PageBlock) BlockCollageCell.this.currentBlock.items.get(position)) instanceof TL_pageBlockPhoto) {
+                    if (((PageBlock) BlockCollageCell.this.currentBlock.items.get((BlockCollageCell.this.currentBlock.items.size() - position) - 1)) instanceof TL_pageBlockPhoto) {
                         return 0;
                     }
                     return 1;
                 }
             };
-            this.adapter = c07473;
-            recyclerListView.setAdapter(c07473);
+            this.adapter = c04685;
+            recyclerListView.setAdapter(c04685);
             addView(this.innerListView, LayoutHelper.createFrame(-1, -2.0f));
             setWillNotDraw(false);
         }
 
         public void setBlock(TL_pageBlockCollage block) {
-            this.currentBlock = block;
-            this.lastCreatedWidth = 0;
+            if (this.currentBlock != block) {
+                this.currentBlock = block;
+                this.group.calculate();
+            }
             this.adapter.notifyDataSetChanged();
             int color = ArticleViewer.this.getSelectedColor();
             if (color == 0) {
@@ -1486,7 +1554,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
 
         public boolean onTouchEvent(MotionEvent event) {
-            return ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event);
+            if (!ArticleViewer.this.checkLayoutForLinks(event, this, this.captionLayout, this.textX, this.textY)) {
+                if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(event))) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -1497,31 +1570,31 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 int textWidth;
                 int listWidth = width;
                 if (this.currentBlock.level > 0) {
-                    int dp = AndroidUtilities.m10dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m10dp(18.0f);
+                    int dp = AndroidUtilities.m9dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m9dp(18.0f);
                     this.listX = dp;
                     this.textX = dp;
-                    listWidth -= this.listX + AndroidUtilities.m10dp(18.0f);
+                    listWidth -= this.listX + AndroidUtilities.m9dp(18.0f);
                     textWidth = listWidth;
                 } else {
                     this.listX = 0;
-                    this.textX = AndroidUtilities.m10dp(18.0f);
-                    textWidth = width - AndroidUtilities.m10dp(36.0f);
+                    this.textX = AndroidUtilities.m9dp(18.0f);
+                    textWidth = width - AndroidUtilities.m9dp(36.0f);
                 }
-                int countPerRow = listWidth / AndroidUtilities.m10dp(100.0f);
-                int rowCount = (int) Math.ceil((double) (((float) this.currentBlock.items.size()) / ((float) countPerRow)));
-                int itemSize = listWidth / countPerRow;
-                this.gridLayoutManager.setSpanCount(countPerRow);
-                this.innerListView.measure(MeasureSpec.makeMeasureSpec((itemSize * countPerRow) + AndroidUtilities.m10dp(2.0f), NUM), MeasureSpec.makeMeasureSpec(itemSize * rowCount, NUM));
-                height = (rowCount * itemSize) - AndroidUtilities.m10dp(2.0f);
-                if (this.lastCreatedWidth != width) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
-                    if (this.textLayout != null) {
-                        this.textY = AndroidUtilities.m10dp(8.0f) + height;
-                        height += AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight();
-                    }
+                this.innerListView.measure(MeasureSpec.makeMeasureSpec(listWidth, NUM), MeasureSpec.makeMeasureSpec(0, 0));
+                height = this.innerListView.getMeasuredHeight();
+                this.captionLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.text, textWidth, this.currentBlock);
+                if (this.captionLayout != null) {
+                    this.textY = AndroidUtilities.m9dp(8.0f) + height;
+                    this.creditOffset = AndroidUtilities.m9dp(4.0f) + this.captionLayout.getHeight();
+                    height += this.creditOffset + AndroidUtilities.m9dp(4.0f);
                 }
+                this.creditLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.credit, textWidth, this.currentBlock);
+                if (this.creditLayout != null) {
+                    height += AndroidUtilities.m9dp(4.0f) + this.creditLayout.getHeight();
+                }
+                height += AndroidUtilities.m9dp(16.0f);
                 if (this.currentBlock.level > 0 && !this.currentBlock.bottom) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
             } else {
                 height = 1;
@@ -1531,21 +1604,110 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
 
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            this.innerListView.layout(this.listX, 0, this.listX + this.innerListView.getMeasuredWidth(), this.innerListView.getMeasuredHeight());
+            this.innerListView.layout(this.listX, AndroidUtilities.m9dp(8.0f), this.listX + this.innerListView.getMeasuredWidth(), this.innerListView.getMeasuredHeight() + AndroidUtilities.m9dp(8.0f));
         }
 
         protected void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                if (this.textLayout != null) {
+                if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                    this.textLayout.draw(canvas);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.m10dp(18.0f), 0.0f, (float) AndroidUtilities.m10dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m10dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockDetailsBottomCell */
+    private class BlockDetailsBottomCell extends View {
+        private RectF rect = new RectF();
+
+        public BlockDetailsBottomCell(Context context) {
+            super(context);
+            ArticleViewer.this.createDividerPaint();
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m9dp(4.0f) + 1);
+        }
+
+        protected void onDraw(Canvas canvas) {
+            canvas.drawLine(0.0f, 0.0f, (float) getMeasuredWidth(), 0.0f, ArticleViewer.dividerPaint);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockDetailsCell */
+    private class BlockDetailsCell extends View implements Callback {
+        private AnimatedArrowDrawable arrow;
+        private TL_pageBlockDetails currentBlock;
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.m9dp(50.0f);
+        private int textY = (AndroidUtilities.m9dp(11.0f) + 1);
+
+        public BlockDetailsCell(Context context) {
+            super(context);
+            ArticleViewer.this.createDividerPaint();
+            this.arrow = new AnimatedArrowDrawable(ArticleViewer.this.getGrayTextColor(), true);
+        }
+
+        public void invalidateDrawable(Drawable drawable) {
+            invalidate();
+        }
+
+        public void scheduleDrawable(Drawable drawable, Runnable runnable, long l) {
+        }
+
+        public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
+        }
+
+        public void setBlock(TL_pageBlockDetails block) {
+            this.currentBlock = block;
+            this.arrow.setAnimationProgress(block.open ? 0.0f : 1.0f);
+            this.arrow.setCallback(this);
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            return ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int h = AndroidUtilities.m9dp(39.0f);
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.title, width - AndroidUtilities.m9dp(52.0f), this.currentBlock);
+                if (this.textLayout != null) {
+                    h = Math.max(h, AndroidUtilities.m9dp(21.0f) + this.textLayout.getHeight());
+                    this.textY = ((this.textLayout.getHeight() + AndroidUtilities.m9dp(21.0f)) - this.textLayout.getHeight()) / 2;
+                }
+            }
+            setMeasuredDimension(width, h + 1);
+        }
+
+        protected void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                canvas.save();
+                canvas.translate((float) AndroidUtilities.m9dp(18.0f), (float) (((getMeasuredHeight() - AndroidUtilities.m9dp(13.0f)) - 1) / 2));
+                this.arrow.draw(canvas);
+                canvas.restore();
+                if (this.textLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    this.textLayout.draw(canvas);
+                    canvas.restore();
+                }
+                int y = getMeasuredHeight() - 1;
+                canvas.drawLine(0.0f, (float) y, (float) getMeasuredWidth(), (float) y, ArticleViewer.dividerPaint);
             }
         }
     }
@@ -1556,40 +1718,72 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public BlockDividerCell(Context context) {
             super(context);
-            if (ArticleViewer.dividerPaint == null) {
-                ArticleViewer.dividerPaint = new Paint();
-                int color = ArticleViewer.this.getSelectedColor();
-                if (color == 0) {
-                    ArticleViewer.dividerPaint.setColor(-3288619);
-                } else if (color == 1) {
-                    ArticleViewer.dividerPaint.setColor(-4080987);
-                } else if (color == 2) {
-                    ArticleViewer.dividerPaint.setColor(-12303292);
-                }
-            }
+            ArticleViewer.this.createDividerPaint();
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m10dp(18.0f));
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m9dp(18.0f));
         }
 
         protected void onDraw(Canvas canvas) {
             int width = getMeasuredWidth() / 3;
-            this.rect.set((float) width, (float) AndroidUtilities.m10dp(8.0f), (float) (width * 2), (float) AndroidUtilities.m10dp(10.0f));
-            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(1.0f), (float) AndroidUtilities.m10dp(1.0f), ArticleViewer.dividerPaint);
+            this.rect.set((float) width, (float) AndroidUtilities.m9dp(8.0f), (float) (width * 2), (float) AndroidUtilities.m9dp(10.0f));
+            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(1.0f), (float) AndroidUtilities.m9dp(1.0f), ArticleViewer.dividerPaint);
         }
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$BlockEmbedCell */
     private class BlockEmbedCell extends FrameLayout {
+        private DrawingText captionLayout;
+        private DrawingText creditLayout;
+        private int creditOffset;
         private TL_pageBlockEmbed currentBlock;
-        private int lastCreatedWidth;
+        private int exactWebViewHeight;
         private int listX;
-        private StaticLayout textLayout;
         private int textX;
         private int textY;
         private WebPlayerView videoView;
         private TouchyWebView webView;
+
+        /* renamed from: org.telegram.ui.ArticleViewer$BlockEmbedCell$TelegramWebviewProxy */
+        private class TelegramWebviewProxy {
+            private TelegramWebviewProxy() {
+            }
+
+            /* synthetic */ TelegramWebviewProxy(BlockEmbedCell x0, C04591 x1) {
+                this();
+            }
+
+            @JavascriptInterface
+            public void postEvent(String eventName, String eventData) {
+                AndroidUtilities.runOnUIThread(new ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$$Lambda$0(this, eventName, eventData));
+            }
+
+            /* renamed from: lambda$postEvent$0$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy */
+            final /* synthetic */ void mo9492x2b8da535(String eventName, String eventData) {
+                Object obj = -1;
+                switch (eventName.hashCode()) {
+                    case -1065790942:
+                        if (eventName.equals("resize_frame")) {
+                            obj = null;
+                            break;
+                        }
+                        break;
+                }
+                switch (obj) {
+                    case null:
+                        try {
+                            BlockEmbedCell.this.exactWebViewHeight = Utilities.parseInt(new JSONObject(eventData).getString("height")).intValue();
+                            BlockEmbedCell.this.requestLayout();
+                            return;
+                        } catch (Throwable th) {
+                            return;
+                        }
+                    default:
+                        return;
+                }
+            }
+        }
 
         /* renamed from: org.telegram.ui.ArticleViewer$BlockEmbedCell$TouchyWebView */
         public class TouchyWebView extends WebView {
@@ -1610,7 +1804,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
         }
 
-        @SuppressLint({"SetJavaScriptEnabled"})
+        @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
         public BlockEmbedCell(Context context) {
             super(context);
             setWillNotDraw(false);
@@ -1618,7 +1812,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 public void onInitFailed() {
                     BlockEmbedCell.this.webView.setVisibility(0);
                     BlockEmbedCell.this.videoView.setVisibility(4);
-                    BlockEmbedCell.this.videoView.loadVideo(null, null, null, false);
+                    BlockEmbedCell.this.videoView.loadVideo(null, null, null, null, false);
                     HashMap<String, String> args = new HashMap();
                     args.put("Referer", "http://youtube.com");
                     BlockEmbedCell.this.webView.loadUrl(BlockEmbedCell.this.currentBlock.url, args);
@@ -1671,7 +1865,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             ArticleViewer.this.parentActivity.getWindow().addFlags(128);
                             return;
                         } catch (Throwable e) {
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                             return;
                         }
                     }
@@ -1681,7 +1875,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     try {
                         ArticleViewer.this.parentActivity.getWindow().clearFlags(128);
                     } catch (Throwable e2) {
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                     }
                 }
 
@@ -1701,26 +1895,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.webView.getSettings().setAllowContentAccess(true);
             if (VERSION.SDK_INT >= 17) {
                 this.webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+                this.webView.addJavascriptInterface(new TelegramWebviewProxy(this, null), "TelegramWebviewProxy");
             }
             if (VERSION.SDK_INT >= 21) {
                 this.webView.getSettings().setMixedContentMode(0);
                 CookieManager.getInstance().setAcceptThirdPartyCookies(this.webView, true);
             }
             this.webView.setWebChromeClient(new WebChromeClient(ArticleViewer.this) {
-
-                /* renamed from: org.telegram.ui.ArticleViewer$BlockEmbedCell$2$1 */
-                class C07491 implements Runnable {
-                    C07491() {
-                    }
-
-                    public void run() {
-                        if (ArticleViewer.this.customView != null) {
-                            ArticleViewer.this.fullscreenVideoContainer.addView(ArticleViewer.this.customView, LayoutHelper.createFrame(-1, -1.0f));
-                            ArticleViewer.this.fullscreenVideoContainer.setVisibility(0);
-                        }
-                    }
-                }
-
                 public void onShowCustomView(View view, int requestedOrientation, CustomViewCallback callback) {
                     onShowCustomView(view, callback);
                 }
@@ -1732,7 +1913,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     }
                     ArticleViewer.this.customView = view;
                     ArticleViewer.this.customViewCallback = callback;
-                    AndroidUtilities.runOnUIThread(new C07491(), 100);
+                    AndroidUtilities.runOnUIThread(new ArticleViewer$BlockEmbedCell$2$$Lambda$0(this), 100);
+                }
+
+                final /* synthetic */ void lambda$onShowCustomView$0$ArticleViewer$BlockEmbedCell$2() {
+                    if (ArticleViewer.this.customView != null) {
+                        ArticleViewer.this.fullscreenVideoContainer.addView(ArticleViewer.this.customView, LayoutHelper.createFrame(-1, -1.0f));
+                        ArticleViewer.this.fullscreenVideoContainer.setVisibility(0);
+                    }
                 }
 
                 public void onHideCustomView() {
@@ -1755,6 +1943,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
                 }
+
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    Browser.openUrl(ArticleViewer.this.parentActivity, url);
+                    return true;
+                }
             });
             addView(this.webView);
         }
@@ -1768,7 +1961,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 this.currentBlock = null;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.videoView.destroy();
         }
@@ -1777,24 +1970,31 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             Photo thumb = null;
             TL_pageBlockEmbed previousBlock = this.currentBlock;
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             if (previousBlock != this.currentBlock) {
+                if (this.currentBlock.allow_scrolling) {
+                    this.webView.setVerticalScrollBarEnabled(true);
+                    this.webView.setHorizontalScrollBarEnabled(true);
+                } else {
+                    this.webView.setVerticalScrollBarEnabled(false);
+                    this.webView.setHorizontalScrollBarEnabled(false);
+                }
+                this.exactWebViewHeight = 0;
                 try {
                     this.webView.loadUrl("about:blank");
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 try {
                     if (this.currentBlock.html != null) {
                         this.webView.loadDataWithBaseURL("https://telegram.org/embed", this.currentBlock.html, "text/html", C0016C.UTF8_NAME, null);
                         this.videoView.setVisibility(4);
-                        this.videoView.loadVideo(null, null, null, false);
+                        this.videoView.loadVideo(null, null, null, null, false);
                         this.webView.setVisibility(0);
                     } else {
                         if (this.currentBlock.poster_photo_id != 0) {
                             thumb = ArticleViewer.this.getPhotoWithId(this.currentBlock.poster_photo_id);
                         }
-                        if (this.videoView.loadVideo(block.url, thumb, null, this.currentBlock.autoplay)) {
+                        if (this.videoView.loadVideo(block.url, thumb, ArticleViewer.this.currentPage, null, false)) {
                             this.webView.setVisibility(4);
                             this.videoView.setVisibility(0);
                             this.webView.stopLoading();
@@ -1802,14 +2002,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         } else {
                             this.webView.setVisibility(0);
                             this.videoView.setVisibility(4);
-                            this.videoView.loadVideo(null, null, null, false);
+                            this.videoView.loadVideo(null, null, null, null, false);
                             HashMap<String, String> args = new HashMap();
                             args.put("Referer", "http://youtube.com");
                             this.webView.loadUrl(this.currentBlock.url, args);
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
             }
             requestLayout();
@@ -1827,7 +2027,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
 
         public boolean onTouchEvent(MotionEvent event) {
-            return ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event);
+            if (!ArticleViewer.this.checkLayoutForLinks(event, this, this.captionLayout, this.textX, this.textY)) {
+                if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(event))) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -1836,46 +2041,60 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.currentBlock != null) {
                 int textWidth;
                 float scale;
-                float dp;
                 int listWidth = width;
                 if (this.currentBlock.level > 0) {
-                    int dp2 = AndroidUtilities.m10dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m10dp(18.0f);
-                    this.listX = dp2;
-                    this.textX = dp2;
-                    listWidth -= this.listX + AndroidUtilities.m10dp(18.0f);
+                    int dp = AndroidUtilities.m9dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m9dp(18.0f);
+                    this.listX = dp;
+                    this.textX = dp;
+                    listWidth -= this.listX + AndroidUtilities.m9dp(18.0f);
                     textWidth = listWidth;
                 } else {
                     this.listX = 0;
-                    this.textX = AndroidUtilities.m10dp(18.0f);
-                    textWidth = width - AndroidUtilities.m10dp(36.0f);
-                }
-                if (this.currentBlock.f106w == 0) {
-                    scale = 1.0f;
-                } else {
-                    scale = ((float) width) / ((float) this.currentBlock.f106w);
-                }
-                if (this.currentBlock.f106w == 0) {
-                    dp = ((float) AndroidUtilities.m10dp((float) this.currentBlock.f105h)) * scale;
-                } else {
-                    dp = ((float) this.currentBlock.f105h) * scale;
-                }
-                height = (int) dp;
-                this.webView.measure(MeasureSpec.makeMeasureSpec(listWidth, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
-                if (this.videoView.getParent() == this) {
-                    this.videoView.measure(MeasureSpec.makeMeasureSpec(listWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(10.0f) + height, NUM));
-                }
-                if (this.lastCreatedWidth != width) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
-                    if (this.textLayout != null) {
-                        this.textY = AndroidUtilities.m10dp(8.0f) + height;
-                        height += AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight();
+                    this.textX = AndroidUtilities.m9dp(18.0f);
+                    textWidth = width - AndroidUtilities.m9dp(36.0f);
+                    if (!this.currentBlock.full_width) {
+                        listWidth -= AndroidUtilities.m9dp(36.0f);
+                        this.listX += AndroidUtilities.m9dp(18.0f);
                     }
                 }
-                height += AndroidUtilities.m10dp(5.0f);
+                if (this.currentBlock.f198w == 0) {
+                    scale = 1.0f;
+                } else {
+                    scale = ((float) width) / ((float) this.currentBlock.f198w);
+                }
+                if (this.exactWebViewHeight != 0) {
+                    height = AndroidUtilities.m9dp((float) this.exactWebViewHeight);
+                } else {
+                    float dp2;
+                    if (this.currentBlock.f198w == 0) {
+                        dp2 = ((float) AndroidUtilities.m9dp((float) this.currentBlock.f197h)) * scale;
+                    } else {
+                        dp2 = ((float) this.currentBlock.f197h) * scale;
+                    }
+                    height = (int) dp2;
+                }
+                if (height == 0) {
+                    height = AndroidUtilities.m9dp(10.0f);
+                }
+                this.webView.measure(MeasureSpec.makeMeasureSpec(listWidth, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
+                if (this.videoView.getParent() == this) {
+                    this.videoView.measure(MeasureSpec.makeMeasureSpec(listWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(10.0f) + height, NUM));
+                }
+                this.captionLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.text, textWidth, this.currentBlock);
+                if (this.captionLayout != null) {
+                    this.textY = AndroidUtilities.m9dp(8.0f) + height;
+                    this.creditOffset = AndroidUtilities.m9dp(4.0f) + this.captionLayout.getHeight();
+                    height += this.creditOffset + AndroidUtilities.m9dp(4.0f);
+                }
+                this.creditLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.credit, textWidth, this.currentBlock);
+                if (this.creditLayout != null) {
+                    height += AndroidUtilities.m9dp(4.0f) + this.creditLayout.getHeight();
+                }
+                height += AndroidUtilities.m9dp(5.0f);
                 if (this.currentBlock.level > 0 && !this.currentBlock.bottom) {
-                    height += AndroidUtilities.m10dp(8.0f);
-                } else if (this.currentBlock.level == 0 && this.textLayout != null) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
+                } else if (this.currentBlock.level == 0 && this.captionLayout != null) {
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
             } else {
                 height = 1;
@@ -1892,15 +2111,20 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         protected void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                if (this.textLayout != null) {
+                if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                    this.textLayout.draw(canvas);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.m10dp(18.0f), 0.0f, (float) AndroidUtilities.m10dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m10dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -1911,42 +2135,45 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         private AvatarDrawable avatarDrawable;
         private ImageReceiver avatarImageView = new ImageReceiver(this);
         private boolean avatarVisible;
-        private int captionX = AndroidUtilities.m10dp(18.0f);
+        private DrawingText captionLayout;
+        private int captionX = AndroidUtilities.m9dp(18.0f);
         private int captionY;
+        private DrawingText creditLayout;
+        private int creditOffset;
         private TL_pageBlockEmbedPost currentBlock;
-        private StaticLayout dateLayout;
+        private DrawingText dateLayout;
         private int dateX;
-        private int lastCreatedWidth;
         private int lineHeight;
-        private StaticLayout nameLayout;
+        private DrawingText nameLayout;
         private int nameX;
-        private StaticLayout textLayout;
-        private int textX = AndroidUtilities.m10dp(32.0f);
-        private int textY = AndroidUtilities.m10dp(56.0f);
+        private int textX = AndroidUtilities.m9dp(32.0f);
+        private int textY = AndroidUtilities.m9dp(56.0f);
 
         public BlockEmbedPostCell(Context context) {
             super(context);
-            this.avatarImageView.setRoundRadius(AndroidUtilities.m10dp(20.0f));
-            this.avatarImageView.setImageCoords(AndroidUtilities.m10dp(32.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(40.0f), AndroidUtilities.m10dp(40.0f));
+            this.avatarImageView.setRoundRadius(AndroidUtilities.m9dp(20.0f));
+            this.avatarImageView.setImageCoords(AndroidUtilities.m9dp(32.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(40.0f), AndroidUtilities.m9dp(40.0f));
             this.avatarDrawable = new AvatarDrawable();
         }
 
         public void setBlock(TL_pageBlockEmbedPost block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
         public boolean onTouchEvent(MotionEvent event) {
-            return ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event);
+            if (!ArticleViewer.this.checkLayoutForLinks(event, this, this.captionLayout, this.textX, this.textY)) {
+                if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(event))) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int height;
             int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
+            if (this.currentBlock != null) {
                 boolean z = this.currentBlock.author_photo_id != 0;
                 this.avatarVisible = z;
                 if (z) {
@@ -1955,24 +2182,30 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.avatarVisible = z;
                     if (z) {
                         this.avatarDrawable.setInfo(0, this.currentBlock.author, null, false);
-                        PhotoSize image = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.m10dp(40.0f), true);
-                        this.avatarImageView.setImage(image != null ? image.location : null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(40), Integer.valueOf(40)}), this.avatarDrawable, 0, null, 1);
+                        PhotoSize image = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.m9dp(40.0f), true);
+                        this.avatarImageView.setImage(image != null ? image.location : null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(40), Integer.valueOf(40)}), this.avatarDrawable, 0, null, ArticleViewer.this.currentPage, 1);
                     }
                 }
-                this.nameLayout = ArticleViewer.this.createLayoutForText(this.currentBlock.author, null, width - AndroidUtilities.m10dp((float) ((this.avatarVisible ? 54 : 0) + 50)), this.currentBlock);
+                this.nameLayout = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, null, width - AndroidUtilities.m9dp((float) ((this.avatarVisible ? 54 : 0) + 50)), this.currentBlock);
                 if (this.currentBlock.date != 0) {
-                    this.dateLayout = ArticleViewer.this.createLayoutForText(LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.date) * 1000), null, width - AndroidUtilities.m10dp((float) ((this.avatarVisible ? 54 : 0) + 50)), this.currentBlock);
+                    this.dateLayout = ArticleViewer.this.createLayoutForText(this, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.date) * 1000), null, width - AndroidUtilities.m9dp((float) ((this.avatarVisible ? 54 : 0) + 50)), this.currentBlock);
                 } else {
                     this.dateLayout = null;
                 }
-                height = AndroidUtilities.m10dp(56.0f);
-                if (this.currentBlock.text != null) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, width - AndroidUtilities.m10dp(50.0f), this.currentBlock);
-                    if (this.textLayout != null) {
-                        height += AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight();
-                    }
+                height = AndroidUtilities.m9dp(56.0f);
+                int textWidth = width - AndroidUtilities.m9dp(50.0f);
+                this.captionLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.text, textWidth, this.currentBlock);
+                if (this.captionLayout != null) {
+                    this.creditOffset = AndroidUtilities.m9dp(4.0f) + this.captionLayout.getHeight();
+                    height += this.creditOffset + AndroidUtilities.m9dp(4.0f);
+                }
+                this.creditLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.credit, textWidth, this.currentBlock);
+                if (this.creditLayout != null) {
+                    height += AndroidUtilities.m9dp(4.0f) + this.creditLayout.getHeight();
                 }
                 this.lineHeight = height;
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
@@ -1986,7 +2219,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 if (this.nameLayout != null) {
                     canvas.save();
-                    canvas.translate((float) AndroidUtilities.m10dp((float) ((this.avatarVisible ? 54 : 0) + 32)), (float) AndroidUtilities.m10dp(this.dateLayout != null ? 10.0f : 19.0f));
+                    canvas.translate((float) AndroidUtilities.m9dp((float) ((this.avatarVisible ? 54 : 0) + 32)), (float) AndroidUtilities.m9dp(this.dateLayout != null ? 10.0f : 19.0f));
                     this.nameLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -1995,23 +2228,28 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     if (!this.avatarVisible) {
                         i = 0;
                     }
-                    canvas.translate((float) AndroidUtilities.m10dp((float) (i + 32)), (float) AndroidUtilities.m10dp(29.0f));
+                    canvas.translate((float) AndroidUtilities.m9dp((float) (i + 32)), (float) AndroidUtilities.m9dp(29.0f));
                     this.dateLayout.draw(canvas);
                     canvas.restore();
                 }
-                if (this.textLayout != null) {
+                if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                    this.textLayout.draw(canvas);
+                    this.captionLayout.draw(canvas);
                     canvas.restore();
                 }
-                float dp = (float) AndroidUtilities.m10dp(18.0f);
-                float dp2 = (float) AndroidUtilities.m10dp(6.0f);
-                float dp3 = (float) AndroidUtilities.m10dp(20.0f);
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
+                    canvas.restore();
+                }
+                float dp = (float) AndroidUtilities.m9dp(18.0f);
+                float dp2 = (float) AndroidUtilities.m9dp(6.0f);
+                float dp3 = (float) AndroidUtilities.m9dp(20.0f);
                 int i3 = this.lineHeight;
                 if (this.currentBlock.level == 0) {
-                    i2 = AndroidUtilities.m10dp(6.0f);
+                    i2 = AndroidUtilities.m9dp(6.0f);
                 }
                 canvas.drawRect(dp, dp2, dp3, (float) (i3 - i2), ArticleViewer.quoteLinePaint);
             }
@@ -2021,10 +2259,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockFooterCell */
     private class BlockFooterCell extends View {
         private TL_pageBlockFooter currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
-        private int textX = AndroidUtilities.m10dp(18.0f);
-        private int textY = AndroidUtilities.m10dp(8.0f);
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.m9dp(18.0f);
+        private int textY = AndroidUtilities.m9dp(8.0f);
 
         public BlockFooterCell(Context context) {
             super(context);
@@ -2032,7 +2269,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockFooter block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -2045,17 +2281,19 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             int height = 0;
             if (this.currentBlock != null) {
                 if (this.currentBlock.level == 0) {
-                    this.textY = AndroidUtilities.m10dp(8.0f);
-                    this.textX = AndroidUtilities.m10dp(18.0f);
+                    this.textY = AndroidUtilities.m9dp(8.0f);
+                    this.textX = AndroidUtilities.m9dp(18.0f);
                 } else {
                     this.textY = 0;
-                    this.textX = AndroidUtilities.m10dp((float) ((this.currentBlock.level * 14) + 18));
+                    this.textX = AndroidUtilities.m9dp((float) ((this.currentBlock.level * 14) + 18));
                 }
-                if (this.lastCreatedWidth != width) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, (width - AndroidUtilities.m10dp(18.0f)) - this.textX, this.currentBlock);
-                    if (this.textLayout != null) {
-                        height = this.textLayout.getHeight();
-                        height = this.currentBlock.level > 0 ? height + AndroidUtilities.m10dp(8.0f) : height + AndroidUtilities.m10dp(16.0f);
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, (width - AndroidUtilities.m9dp(18.0f)) - this.textX, this.currentBlock);
+                if (this.textLayout != null) {
+                    height = this.textLayout.getHeight();
+                    if (this.currentBlock.level > 0) {
+                        height += AndroidUtilities.m9dp(8.0f);
+                    } else {
+                        height += AndroidUtilities.m9dp(16.0f);
                     }
                 }
             } else {
@@ -2069,12 +2307,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.m10dp(18.0f), 0.0f, (float) AndroidUtilities.m10dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m10dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -2083,10 +2320,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockHeaderCell */
     private class BlockHeaderCell extends View {
         private TL_pageBlockHeader currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
-        private int textX = AndroidUtilities.m10dp(18.0f);
-        private int textY = AndroidUtilities.m10dp(8.0f);
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.m9dp(18.0f);
+        private int textY = AndroidUtilities.m9dp(8.0f);
 
         public BlockHeaderCell(Context context) {
             super(context);
@@ -2094,7 +2330,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockHeader block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -2105,13 +2340,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, width - AndroidUtilities.m10dp(36.0f), this.currentBlock);
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, width - AndroidUtilities.m9dp(36.0f), this.currentBlock);
                 if (this.textLayout != null) {
-                    height = 0 + (AndroidUtilities.m10dp(16.0f) + this.textLayout.getHeight());
+                    height = 0 + (AndroidUtilities.m9dp(16.0f) + this.textLayout.getHeight());
                 }
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
@@ -2120,42 +2355,104 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.currentBlock != null && this.textLayout != null) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$BlockListCell */
-    private class BlockListCell extends View {
-        private TL_pageBlockList currentBlock;
-        private boolean hasRtl;
-        private int lastCreatedWidth;
-        private int maxLetterWidth;
-        private ArrayList<StaticLayout> textLayouts = new ArrayList();
-        private ArrayList<StaticLayout> textNumLayouts = new ArrayList();
-        private int textX;
-        private ArrayList<Integer> textYLayouts = new ArrayList();
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockKickerCell */
+    private class BlockKickerCell extends View {
+        private TL_pageBlockKicker currentBlock;
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.m9dp(18.0f);
+        private int textY;
 
-        public BlockListCell(Context context) {
+        public BlockKickerCell(Context context) {
             super(context);
         }
 
-        public void setBlock(TL_pageBlockList block) {
+        public void setBlock(TL_pageBlockKicker block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
         public boolean onTouchEvent(MotionEvent event) {
-            int count = this.textLayouts.size();
-            int textX = AndroidUtilities.m10dp(36.0f);
-            for (int a = 0; a < count; a++) {
-                StaticLayout textLayout = (StaticLayout) this.textLayouts.get(a);
-                if (ArticleViewer.this.checkLayoutForLinks(event, this, textLayout, textX, ((Integer) this.textYLayouts.get(a)).intValue())) {
-                    return true;
+            return ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int height = 0;
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, width - AndroidUtilities.m9dp(36.0f), this.currentBlock);
+                if (this.textLayout != null) {
+                    height = 0 + (AndroidUtilities.m9dp(16.0f) + this.textLayout.getHeight());
                 }
+                if (this.currentBlock.first) {
+                    height += AndroidUtilities.m9dp(8.0f);
+                    this.textY = AndroidUtilities.m9dp(16.0f);
+                } else {
+                    this.textY = AndroidUtilities.m9dp(8.0f);
+                }
+            } else {
+                height = 1;
+            }
+            setMeasuredDimension(width, height);
+        }
+
+        protected void onDraw(Canvas canvas) {
+            if (this.currentBlock != null && this.textLayout != null) {
+                canvas.save();
+                canvas.translate((float) this.textX, (float) this.textY);
+                this.textLayout.draw(canvas);
+                canvas.restore();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockListItemCell */
+    private class BlockListItemCell extends ViewGroup {
+        private ViewHolder blockLayout;
+        private int blockX;
+        private int blockY;
+        private TL_pageBlockListItem currentBlock;
+        private int currentBlockType;
+        private boolean drawDot;
+        private int numOffsetY;
+        private boolean parentIsList;
+        private DrawingText textLayout;
+        private int textX;
+        private int textY;
+        private boolean verticalAlign;
+
+        public BlockListItemCell(Context context) {
+            super(context);
+            setWillNotDraw(false);
+        }
+
+        public void setBlock(TL_pageBlockListItem block) {
+            if (this.currentBlock != block) {
+                this.currentBlock = block;
+                if (this.blockLayout != null) {
+                    removeView(this.blockLayout.itemView);
+                    this.blockLayout = null;
+                }
+                if (this.currentBlock.blockItem != null) {
+                    this.currentBlockType = ArticleViewer.this.adapter.getTypeForBlock(this.currentBlock.blockItem);
+                    this.blockLayout = ArticleViewer.this.adapter.onCreateViewHolder(this, this.currentBlockType);
+                    addView(this.blockLayout.itemView);
+                }
+            }
+            if (this.currentBlock.blockItem != null) {
+                ArticleViewer.this.adapter.bindBlockToHolder(this.currentBlockType, this.blockLayout, this.currentBlock.blockItem, 0, 0);
+            }
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            if (ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY)) {
+                return true;
             }
             return super.onTouchEvent(event);
         }
@@ -2163,92 +2460,475 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
-            this.hasRtl = false;
-            this.maxLetterWidth = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
-                int a;
-                StaticLayout textLayout;
-                this.textLayouts.clear();
-                this.textYLayouts.clear();
-                this.textNumLayouts.clear();
-                int count = this.currentBlock.items.size();
-                for (a = 0; a < count; a++) {
-                    String num;
-                    RichText item = (RichText) this.currentBlock.items.get(a);
-                    if (a == 0) {
-                        textLayout = ArticleViewer.this.createLayoutForText(null, item, (width - AndroidUtilities.m10dp(24.0f)) - this.maxLetterWidth, this.currentBlock);
-                        if (textLayout != null) {
-                            int lCount = textLayout.getLineCount();
-                            for (int b = 0; b < lCount; b++) {
-                                if (textLayout.getLineLeft(b) > 0.0f) {
-                                    this.hasRtl = true;
-                                    ArticleViewer.this.isRtl = 1;
-                                    break;
-                                }
+            if (this.currentBlock != null) {
+                this.textLayout = null;
+                int dp = (this.currentBlock.index == 0 && this.currentBlock.parent.level == 0) ? AndroidUtilities.m9dp(10.0f) : 0;
+                this.textY = dp;
+                this.numOffsetY = 0;
+                if (!(this.currentBlock.parent.lastMaxNumCalcWidth == width && this.currentBlock.parent.lastFontSize == ArticleViewer.this.selectedFontSize)) {
+                    this.currentBlock.parent.lastMaxNumCalcWidth = width;
+                    this.currentBlock.parent.lastFontSize = ArticleViewer.this.selectedFontSize;
+                    this.currentBlock.parent.maxNumWidth = 0;
+                    int size = this.currentBlock.parent.items.size();
+                    for (int a = 0; a < size; a++) {
+                        TL_pageBlockListItem item = (TL_pageBlockListItem) this.currentBlock.parent.items.get(a);
+                        if (item.num != null) {
+                            item.numLayout = ArticleViewer.this.createLayoutForText(this, item.num, null, width - AndroidUtilities.m9dp(54.0f), this.currentBlock);
+                            this.currentBlock.parent.maxNumWidth = Math.max(this.currentBlock.parent.maxNumWidth, (int) Math.ceil((double) item.numLayout.getLineWidth(0)));
+                        }
+                    }
+                    this.currentBlock.parent.maxNumWidth = Math.max(this.currentBlock.parent.maxNumWidth, (int) Math.ceil((double) ArticleViewer.listTextNumPaint.measureText("00.")));
+                }
+                this.drawDot = !this.currentBlock.parent.pageBlockList.ordered;
+                boolean z = (getParent() instanceof BlockListItemCell) || (getParent() instanceof BlockOrderedListItemCell);
+                this.parentIsList = z;
+                if (ArticleViewer.this.isRtl) {
+                    this.textX = AndroidUtilities.m9dp(18.0f);
+                } else {
+                    this.textX = (AndroidUtilities.m9dp(24.0f) + this.currentBlock.parent.maxNumWidth) + (this.currentBlock.parent.level * AndroidUtilities.m9dp(12.0f));
+                }
+                int maxWidth = (width - AndroidUtilities.m9dp(18.0f)) - this.textX;
+                if (this.currentBlock.textItem != null) {
+                    this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.textItem, maxWidth, this.currentBlock);
+                    if (this.textLayout != null && this.textLayout.getLineCount() > 0) {
+                        if (this.currentBlock.numLayout != null && this.currentBlock.numLayout.getLineCount() > 0) {
+                            this.numOffsetY = (this.currentBlock.numLayout.getLineAscent(0) + AndroidUtilities.m9dp(2.5f)) - this.textLayout.getLineAscent(0);
+                        }
+                        height = 0 + (this.textLayout.getHeight() + AndroidUtilities.m9dp(8.0f));
+                    }
+                } else if (this.currentBlock.blockItem != null) {
+                    this.blockX = this.textX;
+                    this.blockY = this.textY;
+                    if (this.blockLayout != null) {
+                        if (this.blockLayout.itemView instanceof BlockParagraphCell) {
+                            this.blockY -= AndroidUtilities.m9dp(8.0f);
+                            if (!ArticleViewer.this.isRtl) {
+                                this.blockX -= AndroidUtilities.m9dp(18.0f);
+                            }
+                            maxWidth += AndroidUtilities.m9dp(18.0f);
+                            height = 0 - AndroidUtilities.m9dp(8.0f);
+                        } else if ((this.blockLayout.itemView instanceof BlockHeaderCell) || (this.blockLayout.itemView instanceof BlockSubheaderCell) || (this.blockLayout.itemView instanceof BlockTitleCell) || (this.blockLayout.itemView instanceof BlockSubtitleCell)) {
+                            if (!ArticleViewer.this.isRtl) {
+                                this.blockX -= AndroidUtilities.m9dp(18.0f);
+                            }
+                            maxWidth += AndroidUtilities.m9dp(18.0f);
+                        } else if (ArticleViewer.this.isListItemBlock(this.currentBlock.blockItem)) {
+                            this.blockX = 0;
+                            this.blockY = 0;
+                            this.textY = 0;
+                            if (this.currentBlock.index == 0 && this.currentBlock.parent.level == 0) {
+                                height = 0 - AndroidUtilities.m9dp(10.0f);
+                            }
+                            maxWidth = width;
+                            height -= AndroidUtilities.m9dp(8.0f);
+                        } else if (this.blockLayout.itemView instanceof BlockTableCell) {
+                            this.blockX -= AndroidUtilities.m9dp(18.0f);
+                            maxWidth += AndroidUtilities.m9dp(36.0f);
+                        }
+                        this.blockLayout.itemView.measure(MeasureSpec.makeMeasureSpec(maxWidth, NUM), MeasureSpec.makeMeasureSpec(0, 0));
+                        if ((this.blockLayout.itemView instanceof BlockParagraphCell) && this.currentBlock.numLayout != null && this.currentBlock.numLayout.getLineCount() > 0) {
+                            BlockParagraphCell paragraphCell = this.blockLayout.itemView;
+                            if (paragraphCell.textLayout != null && paragraphCell.textLayout.getLineCount() > 0) {
+                                this.numOffsetY = (this.currentBlock.numLayout.getLineAscent(0) + AndroidUtilities.m9dp(2.5f)) - paragraphCell.textLayout.getLineAscent(0);
                             }
                         }
-                    }
-                    if (!this.currentBlock.ordered) {
-                        num = "\u2022";
-                    } else if (this.hasRtl) {
-                        num = String.format(".%d", new Object[]{Integer.valueOf(a + 1)});
-                    } else {
-                        num = String.format("%d.", new Object[]{Integer.valueOf(a + 1)});
-                    }
-                    textLayout = ArticleViewer.this.createLayoutForText(num, item, width - AndroidUtilities.m10dp(54.0f), this.currentBlock);
-                    this.textNumLayouts.add(textLayout);
-                    if (this.currentBlock.ordered) {
-                        if (textLayout != null) {
-                            this.maxLetterWidth = Math.max(this.maxLetterWidth, (int) Math.ceil((double) textLayout.getLineWidth(0)));
+                        if (this.currentBlock.blockItem instanceof TL_pageBlockDetails) {
+                            this.verticalAlign = true;
+                            this.blockY = 0;
+                            if (this.currentBlock.index == 0 && this.currentBlock.parent.level == 0) {
+                                height -= AndroidUtilities.m9dp(10.0f);
+                            }
+                            height -= AndroidUtilities.m9dp(8.0f);
+                        } else if (this.blockLayout.itemView instanceof BlockOrderedListItemCell) {
+                            this.verticalAlign = ((BlockOrderedListItemCell) this.blockLayout.itemView).verticalAlign;
+                        } else if (this.blockLayout.itemView instanceof BlockListItemCell) {
+                            this.verticalAlign = ((BlockListItemCell) this.blockLayout.itemView).verticalAlign;
                         }
-                    } else if (a == 0) {
-                        this.maxLetterWidth = AndroidUtilities.m10dp(12.0f);
+                        if (this.verticalAlign && this.currentBlock.numLayout != null) {
+                            this.textY = ((this.blockLayout.itemView.getMeasuredHeight() - this.currentBlock.numLayout.getHeight()) / 2) - AndroidUtilities.m9dp(4.0f);
+                            this.drawDot = false;
+                        }
+                        height += this.blockLayout.itemView.getMeasuredHeight();
+                    }
+                    height += AndroidUtilities.m9dp(8.0f);
+                }
+                if (this.currentBlock.parent.items.get(this.currentBlock.parent.items.size() - 1) == this.currentBlock) {
+                    height += AndroidUtilities.m9dp(8.0f);
+                }
+                if (this.currentBlock.index == 0 && this.currentBlock.parent.level == 0) {
+                    height += AndroidUtilities.m9dp(10.0f);
+                }
+            } else {
+                height = 1;
+            }
+            setMeasuredDimension(width, height);
+        }
+
+        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            if (this.blockLayout != null) {
+                this.blockLayout.itemView.layout(this.blockX, this.blockY, this.blockX + this.blockLayout.itemView.getMeasuredWidth(), this.blockY + this.blockLayout.itemView.getMeasuredHeight());
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int i = 0;
+            if (this.currentBlock != null) {
+                int width = getMeasuredWidth();
+                if (this.currentBlock.numLayout != null) {
+                    canvas.save();
+                    float dp;
+                    int i2;
+                    if (ArticleViewer.this.isRtl) {
+                        dp = (float) ((width - AndroidUtilities.m9dp(18.0f)) - ((int) Math.ceil((double) this.currentBlock.numLayout.getLineWidth(0))));
+                        i2 = this.textY + this.numOffsetY;
+                        if (this.drawDot) {
+                            i = AndroidUtilities.m9dp(1.0f);
+                        }
+                        canvas.translate(dp, (float) (i2 - i));
+                    } else {
+                        dp = (float) (((AndroidUtilities.m9dp(15.0f) + this.currentBlock.parent.maxNumWidth) - ((int) Math.ceil((double) this.currentBlock.numLayout.getLineWidth(0)))) + (this.currentBlock.parent.level * AndroidUtilities.m9dp(12.0f)));
+                        i2 = this.textY + this.numOffsetY;
+                        if (this.drawDot) {
+                            i = AndroidUtilities.m9dp(1.0f);
+                        }
+                        canvas.translate(dp, (float) (i2 - i));
+                    }
+                    this.currentBlock.numLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.textLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    this.textLayout.draw(canvas);
+                    canvas.restore();
+                }
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockMapCell */
+    private class BlockMapCell extends FrameLayout {
+        private DrawingText captionLayout;
+        private DrawingText creditLayout;
+        private int creditOffset;
+        private TL_pageBlockMap currentBlock;
+        private int currentMapProvider;
+        private int currentType;
+        private ImageReceiver imageView = new ImageReceiver(this);
+        private boolean isFirst;
+        private boolean isLast;
+        private boolean photoPressed;
+        private int textX;
+        private int textY;
+
+        public BlockMapCell(Context context, int type) {
+            super(context);
+            setWillNotDraw(false);
+            this.currentType = type;
+        }
+
+        public void setBlock(TL_pageBlockMap block, boolean first, boolean last) {
+            this.currentBlock = block;
+            this.isFirst = first;
+            this.isLast = last;
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            float x = event.getX();
+            float y = event.getY();
+            if (event.getAction() == 0 && this.imageView.isInsideImage(x, y)) {
+                this.photoPressed = true;
+            } else if (event.getAction() == 1 && this.photoPressed) {
+                this.photoPressed = false;
+                try {
+                    double lat = this.currentBlock.geo.lat;
+                    double lon = this.currentBlock.geo._long;
+                    ArticleViewer.this.parentActivity.startActivity(new Intent("android.intent.action.VIEW", Uri.parse("geo:" + lat + "," + lon + "?q=" + lat + "," + lon)));
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
+                }
+            } else if (event.getAction() == 3) {
+                this.photoPressed = false;
+            }
+            if (!this.photoPressed) {
+                if (!ArticleViewer.this.checkLayoutForLinks(event, this, this.captionLayout, this.textX, this.textY)) {
+                    if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(event))) {
+                        return false;
                     }
                 }
-                for (a = 0; a < count; a++) {
-                    height += AndroidUtilities.m10dp(8.0f);
-                    textLayout = ArticleViewer.this.createLayoutForText(null, (RichText) this.currentBlock.items.get(a), (width - AndroidUtilities.m10dp(42.0f)) - this.maxLetterWidth, this.currentBlock);
-                    this.textYLayouts.add(Integer.valueOf(height));
-                    this.textLayouts.add(textLayout);
-                    if (textLayout != null) {
-                        height += textLayout.getHeight();
-                    }
-                }
-                if (this.hasRtl) {
-                    this.textX = AndroidUtilities.m10dp(18.0f);
+            }
+            return true;
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int height = 0;
+            if (this.currentType == 1) {
+                width = ((View) getParent()).getMeasuredWidth();
+                height = ((View) getParent()).getMeasuredHeight();
+            } else if (this.currentType == 2) {
+                height = width;
+            }
+            if (this.currentBlock != null) {
+                int photoX;
+                int textWidth;
+                int photoWidth = width;
+                if (this.currentType != 0 || this.currentBlock.level <= 0) {
+                    photoX = 0;
+                    this.textX = AndroidUtilities.m9dp(18.0f);
+                    textWidth = width - AndroidUtilities.m9dp(36.0f);
                 } else {
-                    this.textX = AndroidUtilities.m10dp(24.0f) + this.maxLetterWidth;
+                    photoX = AndroidUtilities.m9dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m9dp(18.0f);
+                    this.textX = photoX;
+                    photoWidth -= AndroidUtilities.m9dp(18.0f) + photoX;
+                    textWidth = photoWidth;
                 }
-                height += AndroidUtilities.m10dp(8.0f);
+                if (this.currentType == 0) {
+                    height = (int) (((float) this.currentBlock.f199h) * (((float) photoWidth) / ((float) this.currentBlock.f200w)));
+                    int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.m9dp(56.0f))) * 0.9f);
+                    if (height > maxHeight) {
+                        height = maxHeight;
+                        photoWidth = (int) (((float) this.currentBlock.f200w) * (((float) height) / ((float) this.currentBlock.f199h)));
+                        photoX += ((width - photoX) - photoWidth) / 2;
+                    }
+                }
+                ImageReceiver imageReceiver = this.imageView;
+                int dp = (this.isFirst || this.currentType == 1 || this.currentType == 2 || this.currentBlock.level > 0) ? 0 : AndroidUtilities.m9dp(8.0f);
+                imageReceiver.setImageCoords(photoX, dp, photoWidth, height);
+                String currentUrl = AndroidUtilities.formapMapUrl(ArticleViewer.this.currentAccount, this.currentBlock.geo.lat, this.currentBlock.geo._long, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) height) / AndroidUtilities.density), true, 15);
+                WebFile currentWebFile = WebFile.createWithGeoPoint(this.currentBlock.geo, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) height) / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil((double) AndroidUtilities.density)));
+                this.currentMapProvider = MessagesController.getInstance(ArticleViewer.this.currentAccount).mapProvider;
+                if (this.currentMapProvider == 2) {
+                    if (currentWebFile != null) {
+                        this.imageView.setImage(currentWebFile, null, Theme.chat_locationDrawable[0], null, ArticleViewer.this.currentPage, 0);
+                    }
+                } else if (currentUrl != null) {
+                    this.imageView.setImage(currentUrl, null, Theme.chat_locationDrawable[0], null, 0);
+                }
+                if (this.currentType == 0) {
+                    this.captionLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.text, textWidth, this.currentBlock);
+                    if (this.captionLayout != null) {
+                        this.creditOffset = AndroidUtilities.m9dp(4.0f) + this.captionLayout.getHeight();
+                        height += this.creditOffset + AndroidUtilities.m9dp(4.0f);
+                    }
+                    this.creditLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.credit, textWidth, this.currentBlock);
+                    if (this.creditLayout != null) {
+                        height += AndroidUtilities.m9dp(4.0f) + this.creditLayout.getHeight();
+                    }
+                }
+                if (!this.isFirst && this.currentType == 0 && this.currentBlock.level <= 0) {
+                    height += AndroidUtilities.m9dp(8.0f);
+                }
+                if (this.currentType != 2) {
+                    height += AndroidUtilities.m9dp(8.0f);
+                }
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
 
         protected void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                int count = this.textLayouts.size();
-                int width = getMeasuredWidth();
-                for (int a = 0; a < count; a++) {
-                    StaticLayout textLayout = (StaticLayout) this.textLayouts.get(a);
-                    StaticLayout textLayout2 = (StaticLayout) this.textNumLayouts.get(a);
+                this.imageView.draw(canvas);
+                if (this.currentMapProvider == 2 && this.imageView.hasNotThumb()) {
+                    int w = (int) (((float) Theme.chat_redLocationIcon.getIntrinsicWidth()) * 0.8f);
+                    int h = (int) (((float) Theme.chat_redLocationIcon.getIntrinsicHeight()) * 0.8f);
+                    int x = this.imageView.getImageX() + ((this.imageView.getImageWidth() - w) / 2);
+                    int y = this.imageView.getImageY() + ((this.imageView.getImageHeight() / 2) - h);
+                    Theme.chat_redLocationIcon.setAlpha((int) (255.0f * this.imageView.getCurrentAlpha()));
+                    Theme.chat_redLocationIcon.setBounds(x, y, x + w, y + h);
+                    Theme.chat_redLocationIcon.draw(canvas);
+                }
+                if (this.captionLayout != null) {
                     canvas.save();
-                    if (this.hasRtl) {
-                        canvas.translate((float) ((width - AndroidUtilities.m10dp(18.0f)) - ((int) Math.ceil((double) textLayout2.getLineWidth(0)))), (float) ((Integer) this.textYLayouts.get(a)).intValue());
-                    } else {
-                        canvas.translate((float) AndroidUtilities.m10dp(18.0f), (float) ((Integer) this.textYLayouts.get(a)).intValue());
-                    }
-                    if (textLayout2 != null) {
-                        textLayout2.draw(canvas);
-                    }
+                    float f = (float) this.textX;
+                    int imageY = (this.imageView.getImageY() + this.imageView.getImageHeight()) + AndroidUtilities.m9dp(8.0f);
+                    this.textY = imageY;
+                    canvas.translate(f, (float) imageY);
+                    this.captionLayout.draw(canvas);
                     canvas.restore();
+                }
+                if (this.creditLayout != null) {
                     canvas.save();
-                    canvas.translate((float) this.textX, (float) ((Integer) this.textYLayouts.get(a)).intValue());
-                    ArticleViewer.this.drawLayoutLink(canvas, textLayout);
-                    if (textLayout != null) {
-                        textLayout.draw(canvas);
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.currentBlock.level > 0) {
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                }
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockOrderedListItemCell */
+    private class BlockOrderedListItemCell extends ViewGroup {
+        private ViewHolder blockLayout;
+        private int blockX;
+        private int blockY;
+        private TL_pageBlockOrderedListItem currentBlock;
+        private int currentBlockType;
+        private int numOffsetY;
+        private boolean parentIsList;
+        private DrawingText textLayout;
+        private int textX;
+        private int textY;
+        private boolean verticalAlign;
+
+        public BlockOrderedListItemCell(Context context) {
+            super(context);
+            setWillNotDraw(false);
+        }
+
+        public void setBlock(TL_pageBlockOrderedListItem block) {
+            if (this.currentBlock != block) {
+                this.currentBlock = block;
+                if (this.blockLayout != null) {
+                    removeView(this.blockLayout.itemView);
+                    this.blockLayout = null;
+                }
+                if (this.currentBlock.blockItem != null) {
+                    this.currentBlockType = ArticleViewer.this.adapter.getTypeForBlock(this.currentBlock.blockItem);
+                    this.blockLayout = ArticleViewer.this.adapter.onCreateViewHolder(this, this.currentBlockType);
+                    addView(this.blockLayout.itemView);
+                }
+            }
+            if (this.currentBlock.blockItem != null) {
+                ArticleViewer.this.adapter.bindBlockToHolder(this.currentBlockType, this.blockLayout, this.currentBlock.blockItem, 0, 0);
+            }
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            if (ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY)) {
+                return true;
+            }
+            return super.onTouchEvent(event);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int height = 0;
+            if (this.currentBlock != null) {
+                this.textLayout = null;
+                int dp = (this.currentBlock.index == 0 && this.currentBlock.parent.level == 0) ? AndroidUtilities.m9dp(10.0f) : 0;
+                this.textY = dp;
+                this.numOffsetY = 0;
+                if (!(this.currentBlock.parent.lastMaxNumCalcWidth == width && this.currentBlock.parent.lastFontSize == ArticleViewer.this.selectedFontSize)) {
+                    this.currentBlock.parent.lastMaxNumCalcWidth = width;
+                    this.currentBlock.parent.lastFontSize = ArticleViewer.this.selectedFontSize;
+                    this.currentBlock.parent.maxNumWidth = 0;
+                    int size = this.currentBlock.parent.items.size();
+                    for (int a = 0; a < size; a++) {
+                        TL_pageBlockOrderedListItem item = (TL_pageBlockOrderedListItem) this.currentBlock.parent.items.get(a);
+                        if (item.num != null) {
+                            item.numLayout = ArticleViewer.this.createLayoutForText(this, item.num, null, width - AndroidUtilities.m9dp(54.0f), this.currentBlock);
+                            this.currentBlock.parent.maxNumWidth = Math.max(this.currentBlock.parent.maxNumWidth, (int) Math.ceil((double) item.numLayout.getLineWidth(0)));
+                        }
                     }
+                    this.currentBlock.parent.maxNumWidth = Math.max(this.currentBlock.parent.maxNumWidth, (int) Math.ceil((double) ArticleViewer.listTextNumPaint.measureText("00.")));
+                }
+                if (ArticleViewer.this.isRtl) {
+                    this.textX = AndroidUtilities.m9dp(18.0f);
+                } else {
+                    this.textX = (AndroidUtilities.m9dp(24.0f) + this.currentBlock.parent.maxNumWidth) + (this.currentBlock.parent.level * AndroidUtilities.m9dp(20.0f));
+                }
+                this.verticalAlign = false;
+                int maxWidth = (width - AndroidUtilities.m9dp(18.0f)) - this.textX;
+                if (this.currentBlock.textItem != null) {
+                    this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.textItem, maxWidth, this.currentBlock);
+                    if (this.textLayout != null && this.textLayout.getLineCount() > 0) {
+                        if (this.currentBlock.numLayout != null && this.currentBlock.numLayout.getLineCount() > 0) {
+                            this.numOffsetY = this.currentBlock.numLayout.getLineAscent(0) - this.textLayout.getLineAscent(0);
+                        }
+                        height = 0 + (this.textLayout.getHeight() + AndroidUtilities.m9dp(8.0f));
+                    }
+                } else if (this.currentBlock.blockItem != null) {
+                    this.blockX = this.textX;
+                    this.blockY = this.textY;
+                    if (this.blockLayout != null) {
+                        if (this.blockLayout.itemView instanceof BlockParagraphCell) {
+                            this.blockY -= AndroidUtilities.m9dp(8.0f);
+                            if (!ArticleViewer.this.isRtl) {
+                                this.blockX -= AndroidUtilities.m9dp(18.0f);
+                            }
+                            maxWidth += AndroidUtilities.m9dp(18.0f);
+                            height = 0 - AndroidUtilities.m9dp(8.0f);
+                        } else if ((this.blockLayout.itemView instanceof BlockHeaderCell) || (this.blockLayout.itemView instanceof BlockSubheaderCell) || (this.blockLayout.itemView instanceof BlockTitleCell) || (this.blockLayout.itemView instanceof BlockSubtitleCell)) {
+                            if (!ArticleViewer.this.isRtl) {
+                                this.blockX -= AndroidUtilities.m9dp(18.0f);
+                            }
+                            maxWidth += AndroidUtilities.m9dp(18.0f);
+                        } else if (ArticleViewer.this.isListItemBlock(this.currentBlock.blockItem)) {
+                            this.blockX = 0;
+                            this.blockY = 0;
+                            this.textY = 0;
+                            maxWidth = width;
+                            height = 0 - AndroidUtilities.m9dp(8.0f);
+                        } else if (this.blockLayout.itemView instanceof BlockTableCell) {
+                            this.blockX -= AndroidUtilities.m9dp(18.0f);
+                            maxWidth += AndroidUtilities.m9dp(36.0f);
+                        }
+                        this.blockLayout.itemView.measure(MeasureSpec.makeMeasureSpec(maxWidth, NUM), MeasureSpec.makeMeasureSpec(0, 0));
+                        if ((this.blockLayout.itemView instanceof BlockParagraphCell) && this.currentBlock.numLayout != null && this.currentBlock.numLayout.getLineCount() > 0) {
+                            BlockParagraphCell paragraphCell = this.blockLayout.itemView;
+                            if (paragraphCell.textLayout != null && paragraphCell.textLayout.getLineCount() > 0) {
+                                this.numOffsetY = this.currentBlock.numLayout.getLineAscent(0) - paragraphCell.textLayout.getLineAscent(0);
+                            }
+                        }
+                        if (this.currentBlock.blockItem instanceof TL_pageBlockDetails) {
+                            this.verticalAlign = true;
+                            this.blockY = 0;
+                            height -= AndroidUtilities.m9dp(8.0f);
+                        } else if (this.blockLayout.itemView instanceof BlockOrderedListItemCell) {
+                            this.verticalAlign = ((BlockOrderedListItemCell) this.blockLayout.itemView).verticalAlign;
+                        } else if (this.blockLayout.itemView instanceof BlockListItemCell) {
+                            this.verticalAlign = ((BlockListItemCell) this.blockLayout.itemView).verticalAlign;
+                        }
+                        if (this.verticalAlign && this.currentBlock.numLayout != null) {
+                            this.textY = (this.blockLayout.itemView.getMeasuredHeight() - this.currentBlock.numLayout.getHeight()) / 2;
+                        }
+                        height += this.blockLayout.itemView.getMeasuredHeight();
+                    }
+                    height += AndroidUtilities.m9dp(8.0f);
+                }
+                if (this.currentBlock.parent.items.get(this.currentBlock.parent.items.size() - 1) == this.currentBlock) {
+                    height += AndroidUtilities.m9dp(8.0f);
+                }
+                if (this.currentBlock.index == 0 && this.currentBlock.parent.level == 0) {
+                    height += AndroidUtilities.m9dp(10.0f);
+                }
+            } else {
+                height = 1;
+            }
+            setMeasuredDimension(width, height);
+        }
+
+        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            if (this.blockLayout != null) {
+                this.blockLayout.itemView.layout(this.blockX, this.blockY, this.blockX + this.blockLayout.itemView.getMeasuredWidth(), this.blockY + this.blockLayout.itemView.getMeasuredHeight());
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                int width = getMeasuredWidth();
+                if (this.currentBlock.numLayout != null) {
+                    canvas.save();
+                    if (ArticleViewer.this.isRtl) {
+                        canvas.translate((float) ((width - AndroidUtilities.m9dp(18.0f)) - ((int) Math.ceil((double) this.currentBlock.numLayout.getLineWidth(0)))), (float) (this.textY + this.numOffsetY));
+                    } else {
+                        canvas.translate((float) (((AndroidUtilities.m9dp(18.0f) + this.currentBlock.parent.maxNumWidth) - ((int) Math.ceil((double) this.currentBlock.numLayout.getLineWidth(0)))) + (this.currentBlock.parent.level * AndroidUtilities.m9dp(20.0f))), (float) (this.textY + this.numOffsetY));
+                    }
+                    this.currentBlock.numLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.textLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    this.textLayout.draw(canvas);
                     canvas.restore();
                 }
             }
@@ -2258,8 +2938,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockParagraphCell */
     private class BlockParagraphCell extends View {
         private TL_pageBlockParagraph currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
+        private DrawingText textLayout;
         private int textX;
         private int textY;
 
@@ -2269,7 +2948,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockParagraph block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -2282,25 +2960,19 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             int height = 0;
             if (this.currentBlock != null) {
                 if (this.currentBlock.level == 0) {
-                    if (this.currentBlock.caption != null) {
-                        this.textY = AndroidUtilities.m10dp(4.0f);
-                    } else {
-                        this.textY = AndroidUtilities.m10dp(8.0f);
-                    }
-                    this.textX = AndroidUtilities.m10dp(18.0f);
+                    this.textY = AndroidUtilities.m9dp(8.0f);
+                    this.textX = AndroidUtilities.m9dp(18.0f);
                 } else {
                     this.textY = 0;
-                    this.textX = AndroidUtilities.m10dp((float) ((this.currentBlock.level * 14) + 18));
+                    this.textX = AndroidUtilities.m9dp((float) ((this.currentBlock.level * 14) + 18));
                 }
-                if (this.lastCreatedWidth != width) {
-                    if (this.currentBlock.text != null) {
-                        this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, (width - AndroidUtilities.m10dp(18.0f)) - this.textX, this.currentBlock);
-                    } else if (this.currentBlock.caption != null) {
-                        this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, (width - AndroidUtilities.m10dp(18.0f)) - this.textX, this.currentBlock);
-                    }
-                    if (this.textLayout != null) {
-                        height = this.textLayout.getHeight();
-                        height = this.currentBlock.level > 0 ? height + AndroidUtilities.m10dp(8.0f) : height + AndroidUtilities.m10dp(16.0f);
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, (width - AndroidUtilities.m9dp(18.0f)) - this.textX, this.textY, this.currentBlock);
+                if (this.textLayout != null) {
+                    height = this.textLayout.getHeight();
+                    if (this.currentBlock.level > 0) {
+                        height += AndroidUtilities.m9dp(8.0f);
+                    } else {
+                        height += AndroidUtilities.m9dp(16.0f);
                     }
                 }
             } else {
@@ -2314,12 +2986,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.m10dp(18.0f), 0.0f, (float) AndroidUtilities.m10dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m10dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -2327,16 +2998,19 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
     /* renamed from: org.telegram.ui.ArticleViewer$BlockPhotoCell */
     private class BlockPhotoCell extends FrameLayout {
+        private DrawingText captionLayout;
         private BlockChannelCell channelCell;
+        private DrawingText creditLayout;
+        private int creditOffset;
         private TL_pageBlockPhoto currentBlock;
         private int currentType;
+        private GroupedMessagePosition groupPosition;
         private ImageReceiver imageView = new ImageReceiver(this);
         private boolean isFirst;
         private boolean isLast;
-        private int lastCreatedWidth;
+        private Drawable linkDrawable;
         private PageBlock parentBlock;
         private boolean photoPressed;
-        private StaticLayout textLayout;
         private int textX;
         private int textY;
 
@@ -2351,10 +3025,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void setBlock(TL_pageBlockPhoto block, boolean first, boolean last) {
             this.parentBlock = null;
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             this.isFirst = first;
             this.isLast = last;
             this.channelCell.setVisibility(4);
+            if (!TextUtils.isEmpty(this.currentBlock.url)) {
+                this.linkDrawable = getResources().getDrawable(R.drawable.instant_link);
+            }
             requestLayout();
         }
 
@@ -2373,7 +3049,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public boolean onTouchEvent(MotionEvent event) {
             float x = event.getX();
             float y = event.getY();
-            if (this.channelCell.getVisibility() != 0 || y <= this.channelCell.getTranslationY() || y >= this.channelCell.getTranslationY() + ((float) AndroidUtilities.m10dp(39.0f))) {
+            if (this.channelCell.getVisibility() != 0 || y <= this.channelCell.getTranslationY() || y >= this.channelCell.getTranslationY() + ((float) AndroidUtilities.m9dp(39.0f))) {
                 boolean z;
                 if (event.getAction() == 0 && this.imageView.isInsideImage(x, y)) {
                     this.photoPressed = true;
@@ -2384,9 +3060,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.photoPressed = false;
                 }
                 if (!this.photoPressed) {
-                    if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event))) {
-                        z = false;
-                        return z;
+                    if (!ArticleViewer.this.checkLayoutForLinks(event, this, this.captionLayout, this.textX, this.textY)) {
+                        if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(event))) {
+                            z = false;
+                            return z;
+                        }
                     }
                 }
                 z = true;
@@ -2404,24 +3082,25 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
             if (this.currentType == 1) {
-                width = ArticleViewer.this.listView.getWidth();
+                width = ((View) getParent()).getMeasuredWidth();
                 height = ((View) getParent()).getMeasuredHeight();
             } else if (this.currentType == 2) {
-                height = width;
+                height = (int) Math.ceil((double) ((this.groupPosition.f54ph * ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y))) * 0.5f));
             }
             if (this.currentBlock != null) {
                 int photoX;
                 int textWidth;
                 Photo photo = ArticleViewer.this.getPhotoWithId(this.currentBlock.photo_id);
                 int photoWidth = width;
+                int photoHeight = height;
                 if (this.currentType != 0 || this.currentBlock.level <= 0) {
                     photoX = 0;
-                    this.textX = AndroidUtilities.m10dp(18.0f);
-                    textWidth = width - AndroidUtilities.m10dp(36.0f);
+                    this.textX = AndroidUtilities.m9dp(18.0f);
+                    textWidth = width - AndroidUtilities.m9dp(36.0f);
                 } else {
-                    photoX = AndroidUtilities.m10dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m10dp(18.0f);
+                    photoX = AndroidUtilities.m9dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m9dp(18.0f);
                     this.textX = photoX;
-                    photoWidth -= AndroidUtilities.m10dp(18.0f) + photoX;
+                    photoWidth -= AndroidUtilities.m9dp(18.0f) + photoX;
                     textWidth = photoWidth;
                 }
                 if (photo != null) {
@@ -2433,25 +3112,38 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         thumb = null;
                     }
                     if (this.currentType == 0) {
-                        height = (int) (((float) image.f109h) * (((float) photoWidth) / ((float) image.f110w)));
+                        height = (int) (((float) image.f107h) * (((float) photoWidth) / ((float) image.f108w)));
                         if (this.parentBlock instanceof TL_pageBlockCover) {
                             height = Math.min(height, photoWidth);
                         } else {
-                            int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.m10dp(56.0f))) * 0.9f);
+                            int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.m9dp(56.0f))) * 0.9f);
                             if (height > maxHeight) {
                                 height = maxHeight;
-                                photoWidth = (int) (((float) image.f110w) * (((float) height) / ((float) image.f109h)));
+                                photoWidth = (int) (((float) image.f108w) * (((float) height) / ((float) image.f107h)));
                                 photoX += ((width - photoX) - photoWidth) / 2;
                             }
                         }
+                        photoHeight = height;
+                    } else if (this.currentType == 2) {
+                        if ((this.groupPosition.flags & 2) == 0) {
+                            photoWidth -= AndroidUtilities.m9dp(2.0f);
+                        }
+                        if ((this.groupPosition.flags & 8) == 0) {
+                            photoHeight -= AndroidUtilities.m9dp(2.0f);
+                        }
+                        if (this.groupPosition.leftSpanOffset != 0) {
+                            int offset = (int) Math.ceil((double) (((float) (this.groupPosition.leftSpanOffset * width)) / 1000.0f));
+                            photoWidth -= offset;
+                            photoX += offset;
+                        }
                     }
                     ImageReceiver imageReceiver = this.imageView;
-                    int dp = (this.isFirst || this.currentType == 1 || this.currentType == 2 || this.currentBlock.level > 0) ? 0 : AndroidUtilities.m10dp(8.0f);
-                    imageReceiver.setImageCoords(photoX, dp, photoWidth, height);
+                    int dp = (this.isFirst || this.currentType == 1 || this.currentType == 2 || this.currentBlock.level > 0) ? 0 : AndroidUtilities.m9dp(8.0f);
+                    imageReceiver.setImageCoords(photoX, dp, photoWidth, photoHeight);
                     if (this.currentType == 0) {
                         filter = null;
                     } else {
-                        filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(height)});
+                        filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(photoHeight)});
                     }
                     ImageReceiver imageReceiver2 = this.imageView;
                     TLObject tLObject = image.location;
@@ -2461,88 +3153,145 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     } else {
                         str = null;
                     }
-                    imageReceiver2.setImage(tLObject, filter, fileLocation, str, image.size, null, 1);
+                    imageReceiver2.setImage(tLObject, filter, fileLocation, str, image.size, null, ArticleViewer.this.currentPage, 1);
                 }
-                if (this.currentType == 0 && this.lastCreatedWidth != width) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
-                    if (this.textLayout != null) {
-                        height += AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight();
+                if (this.currentType == 0) {
+                    this.captionLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.text, textWidth, this.currentBlock);
+                    if (this.captionLayout != null) {
+                        this.creditOffset = AndroidUtilities.m9dp(4.0f) + this.captionLayout.getHeight();
+                        height += this.creditOffset + AndroidUtilities.m9dp(4.0f);
+                    }
+                    this.creditLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.credit, textWidth, this.currentBlock);
+                    if (this.creditLayout != null) {
+                        height += AndroidUtilities.m9dp(4.0f) + this.creditLayout.getHeight();
                     }
                 }
                 if (!this.isFirst && this.currentType == 0 && this.currentBlock.level <= 0) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
                 boolean nextIsChannel = (this.parentBlock instanceof TL_pageBlockCover) && ArticleViewer.this.blocks != null && ArticleViewer.this.blocks.size() > 1 && (ArticleViewer.this.blocks.get(1) instanceof TL_pageBlockChannel);
                 if (!(this.currentType == 2 || nextIsChannel)) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
             } else {
                 height = 1;
             }
             this.channelCell.measure(widthMeasureSpec, heightMeasureSpec);
-            this.channelCell.setTranslationY((float) (this.imageView.getImageHeight() - AndroidUtilities.m10dp(39.0f)));
+            this.channelCell.setTranslationY((float) (this.imageView.getImageHeight() - AndroidUtilities.m9dp(39.0f)));
             setMeasuredDimension(width, height);
         }
 
         protected void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
                 this.imageView.draw(canvas);
-                if (this.textLayout != null) {
+                if (!TextUtils.isEmpty(this.currentBlock.url)) {
+                    int x = getMeasuredWidth() - AndroidUtilities.m9dp(35.0f);
+                    int y = this.imageView.getImageY() + AndroidUtilities.m9dp(11.0f);
+                    this.linkDrawable.setBounds(x, y, AndroidUtilities.m9dp(24.0f) + x, AndroidUtilities.m9dp(24.0f) + y);
+                    this.linkDrawable.draw(canvas);
+                }
+                if (this.captionLayout != null) {
                     canvas.save();
                     float f = (float) this.textX;
-                    int imageY = (this.imageView.getImageY() + this.imageView.getImageHeight()) + AndroidUtilities.m10dp(8.0f);
+                    int imageY = (this.imageView.getImageY() + this.imageView.getImageHeight()) + AndroidUtilities.m9dp(8.0f);
                     this.textY = imageY;
                     canvas.translate(f, (float) imageY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                    this.textLayout.draw(canvas);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.m10dp(18.0f), 0.0f, (float) AndroidUtilities.m10dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m10dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ArticleViewer$BlockPreformattedCell */
-    private class BlockPreformattedCell extends View {
+    private class BlockPreformattedCell extends FrameLayout {
         private TL_pageBlockPreformatted currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
+        private HorizontalScrollView scrollView;
+        private View textContainer;
+        private DrawingText textLayout;
 
         public BlockPreformattedCell(Context context) {
             super(context);
+            this.scrollView = new HorizontalScrollView(context, ArticleViewer.this) {
+                public boolean onInterceptTouchEvent(MotionEvent ev) {
+                    if (BlockPreformattedCell.this.textContainer.getMeasuredWidth() > getMeasuredWidth()) {
+                        ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
+                    }
+                    return super.onInterceptTouchEvent(ev);
+                }
+
+                protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+                    super.onScrollChanged(l, t, oldl, oldt);
+                    if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
+                        ArticleViewer.this.pressedLinkOwnerLayout = null;
+                        ArticleViewer.this.pressedLinkOwnerView = null;
+                    }
+                }
+            };
+            this.scrollView.setPadding(0, AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f));
+            addView(this.scrollView, LayoutHelper.createFrame(-1, -2.0f));
+            this.textContainer = new View(context, ArticleViewer.this) {
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    int height = 0;
+                    int width = 1;
+                    if (BlockPreformattedCell.this.currentBlock != null) {
+                        BlockPreformattedCell.this.textLayout = ArticleViewer.this.createLayoutForText(this, null, BlockPreformattedCell.this.currentBlock.text, AndroidUtilities.m9dp(5000.0f), BlockPreformattedCell.this.currentBlock);
+                        if (BlockPreformattedCell.this.textLayout != null) {
+                            height = 0 + BlockPreformattedCell.this.textLayout.getHeight();
+                            int count = BlockPreformattedCell.this.textLayout.getLineCount();
+                            for (int a = 0; a < count; a++) {
+                                width = Math.max((int) Math.ceil((double) BlockPreformattedCell.this.textLayout.getLineWidth(a)), width);
+                            }
+                        }
+                    } else {
+                        height = 1;
+                    }
+                    setMeasuredDimension(AndroidUtilities.m9dp(32.0f) + width, height);
+                }
+
+                protected void onDraw(Canvas canvas) {
+                    if (BlockPreformattedCell.this.textLayout != null) {
+                        canvas.save();
+                        BlockPreformattedCell.this.textLayout.draw(canvas);
+                        canvas.restore();
+                    }
+                }
+            };
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-2, -1);
+            int dp = AndroidUtilities.m9dp(16.0f);
+            layoutParams.rightMargin = dp;
+            layoutParams.leftMargin = dp;
+            dp = AndroidUtilities.m9dp(12.0f);
+            layoutParams.bottomMargin = dp;
+            layoutParams.topMargin = dp;
+            this.scrollView.addView(this.textContainer, layoutParams);
+            setWillNotDraw(false);
         }
 
         public void setBlock(TL_pageBlockPreformatted block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
+            this.scrollView.setScrollX(0);
             requestLayout();
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, width - AndroidUtilities.m10dp(24.0f), this.currentBlock);
-                if (this.textLayout != null) {
-                    height = 0 + (AndroidUtilities.m10dp(32.0f) + this.textLayout.getHeight());
-                }
-            }
-            setMeasuredDimension(width, height);
+            this.scrollView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(0, 0));
+            setMeasuredDimension(width, this.scrollView.getMeasuredHeight());
         }
 
         protected void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
-                canvas.drawRect(0.0f, (float) AndroidUtilities.m10dp(8.0f), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.m10dp(8.0f)), ArticleViewer.preformattedBackgroundPaint);
-                if (this.textLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) AndroidUtilities.m10dp(12.0f), (float) AndroidUtilities.m10dp(16.0f));
-                    this.textLayout.draw(canvas);
-                    canvas.restore();
-                }
+                canvas.drawRect(0.0f, (float) AndroidUtilities.m9dp(8.0f), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.m9dp(8.0f)), ArticleViewer.preformattedBackgroundPaint);
             }
         }
     }
@@ -2550,11 +3299,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockPullquoteCell */
     private class BlockPullquoteCell extends View {
         private TL_pageBlockPullquote currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
-        private StaticLayout textLayout2;
-        private int textX = AndroidUtilities.m10dp(18.0f);
-        private int textY = AndroidUtilities.m10dp(8.0f);
+        private DrawingText textLayout;
+        private DrawingText textLayout2;
+        private int textX = AndroidUtilities.m9dp(18.0f);
+        private int textY = AndroidUtilities.m9dp(8.0f);
         private int textY2;
 
         public BlockPullquoteCell(Context context) {
@@ -2563,7 +3311,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockPullquote block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -2579,21 +3326,21 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, width - AndroidUtilities.m10dp(36.0f), this.currentBlock);
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, width - AndroidUtilities.m9dp(36.0f), this.currentBlock);
                 if (this.textLayout != null) {
-                    height = 0 + (AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight());
+                    height = 0 + (AndroidUtilities.m9dp(8.0f) + this.textLayout.getHeight());
                 }
-                this.textLayout2 = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, width - AndroidUtilities.m10dp(36.0f), this.currentBlock);
+                this.textLayout2 = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption, width - AndroidUtilities.m9dp(36.0f), this.currentBlock);
                 if (this.textLayout2 != null) {
-                    this.textY2 = AndroidUtilities.m10dp(2.0f) + height;
-                    height += AndroidUtilities.m10dp(8.0f) + this.textLayout2.getHeight();
+                    this.textY2 = AndroidUtilities.m9dp(2.0f) + height;
+                    height += AndroidUtilities.m9dp(8.0f) + this.textLayout2.getHeight();
                 }
                 if (height != 0) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
@@ -2603,14 +3350,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.textLayout2 != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY2);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout2);
                     this.textLayout2.draw(canvas);
                     canvas.restore();
                 }
@@ -2618,15 +3363,211 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockRelatedArticlesCell */
+    private class BlockRelatedArticlesCell extends View {
+        private int additionalHeight;
+        private TL_pageBlockRelatedArticlesChild currentBlock;
+        private boolean divider;
+        private boolean drawImage;
+        private ImageReceiver imageView = new ImageReceiver(this);
+        private DrawingText textLayout;
+        private DrawingText textLayout2;
+        private int textOffset;
+        private int textX = AndroidUtilities.m9dp(18.0f);
+        private int textY = AndroidUtilities.m9dp(10.0f);
+
+        public BlockRelatedArticlesCell(Context context) {
+            super(context);
+            this.imageView.setRoundRadius(AndroidUtilities.m9dp(6.0f));
+            ArticleViewer.this.createDividerPaint();
+        }
+
+        public void setBlock(TL_pageBlockRelatedArticlesChild block) {
+            this.currentBlock = block;
+            requestLayout();
+        }
+
+        @SuppressLint({"DrawAllocation"})
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            this.divider = this.currentBlock.num != this.currentBlock.parent.articles.size() + -1;
+            TL_pageRelatedArticle item = (TL_pageRelatedArticle) this.currentBlock.parent.articles.get(this.currentBlock.num);
+            this.additionalHeight = 0;
+            if (ArticleViewer.this.selectedFontSize == 0) {
+                this.additionalHeight = -AndroidUtilities.m9dp(4.0f);
+            } else if (ArticleViewer.this.selectedFontSize == 1) {
+                this.additionalHeight = -AndroidUtilities.m9dp(2.0f);
+            } else if (ArticleViewer.this.selectedFontSize == 3) {
+                this.additionalHeight = AndroidUtilities.m9dp(2.0f);
+            } else if (ArticleViewer.this.selectedFontSize == 4) {
+                this.additionalHeight = AndroidUtilities.m9dp(4.0f);
+            }
+            Photo photo = item.photo_id != 0 ? ArticleViewer.this.getPhotoWithId(item.photo_id) : null;
+            if (photo != null) {
+                this.drawImage = true;
+                PhotoSize image = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize());
+                PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 80, true);
+                if (image == thumb) {
+                    thumb = null;
+                }
+                this.imageView.setImage(image.location, "64_64", thumb != null ? thumb.location : null, thumb != null ? "64_64_b" : null, image.size, null, ArticleViewer.this.currentPage, 1);
+            } else {
+                this.drawImage = false;
+            }
+            int layoutHeight = AndroidUtilities.m9dp(60.0f);
+            int a = 0;
+            int count = this.drawImage ? 2 : 1;
+            while (a < count) {
+                String description;
+                int availableWidth = width - AndroidUtilities.m9dp(36.0f);
+                if (a == 1) {
+                    int imageWidth = layoutHeight - AndroidUtilities.m9dp(16.0f);
+                    this.imageView.setImageCoords((width - imageWidth) - AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), imageWidth, imageWidth);
+                    availableWidth -= this.imageView.getImageWidth() + AndroidUtilities.m9dp(6.0f);
+                }
+                int height = AndroidUtilities.m9dp(18.0f);
+                if (item.title != null) {
+                    this.textLayout = ArticleViewer.this.createLayoutForText(this, item.title, null, availableWidth, this.textY, this.currentBlock, Alignment.ALIGN_NORMAL, 3);
+                }
+                int lineCount = 4;
+                if (this.textLayout != null) {
+                    lineCount = 4 - this.textLayout.getLineCount();
+                    this.textOffset = (this.textLayout.getHeight() + AndroidUtilities.m9dp(6.0f)) + this.additionalHeight;
+                    height += this.textLayout.getHeight();
+                } else {
+                    this.textOffset = 0;
+                }
+                if (item.published_date != 0 && !TextUtils.isEmpty(item.author)) {
+                    description = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format(((long) item.published_date) * 1000), item.author);
+                } else if (!TextUtils.isEmpty(item.author)) {
+                    description = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, item.author);
+                } else if (item.published_date != 0) {
+                    description = LocaleController.getInstance().chatFullDate.format(((long) item.published_date) * 1000);
+                } else if (TextUtils.isEmpty(item.description)) {
+                    description = item.url;
+                } else {
+                    description = item.description;
+                }
+                this.textLayout2 = ArticleViewer.this.createLayoutForText(this, description, null, availableWidth, this.textOffset + this.textY, this.currentBlock, Alignment.ALIGN_NORMAL, lineCount);
+                if (this.textLayout2 != null) {
+                    height += this.textLayout2.getHeight();
+                    if (this.textLayout != null) {
+                        height += AndroidUtilities.m9dp(6.0f) + this.additionalHeight;
+                    }
+                }
+                layoutHeight = Math.max(layoutHeight, height);
+                a++;
+            }
+            setMeasuredDimension(width, (this.divider ? 1 : 0) + layoutHeight);
+        }
+
+        protected void onDraw(Canvas canvas) {
+            float f = 0.0f;
+            if (this.currentBlock != null) {
+                if (this.drawImage) {
+                    this.imageView.draw(canvas);
+                }
+                canvas.save();
+                canvas.translate((float) this.textX, (float) AndroidUtilities.m9dp(10.0f));
+                if (this.textLayout != null) {
+                    this.textLayout.draw(canvas);
+                }
+                if (this.textLayout2 != null) {
+                    canvas.translate(0.0f, (float) this.textOffset);
+                    this.textLayout2.draw(canvas);
+                }
+                canvas.restore();
+                if (this.divider) {
+                    if (!ArticleViewer.this.isRtl) {
+                        f = (float) AndroidUtilities.m9dp(17.0f);
+                    }
+                    canvas.drawLine(f, (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (ArticleViewer.this.isRtl ? AndroidUtilities.m9dp(17.0f) : 0)), (float) (getMeasuredHeight() - 1), ArticleViewer.dividerPaint);
+                }
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockRelatedArticlesHeaderCell */
+    private class BlockRelatedArticlesHeaderCell extends View {
+        private TL_pageBlockRelatedArticles currentBlock;
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.m9dp(18.0f);
+        private int textY;
+
+        public BlockRelatedArticlesHeaderCell(Context context) {
+            super(context);
+        }
+
+        public void setBlock(TL_pageBlockRelatedArticles block) {
+            this.currentBlock = block;
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            return ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.title, width - AndroidUtilities.m9dp(52.0f), 0, this.currentBlock, Alignment.ALIGN_NORMAL, 1);
+                if (this.textLayout != null) {
+                    this.textY = AndroidUtilities.m9dp(6.0f) + ((AndroidUtilities.m9dp(32.0f) - this.textLayout.getHeight()) / 2);
+                }
+            }
+            if (this.textLayout != null) {
+                setMeasuredDimension(width, AndroidUtilities.m9dp(38.0f));
+            } else {
+                setMeasuredDimension(width, 1);
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            if (this.currentBlock != null && this.textLayout != null) {
+                canvas.save();
+                canvas.translate((float) this.textX, (float) this.textY);
+                this.textLayout.draw(canvas);
+                canvas.restore();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockRelatedArticlesShadowCell */
+    private class BlockRelatedArticlesShadowCell extends View {
+        private CombinedDrawable shadowDrawable;
+
+        public BlockRelatedArticlesShadowCell(Context context) {
+            super(context);
+            this.shadowDrawable = new CombinedDrawable(new ColorDrawable(-986896), Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, (int) Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
+            this.shadowDrawable.setFullsize(true);
+            setBackgroundDrawable(this.shadowDrawable);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m9dp(12.0f));
+            int color = ArticleViewer.this.getSelectedColor();
+            if (color == 0) {
+                Theme.setCombinedDrawableColor(this.shadowDrawable, -986896, false);
+            } else if (color == 1) {
+                Theme.setCombinedDrawableColor(this.shadowDrawable, -1712440, false);
+            } else if (color == 2) {
+                Theme.setCombinedDrawableColor(this.shadowDrawable, -15000805, false);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ArticleViewer$BlockSlideshowCell */
     private class BlockSlideshowCell extends FrameLayout {
         private PagerAdapter adapter;
+        private DrawingText captionLayout;
+        private DrawingText creditLayout;
+        private int creditOffset;
         private TL_pageBlockSlideshow currentBlock;
+        private int currentPage;
         private View dotsContainer;
         private ViewPager innerListView;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
-        private int textX = AndroidUtilities.m10dp(18.0f);
+        private float pageOffset;
+        private int textX = AndroidUtilities.m9dp(18.0f);
         private int textY;
 
         public BlockSlideshowCell(Context context) {
@@ -2647,9 +3588,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             };
             this.innerListView.addOnPageChangeListener(new OnPageChangeListener(ArticleViewer.this) {
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    float width = (float) BlockSlideshowCell.this.innerListView.getMeasuredWidth();
+                    if (width != 0.0f) {
+                        BlockSlideshowCell.this.pageOffset = (((((float) position) * width) + ((float) positionOffsetPixels)) - (((float) BlockSlideshowCell.this.currentPage) * width)) / width;
+                        BlockSlideshowCell.this.dotsContainer.invalidate();
+                    }
                 }
 
                 public void onPageSelected(int position) {
+                    BlockSlideshowCell.this.currentPage = position;
                     BlockSlideshowCell.this.dotsContainer.invalidate();
                 }
 
@@ -2657,7 +3604,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
             });
             ViewPager viewPager = this.innerListView;
-            PagerAdapter c07563 = new PagerAdapter(ArticleViewer.this) {
+            PagerAdapter c04793 = new PagerAdapter(ArticleViewer.this) {
 
                 /* renamed from: org.telegram.ui.ArticleViewer$BlockSlideshowCell$3$ObjectContainer */
                 class ObjectContainer {
@@ -2713,8 +3660,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     }
                 }
             };
-            this.adapter = c07563;
-            viewPager.setAdapter(c07563);
+            this.adapter = c04793;
+            viewPager.setAdapter(c04793);
             int color = ArticleViewer.this.getSelectedColor();
             if (color == 0) {
                 AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, -657673);
@@ -2727,12 +3674,30 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.dotsContainer = new View(context, ArticleViewer.this) {
                 protected void onDraw(Canvas canvas) {
                     if (BlockSlideshowCell.this.currentBlock != null) {
-                        int selected = BlockSlideshowCell.this.innerListView.getCurrentItem();
+                        int xOffset;
+                        int count = BlockSlideshowCell.this.adapter.getCount();
+                        int totalWidth = ((AndroidUtilities.m9dp(7.0f) * count) + ((count - 1) * AndroidUtilities.m9dp(6.0f))) + AndroidUtilities.m9dp(4.0f);
+                        if (totalWidth < getMeasuredWidth()) {
+                            xOffset = (getMeasuredWidth() - totalWidth) / 2;
+                        } else {
+                            xOffset = AndroidUtilities.m9dp(4.0f);
+                            int size = AndroidUtilities.m9dp(13.0f);
+                            int halfCount = ((getMeasuredWidth() - AndroidUtilities.m9dp(8.0f)) / 2) / size;
+                            if (BlockSlideshowCell.this.currentPage == (count - halfCount) - 1 && BlockSlideshowCell.this.pageOffset < 0.0f) {
+                                xOffset -= ((int) (BlockSlideshowCell.this.pageOffset * ((float) size))) + (((count - (halfCount * 2)) - 1) * size);
+                            } else if (BlockSlideshowCell.this.currentPage >= (count - halfCount) - 1) {
+                                xOffset -= ((count - (halfCount * 2)) - 1) * size;
+                            } else if (BlockSlideshowCell.this.currentPage > halfCount) {
+                                xOffset -= ((int) (BlockSlideshowCell.this.pageOffset * ((float) size))) + ((BlockSlideshowCell.this.currentPage - halfCount) * size);
+                            } else if (BlockSlideshowCell.this.currentPage == halfCount && BlockSlideshowCell.this.pageOffset > 0.0f) {
+                                xOffset -= (int) (BlockSlideshowCell.this.pageOffset * ((float) size));
+                            }
+                        }
                         int a = 0;
                         while (a < BlockSlideshowCell.this.currentBlock.items.size()) {
-                            int cx = AndroidUtilities.m10dp(4.0f) + (AndroidUtilities.m10dp(13.0f) * a);
-                            Drawable drawable = selected == a ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
-                            drawable.setBounds(cx - AndroidUtilities.m10dp(5.0f), 0, AndroidUtilities.m10dp(5.0f) + cx, AndroidUtilities.m10dp(10.0f));
+                            int cx = (AndroidUtilities.m9dp(4.0f) + xOffset) + (AndroidUtilities.m9dp(13.0f) * a);
+                            Drawable drawable = BlockSlideshowCell.this.currentPage == a ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
+                            drawable.setBounds(cx - AndroidUtilities.m9dp(5.0f), 0, AndroidUtilities.m9dp(5.0f) + cx, AndroidUtilities.m9dp(10.0f));
                             drawable.draw(canvas);
                             a++;
                         }
@@ -2745,32 +3710,41 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockSlideshow block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
-            this.innerListView.setCurrentItem(0, false);
             this.adapter.notifyDataSetChanged();
+            this.innerListView.setCurrentItem(0, false);
+            this.innerListView.forceLayout();
             requestLayout();
         }
 
         public boolean onTouchEvent(MotionEvent event) {
-            return ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event);
+            if (!ArticleViewer.this.checkLayoutForLinks(event, this, this.captionLayout, this.textX, this.textY)) {
+                if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(event))) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int height;
             int width = MeasureSpec.getSize(widthMeasureSpec);
             if (this.currentBlock != null) {
-                height = AndroidUtilities.m10dp(310.0f);
+                height = AndroidUtilities.m9dp(310.0f);
                 this.innerListView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
                 int count = this.currentBlock.items.size();
-                this.dotsContainer.measure(MeasureSpec.makeMeasureSpec(((AndroidUtilities.m10dp(7.0f) * count) + ((count - 1) * AndroidUtilities.m10dp(6.0f))) + AndroidUtilities.m10dp(4.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(10.0f), NUM));
-                if (this.lastCreatedWidth != width) {
-                    this.textY = AndroidUtilities.m10dp(16.0f) + height;
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, width - AndroidUtilities.m10dp(36.0f), this.currentBlock);
-                    if (this.textLayout != null) {
-                        height += AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight();
-                    }
+                this.dotsContainer.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(10.0f), NUM));
+                int textWidth = width - AndroidUtilities.m9dp(36.0f);
+                this.textY = AndroidUtilities.m9dp(16.0f) + height;
+                this.captionLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.text, textWidth, this.currentBlock);
+                if (this.captionLayout != null) {
+                    this.creditOffset = AndroidUtilities.m9dp(4.0f) + this.captionLayout.getHeight();
+                    height += this.creditOffset + AndroidUtilities.m9dp(4.0f);
                 }
-                height += AndroidUtilities.m10dp(16.0f);
+                this.creditLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.credit, textWidth, this.currentBlock);
+                if (this.creditLayout != null) {
+                    height += AndroidUtilities.m9dp(4.0f) + this.creditLayout.getHeight();
+                }
+                height += AndroidUtilities.m9dp(16.0f);
             } else {
                 height = 1;
             }
@@ -2778,19 +3752,25 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
 
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            this.innerListView.layout(0, AndroidUtilities.m10dp(8.0f), this.innerListView.getMeasuredWidth(), AndroidUtilities.m10dp(8.0f) + this.innerListView.getMeasuredHeight());
-            int y = this.innerListView.getBottom() - AndroidUtilities.m10dp(23.0f);
-            int x = ((right - left) - this.dotsContainer.getMeasuredWidth()) / 2;
-            this.dotsContainer.layout(x, y, this.dotsContainer.getMeasuredWidth() + x, this.dotsContainer.getMeasuredHeight() + y);
+            this.innerListView.layout(0, AndroidUtilities.m9dp(8.0f), this.innerListView.getMeasuredWidth(), AndroidUtilities.m9dp(8.0f) + this.innerListView.getMeasuredHeight());
+            int y = this.innerListView.getBottom() - AndroidUtilities.m9dp(23.0f);
+            this.dotsContainer.layout(0, y, this.dotsContainer.getMeasuredWidth(), this.dotsContainer.getMeasuredHeight() + y);
         }
 
         protected void onDraw(Canvas canvas) {
-            if (this.currentBlock != null && this.textLayout != null) {
-                canvas.save();
-                canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                this.textLayout.draw(canvas);
-                canvas.restore();
+            if (this.currentBlock != null) {
+                if (this.captionLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
+                    canvas.restore();
+                }
             }
         }
     }
@@ -2798,10 +3778,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockSubheaderCell */
     private class BlockSubheaderCell extends View {
         private TL_pageBlockSubheader currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
-        private int textX = AndroidUtilities.m10dp(18.0f);
-        private int textY = AndroidUtilities.m10dp(8.0f);
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.m9dp(18.0f);
+        private int textY = AndroidUtilities.m9dp(8.0f);
 
         public BlockSubheaderCell(Context context) {
             super(context);
@@ -2809,7 +3788,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockSubheader block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -2820,13 +3798,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, width - AndroidUtilities.m10dp(36.0f), this.currentBlock);
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, width - AndroidUtilities.m9dp(36.0f), this.currentBlock);
                 if (this.textLayout != null) {
-                    height = 0 + (AndroidUtilities.m10dp(16.0f) + this.textLayout.getHeight());
+                    height = 0 + (AndroidUtilities.m9dp(16.0f) + this.textLayout.getHeight());
                 }
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
@@ -2835,7 +3813,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.currentBlock != null && this.textLayout != null) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -2845,10 +3822,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockSubtitleCell */
     private class BlockSubtitleCell extends View {
         private TL_pageBlockSubtitle currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
-        private int textX = AndroidUtilities.m10dp(18.0f);
-        private int textY = AndroidUtilities.m10dp(8.0f);
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.m9dp(18.0f);
+        private int textY = AndroidUtilities.m9dp(8.0f);
 
         public BlockSubtitleCell(Context context) {
             super(context);
@@ -2856,7 +3832,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockSubtitle block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -2867,13 +3842,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, width - AndroidUtilities.m10dp(36.0f), this.currentBlock);
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, width - AndroidUtilities.m9dp(36.0f), this.currentBlock);
                 if (this.textLayout != null) {
-                    height = 0 + (AndroidUtilities.m10dp(16.0f) + this.textLayout.getHeight());
+                    height = 0 + (AndroidUtilities.m9dp(16.0f) + this.textLayout.getHeight());
                 }
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
@@ -2882,7 +3857,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.currentBlock != null && this.textLayout != null) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -2892,9 +3866,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     /* renamed from: org.telegram.ui.ArticleViewer$BlockTitleCell */
     private class BlockTitleCell extends View {
         private TL_pageBlockTitle currentBlock;
-        private int lastCreatedWidth;
-        private StaticLayout textLayout;
-        private int textX = AndroidUtilities.m10dp(18.0f);
+        private DrawingText textLayout;
+        private int textX = AndroidUtilities.m9dp(18.0f);
         private int textY;
 
         public BlockTitleCell(Context context) {
@@ -2903,7 +3876,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         public void setBlock(TL_pageBlockTitle block) {
             this.currentBlock = block;
-            this.lastCreatedWidth = 0;
             requestLayout();
         }
 
@@ -2914,31 +3886,19 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
-            if (this.currentBlock == null) {
-                height = 1;
-            } else if (this.lastCreatedWidth != width) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.text, width - AndroidUtilities.m10dp(36.0f), this.currentBlock);
+            if (this.currentBlock != null) {
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.text, width - AndroidUtilities.m9dp(36.0f), this.currentBlock);
                 if (this.textLayout != null) {
-                    height = 0 + (AndroidUtilities.m10dp(16.0f) + this.textLayout.getHeight());
-                    if (ArticleViewer.this.isRtl == -1) {
-                        int count = this.textLayout.getLineCount();
-                        for (int a = 0; a < count; a++) {
-                            if (this.textLayout.getLineLeft(a) > 0.0f) {
-                                ArticleViewer.this.isRtl = 1;
-                                break;
-                            }
-                        }
-                        if (ArticleViewer.this.isRtl == -1) {
-                            ArticleViewer.this.isRtl = 0;
-                        }
-                    }
+                    height = 0 + (AndroidUtilities.m9dp(16.0f) + this.textLayout.getHeight());
                 }
                 if (this.currentBlock.first) {
-                    height += AndroidUtilities.m10dp(8.0f);
-                    this.textY = AndroidUtilities.m10dp(16.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
+                    this.textY = AndroidUtilities.m9dp(16.0f);
                 } else {
-                    this.textY = AndroidUtilities.m10dp(8.0f);
+                    this.textY = AndroidUtilities.m9dp(8.0f);
                 }
+            } else {
+                height = 1;
             }
             setMeasuredDimension(width, height);
         }
@@ -2947,7 +3907,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.currentBlock != null && this.textLayout != null) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -2964,37 +3923,21 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void run() {
             if (ArticleViewer.this.checkingForLongPress && ArticleViewer.this.windowView != null) {
                 ArticleViewer.this.checkingForLongPress = false;
-                ArticleViewer.this.windowView.performHapticFeedback(0);
                 if (ArticleViewer.this.pressedLink != null) {
-                    final String urlFinal = ArticleViewer.this.pressedLink.getUrl();
-                    Builder builder = new Builder(ArticleViewer.this.parentActivity);
-                    builder.setTitle(urlFinal);
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (ArticleViewer.this.parentActivity != null) {
-                                if (which == 0) {
-                                    Browser.openUrl(ArticleViewer.this.parentActivity, urlFinal);
-                                } else if (which == 1) {
-                                    String url = urlFinal;
-                                    if (url.startsWith("mailto:")) {
-                                        url = url.substring(7);
-                                    } else if (url.startsWith("tel:")) {
-                                        url = url.substring(4);
-                                    }
-                                    AndroidUtilities.addToClipboard(url);
-                                }
-                            }
-                        }
-                    });
-                    ArticleViewer.this.showDialog(builder.create());
-                    ArticleViewer.this.hideActionBar();
+                    ArticleViewer.this.windowView.performHapticFeedback(0);
+                    ArticleViewer.this.showCopyPopup(ArticleViewer.this.pressedLink.getUrl());
                     ArticleViewer.this.pressedLink = null;
                     ArticleViewer.this.pressedLinkOwnerLayout = null;
-                    ArticleViewer.this.pressedLinkOwnerView.invalidate();
+                    if (ArticleViewer.this.pressedLinkOwnerView != null) {
+                        ArticleViewer.this.pressedLinkOwnerView.invalidate();
+                    }
                 } else if (ArticleViewer.this.pressedLinkOwnerLayout != null && ArticleViewer.this.pressedLinkOwnerView != null) {
-                    int y = (ArticleViewer.this.pressedLinkOwnerView.getTop() - AndroidUtilities.m10dp(54.0f)) + ArticleViewer.this.pressedLayoutY;
+                    ArticleViewer.this.windowView.performHapticFeedback(0);
+                    int[] location = new int[2];
+                    ArticleViewer.this.pressedLinkOwnerView.getLocationInWindow(location);
+                    int y = (location[1] + ArticleViewer.this.pressedLayoutY) - AndroidUtilities.m9dp(54.0f);
                     if (y < 0) {
-                        y *= -1;
+                        y = 0;
                     }
                     ArticleViewer.this.pressedLinkOwnerView.invalidate();
                     ArticleViewer.this.drawBlockSelection = true;
@@ -3011,7 +3954,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         private CheckForTap() {
         }
 
-        /* synthetic */ CheckForTap(ArticleViewer x0, C07031 x1) {
+        /* synthetic */ CheckForTap(ArticleViewer x0, C04591 x1) {
             this();
         }
 
@@ -3019,7 +3962,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (ArticleViewer.this.pendingCheckForLongPress == null) {
                 ArticleViewer.this.pendingCheckForLongPress = new CheckForLongPress();
             }
-            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$804(ArticleViewer.this);
+            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$1004(ArticleViewer.this);
             if (ArticleViewer.this.windowView != null) {
                 ArticleViewer.this.windowView.postDelayed(ArticleViewer.this.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
             }
@@ -3043,7 +3986,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 ArticleViewer.selectorPaint = new Paint(1);
                 ArticleViewer.selectorPaint.setColor(-15428119);
                 ArticleViewer.selectorPaint.setStyle(Style.STROKE);
-                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
             }
             setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
             setWillNotDraw(false);
@@ -3060,7 +4003,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 i = 3;
             }
             textView.setGravity(i | 16);
-            this.textView.setPadding(0, 0, 0, AndroidUtilities.m10dp(1.0f));
+            this.textView.setPadding(0, 0, 0, AndroidUtilities.m9dp(1.0f));
             View view = this.textView;
             if (!LocaleController.isRTL) {
                 i2 = 3;
@@ -3069,7 +4012,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(48.0f), NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f), NUM));
         }
 
         public void setTextAndColor(String text, int color) {
@@ -3087,16 +4030,58 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
         protected void onDraw(Canvas canvas) {
             ArticleViewer.colorPaint.setColor(this.currentColor);
-            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.m10dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m10dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m10dp(10.0f), ArticleViewer.colorPaint);
+            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.m9dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m9dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(10.0f), ArticleViewer.colorPaint);
             if (this.selected) {
-                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
                 ArticleViewer.selectorPaint.setColor(-15428119);
-                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.m10dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m10dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m10dp(10.0f), ArticleViewer.selectorPaint);
+                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.m9dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m9dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(10.0f), ArticleViewer.selectorPaint);
             } else if (this.currentColor == -1) {
-                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+                ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
                 ArticleViewer.selectorPaint.setColor(-4539718);
-                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.m10dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m10dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m10dp(9.0f), ArticleViewer.selectorPaint);
+                canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.m9dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m9dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(9.0f), ArticleViewer.selectorPaint);
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$DrawingText */
+    public class DrawingText {
+        public StaticLayout textLayout;
+        public LinkPath textPath;
+
+        public void draw(Canvas canvas) {
+            if (this.textPath != null) {
+                canvas.drawPath(this.textPath, ArticleViewer.webpageUrlPaint);
+            }
+            ArticleViewer.this.drawLayoutLink(canvas, this);
+            this.textLayout.draw(canvas);
+        }
+
+        public CharSequence getText() {
+            return this.textLayout.getText();
+        }
+
+        public int getLineCount() {
+            return this.textLayout.getLineCount();
+        }
+
+        public int getLineAscent(int line) {
+            return this.textLayout.getLineAscent(line);
+        }
+
+        public float getLineLeft(int line) {
+            return this.textLayout.getLineLeft(line);
+        }
+
+        public float getLineWidth(int line) {
+            return this.textLayout.getLineWidth(line);
+        }
+
+        public int getHeight() {
+            return this.textLayout.getHeight();
+        }
+
+        public int getWidth() {
+            return this.textLayout.getWidth();
         }
     }
 
@@ -3149,7 +4134,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(48.0f), NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f), NUM));
         }
 
         public void select(boolean value) {
@@ -3236,12 +4221,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         private float currentProgress = 0.0f;
         private long currentProgressTime = 0;
         private long lastUpdateTime = 0;
-        private View parent = null;
+        private View parent;
         private int previousBackgroundState = -2;
         private RectF progressRect = new RectF();
         private float radOffset = 0.0f;
         private float scale = 1.0f;
-        private int size = AndroidUtilities.m10dp(64.0f);
+        private int size = AndroidUtilities.m9dp(64.0f);
 
         public RadialProgressView(Context context, View parentView) {
             if (ArticleViewer.decelerateInterpolator == null) {
@@ -3249,7 +4234,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 ArticleViewer.progressPaint = new Paint(1);
                 ArticleViewer.progressPaint.setStyle(Style.STROKE);
                 ArticleViewer.progressPaint.setStrokeCap(Cap.ROUND);
-                ArticleViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.m10dp(3.0f));
+                ArticleViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.m9dp(3.0f));
                 ArticleViewer.progressPaint.setColor(-1);
             }
             this.parent = parentView;
@@ -3341,7 +4326,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
             }
             if (this.backgroundState == 0 || this.backgroundState == 1 || this.previousBackgroundState == 0 || this.previousBackgroundState == 1) {
-                int diff = AndroidUtilities.m10dp(4.0f);
+                int diff = AndroidUtilities.m9dp(4.0f);
                 if (this.previousBackgroundState != -2) {
                     ArticleViewer.progressPaint.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
                 } else {
@@ -3380,7 +4365,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 a = 0;
                 while (a < 5) {
                     cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                    if (x <= ((float) (cx - AndroidUtilities.m10dp(15.0f))) || x >= ((float) (AndroidUtilities.m10dp(15.0f) + cx))) {
+                    if (x <= ((float) (cx - AndroidUtilities.m9dp(15.0f))) || x >= ((float) (AndroidUtilities.m9dp(15.0f) + cx))) {
                         a++;
                     } else {
                         if (a == ArticleViewer.this.selectedFontSize) {
@@ -3416,7 +4401,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     a = 0;
                     while (a < 5) {
                         cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                        if (x <= ((float) (cx - AndroidUtilities.m10dp(15.0f))) || x >= ((float) (AndroidUtilities.m10dp(15.0f) + cx))) {
+                        if (x <= ((float) (cx - AndroidUtilities.m9dp(15.0f))) || x >= ((float) (AndroidUtilities.m9dp(15.0f) + cx))) {
                             a++;
                         } else if (ArticleViewer.this.selectedFontSize != a) {
                             ArticleViewer.this.selectedFontSize = a;
@@ -3436,9 +4421,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             int width = MeasureSpec.getSize(widthMeasureSpec);
-            this.circleSize = AndroidUtilities.m10dp(5.0f);
-            this.gapSize = AndroidUtilities.m10dp(2.0f);
-            this.sideSide = AndroidUtilities.m10dp(17.0f);
+            this.circleSize = AndroidUtilities.m9dp(5.0f);
+            this.gapSize = AndroidUtilities.m9dp(2.0f);
+            this.sideSide = AndroidUtilities.m9dp(17.0f);
             this.lineSize = (((getMeasuredWidth() - (this.circleSize * 5)) - (this.gapSize * 8)) - (this.sideSide * 2)) / 4;
         }
 
@@ -3452,10 +4437,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 } else {
                     this.paint.setColor(-3355444);
                 }
-                canvas.drawCircle((float) cx, (float) cy, a == ArticleViewer.this.selectedFontSize ? (float) AndroidUtilities.m10dp(4.0f) : (float) (this.circleSize / 2), this.paint);
+                canvas.drawCircle((float) cx, (float) cy, a == ArticleViewer.this.selectedFontSize ? (float) AndroidUtilities.m9dp(4.0f) : (float) (this.circleSize / 2), this.paint);
                 if (a != 0) {
                     int x = ((cx - (this.circleSize / 2)) - this.gapSize) - this.lineSize;
-                    canvas.drawRect((float) x, (float) (cy - AndroidUtilities.m10dp(1.0f)), (float) (this.lineSize + x), (float) (AndroidUtilities.m10dp(1.0f) + cy), this.paint);
+                    canvas.drawRect((float) x, (float) (cy - AndroidUtilities.m9dp(1.0f)), (float) (this.lineSize + x), (float) (AndroidUtilities.m9dp(1.0f) + cy), this.paint);
                 }
                 a++;
             }
@@ -3466,6 +4451,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private class WindowView extends FrameLayout {
         private float alpha;
         private Runnable attachRunnable;
+        private int bHeight;
+        private int bWidth;
+        /* renamed from: bX */
+        private int f214bX;
+        /* renamed from: bY */
+        private int f215bY;
         private boolean closeAnimationInProgress;
         private float innerTranslationX;
         private boolean maybeStartTracking;
@@ -3497,16 +4488,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 heightSize -= insets.getSystemWindowInsetBottom();
                 widthSize -= insets.getSystemWindowInsetRight() + insets.getSystemWindowInsetLeft();
                 if (insets.getSystemWindowInsetRight() != 0) {
-                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetRight(), NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+                    this.bWidth = insets.getSystemWindowInsetRight();
+                    this.bHeight = heightSize;
                 } else if (insets.getSystemWindowInsetLeft() != 0) {
-                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetLeft(), NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+                    this.bWidth = insets.getSystemWindowInsetLeft();
+                    this.bHeight = heightSize;
                 } else {
-                    if (insets.getSystemWindowInsetBottom() == 0) {
-                        ArticleViewer.this.barBackground.setVisibility(4);
-                    } else {
-                        ArticleViewer.this.barBackground.setVisibility(0);
-                    }
-                    ArticleViewer.this.barBackground.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(insets.getSystemWindowInsetBottom(), NUM));
+                    this.bWidth = widthSize;
+                    this.bHeight = insets.getSystemWindowInsetBottom();
                 }
             }
             ArticleViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
@@ -3520,17 +4509,27 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
             if (!this.selfLayout) {
                 int x;
+                int width = right - left;
+                if (ArticleViewer.this.anchorsOffsetMeasuredWidth != width) {
+                    for (Entry<String, Integer> entry : ArticleViewer.this.anchorsOffset.entrySet()) {
+                        entry.setValue(Integer.valueOf(-1));
+                    }
+                    ArticleViewer.this.anchorsOffsetMeasuredWidth = width;
+                }
                 if (VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
                     x = 0;
                 } else {
                     WindowInsets insets = (WindowInsets) ArticleViewer.this.lastInsets;
                     x = insets.getSystemWindowInsetLeft();
                     if (insets.getSystemWindowInsetRight() != 0) {
-                        ArticleViewer.this.barBackground.layout((right - left) - insets.getSystemWindowInsetRight(), 0, right - left, bottom - top);
+                        this.f214bX = width - this.bWidth;
+                        this.f215bY = 0;
                     } else if (insets.getSystemWindowInsetLeft() != 0) {
-                        ArticleViewer.this.barBackground.layout(0, 0, insets.getSystemWindowInsetLeft(), bottom - top);
+                        this.f214bX = 0;
+                        this.f215bY = 0;
                     } else {
-                        ArticleViewer.this.barBackground.layout(0, (bottom - top) - insets.getStableInsetBottom(), right - left, bottom - top);
+                        this.f214bX = 0;
+                        this.f215bY = (bottom - top) - this.bHeight;
                     }
                 }
                 ArticleViewer.this.containerView.layout(x, 0, ArticleViewer.this.containerView.getMeasuredWidth() + x, ArticleViewer.this.containerView.getMeasuredHeight());
@@ -3589,7 +4588,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 ArticleViewer.this.scrimPaint.setColor(((int) (153.0f * opacity)) << 24);
                 canvas.drawRect(0.0f, 0.0f, (float) translationX, (float) getHeight(), ArticleViewer.this.scrimPaint);
-                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.m10dp(20.0f)), 1.0f));
+                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.m9dp(20.0f)), 1.0f));
                 ArticleViewer.this.layerShadowDrawable.setBounds(translationX - ArticleViewer.this.layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
                 ArticleViewer.this.layerShadowDrawable.setAlpha((int) (255.0f * alpha));
                 ArticleViewer.this.layerShadowDrawable.draw(canvas);
@@ -3630,6 +4629,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.maybeStartTracking && !this.startedTracking && ((float) dx) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
                     prepareForMoving(event);
                 } else if (this.startedTracking) {
+                    ArticleViewer.this.pressedLinkOwnerLayout = null;
+                    ArticleViewer.this.pressedLinkOwnerView = null;
                     ArticleViewer.this.containerView.setTranslationX((float) dx);
                     setInnerTranslationX((float) dx);
                 }
@@ -3698,6 +4699,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             return this.startedTracking;
         }
 
+        protected void dispatchDraw(Canvas canvas) {
+            super.dispatchDraw(canvas);
+            if (this.bWidth != 0 && this.bHeight != 0) {
+                if (this.f214bX == 0 && this.f215bY == 0) {
+                    canvas.drawRect((float) this.f214bX, (float) this.f215bY, (float) (this.f214bX + this.bWidth), (float) (this.f215bY + this.bHeight), ArticleViewer.this.blackPaint);
+                    return;
+                }
+                canvas.drawRect(((float) this.f214bX) - getTranslationX(), (float) this.f215bY, ((float) (this.f214bX + this.bWidth)) - getTranslationX(), (float) (this.f215bY + this.bHeight), ArticleViewer.this.blackPaint);
+            }
+        }
+
         protected void onDraw(Canvas canvas) {
             canvas.drawRect(this.innerTranslationX, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), ArticleViewer.this.backgroundPaint);
         }
@@ -3720,142 +4732,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$10 */
-    class C187910 implements OnItemClickListener {
-        C187910() {
-        }
-
-        public void onItemClick(View view, int position) {
-            if (position != ArticleViewer.this.blocks.size() || ArticleViewer.this.currentPage == null) {
-                if (position >= 0 && position < ArticleViewer.this.blocks.size()) {
-                    PageBlock pageBlock = (PageBlock) ArticleViewer.this.blocks.get(position);
-                    if (pageBlock instanceof TL_pageBlockChannel) {
-                        MessagesController.getInstance(ArticleViewer.this.currentAccount).openByUserName(pageBlock.channel.username, ArticleViewer.this.parentFragment, 2);
-                        ArticleViewer.this.close(false, true);
-                    }
-                }
-            } else if (ArticleViewer.this.previewsReqId == 0) {
-                TLObject object = MessagesController.getInstance(ArticleViewer.this.currentAccount).getUserOrChat("previews");
-                if (object instanceof TL_user) {
-                    ArticleViewer.this.openPreviewsChat((User) object, ArticleViewer.this.currentPage.f183id);
-                    return;
-                }
-                final int currentAccount = UserConfig.selectedAccount;
-                final long pageId = ArticleViewer.this.currentPage.f183id;
-                ArticleViewer.this.showProgressView(true);
-                TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
-                req.username = "previews";
-                ArticleViewer.this.previewsReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, new RequestDelegate() {
-                    public void run(final TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (ArticleViewer.this.previewsReqId != 0) {
-                                    ArticleViewer.this.previewsReqId = 0;
-                                    ArticleViewer.this.showProgressView(false);
-                                    if (response != null) {
-                                        TL_contacts_resolvedPeer res = response;
-                                        MessagesController.getInstance(currentAccount).putUsers(res.users, false);
-                                        MessagesStorage.getInstance(currentAccount).putUsersAndChats(res.users, res.chats, false, true);
-                                        if (!res.users.isEmpty()) {
-                                            ArticleViewer.this.openPreviewsChat((User) res.users.get(0), pageId);
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$11 */
-    class C188011 extends OnScrollListener {
-        C188011() {
-        }
-
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if (ArticleViewer.this.listView.getChildCount() != 0) {
-                ArticleViewer.this.headerView.invalidate();
-                ArticleViewer.this.checkScroll(dy);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$19 */
-    class C188119 extends ActionBarMenuOnItemClick {
-        C188119() {
-        }
-
-        public void onItemClick(int id) {
-            int i = 1;
-            if (id == -1) {
-                ArticleViewer.this.closePhoto(true);
-            } else if (id == 1) {
-                if (VERSION.SDK_INT < 23 || ArticleViewer.this.parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
-                    File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
-                    if (f == null || !f.exists()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ArticleViewer.this.parentActivity);
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                        builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
-                        ArticleViewer.this.showDialog(builder.create());
-                        return;
-                    }
-                    String file = f.toString();
-                    Context access$1900 = ArticleViewer.this.parentActivity;
-                    if (!ArticleViewer.this.isMediaVideo(ArticleViewer.this.currentIndex)) {
-                        i = 0;
-                    }
-                    MediaController.saveFile(file, access$1900, i, null, null);
-                    return;
-                }
-                ArticleViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
-            } else if (id == 2) {
-                ArticleViewer.this.onSharePressed();
-            } else if (id == 3) {
-                try {
-                    AndroidUtilities.openForView(ArticleViewer.this.getMedia(ArticleViewer.this.currentIndex), ArticleViewer.this.parentActivity);
-                    ArticleViewer.this.closePhoto(false);
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
-                }
-            }
-        }
-
-        public boolean canOpenMenu() {
-            File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
-            return f != null && f.exists();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$20 */
-    class C188220 implements SeekBarDelegate {
-        C188220() {
-        }
-
-        public void onSeekBarDrag(float progress) {
-            if (ArticleViewer.this.videoPlayer != null) {
-                ArticleViewer.this.videoPlayer.seekTo((long) ((int) (((float) ArticleViewer.this.videoPlayer.getDuration()) * progress)));
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$2 */
-    class C18842 implements OnDispatchKeyEventListener {
-        C18842() {
-        }
-
-        public void onDispatchKeyEvent(KeyEvent keyEvent) {
-            if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && ArticleViewer.this.popupWindow != null && ArticleViewer.this.popupWindow.isShowing()) {
-                ArticleViewer.this.popupWindow.dismiss();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ArticleViewer$40 */
-    class C188740 implements VideoPlayerDelegate {
-        C188740() {
+    /* renamed from: org.telegram.ui.ArticleViewer$16 */
+    class C125416 implements VideoPlayerDelegate {
+        C125416() {
         }
 
         public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -3864,13 +4743,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     try {
                         ArticleViewer.this.parentActivity.getWindow().clearFlags(128);
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 } else {
                     try {
                         ArticleViewer.this.parentActivity.getWindow().addFlags(128);
                     } catch (Throwable e2) {
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                     }
                 }
                 if (playbackState == 3 && ArticleViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
@@ -3898,7 +4777,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
 
         public void onError(Exception e) {
-            FileLog.m14e((Throwable) e);
+            FileLog.m13e((Throwable) e);
         }
 
         public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
@@ -3927,13 +4806,110 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    /* renamed from: org.telegram.ui.ArticleViewer$9 */
-    class C18909 implements OnItemLongClickListener {
-        C18909() {
+    /* renamed from: org.telegram.ui.ArticleViewer$4 */
+    class C12564 extends OnScrollListener {
+        C12564() {
         }
 
-        public boolean onItemClick(View view, int position) {
-            return false;
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (ArticleViewer.this.listView.getChildCount() != 0) {
+                ArticleViewer.this.headerView.invalidate();
+                ArticleViewer.this.checkScroll(dy);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$6 */
+    class C12576 extends ActionBarMenuOnItemClick {
+        C12576() {
+        }
+
+        public void onItemClick(int id) {
+            int i = 1;
+            if (id == -1) {
+                ArticleViewer.this.closePhoto(true);
+            } else if (id == 1) {
+                if (VERSION.SDK_INT < 23 || ArticleViewer.this.parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
+                    File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
+                    if (f == null || !f.exists()) {
+                        Builder builder = new Builder(ArticleViewer.this.parentActivity);
+                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
+                        ArticleViewer.this.showDialog(builder.create());
+                        return;
+                    }
+                    String file = f.toString();
+                    Context access$2200 = ArticleViewer.this.parentActivity;
+                    if (!ArticleViewer.this.isMediaVideo(ArticleViewer.this.currentIndex)) {
+                        i = 0;
+                    }
+                    MediaController.saveFile(file, access$2200, i, null, null);
+                    return;
+                }
+                ArticleViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
+            } else if (id == 2) {
+                ArticleViewer.this.onSharePressed();
+            } else if (id == 3) {
+                try {
+                    AndroidUtilities.openForView(ArticleViewer.this.getMedia(ArticleViewer.this.currentIndex), ArticleViewer.this.parentActivity);
+                    ArticleViewer.this.closePhoto(false);
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
+                }
+            }
+        }
+
+        public boolean canOpenMenu() {
+            File f = ArticleViewer.this.getMediaFile(ArticleViewer.this.currentIndex);
+            return f != null && f.exists();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$7 */
+    class C12587 implements GroupedPhotosListViewDelegate {
+        C12587() {
+        }
+
+        public int getCurrentIndex() {
+            return ArticleViewer.this.currentIndex;
+        }
+
+        public int getCurrentAccount() {
+            return ArticleViewer.this.currentAccount;
+        }
+
+        public int getAvatarsDialogId() {
+            return 0;
+        }
+
+        public int getSlideshowMessageId() {
+            return 0;
+        }
+
+        public ArrayList<FileLocation> getImagesArrLocations() {
+            return null;
+        }
+
+        public ArrayList<MessageObject> getImagesArr() {
+            return null;
+        }
+
+        public ArrayList<PageBlock> getPageBlockArr() {
+            return ArticleViewer.this.imagesArr;
+        }
+
+        public Object getParentObject() {
+            return ArticleViewer.this.currentPage;
+        }
+
+        public void setCurrentIndex(int index) {
+            ArticleViewer.this.currentIndex = -1;
+            if (ArticleViewer.this.currentThumb != null) {
+                ArticleViewer.this.currentThumb.release();
+                ArticleViewer.this.currentThumb = null;
+            }
+            ArticleViewer.this.setImageIndex(index, true);
         }
     }
 
@@ -3944,45 +4920,45 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         private int buttonState;
         private int buttonX;
         private int buttonY;
+        private DrawingText captionLayout;
+        private DrawingText creditLayout;
+        private int creditOffset;
         private TL_pageBlockAudio currentBlock;
         private Document currentDocument;
         private MessageObject currentMessageObject;
         private StaticLayout durationLayout;
         private boolean isFirst;
         private boolean isLast;
-        private int lastCreatedWidth;
         private String lastTimeString;
         private RadialProgress radialProgress = new RadialProgress(this);
         private SeekBar seekBar;
         private int seekBarX;
         private int seekBarY;
-        private StaticLayout textLayout;
         private int textX;
-        private int textY = AndroidUtilities.m10dp(54.0f);
+        private int textY = AndroidUtilities.m9dp(54.0f);
         private StaticLayout titleLayout;
 
         public BlockAudioCell(Context context) {
             super(context);
             this.radialProgress.setAlphaForPrevious(true);
-            this.radialProgress.setDiff(AndroidUtilities.m10dp(0.0f));
-            this.radialProgress.setStrokeWidth(AndroidUtilities.m10dp(2.0f));
+            this.radialProgress.setDiff(AndroidUtilities.m9dp(0.0f));
+            this.radialProgress.setStrokeWidth(AndroidUtilities.m9dp(2.0f));
             this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
             this.seekBar = new SeekBar(context);
-            this.seekBar.setDelegate(new SeekBarDelegate(ArticleViewer.this) {
-                public void onSeekBarDrag(float progress) {
-                    if (BlockAudioCell.this.currentMessageObject != null) {
-                        BlockAudioCell.this.currentMessageObject.audioProgress = progress;
-                        MediaController.getInstance().seekToProgress(BlockAudioCell.this.currentMessageObject, progress);
-                    }
-                }
-            });
+            this.seekBar.setDelegate(new ArticleViewer$BlockAudioCell$$Lambda$0(this));
+        }
+
+        final /* synthetic */ void lambda$new$0$ArticleViewer$BlockAudioCell(float progress) {
+            if (this.currentMessageObject != null) {
+                this.currentMessageObject.audioProgress = progress;
+                MediaController.getInstance().seekToProgress(this.currentMessageObject, progress);
+            }
         }
 
         public void setBlock(TL_pageBlockAudio block, boolean first, boolean last) {
             this.currentBlock = block;
             this.currentMessageObject = (MessageObject) ArticleViewer.this.audioBlocks.get(this.currentBlock);
             this.currentDocument = this.currentMessageObject.getDocument();
-            this.lastCreatedWidth = 0;
             this.isFirst = first;
             this.isLast = last;
             this.radialProgress.setProgressColor(ArticleViewer.this.getTextColor());
@@ -4007,7 +4983,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
             boolean z;
             if (event.getAction() == 0) {
-                if ((this.buttonState != -1 && x >= ((float) this.buttonX) && x <= ((float) (this.buttonX + AndroidUtilities.m10dp(48.0f))) && y >= ((float) this.buttonY) && y <= ((float) (this.buttonY + AndroidUtilities.m10dp(48.0f)))) || this.buttonState == 0) {
+                if ((this.buttonState != -1 && x >= ((float) this.buttonX) && x <= ((float) (this.buttonX + AndroidUtilities.m9dp(48.0f))) && y >= ((float) this.buttonY) && y <= ((float) (this.buttonY + AndroidUtilities.m9dp(48.0f)))) || this.buttonState == 0) {
                     this.buttonPressed = 1;
                     invalidate();
                 }
@@ -4023,9 +4999,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.buttonPressed = 0;
             }
             if (this.buttonPressed == 0) {
-                if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event))) {
-                    z = false;
-                    return z;
+                if (!ArticleViewer.this.checkLayoutForLinks(event, this, this.captionLayout, this.textX, this.textY)) {
+                    if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(event))) {
+                        z = false;
+                        return z;
+                    }
                 }
             }
             z = true;
@@ -4035,51 +5013,55 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         @SuppressLint({"DrawAllocation"})
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = AndroidUtilities.m10dp(54.0f);
+            int height = AndroidUtilities.m9dp(54.0f);
             if (this.currentBlock != null) {
                 if (this.currentBlock.level > 0) {
-                    this.textX = AndroidUtilities.m10dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m10dp(18.0f);
+                    this.textX = AndroidUtilities.m9dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m9dp(18.0f);
                 } else {
-                    this.textX = AndroidUtilities.m10dp(18.0f);
+                    this.textX = AndroidUtilities.m9dp(18.0f);
                 }
-                int textWidth = (width - this.textX) - AndroidUtilities.m10dp(18.0f);
-                int size = AndroidUtilities.m10dp(40.0f);
-                this.buttonX = AndroidUtilities.m10dp(16.0f);
-                this.buttonY = AndroidUtilities.m10dp(7.0f);
-                this.currentBlock.caption = new TL_textPlain();
+                int textWidth = (width - this.textX) - AndroidUtilities.m9dp(18.0f);
+                int size = AndroidUtilities.m9dp(40.0f);
+                this.buttonX = AndroidUtilities.m9dp(16.0f);
+                this.buttonY = AndroidUtilities.m9dp(7.0f);
                 this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + size, this.buttonY + size);
-                if (this.lastCreatedWidth != width) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
-                    if (this.textLayout != null) {
-                        height += AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight();
-                    }
+                this.captionLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.text, textWidth, this.currentBlock);
+                if (this.captionLayout != null) {
+                    this.creditOffset = AndroidUtilities.m9dp(4.0f) + this.captionLayout.getHeight();
+                    height += this.creditOffset + AndroidUtilities.m9dp(4.0f);
+                }
+                this.creditLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.credit, textWidth, this.currentBlock);
+                if (this.creditLayout != null) {
+                    height += AndroidUtilities.m9dp(4.0f) + this.creditLayout.getHeight();
                 }
                 if (!this.isFirst && this.currentBlock.level <= 0) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
                 String author = this.currentMessageObject.getMusicAuthor(false);
                 String title = this.currentMessageObject.getMusicTitle(false);
-                this.seekBarX = (this.buttonX + AndroidUtilities.m10dp(50.0f)) + size;
-                int w = (width - this.seekBarX) - AndroidUtilities.m10dp(18.0f);
+                this.seekBarX = (this.buttonX + AndroidUtilities.m9dp(50.0f)) + size;
+                int w = (width - this.seekBarX) - AndroidUtilities.m9dp(18.0f);
                 if (TextUtils.isEmpty(title) && TextUtils.isEmpty(author)) {
                     this.titleLayout = null;
-                    this.seekBarY = this.buttonY + ((size - AndroidUtilities.m10dp(30.0f)) / 2);
+                    this.seekBarY = this.buttonY + ((size - AndroidUtilities.m9dp(30.0f)) / 2);
                 } else {
                     SpannableStringBuilder stringBuilder;
+                    SpannableStringBuilder spannableStringBuilder;
                     if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author)) {
-                        stringBuilder = new SpannableStringBuilder(String.format("%s - %s", new Object[]{author, title}));
+                        spannableStringBuilder = new SpannableStringBuilder(String.format("%s - %s", new Object[]{author, title}));
                     } else if (TextUtils.isEmpty(title)) {
-                        stringBuilder = new SpannableStringBuilder(author);
+                        spannableStringBuilder = new SpannableStringBuilder(author);
                     } else {
                         stringBuilder = new SpannableStringBuilder(title);
                     }
                     if (!TextUtils.isEmpty(author)) {
-                        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, author.length(), 18);
+                        TypefaceSpan typefaceSpan = new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        stringBuilder.setSpan(typefaceSpan, 0, author.length(), 18);
                     }
                     this.titleLayout = new StaticLayout(TextUtils.ellipsize(stringBuilder, Theme.chat_audioTitlePaint, (float) w, TruncateAt.END), ArticleViewer.audioTimePaint, w, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    this.seekBarY = (this.buttonY + ((size - AndroidUtilities.m10dp(30.0f)) / 2)) + AndroidUtilities.m10dp(11.0f);
+                    this.seekBarY = (this.buttonY + ((size - AndroidUtilities.m9dp(30.0f)) / 2)) + AndroidUtilities.m9dp(11.0f);
                 }
-                this.seekBar.setSize(w, AndroidUtilities.m10dp(30.0f));
+                this.seekBar.setSize(w, AndroidUtilities.m9dp(30.0f));
             } else {
                 height = 1;
             }
@@ -4096,25 +5078,30 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 canvas.restore();
                 if (this.durationLayout != null) {
                     canvas.save();
-                    canvas.translate((float) (this.buttonX + AndroidUtilities.m10dp(54.0f)), (float) (this.seekBarY + AndroidUtilities.m10dp(6.0f)));
+                    canvas.translate((float) (this.buttonX + AndroidUtilities.m9dp(54.0f)), (float) (this.seekBarY + AndroidUtilities.m9dp(6.0f)));
                     this.durationLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.titleLayout != null) {
                     canvas.save();
-                    canvas.translate((float) (this.buttonX + AndroidUtilities.m10dp(54.0f)), (float) (this.seekBarY - AndroidUtilities.m10dp(16.0f)));
+                    canvas.translate((float) (this.buttonX + AndroidUtilities.m9dp(54.0f)), (float) (this.seekBarY - AndroidUtilities.m9dp(16.0f)));
                     this.titleLayout.draw(canvas);
                     canvas.restore();
                 }
-                if (this.textLayout != null) {
+                if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                    this.textLayout.draw(canvas);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.m10dp(18.0f), 0.0f, (float) AndroidUtilities.m10dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m10dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -4143,7 +5130,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 String timeString = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)});
                 if (this.lastTimeString == null || !(this.lastTimeString == null || this.lastTimeString.equals(timeString))) {
                     this.lastTimeString = timeString;
-                    ArticleViewer.audioTimePaint.setTextSize((float) AndroidUtilities.m10dp(16.0f));
+                    ArticleViewer.audioTimePaint.setTextSize((float) AndroidUtilities.m9dp(16.0f));
                     this.durationLayout = new StaticLayout(timeString, ArticleViewer.audioTimePaint, (int) Math.ceil((double) ArticleViewer.audioTimePaint.measureText(timeString)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 }
                 ArticleViewer.audioTimePaint.setColor(ArticleViewer.this.getTextColor());
@@ -4195,14 +5182,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     invalidate();
                 }
             } else if (this.buttonState == 1) {
-                if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
+                if (MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject)) {
                     this.buttonState = 0;
                     this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                     invalidate();
                 }
             } else if (this.buttonState == 2) {
                 this.radialProgress.setProgress(0.0f, false);
-                FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, true, 1);
+                FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, ArticleViewer.this.currentPage, true, 1);
                 this.buttonState = 3;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
                 invalidate();
@@ -4214,7 +5201,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
         }
 
-        public void onFailedDownload(String fileName) {
+        public void onFailedDownload(String fileName, boolean canceled) {
             updateButtonState(true);
         }
 
@@ -4238,6 +5225,232 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
+    /* renamed from: org.telegram.ui.ArticleViewer$BlockTableCell */
+    private class BlockTableCell extends FrameLayout implements TableLayoutDelegate {
+        private TL_pageBlockTable currentBlock;
+        private boolean firstLayout;
+        private boolean inLayout;
+        private int listX;
+        private int listY;
+        private HorizontalScrollView scrollView;
+        private TableLayout tableLayout;
+        private int textX;
+        private int textY;
+        private DrawingText titleLayout;
+
+        public BlockTableCell(Context context) {
+            super(context);
+            this.scrollView = new HorizontalScrollView(context, ArticleViewer.this) {
+                public boolean onInterceptTouchEvent(MotionEvent ev) {
+                    if (BlockTableCell.this.tableLayout.getMeasuredWidth() > getMeasuredWidth() - AndroidUtilities.m9dp(36.0f)) {
+                        ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
+                    }
+                    return super.onInterceptTouchEvent(ev);
+                }
+
+                protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+                    super.onScrollChanged(l, t, oldl, oldt);
+                    if (ArticleViewer.this.pressedLinkOwnerLayout != null) {
+                        ArticleViewer.this.pressedLinkOwnerLayout = null;
+                        ArticleViewer.this.pressedLinkOwnerView = null;
+                    }
+                }
+
+                protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX, int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
+                    ArticleViewer.this.removePressedLink();
+                    return super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX, scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
+                }
+
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    BlockTableCell.this.tableLayout.measure(MeasureSpec.makeMeasureSpec((MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft()) - getPaddingRight(), 0), heightMeasureSpec);
+                    setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), BlockTableCell.this.tableLayout.getMeasuredHeight());
+                }
+            };
+            this.scrollView.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
+            this.scrollView.setClipToPadding(false);
+            addView(this.scrollView, LayoutHelper.createFrame(-1, -2.0f));
+            this.tableLayout = new TableLayout(context, this);
+            this.tableLayout.setOrientation(0);
+            this.tableLayout.setRowOrderPreserved(true);
+            this.scrollView.addView(this.tableLayout, new FrameLayout.LayoutParams(-2, -2));
+            setWillNotDraw(false);
+        }
+
+        public DrawingText createTextLayout(TL_pageTableCell cell, int maxWidth) {
+            if (cell == null) {
+                return null;
+            }
+            Alignment alignment;
+            if (cell.align_right) {
+                alignment = Alignment.ALIGN_OPPOSITE;
+            } else if (cell.align_center) {
+                alignment = Alignment.ALIGN_CENTER;
+            } else {
+                alignment = Alignment.ALIGN_NORMAL;
+            }
+            return ArticleViewer.this.createLayoutForText(this, null, cell.text, maxWidth, 0, this.currentBlock, alignment, 0);
+        }
+
+        public Paint getLinePaint() {
+            return ArticleViewer.tableLinePaint;
+        }
+
+        public Paint getHalfLinePaint() {
+            return ArticleViewer.tableHalfLinePaint;
+        }
+
+        public Paint getHeaderPaint() {
+            return ArticleViewer.tableHeaderPaint;
+        }
+
+        public Paint getStripPaint() {
+            return ArticleViewer.tableStripPaint;
+        }
+
+        public void setBlock(TL_pageBlockTable block) {
+            TL_pageTableRow row;
+            int size2;
+            int c;
+            TL_pageTableCell cell;
+            this.currentBlock = block;
+            int color = ArticleViewer.this.getSelectedColor();
+            if (color == 0) {
+                AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, -657673);
+            } else if (color == 1) {
+                AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, -659492);
+            } else if (color == 2) {
+                AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, -15461356);
+            }
+            this.tableLayout.removeAllChildrens();
+            this.tableLayout.setDrawLines(this.currentBlock.bordered);
+            this.tableLayout.setStriped(this.currentBlock.striped);
+            this.tableLayout.setRtl(ArticleViewer.this.isRtl);
+            int maxCols = 0;
+            if (!this.currentBlock.rows.isEmpty()) {
+                row = (TL_pageTableRow) this.currentBlock.rows.get(0);
+                size2 = row.cells.size();
+                for (c = 0; c < size2; c++) {
+                    int i;
+                    cell = (TL_pageTableCell) row.cells.get(c);
+                    if (cell.colspan != 0) {
+                        i = cell.colspan;
+                    } else {
+                        i = 1;
+                    }
+                    maxCols += i;
+                }
+            }
+            int size = this.currentBlock.rows.size();
+            for (int r = 0; r < size; r++) {
+                row = (TL_pageTableRow) this.currentBlock.rows.get(r);
+                int cols = 0;
+                size2 = row.cells.size();
+                for (c = 0; c < size2; c++) {
+                    int colspan;
+                    int rowspan;
+                    cell = (TL_pageTableCell) row.cells.get(c);
+                    if (cell.colspan != 0) {
+                        colspan = cell.colspan;
+                    } else {
+                        colspan = 1;
+                    }
+                    if (cell.rowspan != 0) {
+                        rowspan = cell.rowspan;
+                    } else {
+                        rowspan = 1;
+                    }
+                    if (cell.text != null) {
+                        this.tableLayout.addChild(cell, cols, r, colspan);
+                    } else {
+                        this.tableLayout.addChild(cols, r, colspan, rowspan);
+                    }
+                    cols += colspan;
+                }
+            }
+            this.tableLayout.setColumnCount(maxCols);
+            this.firstLayout = true;
+            requestLayout();
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            int N = this.tableLayout.getChildCount();
+            for (int i = 0; i < N; i++) {
+                Child c = this.tableLayout.getChildAt(i);
+                if (ArticleViewer.this.checkLayoutForLinks(event, this, c.textLayout, ((this.scrollView.getPaddingLeft() - this.scrollView.getScrollX()) + this.listX) + c.getTextX(), this.listY + c.getTextY())) {
+                    return true;
+                }
+            }
+            boolean z = ArticleViewer.this.checkLayoutForLinks(event, this, this.titleLayout, this.textX, this.textY) || super.onTouchEvent(event);
+            return z;
+        }
+
+        public void invalidate() {
+            super.invalidate();
+            this.tableLayout.invalidate();
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            this.inLayout = true;
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int height = 0;
+            if (this.currentBlock != null) {
+                int textWidth;
+                if (this.currentBlock.level > 0) {
+                    this.listX = AndroidUtilities.m9dp((float) (this.currentBlock.level * 14));
+                    this.textX = this.listX + AndroidUtilities.m9dp(18.0f);
+                    textWidth = width - this.textX;
+                } else {
+                    this.listX = 0;
+                    this.textX = AndroidUtilities.m9dp(18.0f);
+                    textWidth = width - AndroidUtilities.m9dp(36.0f);
+                }
+                this.titleLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.title, textWidth, 0, this.currentBlock, Alignment.ALIGN_CENTER, 0);
+                if (this.titleLayout != null) {
+                    this.textY = 0;
+                    height = 0 + (this.titleLayout.getHeight() + AndroidUtilities.m9dp(8.0f));
+                    this.listY = height;
+                } else {
+                    this.listY = 0;
+                }
+                this.scrollView.measure(MeasureSpec.makeMeasureSpec(width - this.listX, NUM), MeasureSpec.makeMeasureSpec(0, 0));
+                height += this.scrollView.getMeasuredHeight() + AndroidUtilities.m9dp(8.0f);
+                if (this.currentBlock.level > 0 && !this.currentBlock.bottom) {
+                    height += AndroidUtilities.m9dp(8.0f);
+                }
+            } else {
+                height = 1;
+            }
+            setMeasuredDimension(width, height);
+            this.inLayout = false;
+        }
+
+        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            this.scrollView.layout(this.listX, this.listY, this.listX + this.scrollView.getMeasuredWidth(), this.listY + this.scrollView.getMeasuredHeight());
+            if (this.firstLayout) {
+                if (ArticleViewer.this.isRtl) {
+                    this.scrollView.setScrollX((this.tableLayout.getMeasuredWidth() - this.scrollView.getMeasuredWidth()) + AndroidUtilities.m9dp(36.0f));
+                } else {
+                    this.scrollView.setScrollX(0);
+                }
+                this.firstLayout = false;
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            if (this.currentBlock != null) {
+                if (this.titleLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    this.titleLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.currentBlock.level > 0) {
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                }
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ArticleViewer$BlockVideoCell */
     private class BlockVideoCell extends FrameLayout implements FileDownloadProgressListener {
         private int TAG;
@@ -4246,19 +5459,21 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         private int buttonX;
         private int buttonY;
         private boolean cancelLoading;
+        private DrawingText captionLayout;
         private BlockChannelCell channelCell;
+        private DrawingText creditLayout;
+        private int creditOffset;
         private TL_pageBlockVideo currentBlock;
         private Document currentDocument;
         private int currentType;
+        private GroupedMessagePosition groupPosition;
         private ImageReceiver imageView = new ImageReceiver(this);
         private boolean isFirst;
         private boolean isGif;
         private boolean isLast;
-        private int lastCreatedWidth;
         private PageBlock parentBlock;
         private boolean photoPressed;
         private RadialProgress radialProgress;
-        private StaticLayout textLayout;
         private int textX;
         private int textY;
 
@@ -4280,7 +5495,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.cancelLoading = false;
             this.currentDocument = ArticleViewer.this.getDocumentWithId(this.currentBlock.video_id);
             this.isGif = MessageObject.isGifDocument(this.currentDocument);
-            this.lastCreatedWidth = 0;
             this.isFirst = first;
             this.isLast = last;
             this.channelCell.setVisibility(4);
@@ -4303,10 +5517,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public boolean onTouchEvent(MotionEvent event) {
             float x = event.getX();
             float y = event.getY();
-            if (this.channelCell.getVisibility() != 0 || y <= this.channelCell.getTranslationY() || y >= this.channelCell.getTranslationY() + ((float) AndroidUtilities.m10dp(39.0f))) {
+            if (this.channelCell.getVisibility() != 0 || y <= this.channelCell.getTranslationY() || y >= this.channelCell.getTranslationY() + ((float) AndroidUtilities.m9dp(39.0f))) {
                 boolean z;
                 if (event.getAction() == 0 && this.imageView.isInsideImage(x, y)) {
-                    if ((this.buttonState == -1 || x < ((float) this.buttonX) || x > ((float) (this.buttonX + AndroidUtilities.m10dp(48.0f))) || y < ((float) this.buttonY) || y > ((float) (this.buttonY + AndroidUtilities.m10dp(48.0f)))) && this.buttonState != 0) {
+                    if ((this.buttonState == -1 || x < ((float) this.buttonX) || x > ((float) (this.buttonX + AndroidUtilities.m9dp(48.0f))) || y < ((float) this.buttonY) || y > ((float) (this.buttonY + AndroidUtilities.m9dp(48.0f)))) && this.buttonState != 0) {
                         this.photoPressed = true;
                     } else {
                         this.buttonPressed = 1;
@@ -4327,9 +5541,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.photoPressed = false;
                 }
                 if (!this.photoPressed && this.buttonPressed == 0) {
-                    if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event))) {
-                        z = false;
-                        return z;
+                    if (!ArticleViewer.this.checkLayoutForLinks(event, this, this.captionLayout, this.textX, this.textY)) {
+                        if (!(ArticleViewer.this.checkLayoutForLinks(event, this, this.creditLayout, this.textX, this.textY + this.creditOffset) || super.onTouchEvent(event))) {
+                            z = false;
+                            return z;
+                        }
                     }
                 }
                 z = true;
@@ -4347,71 +5563,102 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
             if (this.currentType == 1) {
-                width = ArticleViewer.this.listView.getWidth();
+                width = ((View) getParent()).getMeasuredWidth();
                 height = ((View) getParent()).getMeasuredHeight();
             } else if (this.currentType == 2) {
-                height = width;
+                height = (int) Math.ceil((double) ((this.groupPosition.f54ph * ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y))) * 0.5f));
             }
             if (this.currentBlock != null) {
                 int photoX;
                 int textWidth;
                 int photoWidth = width;
+                int photoHeight = height;
                 if (this.currentType != 0 || this.currentBlock.level <= 0) {
                     photoX = 0;
-                    this.textX = AndroidUtilities.m10dp(18.0f);
-                    textWidth = width - AndroidUtilities.m10dp(36.0f);
+                    this.textX = AndroidUtilities.m9dp(18.0f);
+                    textWidth = width - AndroidUtilities.m9dp(36.0f);
                 } else {
-                    photoX = AndroidUtilities.m10dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m10dp(18.0f);
+                    photoX = AndroidUtilities.m9dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.m9dp(18.0f);
                     this.textX = photoX;
-                    photoWidth -= AndroidUtilities.m10dp(18.0f) + photoX;
+                    photoWidth -= AndroidUtilities.m9dp(18.0f) + photoX;
                     textWidth = photoWidth;
                 }
                 if (this.currentDocument != null) {
+                    int size = AndroidUtilities.m9dp(48.0f);
                     PhotoSize thumb = this.currentDocument.thumb;
                     if (this.currentType == 0) {
-                        height = (int) (((float) thumb.f109h) * (((float) photoWidth) / ((float) thumb.f110w)));
+                        boolean found = false;
+                        int count = this.currentDocument.attributes.size();
+                        for (int a = 0; a < count; a++) {
+                            DocumentAttribute attribute = (DocumentAttribute) this.currentDocument.attributes.get(a);
+                            if (attribute instanceof TL_documentAttributeVideo) {
+                                height = (int) (((float) attribute.f86h) * (((float) photoWidth) / ((float) attribute.f87w)));
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            height = (int) (((float) thumb.f107h) * (((float) photoWidth) / ((float) thumb.f108w)));
+                        }
                         if (this.parentBlock instanceof TL_pageBlockCover) {
                             height = Math.min(height, photoWidth);
                         } else {
-                            int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.m10dp(56.0f))) * 0.9f);
+                            int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.m9dp(56.0f))) * 0.9f);
                             if (height > maxHeight) {
                                 height = maxHeight;
-                                photoWidth = (int) (((float) thumb.f110w) * (((float) height) / ((float) thumb.f109h)));
+                                photoWidth = (int) (((float) thumb.f108w) * (((float) height) / ((float) thumb.f107h)));
                                 photoX += ((width - photoX) - photoWidth) / 2;
                             }
                         }
+                        if (height == 0) {
+                            height = AndroidUtilities.m9dp(100.0f);
+                        } else if (height < size) {
+                            height = size;
+                        }
+                        photoHeight = height;
+                    } else if (this.currentType == 2) {
+                        if ((this.groupPosition.flags & 2) == 0) {
+                            photoWidth -= AndroidUtilities.m9dp(2.0f);
+                        }
+                        if ((this.groupPosition.flags & 8) == 0) {
+                            photoHeight -= AndroidUtilities.m9dp(2.0f);
+                        }
                     }
                     ImageReceiver imageReceiver = this.imageView;
-                    int dp = (this.isFirst || this.currentType == 1 || this.currentType == 2 || this.currentBlock.level > 0) ? 0 : AndroidUtilities.m10dp(8.0f);
-                    imageReceiver.setImageCoords(photoX, dp, photoWidth, height);
+                    int dp = (this.isFirst || this.currentType == 1 || this.currentType == 2 || this.currentBlock.level > 0) ? 0 : AndroidUtilities.m9dp(8.0f);
+                    imageReceiver.setImageCoords(photoX, dp, photoWidth, photoHeight);
                     if (this.isGif) {
-                        this.imageView.setImage(this.currentDocument, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(height)}), thumb != null ? thumb.location : null, thumb != null ? "80_80_b" : null, this.currentDocument.size, null, 1);
+                        this.imageView.setImage(this.currentDocument, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(photoHeight)}), thumb != null ? thumb.location : null, thumb != null ? "80_80_b" : null, this.currentDocument.size, null, ArticleViewer.this.currentPage, 1);
                     } else {
-                        this.imageView.setImage(null, null, thumb != null ? thumb.location : null, thumb != null ? "80_80_b" : null, 0, null, 1);
+                        this.imageView.setImage(null, null, thumb != null ? thumb.location : null, thumb != null ? "80_80_b" : null, 0, null, ArticleViewer.this.currentPage, 1);
                     }
-                    int size = AndroidUtilities.m10dp(48.0f);
                     this.buttonX = (int) (((float) this.imageView.getImageX()) + (((float) (this.imageView.getImageWidth() - size)) / 2.0f));
                     this.buttonY = (int) (((float) this.imageView.getImageY()) + (((float) (this.imageView.getImageHeight() - size)) / 2.0f));
                     this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + size, this.buttonY + size);
                 }
-                if (this.currentType == 0 && this.lastCreatedWidth != width) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
-                    if (this.textLayout != null) {
-                        height += AndroidUtilities.m10dp(8.0f) + this.textLayout.getHeight();
+                if (this.currentType == 0) {
+                    this.captionLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.text, textWidth, this.currentBlock);
+                    if (this.captionLayout != null) {
+                        this.creditOffset = AndroidUtilities.m9dp(4.0f) + this.captionLayout.getHeight();
+                        height += this.creditOffset + AndroidUtilities.m9dp(4.0f);
+                    }
+                    this.creditLayout = ArticleViewer.this.createLayoutForText(this, null, this.currentBlock.caption.credit, textWidth, this.currentBlock);
+                    if (this.creditLayout != null) {
+                        height += AndroidUtilities.m9dp(4.0f) + this.creditLayout.getHeight();
                     }
                 }
                 if (!this.isFirst && this.currentType == 0 && this.currentBlock.level <= 0) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
                 boolean nextIsChannel = (this.parentBlock instanceof TL_pageBlockCover) && ArticleViewer.this.blocks != null && ArticleViewer.this.blocks.size() > 1 && (ArticleViewer.this.blocks.get(1) instanceof TL_pageBlockChannel);
                 if (!(this.currentType == 2 || nextIsChannel)) {
-                    height += AndroidUtilities.m10dp(8.0f);
+                    height += AndroidUtilities.m9dp(8.0f);
                 }
             } else {
                 height = 1;
             }
             this.channelCell.measure(widthMeasureSpec, heightMeasureSpec);
-            this.channelCell.setTranslationY((float) (this.imageView.getImageHeight() - AndroidUtilities.m10dp(39.0f)));
+            this.channelCell.setTranslationY((float) (this.imageView.getImageHeight() - AndroidUtilities.m9dp(39.0f)));
             setMeasuredDimension(width, height);
         }
 
@@ -4421,18 +5668,23 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.imageView.getVisible()) {
                     this.radialProgress.draw(canvas);
                 }
-                if (this.textLayout != null) {
+                if (this.captionLayout != null) {
                     canvas.save();
                     float f = (float) this.textX;
-                    int imageY = (this.imageView.getImageY() + this.imageView.getImageHeight()) + AndroidUtilities.m10dp(8.0f);
+                    int imageY = (this.imageView.getImageY() + this.imageView.getImageHeight()) + AndroidUtilities.m9dp(8.0f);
                     this.textY = imageY;
                     canvas.translate(f, (float) imageY);
-                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                    this.textLayout.draw(canvas);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.creditLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
+                    this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
                 if (this.currentBlock.level > 0) {
-                    canvas.drawRect((float) AndroidUtilities.m10dp(18.0f), 0.0f, (float) AndroidUtilities.m10dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m10dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                    canvas.drawRect((float) AndroidUtilities.m9dp(18.0f), 0.0f, (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.m9dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
                 }
             }
         }
@@ -4484,9 +5736,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.cancelLoading = false;
                 this.radialProgress.setProgress(0.0f, false);
                 if (this.isGif) {
-                    this.imageView.setImage(this.currentDocument, null, this.currentDocument.thumb != null ? this.currentDocument.thumb.location : null, "80_80_b", this.currentDocument.size, null, 1);
+                    this.imageView.setImage(this.currentDocument, null, this.currentDocument.thumb != null ? this.currentDocument.thumb.location : null, "80_80_b", this.currentDocument.size, null, ArticleViewer.this.currentPage, 1);
                 } else {
-                    FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, true, 1);
+                    FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, ArticleViewer.this.currentPage, true, 1);
                 }
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
@@ -4511,7 +5763,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
         }
 
-        public void onFailedDownload(String fileName) {
+        public void onFailedDownload(String fileName, boolean canceled) {
             updateButtonState(false);
         }
 
@@ -4540,9 +5792,128 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
+    /* renamed from: org.telegram.ui.ArticleViewer$TL_pageBlockDetailsBottom */
+    private class TL_pageBlockDetailsBottom extends PageBlock {
+        private TL_pageBlockDetails parent;
+
+        private TL_pageBlockDetailsBottom() {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild */
+    private class TL_pageBlockDetailsChild extends PageBlock {
+        private PageBlock block;
+        private PageBlock parent;
+
+        private TL_pageBlockDetailsChild() {
+        }
+
+        /* synthetic */ TL_pageBlockDetailsChild(ArticleViewer x0, C04591 x1) {
+            this();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$TL_pageBlockListItem */
+    private class TL_pageBlockListItem extends PageBlock {
+        private PageBlock blockItem;
+        private int index;
+        private String num;
+        private DrawingText numLayout;
+        private TL_pageBlockListParent parent;
+        private RichText textItem;
+
+        private TL_pageBlockListItem() {
+            this.index = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        }
+
+        /* synthetic */ TL_pageBlockListItem(ArticleViewer x0, C04591 x1) {
+            this();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$TL_pageBlockListParent */
+    private class TL_pageBlockListParent extends PageBlock {
+        private ArrayList<TL_pageBlockListItem> items;
+        private int lastFontSize;
+        private int lastMaxNumCalcWidth;
+        private int level;
+        private int maxNumWidth;
+        private TL_pageBlockList pageBlockList;
+
+        private TL_pageBlockListParent() {
+            this.items = new ArrayList();
+        }
+
+        /* synthetic */ TL_pageBlockListParent(ArticleViewer x0, C04591 x1) {
+            this();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListItem */
+    private class TL_pageBlockOrderedListItem extends PageBlock {
+        private PageBlock blockItem;
+        private int index;
+        private String num;
+        private DrawingText numLayout;
+        private TL_pageBlockOrderedListParent parent;
+        private RichText textItem;
+
+        private TL_pageBlockOrderedListItem() {
+            this.index = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        }
+
+        /* synthetic */ TL_pageBlockOrderedListItem(ArticleViewer x0, C04591 x1) {
+            this();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListParent */
+    private class TL_pageBlockOrderedListParent extends PageBlock {
+        private ArrayList<TL_pageBlockOrderedListItem> items;
+        private int lastFontSize;
+        private int lastMaxNumCalcWidth;
+        private int level;
+        private int maxNumWidth;
+        private TL_pageBlockOrderedList pageBlockOrderedList;
+
+        private TL_pageBlockOrderedListParent() {
+            this.items = new ArrayList();
+        }
+
+        /* synthetic */ TL_pageBlockOrderedListParent(ArticleViewer x0, C04591 x1) {
+            this();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesChild */
+    private class TL_pageBlockRelatedArticlesChild extends PageBlock {
+        private int num;
+        private TL_pageBlockRelatedArticles parent;
+
+        private TL_pageBlockRelatedArticlesChild() {
+        }
+
+        /* synthetic */ TL_pageBlockRelatedArticlesChild(ArticleViewer x0, C04591 x1) {
+            this();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow */
+    private class TL_pageBlockRelatedArticlesShadow extends PageBlock {
+        private TL_pageBlockRelatedArticles parent;
+
+        private TL_pageBlockRelatedArticlesShadow() {
+        }
+
+        /* synthetic */ TL_pageBlockRelatedArticlesShadow(ArticleViewer x0, C04591 x1) {
+            this();
+        }
+    }
+
     /* renamed from: org.telegram.ui.ArticleViewer$WebpageAdapter */
     private class WebpageAdapter extends SelectionAdapter {
         private Context context;
+        private ArrayList<PageBlock> localBlocks = new ArrayList();
 
         public WebpageAdapter(Context ctx) {
             this.context = ctx;
@@ -4588,7 +5959,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     view = new BlockTitleCell(this.context);
                     break;
                 case 12:
-                    view = new BlockListCell(this.context);
+                    view = new BlockListItemCell(this.context);
                     break;
                 case 13:
                     view = new BlockFooterCell(this.context);
@@ -4611,10 +5982,37 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 case 19:
                     view = new BlockAudioCell(this.context);
                     break;
-                default:
+                case 20:
+                    view = new BlockKickerCell(this.context);
+                    break;
+                case 21:
+                    view = new BlockOrderedListItemCell(this.context);
+                    break;
+                case 22:
+                    view = new BlockMapCell(this.context, 0);
+                    break;
+                case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
+                    view = new BlockRelatedArticlesCell(this.context);
+                    break;
+                case 24:
+                    view = new BlockDetailsCell(this.context);
+                    break;
+                case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
+                    view = new BlockTableCell(this.context);
+                    break;
+                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+                    view = new BlockRelatedArticlesHeaderCell(this.context);
+                    break;
+                case 27:
+                    view = new BlockDetailsBottomCell(this.context);
+                    break;
+                case NalUnitTypes.NAL_TYPE_RSV_VCL28 /*28*/:
+                    view = new BlockRelatedArticlesShadowCell(this.context);
+                    break;
+                case 90:
                     View frameLayout = new FrameLayout(this.context) {
                         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(44.0f), NUM));
+                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(44.0f), NUM));
                         }
                     };
                     frameLayout.setTag(Integer.valueOf(90));
@@ -4625,116 +6023,31 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     textView.setGravity(17);
                     view = frameLayout;
                     break;
+                default:
+                    View textView2 = new TextView(this.context);
+                    textView2.setBackgroundColor(-65536);
+                    textView2.setTextColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
+                    textView2.setTextSize(1, 20.0f);
+                    view = textView2;
+                    break;
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
             return new Holder(view);
         }
 
         public boolean isEnabled(ViewHolder holder) {
+            int type = holder.getItemViewType();
+            if (type == 23 || type == 24) {
+                return true;
+            }
             return false;
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z = true;
-            if (position < ArticleViewer.this.blocks.size()) {
-                PageBlock block = (PageBlock) ArticleViewer.this.blocks.get(position);
-                PageBlock originalBlock = block;
-                if (block instanceof TL_pageBlockCover) {
-                    block = block.cover;
-                }
-                boolean z2;
-                switch (holder.getItemViewType()) {
-                    case 0:
-                        holder.itemView.setBlock((TL_pageBlockParagraph) block);
-                        return;
-                    case 1:
-                        holder.itemView.setBlock((TL_pageBlockHeader) block);
-                        return;
-                    case 2:
-                        BlockDividerCell cell = holder.itemView;
-                        return;
-                    case 3:
-                        holder.itemView.setBlock((TL_pageBlockEmbed) block);
-                        return;
-                    case 4:
-                        holder.itemView.setBlock((TL_pageBlockSubtitle) block);
-                        return;
-                    case 5:
-                        BlockVideoCell cell2 = holder.itemView;
-                        TL_pageBlockVideo tL_pageBlockVideo = (TL_pageBlockVideo) block;
-                        if (position == 0) {
-                            z2 = true;
-                        } else {
-                            z2 = false;
-                        }
-                        if (position != ArticleViewer.this.blocks.size() - 1) {
-                            z = false;
-                        }
-                        cell2.setBlock(tL_pageBlockVideo, z2, z);
-                        cell2.setParentBlock(originalBlock);
-                        return;
-                    case 6:
-                        holder.itemView.setBlock((TL_pageBlockPullquote) block);
-                        return;
-                    case 7:
-                        holder.itemView.setBlock((TL_pageBlockBlockquote) block);
-                        return;
-                    case 8:
-                        holder.itemView.setBlock((TL_pageBlockSlideshow) block);
-                        return;
-                    case 9:
-                        BlockPhotoCell cell3 = holder.itemView;
-                        TL_pageBlockPhoto tL_pageBlockPhoto = (TL_pageBlockPhoto) block;
-                        if (position == 0) {
-                            z2 = true;
-                        } else {
-                            z2 = false;
-                        }
-                        if (position != ArticleViewer.this.blocks.size() - 1) {
-                            z = false;
-                        }
-                        cell3.setBlock(tL_pageBlockPhoto, z2, z);
-                        cell3.setParentBlock(originalBlock);
-                        return;
-                    case 10:
-                        holder.itemView.setBlock((TL_pageBlockAuthorDate) block);
-                        return;
-                    case 11:
-                        holder.itemView.setBlock((TL_pageBlockTitle) block);
-                        return;
-                    case 12:
-                        holder.itemView.setBlock((TL_pageBlockList) block);
-                        return;
-                    case 13:
-                        holder.itemView.setBlock((TL_pageBlockFooter) block);
-                        return;
-                    case 14:
-                        holder.itemView.setBlock((TL_pageBlockPreformatted) block);
-                        return;
-                    case 15:
-                        holder.itemView.setBlock((TL_pageBlockSubheader) block);
-                        return;
-                    case 16:
-                        holder.itemView.setBlock((TL_pageBlockEmbedPost) block);
-                        return;
-                    case 17:
-                        holder.itemView.setBlock((TL_pageBlockCollage) block);
-                        return;
-                    case 18:
-                        holder.itemView.setBlock((TL_pageBlockChannel) block);
-                        return;
-                    case 19:
-                        BlockAudioCell cell4 = holder.itemView;
-                        TL_pageBlockAudio tL_pageBlockAudio = (TL_pageBlockAudio) block;
-                        z2 = position == 0;
-                        if (position != ArticleViewer.this.blocks.size() - 1) {
-                            z = false;
-                        }
-                        cell4.setBlock(tL_pageBlockAudio, z2, z);
-                        return;
-                    default:
-                        return;
-                }
+            if (position < this.localBlocks.size()) {
+                PageBlock block = (PageBlock) this.localBlocks.get(position);
+                bindBlockToHolder(holder.getItemViewType(), holder, block, position, this.localBlocks.size());
+                return;
             }
             switch (holder.getItemViewType()) {
                 case 90:
@@ -4750,11 +6063,147 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         return;
                     } else if (color == 2) {
                         textView.setTextColor(ArticleViewer.this.getGrayTextColor());
-                        textView.setBackgroundColor(-14277082);
+                        textView.setBackgroundColor(-15000805);
                         return;
                     } else {
                         return;
                     }
+                default:
+                    return;
+            }
+        }
+
+        private void bindBlockToHolder(int type, ViewHolder holder, PageBlock block, int position, int total) {
+            boolean z = true;
+            PageBlock originalBlock = block;
+            if (block instanceof TL_pageBlockCover) {
+                block = ((TL_pageBlockCover) block).cover;
+            } else if (block instanceof TL_pageBlockDetailsChild) {
+                block = ((TL_pageBlockDetailsChild) block).block;
+            }
+            boolean z2;
+            switch (type) {
+                case 0:
+                    holder.itemView.setBlock((TL_pageBlockParagraph) block);
+                    return;
+                case 1:
+                    holder.itemView.setBlock((TL_pageBlockHeader) block);
+                    return;
+                case 2:
+                    BlockDividerCell cell = holder.itemView;
+                    return;
+                case 3:
+                    holder.itemView.setBlock((TL_pageBlockEmbed) block);
+                    return;
+                case 4:
+                    holder.itemView.setBlock((TL_pageBlockSubtitle) block);
+                    return;
+                case 5:
+                    BlockVideoCell cell2 = holder.itemView;
+                    TL_pageBlockVideo tL_pageBlockVideo = (TL_pageBlockVideo) block;
+                    if (position == 0) {
+                        z2 = true;
+                    } else {
+                        z2 = false;
+                    }
+                    if (position != total - 1) {
+                        z = false;
+                    }
+                    cell2.setBlock(tL_pageBlockVideo, z2, z);
+                    cell2.setParentBlock(originalBlock);
+                    return;
+                case 6:
+                    holder.itemView.setBlock((TL_pageBlockPullquote) block);
+                    return;
+                case 7:
+                    holder.itemView.setBlock((TL_pageBlockBlockquote) block);
+                    return;
+                case 8:
+                    holder.itemView.setBlock((TL_pageBlockSlideshow) block);
+                    return;
+                case 9:
+                    BlockPhotoCell cell3 = holder.itemView;
+                    TL_pageBlockPhoto tL_pageBlockPhoto = (TL_pageBlockPhoto) block;
+                    if (position == 0) {
+                        z2 = true;
+                    } else {
+                        z2 = false;
+                    }
+                    if (position != total - 1) {
+                        z = false;
+                    }
+                    cell3.setBlock(tL_pageBlockPhoto, z2, z);
+                    cell3.setParentBlock(originalBlock);
+                    return;
+                case 10:
+                    holder.itemView.setBlock((TL_pageBlockAuthorDate) block);
+                    return;
+                case 11:
+                    holder.itemView.setBlock((TL_pageBlockTitle) block);
+                    return;
+                case 12:
+                    holder.itemView.setBlock((TL_pageBlockListItem) block);
+                    return;
+                case 13:
+                    holder.itemView.setBlock((TL_pageBlockFooter) block);
+                    return;
+                case 14:
+                    holder.itemView.setBlock((TL_pageBlockPreformatted) block);
+                    return;
+                case 15:
+                    holder.itemView.setBlock((TL_pageBlockSubheader) block);
+                    return;
+                case 16:
+                    holder.itemView.setBlock((TL_pageBlockEmbedPost) block);
+                    return;
+                case 17:
+                    holder.itemView.setBlock((TL_pageBlockCollage) block);
+                    return;
+                case 18:
+                    holder.itemView.setBlock((TL_pageBlockChannel) block);
+                    return;
+                case 19:
+                    BlockAudioCell cell4 = holder.itemView;
+                    TL_pageBlockAudio tL_pageBlockAudio = (TL_pageBlockAudio) block;
+                    z2 = position == 0;
+                    if (position != total - 1) {
+                        z = false;
+                    }
+                    cell4.setBlock(tL_pageBlockAudio, z2, z);
+                    return;
+                case 20:
+                    holder.itemView.setBlock((TL_pageBlockKicker) block);
+                    return;
+                case 21:
+                    holder.itemView.setBlock((TL_pageBlockOrderedListItem) block);
+                    return;
+                case 22:
+                    BlockMapCell cell5 = holder.itemView;
+                    TL_pageBlockMap tL_pageBlockMap = (TL_pageBlockMap) block;
+                    z2 = position == 0;
+                    if (position != total - 1) {
+                        z = false;
+                    }
+                    cell5.setBlock(tL_pageBlockMap, z2, z);
+                    return;
+                case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
+                    holder.itemView.setBlock((TL_pageBlockRelatedArticlesChild) block);
+                    return;
+                case 24:
+                    holder.itemView.setBlock((TL_pageBlockDetails) block);
+                    return;
+                case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
+                    holder.itemView.setBlock((TL_pageBlockTable) block);
+                    return;
+                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+                    holder.itemView.setBlock((TL_pageBlockRelatedArticles) block);
+                    return;
+                case 27:
+                    BlockDetailsBottomCell cell6 = holder.itemView;
+                    return;
+                case 100:
+                    holder.itemView.setText("unsupported block " + block);
+                    return;
                 default:
                     return;
             }
@@ -4797,7 +6246,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (block instanceof TL_pageBlockTitle) {
                 return 11;
             }
-            if (block instanceof TL_pageBlockList) {
+            if (block instanceof TL_pageBlockListItem) {
                 return 12;
             }
             if (block instanceof TL_pageBlockFooter) {
@@ -4821,25 +6270,137 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (block instanceof TL_pageBlockAudio) {
                 return 19;
             }
-            if (block instanceof TL_pageBlockCover) {
-                return getTypeForBlock(block.cover);
+            if (block instanceof TL_pageBlockKicker) {
+                return 20;
             }
-            return 0;
+            if (block instanceof TL_pageBlockOrderedListItem) {
+                return 21;
+            }
+            if (block instanceof TL_pageBlockMap) {
+                return 22;
+            }
+            if (block instanceof TL_pageBlockRelatedArticlesChild) {
+                return 23;
+            }
+            if (block instanceof TL_pageBlockDetails) {
+                return 24;
+            }
+            if (block instanceof TL_pageBlockTable) {
+                return 25;
+            }
+            if (block instanceof TL_pageBlockRelatedArticles) {
+                return 26;
+            }
+            if (block instanceof TL_pageBlockDetailsBottom) {
+                return 27;
+            }
+            if (block instanceof TL_pageBlockRelatedArticlesShadow) {
+                return 28;
+            }
+            if (block instanceof TL_pageBlockDetailsChild) {
+                return getTypeForBlock(((TL_pageBlockDetailsChild) block).block);
+            }
+            if (block instanceof TL_pageBlockCover) {
+                return getTypeForBlock(((TL_pageBlockCover) block).cover);
+            }
+            return 100;
         }
 
         public int getItemViewType(int position) {
-            if (position == ArticleViewer.this.blocks.size()) {
+            if (position == this.localBlocks.size()) {
                 return 90;
             }
-            return getTypeForBlock((PageBlock) ArticleViewer.this.blocks.get(position));
+            return getTypeForBlock((PageBlock) this.localBlocks.get(position));
+        }
+
+        public PageBlock getItem(int position) {
+            return (PageBlock) this.localBlocks.get(position);
         }
 
         public int getItemCount() {
-            return (ArticleViewer.this.currentPage == null || ArticleViewer.this.currentPage.cached_page == null) ? 0 : ArticleViewer.this.blocks.size() + 1;
+            return (ArticleViewer.this.currentPage == null || ArticleViewer.this.currentPage.cached_page == null) ? 0 : this.localBlocks.size() + 1;
+        }
+
+        private boolean isBlockOpened(TL_pageBlockDetailsChild child) {
+            PageBlock parentBlock = ArticleViewer.this.getLastNonListPageBlock(child.parent);
+            if (parentBlock instanceof TL_pageBlockDetails) {
+                return ((TL_pageBlockDetails) parentBlock).open;
+            }
+            if (!(parentBlock instanceof TL_pageBlockDetailsChild)) {
+                return false;
+            }
+            TL_pageBlockDetailsChild parent = (TL_pageBlockDetailsChild) parentBlock;
+            parentBlock = ArticleViewer.this.getLastNonListPageBlock(parent.block);
+            if (!(parentBlock instanceof TL_pageBlockDetails) || ((TL_pageBlockDetails) parentBlock).open) {
+                return isBlockOpened(parent);
+            }
+            return false;
+        }
+
+        private void updateRows() {
+            this.localBlocks.clear();
+            int size = ArticleViewer.this.blocks.size();
+            for (int a = 0; a < size; a++) {
+                PageBlock originalBlock = (PageBlock) ArticleViewer.this.blocks.get(a);
+                PageBlock block = ArticleViewer.this.getLastNonListPageBlock(originalBlock);
+                if (!(block instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) block)) {
+                    this.localBlocks.add(originalBlock);
+                }
+            }
+        }
+
+        public void notifyDataSetChanged() {
+            updateRows();
+            super.notifyDataSetChanged();
+        }
+
+        public void notifyItemChanged(int position) {
+            updateRows();
+            super.notifyItemChanged(position);
+        }
+
+        public void notifyItemChanged(int position, Object payload) {
+            updateRows();
+            super.notifyItemChanged(position, payload);
+        }
+
+        public void notifyItemRangeChanged(int positionStart, int itemCount) {
+            updateRows();
+            super.notifyItemRangeChanged(positionStart, itemCount);
+        }
+
+        public void notifyItemRangeChanged(int positionStart, int itemCount, Object payload) {
+            updateRows();
+            super.notifyItemRangeChanged(positionStart, itemCount, payload);
+        }
+
+        public void notifyItemInserted(int position) {
+            updateRows();
+            super.notifyItemInserted(position);
+        }
+
+        public void notifyItemMoved(int fromPosition, int toPosition) {
+            updateRows();
+            super.notifyItemMoved(fromPosition, toPosition);
+        }
+
+        public void notifyItemRangeInserted(int positionStart, int itemCount) {
+            updateRows();
+            super.notifyItemRangeInserted(positionStart, itemCount);
+        }
+
+        public void notifyItemRemoved(int position) {
+            updateRows();
+            super.notifyItemRemoved(position);
+        }
+
+        public void notifyItemRangeRemoved(int positionStart, int itemCount) {
+            updateRows();
+            super.notifyItemRangeRemoved(positionStart, itemCount);
         }
     }
 
-    static /* synthetic */ int access$804(ArticleViewer x0) {
+    static /* synthetic */ int access$1004(ArticleViewer x0) {
         int i = x0.pressCount + 1;
         x0.pressCount = i;
         return i;
@@ -4876,26 +6437,83 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         return Instance != null;
     }
 
+    private void createDividerPaint() {
+        if (dividerPaint == null) {
+            dividerPaint = new Paint();
+            int color = getSelectedColor();
+            if (color == 0) {
+                dividerPaint.setColor(-3288619);
+            } else if (color == 1) {
+                dividerPaint.setColor(-4080987);
+            } else if (color == 2) {
+                dividerPaint.setColor(-12303292);
+            }
+        }
+    }
+
+    private void showCopyPopup(String urlFinal) {
+        if (this.parentActivity != null) {
+            if (this.linkSheet != null) {
+                this.linkSheet.lambda$new$4$EmbedBottomSheet();
+                this.linkSheet = null;
+            }
+            BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
+            builder.setTitle(urlFinal);
+            builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new ArticleViewer$$Lambda$0(this, urlFinal));
+            BottomSheet sheet = builder.create();
+            showDialog(sheet);
+            for (int a = 0; a < 2; a++) {
+                sheet.setItemColor(a, getTextColor(), getTextColor());
+            }
+            sheet.setTitleColor(getGrayTextColor());
+            if (this.selectedColor == 0) {
+                sheet.setBackgroundColor(-1);
+            } else if (this.selectedColor == 1) {
+                sheet.setBackgroundColor(-659492);
+            } else if (this.selectedColor == 2) {
+                sheet.setBackgroundColor(-15461356);
+            }
+            hideActionBar();
+        }
+    }
+
+    final /* synthetic */ void lambda$showCopyPopup$0$ArticleViewer(String urlFinal, DialogInterface dialog, int which) {
+        if (this.parentActivity != null) {
+            if (which == 0) {
+                Browser.openUrl(this.parentActivity, urlFinal);
+            } else if (which == 1) {
+                String url = urlFinal;
+                if (url.startsWith("mailto:")) {
+                    url = url.substring(7);
+                } else if (url.startsWith("tel:")) {
+                    url = url.substring(4);
+                }
+                AndroidUtilities.addToClipboard(url);
+            }
+        }
+    }
+
     private void showPopup(View parent, int gravity, int x, int y) {
         if (this.popupWindow == null || !this.popupWindow.isShowing()) {
             if (this.popupLayout == null) {
                 this.popupRect = new Rect();
                 this.popupLayout = new ActionBarPopupWindowLayout(this.parentActivity);
+                this.popupLayout.setPadding(AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(1.0f));
                 this.popupLayout.setBackgroundDrawable(this.parentActivity.getResources().getDrawable(R.drawable.menu_copy));
                 this.popupLayout.setAnimationEnabled(false);
-                this.popupLayout.setOnTouchListener(new C07031());
-                this.popupLayout.setDispatchKeyEventListener(new C18842());
+                this.popupLayout.setOnTouchListener(new ArticleViewer$$Lambda$1(this));
+                this.popupLayout.setDispatchKeyEventListener(new ArticleViewer$$Lambda$2(this));
                 this.popupLayout.setShowedFromBotton(false);
                 TextView deleteView = new TextView(this.parentActivity);
                 deleteView.setTextColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
-                deleteView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                deleteView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
                 deleteView.setGravity(16);
-                deleteView.setPadding(AndroidUtilities.m10dp(14.0f), 0, AndroidUtilities.m10dp(14.0f), 0);
+                deleteView.setPadding(AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f), 0);
                 deleteView.setTextSize(1, 15.0f);
                 deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 deleteView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
-                deleteView.setOnClickListener(new C07273());
-                this.popupLayout.addView(deleteView, LayoutHelper.createFrame(-2, 38.0f));
+                deleteView.setOnClickListener(new ArticleViewer$$Lambda$3(this));
+                this.popupLayout.addView(deleteView, LayoutHelper.createFrame(-2, 48.0f));
                 this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow.setAnimationEnabled(false);
                 this.popupWindow.setAnimationStyle(R.style.PopupAnimation);
@@ -4904,15 +6522,262 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.popupWindow.setInputMethodMode(2);
                 this.popupWindow.setSoftInputMode(0);
                 this.popupWindow.getContentView().setFocusableInTouchMode(true);
-                this.popupWindow.setOnDismissListener(new C07394());
+                this.popupWindow.setOnDismissListener(new ArticleViewer$$Lambda$4(this));
             }
-            this.popupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(1000.0f), Integer.MIN_VALUE));
+            this.popupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(1000.0f), Integer.MIN_VALUE));
             this.popupWindow.setFocusable(true);
             this.popupWindow.showAtLocation(parent, gravity, x, y);
             this.popupWindow.startAnimation();
             return;
         }
         this.popupWindow.dismiss();
+    }
+
+    final /* synthetic */ boolean lambda$showPopup$1$ArticleViewer(View v, MotionEvent event) {
+        if (event.getActionMasked() == 0 && this.popupWindow != null && this.popupWindow.isShowing()) {
+            v.getHitRect(this.popupRect);
+            if (!this.popupRect.contains((int) event.getX(), (int) event.getY())) {
+                this.popupWindow.dismiss();
+            }
+        }
+        return false;
+    }
+
+    final /* synthetic */ void lambda$showPopup$2$ArticleViewer(KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && this.popupWindow != null && this.popupWindow.isShowing()) {
+            this.popupWindow.dismiss();
+        }
+    }
+
+    final /* synthetic */ void lambda$showPopup$3$ArticleViewer(View v) {
+        if (this.pressedLinkOwnerLayout != null) {
+            AndroidUtilities.addToClipboard(this.pressedLinkOwnerLayout.getText());
+            Toast.makeText(this.parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
+        }
+        if (this.popupWindow != null && this.popupWindow.isShowing()) {
+            this.popupWindow.dismiss(true);
+        }
+    }
+
+    final /* synthetic */ void lambda$showPopup$4$ArticleViewer() {
+        if (this.pressedLinkOwnerView != null) {
+            this.pressedLinkOwnerLayout = null;
+            this.pressedLinkOwnerView.invalidate();
+            this.pressedLinkOwnerView = null;
+        }
+    }
+
+    private void setRichTextParents(PageBlock block) {
+        int size;
+        int a;
+        if (block instanceof TL_pageBlockEmbedPost) {
+            TL_pageBlockEmbedPost blockEmbedPost = (TL_pageBlockEmbedPost) block;
+            setRichTextParents(null, blockEmbedPost.caption.text);
+            setRichTextParents(null, blockEmbedPost.caption.credit);
+        } else if (block instanceof TL_pageBlockParagraph) {
+            setRichTextParents(null, ((TL_pageBlockParagraph) block).text);
+        } else if (block instanceof TL_pageBlockKicker) {
+            setRichTextParents(null, ((TL_pageBlockKicker) block).text);
+        } else if (block instanceof TL_pageBlockFooter) {
+            setRichTextParents(null, ((TL_pageBlockFooter) block).text);
+        } else if (block instanceof TL_pageBlockHeader) {
+            setRichTextParents(null, ((TL_pageBlockHeader) block).text);
+        } else if (block instanceof TL_pageBlockPreformatted) {
+            setRichTextParents(null, ((TL_pageBlockPreformatted) block).text);
+        } else if (block instanceof TL_pageBlockSubheader) {
+            setRichTextParents(null, ((TL_pageBlockSubheader) block).text);
+        } else if (block instanceof TL_pageBlockSlideshow) {
+            TL_pageBlockSlideshow pageBlockSlideshow = (TL_pageBlockSlideshow) block;
+            setRichTextParents(null, pageBlockSlideshow.caption.text);
+            setRichTextParents(null, pageBlockSlideshow.caption.credit);
+            size = pageBlockSlideshow.items.size();
+            for (a = 0; a < size; a++) {
+                setRichTextParents((PageBlock) pageBlockSlideshow.items.get(a));
+            }
+        } else if (block instanceof TL_pageBlockPhoto) {
+            TL_pageBlockPhoto pageBlockPhoto = (TL_pageBlockPhoto) block;
+            setRichTextParents(null, pageBlockPhoto.caption.text);
+            setRichTextParents(null, pageBlockPhoto.caption.credit);
+        } else if (block instanceof TL_pageBlockListItem) {
+            TL_pageBlockListItem pageBlockListItem = (TL_pageBlockListItem) block;
+            if (pageBlockListItem.textItem != null) {
+                setRichTextParents(null, pageBlockListItem.textItem);
+            } else if (pageBlockListItem.blockItem != null) {
+                setRichTextParents(pageBlockListItem.blockItem);
+            }
+        } else if (block instanceof TL_pageBlockOrderedListItem) {
+            TL_pageBlockOrderedListItem pageBlockOrderedListItem = (TL_pageBlockOrderedListItem) block;
+            if (pageBlockOrderedListItem.textItem != null) {
+                setRichTextParents(null, pageBlockOrderedListItem.textItem);
+            } else if (pageBlockOrderedListItem.blockItem != null) {
+                setRichTextParents(pageBlockOrderedListItem.blockItem);
+            }
+        } else if (block instanceof TL_pageBlockCollage) {
+            TL_pageBlockCollage pageBlockCollage = (TL_pageBlockCollage) block;
+            setRichTextParents(null, pageBlockCollage.caption.text);
+            setRichTextParents(null, pageBlockCollage.caption.credit);
+            size = pageBlockCollage.items.size();
+            for (a = 0; a < size; a++) {
+                setRichTextParents((PageBlock) pageBlockCollage.items.get(a));
+            }
+        } else if (block instanceof TL_pageBlockEmbed) {
+            TL_pageBlockEmbed pageBlockEmbed = (TL_pageBlockEmbed) block;
+            setRichTextParents(null, pageBlockEmbed.caption.text);
+            setRichTextParents(null, pageBlockEmbed.caption.credit);
+        } else if (block instanceof TL_pageBlockSubtitle) {
+            setRichTextParents(null, ((TL_pageBlockSubtitle) block).text);
+        } else if (block instanceof TL_pageBlockBlockquote) {
+            TL_pageBlockBlockquote pageBlockBlockquote = (TL_pageBlockBlockquote) block;
+            setRichTextParents(null, pageBlockBlockquote.text);
+            setRichTextParents(null, pageBlockBlockquote.caption);
+        } else if (block instanceof TL_pageBlockDetails) {
+            TL_pageBlockDetails pageBlockDetails = (TL_pageBlockDetails) block;
+            setRichTextParents(null, pageBlockDetails.title);
+            size = pageBlockDetails.blocks.size();
+            for (a = 0; a < size; a++) {
+                setRichTextParents((PageBlock) pageBlockDetails.blocks.get(a));
+            }
+        } else if (block instanceof TL_pageBlockVideo) {
+            TL_pageBlockVideo pageBlockVideo = (TL_pageBlockVideo) block;
+            setRichTextParents(null, pageBlockVideo.caption.text);
+            setRichTextParents(null, pageBlockVideo.caption.credit);
+        } else if (block instanceof TL_pageBlockPullquote) {
+            TL_pageBlockPullquote pageBlockPullquote = (TL_pageBlockPullquote) block;
+            setRichTextParents(null, pageBlockPullquote.text);
+            setRichTextParents(null, pageBlockPullquote.caption);
+        } else if (block instanceof TL_pageBlockAudio) {
+            TL_pageBlockAudio pageBlockAudio = (TL_pageBlockAudio) block;
+            setRichTextParents(null, pageBlockAudio.caption.text);
+            setRichTextParents(null, pageBlockAudio.caption.credit);
+        } else if (block instanceof TL_pageBlockTable) {
+            TL_pageBlockTable pageBlockTable = (TL_pageBlockTable) block;
+            setRichTextParents(null, pageBlockTable.title);
+            size = pageBlockTable.rows.size();
+            for (a = 0; a < size; a++) {
+                TL_pageTableRow row = (TL_pageTableRow) pageBlockTable.rows.get(a);
+                int size2 = row.cells.size();
+                for (int b = 0; b < size2; b++) {
+                    setRichTextParents(null, ((TL_pageTableCell) row.cells.get(b)).text);
+                }
+            }
+        } else if (block instanceof TL_pageBlockTitle) {
+            setRichTextParents(null, ((TL_pageBlockTitle) block).text);
+        } else if (block instanceof TL_pageBlockCover) {
+            setRichTextParents(((TL_pageBlockCover) block).cover);
+        } else if (block instanceof TL_pageBlockAuthorDate) {
+            setRichTextParents(null, ((TL_pageBlockAuthorDate) block).author);
+        } else if (block instanceof TL_pageBlockMap) {
+            TL_pageBlockMap pageBlockMap = (TL_pageBlockMap) block;
+            setRichTextParents(null, pageBlockMap.caption.text);
+            setRichTextParents(null, pageBlockMap.caption.credit);
+        } else if (block instanceof TL_pageBlockRelatedArticles) {
+            setRichTextParents(null, ((TL_pageBlockRelatedArticles) block).title);
+        }
+    }
+
+    private RichText getBlockCaption(PageBlock block, int type) {
+        if (type == 2) {
+            RichText text1 = getBlockCaption(block, 0);
+            if (text1 instanceof TL_textEmpty) {
+                text1 = null;
+            }
+            RichText text2 = getBlockCaption(block, 1);
+            if (text2 instanceof TL_textEmpty) {
+                text2 = null;
+            }
+            if (text1 != null && text2 == null) {
+                return text1;
+            }
+            if (text1 == null && text2 != null) {
+                return text2;
+            }
+            if (text1 == null || text2 == null) {
+                return null;
+            }
+            TL_textPlain text3 = new TL_textPlain();
+            text3.text = " ";
+            RichText textConcat = new TL_textConcat();
+            textConcat.texts.add(text1);
+            textConcat.texts.add(text3);
+            textConcat.texts.add(text2);
+            return textConcat;
+        }
+        if (block instanceof TL_pageBlockEmbedPost) {
+            TL_pageBlockEmbedPost blockEmbedPost = (TL_pageBlockEmbedPost) block;
+            if (type == 0) {
+                return blockEmbedPost.caption.text;
+            }
+            if (type == 1) {
+                return blockEmbedPost.caption.credit;
+            }
+        } else if (block instanceof TL_pageBlockSlideshow) {
+            TL_pageBlockSlideshow pageBlockSlideshow = (TL_pageBlockSlideshow) block;
+            if (type == 0) {
+                return pageBlockSlideshow.caption.text;
+            }
+            if (type == 1) {
+                return pageBlockSlideshow.caption.credit;
+            }
+        } else if (block instanceof TL_pageBlockPhoto) {
+            TL_pageBlockPhoto pageBlockPhoto = (TL_pageBlockPhoto) block;
+            if (type == 0) {
+                return pageBlockPhoto.caption.text;
+            }
+            if (type == 1) {
+                return pageBlockPhoto.caption.credit;
+            }
+        } else if (block instanceof TL_pageBlockCollage) {
+            TL_pageBlockCollage pageBlockCollage = (TL_pageBlockCollage) block;
+            if (type == 0) {
+                return pageBlockCollage.caption.text;
+            }
+            if (type == 1) {
+                return pageBlockCollage.caption.credit;
+            }
+        } else if (block instanceof TL_pageBlockEmbed) {
+            TL_pageBlockEmbed pageBlockEmbed = (TL_pageBlockEmbed) block;
+            if (type == 0) {
+                return pageBlockEmbed.caption.text;
+            }
+            if (type == 1) {
+                return pageBlockEmbed.caption.credit;
+            }
+        } else if (block instanceof TL_pageBlockBlockquote) {
+            return ((TL_pageBlockBlockquote) block).caption;
+        } else {
+            if (block instanceof TL_pageBlockVideo) {
+                TL_pageBlockVideo pageBlockVideo = (TL_pageBlockVideo) block;
+                if (type == 0) {
+                    return pageBlockVideo.caption.text;
+                }
+                if (type == 1) {
+                    return pageBlockVideo.caption.credit;
+                }
+            } else if (block instanceof TL_pageBlockPullquote) {
+                return ((TL_pageBlockPullquote) block).caption;
+            } else {
+                if (block instanceof TL_pageBlockAudio) {
+                    TL_pageBlockAudio pageBlockAudio = (TL_pageBlockAudio) block;
+                    if (type == 0) {
+                        return pageBlockAudio.caption.text;
+                    }
+                    if (type == 1) {
+                        return pageBlockAudio.caption.credit;
+                    }
+                } else if (block instanceof TL_pageBlockCover) {
+                    return getBlockCaption(((TL_pageBlockCover) block).cover, type);
+                } else if (block instanceof TL_pageBlockMap) {
+                    TL_pageBlockMap pageBlockMap = (TL_pageBlockMap) block;
+                    if (type == 0) {
+                        return pageBlockMap.caption.text;
+                    }
+                    if (type == 1) {
+                        return pageBlockMap.caption.credit;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void setRichTextParents(RichText parentRichText, RichText richText) {
@@ -4937,128 +6802,423 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 for (int a = 0; a < count; a++) {
                     setRichTextParents(richText, (RichText) richText.texts.get(a));
                 }
+            } else if (richText instanceof TL_textSubscript) {
+                setRichTextParents(richText, ((TL_textSubscript) richText).text);
+            } else if (richText instanceof TL_textSuperscript) {
+                setRichTextParents(richText, ((TL_textSuperscript) richText).text);
+            } else if (richText instanceof TL_textMarked) {
+                setRichTextParents(richText, ((TL_textMarked) richText).text);
+            } else if (richText instanceof TL_textAnchor) {
+                TL_textAnchor textAnchor = (TL_textAnchor) richText;
+                setRichTextParents(richText, textAnchor.text);
+                String name = textAnchor.name.toLowerCase();
+                this.anchors.put(name, Integer.valueOf(this.blocks.size()));
+                if (textAnchor.text instanceof TL_textPlain) {
+                    if (!TextUtils.isEmpty(textAnchor.text.text)) {
+                        this.anchorsParent.put(name, this.blocks.get(this.blocks.size() - 1));
+                    }
+                } else if (!(textAnchor.text instanceof TL_textEmpty)) {
+                    this.anchorsParent.put(name, this.blocks.get(this.blocks.size() - 1));
+                }
+                this.anchorsOffset.put(name, Integer.valueOf(-1));
+            }
+        }
+    }
+
+    private View getLastNonListCell(View view) {
+        if (view instanceof BlockListItemCell) {
+            return getLastNonListCell(((BlockListItemCell) view).blockLayout.itemView);
+        }
+        if (view instanceof BlockOrderedListItemCell) {
+            return getLastNonListCell(((BlockOrderedListItemCell) view).blockLayout.itemView);
+        }
+        return view;
+    }
+
+    private boolean isListItemBlock(PageBlock block) {
+        return (block instanceof TL_pageBlockListItem) || (block instanceof TL_pageBlockOrderedListItem);
+    }
+
+    private PageBlock getLastNonListPageBlock(PageBlock block) {
+        if (block instanceof TL_pageBlockListItem) {
+            TL_pageBlockListItem blockListItem = (TL_pageBlockListItem) block;
+            if (blockListItem.blockItem != null) {
+                return getLastNonListPageBlock(blockListItem.blockItem);
+            }
+            return blockListItem.blockItem;
+        } else if (!(block instanceof TL_pageBlockOrderedListItem)) {
+            return block;
+        } else {
+            TL_pageBlockOrderedListItem blockListItem2 = (TL_pageBlockOrderedListItem) block;
+            if (blockListItem2.blockItem != null) {
+                return getLastNonListPageBlock(blockListItem2.blockItem);
+            }
+            return blockListItem2.blockItem;
+        }
+    }
+
+    private boolean openAllParentBlocks(TL_pageBlockDetailsChild child) {
+        PageBlock parentBlock = getLastNonListPageBlock(child.parent);
+        TL_pageBlockDetails blockDetails;
+        if (parentBlock instanceof TL_pageBlockDetails) {
+            blockDetails = (TL_pageBlockDetails) parentBlock;
+            if (blockDetails.open) {
+                return false;
+            }
+            blockDetails.open = true;
+            return true;
+        } else if (!(parentBlock instanceof TL_pageBlockDetailsChild)) {
+            return false;
+        } else {
+            TL_pageBlockDetailsChild parent = (TL_pageBlockDetailsChild) parentBlock;
+            parentBlock = getLastNonListPageBlock(parent.block);
+            boolean opened = false;
+            if (parentBlock instanceof TL_pageBlockDetails) {
+                blockDetails = (TL_pageBlockDetails) parentBlock;
+                if (!blockDetails.open) {
+                    blockDetails.open = true;
+                    opened = true;
+                }
+            }
+            if (openAllParentBlocks(parent) || opened) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    private PageBlock fixListBlock(PageBlock parentBlock, PageBlock childBlock) {
+        if (parentBlock instanceof TL_pageBlockListItem) {
+            ((TL_pageBlockListItem) parentBlock).blockItem = childBlock;
+            return parentBlock;
+        } else if (!(parentBlock instanceof TL_pageBlockOrderedListItem)) {
+            return childBlock;
+        } else {
+            ((TL_pageBlockOrderedListItem) parentBlock).blockItem = childBlock;
+            return parentBlock;
+        }
+    }
+
+    private PageBlock wrapInTableBlock(PageBlock parentBlock, PageBlock childBlock) {
+        TL_pageBlockListItem item;
+        if (parentBlock instanceof TL_pageBlockListItem) {
+            TL_pageBlockListItem parent = (TL_pageBlockListItem) parentBlock;
+            item = new TL_pageBlockListItem(this, null);
+            item.parent = parent.parent;
+            item.blockItem = wrapInTableBlock(parent.blockItem, childBlock);
+            return item;
+        } else if (!(parentBlock instanceof TL_pageBlockOrderedListItem)) {
+            return childBlock;
+        } else {
+            TL_pageBlockOrderedListItem parent2 = (TL_pageBlockOrderedListItem) parentBlock;
+            item = new TL_pageBlockOrderedListItem(this, null);
+            item.parent = parent2.parent;
+            item.blockItem = wrapInTableBlock(parent2.blockItem, childBlock);
+            return item;
+        }
+    }
+
+    private void addBlock(PageBlock block, int level, int listLevel, int position) {
+        PageBlock originalBlock = block;
+        if (block instanceof TL_pageBlockDetailsChild) {
+            block = ((TL_pageBlockDetailsChild) block).block;
+        }
+        if (!((block instanceof TL_pageBlockList) || (block instanceof TL_pageBlockOrderedList))) {
+            setRichTextParents(block);
+            addAllMediaFromBlock(block);
+        }
+        block = getLastNonListPageBlock(block);
+        if (!(block instanceof TL_pageBlockUnsupported)) {
+            if (block instanceof TL_pageBlockAnchor) {
+                this.anchors.put(((TL_pageBlockAnchor) block).name.toLowerCase(), Integer.valueOf(this.blocks.size()));
+                return;
+            }
+            if (!((block instanceof TL_pageBlockList) || (block instanceof TL_pageBlockOrderedList))) {
+                this.blocks.add(originalBlock);
+            }
+            int b;
+            int size;
+            TL_pageBlockDetailsChild child;
+            PageBlock tL_pageBlockListItem;
+            RichText textPlain;
+            TL_pageBlockDetailsChild pageBlockDetailsChild;
+            PageBlock finalBlock;
+            int size2;
+            int c;
+            if (block instanceof TL_pageBlockAudio) {
+                TL_pageBlockAudio blockAudio = (TL_pageBlockAudio) block;
+                TL_message message = new TL_message();
+                message.out = true;
+                int i = -Long.valueOf(blockAudio.audio_id).hashCode();
+                block.mid = i;
+                message.f104id = i;
+                message.to_id = new TL_peerUser();
+                Peer peer = message.to_id;
+                int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
+                message.from_id = clientUserId;
+                peer.user_id = clientUserId;
+                message.date = (int) (System.currentTimeMillis() / 1000);
+                message.message = TtmlNode.ANONYMOUS_REGION_ID;
+                message.media = new TL_messageMediaDocument();
+                message.media.webpage = this.currentPage;
+                MessageMedia messageMedia = message.media;
+                messageMedia.flags |= 3;
+                message.media.document = getDocumentWithId(blockAudio.audio_id);
+                message.flags |= 768;
+                MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, message, false);
+                this.audioMessages.add(messageObject);
+                this.audioBlocks.put(blockAudio, messageObject);
+            } else if (block instanceof TL_pageBlockEmbedPost) {
+                TL_pageBlockEmbedPost pageBlockEmbedPost = (TL_pageBlockEmbedPost) block;
+                if (!pageBlockEmbedPost.blocks.isEmpty()) {
+                    block.level = -1;
+                    for (b = 0; b < pageBlockEmbedPost.blocks.size(); b++) {
+                        PageBlock innerBlock = (PageBlock) pageBlockEmbedPost.blocks.get(b);
+                        if (!(innerBlock instanceof TL_pageBlockUnsupported)) {
+                            if (innerBlock instanceof TL_pageBlockAnchor) {
+                                this.anchors.put(((TL_pageBlockAnchor) innerBlock).name.toLowerCase(), Integer.valueOf(this.blocks.size()));
+                            } else {
+                                innerBlock.level = 1;
+                                if (b == pageBlockEmbedPost.blocks.size() - 1) {
+                                    innerBlock.bottom = true;
+                                }
+                                this.blocks.add(innerBlock);
+                                addAllMediaFromBlock(innerBlock);
+                            }
+                        }
+                    }
+                }
+            } else if (block instanceof TL_pageBlockRelatedArticles) {
+                TL_pageBlockRelatedArticles pageBlockRelatedArticles = (TL_pageBlockRelatedArticles) block;
+                TL_pageBlockRelatedArticlesShadow tL_pageBlockRelatedArticlesShadow = new TL_pageBlockRelatedArticlesShadow(this, null);
+                tL_pageBlockRelatedArticlesShadow.parent = pageBlockRelatedArticles;
+                this.blocks.add(this.blocks.size() - 1, tL_pageBlockRelatedArticlesShadow);
+                size = pageBlockRelatedArticles.articles.size();
+                for (b = 0; b < size; b++) {
+                    TL_pageBlockRelatedArticlesChild child2 = new TL_pageBlockRelatedArticlesChild(this, null);
+                    child2.parent = pageBlockRelatedArticles;
+                    child2.num = b;
+                    this.blocks.add(child2);
+                }
+                if (position == 0) {
+                    tL_pageBlockRelatedArticlesShadow = new TL_pageBlockRelatedArticlesShadow(this, null);
+                    tL_pageBlockRelatedArticlesShadow.parent = pageBlockRelatedArticles;
+                    this.blocks.add(tL_pageBlockRelatedArticlesShadow);
+                }
+            } else if (block instanceof TL_pageBlockDetails) {
+                TL_pageBlockDetails pageBlockDetails = (TL_pageBlockDetails) block;
+                size = pageBlockDetails.blocks.size();
+                for (b = 0; b < size; b++) {
+                    child = new TL_pageBlockDetailsChild(this, null);
+                    child.parent = originalBlock;
+                    child.block = (PageBlock) pageBlockDetails.blocks.get(b);
+                    addBlock(wrapInTableBlock(originalBlock, child), level + 1, listLevel, position);
+                }
+            } else if (block instanceof TL_pageBlockList) {
+                TL_pageBlockList pageBlockList = (TL_pageBlockList) block;
+                TL_pageBlockListParent tL_pageBlockListParent = new TL_pageBlockListParent(this, null);
+                tL_pageBlockListParent.pageBlockList = pageBlockList;
+                tL_pageBlockListParent.level = listLevel;
+                size = pageBlockList.items.size();
+                for (b = 0; b < size; b++) {
+                    TL_pageListItemBlocks pageListItemBlocks;
+                    PageListItem item = (PageListItem) pageBlockList.items.get(b);
+                    tL_pageBlockListItem = new TL_pageBlockListItem(this, null);
+                    tL_pageBlockListItem.index = b;
+                    tL_pageBlockListItem.parent = tL_pageBlockListParent;
+                    if (!pageBlockList.ordered) {
+                        tL_pageBlockListItem.num = "\u2022";
+                    } else if (this.isRtl) {
+                        tL_pageBlockListItem.num = String.format(".%d", new Object[]{Integer.valueOf(b + 1)});
+                    } else {
+                        tL_pageBlockListItem.num = String.format("%d.", new Object[]{Integer.valueOf(b + 1)});
+                    }
+                    tL_pageBlockListParent.items.add(tL_pageBlockListItem);
+                    if (item instanceof TL_pageListItemText) {
+                        tL_pageBlockListItem.textItem = ((TL_pageListItemText) item).text;
+                    } else if (item instanceof TL_pageListItemBlocks) {
+                        pageListItemBlocks = (TL_pageListItemBlocks) item;
+                        if (pageListItemBlocks.blocks.isEmpty()) {
+                            PageListItem text = new TL_pageListItemText();
+                            textPlain = new TL_textPlain();
+                            textPlain.text = " ";
+                            text.text = textPlain;
+                            item = text;
+                        } else {
+                            tL_pageBlockListItem.blockItem = (PageBlock) pageListItemBlocks.blocks.get(0);
+                        }
+                    }
+                    if (originalBlock instanceof TL_pageBlockDetailsChild) {
+                        pageBlockDetailsChild = (TL_pageBlockDetailsChild) originalBlock;
+                        child = new TL_pageBlockDetailsChild(this, null);
+                        child.parent = pageBlockDetailsChild.parent;
+                        child.block = tL_pageBlockListItem;
+                        addBlock(child, level, listLevel + 1, position);
+                    } else {
+                        if (b == 0) {
+                            finalBlock = fixListBlock(originalBlock, tL_pageBlockListItem);
+                        } else {
+                            finalBlock = tL_pageBlockListItem;
+                        }
+                        addBlock(finalBlock, level, listLevel + 1, position);
+                    }
+                    if (item instanceof TL_pageListItemBlocks) {
+                        pageListItemBlocks = (TL_pageListItemBlocks) item;
+                        size2 = pageListItemBlocks.blocks.size();
+                        for (c = 1; c < size2; c++) {
+                            tL_pageBlockListItem = new TL_pageBlockListItem(this, null);
+                            tL_pageBlockListItem.blockItem = (PageBlock) pageListItemBlocks.blocks.get(c);
+                            tL_pageBlockListItem.parent = tL_pageBlockListParent;
+                            if (originalBlock instanceof TL_pageBlockDetailsChild) {
+                                pageBlockDetailsChild = (TL_pageBlockDetailsChild) originalBlock;
+                                child = new TL_pageBlockDetailsChild(this, null);
+                                child.parent = pageBlockDetailsChild.parent;
+                                child.block = tL_pageBlockListItem;
+                                addBlock(child, level, listLevel + 1, position);
+                            } else {
+                                addBlock(tL_pageBlockListItem, level, listLevel + 1, position);
+                            }
+                            tL_pageBlockListParent.items.add(tL_pageBlockListItem);
+                        }
+                    }
+                }
+            } else if (block instanceof TL_pageBlockOrderedList) {
+                TL_pageBlockOrderedList pageBlockOrderedList = (TL_pageBlockOrderedList) block;
+                TL_pageBlockOrderedListParent tL_pageBlockOrderedListParent = new TL_pageBlockOrderedListParent(this, null);
+                tL_pageBlockOrderedListParent.pageBlockOrderedList = pageBlockOrderedList;
+                tL_pageBlockOrderedListParent.level = listLevel;
+                size = pageBlockOrderedList.items.size();
+                for (b = 0; b < size; b++) {
+                    TL_pageListOrderedItemBlocks pageListOrderedItemBlocks;
+                    PageListOrderedItem item2 = (PageListOrderedItem) pageBlockOrderedList.items.get(b);
+                    tL_pageBlockListItem = new TL_pageBlockOrderedListItem(this, null);
+                    tL_pageBlockListItem.index = b;
+                    tL_pageBlockListItem.parent = tL_pageBlockOrderedListParent;
+                    tL_pageBlockOrderedListParent.items.add(tL_pageBlockListItem);
+                    if (item2 instanceof TL_pageListOrderedItemText) {
+                        TL_pageListOrderedItemText pageListOrderedItemText = (TL_pageListOrderedItemText) item2;
+                        tL_pageBlockListItem.textItem = pageListOrderedItemText.text;
+                        if (TextUtils.isEmpty(pageListOrderedItemText.num)) {
+                            tL_pageBlockListItem.num = String.format("%d.", new Object[]{Integer.valueOf(b + 1)});
+                        } else {
+                            tL_pageBlockListItem.num = pageListOrderedItemText.num + ".";
+                        }
+                    } else if (item2 instanceof TL_pageListOrderedItemBlocks) {
+                        pageListOrderedItemBlocks = (TL_pageListOrderedItemBlocks) item2;
+                        if (pageListOrderedItemBlocks.blocks.isEmpty()) {
+                            PageListOrderedItem text2 = new TL_pageListOrderedItemText();
+                            textPlain = new TL_textPlain();
+                            textPlain.text = " ";
+                            text2.text = textPlain;
+                            item2 = text2;
+                        } else {
+                            tL_pageBlockListItem.blockItem = (PageBlock) pageListOrderedItemBlocks.blocks.get(0);
+                        }
+                        if (TextUtils.isEmpty(pageListOrderedItemBlocks.num)) {
+                            tL_pageBlockListItem.num = String.format("%d.", new Object[]{Integer.valueOf(b + 1)});
+                        } else {
+                            tL_pageBlockListItem.num = tL_pageBlockListItem.num + pageListOrderedItemBlocks.num + ".";
+                        }
+                    }
+                    if (originalBlock instanceof TL_pageBlockDetailsChild) {
+                        pageBlockDetailsChild = (TL_pageBlockDetailsChild) originalBlock;
+                        child = new TL_pageBlockDetailsChild(this, null);
+                        child.parent = pageBlockDetailsChild.parent;
+                        child.block = tL_pageBlockListItem;
+                        addBlock(child, level, listLevel + 1, position);
+                    } else {
+                        if (b == 0) {
+                            finalBlock = fixListBlock(originalBlock, tL_pageBlockListItem);
+                        } else {
+                            finalBlock = tL_pageBlockListItem;
+                        }
+                        addBlock(finalBlock, level, listLevel + 1, position);
+                    }
+                    if (item2 instanceof TL_pageListOrderedItemBlocks) {
+                        pageListOrderedItemBlocks = (TL_pageListOrderedItemBlocks) item2;
+                        size2 = pageListOrderedItemBlocks.blocks.size();
+                        for (c = 1; c < size2; c++) {
+                            tL_pageBlockListItem = new TL_pageBlockOrderedListItem(this, null);
+                            tL_pageBlockListItem.blockItem = (PageBlock) pageListOrderedItemBlocks.blocks.get(c);
+                            tL_pageBlockListItem.parent = tL_pageBlockOrderedListParent;
+                            if (originalBlock instanceof TL_pageBlockDetailsChild) {
+                                pageBlockDetailsChild = (TL_pageBlockDetailsChild) originalBlock;
+                                child = new TL_pageBlockDetailsChild(this, null);
+                                child.parent = pageBlockDetailsChild.parent;
+                                child.block = tL_pageBlockListItem;
+                                addBlock(child, level, listLevel + 1, position);
+                            } else {
+                                addBlock(tL_pageBlockListItem, level, listLevel + 1, position);
+                            }
+                            tL_pageBlockOrderedListParent.items.add(tL_pageBlockListItem);
+                        }
+                    }
+                }
             }
         }
     }
 
     private void updateInterfaceForCurrentPage(boolean back) {
         if (this.currentPage != null && this.currentPage.cached_page != null) {
-            this.isRtl = -1;
+            CharSequence charSequence;
+            this.isRtl = this.currentPage.cached_page.rtl;
             this.channelBlock = null;
             this.blocks.clear();
             this.photoBlocks.clear();
             this.audioBlocks.clear();
             this.audioMessages.clear();
+            this.anchors.clear();
+            this.anchorsParent.clear();
+            this.anchorsOffset.clear();
+            SimpleTextView simpleTextView = this.titleTextView;
+            if (this.currentPage.site_name == null) {
+                charSequence = TtmlNode.ANONYMOUS_REGION_ID;
+            } else {
+                charSequence = this.currentPage.site_name;
+            }
+            simpleTextView.setText(charSequence);
             int count = this.currentPage.cached_page.blocks.size();
             for (int a = 0; a < count; a++) {
+                int i;
                 PageBlock block = (PageBlock) this.currentPage.cached_page.blocks.get(a);
-                if (!(block instanceof TL_pageBlockUnsupported)) {
-                    if (block instanceof TL_pageBlockAnchor) {
-                        this.anchors.put(block.name.toLowerCase(), Integer.valueOf(this.blocks.size()));
-                    } else {
-                        if (block instanceof TL_pageBlockAudio) {
-                            TL_message message = new TL_message();
-                            message.out = true;
-                            int i = ((int) this.currentPage.f183id) + a;
-                            block.mid = i;
-                            message.f104id = i;
-                            message.to_id = new TL_peerUser();
-                            Peer peer = message.to_id;
-                            int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
-                            message.from_id = clientUserId;
-                            peer.user_id = clientUserId;
-                            message.date = (int) (System.currentTimeMillis() / 1000);
-                            message.message = TtmlNode.ANONYMOUS_REGION_ID;
-                            message.media = new TL_messageMediaDocument();
-                            MessageMedia messageMedia = message.media;
-                            messageMedia.flags |= 3;
-                            message.media.document = getDocumentWithId(block.audio_id);
-                            message.flags |= 768;
-                            MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, message, false);
-                            this.audioMessages.add(messageObject);
-                            this.audioBlocks.put((TL_pageBlockAudio) block, messageObject);
-                        }
-                        setRichTextParents(null, block.text);
-                        setRichTextParents(null, block.caption);
-                        int i2;
-                        if (block instanceof TL_pageBlockAuthorDate) {
-                            setRichTextParents(null, ((TL_pageBlockAuthorDate) block).author);
-                        } else if (block instanceof TL_pageBlockCollage) {
-                            TL_pageBlockCollage innerBlock = (TL_pageBlockCollage) block;
-                            for (i2 = 0; i2 < innerBlock.items.size(); i2++) {
-                                setRichTextParents(null, ((PageBlock) innerBlock.items.get(i2)).text);
-                                setRichTextParents(null, ((PageBlock) innerBlock.items.get(i2)).caption);
-                            }
-                        } else if (block instanceof TL_pageBlockList) {
-                            TL_pageBlockList innerBlock2 = (TL_pageBlockList) block;
-                            for (i2 = 0; i2 < innerBlock2.items.size(); i2++) {
-                                setRichTextParents(null, (RichText) innerBlock2.items.get(i2));
-                            }
-                        } else if (block instanceof TL_pageBlockSlideshow) {
-                            TL_pageBlockSlideshow innerBlock3 = (TL_pageBlockSlideshow) block;
-                            for (i2 = 0; i2 < innerBlock3.items.size(); i2++) {
-                                setRichTextParents(null, ((PageBlock) innerBlock3.items.get(i2)).text);
-                                setRichTextParents(null, ((PageBlock) innerBlock3.items.get(i2)).caption);
-                            }
-                        }
-                        if (a == 0) {
-                            block.first = true;
-                            if ((block instanceof TL_pageBlockCover) && block.cover.caption != null && !(block.cover.caption instanceof TL_textEmpty) && count > 1) {
-                                PageBlock next = (PageBlock) this.currentPage.cached_page.blocks.get(1);
-                                if (next instanceof TL_pageBlockChannel) {
-                                    this.channelBlock = (TL_pageBlockChannel) next;
-                                }
-                            }
-                        } else if (a == 1 && this.channelBlock != null) {
-                        }
-                        addAllMediaFromBlock(block);
-                        this.blocks.add(block);
-                        if (block instanceof TL_pageBlockEmbedPost) {
-                            if (!block.blocks.isEmpty()) {
-                                block.level = -1;
-                                for (int b = 0; b < block.blocks.size(); b++) {
-                                    PageBlock innerBlock4 = (PageBlock) block.blocks.get(b);
-                                    if (!(innerBlock4 instanceof TL_pageBlockUnsupported)) {
-                                        if (innerBlock4 instanceof TL_pageBlockAnchor) {
-                                            this.anchors.put(innerBlock4.name.toLowerCase(), Integer.valueOf(this.blocks.size()));
-                                        } else {
-                                            innerBlock4.level = 1;
-                                            if (b == block.blocks.size() - 1) {
-                                                innerBlock4.bottom = true;
-                                            }
-                                            this.blocks.add(innerBlock4);
-                                            addAllMediaFromBlock(innerBlock4);
-                                        }
-                                    }
-                                }
-                            }
-                            if (!(block.caption instanceof TL_textEmpty)) {
-                                TL_pageBlockParagraph caption = new TL_pageBlockParagraph();
-                                caption.caption = block.caption;
-                                this.blocks.add(caption);
+                if (a == 0) {
+                    block.first = true;
+                    if (block instanceof TL_pageBlockCover) {
+                        RichText caption = getBlockCaption((TL_pageBlockCover) block, 0);
+                        if (!(caption == null || (caption instanceof TL_textEmpty) || count <= 1)) {
+                            PageBlock next = (PageBlock) this.currentPage.cached_page.blocks.get(1);
+                            if (next instanceof TL_pageBlockChannel) {
+                                this.channelBlock = (TL_pageBlockChannel) next;
                             }
                         }
                     }
+                } else if (a == 1 && this.channelBlock != null) {
                 }
+                if (a == count - 1) {
+                    i = a;
+                } else {
+                    i = 0;
+                }
+                addBlock(block, 0, 0, i);
             }
             this.adapter.notifyDataSetChanged();
             if (this.pagesStack.size() == 1 || back) {
                 int offset;
                 SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("articles", 0);
-                String key = "article" + this.currentPage.f183id;
+                String key = "article" + this.currentPage.f182id;
                 int position = preferences.getInt(key, -1);
                 if (preferences.getBoolean(key + "r", true) == (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y)) {
                     offset = preferences.getInt(key + "o", 0) - this.listView.getPaddingTop();
                 } else {
-                    offset = AndroidUtilities.m10dp(10.0f);
+                    offset = AndroidUtilities.m9dp(10.0f);
                 }
                 if (position != -1) {
                     this.layoutManager.scrollToPositionWithOffset(position, offset);
-                    return;
                 }
-                return;
+            } else {
+                this.layoutManager.scrollToPositionWithOffset(0, 0);
             }
-            this.layoutManager.scrollToPositionWithOffset(0, 0);
+            checkScroll(-AndroidUtilities.m9dp(56.0f));
         }
     }
 
@@ -5067,12 +7227,94 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.currentPage = webPage;
         this.pagesStack.add(webPage);
         updateInterfaceForCurrentPage(false);
-        if (anchor != null) {
-            Integer row = (Integer) this.anchors.get(anchor.toLowerCase());
-            if (row != null) {
-                this.layoutManager.scrollToPositionWithOffset(row.intValue(), 0);
+        scrollToAnchor(anchor);
+    }
+
+    private boolean scrollToAnchor(String anchor) {
+        if (TextUtils.isEmpty(anchor)) {
+            return false;
+        }
+        anchor = anchor.toLowerCase();
+        Integer row = (Integer) this.anchors.get(anchor);
+        if (row == null) {
+            return false;
+        }
+        PageBlock originalBlock = (PageBlock) this.blocks.get(row.intValue());
+        PageBlock block = getLastNonListPageBlock(originalBlock);
+        int type;
+        ViewHolder holder;
+        if (this.anchorsParent.containsKey(anchor)) {
+            if (originalBlock instanceof TL_pageBlockDetailsChild) {
+                originalBlock = ((TL_pageBlockDetailsChild) block).block;
+            }
+            type = this.adapter.getTypeForBlock(originalBlock);
+            holder = this.adapter.onCreateViewHolder(null, type);
+            this.adapter.bindBlockToHolder(type, holder, originalBlock, 0, 0);
+            createDividerPaint();
+            BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
+            builder.setApplyTopPadding(false);
+            LinearLayout linearLayout = new LinearLayout(this.parentActivity);
+            linearLayout.setOrientation(1);
+            View c04591 = new TextView(this.parentActivity) {
+                protected void onDraw(Canvas canvas) {
+                    canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), ArticleViewer.dividerPaint);
+                    super.onDraw(canvas);
+                }
+            };
+            c04591.setTextSize(1, 16.0f);
+            c04591.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            c04591.setText(LocaleController.getString("InstantViewReference", R.string.InstantViewReference));
+            c04591.setGravity((this.isRtl ? 5 : 3) | 16);
+            c04591.setTextColor(getTextColor());
+            c04591.setPadding(AndroidUtilities.m9dp(21.0f), 0, AndroidUtilities.m9dp(21.0f), 0);
+            linearLayout.addView(c04591, new LinearLayout.LayoutParams(-1, AndroidUtilities.m9dp(48.0f) + 1));
+            int top = 6;
+            if (holder.itemView instanceof BlockListItemCell) {
+                if (holder.itemView.currentBlock.index != 0) {
+                    top = 6 + 10;
+                }
+            } else if ((holder.itemView instanceof BlockOrderedListItemCell) && holder.itemView.currentBlock.index != 0) {
+                top = 6 + 10;
+            }
+            linearLayout.addView(holder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, (float) top, 0.0f, 0.0f));
+            builder.setCustomView(linearLayout);
+            this.linkSheet = builder.create();
+            if (this.selectedColor == 0) {
+                this.linkSheet.setBackgroundColor(-1);
+            } else if (this.selectedColor == 1) {
+                this.linkSheet.setBackgroundColor(-659492);
+            } else if (this.selectedColor == 2) {
+                this.linkSheet.setBackgroundColor(-15461356);
+            }
+            showDialog(this.linkSheet);
+            hideActionBar();
+            return true;
+        }
+        if (block instanceof TL_pageBlockDetailsChild) {
+            if (openAllParentBlocks((TL_pageBlockDetailsChild) block)) {
+                this.adapter.updateRows();
+                this.adapter.notifyDataSetChanged();
             }
         }
+        int position = this.adapter.localBlocks.indexOf(originalBlock);
+        if (position != -1) {
+            row = Integer.valueOf(position);
+        }
+        Integer offset = (Integer) this.anchorsOffset.get(anchor);
+        if (offset == null) {
+            offset = Integer.valueOf(0);
+        } else if (offset.intValue() == -1) {
+            type = this.adapter.getTypeForBlock(originalBlock);
+            holder = this.adapter.onCreateViewHolder(null, type);
+            this.adapter.bindBlockToHolder(type, holder, originalBlock, 0, 0);
+            holder.itemView.measure(MeasureSpec.makeMeasureSpec(this.listView.getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+            offset = (Integer) this.anchorsOffset.get(anchor);
+            if (offset.intValue() == -1) {
+                offset = Integer.valueOf(0);
+            }
+        }
+        this.layoutManager.scrollToPositionWithOffset(row.intValue(), (this.currentHeaderHeight - AndroidUtilities.m9dp(56.0f)) - offset.intValue());
+        return true;
     }
 
     private boolean removeLastPageFromStack() {
@@ -5124,76 +7366,148 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (richText instanceof TL_textEmail) {
             return getTextFlags(richText.parentRichText) | 8;
         }
-        if (richText instanceof TL_textUrl) {
+        if (richText instanceof TL_textPhone) {
             return getTextFlags(richText.parentRichText) | 8;
         }
-        if (richText != null) {
-            return getTextFlags(richText.parentRichText);
+        if (richText instanceof TL_textUrl) {
+            if (((TL_textUrl) richText).webpage_id != 0) {
+                return getTextFlags(richText.parentRichText) | 512;
+            }
+            return getTextFlags(richText.parentRichText) | 8;
+        } else if (richText instanceof TL_textSubscript) {
+            return getTextFlags(richText.parentRichText) | 128;
+        } else {
+            if (richText instanceof TL_textSuperscript) {
+                return getTextFlags(richText.parentRichText) | 256;
+            }
+            if (richText instanceof TL_textMarked) {
+                return getTextFlags(richText.parentRichText) | 64;
+            }
+            if (richText != null) {
+                return getTextFlags(richText.parentRichText);
+            }
+            return 0;
         }
-        return 0;
     }
 
-    private CharSequence getText(RichText parentRichText, RichText richText, PageBlock parentBlock) {
-        if (richText instanceof TL_textFixed) {
-            return getText(parentRichText, ((TL_textFixed) richText).text, parentBlock);
-        }
-        if (richText instanceof TL_textItalic) {
-            return getText(parentRichText, ((TL_textItalic) richText).text, parentBlock);
-        }
-        if (richText instanceof TL_textBold) {
-            return getText(parentRichText, ((TL_textBold) richText).text, parentBlock);
-        }
-        if (richText instanceof TL_textUnderline) {
-            return getText(parentRichText, ((TL_textUnderline) richText).text, parentBlock);
-        }
-        if (richText instanceof TL_textStrike) {
-            return getText(parentRichText, ((TL_textStrike) richText).text, parentBlock);
+    private CharSequence getText(View parentView, RichText parentRichText, RichText richText, PageBlock parentBlock, int maxWidth) {
+        if (richText == null) {
+            return null;
         }
         CharSequence spannableStringBuilder;
         MetricAffectingSpan[] innerSpans;
         TextPaint textPaint;
-        if (richText instanceof TL_textEmail) {
-            spannableStringBuilder = new SpannableStringBuilder(getText(parentRichText, ((TL_textEmail) richText).text, parentBlock));
+        MetricAffectingSpan textPaintWebpageUrlSpan;
+        if (richText instanceof TL_textFixed) {
+            return getText(parentView, parentRichText, ((TL_textFixed) richText).text, parentBlock, maxWidth);
+        } else if (richText instanceof TL_textItalic) {
+            return getText(parentView, parentRichText, ((TL_textItalic) richText).text, parentBlock, maxWidth);
+        } else if (richText instanceof TL_textBold) {
+            return getText(parentView, parentRichText, ((TL_textBold) richText).text, parentBlock, maxWidth);
+        } else if (richText instanceof TL_textUnderline) {
+            return getText(parentView, parentRichText, ((TL_textUnderline) richText).text, parentBlock, maxWidth);
+        } else if (richText instanceof TL_textStrike) {
+            return getText(parentView, parentRichText, ((TL_textStrike) richText).text, parentBlock, maxWidth);
+        } else if (richText instanceof TL_textEmail) {
+            spannableStringBuilder = new SpannableStringBuilder(getText(parentView, parentRichText, ((TL_textEmail) richText).text, parentBlock, maxWidth));
             innerSpans = (MetricAffectingSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             textPaint = (innerSpans == null || innerSpans.length == 0) ? getTextPaint(parentRichText, richText, parentBlock) : null;
             spannableStringBuilder.setSpan(new TextPaintUrlSpan(textPaint, "mailto:" + getUrl(richText)), 0, spannableStringBuilder.length(), 33);
             return spannableStringBuilder;
         } else if (richText instanceof TL_textUrl) {
-            spannableStringBuilder = new SpannableStringBuilder(getText(parentRichText, ((TL_textUrl) richText).text, parentBlock));
+            TL_textUrl textUrl = (TL_textUrl) richText;
+            spannableStringBuilder = new SpannableStringBuilder(getText(parentView, parentRichText, ((TL_textUrl) richText).text, parentBlock, maxWidth));
             innerSpans = (MetricAffectingSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
-            textPaint = (innerSpans == null || innerSpans.length == 0) ? getTextPaint(parentRichText, richText, parentBlock) : null;
-            spannableStringBuilder.setSpan(new TextPaintUrlSpan(textPaint, getUrl(richText)), 0, spannableStringBuilder.length(), 33);
+            TextPaint paint = (innerSpans == null || innerSpans.length == 0) ? getTextPaint(parentRichText, richText, parentBlock) : null;
+            if (textUrl.webpage_id != 0) {
+                textPaintWebpageUrlSpan = new TextPaintWebpageUrlSpan(paint, getUrl(richText));
+            } else {
+                textPaintWebpageUrlSpan = new TextPaintUrlSpan(paint, getUrl(richText));
+            }
+            spannableStringBuilder.setSpan(span, 0, spannableStringBuilder.length(), 33);
             return spannableStringBuilder;
         } else if (richText instanceof TL_textPlain) {
             return ((TL_textPlain) richText).text;
         } else {
-            if (richText instanceof TL_textEmpty) {
+            if (richText instanceof TL_textAnchor) {
+                TL_textAnchor textAnchor = (TL_textAnchor) richText;
+                spannableStringBuilder = new SpannableStringBuilder(getText(parentView, parentRichText, textAnchor.text, parentBlock, maxWidth));
+                spannableStringBuilder.setSpan(new AnchorSpan(textAnchor.name), 0, spannableStringBuilder.length(), 17);
+                return spannableStringBuilder;
+            } else if (richText instanceof TL_textEmpty) {
                 return TtmlNode.ANONYMOUS_REGION_ID;
-            }
-            if (!(richText instanceof TL_textConcat)) {
-                return "not supported " + richText;
-            }
-            spannableStringBuilder = new SpannableStringBuilder();
-            int count = richText.texts.size();
-            for (int a = 0; a < count; a++) {
-                RichText innerRichText = (RichText) richText.texts.get(a);
-                CharSequence innerText = getText(parentRichText, innerRichText, parentBlock);
-                int flags = getTextFlags(innerRichText);
-                int startLength = spannableStringBuilder.length();
-                spannableStringBuilder.append(innerText);
-                if (!(flags == 0 || (innerText instanceof SpannableStringBuilder))) {
-                    if ((flags & 8) != 0) {
-                        String url = getUrl(innerRichText);
-                        if (url == null) {
-                            url = getUrl(parentRichText);
+            } else {
+                if (richText instanceof TL_textConcat) {
+                    CharSequence spannableStringBuilder2 = new SpannableStringBuilder();
+                    int count = richText.texts.size();
+                    int a = 0;
+                    while (a < count) {
+                        RichText innerRichText = (RichText) richText.texts.get(a);
+                        boolean extraSpace = maxWidth >= 0 && (innerRichText instanceof TL_textUrl) && ((TL_textUrl) innerRichText).webpage_id != 0;
+                        if (extraSpace && spannableStringBuilder2.length() != 0) {
+                            if (spannableStringBuilder2.charAt(spannableStringBuilder2.length() - 1) != 10) {
+                                spannableStringBuilder2.append(" ");
+                            }
                         }
-                        spannableStringBuilder.setSpan(new TextPaintUrlSpan(getTextPaint(parentRichText, innerRichText, parentBlock), url), startLength, spannableStringBuilder.length(), 33);
-                    } else {
-                        spannableStringBuilder.setSpan(new TextPaintSpan(getTextPaint(parentRichText, innerRichText, parentBlock)), startLength, spannableStringBuilder.length(), 33);
+                        CharSequence innerText = getText(parentView, parentRichText, innerRichText, parentBlock, maxWidth);
+                        int flags = getTextFlags(innerRichText);
+                        int startLength = spannableStringBuilder2.length();
+                        spannableStringBuilder2.append(innerText);
+                        if (!(flags == 0 || (innerText instanceof SpannableStringBuilder))) {
+                            if ((flags & 8) == 0 && (flags & 512) == 0) {
+                                spannableStringBuilder2.setSpan(new TextPaintSpan(getTextPaint(parentRichText, innerRichText, parentBlock)), startLength, spannableStringBuilder2.length(), 33);
+                            } else {
+                                String url = getUrl(innerRichText);
+                                if (url == null) {
+                                    url = getUrl(parentRichText);
+                                }
+                                if ((flags & 512) != 0) {
+                                    textPaintWebpageUrlSpan = new TextPaintWebpageUrlSpan(getTextPaint(parentRichText, innerRichText, parentBlock), url);
+                                } else {
+                                    textPaintWebpageUrlSpan = new TextPaintUrlSpan(getTextPaint(parentRichText, innerRichText, parentBlock), url);
+                                }
+                                spannableStringBuilder2.setSpan(span, startLength, spannableStringBuilder2.length(), 33);
+                            }
+                        }
+                        if (extraSpace && a != count - 1) {
+                            spannableStringBuilder2.append(" ");
+                        }
+                        a++;
                     }
+                    return spannableStringBuilder2;
+                } else if (richText instanceof TL_textSubscript) {
+                    return getText(parentView, parentRichText, ((TL_textSubscript) richText).text, parentBlock, maxWidth);
+                } else if (richText instanceof TL_textSuperscript) {
+                    return getText(parentView, parentRichText, ((TL_textSuperscript) richText).text, parentBlock, maxWidth);
+                } else if (richText instanceof TL_textMarked) {
+                    return getText(parentView, parentRichText, ((TL_textMarked) richText).text, parentBlock, maxWidth);
+                } else if (richText instanceof TL_textPhone) {
+                    spannableStringBuilder = new SpannableStringBuilder(getText(parentView, parentRichText, ((TL_textPhone) richText).text, parentBlock, maxWidth));
+                    innerSpans = (MetricAffectingSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
+                    textPaint = (innerSpans == null || innerSpans.length == 0) ? getTextPaint(parentRichText, richText, parentBlock) : null;
+                    spannableStringBuilder.setSpan(new TextPaintUrlSpan(textPaint, "tel:" + getUrl(richText)), 0, spannableStringBuilder.length(), 33);
+                    return spannableStringBuilder;
+                } else if (!(richText instanceof TL_textImage)) {
+                    return "not supported " + richText;
+                } else {
+                    TL_textImage textImage = (TL_textImage) richText;
+                    Document document = getDocumentWithId(textImage.document_id);
+                    if (document == null) {
+                        return TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                    spannableStringBuilder = new SpannableStringBuilder("*");
+                    int w = AndroidUtilities.m9dp((float) textImage.f205w);
+                    int h = AndroidUtilities.m9dp((float) textImage.f204h);
+                    maxWidth = Math.abs(maxWidth);
+                    if (w > maxWidth) {
+                        float scale = ((float) maxWidth) / ((float) w);
+                        w = maxWidth;
+                        h = (int) (((float) h) * scale);
+                    }
+                    spannableStringBuilder.setSpan(new TextPaintImageReceiverSpan(parentView, document, this.currentPage, w, h, false, this.selectedColor == 2), 0, spannableStringBuilder.length(), 33);
+                    return spannableStringBuilder;
                 }
             }
-            return spannableStringBuilder;
         }
     }
 
@@ -5219,6 +7533,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (richText instanceof TL_textUrl) {
             return ((TL_textUrl) richText).url;
         }
+        if (richText instanceof TL_textPhone) {
+            return ((TL_textPhone) richText).phone;
+        }
         return null;
     }
 
@@ -5229,6 +7546,39 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 return -14606047;
             default:
                 return -6710887;
+        }
+    }
+
+    private int getInstantLinkBackgroundColor() {
+        switch (getSelectedColor()) {
+            case 0:
+                return -1707782;
+            case 1:
+                return -2498337;
+            default:
+                return -14536904;
+        }
+    }
+
+    private int getLinkTextColor() {
+        switch (getSelectedColor()) {
+            case 0:
+                return -15435321;
+            case 1:
+                return -13471296;
+            default:
+                return -10838585;
+        }
+    }
+
+    private int getMarkColor() {
+        switch (getSelectedColor()) {
+            case 0:
+                return -68676;
+            case 1:
+                return -1712691;
+            default:
+                return -14408668;
         }
     }
 
@@ -5247,100 +7597,190 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         int additionalSize;
         int flags = getTextFlags(richText);
         SparseArray<TextPaint> currentMap = null;
-        int textSize = AndroidUtilities.m10dp(14.0f);
+        int textSize = AndroidUtilities.m9dp(14.0f);
         int textColor = -65536;
         if (this.selectedFontSize == 0) {
-            additionalSize = -AndroidUtilities.m10dp(4.0f);
+            additionalSize = -AndroidUtilities.m9dp(4.0f);
         } else if (this.selectedFontSize == 1) {
-            additionalSize = -AndroidUtilities.m10dp(2.0f);
+            additionalSize = -AndroidUtilities.m9dp(2.0f);
         } else if (this.selectedFontSize == 3) {
-            additionalSize = AndroidUtilities.m10dp(2.0f);
+            additionalSize = AndroidUtilities.m9dp(2.0f);
         } else if (this.selectedFontSize == 4) {
-            additionalSize = AndroidUtilities.m10dp(4.0f);
+            additionalSize = AndroidUtilities.m9dp(4.0f);
         } else {
             additionalSize = 0;
         }
         if (parentBlock instanceof TL_pageBlockPhoto) {
-            currentMap = captionTextPaints;
-            textSize = AndroidUtilities.m10dp(14.0f);
+            TL_pageBlockPhoto pageBlockPhoto = (TL_pageBlockPhoto) parentBlock;
+            if (pageBlockPhoto.caption.text == richText || pageBlockPhoto.caption.text == parentRichText) {
+                currentMap = photoCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+            } else {
+                currentMap = photoCreditTextPaints;
+                textSize = AndroidUtilities.m9dp(12.0f);
+            }
+            textColor = getGrayTextColor();
+        } else if (parentBlock instanceof TL_pageBlockMap) {
+            TL_pageBlockMap pageBlockMap = (TL_pageBlockMap) parentBlock;
+            if (pageBlockMap.caption.text == richText || pageBlockMap.caption.text == parentRichText) {
+                currentMap = photoCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+            } else {
+                currentMap = photoCreditTextPaints;
+                textSize = AndroidUtilities.m9dp(12.0f);
+            }
             textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockTitle) {
             currentMap = titleTextPaints;
-            textSize = AndroidUtilities.m10dp(24.0f);
+            textSize = AndroidUtilities.m9dp(24.0f);
+            textColor = getTextColor();
+        } else if (parentBlock instanceof TL_pageBlockKicker) {
+            currentMap = kickerTextPaints;
+            textSize = AndroidUtilities.m9dp(14.0f);
             textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockAuthorDate) {
             currentMap = authorTextPaints;
-            textSize = AndroidUtilities.m10dp(14.0f);
+            textSize = AndroidUtilities.m9dp(14.0f);
             textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockFooter) {
             currentMap = footerTextPaints;
-            textSize = AndroidUtilities.m10dp(14.0f);
+            textSize = AndroidUtilities.m9dp(14.0f);
             textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockSubtitle) {
             currentMap = subtitleTextPaints;
-            textSize = AndroidUtilities.m10dp(21.0f);
+            textSize = AndroidUtilities.m9dp(21.0f);
             textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockHeader) {
             currentMap = headerTextPaints;
-            textSize = AndroidUtilities.m10dp(21.0f);
+            textSize = AndroidUtilities.m9dp(21.0f);
             textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockSubheader) {
             currentMap = subheaderTextPaints;
-            textSize = AndroidUtilities.m10dp(18.0f);
+            textSize = AndroidUtilities.m9dp(18.0f);
             textColor = getTextColor();
-        } else if ((parentBlock instanceof TL_pageBlockBlockquote) || (parentBlock instanceof TL_pageBlockPullquote)) {
-            if (parentBlock.text == parentRichText) {
+        } else if (parentBlock instanceof TL_pageBlockBlockquote) {
+            TL_pageBlockBlockquote pageBlockBlockquote = (TL_pageBlockBlockquote) parentBlock;
+            if (pageBlockBlockquote.text == parentRichText) {
                 currentMap = quoteTextPaints;
-                textSize = AndroidUtilities.m10dp(15.0f);
+                textSize = AndroidUtilities.m9dp(15.0f);
                 textColor = getTextColor();
-            } else if (parentBlock.caption == parentRichText) {
-                currentMap = subquoteTextPaints;
-                textSize = AndroidUtilities.m10dp(14.0f);
+            } else if (pageBlockBlockquote.caption == parentRichText) {
+                currentMap = photoCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+                textColor = getGrayTextColor();
+            }
+        } else if (parentBlock instanceof TL_pageBlockPullquote) {
+            TL_pageBlockPullquote pageBlockBlockquote2 = (TL_pageBlockPullquote) parentBlock;
+            if (pageBlockBlockquote2.text == parentRichText) {
+                currentMap = quoteTextPaints;
+                textSize = AndroidUtilities.m9dp(15.0f);
+                textColor = getTextColor();
+            } else if (pageBlockBlockquote2.caption == parentRichText) {
+                currentMap = photoCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
                 textColor = getGrayTextColor();
             }
         } else if (parentBlock instanceof TL_pageBlockPreformatted) {
             currentMap = preformattedTextPaints;
-            textSize = AndroidUtilities.m10dp(14.0f);
+            textSize = AndroidUtilities.m9dp(14.0f);
             textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockParagraph) {
-            if (parentBlock.caption == parentRichText) {
-                currentMap = embedPostCaptionTextPaints;
-                textSize = AndroidUtilities.m10dp(14.0f);
-                textColor = getGrayTextColor();
-            } else {
-                currentMap = paragraphTextPaints;
-                textSize = AndroidUtilities.m10dp(16.0f);
-                textColor = getTextColor();
-            }
-        } else if (parentBlock instanceof TL_pageBlockList) {
+            currentMap = paragraphTextPaints;
+            textSize = AndroidUtilities.m9dp(16.0f);
+            textColor = getTextColor();
+        } else if (isListItemBlock(parentBlock)) {
             currentMap = listTextPaints;
-            textSize = AndroidUtilities.m10dp(15.0f);
+            textSize = AndroidUtilities.m9dp(16.0f);
             textColor = getTextColor();
         } else if (parentBlock instanceof TL_pageBlockEmbed) {
-            currentMap = embedTextPaints;
-            textSize = AndroidUtilities.m10dp(14.0f);
+            TL_pageBlockEmbed pageBlockEmbed = (TL_pageBlockEmbed) parentBlock;
+            if (pageBlockEmbed.caption.text == richText || pageBlockEmbed.caption.text == parentRichText) {
+                currentMap = photoCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+            } else {
+                currentMap = photoCreditTextPaints;
+                textSize = AndroidUtilities.m9dp(12.0f);
+            }
             textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockSlideshow) {
-            currentMap = slideshowTextPaints;
-            textSize = AndroidUtilities.m10dp(14.0f);
+            TL_pageBlockSlideshow pageBlockSlideshow = (TL_pageBlockSlideshow) parentBlock;
+            if (pageBlockSlideshow.caption.text == richText || pageBlockSlideshow.caption.text == parentRichText) {
+                currentMap = photoCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+            } else {
+                currentMap = photoCreditTextPaints;
+                textSize = AndroidUtilities.m9dp(12.0f);
+            }
+            textColor = getGrayTextColor();
+        } else if (parentBlock instanceof TL_pageBlockCollage) {
+            TL_pageBlockCollage pageBlockCollage = (TL_pageBlockCollage) parentBlock;
+            if (pageBlockCollage.caption.text == richText || pageBlockCollage.caption.text == parentRichText) {
+                currentMap = photoCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+            } else {
+                currentMap = photoCreditTextPaints;
+                textSize = AndroidUtilities.m9dp(12.0f);
+            }
             textColor = getGrayTextColor();
         } else if (parentBlock instanceof TL_pageBlockEmbedPost) {
-            if (richText != null) {
-                currentMap = embedPostTextPaints;
-                textSize = AndroidUtilities.m10dp(14.0f);
+            TL_pageBlockEmbedPost pageBlockEmbedPost = (TL_pageBlockEmbedPost) parentBlock;
+            if (richText == pageBlockEmbedPost.caption.text) {
+                currentMap = photoCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+                textColor = getGrayTextColor();
+            } else {
+                if (richText == pageBlockEmbedPost.caption.credit) {
+                    currentMap = photoCreditTextPaints;
+                    textSize = AndroidUtilities.m9dp(12.0f);
+                    textColor = getGrayTextColor();
+                } else if (richText != null) {
+                    currentMap = embedPostTextPaints;
+                    textSize = AndroidUtilities.m9dp(14.0f);
+                    textColor = getTextColor();
+                }
+            }
+        } else if (parentBlock instanceof TL_pageBlockVideo) {
+            if (richText == ((TL_pageBlockVideo) parentBlock).caption.text) {
+                currentMap = mediaCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+                textColor = getTextColor();
+            } else {
+                currentMap = mediaCreditTextPaints;
+                textSize = AndroidUtilities.m9dp(12.0f);
                 textColor = getTextColor();
             }
-        } else if ((parentBlock instanceof TL_pageBlockVideo) || (parentBlock instanceof TL_pageBlockAudio)) {
-            currentMap = videoTextPaints;
-            textSize = AndroidUtilities.m10dp(14.0f);
+        } else if (parentBlock instanceof TL_pageBlockAudio) {
+            if (richText == ((TL_pageBlockAudio) parentBlock).caption.text) {
+                currentMap = mediaCaptionTextPaints;
+                textSize = AndroidUtilities.m9dp(14.0f);
+                textColor = getTextColor();
+            } else {
+                currentMap = mediaCreditTextPaints;
+                textSize = AndroidUtilities.m9dp(12.0f);
+                textColor = getTextColor();
+            }
+        } else if (parentBlock instanceof TL_pageBlockRelatedArticles) {
+            currentMap = relatedArticleTextPaints;
+            textSize = AndroidUtilities.m9dp(15.0f);
+            textColor = getGrayTextColor();
+        } else if (parentBlock instanceof TL_pageBlockDetails) {
+            currentMap = detailsTextPaints;
+            textSize = AndroidUtilities.m9dp(15.0f);
             textColor = getTextColor();
+        } else if (parentBlock instanceof TL_pageBlockTable) {
+            currentMap = tableTextPaints;
+            textSize = AndroidUtilities.m9dp(15.0f);
+            textColor = getTextColor();
+        }
+        if (!((flags & 256) == 0 && (flags & 128) == 0)) {
+            textSize -= AndroidUtilities.m9dp(4.0f);
         }
         if (currentMap == null) {
             if (errorTextPaint == null) {
                 errorTextPaint = new TextPaint(1);
                 errorTextPaint.setColor(-65536);
             }
-            errorTextPaint.setTextSize((float) AndroidUtilities.m10dp(14.0f));
+            errorTextPaint.setTextSize((float) AndroidUtilities.m9dp(14.0f));
             return errorTextPaint;
         }
         TextPaint paint = (TextPaint) currentMap.get(flags);
@@ -5348,7 +7788,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             paint = new TextPaint(1);
             if ((flags & 4) != 0) {
                 paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmono.ttf"));
-            } else if (this.selectedFont == 1 || (parentBlock instanceof TL_pageBlockTitle) || (parentBlock instanceof TL_pageBlockHeader) || (parentBlock instanceof TL_pageBlockSubtitle) || (parentBlock instanceof TL_pageBlockSubheader)) {
+            } else if (parentBlock instanceof TL_pageBlockRelatedArticles) {
+                paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            } else if (this.selectedFont == 1 || (parentBlock instanceof TL_pageBlockTitle) || (parentBlock instanceof TL_pageBlockKicker) || (parentBlock instanceof TL_pageBlockHeader) || (parentBlock instanceof TL_pageBlockSubtitle) || (parentBlock instanceof TL_pageBlockSubheader)) {
                 if ((flags & 1) != 0 && (flags & 2) != 0) {
                     paint.setTypeface(Typeface.create(C0016C.SERIF_NAME, 3));
                 } else if ((flags & 1) != 0) {
@@ -5371,9 +7813,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if ((flags & 16) != 0) {
                 paint.setFlags(paint.getFlags() | 8);
             }
-            if ((flags & 8) != 0) {
-                paint.setFlags(paint.getFlags() | 8);
-                textColor = getTextColor();
+            if (!((flags & 8) == 0 && (flags & 512) == 0)) {
+                paint.setFlags(paint.getFlags());
+                textColor = getLinkTextColor();
+            }
+            if ((flags & 256) != 0) {
+                paint.baselineShift -= AndroidUtilities.m9dp(6.0f);
+            } else if ((flags & 128) != 0) {
+                paint.baselineShift += AndroidUtilities.m9dp(2.0f);
+            }
+            if ((flags & 64) != 0) {
+                paint.bgColor = getMarkColor();
             }
             paint.setColor(textColor);
             currentMap.put(flags, paint);
@@ -5382,7 +7832,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         return paint;
     }
 
-    private StaticLayout createLayoutForText(CharSequence plainText, RichText richText, int width, PageBlock parentBlock) {
+    private DrawingText createLayoutForText(View parentView, CharSequence plainText, RichText richText, int width, PageBlock parentBlock) {
+        return createLayoutForText(parentView, plainText, richText, width, 0, parentBlock, Alignment.ALIGN_NORMAL, 0);
+    }
+
+    private DrawingText createLayoutForText(View parentView, CharSequence plainText, RichText richText, int width, int textY, PageBlock parentBlock) {
+        return createLayoutForText(parentView, plainText, richText, width, textY, parentBlock, Alignment.ALIGN_NORMAL, 0);
+    }
+
+    private DrawingText createLayoutForText(View parentView, CharSequence plainText, RichText richText, int width, int textY, PageBlock parentBlock, Alignment align, int maxLines) {
         if (plainText == null && (richText == null || (richText instanceof TL_textEmpty))) {
             return null;
         }
@@ -5392,51 +7850,82 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             quoteLinePaint = new Paint();
             quoteLinePaint.setColor(getTextColor());
             preformattedBackgroundPaint = new Paint();
+            tableLinePaint = new Paint(1);
+            tableLinePaint.setStyle(Style.STROKE);
+            tableLinePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
+            tableHalfLinePaint = new Paint();
+            tableHalfLinePaint.setStyle(Style.STROKE);
+            tableHalfLinePaint.setStrokeWidth(((float) AndroidUtilities.m9dp(1.0f)) / 2.0f);
+            tableHeaderPaint = new Paint();
+            tableStripPaint = new Paint();
+            urlPaint = new Paint();
+            webpageUrlPaint = new Paint();
             if (color == 0) {
                 preformattedBackgroundPaint.setColor(-657156);
+                webpageUrlPaint.setColor(-1313798);
+                urlPaint.setColor(-2299145);
+                tableHalfLinePaint.setColor(-2039584);
+                tableLinePaint.setColor(-2039584);
+                tableHeaderPaint.setColor(-723724);
+                tableStripPaint.setColor(-526345);
             } else if (color == 1) {
                 preformattedBackgroundPaint.setColor(-1712440);
+                webpageUrlPaint.setColor(-2365721);
+                urlPaint.setColor(-3481882);
+                tableHalfLinePaint.setColor(-3620432);
+                tableLinePaint.setColor(-3620432);
+                tableHeaderPaint.setColor(-1120560);
+                tableStripPaint.setColor(-1120560);
             } else if (color == 2) {
-                preformattedBackgroundPaint.setColor(-14277082);
-            }
-            urlPaint = new Paint();
-            if (color == 0) {
-                urlPaint.setColor(-1315861);
-            } else if (color == 1) {
-                urlPaint.setColor(-1712440);
-            } else if (color == 2) {
-                urlPaint.setColor(-14277082);
+                preformattedBackgroundPaint.setColor(-15000805);
+                webpageUrlPaint.setColor(-14536904);
+                urlPaint.setColor(-14469050);
+                tableHalfLinePaint.setColor(-13750738);
+                tableLinePaint.setColor(-13750738);
+                tableHeaderPaint.setColor(-15066598);
+                tableStripPaint.setColor(-15066598);
             }
         }
         if (plainText != null) {
             text = plainText;
         } else {
-            text = getText(richText, richText, parentBlock);
+            text = getText(parentView, richText, richText, parentBlock, width);
         }
         if (TextUtils.isEmpty(text)) {
             return null;
         }
+        int additionalSize;
         TextPaint paint;
+        StaticLayout result;
+        if (this.selectedFontSize == 0) {
+            additionalSize = -AndroidUtilities.m9dp(4.0f);
+        } else if (this.selectedFontSize == 1) {
+            additionalSize = -AndroidUtilities.m9dp(2.0f);
+        } else if (this.selectedFontSize == 3) {
+            additionalSize = AndroidUtilities.m9dp(2.0f);
+        } else if (this.selectedFontSize == 4) {
+            additionalSize = AndroidUtilities.m9dp(4.0f);
+        } else {
+            additionalSize = 0;
+        }
         if ((parentBlock instanceof TL_pageBlockEmbedPost) && richText == null) {
-            if (parentBlock.author == plainText) {
+            if (((TL_pageBlockEmbedPost) parentBlock).author == plainText) {
                 if (embedPostAuthorPaint == null) {
                     embedPostAuthorPaint = new TextPaint(1);
                     embedPostAuthorPaint.setColor(getTextColor());
                 }
-                embedPostAuthorPaint.setTextSize((float) AndroidUtilities.m10dp(15.0f));
+                embedPostAuthorPaint.setTextSize((float) (AndroidUtilities.m9dp(15.0f) + additionalSize));
                 paint = embedPostAuthorPaint;
             } else {
                 if (embedPostDatePaint == null) {
                     embedPostDatePaint = new TextPaint(1);
                     if (color == 0) {
                         embedPostDatePaint.setColor(-7366752);
-                    } else if (color == 1) {
-                        embedPostDatePaint.setColor(-11711675);
-                    } else if (color == 2) {
-                        embedPostDatePaint.setColor(-10066330);
+                    } else {
+                        embedPostDatePaint.setColor(getGrayTextColor());
                     }
                 }
-                embedPostDatePaint.setTextSize((float) AndroidUtilities.m10dp(14.0f));
+                embedPostDatePaint.setTextSize((float) (AndroidUtilities.m9dp(14.0f) + additionalSize));
                 paint = embedPostDatePaint;
             }
         } else if (parentBlock instanceof TL_pageBlockChannel) {
@@ -5449,38 +7938,111 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             } else {
                 channelNamePaint.setColor(-1);
             }
-            channelNamePaint.setTextSize((float) AndroidUtilities.m10dp(15.0f));
+            channelNamePaint.setTextSize((float) AndroidUtilities.m9dp(15.0f));
             paint = channelNamePaint;
-        } else if (!(parentBlock instanceof TL_pageBlockList) || plainText == null) {
+        } else if (parentBlock instanceof TL_pageBlockRelatedArticlesChild) {
+            TL_pageBlockRelatedArticlesChild pageBlockRelatedArticlesChild = (TL_pageBlockRelatedArticlesChild) parentBlock;
+            if (plainText == ((TL_pageRelatedArticle) pageBlockRelatedArticlesChild.parent.articles.get(pageBlockRelatedArticlesChild.num)).title) {
+                if (relatedArticleHeaderPaint == null) {
+                    relatedArticleHeaderPaint = new TextPaint(1);
+                    relatedArticleHeaderPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                }
+                relatedArticleHeaderPaint.setColor(getTextColor());
+                relatedArticleHeaderPaint.setTextSize((float) (AndroidUtilities.m9dp(15.0f) + additionalSize));
+                paint = relatedArticleHeaderPaint;
+            } else {
+                if (relatedArticleTextPaint == null) {
+                    relatedArticleTextPaint = new TextPaint(1);
+                }
+                relatedArticleTextPaint.setColor(getGrayTextColor());
+                relatedArticleTextPaint.setTextSize((float) (AndroidUtilities.m9dp(14.0f) + additionalSize));
+                paint = relatedArticleTextPaint;
+            }
+        } else if (!isListItemBlock(parentBlock) || plainText == null) {
             paint = getTextPaint(richText, richText, parentBlock);
         } else {
-            int additionalSize;
             if (listTextPointerPaint == null) {
                 listTextPointerPaint = new TextPaint(1);
                 listTextPointerPaint.setColor(getTextColor());
             }
-            if (this.selectedFontSize == 0) {
-                additionalSize = -AndroidUtilities.m10dp(4.0f);
-            } else if (this.selectedFontSize == 1) {
-                additionalSize = -AndroidUtilities.m10dp(2.0f);
-            } else if (this.selectedFontSize == 3) {
-                additionalSize = AndroidUtilities.m10dp(2.0f);
-            } else if (this.selectedFontSize == 4) {
-                additionalSize = AndroidUtilities.m10dp(4.0f);
-            } else {
-                additionalSize = 0;
+            if (listTextNumPaint == null) {
+                listTextNumPaint = new TextPaint(1);
+                listTextNumPaint.setColor(getTextColor());
             }
-            listTextPointerPaint.setTextSize((float) (AndroidUtilities.m10dp(15.0f) + additionalSize));
-            paint = listTextPointerPaint;
+            listTextPointerPaint.setTextSize((float) (AndroidUtilities.m9dp(19.0f) + additionalSize));
+            listTextNumPaint.setTextSize((float) (AndroidUtilities.m9dp(16.0f) + additionalSize));
+            if (!(parentBlock instanceof TL_pageBlockListItem) || ((TL_pageBlockListItem) parentBlock).parent.pageBlockList.ordered) {
+                paint = listTextNumPaint;
+            } else {
+                paint = listTextPointerPaint;
+            }
         }
-        if ((parentBlock instanceof TL_pageBlockPullquote) || !(richText == null || parentBlock == null || (parentBlock instanceof TL_pageBlockBlockquote) || richText != parentBlock.caption)) {
-            return new StaticLayout(text, paint, width, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        if (maxLines == 0) {
+            if (text.charAt(text.length() - 1) == 10) {
+                text = text.subSequence(0, text.length() - 1);
+            }
+            if (parentBlock instanceof TL_pageBlockPullquote) {
+                result = new StaticLayout(text, paint, width, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+            } else {
+                result = new StaticLayout(text, paint, width, align, 1.0f, (float) AndroidUtilities.m9dp(4.0f), false);
+            }
+        } else if (parentBlock instanceof TL_pageBlockPullquote) {
+            result = StaticLayoutEx.createStaticLayout(text, paint, width, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false, TruncateAt.END, width, maxLines);
+        } else {
+            result = StaticLayoutEx.createStaticLayout(text, paint, width, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(4.0f), false, TruncateAt.END, width, maxLines);
         }
-        return new StaticLayout(text, paint, width, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(4.0f), false);
+        if (result == null) {
+            return null;
+        }
+        CharSequence finalText = result.getText();
+        LinkPath textPath = null;
+        if (result != null && (finalText instanceof Spanned)) {
+            int a;
+            Spanned spanned = (Spanned) finalText;
+            try {
+                AnchorSpan[] innerSpans = (AnchorSpan[]) spanned.getSpans(0, spanned.length(), AnchorSpan.class);
+                int linesCount = result.getLineCount();
+                if (innerSpans != null && innerSpans.length > 0) {
+                    for (a = 0; a < innerSpans.length; a++) {
+                        if (linesCount <= 1) {
+                            this.anchorsOffset.put(innerSpans[a].getName(), Integer.valueOf(textY));
+                        } else {
+                            this.anchorsOffset.put(innerSpans[a].getName(), Integer.valueOf(result.getLineTop(result.getLineForOffset(spanned.getSpanStart(innerSpans[a]))) + textY));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+            }
+            try {
+                TextPaintWebpageUrlSpan[] innerSpans2 = (TextPaintWebpageUrlSpan[]) spanned.getSpans(0, spanned.length(), TextPaintWebpageUrlSpan.class);
+                if (innerSpans2 != null && innerSpans2.length > 0) {
+                    Path linkPath = new LinkPath(true);
+                    try {
+                        linkPath.setAllowReset(false);
+                        for (a = 0; a < innerSpans2.length; a++) {
+                            int start = spanned.getSpanStart(innerSpans2[a]);
+                            int end = spanned.getSpanEnd(innerSpans2[a]);
+                            linkPath.setCurrentLayout(result, start, 0.0f);
+                            linkPath.setBaselineShift(innerSpans2[a].getTextPaint().baselineShift);
+                            result.getSelectionPath(start, end, linkPath);
+                        }
+                        linkPath.setAllowReset(true);
+                        textPath = linkPath;
+                    } catch (Exception e2) {
+                        Path textPath2 = linkPath;
+                    }
+                }
+            } catch (Exception e3) {
+            }
+        }
+        DrawingText drawingText = new DrawingText();
+        drawingText.textLayout = result;
+        drawingText.textPath = textPath2;
+        return drawingText;
     }
 
-    private void drawLayoutLink(Canvas canvas, StaticLayout layout) {
-        if (canvas != null && this.pressedLinkOwnerLayout == layout) {
+    private void drawLayoutLink(Canvas canvas, DrawingText layout) {
+        if (canvas != null && layout != null && this.pressedLinkOwnerLayout == layout) {
             if (this.pressedLink != null) {
                 canvas.drawPath(this.urlPath, urlPaint);
             } else if (this.drawBlockSelection && layout != null) {
@@ -5494,21 +8056,30 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     x = 0.0f;
                 }
                 Canvas canvas2 = canvas;
-                canvas2.drawRect(((float) (-AndroidUtilities.m10dp(2.0f))) + x, 0.0f, ((float) AndroidUtilities.m10dp(2.0f)) + (x + width), (float) layout.getHeight(), urlPaint);
+                canvas2.drawRect(((float) (-AndroidUtilities.m9dp(2.0f))) + x, 0.0f, ((float) AndroidUtilities.m9dp(2.0f)) + (x + width), (float) layout.getHeight(), urlPaint);
             }
         }
     }
 
-    private boolean checkLayoutForLinks(MotionEvent event, View parentView, StaticLayout layout, int layoutX, int layoutY) {
-        if (parentView == null || layout == null) {
+    private boolean checkLayoutForLinks(MotionEvent event, View parentView, DrawingText drawingText, int layoutX, int layoutY) {
+        if (parentView == null || drawingText == null) {
             return false;
         }
+        StaticLayout layout = drawingText.textLayout;
         int x = (int) event.getX();
         int y = (int) event.getY();
         boolean removeLink = false;
         if (event.getAction() == 0) {
-            if (x >= layoutX && x <= layout.getWidth() + layoutX && y >= layoutY && y <= layout.getHeight() + layoutY) {
-                this.pressedLinkOwnerLayout = layout;
+            int a;
+            float width = 0.0f;
+            float left = 2.14748365E9f;
+            int N = layout.getLineCount();
+            for (a = 0; a < N; a++) {
+                width = Math.max(layout.getLineWidth(a), width);
+                left = Math.min(layout.getLineLeft(a), left);
+            }
+            if (((float) x) >= ((float) layoutX) + left && ((float) x) <= (((float) layoutX) + left) + width && y >= layoutY && y <= layout.getHeight() + layoutY) {
+                this.pressedLinkOwnerLayout = drawingText;
                 this.pressedLinkOwnerView = parentView;
                 this.pressedLayoutY = layoutY;
                 if (layout.getText() instanceof Spannable) {
@@ -5516,7 +8087,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     try {
                         int line = layout.getLineForVertical(y - layoutY);
                         int off = layout.getOffsetForHorizontal(line, (float) checkX);
-                        float left = layout.getLineLeft(line);
+                        left = layout.getLineLeft(line);
                         if (left <= ((float) checkX) && layout.getLineWidth(line) + left >= ((float) checkX)) {
                             Spannable buffer = (Spannable) layout.getText();
                             TextPaintUrlSpan[] link = (TextPaintUrlSpan[]) buffer.getSpans(off, off, TextPaintUrlSpan.class);
@@ -5524,7 +8095,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                 this.pressedLink = link[0];
                                 int pressedStart = buffer.getSpanStart(this.pressedLink);
                                 int pressedEnd = buffer.getSpanEnd(this.pressedLink);
-                                for (int a = 1; a < link.length; a++) {
+                                for (a = 1; a < link.length; a++) {
                                     TextPaintUrlSpan span = link[a];
                                     int start = buffer.getSpanStart(span);
                                     int end = buffer.getSpanEnd(span);
@@ -5535,16 +8106,18 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                     }
                                 }
                                 try {
+                                    this.urlPath.setUseRoundRect(true);
                                     this.urlPath.setCurrentLayout(layout, pressedStart, 0.0f);
+                                    this.urlPath.setBaselineShift(this.pressedLink.getTextPaint().baselineShift);
                                     layout.getSelectionPath(pressedStart, pressedEnd, this.urlPath);
                                     parentView.invalidate();
                                 } catch (Throwable e) {
-                                    FileLog.m14e(e);
+                                    FileLog.m13e(e);
                                 }
                             }
                         }
                     } catch (Throwable e2) {
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                     }
                 }
             }
@@ -5554,62 +8127,46 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 String url = this.pressedLink.getUrl();
                 if (url != null) {
                     String anchor;
+                    if (this.linkSheet != null) {
+                        this.linkSheet.lambda$new$4$EmbedBottomSheet();
+                        this.linkSheet = null;
+                    }
                     boolean isAnchor = false;
                     int index = url.lastIndexOf(35);
                     if (index != -1) {
+                        String webPageUrl;
+                        if (TextUtils.isEmpty(this.currentPage.cached_page.url)) {
+                            webPageUrl = this.currentPage.url.toLowerCase();
+                        } else {
+                            webPageUrl = this.currentPage.cached_page.url.toLowerCase();
+                        }
                         try {
                             anchor = URLDecoder.decode(url.substring(index + 1), C0016C.UTF8_NAME);
                         } catch (Exception e3) {
                             anchor = TtmlNode.ANONYMOUS_REGION_ID;
                         }
-                        if (url.toLowerCase().contains(this.currentPage.url.toLowerCase())) {
-                            Integer row = (Integer) this.anchors.get(anchor.toLowerCase());
-                            if (row != null) {
-                                this.layoutManager.scrollToPositionWithOffset(row.intValue(), 0);
-                                isAnchor = true;
+                        if (url.toLowerCase().contains(webPageUrl)) {
+                            if (TextUtils.isEmpty(anchor)) {
+                                this.layoutManager.scrollToPositionWithOffset(0, 0);
+                                checkScroll(-AndroidUtilities.m9dp(56.0f));
+                            } else {
+                                scrollToAnchor(anchor);
                             }
+                            isAnchor = true;
                         }
                     } else {
                         anchor = null;
                     }
-                    if (!isAnchor && this.openUrlReqId == 0) {
-                        final String anchorFinal = anchor;
-                        showProgressView(true);
-                        TLObject req = new TL_messages_getWebPage();
-                        req.url = this.pressedLink.getUrl();
-                        req.hash = 0;
-                        final TLObject tLObject = req;
-                        this.openUrlReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                            public void run(final TLObject response, TL_error error) {
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        if (ArticleViewer.this.openUrlReqId != 0) {
-                                            ArticleViewer.this.openUrlReqId = 0;
-                                            ArticleViewer.this.showProgressView(false);
-                                            if (!ArticleViewer.this.isVisible) {
-                                                return;
-                                            }
-                                            if ((response instanceof TL_webPage) && (((TL_webPage) response).cached_page instanceof TL_pageFull)) {
-                                                ArticleViewer.this.addPageToStack((TL_webPage) response, anchorFinal);
-                                            } else {
-                                                Browser.openUrl(ArticleViewer.this.parentActivity, tLObject.url);
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-                        });
+                    if (!isAnchor) {
+                        openWebpageUrl(this.pressedLink.getUrl(), anchor);
                     }
                 }
             }
-        } else if (event.getAction() == 3) {
+        } else if (event.getAction() == 3 && (this.popupWindow == null || !this.popupWindow.isShowing())) {
             removeLink = true;
         }
         if (removeLink) {
-            this.pressedLink = null;
-            this.pressedLinkOwnerLayout = null;
-            this.pressedLinkOwnerView = null;
-            parentView.invalidate();
+            removePressedLink();
         }
         if (event.getAction() == 0) {
             startCheckLongPress();
@@ -5617,22 +8174,68 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (!(event.getAction() == 0 || event.getAction() == 2)) {
             cancelCheckLongPress();
         }
-        if (this.pressedLinkOwnerLayout != null) {
-            return true;
+        if (!(parentView instanceof BlockDetailsCell)) {
+            return this.pressedLinkOwnerLayout != null;
+        } else {
+            if (this.pressedLink != null) {
+                return true;
+            }
+            return false;
         }
-        return false;
+    }
+
+    private void removePressedLink() {
+        if (this.pressedLink != null || this.pressedLinkOwnerView != null) {
+            View parentView = this.pressedLinkOwnerView;
+            this.pressedLink = null;
+            this.pressedLinkOwnerLayout = null;
+            this.pressedLinkOwnerView = null;
+            if (parentView != null) {
+                parentView.invalidate();
+            }
+        }
+    }
+
+    private void openWebpageUrl(String url, String anchor) {
+        if (this.openUrlReqId == 0) {
+            closePhoto(false);
+            showProgressView(true, true);
+            TL_messages_getWebPage req = new TL_messages_getWebPage();
+            req.url = url;
+            req.hash = 0;
+            this.openUrlReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ArticleViewer$$Lambda$5(this, anchor, req));
+        }
+    }
+
+    final /* synthetic */ void lambda$openWebpageUrl$6$ArticleViewer(String anchor, TL_messages_getWebPage req, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$42(this, response, anchor, req));
+    }
+
+    final /* synthetic */ void lambda$null$5$ArticleViewer(TLObject response, String anchor, TL_messages_getWebPage req) {
+        if (this.openUrlReqId != 0) {
+            this.openUrlReqId = 0;
+            showProgressView(true, false);
+            if (!this.isVisible) {
+                return;
+            }
+            if ((response instanceof TL_webPage) && (((TL_webPage) response).cached_page instanceof TL_page)) {
+                addPageToStack((TL_webPage) response, anchor);
+            } else {
+                Browser.openUrl(this.parentActivity, req.url);
+            }
+        }
     }
 
     private Photo getPhotoWithId(long id) {
         if (this.currentPage == null || this.currentPage.cached_page == null) {
             return null;
         }
-        if (this.currentPage.photo != null && this.currentPage.photo.f108id == id) {
+        if (this.currentPage.photo != null && this.currentPage.photo.f106id == id) {
             return this.currentPage.photo;
         }
         for (int a = 0; a < this.currentPage.cached_page.photos.size(); a++) {
             Photo photo = (Photo) this.currentPage.cached_page.photos.get(a);
-            if (photo.f108id == id) {
+            if (photo.f106id == id) {
                 return photo;
             }
         }
@@ -5661,7 +8264,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         int count;
         View view;
         BlockAudioCell cell;
-        if (id == NotificationCenter.FileDidFailedLoad) {
+        if (id == NotificationCenter.fileDidFailedLoad) {
             location = args[0];
             a = 0;
             while (a < 3) {
@@ -5673,7 +8276,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     return;
                 }
             }
-        } else if (id == NotificationCenter.FileDidLoaded) {
+        } else if (id == NotificationCenter.fileDidLoad) {
             location = (String) args[0];
             a = 0;
             while (a < 3) {
@@ -5698,7 +8301,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 a++;
             }
-        } else if (id == NotificationCenter.emojiDidLoaded) {
+        } else if (id == NotificationCenter.emojiDidLoad) {
             if (this.captionTextView != null) {
                 this.captionTextView.invalidate();
             }
@@ -5784,11 +8387,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         for (a = 0; a < embedPostTextPaints.size(); a++) {
             updateFontEntry(embedPostTextPaints.keyAt(a), (TextPaint) embedPostTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (a = 0; a < videoTextPaints.size(); a++) {
-            updateFontEntry(videoTextPaints.keyAt(a), (TextPaint) videoTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < mediaCaptionTextPaints.size(); a++) {
+            updateFontEntry(mediaCaptionTextPaints.keyAt(a), (TextPaint) mediaCaptionTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (a = 0; a < captionTextPaints.size(); a++) {
-            updateFontEntry(captionTextPaints.keyAt(a), (TextPaint) captionTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < mediaCreditTextPaints.size(); a++) {
+            updateFontEntry(mediaCreditTextPaints.keyAt(a), (TextPaint) mediaCreditTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (a = 0; a < photoCaptionTextPaints.size(); a++) {
+            updateFontEntry(photoCaptionTextPaints.keyAt(a), (TextPaint) photoCaptionTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (a = 0; a < photoCreditTextPaints.size(); a++) {
+            updateFontEntry(photoCreditTextPaints.keyAt(a), (TextPaint) photoCreditTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
         for (a = 0; a < authorTextPaints.size(); a++) {
             updateFontEntry(authorTextPaints.keyAt(a), (TextPaint) authorTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
@@ -5796,17 +8405,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         for (a = 0; a < footerTextPaints.size(); a++) {
             updateFontEntry(footerTextPaints.keyAt(a), (TextPaint) footerTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (a = 0; a < subquoteTextPaints.size(); a++) {
-            updateFontEntry(subquoteTextPaints.keyAt(a), (TextPaint) subquoteTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
-        }
         for (a = 0; a < embedPostCaptionTextPaints.size(); a++) {
             updateFontEntry(embedPostCaptionTextPaints.keyAt(a), (TextPaint) embedPostCaptionTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (a = 0; a < embedTextPaints.size(); a++) {
-            updateFontEntry(embedTextPaints.keyAt(a), (TextPaint) embedTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < relatedArticleTextPaints.size(); a++) {
+            updateFontEntry(relatedArticleTextPaints.keyAt(a), (TextPaint) relatedArticleTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (a = 0; a < slideshowTextPaints.size(); a++) {
-            updateFontEntry(slideshowTextPaints.keyAt(a), (TextPaint) slideshowTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < detailsTextPaints.size(); a++) {
+            updateFontEntry(detailsTextPaints.keyAt(a), (TextPaint) detailsTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        }
+        for (a = 0; a < tableTextPaints.size(); a++) {
+            updateFontEntry(tableTextPaints.keyAt(a), (TextPaint) tableTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
     }
 
@@ -5841,7 +8450,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     private void updatePaintColors() {
-        int a;
         ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putInt("font_color", this.selectedColor).commit();
         int currentColor = getSelectedColor();
         if (currentColor == 0) {
@@ -5854,7 +8462,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.backgroundPaint.setColor(-15461356);
             this.listView.setGlowColor(-15461356);
         }
-        for (a = 0; a < Theme.chat_ivStatesDrawable.length; a++) {
+        for (int a = 0; a < Theme.chat_ivStatesDrawable.length; a++) {
             Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), false);
             Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), true);
             Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][1], getTextColor(), false);
@@ -5866,23 +8474,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (listTextPointerPaint != null) {
             listTextPointerPaint.setColor(getTextColor());
         }
-        if (preformattedBackgroundPaint != null) {
-            if (currentColor == 0) {
-                preformattedBackgroundPaint.setColor(-657156);
-            } else if (currentColor == 1) {
-                preformattedBackgroundPaint.setColor(-1712440);
-            } else if (currentColor == 2) {
-                preformattedBackgroundPaint.setColor(-14277082);
-            }
-        }
-        if (urlPaint != null) {
-            if (currentColor == 0) {
-                urlPaint.setColor(-1315861);
-            } else if (currentColor == 1) {
-                urlPaint.setColor(-1712440);
-            } else if (currentColor == 2) {
-                urlPaint.setColor(-14277082);
-            }
+        if (listTextNumPaint != null) {
+            listTextNumPaint.setColor(getTextColor());
         }
         if (embedPostAuthorPaint != null) {
             embedPostAuthorPaint.setColor(getTextColor());
@@ -5894,13 +8487,24 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 channelNamePaint.setColor(-1);
             }
         }
+        if (channelNamePaint != null) {
+            if (this.channelBlock == null) {
+                channelNamePaint.setColor(getTextColor());
+            } else {
+                channelNamePaint.setColor(-1);
+            }
+        }
+        if (relatedArticleHeaderPaint != null) {
+            relatedArticleHeaderPaint.setColor(getTextColor());
+        }
+        if (relatedArticleTextPaint != null) {
+            relatedArticleTextPaint.setColor(getGrayTextColor());
+        }
         if (embedPostDatePaint != null) {
             if (currentColor == 0) {
                 embedPostDatePaint.setColor(-7366752);
-            } else if (currentColor == 1) {
-                embedPostDatePaint.setColor(-11711675);
-            } else if (currentColor == 2) {
-                embedPostDatePaint.setColor(-10066330);
+            } else {
+                embedPostDatePaint.setColor(getGrayTextColor());
             }
         }
         if (dividerPaint != null) {
@@ -5909,59 +8513,70 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             } else if (currentColor == 1) {
                 dividerPaint.setColor(-4080987);
             } else if (currentColor == 2) {
-                dividerPaint.setColor(-12303292);
+                dividerPaint.setColor(-13553359);
             }
         }
-        for (a = 0; a < titleTextPaints.size(); a++) {
-            ((TextPaint) titleTextPaints.valueAt(a)).setColor(getTextColor());
+        if (preformattedBackgroundPaint != null) {
+            if (currentColor == 0) {
+                preformattedBackgroundPaint.setColor(-657156);
+                webpageUrlPaint.setColor(-1313798);
+                urlPaint.setColor(-2299145);
+                tableHalfLinePaint.setColor(-2039584);
+                tableLinePaint.setColor(-2039584);
+                tableHeaderPaint.setColor(-723724);
+                tableStripPaint.setColor(-526345);
+            } else if (currentColor == 1) {
+                preformattedBackgroundPaint.setColor(-1712440);
+                webpageUrlPaint.setColor(-2365721);
+                urlPaint.setColor(-3481882);
+                tableHalfLinePaint.setColor(-3620432);
+                tableLinePaint.setColor(-3620432);
+                tableHeaderPaint.setColor(-1120560);
+                tableStripPaint.setColor(-1120560);
+            } else if (currentColor == 2) {
+                preformattedBackgroundPaint.setColor(-15000805);
+                webpageUrlPaint.setColor(-14536904);
+                urlPaint.setColor(-14469050);
+                tableHalfLinePaint.setColor(-13750738);
+                tableLinePaint.setColor(-13750738);
+                tableHeaderPaint.setColor(-15066598);
+                tableStripPaint.setColor(-15066598);
+            }
         }
-        for (a = 0; a < subtitleTextPaints.size(); a++) {
-            ((TextPaint) subtitleTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < headerTextPaints.size(); a++) {
-            ((TextPaint) headerTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < subheaderTextPaints.size(); a++) {
-            ((TextPaint) subheaderTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < quoteTextPaints.size(); a++) {
-            ((TextPaint) quoteTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < preformattedTextPaints.size(); a++) {
-            ((TextPaint) preformattedTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < paragraphTextPaints.size(); a++) {
-            ((TextPaint) paragraphTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < listTextPaints.size(); a++) {
-            ((TextPaint) listTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < embedPostTextPaints.size(); a++) {
-            ((TextPaint) embedPostTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < videoTextPaints.size(); a++) {
-            ((TextPaint) videoTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < captionTextPaints.size(); a++) {
-            ((TextPaint) captionTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < authorTextPaints.size(); a++) {
-            ((TextPaint) authorTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < footerTextPaints.size(); a++) {
-            ((TextPaint) footerTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < subquoteTextPaints.size(); a++) {
-            ((TextPaint) subquoteTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < embedPostCaptionTextPaints.size(); a++) {
-            ((TextPaint) embedPostCaptionTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < embedTextPaints.size(); a++) {
-            ((TextPaint) embedTextPaints.valueAt(a)).setColor(getTextColor());
-        }
-        for (a = 0; a < slideshowTextPaints.size(); a++) {
-            ((TextPaint) slideshowTextPaints.valueAt(a)).setColor(getTextColor());
+        setMapColors(titleTextPaints);
+        setMapColors(kickerTextPaints);
+        setMapColors(subtitleTextPaints);
+        setMapColors(headerTextPaints);
+        setMapColors(subheaderTextPaints);
+        setMapColors(quoteTextPaints);
+        setMapColors(preformattedTextPaints);
+        setMapColors(paragraphTextPaints);
+        setMapColors(listTextPaints);
+        setMapColors(embedPostTextPaints);
+        setMapColors(mediaCaptionTextPaints);
+        setMapColors(mediaCreditTextPaints);
+        setMapColors(photoCaptionTextPaints);
+        setMapColors(photoCreditTextPaints);
+        setMapColors(authorTextPaints);
+        setMapColors(footerTextPaints);
+        setMapColors(embedPostCaptionTextPaints);
+        setMapColors(relatedArticleTextPaints);
+        setMapColors(detailsTextPaints);
+        setMapColors(tableTextPaints);
+    }
+
+    private void setMapColors(SparseArray<TextPaint> map) {
+        for (int a = 0; a < map.size(); a++) {
+            int flags = map.keyAt(a);
+            TextPaint paint = (TextPaint) map.valueAt(a);
+            if ((flags & 64) != 0) {
+                paint.bgColor = getMarkColor();
+            }
+            if ((flags & 8) == 0 && (flags & 512) == 0) {
+                paint.setColor(getTextColor());
+            } else {
+                paint.setColor(getLinkTextColor());
+            }
         }
     }
 
@@ -5999,7 +8614,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
         this.containerView.setFitsSystemWindows(true);
         if (VERSION.SDK_INT >= 21) {
-            this.containerView.setOnApplyWindowInsetsListener(new C07446());
+            this.containerView.setOnApplyWindowInsetsListener(new ArticleViewer$$Lambda$6(this));
         }
         this.containerView.setSystemUiVisibility(1028);
         this.photoContainerBackground = new View(activity);
@@ -6014,10 +8629,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
                 int y = (bottom - top) - ArticleViewer.this.captionTextView.getMeasuredHeight();
+                int y2 = (bottom - top) - ArticleViewer.this.groupedPhotosListView.getMeasuredHeight();
                 if (ArticleViewer.this.bottomLayout.getVisibility() == 0) {
                     y -= ArticleViewer.this.bottomLayout.getMeasuredHeight();
+                    y2 -= ArticleViewer.this.bottomLayout.getMeasuredHeight();
+                }
+                if (!ArticleViewer.this.groupedPhotosListView.currentPhotos.isEmpty()) {
+                    y -= ArticleViewer.this.groupedPhotosListView.getMeasuredHeight();
                 }
                 ArticleViewer.this.captionTextView.layout(0, y, ArticleViewer.this.captionTextView.getMeasuredWidth(), ArticleViewer.this.captionTextView.getMeasuredHeight() + y);
+                ArticleViewer.this.captionTextViewNext.layout(0, y, ArticleViewer.this.captionTextViewNext.getMeasuredWidth(), ArticleViewer.this.captionTextViewNext.getMeasuredHeight() + y);
+                ArticleViewer.this.groupedPhotosListView.layout(0, y2, ArticleViewer.this.groupedPhotosListView.getMeasuredWidth(), ArticleViewer.this.groupedPhotosListView.getMeasuredHeight() + y2);
             }
         };
         this.photoContainerView.setVisibility(4);
@@ -6031,11 +8653,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.fullscreenAspectRatioView.setVisibility(8);
         this.fullscreenVideoContainer.addView(this.fullscreenAspectRatioView, LayoutHelper.createFrame(-1, -1, 17));
         this.fullscreenTextureView = new TextureView(activity);
-        if (VERSION.SDK_INT >= 21) {
-            this.barBackground = new View(activity);
-            this.barBackground.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
-            this.windowView.addView(this.barBackground);
-        }
         this.listView = new RecyclerListView(activity) {
             protected void onLayout(boolean changed, int l, int t, int r, int b) {
                 super.onLayout(changed, l, t, r, b);
@@ -6049,7 +8666,28 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     }
                 }
             }
+
+            public boolean onInterceptTouchEvent(MotionEvent e) {
+                if (ArticleViewer.this.pressedLinkOwnerLayout != null && ArticleViewer.this.pressedLink == null && ((ArticleViewer.this.popupWindow == null || !ArticleViewer.this.popupWindow.isShowing()) && (e.getAction() == 1 || e.getAction() == 3))) {
+                    ArticleViewer.this.pressedLink = null;
+                    ArticleViewer.this.pressedLinkOwnerLayout = null;
+                    ArticleViewer.this.pressedLinkOwnerView = null;
+                } else if (!(ArticleViewer.this.pressedLinkOwnerLayout == null || ArticleViewer.this.pressedLink == null || e.getAction() != 1)) {
+                    ArticleViewer.this.checkLayoutForLinks(e, ArticleViewer.this.pressedLinkOwnerView, ArticleViewer.this.pressedLinkOwnerLayout, 0, 0);
+                }
+                return super.onInterceptTouchEvent(e);
+            }
+
+            public boolean onTouchEvent(MotionEvent e) {
+                if (ArticleViewer.this.pressedLinkOwnerLayout != null && ArticleViewer.this.pressedLink == null && ((ArticleViewer.this.popupWindow == null || !ArticleViewer.this.popupWindow.isShowing()) && (e.getAction() == 1 || e.getAction() == 3))) {
+                    ArticleViewer.this.pressedLink = null;
+                    ArticleViewer.this.pressedLinkOwnerLayout = null;
+                    ArticleViewer.this.pressedLinkOwnerView = null;
+                }
+                return super.onTouchEvent(e);
+            }
         };
+        ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         RecyclerListView recyclerListView = this.listView;
         LayoutManager linearLayoutManager = new LinearLayoutManager(this.parentActivity, 1, false);
         this.layoutManager = linearLayoutManager;
@@ -6059,12 +8697,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.adapter = webpageAdapter;
         recyclerListView.setAdapter(webpageAdapter);
         this.listView.setClipToPadding(false);
-        this.listView.setPadding(0, AndroidUtilities.m10dp(56.0f), 0, 0);
-        this.listView.setTopGlowOffset(AndroidUtilities.m10dp(56.0f));
+        this.listView.setPadding(0, AndroidUtilities.m9dp(56.0f), 0, 0);
+        this.listView.setTopGlowOffset(AndroidUtilities.m9dp(56.0f));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemLongClickListener(new C18909());
-        this.listView.setOnItemClickListener(new C187910());
-        this.listView.setOnScrollListener(new C188011());
+        this.listView.setOnItemLongClickListener(new ArticleViewer$$Lambda$7(this));
+        this.listView.setOnItemClickListener(new ArticleViewer$$Lambda$8(this));
+        this.listView.setOnScrollListener(new C12564());
         this.headerPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.headerProgressPaint.setColor(-14408666);
         this.headerView = new FrameLayout(activity) {
@@ -6097,7 +8735,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
             }
         };
-        this.headerView.setOnTouchListener(new C069713());
+        this.headerView.setOnTouchListener(ArticleViewer$$Lambda$9.$instance);
         this.headerView.setWillNotDraw(false);
         this.containerView.addView(this.headerView, LayoutHelper.createFrame(-1, 56.0f));
         this.backButton = new ImageView(activity);
@@ -6109,9 +8747,23 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.backButton.setImageDrawable(this.backDrawable);
         this.backButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.headerView.addView(this.backButton, LayoutHelper.createFrame(54, 56.0f));
-        this.backButton.setOnClickListener(new C069814());
+        this.backButton.setOnClickListener(new ArticleViewer$$Lambda$10(this));
+        this.titleTextView = new SimpleTextView(activity);
+        this.titleTextView.setGravity(19);
+        this.titleTextView.setTextSize(20);
+        this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.titleTextView.setTextColor(-5000269);
+        this.titleTextView.setPivotX(0.0f);
+        this.titleTextView.setPivotY((float) AndroidUtilities.m9dp(28.0f));
+        this.headerView.addView(this.titleTextView, LayoutHelper.createFrame(-1, 56.0f, 51, 72.0f, 0.0f, 96.0f, 0.0f));
+        this.lineProgressView = new LineProgressView(activity);
+        this.lineProgressView.setProgressColor(-1);
+        this.lineProgressView.setPivotX(0.0f);
+        this.lineProgressView.setPivotY((float) AndroidUtilities.m9dp(2.0f));
+        this.headerView.addView(this.lineProgressView, LayoutHelper.createFrame(-1, 2.0f, 83, 0.0f, 0.0f, 0.0f, 1.0f));
+        this.lineProgressTickRunnable = new ArticleViewer$$Lambda$11(this);
         LinearLayout settingsContainer = new LinearLayout(this.parentActivity);
-        settingsContainer.setPadding(0, AndroidUtilities.m10dp(4.0f), 0, AndroidUtilities.m10dp(4.0f));
+        settingsContainer.setPadding(0, AndroidUtilities.m9dp(4.0f), 0, AndroidUtilities.m9dp(4.0f));
         settingsContainer.setOrientation(1);
         int a = 0;
         while (a < 3) {
@@ -6126,7 +8778,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
                     this.nightModeImageView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240));
                     this.colorCells[a].addView(this.nightModeImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 48));
-                    this.nightModeImageView.setOnClickListener(new C069915());
+                    this.nightModeImageView.setOnClickListener(new ArticleViewer$$Lambda$12(this));
                     this.colorCells[a].setTextAndColor(LocaleController.getString("ColorWhite", R.string.ColorWhite), -1);
                     break;
                 case 1:
@@ -6138,8 +8790,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
             this.colorCells[a].select(a == this.selectedColor);
             this.colorCells[a].setTag(Integer.valueOf(a));
-            this.colorCells[a].setOnClickListener(new C070016());
-            settingsContainer.addView(this.colorCells[a], LayoutHelper.createLinear(-1, 48));
+            this.colorCells[a].setOnClickListener(new ArticleViewer$$Lambda$13(this));
+            settingsContainer.addView(this.colorCells[a], LayoutHelper.createLinear(-1, 50));
             a++;
         }
         updateNightModeButton();
@@ -6160,8 +8812,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
             this.fontCells[a].select(a == this.selectedFont);
             this.fontCells[a].setTag(Integer.valueOf(a));
-            this.fontCells[a].setOnClickListener(new C070117());
-            settingsContainer.addView(this.fontCells[a], LayoutHelper.createLinear(-1, 48));
+            this.fontCells[a].setOnClickListener(new ArticleViewer$$Lambda$14(this));
+            settingsContainer.addView(this.fontCells[a], LayoutHelper.createLinear(-1, 50));
             a++;
         }
         divider = new View(this.parentActivity);
@@ -6189,12 +8841,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         textView.setTextColor(-5000269);
         textView.setGravity(17);
         this.settingsButton.addView(textView, LayoutHelper.createFrame(-1, -1.0f));
-        this.settingsButton.addSubItem(settingsContainer, AndroidUtilities.m10dp(220.0f), -2);
+        this.settingsButton.addSubItem(settingsContainer, AndroidUtilities.m9dp(220.0f), -2);
         this.settingsButton.redrawPopup(-1);
         this.headerView.addView(this.settingsButton, LayoutHelper.createFrame(48, 56.0f, 53, 0.0f, 0.0f, 56.0f, 0.0f));
         this.shareContainer = new FrameLayout(activity);
         this.headerView.addView(this.shareContainer, LayoutHelper.createFrame(48, 56, 53));
-        this.shareContainer.setOnClickListener(new C070218());
+        this.shareContainer.setOnClickListener(new ArticleViewer$$Lambda$15(this));
         this.shareButton = new ImageView(activity);
         this.shareButton.setScaleType(ScaleType.CENTER);
         this.shareButton.setImageResource(R.drawable.ic_share_article);
@@ -6223,7 +8875,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
         this.scroller = new Scroller(activity);
         this.blackPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
-        this.actionBar = new C0646ActionBar(activity);
+        this.actionBar = new C0403ActionBar(activity);
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.actionBar.setOccupyStatusBar(false);
         this.actionBar.setTitleColor(-1);
@@ -6231,7 +8883,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
         this.photoContainerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-        this.actionBar.setActionBarMenuOnItemClick(new C188119());
+        this.actionBar.setActionBarMenuOnItemClick(new C12576());
         ActionBarMenu menu = this.actionBar.createMenu();
         menu.addItem(2, (int) R.drawable.share);
         this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
@@ -6241,28 +8893,33 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.bottomLayout = new FrameLayout(this.parentActivity);
         this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.photoContainerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-        this.captionTextViewOld = new TextView(activity);
-        this.captionTextViewOld.setMaxLines(10);
-        this.captionTextViewOld.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-        this.captionTextViewOld.setPadding(AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(8.0f));
-        this.captionTextViewOld.setLinkTextColor(-1);
-        this.captionTextViewOld.setTextColor(-1);
-        this.captionTextViewOld.setGravity(19);
-        this.captionTextViewOld.setTextSize(1, 16.0f);
-        this.captionTextViewOld.setVisibility(4);
-        this.photoContainerView.addView(this.captionTextViewOld, LayoutHelper.createFrame(-1, -2, 83));
-        TextView textView2 = new TextView(activity);
-        this.captionTextViewNew = textView2;
-        this.captionTextView = textView2;
-        this.captionTextViewNew.setMaxLines(10);
-        this.captionTextViewNew.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-        this.captionTextViewNew.setPadding(AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(8.0f));
-        this.captionTextViewNew.setLinkTextColor(-1);
-        this.captionTextViewNew.setTextColor(-1);
-        this.captionTextViewNew.setGravity(19);
-        this.captionTextViewNew.setTextSize(1, 16.0f);
-        this.captionTextViewNew.setVisibility(4);
-        this.photoContainerView.addView(this.captionTextViewNew, LayoutHelper.createFrame(-1, -2, 83));
+        this.groupedPhotosListView = new GroupedPhotosListView(this.parentActivity);
+        this.photoContainerView.addView(this.groupedPhotosListView, LayoutHelper.createFrame(-1, 62.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
+        this.groupedPhotosListView.setDelegate(new C12587());
+        this.captionTextViewNext = new TextView(activity);
+        this.captionTextViewNext.setMaxLines(10);
+        this.captionTextViewNext.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+        this.captionTextViewNext.setMovementMethod(new LinkMovementMethodMy());
+        this.captionTextViewNext.setPadding(AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(8.0f));
+        this.captionTextViewNext.setLinkTextColor(-1);
+        this.captionTextViewNext.setTextColor(-1);
+        this.captionTextViewNext.setHighlightColor(872415231);
+        this.captionTextViewNext.setGravity(19);
+        this.captionTextViewNext.setTextSize(1, 16.0f);
+        this.captionTextViewNext.setVisibility(8);
+        this.photoContainerView.addView(this.captionTextViewNext, LayoutHelper.createFrame(-1, -2, 83));
+        this.captionTextView = new TextView(activity);
+        this.captionTextView.setMaxLines(10);
+        this.captionTextView.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+        this.captionTextView.setMovementMethod(new LinkMovementMethodMy());
+        this.captionTextView.setPadding(AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(8.0f));
+        this.captionTextView.setLinkTextColor(-1);
+        this.captionTextView.setTextColor(-1);
+        this.captionTextView.setHighlightColor(872415231);
+        this.captionTextView.setGravity(19);
+        this.captionTextView.setTextSize(1, 16.0f);
+        this.captionTextView.setVisibility(8);
+        this.photoContainerView.addView(this.captionTextView, LayoutHelper.createFrame(-1, -2, 83));
         this.radialProgressViews[0] = new RadialProgressView(activity, this.photoContainerView);
         this.radialProgressViews[0].setBackgroundState(0, false);
         this.radialProgressViews[1] = new RadialProgressView(activity, this.photoContainerView);
@@ -6271,12 +8928,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.radialProgressViews[2].setBackgroundState(0, false);
         this.videoPlayerSeekbar = new SeekBar(activity);
         this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
-        this.videoPlayerSeekbar.setDelegate(new C188220());
+        this.videoPlayerSeekbar.setDelegate(new ArticleViewer$$Lambda$16(this));
         this.videoPlayerControlFrameLayout = new FrameLayout(activity) {
             public boolean onTouchEvent(MotionEvent event) {
                 int x = (int) event.getX();
                 int y = (int) event.getY();
-                if (!ArticleViewer.this.videoPlayerSeekbar.onTouch(event.getAction(), event.getX() - ((float) AndroidUtilities.m10dp(48.0f)), event.getY())) {
+                if (!ArticleViewer.this.videoPlayerSeekbar.onTouch(event.getAction(), event.getX() - ((float) AndroidUtilities.m9dp(48.0f)), event.getY())) {
                     return super.onTouchEvent(event);
                 }
                 getParent().requestDisallowInterceptTouchEvent(true);
@@ -6296,7 +8953,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     duration = 0;
                 }
                 duration /= 1000;
-                ArticleViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.m10dp(64.0f)) - ((int) Math.ceil((double) ArticleViewer.this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})))), getMeasuredHeight());
+                ArticleViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.m9dp(64.0f)) - ((int) Math.ceil((double) ArticleViewer.this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})))), getMeasuredHeight());
             }
 
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -6310,7 +8967,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
             protected void onDraw(Canvas canvas) {
                 canvas.save();
-                canvas.translate((float) AndroidUtilities.m10dp(48.0f), 0.0f);
+                canvas.translate((float) AndroidUtilities.m9dp(48.0f), 0.0f);
                 ArticleViewer.this.videoPlayerSeekbar.draw(canvas);
                 canvas.restore();
             }
@@ -6320,7 +8977,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.videoPlayButton = new ImageView(activity);
         this.videoPlayButton.setScaleType(ScaleType.CENTER);
         this.videoPlayerControlFrameLayout.addView(this.videoPlayButton, LayoutHelper.createFrame(48, 48, 51));
-        this.videoPlayButton.setOnClickListener(new C070522());
+        this.videoPlayButton.setOnClickListener(new ArticleViewer$$Lambda$17(this));
         this.videoPlayerTime = new TextView(activity);
         this.videoPlayerTime.setTextColor(-1);
         this.videoPlayerTime.setGravity(16);
@@ -6338,6 +8995,177 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.rightImage.setCrossfadeAlpha((byte) 2);
         this.rightImage.setInvalidateAll(true);
         updatePaintColors();
+    }
+
+    final /* synthetic */ WindowInsets lambda$setParentActivity$7$ArticleViewer(View v, WindowInsets insets) {
+        WindowInsets oldInsets = this.lastInsets;
+        this.lastInsets = insets;
+        if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
+            this.windowView.requestLayout();
+        }
+        return insets.consumeSystemWindowInsets();
+    }
+
+    final /* synthetic */ boolean lambda$setParentActivity$8$ArticleViewer(View view, int position) {
+        if (!(view instanceof BlockRelatedArticlesCell)) {
+            return false;
+        }
+        BlockRelatedArticlesCell cell = (BlockRelatedArticlesCell) view;
+        showCopyPopup(((TL_pageRelatedArticle) cell.currentBlock.parent.articles.get(cell.currentBlock.num)).url);
+        return true;
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$11$ArticleViewer(View view, int position) {
+        if (position != this.adapter.localBlocks.size() || this.currentPage == null) {
+            if (position >= 0 && position < this.adapter.localBlocks.size()) {
+                PageBlock pageBlock = (PageBlock) this.adapter.localBlocks.get(position);
+                PageBlock originalBlock = pageBlock;
+                pageBlock = getLastNonListPageBlock(pageBlock);
+                if (pageBlock instanceof TL_pageBlockDetailsChild) {
+                    pageBlock = ((TL_pageBlockDetailsChild) pageBlock).block;
+                }
+                if (pageBlock instanceof TL_pageBlockChannel) {
+                    MessagesController.getInstance(this.currentAccount).openByUserName(((TL_pageBlockChannel) pageBlock).channel.username, this.parentFragment, 2);
+                    close(false, true);
+                } else if (pageBlock instanceof TL_pageBlockRelatedArticlesChild) {
+                    TL_pageBlockRelatedArticlesChild pageBlockRelatedArticlesChild = (TL_pageBlockRelatedArticlesChild) pageBlock;
+                    openWebpageUrl(((TL_pageRelatedArticle) pageBlockRelatedArticlesChild.parent.articles.get(pageBlockRelatedArticlesChild.num)).url, null);
+                } else if (pageBlock instanceof TL_pageBlockDetails) {
+                    view = getLastNonListCell(view);
+                    if (view instanceof BlockDetailsCell) {
+                        this.pressedLinkOwnerLayout = null;
+                        this.pressedLinkOwnerView = null;
+                        if (this.blocks.indexOf(originalBlock) >= 0) {
+                            TL_pageBlockDetails pageBlockDetails = (TL_pageBlockDetails) pageBlock;
+                            pageBlockDetails.open = !pageBlockDetails.open;
+                            int oldCount = this.adapter.getItemCount();
+                            this.adapter.updateRows();
+                            int changeCount = Math.abs(this.adapter.getItemCount() - oldCount);
+                            BlockDetailsCell cell = (BlockDetailsCell) view;
+                            cell.arrow.setAnimationProgressAnimated(pageBlockDetails.open ? 0.0f : 1.0f);
+                            cell.invalidate();
+                            if (changeCount == 0) {
+                                return;
+                            }
+                            if (pageBlockDetails.open) {
+                                this.adapter.notifyItemRangeInserted(position + 1, changeCount);
+                            } else {
+                                this.adapter.notifyItemRangeRemoved(position + 1, changeCount);
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (this.previewsReqId == 0) {
+            TLObject object = MessagesController.getInstance(this.currentAccount).getUserOrChat("previews");
+            if (object instanceof TL_user) {
+                openPreviewsChat((User) object, this.currentPage.f182id);
+                return;
+            }
+            int currentAccount = UserConfig.selectedAccount;
+            long pageId = this.currentPage.f182id;
+            showProgressView(true, true);
+            TLObject req = new TL_contacts_resolveUsername();
+            req.username = "previews";
+            this.previewsReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$40(this, currentAccount, pageId));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$10$ArticleViewer(int currentAccount, long pageId, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$41(this, response, currentAccount, pageId));
+    }
+
+    final /* synthetic */ void lambda$null$9$ArticleViewer(TLObject response, int currentAccount, long pageId) {
+        if (this.previewsReqId != 0) {
+            this.previewsReqId = 0;
+            showProgressView(true, false);
+            if (response != null) {
+                TL_contacts_resolvedPeer res = (TL_contacts_resolvedPeer) response;
+                MessagesController.getInstance(currentAccount).putUsers(res.users, false);
+                MessagesStorage.getInstance(currentAccount).putUsersAndChats(res.users, res.chats, false, true);
+                if (!res.users.isEmpty()) {
+                    openPreviewsChat((User) res.users.get(0), pageId);
+                }
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$13$ArticleViewer(View v) {
+        close(true, true);
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$14$ArticleViewer() {
+        float progressLeft = 0.7f - this.lineProgressView.getCurrentProgress();
+        if (progressLeft > 0.0f) {
+            float tick;
+            if (progressLeft < 0.25f) {
+                tick = 0.01f;
+            } else {
+                tick = 0.02f;
+            }
+            this.lineProgressView.setProgress(this.lineProgressView.getCurrentProgress() + tick, true);
+            AndroidUtilities.runOnUIThread(this.lineProgressTickRunnable, 100);
+        }
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$15$ArticleViewer(View v) {
+        this.nightModeEnabled = !this.nightModeEnabled;
+        ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putBoolean("nightModeEnabled", this.nightModeEnabled).commit();
+        updateNightModeButton();
+        updatePaintColors();
+        this.adapter.notifyDataSetChanged();
+        if (this.nightModeEnabled) {
+            showNightModeHint();
+        }
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$16$ArticleViewer(View v) {
+        int num = ((Integer) v.getTag()).intValue();
+        this.selectedColor = num;
+        int a12 = 0;
+        while (a12 < 3) {
+            this.colorCells[a12].select(a12 == num);
+            a12++;
+        }
+        updateNightModeButton();
+        updatePaintColors();
+        this.adapter.notifyDataSetChanged();
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$17$ArticleViewer(View v) {
+        int num = ((Integer) v.getTag()).intValue();
+        this.selectedFont = num;
+        int a1 = 0;
+        while (a1 < 2) {
+            this.fontCells[a1].select(a1 == num);
+            a1++;
+        }
+        updatePaintFonts();
+        this.adapter.notifyDataSetChanged();
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$18$ArticleViewer(View v) {
+        if (this.currentPage != null && this.parentActivity != null) {
+            showDialog(new ShareAlert(this.parentActivity, null, this.currentPage.url, false, this.currentPage.url, true));
+            hideActionBar();
+        }
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$19$ArticleViewer(float progress) {
+        if (this.videoPlayer != null) {
+            this.videoPlayer.seekTo((long) ((int) (((float) this.videoPlayer.getDuration()) * progress)));
+        }
+    }
+
+    final /* synthetic */ void lambda$setParentActivity$20$ArticleViewer(View v) {
+        if (this.videoPlayer == null) {
+            return;
+        }
+        if (this.isPlaying) {
+            this.videoPlayer.pause();
+        } else {
+            this.videoPlayer.play();
+        }
     }
 
     private void showNightModeHint() {
@@ -6380,10 +9208,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             frameLayout2.addView(textView, LayoutHelper.createFrame(-1, -1.0f, i, f, 11.0f, (float) i2, 12.0f));
             AnimatorSet animatorSet = new AnimatorSet();
             Animator[] animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.nightModeHintView, "translationY", new float[]{(float) AndroidUtilities.m10dp(100.0f), 0.0f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.nightModeHintView, "translationY", new float[]{(float) AndroidUtilities.m9dp(100.0f), 0.0f});
             animatorSet.playTogether(animatorArr);
             animatorSet.setInterpolator(new DecelerateInterpolator(1.5f));
-            animatorSet.addListener(new C070723());
+            animatorSet.addListener(new C04659());
             animatorSet.setDuration(250);
             animatorSet.start();
         }
@@ -6398,8 +9226,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     private void checkScroll(int dy) {
-        int maxHeight = AndroidUtilities.m10dp(56.0f);
-        int minHeight = Math.max(AndroidUtilities.statusBarHeight, AndroidUtilities.m10dp(24.0f));
+        int maxHeight = AndroidUtilities.m9dp(56.0f);
+        int minHeight = Math.max(AndroidUtilities.statusBarHeight, AndroidUtilities.m9dp(24.0f));
         float heightDiff = (float) (maxHeight - minHeight);
         int newHeight = this.currentHeaderHeight - dy;
         if (newHeight < minHeight) {
@@ -6409,7 +9237,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
         this.currentHeaderHeight = newHeight;
         float scale = 0.8f + ((((float) (this.currentHeaderHeight - minHeight)) / heightDiff) * 0.2f);
-        int scaledHeight = (int) (((float) maxHeight) * scale);
+        float scale2 = 0.5f + ((((float) (this.currentHeaderHeight - minHeight)) / heightDiff) * 0.5f);
         this.backButton.setScaleX(scale);
         this.backButton.setScaleY(scale);
         this.backButton.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
@@ -6417,8 +9245,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.shareContainer.setScaleY(scale);
         this.settingsButton.setScaleX(scale);
         this.settingsButton.setScaleY(scale);
+        this.titleTextView.setScaleX(scale);
+        this.titleTextView.setScaleY(scale);
+        this.lineProgressView.setScaleY(scale2);
         this.shareContainer.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
         this.settingsButton.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
+        this.titleTextView.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
         this.headerView.setTranslationY((float) (this.currentHeaderHeight - maxHeight));
         this.listView.setTopGlowOffset(this.currentHeaderHeight);
     }
@@ -6426,7 +9258,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private void openPreviewsChat(User user, long wid) {
         if (user != null && this.parentActivity != null) {
             Bundle args = new Bundle();
-            args.putInt("user_id", user.f177id);
+            args.putInt("user_id", user.f176id);
             args.putString("botUser", "webpage" + wid);
             ((LaunchActivity) this.parentActivity).presentFragment(new ChatActivity(args), false, true);
             close(false, true);
@@ -6437,31 +9269,40 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         int count;
         int a;
         PageBlock innerBlock;
-        if ((block instanceof TL_pageBlockPhoto) || ((block instanceof TL_pageBlockVideo) && isVideoBlock(block))) {
-            this.photoBlocks.add(block);
+        if (block instanceof TL_pageBlockPhoto) {
+            TL_pageBlockPhoto pageBlockPhoto = (TL_pageBlockPhoto) block;
+            Photo photo = getPhotoWithId(pageBlockPhoto.photo_id);
+            if (photo != null) {
+                pageBlockPhoto.thumb = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 56, true);
+                this.photoBlocks.add(block);
+            }
+        } else if ((block instanceof TL_pageBlockVideo) && isVideoBlock(block)) {
+            TL_pageBlockVideo pageBlockVideo = (TL_pageBlockVideo) block;
+            Document document = getDocumentWithId(pageBlockVideo.video_id);
+            if (document != null) {
+                pageBlockVideo.thumb = document.thumb;
+                this.photoBlocks.add(block);
+            }
         } else if (block instanceof TL_pageBlockSlideshow) {
             TL_pageBlockSlideshow slideshow = (TL_pageBlockSlideshow) block;
             count = slideshow.items.size();
             for (a = 0; a < count; a++) {
                 innerBlock = (PageBlock) slideshow.items.get(a);
-                if ((innerBlock instanceof TL_pageBlockPhoto) || ((innerBlock instanceof TL_pageBlockVideo) && isVideoBlock(innerBlock))) {
-                    this.photoBlocks.add(innerBlock);
-                }
+                innerBlock.groupId = this.lastBlockNum;
+                addAllMediaFromBlock(innerBlock);
             }
+            this.lastBlockNum++;
         } else if (block instanceof TL_pageBlockCollage) {
             TL_pageBlockCollage collage = (TL_pageBlockCollage) block;
             count = collage.items.size();
             for (a = 0; a < count; a++) {
                 innerBlock = (PageBlock) collage.items.get(a);
-                if ((innerBlock instanceof TL_pageBlockPhoto) || ((innerBlock instanceof TL_pageBlockVideo) && isVideoBlock(innerBlock))) {
-                    this.photoBlocks.add(innerBlock);
-                }
+                innerBlock.groupId = this.lastBlockNum;
+                addAllMediaFromBlock(innerBlock);
             }
-        } else if (!(block instanceof TL_pageBlockCover)) {
-        } else {
-            if ((block.cover instanceof TL_pageBlockPhoto) || ((block.cover instanceof TL_pageBlockVideo) && isVideoBlock(block.cover))) {
-                this.photoBlocks.add(block.cover);
-            }
+            this.lastBlockNum++;
+        } else if (block instanceof TL_pageBlockCover) {
+            addAllMediaFromBlock(((TL_pageBlockCover) block).cover);
         }
     }
 
@@ -6483,41 +9324,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (first) {
             TL_messages_getWebPage req = new TL_messages_getWebPage();
             req.url = webpage.url;
-            if (webpage.cached_page instanceof TL_pagePart) {
+            if ((webpage.cached_page instanceof TL_pagePart_layer82) || webpage.cached_page.part) {
                 req.hash = 0;
             } else {
                 req.hash = webpage.hash;
             }
-            final WebPage webPageFinal = webpage;
-            final int currentAccount = UserConfig.selectedAccount;
-            final MessageObject messageObject2 = messageObject;
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                    if (response instanceof TL_webPage) {
-                        final TL_webPage webPage = (TL_webPage) response;
-                        if (webPage.cached_page != null) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    if (!ArticleViewer.this.pagesStack.isEmpty() && ArticleViewer.this.pagesStack.get(0) == webPageFinal && webPage.cached_page != null) {
-                                        if (messageObject2 != null) {
-                                            messageObject2.messageOwner.media.webpage = webPage;
-                                        }
-                                        ArticleViewer.this.pagesStack.set(0, webPage);
-                                        if (ArticleViewer.this.pagesStack.size() == 1) {
-                                            ArticleViewer.this.currentPage = webPage;
-                                            ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().remove("article" + ArticleViewer.this.currentPage.f183id).commit();
-                                            ArticleViewer.this.updateInterfaceForCurrentPage(false);
-                                        }
-                                    }
-                                }
-                            });
-                            LongSparseArray<WebPage> webpages = new LongSparseArray(1);
-                            webpages.put(webPage.f183id, webPage);
-                            MessagesStorage.getInstance(currentAccount).putWebPages(webpages);
-                        }
-                    }
-                }
-            });
+            WebPage webPageFinal = webpage;
+            int currentAccount = UserConfig.selectedAccount;
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$18(this, webPageFinal, messageObject, currentAccount));
         }
         this.pagesStack.clear();
         this.collapsed = false;
@@ -6529,23 +9343,28 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.windowView.setInnerTranslationX(0.0f);
         this.actionBar.setVisibility(8);
         this.bottomLayout.setVisibility(8);
-        this.captionTextViewNew.setVisibility(8);
-        this.captionTextViewOld.setVisibility(8);
+        this.captionTextView.setVisibility(8);
+        this.captionTextViewNext.setVisibility(8);
         this.shareContainer.setAlpha(0.0f);
         this.backButton.setAlpha(0.0f);
         this.settingsButton.setAlpha(0.0f);
         this.layoutManager.scrollToPositionWithOffset(0, 0);
-        checkScroll(-AndroidUtilities.m10dp(56.0f));
+        checkScroll(-AndroidUtilities.m9dp(56.0f));
         String anchor = null;
         int index;
         if (messageObject != null) {
             webpage = messageObject.messageOwner.media.webpage;
-            String webPageUrl = webpage.url.toLowerCase();
             for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
                 MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
                 if (entity instanceof TL_messageEntityUrl) {
                     try {
+                        String webPageUrl;
                         url = messageObject.messageOwner.message.substring(entity.offset, entity.offset + entity.length).toLowerCase();
+                        if (TextUtils.isEmpty(webpage.cached_page.url)) {
+                            webPageUrl = webpage.url.toLowerCase();
+                        } else {
+                            webPageUrl = webpage.cached_page.url.toLowerCase();
+                        }
                         if (url.contains(webPageUrl) || webPageUrl.contains(url)) {
                             index = url.lastIndexOf(35);
                             if (index != -1) {
@@ -6553,7 +9372,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             }
                         }
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
             }
@@ -6588,7 +9407,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.containerView.setFocusable(false);
                 wm.addView(this.windowView, this.windowLayoutParams);
             } catch (Throwable e3) {
-                FileLog.m14e(e3);
+                FileLog.m13e(e3);
                 return false;
             }
         }
@@ -6596,40 +9415,77 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.animationInProgress = 1;
         this.windowView.setAlpha(0.0f);
         this.containerView.setAlpha(0.0f);
-        final AnimatorSet animatorSet = new AnimatorSet();
+        AnimatorSet animatorSet = new AnimatorSet();
         Animator[] animatorArr = new Animator[3];
         float[] fArr = new float[2];
         animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, 1.0f});
         fArr = new float[2];
         animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, 1.0f});
-        animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.m10dp(56.0f), 0.0f});
+        animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.m9dp(56.0f), 0.0f});
         animatorSet.playTogether(animatorArr);
-        this.animationEndRunnable = new C070925();
+        this.animationEndRunnable = new ArticleViewer$$Lambda$19(this);
         animatorSet.setDuration(150);
         animatorSet.setInterpolator(this.interpolator);
-        animatorSet.addListener(new C071126());
+        animatorSet.addListener(new C045010());
         this.transitionAnimationStartTime = System.currentTimeMillis();
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
-                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(true);
-                animatorSet.start();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$20(this, animatorSet));
         if (VERSION.SDK_INT >= 18) {
             this.containerView.setLayerType(2, null);
         }
-        showActionBar(Callback.DEFAULT_DRAG_ANIMATION_DURATION);
+        showActionBar(ItemTouchHelper.Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         return true;
+    }
+
+    final /* synthetic */ void lambda$open$22$ArticleViewer(WebPage webPageFinal, MessageObject messageObject, int currentAccount, TLObject response, TL_error error) {
+        if (response instanceof TL_webPage) {
+            TL_webPage webPage = (TL_webPage) response;
+            if (webPage.cached_page != null) {
+                AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$39(this, webPageFinal, webPage, messageObject));
+                LongSparseArray<WebPage> webpages = new LongSparseArray(1);
+                webpages.put(webPage.f182id, webPage);
+                MessagesStorage.getInstance(currentAccount).putWebPages(webpages);
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$null$21$ArticleViewer(WebPage webPageFinal, TL_webPage webPage, MessageObject messageObject) {
+        if (!this.pagesStack.isEmpty() && this.pagesStack.get(0) == webPageFinal && webPage.cached_page != null) {
+            if (messageObject != null) {
+                messageObject.messageOwner.media.webpage = webPage;
+            }
+            this.pagesStack.set(0, webPage);
+            if (this.pagesStack.size() == 1) {
+                this.currentPage = webPage;
+                ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().remove("article" + this.currentPage.f182id).commit();
+                updateInterfaceForCurrentPage(false);
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$open$23$ArticleViewer() {
+        if (this.containerView != null && this.windowView != null) {
+            if (VERSION.SDK_INT >= 18) {
+                this.containerView.setLayerType(0, null);
+            }
+            this.animationInProgress = 0;
+            AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
+        }
+    }
+
+    final /* synthetic */ void lambda$open$24$ArticleViewer(AnimatorSet animatorSet) {
+        NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
+        NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
+        animatorSet.start();
     }
 
     private void hideActionBar() {
         AnimatorSet animatorSet = new AnimatorSet();
-        r1 = new Animator[3];
-        r1[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{0.0f});
-        r1[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{0.0f});
-        r1[2] = ObjectAnimator.ofFloat(this.settingsButton, "alpha", new float[]{0.0f});
-        animatorSet.playTogether(r1);
+        Animator[] animatorArr = new Animator[4];
+        animatorArr[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{0.0f});
+        animatorArr[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{0.0f});
+        animatorArr[2] = ObjectAnimator.ofFloat(this.settingsButton, "alpha", new float[]{0.0f});
+        animatorArr[3] = ObjectAnimator.ofFloat(this.titleTextView, "alpha", new float[]{0.0f});
+        animatorSet.playTogether(animatorArr);
         animatorSet.setDuration(250);
         animatorSet.setInterpolator(new DecelerateInterpolator());
         animatorSet.start();
@@ -6637,17 +9493,29 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
     private void showActionBar(int delay) {
         AnimatorSet animatorSet = new AnimatorSet();
-        r1 = new Animator[3];
-        r1[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{1.0f});
-        r1[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{1.0f});
-        r1[2] = ObjectAnimator.ofFloat(this.settingsButton, "alpha", new float[]{1.0f});
-        animatorSet.playTogether(r1);
+        Animator[] animatorArr = new Animator[4];
+        animatorArr[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{1.0f});
+        animatorArr[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{1.0f});
+        animatorArr[2] = ObjectAnimator.ofFloat(this.settingsButton, "alpha", new float[]{1.0f});
+        animatorArr[3] = ObjectAnimator.ofFloat(this.titleTextView, "alpha", new float[]{1.0f});
+        animatorSet.playTogether(animatorArr);
         animatorSet.setDuration(150);
         animatorSet.setStartDelay((long) delay);
         animatorSet.start();
     }
 
-    private void showProgressView(final boolean show) {
+    private void showProgressView(boolean useLine, final boolean show) {
+        if (useLine) {
+            AndroidUtilities.cancelRunOnUIThread(this.lineProgressTickRunnable);
+            if (show) {
+                this.lineProgressView.setProgress(0.0f, false);
+                this.lineProgressView.setProgress(0.3f, true);
+                AndroidUtilities.runOnUIThread(this.lineProgressTickRunnable, 100);
+                return;
+            }
+            this.lineProgressView.setProgress(1.0f, true);
+            return;
+        }
         if (this.progressViewAnimation != null) {
             this.progressViewAnimation.cancel();
         }
@@ -6722,15 +9590,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             AnimatorSet animatorSet = new AnimatorSet();
             Animator[] animatorArr = new Animator[12];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "translationX", new float[]{(float) (this.containerView.getMeasuredWidth() - AndroidUtilities.m10dp(56.0f))});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "translationX", new float[]{(float) (this.containerView.getMeasuredWidth() - AndroidUtilities.m9dp(56.0f))});
             FrameLayout frameLayout = this.containerView;
             String str = "translationY";
             float[] fArr = new float[1];
-            int currentActionBarHeight = C0646ActionBar.getCurrentActionBarHeight();
+            int currentActionBarHeight = C0403ActionBar.getCurrentActionBarHeight();
             if (VERSION.SDK_INT >= 21) {
                 i = AndroidUtilities.statusBarHeight;
             } else {
@@ -6740,7 +9608,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
             animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f});
             animatorArr[3] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{0.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.listView, "translationY", new float[]{(float) (-AndroidUtilities.m10dp(56.0f))});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.listView, "translationY", new float[]{(float) (-AndroidUtilities.m9dp(56.0f))});
             animatorArr[5] = ObjectAnimator.ofFloat(this.headerView, "translationY", new float[]{0.0f});
             animatorArr[6] = ObjectAnimator.ofFloat(this.backButton, "scaleX", new float[]{1.0f});
             animatorArr[7] = ObjectAnimator.ofFloat(this.backButton, "scaleY", new float[]{1.0f});
@@ -6751,16 +9619,26 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             animatorSet.playTogether(animatorArr);
             this.collapsed = true;
             this.animationInProgress = 2;
-            this.animationEndRunnable = new C071429();
+            this.animationEndRunnable = new ArticleViewer$$Lambda$21(this);
             animatorSet.setInterpolator(new DecelerateInterpolator());
             animatorSet.setDuration(250);
-            animatorSet.addListener(new C071530());
+            animatorSet.addListener(new C045212());
             this.transitionAnimationStartTime = System.currentTimeMillis();
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(2, null);
             }
             this.backDrawable.setRotation(1.0f, true);
             animatorSet.start();
+        }
+    }
+
+    final /* synthetic */ void lambda$collapse$25$ArticleViewer() {
+        if (this.containerView != null) {
+            if (VERSION.SDK_INT >= 18) {
+                this.containerView.setLayerType(0, null);
+            }
+            this.animationInProgress = 0;
+            ((WindowManager) this.parentActivity.getSystemService("window")).updateViewLayout(this.windowView, this.windowLayoutParams);
         }
     }
 
@@ -6783,16 +9661,25 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             animatorSet.playTogether(r1);
             this.collapsed = false;
             this.animationInProgress = 2;
-            this.animationEndRunnable = new C071631();
+            this.animationEndRunnable = new ArticleViewer$$Lambda$22(this);
             animatorSet.setDuration(250);
             animatorSet.setInterpolator(new DecelerateInterpolator());
-            animatorSet.addListener(new C071732());
+            animatorSet.addListener(new C045313());
             this.transitionAnimationStartTime = System.currentTimeMillis();
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(2, null);
             }
             this.backDrawable.setRotation(0.0f, true);
             animatorSet.start();
+        }
+    }
+
+    final /* synthetic */ void lambda$uncollapse$26$ArticleViewer() {
+        if (this.containerView != null) {
+            if (VERSION.SDK_INT >= 18) {
+                this.containerView.setLayerType(0, null);
+            }
+            this.animationInProgress = 0;
         }
     }
 
@@ -6809,7 +9696,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     offset = 0;
                 }
                 Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit();
-                String key = "article" + this.currentPage.f183id;
+                String key = "article" + this.currentPage.f182id;
                 Editor putInt = editor.putInt(key, position).putInt(key + "o", offset);
                 String str = key + "r";
                 if (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y) {
@@ -6822,11 +9709,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
     public void close(boolean byBackPress, boolean force) {
         if (this.parentActivity != null && this.isVisible && !checkAnimation()) {
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
-            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
             if (this.fullscreenVideoContainer.getVisibility() == 0) {
                 if (this.customView != null) {
                     this.fullscreenVideoContainer.setVisibility(4);
@@ -6855,15 +9737,20 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.openUrlReqId != 0) {
                 ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.openUrlReqId, true);
                 this.openUrlReqId = 0;
-                showProgressView(false);
+                showProgressView(true, false);
             }
             if (this.previewsReqId != 0) {
                 ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.previewsReqId, true);
                 this.previewsReqId = 0;
-                showProgressView(false);
+                showProgressView(true, false);
             }
             saveCurrentPagePosition();
             if (!byBackPress || force || !removeLastPageFromStack()) {
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
                 this.parentFragment = null;
                 try {
                     if (this.visibleDialog != null) {
@@ -6871,25 +9758,35 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         this.visibleDialog = null;
                     }
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 AnimatorSet animatorSet = new AnimatorSet();
                 r2 = new Animator[3];
                 r2[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f});
                 r2[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
-                r2[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{0.0f, (float) AndroidUtilities.m10dp(56.0f)});
+                r2[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{0.0f, (float) AndroidUtilities.m9dp(56.0f)});
                 animatorSet.playTogether(r2);
                 this.animationInProgress = 2;
-                this.animationEndRunnable = new C071833();
+                this.animationEndRunnable = new ArticleViewer$$Lambda$23(this);
                 animatorSet.setDuration(150);
                 animatorSet.setInterpolator(this.interpolator);
-                animatorSet.addListener(new C071934());
+                animatorSet.addListener(new C045414());
                 this.transitionAnimationStartTime = System.currentTimeMillis();
                 if (VERSION.SDK_INT >= 18) {
                     this.containerView.setLayerType(2, null);
                 }
                 animatorSet.start();
             }
+        }
+    }
+
+    final /* synthetic */ void lambda$close$27$ArticleViewer() {
+        if (this.containerView != null) {
+            if (VERSION.SDK_INT >= 18) {
+                this.containerView.setLayerType(0, null);
+            }
+            this.animationInProgress = 0;
+            onClosed();
         }
     }
 
@@ -6902,109 +9799,96 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         try {
             this.parentActivity.getWindow().clearFlags(128);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         for (int a = 0; a < this.createdWebViews.size(); a++) {
             ((BlockEmbedCell) this.createdWebViews.get(a)).destroyWebView(false);
         }
-        this.containerView.post(new C072035());
+        this.containerView.post(new ArticleViewer$$Lambda$24(this));
     }
 
-    private void loadChannel(final BlockChannelCell cell, Chat channel) {
+    final /* synthetic */ void lambda$onClosed$28$ArticleViewer() {
+        try {
+            if (this.windowView.getParent() != null) {
+                ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    private void loadChannel(BlockChannelCell cell, Chat channel) {
         if (!this.loadingChannel && !TextUtils.isEmpty(channel.username)) {
             this.loadingChannel = true;
             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
             req.username = channel.username;
-            final int currentAccount = UserConfig.selectedAccount;
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, final TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            ArticleViewer.this.loadingChannel = false;
-                            if (ArticleViewer.this.parentFragment != null && ArticleViewer.this.blocks != null && !ArticleViewer.this.blocks.isEmpty()) {
-                                if (error == null) {
-                                    TL_contacts_resolvedPeer res = response;
-                                    if (res.chats.isEmpty()) {
-                                        cell.setState(4, false);
-                                        return;
-                                    }
-                                    MessagesController.getInstance(currentAccount).putUsers(res.users, false);
-                                    MessagesController.getInstance(currentAccount).putChats(res.chats, false);
-                                    MessagesStorage.getInstance(currentAccount).putUsersAndChats(res.users, res.chats, false, true);
-                                    ArticleViewer.this.loadedChannel = (Chat) res.chats.get(0);
-                                    if (!ArticleViewer.this.loadedChannel.left || ArticleViewer.this.loadedChannel.kicked) {
-                                        cell.setState(4, false);
-                                        return;
-                                    } else {
-                                        cell.setState(0, false);
-                                        return;
-                                    }
-                                }
-                                cell.setState(4, false);
-                            }
-                        }
-                    });
+            int currentAccount = UserConfig.selectedAccount;
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$25(this, currentAccount, cell));
+        }
+    }
+
+    final /* synthetic */ void lambda$loadChannel$30$ArticleViewer(int currentAccount, BlockChannelCell cell, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$38(this, error, response, currentAccount, cell));
+    }
+
+    final /* synthetic */ void lambda$null$29$ArticleViewer(TL_error error, TLObject response, int currentAccount, BlockChannelCell cell) {
+        this.loadingChannel = false;
+        if (this.parentFragment != null && this.blocks != null && !this.blocks.isEmpty()) {
+            if (error == null) {
+                TL_contacts_resolvedPeer res = (TL_contacts_resolvedPeer) response;
+                if (res.chats.isEmpty()) {
+                    cell.setState(4, false);
+                    return;
                 }
-            });
+                MessagesController.getInstance(currentAccount).putUsers(res.users, false);
+                MessagesController.getInstance(currentAccount).putChats(res.chats, false);
+                MessagesStorage.getInstance(currentAccount).putUsersAndChats(res.users, res.chats, false, true);
+                this.loadedChannel = (Chat) res.chats.get(0);
+                if (!this.loadedChannel.left || this.loadedChannel.kicked) {
+                    cell.setState(4, false);
+                    return;
+                } else {
+                    cell.setState(0, false);
+                    return;
+                }
+            }
+            cell.setState(4, false);
         }
     }
 
     private void joinChannel(BlockChannelCell cell, Chat channel) {
-        final TL_channels_joinChannel req = new TL_channels_joinChannel();
+        TL_channels_joinChannel req = new TL_channels_joinChannel();
         req.channel = MessagesController.getInputChannel(channel);
-        final int currentAccount = UserConfig.selectedAccount;
-        final BlockChannelCell blockChannelCell = cell;
-        final Chat chat = channel;
-        ConnectionsManager.getInstance(currentAccount).sendRequest(req, new RequestDelegate() {
+        int currentAccount = UserConfig.selectedAccount;
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$26(this, cell, currentAccount, req, channel));
+    }
 
-            /* renamed from: org.telegram.ui.ArticleViewer$37$2 */
-            class C07232 implements Runnable {
-                C07232() {
-                }
-
-                public void run() {
-                    blockChannelCell.setState(2, false);
-                }
+    final /* synthetic */ void lambda$joinChannel$34$ArticleViewer(BlockChannelCell cell, int currentAccount, TL_channels_joinChannel req, Chat channel, TLObject response, TL_error error) {
+        if (error != null) {
+            AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$35(this, cell, currentAccount, error, req));
+            return;
+        }
+        boolean hasJoinMessage = false;
+        Updates updates = (Updates) response;
+        for (int a = 0; a < updates.updates.size(); a++) {
+            Update update = (Update) updates.updates.get(a);
+            if ((update instanceof TL_updateNewChannelMessage) && (((TL_updateNewChannelMessage) update).message.action instanceof TL_messageActionChatAddUser)) {
+                hasJoinMessage = true;
+                break;
             }
+        }
+        MessagesController.getInstance(currentAccount).processUpdates(updates, false);
+        if (!hasJoinMessage) {
+            MessagesController.getInstance(currentAccount).generateJoinMessage(channel.f78id, true);
+        }
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$36(cell));
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$37(currentAccount, channel), 1000);
+        MessagesStorage.getInstance(currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), null, true, channel.f78id);
+    }
 
-            /* renamed from: org.telegram.ui.ArticleViewer$37$3 */
-            class C07243 implements Runnable {
-                C07243() {
-                }
-
-                public void run() {
-                    MessagesController.getInstance(currentAccount).loadFullChat(chat.f78id, 0, true);
-                }
-            }
-
-            public void run(TLObject response, final TL_error error) {
-                if (error != null) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            blockChannelCell.setState(0, false);
-                            AlertsCreator.processError(currentAccount, error, ArticleViewer.this.parentFragment, req, Boolean.valueOf(true));
-                        }
-                    });
-                    return;
-                }
-                boolean hasJoinMessage = false;
-                Updates updates = (Updates) response;
-                for (int a = 0; a < updates.updates.size(); a++) {
-                    Update update = (Update) updates.updates.get(a);
-                    if ((update instanceof TL_updateNewChannelMessage) && (((TL_updateNewChannelMessage) update).message.action instanceof TL_messageActionChatAddUser)) {
-                        hasJoinMessage = true;
-                        break;
-                    }
-                }
-                MessagesController.getInstance(currentAccount).processUpdates(updates, false);
-                if (!hasJoinMessage) {
-                    MessagesController.getInstance(currentAccount).generateJoinMessage(chat.f78id, true);
-                }
-                AndroidUtilities.runOnUIThread(new C07232());
-                AndroidUtilities.runOnUIThread(new C07243(), 1000);
-                MessagesStorage.getInstance(currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), null, true, chat.f78id);
-            }
-        });
+    final /* synthetic */ void lambda$null$31$ArticleViewer(BlockChannelCell cell, int currentAccount, TL_error error, TL_channels_joinChannel req) {
+        cell.setState(0, false);
+        AlertsCreator.processError(currentAccount, error, this.parentFragment, req, Boolean.valueOf(true));
     }
 
     private boolean checkAnimation() {
@@ -7030,7 +9914,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 this.windowView = null;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             for (int a = 0; a < this.createdWebViews.size(); a++) {
                 ((BlockEmbedCell) this.createdWebViews.get(a)).destroyWebView(true);
@@ -7039,7 +9923,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             try {
                 this.parentActivity.getWindow().clearFlags(128);
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
             if (this.currentThumb != null) {
                 this.currentThumb.release();
@@ -7064,17 +9948,22 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             try {
                 this.visibleDialog = dialog;
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new C072538());
+                this.visibleDialog.setOnDismissListener(new ArticleViewer$$Lambda$27(this));
                 dialog.show();
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
         }
+    }
+
+    final /* synthetic */ void lambda$showDialog$35$ArticleViewer(DialogInterface dialog1) {
+        showActionBar(120);
+        this.visibleDialog = null;
     }
 
     private void onSharePressed() {
@@ -7082,7 +9971,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             try {
                 File f = getMediaFile(this.currentIndex);
                 if (f == null || !f.exists()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity);
+                    Builder builder = new Builder(this.parentActivity);
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                     builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
@@ -7103,7 +9992,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
         }
     }
@@ -7157,7 +10046,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 long duration;
                 this.videoPlayer = new VideoPlayer();
                 this.videoPlayer.setTextureView(this.videoTextureView);
-                this.videoPlayer.setDelegate(new C188740());
+                this.videoPlayer.setDelegate(new C125416());
                 if (this.videoPlayer != null) {
                     duration = this.videoPlayer.getDuration();
                     if (duration == C0016C.TIME_UNSET) {
@@ -7183,7 +10072,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         try {
             this.parentActivity.getWindow().clearFlags(128);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (this.aspectRatioFrameLayout != null) {
             this.photoContainerView.removeView(this.aspectRatioFrameLayout);
@@ -7219,7 +10108,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         TextView textView;
         if (animated) {
             ArrayList<Animator> arrayList = new ArrayList();
-            C0646ActionBar c0646ActionBar = this.actionBar;
+            C0403ActionBar c0403ActionBar = this.actionBar;
             String str = "alpha";
             float[] fArr = new float[1];
             if (show) {
@@ -7228,7 +10117,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 f2 = 0.0f;
             }
             fArr[0] = f2;
-            arrayList.add(ObjectAnimator.ofFloat(c0646ActionBar, str, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(c0403ActionBar, str, fArr));
+            GroupedPhotosListView groupedPhotosListView = this.groupedPhotosListView;
+            str = "alpha";
+            fArr = new float[1];
+            if (show) {
+                f2 = 1.0f;
+            } else {
+                f2 = 0.0f;
+            }
+            fArr[0] = f2;
+            arrayList.add(ObjectAnimator.ofFloat(groupedPhotosListView, str, fArr));
             frameLayout = this.bottomLayout;
             str = "alpha";
             fArr = new float[1];
@@ -7252,7 +10151,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.currentActionBarAnimation = new AnimatorSet();
             this.currentActionBarAnimation.playTogether(arrayList);
             if (!show) {
-                this.currentActionBarAnimation.addListener(new C072841());
+                this.currentActionBarAnimation.addListener(new C045617());
             }
             this.currentActionBarAnimation.setDuration(200);
             this.currentActionBarAnimation.start();
@@ -7279,7 +10178,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.bottomLayout.setVisibility(8);
             }
             if (this.captionTextView.getTag() != null) {
-                this.captionTextView.setVisibility(4);
+                this.captionTextView.setVisibility(8);
             }
         }
     }
@@ -7297,11 +10196,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             return null;
         }
         PageBlock block = (PageBlock) this.imagesArr.get(index);
-        if (block.photo_id != 0) {
-            return getPhotoWithId(block.photo_id);
+        if (block instanceof TL_pageBlockPhoto) {
+            return getPhotoWithId(((TL_pageBlockPhoto) block).photo_id);
         }
-        if (block.video_id != 0) {
-            return getDocumentWithId(block.video_id);
+        if (block instanceof TL_pageBlockVideo) {
+            return getDocumentWithId(((TL_pageBlockVideo) block).video_id);
         }
         return null;
     }
@@ -7311,8 +10210,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             return null;
         }
         PageBlock block = (PageBlock) this.imagesArr.get(index);
-        if (block.photo_id != 0) {
-            Photo photo = getPhotoWithId(block.photo_id);
+        if (block instanceof TL_pageBlockPhoto) {
+            Photo photo = getPhotoWithId(((TL_pageBlockPhoto) block).photo_id);
             if (photo == null) {
                 return null;
             }
@@ -7321,10 +10220,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 return FileLoader.getPathToAttach(sizeFull, true);
             }
             return null;
-        } else if (block.video_id == 0) {
+        } else if (!(block instanceof TL_pageBlockVideo)) {
             return null;
         } else {
-            Document document = getDocumentWithId(block.video_id);
+            Document document = getDocumentWithId(((TL_pageBlockVideo) block).video_id);
             if (document != null) {
                 return FileLoader.getPathToAttach(document, true);
             }
@@ -7333,8 +10232,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     private boolean isVideoBlock(PageBlock block) {
-        if (!(block == null || block.video_id == 0)) {
-            Document document = getDocumentWithId(block.video_id);
+        if (block != null && (block instanceof TL_pageBlockVideo)) {
+            Document document = getDocumentWithId(((TL_pageBlockVideo) block).video_id);
             if (document != null) {
                 return MessageObject.isVideoDocument(document);
             }
@@ -7352,7 +10251,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
         PageBlock block = (PageBlock) this.imagesArr.get(index);
         if (block instanceof TL_pageBlockVideo) {
-            Document document = getDocumentWithId(block.video_id);
+            Document document = getDocumentWithId(((TL_pageBlockVideo) block).video_id);
             if (document != null) {
                 return document.mime_type;
             }
@@ -7410,7 +10309,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.menuItem.hideSubItem(3);
         this.actionBar.setTranslationY(0.0f);
         this.captionTextView.setTag(null);
-        this.captionTextView.setVisibility(4);
+        this.captionTextView.setVisibility(8);
         for (int a = 0; a < 3; a++) {
             if (this.radialProgressViews[a] != null) {
                 this.radialProgressViews[a].setBackgroundState(-1, false);
@@ -7456,7 +10355,26 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (isVideo) {
                     this.menuItem.showSubItem(3);
                 }
-                setCurrentCaption(getText(this.currentMedia.caption, this.currentMedia.caption, this.currentMedia));
+                CharSequence captionToSet = null;
+                boolean setAsIs = false;
+                if (newMedia instanceof TL_pageBlockPhoto) {
+                    String url = ((TL_pageBlockPhoto) newMedia).url;
+                    if (!TextUtils.isEmpty(url)) {
+                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(url);
+                        spannableStringBuilder.setSpan(new URLSpan(url) {
+                            public void onClick(View widget) {
+                                ArticleViewer.this.openWebpageUrl(getURL(), null);
+                            }
+                        }, 0, url.length(), 34);
+                        captionToSet = spannableStringBuilder;
+                        setAsIs = true;
+                    }
+                }
+                if (captionToSet == null) {
+                    RichText caption = getBlockCaption(this.currentMedia, 2);
+                    captionToSet = getText(null, caption, caption, this.currentMedia, -AndroidUtilities.m9dp(100.0f));
+                }
+                setCurrentCaption(captionToSet, setAsIs);
                 if (this.currentAnimation != null) {
                     this.menuItem.setVisibility(8);
                     this.menuItem.hideSubItem(1);
@@ -7472,6 +10390,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     }
                     this.menuItem.showSubItem(1);
                 }
+                this.groupedPhotosListView.fillList();
             }
             int count = this.listView.getChildCount();
             for (a = 0; a < count; a++) {
@@ -7569,23 +10488,37 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    private void setCurrentCaption(CharSequence caption) {
+    private void setCurrentCaption(CharSequence caption, boolean setAsIs) {
         if (TextUtils.isEmpty(caption)) {
-            this.captionTextView.setTextColor(-1);
             this.captionTextView.setTag(null);
-            this.captionTextView.setVisibility(4);
+            this.captionTextView.setVisibility(8);
             return;
         }
-        this.captionTextView = this.captionTextViewOld;
-        this.captionTextViewOld = this.captionTextViewNew;
-        this.captionTextViewNew = this.captionTextView;
+        CharSequence result;
         Theme.createChatResources(null, true);
-        CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(20.0f), false);
+        if (setAsIs) {
+            result = caption;
+        } else if (caption instanceof Spannable) {
+            Spannable spannable = (Spannable) caption;
+            TextPaintUrlSpan[] spans = (TextPaintUrlSpan[]) spannable.getSpans(0, caption.length(), TextPaintUrlSpan.class);
+            SpannableStringBuilder builder = new SpannableStringBuilder(caption.toString());
+            Object result2 = builder;
+            if (spans != null && spans.length > 0) {
+                for (int a = 0; a < spans.length; a++) {
+                    builder.setSpan(new URLSpan(spans[a].getUrl()) {
+                        public void onClick(View widget) {
+                            ArticleViewer.this.openWebpageUrl(getURL(), null);
+                        }
+                    }, spannable.getSpanStart(spans[a]), spannable.getSpanEnd(spans[a]), 33);
+                }
+            }
+        } else {
+            result2 = new SpannableStringBuilder(caption.toString());
+        }
+        CharSequence str = Emoji.replaceEmoji(result2, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(20.0f), false);
         this.captionTextView.setTag(str);
         this.captionTextView.setText(str);
-        this.captionTextView.setTextColor(-1);
-        this.captionTextView.setAlpha(this.actionBar.getVisibility() == 0 ? 1.0f : 0.0f);
-        AndroidUtilities.runOnUIThread(new C072942());
+        this.captionTextView.setVisibility(0);
     }
 
     private void checkProgress(int a, boolean animated) {
@@ -7658,7 +10591,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 } else {
                     fileLocation2 = null;
                 }
-                imageReceiver.setImage(fileLocation, null, null, bitmapDrawable, fileLocation2, "b", size[0], null, 1);
+                imageReceiver.setImage(fileLocation, null, null, bitmapDrawable, fileLocation2, "b", size[0], null, this.currentPage, 1);
             } else if (isMediaVideo(index)) {
                 if (fileLocation instanceof TL_fileLocationUnavailable) {
                     imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(R.drawable.photoview_placeholder));
@@ -7668,7 +10601,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.currentThumb != null && imageReceiver == this.centerImage) {
                     placeHolder = this.currentThumb;
                 }
-                imageReceiver.setImage(null, null, null, placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null, fileLocation, "b", 0, null, 1);
+                imageReceiver.setImage(null, null, null, placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null, fileLocation, "b", 0, null, this.currentPage, 1);
             } else if (this.currentAnimation != null) {
                 imageReceiver.setImageBitmap(this.currentAnimation);
                 this.currentAnimation.setSecondParentView(this.photoContainerView);
@@ -7702,15 +10635,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (this.parentActivity == null || this.isPhotoVisible || checkPhotoAnimation() || block == null) {
             return false;
         }
-        final PlaceProviderObject object = getPlaceForPhoto(block);
+        PlaceProviderObject object = getPlaceForPhoto(block);
         if (object == null) {
             return false;
         }
         float scale;
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailedLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         if (this.velocityTracker == null) {
             this.velocityTracker = VelocityTracker.obtain();
         }
@@ -7720,6 +10653,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.bottomLayout.setAlpha(0.0f);
         this.captionTextView.setAlpha(0.0f);
         this.photoBackgroundDrawable.setAlpha(0);
+        this.groupedPhotosListView.setAlpha(0.0f);
+        this.photoContainerView.setAlpha(1.0f);
         this.disableShowCheck = true;
         this.photoAnimationInProgress = 1;
         if (block != null) {
@@ -7802,64 +10737,83 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.photoContainerView.setVisibility(0);
         this.photoContainerBackground.setVisibility(0);
         this.animatingImageView.setAnimationProgress(0.0f);
-        final AnimatorSet animatorSet = new AnimatorSet();
-        Animator[] animatorArr = new Animator[5];
+        AnimatorSet animatorSet = new AnimatorSet();
+        r23 = new Animator[6];
         float[] fArr = new float[2];
-        animatorArr[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f});
+        r23[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f});
         int[] iArr = new int[2];
-        animatorArr[1] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0, 255});
+        r23[1] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0, 255});
         fArr = new float[2];
-        animatorArr[2] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f, 1.0f});
+        r23[2] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f, 1.0f});
         fArr = new float[2];
-        animatorArr[3] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f, 1.0f});
+        r23[3] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f, 1.0f});
         fArr = new float[2];
-        animatorArr[4] = ObjectAnimator.ofFloat(this.captionTextView, "alpha", new float[]{0.0f, 1.0f});
-        animatorSet.playTogether(animatorArr);
-        this.photoAnimationEndRunnable = new C073043();
+        r23[4] = ObjectAnimator.ofFloat(this.captionTextView, "alpha", new float[]{0.0f, 1.0f});
+        fArr = new float[2];
+        r23[5] = ObjectAnimator.ofFloat(this.groupedPhotosListView, "alpha", new float[]{0.0f, 1.0f});
+        animatorSet.playTogether(r23);
+        this.photoAnimationEndRunnable = new ArticleViewer$$Lambda$28(this);
         animatorSet.setDuration(200);
-        animatorSet.addListener(new C073244());
+        animatorSet.addListener(new C046020());
         this.photoTransitionAnimationStartTime = System.currentTimeMillis();
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
-                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(true);
-                animatorSet.start();
-            }
-        });
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$29(this, animatorSet));
         if (VERSION.SDK_INT >= 18) {
             this.photoContainerView.setLayerType(2, null);
         }
-        this.photoBackgroundDrawable.drawRunnable = new Runnable() {
-            public void run() {
-                ArticleViewer.this.disableShowCheck = false;
-                object.imageReceiver.setVisible(false, true);
-            }
-        };
+        this.photoBackgroundDrawable.drawRunnable = new ArticleViewer$$Lambda$30(this, object);
         return true;
+    }
+
+    final /* synthetic */ void lambda$openPhoto$36$ArticleViewer() {
+        if (this.photoContainerView != null) {
+            if (VERSION.SDK_INT >= 18) {
+                this.photoContainerView.setLayerType(0, null);
+            }
+            this.photoAnimationInProgress = 0;
+            this.photoTransitionAnimationStartTime = 0;
+            setImages();
+            this.photoContainerView.invalidate();
+            this.animatingImageView.setVisibility(8);
+            if (this.showAfterAnimation != null) {
+                this.showAfterAnimation.imageReceiver.setVisible(true, true);
+            }
+            if (this.hideAfterAnimation != null) {
+                this.hideAfterAnimation.imageReceiver.setVisible(false, true);
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$openPhoto$37$ArticleViewer(AnimatorSet animatorSet) {
+        NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
+        NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
+        animatorSet.start();
+    }
+
+    final /* synthetic */ void lambda$openPhoto$38$ArticleViewer(PlaceProviderObject object) {
+        this.disableShowCheck = false;
+        object.imageReceiver.setVisible(false, true);
     }
 
     public void closePhoto(boolean animated) {
         if (this.parentActivity != null && this.isPhotoVisible && !checkPhotoAnimation()) {
             releasePlayer();
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailedLoad);
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidLoaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
-            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
             this.isActionBarVisible = false;
             if (this.velocityTracker != null) {
                 this.velocityTracker.recycle();
                 this.velocityTracker = null;
             }
-            final PlaceProviderObject object = getPlaceForPhoto(this.currentMedia);
-            AnimatorSet animatorSet;
-            Animator[] animatorArr;
+            PlaceProviderObject object = getPlaceForPhoto(this.currentMedia);
             if (animated) {
                 float scale2;
                 this.photoAnimationInProgress = 1;
                 this.animatingImageView.setVisibility(0);
                 this.photoContainerView.invalidate();
-                animatorSet = new AnimatorSet();
+                AnimatorSet animatorSet = new AnimatorSet();
                 ViewGroup.LayoutParams layoutParams = this.animatingImageView.getLayoutParams();
                 Rect drawRegion = null;
                 int orientation = this.centerImage.getOrientation();
@@ -7933,20 +10887,21 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.animationValues[1][5] = ((float) clipTop) * object.scale;
                     this.animationValues[1][6] = ((float) clipBottom) * object.scale;
                     this.animationValues[1][7] = (float) object.radius;
-                    animatorArr = new Animator[5];
+                    Animator[] animatorArr = new Animator[6];
                     float[] fArr = new float[2];
                     animatorArr[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f});
                     animatorArr[1] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0});
                     animatorArr[2] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f});
                     animatorArr[3] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f});
                     animatorArr[4] = ObjectAnimator.ofFloat(this.captionTextView, "alpha", new float[]{0.0f});
+                    animatorArr[5] = ObjectAnimator.ofFloat(this.groupedPhotosListView, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                 } else {
                     float f;
                     int h = AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight;
-                    r24 = new Animator[6];
-                    r24[0] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0});
-                    r24[1] = ObjectAnimator.ofFloat(this.animatingImageView, "alpha", new float[]{0.0f});
+                    Animator[] animatorArr2 = new Animator[7];
+                    animatorArr2[0] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0});
+                    animatorArr2[1] = ObjectAnimator.ofFloat(this.animatingImageView, "alpha", new float[]{0.0f});
                     ClippingImageView clippingImageView = this.animatingImageView;
                     String str = "translationY";
                     float[] fArr2 = new float[1];
@@ -7956,63 +10911,28 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         f = (float) (-h);
                     }
                     fArr2[0] = f;
-                    r24[2] = ObjectAnimator.ofFloat(clippingImageView, str, fArr2);
-                    r24[3] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f});
-                    r24[4] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f});
-                    r24[5] = ObjectAnimator.ofFloat(this.captionTextView, "alpha", new float[]{0.0f});
-                    animatorSet.playTogether(r24);
+                    animatorArr2[2] = ObjectAnimator.ofFloat(clippingImageView, str, fArr2);
+                    animatorArr2[3] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f});
+                    animatorArr2[4] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f});
+                    animatorArr2[5] = ObjectAnimator.ofFloat(this.captionTextView, "alpha", new float[]{0.0f});
+                    animatorArr2[6] = ObjectAnimator.ofFloat(this.groupedPhotosListView, "alpha", new float[]{0.0f});
+                    animatorSet.playTogether(animatorArr2);
                 }
-                this.photoAnimationEndRunnable = new Runnable() {
-                    public void run() {
-                        if (VERSION.SDK_INT >= 18) {
-                            ArticleViewer.this.photoContainerView.setLayerType(0, null);
-                        }
-                        ArticleViewer.this.photoContainerView.setVisibility(4);
-                        ArticleViewer.this.photoContainerBackground.setVisibility(4);
-                        ArticleViewer.this.photoAnimationInProgress = 0;
-                        ArticleViewer.this.onPhotoClosed(object);
-                    }
-                };
+                this.photoAnimationEndRunnable = new ArticleViewer$$Lambda$31(this, object);
                 animatorSet.setDuration(200);
-                animatorSet.addListener(new C073748());
+                animatorSet.addListener(new C046121());
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();
                 if (VERSION.SDK_INT >= 18) {
                     this.photoContainerView.setLayerType(2, null);
                 }
                 animatorSet.start();
             } else {
-                animatorSet = new AnimatorSet();
-                animatorArr = new Animator[6];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.photoContainerView, "scaleX", new float[]{0.9f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.photoContainerView, "scaleY", new float[]{0.9f});
-                animatorArr[2] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.captionTextView, "alpha", new float[]{0.0f});
-                animatorSet.playTogether(animatorArr);
-                this.photoAnimationInProgress = 2;
-                this.photoAnimationEndRunnable = new Runnable() {
-                    public void run() {
-                        if (ArticleViewer.this.photoContainerView != null) {
-                            if (VERSION.SDK_INT >= 18) {
-                                ArticleViewer.this.photoContainerView.setLayerType(0, null);
-                            }
-                            ArticleViewer.this.photoContainerView.setVisibility(4);
-                            ArticleViewer.this.photoContainerBackground.setVisibility(4);
-                            ArticleViewer.this.photoAnimationInProgress = 0;
-                            ArticleViewer.this.onPhotoClosed(object);
-                            ArticleViewer.this.photoContainerView.setScaleX(1.0f);
-                            ArticleViewer.this.photoContainerView.setScaleY(1.0f);
-                        }
-                    }
-                };
-                animatorSet.setDuration(200);
-                animatorSet.addListener(new C074150());
-                this.photoTransitionAnimationStartTime = System.currentTimeMillis();
-                if (VERSION.SDK_INT >= 18) {
-                    this.photoContainerView.setLayerType(2, null);
-                }
-                animatorSet.start();
+                this.photoContainerView.setVisibility(4);
+                this.photoContainerBackground.setVisibility(4);
+                this.photoAnimationInProgress = 0;
+                onPhotoClosed(object);
+                this.photoContainerView.setScaleX(1.0f);
+                this.photoContainerView.setScaleY(1.0f);
             }
             if (this.currentAnimation != null) {
                 this.currentAnimation.setSecondParentView(null);
@@ -8020,6 +10940,16 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.centerImage.setImageBitmap((Drawable) null);
             }
         }
+    }
+
+    final /* synthetic */ void lambda$closePhoto$39$ArticleViewer(PlaceProviderObject object) {
+        if (VERSION.SDK_INT >= 18) {
+            this.photoContainerView.setLayerType(0, null);
+        }
+        this.photoContainerView.setVisibility(4);
+        this.photoContainerBackground.setVisibility(4);
+        this.photoAnimationInProgress = 0;
+        onPhotoClosed(object);
     }
 
     private void onPhotoClosed(PlaceProviderObject object) {
@@ -8042,11 +10972,16 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.centerImage.setImageBitmap((Bitmap) null);
         this.leftImage.setImageBitmap((Bitmap) null);
         this.rightImage.setImageBitmap((Bitmap) null);
-        this.photoContainerView.post(new C074251());
+        this.photoContainerView.post(new ArticleViewer$$Lambda$32(this));
         this.disableShowCheck = false;
         if (object != null) {
             object.imageReceiver.setVisible(true, true);
         }
+        this.groupedPhotosListView.clear();
+    }
+
+    final /* synthetic */ void lambda$onPhotoClosed$40$ArticleViewer() {
+        this.animatingImageView.setImageBitmap(null);
     }
 
     public void onPause() {
@@ -8137,10 +11072,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 float dx = Math.abs(ev.getX() - this.moveStartX);
                 float dy = Math.abs(ev.getY() - this.dragY);
-                if (dx > ((float) AndroidUtilities.m10dp(3.0f)) || dy > ((float) AndroidUtilities.m10dp(3.0f))) {
+                if (dx > ((float) AndroidUtilities.m9dp(3.0f)) || dy > ((float) AndroidUtilities.m9dp(3.0f))) {
                     this.discardTap = true;
                 }
-                if (this.canDragDown && !this.draggingDown && this.scale == 1.0f && dy >= ((float) AndroidUtilities.m10dp(30.0f)) && dy / 2.0f > dx) {
+                if (this.canDragDown && !this.draggingDown && this.scale == 1.0f && dy >= ((float) AndroidUtilities.m9dp(30.0f)) && dy / 2.0f > dx) {
                     this.draggingDown = true;
                     this.moving = false;
                     this.dragY = ev.getY();
@@ -8158,7 +11093,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 } else {
                     float moveDx = this.moveStartX - ev.getX();
                     float moveDy = this.moveStartY - ev.getY();
-                    if (this.moving || ((this.scale == 1.0f && Math.abs(moveDy) + ((float) AndroidUtilities.m10dp(12.0f)) < Math.abs(moveDx)) || this.scale != 1.0f)) {
+                    if (this.moving || ((this.scale == 1.0f && Math.abs(moveDy) + ((float) AndroidUtilities.m9dp(12.0f)) < Math.abs(moveDx)) || this.scale != 1.0f)) {
                         if (!this.moving) {
                             moveDx = 0.0f;
                             moveDy = 0.0f;
@@ -8233,10 +11168,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.velocityTracker.computeCurrentVelocity(1000);
                     velocity = this.velocityTracker.getXVelocity();
                 }
-                if ((this.translationX < this.minX - ((float) (getContainerViewWidth() / 3)) || velocity < ((float) (-AndroidUtilities.m10dp(650.0f)))) && this.rightImage.hasImage()) {
+                if ((this.translationX < this.minX - ((float) (getContainerViewWidth() / 3)) || velocity < ((float) (-AndroidUtilities.m9dp(650.0f)))) && this.rightImage.hasImage()) {
                     goToNext();
                     return true;
-                } else if ((this.translationX > this.maxX + ((float) (getContainerViewWidth() / 3)) || velocity > ((float) AndroidUtilities.m10dp(650.0f))) && this.leftImage.hasImage()) {
+                } else if ((this.translationX > this.maxX + ((float) (getContainerViewWidth() / 3)) || velocity > ((float) AndroidUtilities.m9dp(650.0f))) && this.leftImage.hasImage()) {
                     goToPrev();
                     return true;
                 } else {
@@ -8280,7 +11215,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             extra = ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale;
         }
         this.switchImageAfterAnimation = 1;
-        animateTo(this.scale, ((this.minX - ((float) getContainerViewWidth())) - extra) - ((float) (AndroidUtilities.m10dp(30.0f) / 2)), this.translationY, false);
+        animateTo(this.scale, ((this.minX - ((float) getContainerViewWidth())) - extra) - ((float) (AndroidUtilities.m9dp(30.0f) / 2)), this.translationY, false);
     }
 
     private void goToPrev() {
@@ -8289,11 +11224,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             extra = ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale;
         }
         this.switchImageAfterAnimation = 2;
-        animateTo(this.scale, ((this.maxX + ((float) getContainerViewWidth())) + extra) + ((float) (AndroidUtilities.m10dp(30.0f) / 2)), this.translationY, false);
+        animateTo(this.scale, ((this.maxX + ((float) getContainerViewWidth())) + extra) + ((float) (AndroidUtilities.m9dp(30.0f) / 2)), this.translationY, false);
     }
 
     private void animateTo(float newScale, float newTx, float newTy, boolean isZoom) {
-        animateTo(newScale, newTx, newTy, isZoom, Callback.DEFAULT_SWIPE_ANIMATION_DURATION);
+        animateTo(newScale, newTx, newTy, isZoom, ItemTouchHelper.Callback.DEFAULT_SWIPE_ANIMATION_DURATION);
     }
 
     private void animateTo(float newScale, float newTx, float newTy, boolean isZoom, int duration) {
@@ -8307,7 +11242,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f})});
             this.imageMoveAnimation.setInterpolator(this.interpolator);
             this.imageMoveAnimation.setDuration((long) duration);
-            this.imageMoveAnimation.addListener(new C074352());
+            this.imageMoveAnimation.addListener(new C046222());
             this.imageMoveAnimation.start();
         }
     }
@@ -8375,9 +11310,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 if (this.switchImageAfterAnimation != 0) {
                     if (this.switchImageAfterAnimation == 1) {
-                        setImageIndex(this.currentIndex + 1, false);
+                        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$33(this));
                     } else if (this.switchImageAfterAnimation == 2) {
-                        setImageIndex(this.currentIndex - 1, false);
+                        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$34(this));
                     }
                     this.switchImageAfterAnimation = 0;
                 }
@@ -8388,18 +11323,22 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     aty = this.translationY;
                 }
             }
-            if (this.scale != 1.0f || aty == -1.0f || this.zoomAnimation) {
-                this.photoBackgroundDrawable.setAlpha(255);
-            } else {
-                float maxValue = ((float) getContainerViewHeight()) / 4.0f;
-                this.photoBackgroundDrawable.setAlpha((int) Math.max(127.0f, 255.0f * (1.0f - (Math.min(Math.abs(aty), maxValue) / maxValue))));
+            if (this.photoAnimationInProgress != 2) {
+                if (this.scale != 1.0f || aty == -1.0f || this.zoomAnimation) {
+                    this.photoBackgroundDrawable.setAlpha(255);
+                } else {
+                    float maxValue = ((float) getContainerViewHeight()) / 4.0f;
+                    this.photoBackgroundDrawable.setAlpha((int) Math.max(127.0f, 255.0f * (1.0f - (Math.min(Math.abs(aty), maxValue) / maxValue))));
+                }
             }
             ImageReceiver sideImage = null;
             if (!(this.scale < 1.0f || this.zoomAnimation || this.zooming)) {
-                if (currentTranslationX > this.maxX + ((float) AndroidUtilities.m10dp(5.0f))) {
+                if (currentTranslationX > this.maxX + ((float) AndroidUtilities.m9dp(5.0f))) {
                     sideImage = this.leftImage;
-                } else if (currentTranslationX < this.minX - ((float) AndroidUtilities.m10dp(5.0f))) {
+                } else if (currentTranslationX < this.minX - ((float) AndroidUtilities.m9dp(5.0f))) {
                     sideImage = this.rightImage;
+                } else {
+                    this.groupedPhotosListView.setMoveProgress(0.0f);
                 }
             }
             this.changingPage = sideImage != null;
@@ -8410,12 +11349,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (!this.zoomAnimation && tranlateX < this.minX) {
                     alpha = Math.min(1.0f, (this.minX - tranlateX) / ((float) canvas.getWidth()));
                     scaleDiff = (1.0f - alpha) * 0.3f;
-                    tranlateX = (float) ((-canvas.getWidth()) - (AndroidUtilities.m10dp(30.0f) / 2));
+                    tranlateX = (float) ((-canvas.getWidth()) - (AndroidUtilities.m9dp(30.0f) / 2));
                 }
                 if (sideImage.hasBitmapImage()) {
                     canvas.save();
                     canvas.translate((float) (getContainerViewWidth() / 2), (float) (getContainerViewHeight() / 2));
-                    canvas.translate(((float) (canvas.getWidth() + (AndroidUtilities.m10dp(30.0f) / 2))) + tranlateX, 0.0f);
+                    canvas.translate(((float) (canvas.getWidth() + (AndroidUtilities.m9dp(30.0f) / 2))) + tranlateX, 0.0f);
                     canvas.scale(1.0f - scaleDiff, 1.0f - scaleDiff);
                     bitmapWidth = sideImage.getBitmapWidth();
                     bitmapHeight = sideImage.getBitmapHeight();
@@ -8433,9 +11372,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     sideImage.draw(canvas);
                     canvas.restore();
                 }
+                this.groupedPhotosListView.setMoveProgress(-alpha);
                 canvas.save();
                 canvas.translate(tranlateX, currentTranslationY / currentScale);
-                canvas.translate(((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.m10dp(30.0f))) / 2.0f, (-currentTranslationY) / currentScale);
+                canvas.translate(((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.m9dp(30.0f))) / 2.0f, (-currentTranslationY) / currentScale);
                 this.radialProgressViews[1].setScale(1.0f - scaleDiff);
                 this.radialProgressViews[1].setAlpha(alpha);
                 this.radialProgressViews[1].onDraw(canvas);
@@ -8510,7 +11450,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (sideImage.hasBitmapImage()) {
                     canvas.save();
                     canvas.translate((float) (getContainerViewWidth() / 2), (float) (getContainerViewHeight() / 2));
-                    canvas.translate(((-((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.m10dp(30.0f)))) / 2.0f) + currentTranslationX, 0.0f);
+                    canvas.translate(((-((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.m9dp(30.0f)))) / 2.0f) + currentTranslationX, 0.0f);
                     bitmapWidth = sideImage.getBitmapWidth();
                     bitmapHeight = sideImage.getBitmapHeight();
                     scaleX = ((float) getContainerViewWidth()) / ((float) bitmapWidth);
@@ -8523,15 +11463,24 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     sideImage.draw(canvas);
                     canvas.restore();
                 }
+                this.groupedPhotosListView.setMoveProgress(1.0f - alpha);
                 canvas.save();
                 canvas.translate(currentTranslationX, currentTranslationY / currentScale);
-                canvas.translate((-((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.m10dp(30.0f)))) / 2.0f, (-currentTranslationY) / currentScale);
+                canvas.translate((-((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.m9dp(30.0f)))) / 2.0f, (-currentTranslationY) / currentScale);
                 this.radialProgressViews[2].setScale(1.0f);
                 this.radialProgressViews[2].setAlpha(1.0f);
                 this.radialProgressViews[2].onDraw(canvas);
                 canvas.restore();
             }
         }
+    }
+
+    final /* synthetic */ void lambda$drawContent$41$ArticleViewer() {
+        setImageIndex(this.currentIndex + 1, false);
+    }
+
+    final /* synthetic */ void lambda$drawContent$42$ArticleViewer() {
+        setImageIndex(this.currentIndex - 1, false);
     }
 
     private void onActionClick(boolean download) {
@@ -8552,7 +11501,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (FileLoader.getInstance(this.currentAccount).isLoadingFile(this.currentFileNames[0])) {
                     FileLoader.getInstance(this.currentAccount).cancelLoadFile(document);
                 } else {
-                    FileLoader.getInstance(this.currentAccount).loadFile(document, true, 1);
+                    FileLoader.getInstance(this.currentAccount).loadFile(document, this.currentPage, true, 1);
                 }
             }
         }
@@ -8601,7 +11550,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (state > 0 && state <= 3) {
                 float x = e.getX();
                 float y = e.getY();
-                if (x >= ((float) (getContainerViewWidth() - AndroidUtilities.m10dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.m10dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.m10dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.m10dp(100.0f))) / 2.0f) {
+                if (x >= ((float) (getContainerViewWidth() - AndroidUtilities.m9dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.m9dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.m9dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.m9dp(100.0f))) / 2.0f) {
                     onActionClick(true);
                     checkProgress(0, true);
                     return true;
@@ -8648,35 +11597,56 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         return false;
     }
 
+    private ImageReceiver getImageReceiverView(View view, PageBlock pageBlock, int[] coords) {
+        ImageReceiver imageReceiver;
+        if (view instanceof BlockPhotoCell) {
+            BlockPhotoCell cell = (BlockPhotoCell) view;
+            if (cell.currentBlock == pageBlock) {
+                view.getLocationInWindow(coords);
+                return cell.imageView;
+            }
+        } else if (view instanceof BlockVideoCell) {
+            BlockVideoCell cell2 = (BlockVideoCell) view;
+            if (cell2.currentBlock == pageBlock) {
+                view.getLocationInWindow(coords);
+                return cell2.imageView;
+            }
+        } else if (view instanceof BlockCollageCell) {
+            imageReceiver = getImageReceiverFromListView(((BlockCollageCell) view).innerListView, pageBlock, coords);
+            if (imageReceiver != null) {
+                return imageReceiver;
+            }
+        } else if (view instanceof BlockSlideshowCell) {
+            imageReceiver = getImageReceiverFromListView(((BlockSlideshowCell) view).innerListView, pageBlock, coords);
+            if (imageReceiver != null) {
+                return imageReceiver;
+            }
+        } else if (view instanceof BlockListItemCell) {
+            BlockListItemCell blockListItemCell = (BlockListItemCell) view;
+            if (blockListItemCell.blockLayout != null) {
+                imageReceiver = getImageReceiverView(blockListItemCell.blockLayout.itemView, pageBlock, coords);
+                if (imageReceiver != null) {
+                    return imageReceiver;
+                }
+            }
+        } else if (view instanceof BlockOrderedListItemCell) {
+            BlockOrderedListItemCell blockOrderedListItemCell = (BlockOrderedListItemCell) view;
+            if (blockOrderedListItemCell.blockLayout != null) {
+                imageReceiver = getImageReceiverView(blockOrderedListItemCell.blockLayout.itemView, pageBlock, coords);
+                if (imageReceiver != null) {
+                    return imageReceiver;
+                }
+            }
+        }
+        return null;
+    }
+
     private ImageReceiver getImageReceiverFromListView(ViewGroup listView, PageBlock pageBlock, int[] coords) {
         int count = listView.getChildCount();
         for (int a = 0; a < count; a++) {
-            View view = listView.getChildAt(a);
-            ImageReceiver imageReceiver;
-            if (view instanceof BlockPhotoCell) {
-                BlockPhotoCell cell = (BlockPhotoCell) view;
-                if (cell.currentBlock == pageBlock) {
-                    view.getLocationInWindow(coords);
-                    return cell.imageView;
-                }
-            } else if (view instanceof BlockVideoCell) {
-                BlockVideoCell cell2 = (BlockVideoCell) view;
-                if (cell2.currentBlock == pageBlock) {
-                    view.getLocationInWindow(coords);
-                    return cell2.imageView;
-                }
-            } else if (view instanceof BlockCollageCell) {
-                imageReceiver = getImageReceiverFromListView(((BlockCollageCell) view).innerListView, pageBlock, coords);
-                if (imageReceiver != null) {
-                    return imageReceiver;
-                }
-            } else if (view instanceof BlockSlideshowCell) {
-                imageReceiver = getImageReceiverFromListView(((BlockSlideshowCell) view).innerListView, pageBlock, coords);
-                if (imageReceiver != null) {
-                    return imageReceiver;
-                }
-            } else {
-                continue;
+            ImageReceiver imageReceiver = getImageReceiverView(listView.getChildAt(a), pageBlock, coords);
+            if (imageReceiver != null) {
+                return imageReceiver;
             }
         }
         return null;

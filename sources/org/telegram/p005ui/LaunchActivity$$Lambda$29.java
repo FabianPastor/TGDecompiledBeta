@@ -1,20 +1,17 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.messenger.LocaleController.LocaleInfo;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.LaunchActivity$$Lambda$29 */
 final /* synthetic */ class LaunchActivity$$Lambda$29 implements OnClickListener {
     private final LaunchActivity arg$1;
-    private final LocaleInfo[] arg$2;
 
-    LaunchActivity$$Lambda$29(LaunchActivity launchActivity, LocaleInfo[] localeInfoArr) {
+    LaunchActivity$$Lambda$29(LaunchActivity launchActivity) {
         this.arg$1 = launchActivity;
-        this.arg$2 = localeInfoArr;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$showLanguageAlertInternal$43$LaunchActivity(this.arg$2, dialogInterface, i);
+    public void onClick(View view) {
+        this.arg$1.lambda$showLanguageAlertInternal$44$LaunchActivity(view);
     }
 }

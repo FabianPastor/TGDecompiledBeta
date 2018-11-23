@@ -15,7 +15,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 
@@ -27,8 +27,8 @@ public class ChannelIntroActivity extends BaseFragment {
     private TextView whatIsChannelText;
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$3 */
-    class C09313 implements OnTouchListener {
-        C09313() {
+    class C05643 implements OnTouchListener {
+        C05643() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -37,8 +37,8 @@ public class ChannelIntroActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$4 */
-    class C09324 implements OnClickListener {
-        C09324() {
+    class C05654 implements OnClickListener {
+        C05654() {
         }
 
         public void onClick(View v) {
@@ -49,13 +49,13 @@ public class ChannelIntroActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
-    class C19461 extends ActionBarMenuOnItemClick {
-        C19461() {
+    class C12921 extends ActionBarMenuOnItemClick {
+        C12921() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChannelIntroActivity.this.lambda$checkDiscard$69$PassportActivity();
+                ChannelIntroActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
@@ -69,7 +69,7 @@ public class ChannelIntroActivity extends BaseFragment {
         if (!AndroidUtilities.isTablet()) {
             this.actionBar.showActionModeTop();
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C19461());
+        this.actionBar.setActionBarMenuOnItemClick(new C12921());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -78,12 +78,12 @@ public class ChannelIntroActivity extends BaseFragment {
                     ChannelIntroActivity.this.imageView.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.78f), NUM));
                     ChannelIntroActivity.this.whatIsChannelText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), MeasureSpec.makeMeasureSpec(height, 0));
                     ChannelIntroActivity.this.descriptionText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.5f), NUM), MeasureSpec.makeMeasureSpec(height, 0));
-                    ChannelIntroActivity.this.createChannelText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(24.0f), NUM));
+                    ChannelIntroActivity.this.createChannelText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(24.0f), NUM));
                 } else {
                     ChannelIntroActivity.this.imageView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.44f), NUM));
                     ChannelIntroActivity.this.whatIsChannelText.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, 0));
                     ChannelIntroActivity.this.descriptionText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.9f), NUM), MeasureSpec.makeMeasureSpec(height, 0));
-                    ChannelIntroActivity.this.createChannelText.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(24.0f), NUM));
+                    ChannelIntroActivity.this.createChannelText.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(24.0f), NUM));
                 }
                 setMeasuredDimension(width, height);
             }
@@ -119,7 +119,7 @@ public class ChannelIntroActivity extends BaseFragment {
         };
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         ViewGroup viewGroup = this.fragmentView;
-        viewGroup.setOnTouchListener(new C09313());
+        viewGroup.setOnTouchListener(new C05643());
         this.imageView = new ImageView(context);
         this.imageView.setImageResource(R.drawable.channelintro);
         this.imageView.setScaleType(ScaleType.FIT_CENTER);
@@ -143,7 +143,7 @@ public class ChannelIntroActivity extends BaseFragment {
         this.createChannelText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.createChannelText.setText(LocaleController.getString("ChannelAlertCreate", R.string.ChannelAlertCreate));
         viewGroup.addView(this.createChannelText);
-        this.createChannelText.setOnClickListener(new C09324());
+        this.createChannelText.setOnClickListener(new C05654());
         return this.fragmentView;
     }
 

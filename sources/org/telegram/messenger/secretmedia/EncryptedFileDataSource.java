@@ -19,7 +19,7 @@ public final class EncryptedFileDataSource implements DataSource {
     private RandomAccessFile file;
     private int fileOffset;
     /* renamed from: iv */
-    private byte[] f249iv;
+    private byte[] f263iv;
     private byte[] key;
     private final TransferListener listener;
     private boolean opened;
@@ -45,7 +45,7 @@ public final class EncryptedFileDataSource implements DataSource {
 
     public EncryptedFileDataSource(TransferListener listener) {
         this.key = new byte[32];
-        this.f249iv = new byte[16];
+        this.f263iv = new byte[16];
         this.listener = listener;
     }
 
@@ -56,7 +56,7 @@ public final class EncryptedFileDataSource implements DataSource {
             File path = new File(dataSpec.uri.getPath());
             RandomAccessFile keyFile = new RandomAccessFile(new File(FileLoader.getInternalCacheDir(), path.getName() + ".key"), "r");
             keyFile.read(this.key);
-            keyFile.read(this.f249iv);
+            keyFile.read(this.f263iv);
             keyFile.close();
             this.file = new RandomAccessFile(path, "r");
             this.file.seek(dataSpec.position);
@@ -84,7 +84,7 @@ public final class EncryptedFileDataSource implements DataSource {
         }
         try {
             int bytesRead = this.file.read(buffer, offset, (int) Math.min(this.bytesRemaining, (long) readLength));
-            Utilities.aesCtrDecryptionByteArray(buffer, this.key, this.f249iv, offset, bytesRead, this.fileOffset);
+            Utilities.aesCtrDecryptionByteArray(buffer, this.key, this.f263iv, offset, bytesRead, this.fileOffset);
             this.fileOffset += bytesRead;
             if (bytesRead <= 0) {
                 return bytesRead;

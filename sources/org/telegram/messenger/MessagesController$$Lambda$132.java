@@ -1,13 +1,16 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class MessagesController$$Lambda$132 implements Runnable {
-    private final MessagesController arg$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-    MessagesController$$Lambda$132(MessagesController messagesController) {
-        this.arg$1 = messagesController;
+final /* synthetic */ class MessagesController$$Lambda$132 implements RequestDelegate {
+    static final RequestDelegate $instance = new MessagesController$$Lambda$132();
+
+    private MessagesController$$Lambda$132() {
     }
 
-    public void run() {
-        this.arg$1.lambda$processUpdates$218$MessagesController();
+    public void run(TLObject tLObject, TL_error tL_error) {
+        MessagesController.lambda$processUpdates$218$MessagesController(tLObject, tL_error);
     }
 }

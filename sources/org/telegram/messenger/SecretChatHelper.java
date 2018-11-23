@@ -269,7 +269,7 @@ public class SecretChatHelper {
             }
             newChat.user_id = user_id;
             TL_dialog dialog = new TL_dialog();
-            dialog.f130id = dialog_id;
+            dialog.f128id = dialog_id;
             dialog.unread_count = 0;
             dialog.top_message = 0;
             dialog.last_message_date = update.date;
@@ -302,7 +302,7 @@ public class SecretChatHelper {
     }
 
     final /* synthetic */ void lambda$processUpdateEncryption$1$SecretChatHelper(TL_dialog dialog) {
-        MessagesController.getInstance(this.currentAccount).dialogs_dict.put(dialog.f130id, dialog);
+        MessagesController.getInstance(this.currentAccount).dialogs_dict.put(dialog.f128id, dialog);
         MessagesController.getInstance(this.currentAccount).dialogs.add(dialog);
         MessagesController.getInstance(this.currentAccount).sortDialogs(null);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
@@ -616,7 +616,7 @@ public class SecretChatHelper {
                 layer.out_seq_no = newMsgObj.seq_out;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d(req + " send message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
+                FileLog.m10d(req + " send message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
             }
             int len = toEncryptObject.getObjectSize();
             AbstractSerializedData nativeByteBuffer = new NativeByteBuffer(len + 4);
@@ -682,7 +682,7 @@ public class SecretChatHelper {
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(reqToSend, new SecretChatHelper$$Lambda$27(this, req, chat, newMsgObj, newMsg, originalPath), 64);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -704,7 +704,7 @@ public class SecretChatHelper {
                     currentChat.key_hash = key_hash;
                     MessagesStorage.getInstance(this.currentAccount).updateEncryptedChat(currentChat);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
             this.sendingNotifyLayer.remove(Integer.valueOf(currentChat.f88id));
@@ -770,7 +770,7 @@ public class SecretChatHelper {
                     chat.key_hash = key_hash;
                     MessagesStorage.getInstance(this.currentAccount).updateEncryptedChat(chat);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
             chat.layer = AndroidUtilities.setPeerLayerVersion(chat.layer, newPeerLayer);
@@ -876,12 +876,13 @@ public class SecretChatHelper {
                     messageMedia.flags |= 3;
                     newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
                     newMessage.media.photo = new TL_photo();
+                    newMessage.media.photo.file_reference = new byte[0];
                     newMessage.media.photo.date = newMessage.date;
                     thumb = ((TL_decryptedMessageMediaPhoto) decryptedMessage.media).thumb;
                     if (thumb != null && thumb.length != 0 && thumb.length <= 6000 && decryptedMessage.media.thumb_w <= 100 && decryptedMessage.media.thumb_h <= 100) {
                         TL_photoCachedSize small = new TL_photoCachedSize();
-                        small.f110w = decryptedMessage.media.thumb_w;
-                        small.f109h = decryptedMessage.media.thumb_h;
+                        small.f108w = decryptedMessage.media.thumb_w;
+                        small.f107h = decryptedMessage.media.thumb_h;
                         small.bytes = thumb;
                         small.type = "s";
                         small.location = new TL_fileLocationUnavailable();
@@ -893,8 +894,8 @@ public class SecretChatHelper {
                         messageMedia.flags |= 4;
                     }
                     TL_photoSize big = new TL_photoSize();
-                    big.f110w = decryptedMessage.media.f83w;
-                    big.f109h = decryptedMessage.media.f80h;
+                    big.f108w = decryptedMessage.media.f83w;
+                    big.f107h = decryptedMessage.media.f80h;
                     big.type = "x";
                     big.size = file.size;
                     big.location = new TL_fileEncryptedLocation();
@@ -932,8 +933,8 @@ public class SecretChatHelper {
                     } else {
                         newMessage.media.document.thumb = new TL_photoCachedSize();
                         newMessage.media.document.thumb.bytes = thumb;
-                        newMessage.media.document.thumb.f110w = decryptedMessage.media.thumb_w;
-                        newMessage.media.document.thumb.f109h = decryptedMessage.media.thumb_h;
+                        newMessage.media.document.thumb.f108w = decryptedMessage.media.thumb_w;
+                        newMessage.media.document.thumb.f107h = decryptedMessage.media.thumb_h;
                         newMessage.media.document.thumb.type = "s";
                         newMessage.media.document.thumb.location = new TL_fileLocationUnavailable();
                     }
@@ -990,8 +991,8 @@ public class SecretChatHelper {
                     } else {
                         newMessage.media.document.thumb = new TL_photoCachedSize();
                         newMessage.media.document.thumb.bytes = thumb;
-                        newMessage.media.document.thumb.f110w = decryptedMessage.media.thumb_w;
-                        newMessage.media.document.thumb.f109h = decryptedMessage.media.thumb_h;
+                        newMessage.media.document.thumb.f108w = decryptedMessage.media.thumb_w;
+                        newMessage.media.document.thumb.f107h = decryptedMessage.media.thumb_h;
                         newMessage.media.document.thumb.type = "s";
                         newMessage.media.document.thumb.location = new TL_fileLocationUnavailable();
                     }
@@ -1007,6 +1008,7 @@ public class SecretChatHelper {
                     newMessage.media.document = new TL_document();
                     newMessage.media.document.f84id = decryptedMessage.media.f81id;
                     newMessage.media.document.access_hash = decryptedMessage.media.access_hash;
+                    newMessage.media.document.file_reference = new byte[0];
                     newMessage.media.document.date = decryptedMessage.media.date;
                     newMessage.media.document.attributes = decryptedMessage.media.attributes;
                     newMessage.media.document.mime_type = decryptedMessage.media.mime_type;
@@ -1119,7 +1121,7 @@ public class SecretChatHelper {
                     if (chat.exchange_id != 0) {
                         if (chat.exchange_id > serviceMessage.action.exchange_id) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11d("we already have request key with higher exchange_id");
+                                FileLog.m10d("we already have request key with higher exchange_id");
                             }
                             return null;
                         }
@@ -1252,10 +1254,10 @@ public class SecretChatHelper {
                     resendMessages(serviceMessage.action.start_seq_no, serviceMessage.action.end_seq_no, chat);
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m12e("unknown message " + object);
+                FileLog.m11e("unknown message " + object);
             }
         } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.m12e("unknown TLObject");
+            FileLog.m11e("unknown TLObject");
         }
         return null;
     }
@@ -1264,7 +1266,7 @@ public class SecretChatHelper {
         TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(did);
         if (dialog != null) {
             dialog.unread_count = 0;
-            MessagesController.getInstance(this.currentAccount).dialogMessage.remove(dialog.f130id);
+            MessagesController.getInstance(this.currentAccount).dialogMessage.remove(dialog.f128id);
         }
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SecretChatHelper$$Lambda$25(this, did));
         MessagesStorage.getInstance(this.currentAccount).deleteDialog(did, 1);
@@ -1374,7 +1376,7 @@ public class SecretChatHelper {
                 MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast(String.format(Locale.US, "REPLACE INTO requested_holes VALUES(%d, %d, %d)", new Object[]{Integer.valueOf(encryptedChat.f88id), Integer.valueOf(sSeq), Integer.valueOf(endSeq)})).stepThis().dispose();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -1525,13 +1527,13 @@ public class SecretChatHelper {
                     }
                     if (layer.random_bytes.length < 15) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("got random bytes less than needed");
+                            FileLog.m11e("got random bytes less than needed");
                         }
                         return null;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("current chat in_seq = " + chat.seq_in + " out_seq = " + chat.seq_out);
-                        FileLog.m11d("got message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
+                        FileLog.m10d("current chat in_seq = " + chat.seq_in + " out_seq = " + chat.seq_out);
+                        FileLog.m10d("got message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
                     }
                     if (layer.out_seq_no <= chat.seq_in) {
                         return null;
@@ -1541,7 +1543,7 @@ public class SecretChatHelper {
                     }
                     if (chat.seq_in != layer.out_seq_no - 2) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("got hole");
+                            FileLog.m11e("got hole");
                         }
                         ArrayList<TL_decryptedMessageHolder> arr = (ArrayList) this.secretHolesQueue.get(chat.f88id);
                         if (arr == null) {
@@ -1593,11 +1595,11 @@ public class SecretChatHelper {
             }
             is.reuse();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m12e(String.format("fingerprint mismatch %x", new Object[]{Long.valueOf(fingerprint)}));
+                FileLog.m11e(String.format("fingerprint mismatch %x", new Object[]{Long.valueOf(fingerprint)}));
             }
             return null;
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -1709,9 +1711,9 @@ public class SecretChatHelper {
             int a;
             messages_DhConfig res = (messages_DhConfig) response;
             if (response instanceof TL_messages_dhConfig) {
-                if (Utilities.isGoodPrime(res.f185p, res.f184g)) {
-                    MessagesStorage.getInstance(this.currentAccount).setSecretPBytes(res.f185p);
-                    MessagesStorage.getInstance(this.currentAccount).setSecretG(res.f184g);
+                if (Utilities.isGoodPrime(res.f184p, res.f183g)) {
+                    MessagesStorage.getInstance(this.currentAccount).setSecretPBytes(res.f184p);
+                    MessagesStorage.getInstance(this.currentAccount).setSecretG(res.f183g);
                     MessagesStorage.getInstance(this.currentAccount).setLastSecretVersion(res.version);
                     MessagesStorage.getInstance(this.currentAccount).saveSecretParams(MessagesStorage.getInstance(this.currentAccount).getLastSecretVersion(), MessagesStorage.getInstance(this.currentAccount).getSecretG(), MessagesStorage.getInstance(this.currentAccount).getSecretPBytes());
                 } else {
@@ -1816,9 +1818,9 @@ public class SecretChatHelper {
         if (error == null) {
             messages_DhConfig res = (messages_DhConfig) response;
             if (response instanceof TL_messages_dhConfig) {
-                if (Utilities.isGoodPrime(res.f185p, res.f184g)) {
-                    MessagesStorage.getInstance(this.currentAccount).setSecretPBytes(res.f185p);
-                    MessagesStorage.getInstance(this.currentAccount).setSecretG(res.f184g);
+                if (Utilities.isGoodPrime(res.f184p, res.f183g)) {
+                    MessagesStorage.getInstance(this.currentAccount).setSecretPBytes(res.f184p);
+                    MessagesStorage.getInstance(this.currentAccount).setSecretG(res.f183g);
                     MessagesStorage.getInstance(this.currentAccount).setLastSecretVersion(res.version);
                     MessagesStorage.getInstance(this.currentAccount).saveSecretParams(MessagesStorage.getInstance(this.currentAccount).getLastSecretVersion(), MessagesStorage.getInstance(this.currentAccount).getSecretG(), MessagesStorage.getInstance(this.currentAccount).getSecretPBytes());
                 } else {
@@ -1853,7 +1855,7 @@ public class SecretChatHelper {
                 progressDialog.dismiss();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -1872,7 +1874,7 @@ public class SecretChatHelper {
             try {
                 progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
         EncryptedChat chat = (EncryptedChat) response1;
@@ -1882,11 +1884,11 @@ public class SecretChatHelper {
         chat.a_or_b = salt;
         MessagesController.getInstance(this.currentAccount).putEncryptedChat(chat, false);
         TL_dialog dialog = new TL_dialog();
-        dialog.f130id = ((long) chat.f88id) << 32;
+        dialog.f128id = ((long) chat.f88id) << 32;
         dialog.unread_count = 0;
         dialog.top_message = 0;
         dialog.last_message_date = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-        MessagesController.getInstance(this.currentAccount).dialogs_dict.put(dialog.f130id, dialog);
+        MessagesController.getInstance(this.currentAccount).dialogs_dict.put(dialog.f128id, dialog);
         MessagesController.getInstance(this.currentAccount).dialogs.add(dialog);
         MessagesController.getInstance(this.currentAccount).sortDialogs(null);
         MessagesStorage.getInstance(this.currentAccount).putEncryptedChat(chat, user, dialog);
@@ -1908,7 +1910,7 @@ public class SecretChatHelper {
             try {
                 progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             Builder builder = new Builder(context);
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -1924,7 +1926,7 @@ public class SecretChatHelper {
             try {
                 progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -1934,7 +1936,7 @@ public class SecretChatHelper {
         try {
             dialog.dismiss();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 }

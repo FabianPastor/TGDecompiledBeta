@@ -25,9 +25,9 @@ public class MentionCell extends LinearLayout {
     public MentionCell(Context context) {
         super(context);
         setOrientation(0);
-        this.avatarDrawable.setTextSize(AndroidUtilities.m10dp(12.0f));
+        this.avatarDrawable.setTextSize(AndroidUtilities.m9dp(12.0f));
         this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.m10dp(14.0f));
+        this.imageView.setRoundRadius(AndroidUtilities.m9dp(14.0f));
         addView(this.imageView, LayoutHelper.createLinear(28, 28, 12.0f, 4.0f, 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -46,7 +46,7 @@ public class MentionCell extends LinearLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(36.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(36.0f), NUM));
     }
 
     public void setUser(User user) {
@@ -60,7 +60,7 @@ public class MentionCell extends LinearLayout {
         if (user.photo == null || user.photo.photo_small == null) {
             this.imageView.setImageDrawable(this.avatarDrawable);
         } else {
-            this.imageView.setImage(user.photo.photo_small, "50_50", this.avatarDrawable);
+            this.imageView.setImage(user.photo.photo_small, "50_50", this.avatarDrawable, (Object) user);
         }
         this.nameTextView.setText(UserObject.getUserName(user));
         if (user.username != null) {
@@ -90,7 +90,7 @@ public class MentionCell extends LinearLayout {
         stringBuilder.append(suggestion.emoji);
         stringBuilder.append("   ");
         stringBuilder.append(suggestion.label);
-        this.nameTextView.setText(Emoji.replaceEmoji(stringBuilder, this.nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(20.0f), false));
+        this.nameTextView.setText(Emoji.replaceEmoji(stringBuilder, this.nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(20.0f), false));
     }
 
     public void setBotCommand(String command, String help, User user) {
@@ -100,14 +100,14 @@ public class MentionCell extends LinearLayout {
             if (user.photo == null || user.photo.photo_small == null) {
                 this.imageView.setImageDrawable(this.avatarDrawable);
             } else {
-                this.imageView.setImage(user.photo.photo_small, "50_50", this.avatarDrawable);
+                this.imageView.setImage(user.photo.photo_small, "50_50", this.avatarDrawable, (Object) user);
             }
         } else {
             this.imageView.setVisibility(4);
         }
         this.usernameTextView.setVisibility(0);
         this.nameTextView.setText(command);
-        this.usernameTextView.setText(Emoji.replaceEmoji(help, this.usernameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(20.0f), false));
+        this.usernameTextView.setText(Emoji.replaceEmoji(help, this.usernameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(20.0f), false));
     }
 
     public void setIsDarkTheme(boolean isDarkTheme) {

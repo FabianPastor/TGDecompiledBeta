@@ -70,6 +70,8 @@ public class SearchAdapterHelper {
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$SearchAdapterHelperDelegate */
     public interface SearchAdapterHelperDelegate {
+        SparseArray<User> getExcludeUsers();
+
         void onDataSetChanged();
 
         void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
@@ -142,7 +144,7 @@ public class SearchAdapterHelper {
         }
         if (query.length() > 0) {
             req = new TL_contacts_search();
-            req.f127q = query;
+            req.f125q = query;
             req.limit = 50;
             currentReqId = this.lastReqId + 1;
             this.lastReqId = currentReqId;
@@ -213,7 +215,7 @@ public class SearchAdapterHelper {
             }
             for (a = 0; a < res.users.size(); a++) {
                 user = (User) res.users.get(a);
-                usersMap.put(user.f177id, user);
+                usersMap.put(user.f176id, user);
             }
             for (int b = 0; b < 2; b++) {
                 ArrayList<Peer> arrayList;
@@ -241,7 +243,7 @@ public class SearchAdapterHelper {
                             }
                         } else if (user != null && ((allowBots || !user.bot) && (allowSelf || !user.self))) {
                             this.globalSearch.add(user);
-                            this.globalSearchMap.put(user.f177id, user);
+                            this.globalSearchMap.put(user.f176id, user);
                         }
                     }
                 }
@@ -263,7 +265,7 @@ public class SearchAdapterHelper {
                         this.globalSearchMap.put(-chat.f78id, chat);
                     } else if (user != null) {
                         this.localServerSearch.add(user);
-                        this.globalSearchMap.put(user.f177id, user);
+                        this.globalSearchMap.put(user.f176id, user);
                     }
                 }
             }
@@ -271,6 +273,7 @@ public class SearchAdapterHelper {
             if (this.localSearchResults != null) {
                 mergeResults(this.localSearchResults);
             }
+            mergeExcluteResults();
             this.delegate.onDataSetChanged();
         }
         this.reqId = 0;
@@ -304,7 +307,7 @@ public class SearchAdapterHelper {
             Collections.sort(arrayList, SearchAdapterHelper$$Lambda$6.$instance);
             AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$7(this, arrayList, hashMap));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -325,11 +328,11 @@ public class SearchAdapterHelper {
             for (int a = 0; a < count; a++) {
                 TLObject obj = (TLObject) localResults.get(a);
                 if (obj instanceof User) {
-                    User u = (User) this.globalSearchMap.get(((User) obj).f177id);
+                    User u = (User) this.globalSearchMap.get(((User) obj).f176id);
                     if (u != null) {
                         this.globalSearch.remove(u);
                         this.localServerSearch.remove(u);
-                        this.globalSearchMap.remove(u.f177id);
+                        this.globalSearchMap.remove(u.f176id);
                     }
                 } else if (obj instanceof Chat) {
                     Chat c = (Chat) this.globalSearchMap.get(-((Chat) obj).f78id);
@@ -337,6 +340,23 @@ public class SearchAdapterHelper {
                         this.globalSearch.remove(c);
                         this.localServerSearch.remove(c);
                         this.globalSearchMap.remove(-c.f78id);
+                    }
+                }
+            }
+        }
+    }
+
+    public void mergeExcluteResults() {
+        if (this.delegate != null) {
+            SparseArray<User> ignoreUsers = this.delegate.getExcludeUsers();
+            if (ignoreUsers != null) {
+                int size = ignoreUsers.size();
+                for (int a = 0; a < size; a++) {
+                    User u = (User) this.globalSearchMap.get(ignoreUsers.keyAt(a));
+                    if (u != null) {
+                        this.globalSearch.remove(u);
+                        this.localServerSearch.remove(u);
+                        this.globalSearchMap.remove(u.f176id);
                     }
                 }
             }
@@ -407,7 +427,7 @@ public class SearchAdapterHelper {
                 MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -453,7 +473,7 @@ public class SearchAdapterHelper {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 

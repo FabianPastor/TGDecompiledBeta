@@ -19,13 +19,13 @@ public class CropGestureDetector {
     float mLastTouchY;
     private CropGestureListener mListener;
     final float mMinimumVelocity;
-    final float mTouchSlop = ((float) AndroidUtilities.m10dp(1.0f));
+    final float mTouchSlop = ((float) AndroidUtilities.m9dp(1.0f));
     private VelocityTracker mVelocityTracker;
     private boolean started;
 
     /* renamed from: org.telegram.ui.Components.Crop.CropGestureDetector$1 */
-    class C10431 implements OnScaleGestureListener {
-        C10431() {
+    class C06721 implements OnScaleGestureListener {
+        C06721() {
         }
 
         public boolean onScale(ScaleGestureDetector detector) {
@@ -56,7 +56,7 @@ public class CropGestureDetector {
 
     public CropGestureDetector(Context context) {
         this.mMinimumVelocity = (float) ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
-        this.mDetector = new ScaleGestureDetector(context, new C10431());
+        this.mDetector = new ScaleGestureDetector(context, new C06721());
     }
 
     float getActiveX(MotionEvent ev) {

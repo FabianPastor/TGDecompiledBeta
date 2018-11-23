@@ -1,17 +1,21 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.ChannelEditInfoActivity$$Lambda$9 */
-final /* synthetic */ class ChannelEditInfoActivity$$Lambda$9 implements OnClickListener {
+final /* synthetic */ class ChannelEditInfoActivity$$Lambda$9 implements Runnable {
     private final ChannelEditInfoActivity arg$1;
+    private final TL_error arg$2;
+    private final TLObject arg$3;
 
-    ChannelEditInfoActivity$$Lambda$9(ChannelEditInfoActivity channelEditInfoActivity) {
+    ChannelEditInfoActivity$$Lambda$9(ChannelEditInfoActivity channelEditInfoActivity, TL_error tL_error, TLObject tLObject) {
         this.arg$1 = channelEditInfoActivity;
+        this.arg$2 = tL_error;
+        this.arg$3 = tLObject;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$createView$11$ChannelEditInfoActivity(view);
+    public void run() {
+        this.arg$1.lambda$null$15$ChannelEditInfoActivity(this.arg$2, this.arg$3);
     }
 }

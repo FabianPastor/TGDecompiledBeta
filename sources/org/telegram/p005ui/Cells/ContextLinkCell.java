@@ -3,7 +3,6 @@ package org.telegram.p005ui.Cells;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextUtils;
@@ -33,7 +32,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.WebFile;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LetterDrawable;
-import org.telegram.p005ui.Components.RadialProgress;
+import org.telegram.p005ui.Components.RadialProgress2;
 import org.telegram.p005ui.PhotoViewer;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
@@ -77,7 +76,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private PhotoSize currentPhotoObject;
     private ContextLinkCellDelegate delegate;
     private StaticLayout descriptionLayout;
-    private int descriptionY = AndroidUtilities.m10dp(27.0f);
+    private int descriptionY = AndroidUtilities.m9dp(27.0f);
     private Document documentAttach;
     private int documentAttachType;
     private boolean drawLinkImageView;
@@ -90,11 +89,12 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private boolean mediaWebpage;
     private boolean needDivider;
     private boolean needShadow;
-    private RadialProgress radialProgress = new RadialProgress(this);
+    private Object parentObject;
+    private RadialProgress2 radialProgress = new RadialProgress2(this);
     private float scale;
     private boolean scaled;
     private StaticLayout titleLayout;
-    private int titleY = AndroidUtilities.m10dp(7.0f);
+    private int titleY = AndroidUtilities.m9dp(7.0f);
 
     /* renamed from: org.telegram.ui.Cells.ContextLinkCell$ContextLinkCellDelegate */
     public interface ContextLinkCellDelegate {
@@ -112,14 +112,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         this.titleLayout = null;
         this.linkLayout = null;
         this.currentPhotoObject = null;
-        this.linkY = AndroidUtilities.m10dp(27.0f);
+        this.linkY = AndroidUtilities.m9dp(27.0f);
         if (this.inlineResult == null && this.documentAttach == null) {
-            setMeasuredDimension(AndroidUtilities.m10dp(100.0f), AndroidUtilities.m10dp(100.0f));
+            setMeasuredDimension(AndroidUtilities.m9dp(100.0f), AndroidUtilities.m9dp(100.0f));
             return;
         }
         int width;
         int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int maxWidth = (viewWidth - AndroidUtilities.m10dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.m10dp(8.0f);
+        int maxWidth = (viewWidth - AndroidUtilities.m9dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.m9dp(8.0f);
         PhotoSize currentPhotoObjectThumb = null;
         ArrayList<PhotoSize> photoThumbs = null;
         TLObject webFile = null;
@@ -134,27 +134,27 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (!(this.mediaWebpage || this.inlineResult == null)) {
             if (this.inlineResult.title != null) {
                 try {
-                    this.titleLayout = new StaticLayout(TextUtils.ellipsize(Emoji.replaceEmoji(this.inlineResult.title.replace(10, ' '), Theme.chat_contextResult_titleTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(15.0f), false), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(this.inlineResult.title)), maxWidth), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, maxWidth + AndroidUtilities.m10dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.titleLayout = new StaticLayout(TextUtils.ellipsize(Emoji.replaceEmoji(this.inlineResult.title.replace(10, ' '), Theme.chat_contextResult_titleTextPaint.getFontMetricsInt(), AndroidUtilities.m9dp(15.0f), false), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(this.inlineResult.title)), maxWidth), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, maxWidth + AndroidUtilities.m9dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 this.letterDrawable.setTitle(this.inlineResult.title);
             }
             if (this.inlineResult.description != null) {
                 try {
-                    this.descriptionLayout = ChatMessageCell.generateStaticLayout(Emoji.replaceEmoji(this.inlineResult.description, Theme.chat_contextResult_descriptionTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(13.0f), false), Theme.chat_contextResult_descriptionTextPaint, maxWidth, maxWidth, 0, 3);
+                    this.descriptionLayout = ChatMessageCell.generateStaticLayout(Emoji.replaceEmoji(this.inlineResult.description, Theme.chat_contextResult_descriptionTextPaint.getFontMetricsInt(), AndroidUtilities.m9dp(13.0f), false), Theme.chat_contextResult_descriptionTextPaint, maxWidth, maxWidth, 0, 3);
                     if (this.descriptionLayout.getLineCount() > 0) {
-                        this.linkY = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.m10dp(1.0f);
+                        this.linkY = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.m9dp(1.0f);
                     }
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
             }
             if (this.inlineResult.url != null) {
                 try {
                     this.linkLayout = new StaticLayout(TextUtils.ellipsize(this.inlineResult.url.replace(10, ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(this.inlineResult.url)), maxWidth), TruncateAt.MIDDLE), Theme.chat_contextResult_descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 } catch (Throwable e22) {
-                    FileLog.m14e(e22);
+                    FileLog.m13e(e22);
                 }
             }
         }
@@ -219,8 +219,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 if (currentPhotoObjectThumb != null) {
                     currentPhotoObjectThumb.size = -1;
                 }
-                w = this.currentPhotoObject.f110w;
-                h = this.currentPhotoObject.f109h;
+                w = this.currentPhotoObject.f108w;
+                h = this.currentPhotoObject.f107h;
             } else if (this.inlineResult != null) {
                 int[] result = MessageObject.getInlineResultWidthAndHeight(this.inlineResult);
                 w = result[0];
@@ -228,14 +228,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             }
         }
         if (w == 0 || h == 0) {
-            h = AndroidUtilities.m10dp(80.0f);
+            h = AndroidUtilities.m9dp(80.0f);
             w = h;
         }
         if (!(this.documentAttach == null && this.currentPhotoObject == null && webFile == null && urlLocation == null)) {
             String currentPhotoFilter;
             String currentPhotoFilterThumb = "52_52_b";
             if (this.mediaWebpage) {
-                width = (int) (((float) w) / (((float) h) / ((float) AndroidUtilities.m10dp(80.0f))));
+                width = (int) (((float) w) / (((float) h) / ((float) AndroidUtilities.m9dp(80.0f))));
                 if (this.documentAttachType == 2) {
                     currentPhotoFilter = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf((int) (((float) width) / AndroidUtilities.density)), Integer.valueOf(80)});
                     currentPhotoFilterThumb = currentPhotoFilter;
@@ -257,14 +257,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     } else {
                         fileLocation = null;
                     }
-                    imageReceiver.setImage(tLObject, null, fileLocation, currentPhotoFilter, this.documentAttach.size, ext, 0);
+                    imageReceiver.setImage(tLObject, null, fileLocation, currentPhotoFilter, this.documentAttach.size, ext, this.parentObject, null);
                 } else {
-                    this.linkImageView.setImage(webFile, urlLocation, null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, currentPhotoFilter, -1, ext, 1);
+                    this.linkImageView.setImage(webFile, urlLocation, null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, currentPhotoFilter, -1, ext, this.parentObject, 1);
                 }
             } else if (this.currentPhotoObject != null) {
-                this.linkImageView.setImage(this.currentPhotoObject.location, currentPhotoFilter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, this.currentPhotoObject.size, ext, 0);
+                this.linkImageView.setImage(this.currentPhotoObject.location, currentPhotoFilter, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, this.currentPhotoObject.size, ext, this.parentObject, 0);
             } else {
-                this.linkImageView.setImage(webFile, urlLocation, currentPhotoFilter, null, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, -1, ext, 1);
+                this.linkImageView.setImage(webFile, urlLocation, currentPhotoFilter, null, currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, currentPhotoFilterThumb, -1, ext, this.parentObject, 1);
             }
             this.drawLinkImageView = true;
         }
@@ -274,12 +274,13 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             width = viewWidth;
             height = MeasureSpec.getSize(heightMeasureSpec);
             if (height == 0) {
-                height = AndroidUtilities.m10dp(100.0f);
+                height = AndroidUtilities.m9dp(100.0f);
             }
             setMeasuredDimension(width, height);
-            x = (width - AndroidUtilities.m10dp(24.0f)) / 2;
-            int y = (height - AndroidUtilities.m10dp(24.0f)) / 2;
-            this.radialProgress.setProgressRect(x, y, AndroidUtilities.m10dp(24.0f) + x, AndroidUtilities.m10dp(24.0f) + y);
+            x = (width - AndroidUtilities.m9dp(24.0f)) / 2;
+            int y = (height - AndroidUtilities.m9dp(24.0f)) / 2;
+            this.radialProgress.setProgressRect(x, y, AndroidUtilities.m9dp(24.0f) + x, AndroidUtilities.m9dp(24.0f) + y);
+            this.radialProgress.setCircleRadius(AndroidUtilities.m9dp(12.0f));
             this.linkImageView.setImageCoords(0, 0, width, height);
             return;
         }
@@ -293,13 +294,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (this.linkLayout != null && this.linkLayout.getLineCount() > 0) {
             height += this.linkLayout.getLineBottom(this.linkLayout.getLineCount() - 1);
         }
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + Math.max(AndroidUtilities.m10dp(68.0f), AndroidUtilities.m10dp(16.0f) + Math.max(AndroidUtilities.m10dp(52.0f), height)));
-        int maxPhotoWidth = AndroidUtilities.m10dp(52.0f);
-        x = LocaleController.isRTL ? (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.m10dp(8.0f)) - maxPhotoWidth : AndroidUtilities.m10dp(8.0f);
-        this.letterDrawable.setBounds(x, AndroidUtilities.m10dp(8.0f), x + maxPhotoWidth, AndroidUtilities.m10dp(60.0f));
-        this.linkImageView.setImageCoords(x, AndroidUtilities.m10dp(8.0f), maxPhotoWidth, maxPhotoWidth);
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + Math.max(AndroidUtilities.m9dp(68.0f), AndroidUtilities.m9dp(16.0f) + Math.max(AndroidUtilities.m9dp(52.0f), height)));
+        int maxPhotoWidth = AndroidUtilities.m9dp(52.0f);
+        x = LocaleController.isRTL ? (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.m9dp(8.0f)) - maxPhotoWidth : AndroidUtilities.m9dp(8.0f);
+        this.letterDrawable.setBounds(x, AndroidUtilities.m9dp(8.0f), x + maxPhotoWidth, AndroidUtilities.m9dp(60.0f));
+        this.linkImageView.setImageCoords(x, AndroidUtilities.m9dp(8.0f), maxPhotoWidth, maxPhotoWidth);
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-            this.radialProgress.setProgressRect(AndroidUtilities.m10dp(4.0f) + x, AndroidUtilities.m10dp(12.0f), AndroidUtilities.m10dp(48.0f) + x, AndroidUtilities.m10dp(56.0f));
+            this.radialProgress.setCircleRadius(AndroidUtilities.m9dp(24.0f));
+            this.radialProgress.setProgressRect(AndroidUtilities.m9dp(4.0f) + x, AndroidUtilities.m9dp(12.0f), AndroidUtilities.m9dp(48.0f) + x, AndroidUtilities.m9dp(56.0f));
         }
     }
 
@@ -340,6 +342,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             MessageMedia messageMedia = message.media;
             messageMedia.flags |= 3;
             message.media.document = new TL_document();
+            message.media.document.file_reference = new byte[0];
             message.flags |= 768;
             if (this.documentAttach != null) {
                 message.media.document = this.documentAttach;
@@ -385,6 +388,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         this.needDivider = divider;
         this.needShadow = shadow;
         this.inlineResult = contextResult;
+        this.parentObject = contextResult;
         if (this.inlineResult == null || this.inlineResult.document == null) {
             this.documentAttach = null;
         } else {
@@ -393,18 +397,19 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         this.mediaWebpage = media;
         setAttachType();
         requestLayout();
-        updateButtonState(false);
+        updateButtonState(false, false);
     }
 
     public void setGif(Document document, boolean divider) {
         this.needDivider = divider;
         this.needShadow = false;
         this.inlineResult = null;
+        this.parentObject = "gif";
         this.documentAttach = document;
         this.mediaWebpage = true;
         setAttachType();
         requestLayout();
-        updateButtonState(false);
+        updateButtonState(false, false);
     }
 
     public boolean isSticker() {
@@ -440,7 +445,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.drawLinkImageView && this.linkImageView.onAttachedToWindow()) {
-            updateButtonState(false);
+            updateButtonState(false, false);
         }
     }
 
@@ -455,15 +460,15 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         int x = (int) event.getX();
         int y = (int) event.getY();
         boolean result = false;
-        int side = AndroidUtilities.m10dp(48.0f);
+        int side = AndroidUtilities.m9dp(48.0f);
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
             boolean area = this.letterDrawable.getBounds().contains(x, y);
             if (event.getAction() == 0) {
                 if (area) {
                     this.buttonPressed = true;
+                    this.radialProgress.setPressed(this.buttonPressed, false);
                     invalidate();
                     result = true;
-                    this.radialProgress.swapBackground(getDrawableForCurrentState());
                 }
             } else if (this.buttonPressed) {
                 if (event.getAction() == 1) {
@@ -478,7 +483,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     this.buttonPressed = false;
                     invalidate();
                 }
-                this.radialProgress.swapBackground(getDrawableForCurrentState());
+                this.radialProgress.setPressed(this.buttonPressed, false);
             }
         } else if (!(this.inlineResult == null || this.inlineResult.content == null || TextUtils.isEmpty(this.inlineResult.content.url))) {
             if (event.getAction() == 0) {
@@ -511,24 +516,24 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (this.buttonState == 0) {
             if (MediaController.getInstance().playMessage(this.currentMessageObject)) {
                 this.buttonState = 1;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                this.radialProgress.setIcon(getIconForCurrentState(), false, false, true);
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject)) {
                 this.buttonState = 0;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                this.radialProgress.setIcon(getIconForCurrentState(), false, false, true);
                 invalidate();
             }
         } else if (this.buttonState == 2) {
             this.radialProgress.setProgress(0.0f, false);
             if (this.documentAttach != null) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.inlineResult, true, 0);
             } else if (this.inlineResult.content instanceof TL_webDocument) {
                 FileLoader.getInstance(this.currentAccount).loadFile(WebFile.createWithWebDocument(this.inlineResult.content), true, 1);
             }
             this.buttonState = 4;
-            this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
+            this.radialProgress.setIcon(getIconForCurrentState(), true, false, true);
             invalidate();
         } else if (this.buttonState == 4) {
             if (this.documentAttach != null) {
@@ -537,7 +542,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 FileLoader.getInstance(this.currentAccount).cancelLoadFile(WebFile.createWithWebDocument(this.inlineResult.content));
             }
             this.buttonState = 2;
-            this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+            this.radialProgress.setIcon(getIconForCurrentState(), false, false, true);
             invalidate();
         }
     }
@@ -545,21 +550,21 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     protected void onDraw(Canvas canvas) {
         if (this.titleLayout != null) {
             canvas.save();
-            canvas.translate((float) AndroidUtilities.m10dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.titleY);
+            canvas.translate((float) AndroidUtilities.m9dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.titleY);
             this.titleLayout.draw(canvas);
             canvas.restore();
         }
         if (this.descriptionLayout != null) {
             Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
             canvas.save();
-            canvas.translate((float) AndroidUtilities.m10dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.descriptionY);
+            canvas.translate((float) AndroidUtilities.m9dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.descriptionY);
             this.descriptionLayout.draw(canvas);
             canvas.restore();
         }
         if (this.linkLayout != null) {
             Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
             canvas.save();
-            canvas.translate((float) AndroidUtilities.m10dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.linkY);
+            canvas.translate((float) AndroidUtilities.m9dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.linkY);
             this.linkLayout.draw(canvas);
             canvas.restore();
         }
@@ -583,17 +588,17 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         } else if (this.inlineResult != null && this.inlineResult.type.equals("file")) {
             w = Theme.chat_inlineResultFile.getIntrinsicWidth();
             h = Theme.chat_inlineResultFile.getIntrinsicHeight();
-            x = this.linkImageView.getImageX() + ((AndroidUtilities.m10dp(52.0f) - w) / 2);
-            y = this.linkImageView.getImageY() + ((AndroidUtilities.m10dp(52.0f) - h) / 2);
-            canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.m10dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.m10dp(52.0f)), LetterDrawable.paint);
+            x = this.linkImageView.getImageX() + ((AndroidUtilities.m9dp(52.0f) - w) / 2);
+            y = this.linkImageView.getImageY() + ((AndroidUtilities.m9dp(52.0f) - h) / 2);
+            canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.m9dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.m9dp(52.0f)), LetterDrawable.paint);
             Theme.chat_inlineResultFile.setBounds(x, y, x + w, y + h);
             Theme.chat_inlineResultFile.draw(canvas);
         } else if (this.inlineResult != null && (this.inlineResult.type.equals(MimeTypes.BASE_TYPE_AUDIO) || this.inlineResult.type.equals("voice"))) {
             w = Theme.chat_inlineResultAudio.getIntrinsicWidth();
             h = Theme.chat_inlineResultAudio.getIntrinsicHeight();
-            x = this.linkImageView.getImageX() + ((AndroidUtilities.m10dp(52.0f) - w) / 2);
-            y = this.linkImageView.getImageY() + ((AndroidUtilities.m10dp(52.0f) - h) / 2);
-            canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.m10dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.m10dp(52.0f)), LetterDrawable.paint);
+            x = this.linkImageView.getImageX() + ((AndroidUtilities.m9dp(52.0f) - w) / 2);
+            y = this.linkImageView.getImageY() + ((AndroidUtilities.m9dp(52.0f) - h) / 2);
+            canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.m9dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.m9dp(52.0f)), LetterDrawable.paint);
             Theme.chat_inlineResultAudio.setBounds(x, y, x + w, y + h);
             Theme.chat_inlineResultAudio.draw(canvas);
         } else if (this.inlineResult == null || !(this.inlineResult.type.equals("venue") || this.inlineResult.type.equals("geo"))) {
@@ -601,9 +606,9 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         } else {
             w = Theme.chat_inlineResultLocation.getIntrinsicWidth();
             h = Theme.chat_inlineResultLocation.getIntrinsicHeight();
-            x = this.linkImageView.getImageX() + ((AndroidUtilities.m10dp(52.0f) - w) / 2);
-            y = this.linkImageView.getImageY() + ((AndroidUtilities.m10dp(52.0f) - h) / 2);
-            canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.m10dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.m10dp(52.0f)), LetterDrawable.paint);
+            x = this.linkImageView.getImageX() + ((AndroidUtilities.m9dp(52.0f) - w) / 2);
+            y = this.linkImageView.getImageY() + ((AndroidUtilities.m9dp(52.0f) - h) / 2);
+            canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.m9dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.m9dp(52.0f)), LetterDrawable.paint);
             Theme.chat_inlineResultLocation.setBounds(x, y, x + w, y + h);
             Theme.chat_inlineResultLocation.draw(canvas);
         }
@@ -638,35 +643,39 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         }
         if (this.needDivider && !this.mediaWebpage) {
             if (LocaleController.isRTL) {
-                canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - AndroidUtilities.m10dp((float) AndroidUtilities.leftBaseline)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+                canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - AndroidUtilities.m9dp((float) AndroidUtilities.leftBaseline)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
             } else {
-                canvas.drawLine((float) AndroidUtilities.m10dp((float) AndroidUtilities.leftBaseline), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+                canvas.drawLine((float) AndroidUtilities.m9dp((float) AndroidUtilities.leftBaseline), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
             }
         }
         if (this.needShadow) {
-            Theme.chat_contextResult_shadowUnderSwitchDrawable.setBounds(0, 0, getMeasuredWidth(), AndroidUtilities.m10dp(3.0f));
+            Theme.chat_contextResult_shadowUnderSwitchDrawable.setBounds(0, 0, getMeasuredWidth(), AndroidUtilities.m9dp(3.0f));
             Theme.chat_contextResult_shadowUnderSwitchDrawable.draw(canvas);
         }
     }
 
-    private Drawable getDrawableForCurrentState() {
-        int i = 1;
-        if (this.documentAttachType != 3 && this.documentAttachType != 5) {
-            return this.buttonState == 1 ? Theme.chat_photoStatesDrawables[5][0] : null;
-        } else {
-            if (this.buttonState == -1) {
-                return null;
+    private int getIconForCurrentState() {
+        if (this.documentAttachType == 3 || this.documentAttachType == 5) {
+            this.radialProgress.setColors(Theme.key_chat_inLoader, Theme.key_chat_inLoaderSelected, Theme.key_chat_inMediaIcon, Theme.key_chat_inMediaIconSelected);
+            if (this.buttonState == 1) {
+                return 1;
             }
-            this.radialProgress.setAlphaForPrevious(false);
-            Drawable[] drawableArr = Theme.chat_fileStatesDrawable[this.buttonState + 5];
-            if (!this.buttonPressed) {
-                i = 0;
+            if (this.buttonState == 2) {
+                return 2;
             }
-            return drawableArr[i];
+            if (this.buttonState == 4) {
+                return 3;
+            }
+            return 0;
         }
+        this.radialProgress.setColors(Theme.key_chat_mediaLoaderPhoto, Theme.key_chat_mediaLoaderPhotoSelected, Theme.key_chat_mediaLoaderPhotoIcon, Theme.key_chat_mediaLoaderPhotoIconSelected);
+        if (this.buttonState != 1) {
+            return 4;
+        }
+        return 5;
     }
 
-    public void updateButtonState(boolean animated) {
+    public void updateButtonState(boolean ifSame, boolean animated) {
         float setProgress = 0.0f;
         String fileName = null;
         File cacheFile = null;
@@ -699,23 +708,24 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 cacheFile = FileLoader.getPathToAttach(this.documentAttach);
             }
         }
-        if (TextUtils.isEmpty(fileName)) {
-            this.radialProgress.setBackground(null, false, false);
-        } else if (cacheFile.exists()) {
-            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-            if (this.documentAttachType == 5 || this.documentAttachType == 3) {
-                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
-                    this.buttonState = 0;
+        if (!TextUtils.isEmpty(fileName)) {
+            if (cacheFile.exists()) {
+                DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+                if (this.documentAttachType == 5 || this.documentAttachType == 3) {
+                    boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                    if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+                        this.buttonState = 0;
+                    } else {
+                        this.buttonState = 1;
+                    }
+                    this.radialProgress.setProgress(1.0f, animated);
                 } else {
-                    this.buttonState = 1;
+                    this.buttonState = -1;
                 }
-            } else {
-                this.buttonState = -1;
+                this.radialProgress.setIcon(getIconForCurrentState(), false, ifSame, animated);
+                invalidate();
+                return;
             }
-            this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
-            invalidate();
-        } else {
             DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
             Float progress;
             if (this.documentAttachType == 5 || this.documentAttachType == 3) {
@@ -733,11 +743,11 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     } else {
                         this.radialProgress.setProgress(0.0f, animated);
                     }
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
+                    this.radialProgress.setIcon(getIconForCurrentState(), true, ifSame, animated);
                 } else {
                     this.buttonState = 2;
                     this.radialProgress.setProgress(0.0f, animated);
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+                    this.radialProgress.setIcon(getIconForCurrentState(), false, ifSame, animated);
                 }
             } else {
                 this.buttonState = 1;
@@ -746,7 +756,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     setProgress = progress.floatValue();
                 }
                 this.radialProgress.setProgress(setProgress, false);
-                this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
+                this.radialProgress.setIcon(getIconForCurrentState(), true, ifSame, animated);
             }
             invalidate();
         }
@@ -760,23 +770,23 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         return this.inlineResult;
     }
 
-    public void onFailedDownload(String fileName) {
-        updateButtonState(false);
+    public void onFailedDownload(String fileName, boolean canceled) {
+        updateButtonState(true, canceled);
     }
 
     public void onSuccessDownload(String fileName) {
         this.radialProgress.setProgress(1.0f, true);
-        updateButtonState(true);
+        updateButtonState(false, true);
     }
 
     public void onProgressDownload(String fileName, float progress) {
         this.radialProgress.setProgress(progress, true);
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
             if (this.buttonState != 4) {
-                updateButtonState(false);
+                updateButtonState(false, true);
             }
         } else if (this.buttonState != 1) {
-            updateButtonState(false);
+            updateButtonState(false, true);
         }
     }
 

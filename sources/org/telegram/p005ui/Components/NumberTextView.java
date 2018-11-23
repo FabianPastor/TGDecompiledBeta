@@ -24,8 +24,8 @@ public class NumberTextView extends View {
     private TextPaint textPaint = new TextPaint(1);
 
     /* renamed from: org.telegram.ui.Components.NumberTextView$1 */
-    class C11451 extends AnimatorListenerAdapter {
-        C11451() {
+    class C07301 extends AnimatorListenerAdapter {
+        C07301() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -82,7 +82,7 @@ public class NumberTextView extends View {
                 fArr[1] = 0.0f;
                 this.animator = ObjectAnimator.ofFloat(this, str, fArr);
                 this.animator.setDuration(150);
-                this.animator.addListener(new C11451());
+                this.animator.addListener(new C07301());
                 this.animator.start();
             }
             invalidate();
@@ -90,7 +90,7 @@ public class NumberTextView extends View {
     }
 
     public void setTextSize(int size) {
-        this.textPaint.setTextSize((float) AndroidUtilities.m10dp((float) size));
+        this.textPaint.setTextSize((float) AndroidUtilities.m9dp((float) size));
         this.oldLetters.clear();
         this.letters.clear();
         setNumber(this.currentNumber, false);
@@ -160,7 +160,7 @@ public class NumberTextView extends View {
                 if (layout != null) {
                     lineWidth = layout.getLineWidth(0);
                 } else {
-                    lineWidth = old.getLineWidth(0) + ((float) AndroidUtilities.m10dp(1.0f));
+                    lineWidth = old.getLineWidth(0) + ((float) AndroidUtilities.m9dp(1.0f));
                 }
                 canvas.translate(lineWidth, 0.0f);
                 a++;

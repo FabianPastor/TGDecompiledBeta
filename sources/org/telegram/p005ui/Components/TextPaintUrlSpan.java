@@ -19,11 +19,18 @@ public class TextPaintUrlSpan extends MetricAffectingSpan {
         return this.currentUrl;
     }
 
+    public TextPaint getTextPaint() {
+        return this.textPaint;
+    }
+
     public void updateMeasureState(TextPaint p) {
         if (this.textPaint != null) {
             p.setColor(this.textPaint.getColor());
             p.setTypeface(this.textPaint.getTypeface());
             p.setFlags(this.textPaint.getFlags());
+            p.setTextSize(this.textPaint.getTextSize());
+            p.baselineShift = this.textPaint.baselineShift;
+            p.bgColor = this.textPaint.bgColor;
         }
     }
 
@@ -32,6 +39,9 @@ public class TextPaintUrlSpan extends MetricAffectingSpan {
             p.setColor(this.textPaint.getColor());
             p.setTypeface(this.textPaint.getTypeface());
             p.setFlags(this.textPaint.getFlags());
+            p.setTextSize(this.textPaint.getTextSize());
+            p.baselineShift = this.textPaint.baselineShift;
+            p.bgColor = this.textPaint.bgColor;
         }
     }
 }

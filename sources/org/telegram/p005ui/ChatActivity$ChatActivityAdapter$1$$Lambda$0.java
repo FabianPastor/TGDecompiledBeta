@@ -2,15 +2,15 @@ package org.telegram.p005ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.ChatActivity.ChatActivityAdapter.C19751;
+import org.telegram.p005ui.ChatActivity.ChatActivityAdapter.C13161;
 
 /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$1$$Lambda$0 */
 final /* synthetic */ class ChatActivity$ChatActivityAdapter$1$$Lambda$0 implements OnClickListener {
-    private final C19751 arg$1;
+    private final C13161 arg$1;
     private final String arg$2;
 
-    ChatActivity$ChatActivityAdapter$1$$Lambda$0(C19751 c19751, String str) {
-        this.arg$1 = c19751;
+    ChatActivity$ChatActivityAdapter$1$$Lambda$0(C13161 c13161, String str) {
+        this.arg$1 = c13161;
         this.arg$2 = str;
     }
 

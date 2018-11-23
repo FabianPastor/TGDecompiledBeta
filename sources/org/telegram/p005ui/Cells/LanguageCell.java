@@ -29,8 +29,6 @@ public class LanguageCell extends FrameLayout {
     public LanguageCell(Context context, boolean dialog) {
         int i;
         int i2;
-        float f;
-        float f2;
         int i3 = 3;
         super(context);
         setWillNotDraw(false);
@@ -55,19 +53,7 @@ public class LanguageCell extends FrameLayout {
         } else {
             i2 = 3;
         }
-        i2 |= 48;
-        if (LocaleController.isRTL) {
-            f = 71.0f;
-        } else {
-            f = (float) (dialog ? 23 : 16);
-        }
-        float f3 = (float) (this.isDialog ? 4 : 6);
-        if (LocaleController.isRTL) {
-            f2 = (float) (dialog ? 23 : 16);
-        } else {
-            f2 = 71.0f;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2, f, f3, f2, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 71.0f : 23.0f, (float) (this.isDialog ? 4 : 7), LocaleController.isRTL ? 23.0f : 71.0f, 0.0f));
         this.textView2 = new TextView(context);
         this.textView2.setTextColor(Theme.getColor(dialog ? Theme.key_dialogTextGray3 : Theme.key_windowBackgroundWhiteGrayText3));
         this.textView2.setTextSize(1, 13.0f);
@@ -88,19 +74,7 @@ public class LanguageCell extends FrameLayout {
         } else {
             i2 = 3;
         }
-        i2 |= 48;
-        if (LocaleController.isRTL) {
-            f = 71.0f;
-        } else {
-            f = (float) (dialog ? 23 : 16);
-        }
-        f3 = (float) (this.isDialog ? 25 : 28);
-        if (LocaleController.isRTL) {
-            f2 = (float) (dialog ? 23 : 16);
-        } else {
-            f2 = 71.0f;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2, f, f3, f2, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 71.0f : 23.0f, (float) (this.isDialog ? 25 : 29), LocaleController.isRTL ? 23.0f : 71.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
@@ -112,7 +86,7 @@ public class LanguageCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(this.isDialog ? 48.0f : 54.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(this.isDialog ? 50.0f : 54.0f), NUM));
     }
 
     public void setLanguage(LocaleInfo language, String desc, boolean divider) {
@@ -144,7 +118,7 @@ public class LanguageCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

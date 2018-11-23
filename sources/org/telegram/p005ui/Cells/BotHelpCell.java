@@ -81,11 +81,11 @@ public class BotHelpCell extends View {
             }
             MessageObject.addLinks(false, stringBuilder);
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, help.length(), 33);
-            Emoji.replaceEmoji(stringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(20.0f), false);
+            Emoji.replaceEmoji(stringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.m9dp(20.0f), false);
             try {
                 this.textLayout = new StaticLayout(stringBuilder, Theme.chat_msgTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 this.width = 0;
-                this.height = this.textLayout.getHeight() + AndroidUtilities.m10dp(22.0f);
+                this.height = this.textLayout.getHeight() + AndroidUtilities.m9dp(22.0f);
                 int count = this.textLayout.getLineCount();
                 for (a = 0; a < count; a++) {
                     this.width = (int) Math.ceil((double) Math.max((float) this.width, this.textLayout.getLineWidth(a) + this.textLayout.getLineLeft(a)));
@@ -94,9 +94,9 @@ public class BotHelpCell extends View {
                     this.width = maxWidth;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
-            this.width += AndroidUtilities.m10dp(22.0f);
+            this.width += AndroidUtilities.m9dp(22.0f);
         }
     }
 
@@ -127,7 +127,7 @@ public class BotHelpCell extends View {
                                     this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
                                     this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
                                 } catch (Throwable e) {
-                                    FileLog.m14e(e);
+                                    FileLog.m13e(e);
                                 }
                             } else {
                                 resetPressedLink();
@@ -135,7 +135,7 @@ public class BotHelpCell extends View {
                         }
                     } catch (Throwable e2) {
                         resetPressedLink();
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                     }
                 } else if (this.pressedLink != null) {
                     try {
@@ -150,7 +150,7 @@ public class BotHelpCell extends View {
                             this.pressedLink.onClick(this);
                         }
                     } catch (Throwable e22) {
-                        FileLog.m14e(e22);
+                        FileLog.m13e(e22);
                     }
                     resetPressedLink();
                     result = true;
@@ -166,12 +166,12 @@ public class BotHelpCell extends View {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), this.height + AndroidUtilities.m10dp(8.0f));
+        setMeasuredDimension(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), this.height + AndroidUtilities.m9dp(8.0f));
     }
 
     protected void onDraw(Canvas canvas) {
         int x = (canvas.getWidth() - this.width) / 2;
-        int y = AndroidUtilities.m10dp(4.0f);
+        int y = AndroidUtilities.m9dp(4.0f);
         Theme.chat_msgInMediaShadowDrawable.setBounds(x, y, this.width + x, this.height + y);
         Theme.chat_msgInMediaShadowDrawable.draw(canvas);
         Theme.chat_msgInMediaDrawable.setBounds(x, y, this.width + x, this.height + y);
@@ -179,10 +179,10 @@ public class BotHelpCell extends View {
         Theme.chat_msgTextPaint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
         Theme.chat_msgTextPaint.linkColor = Theme.getColor(Theme.key_chat_messageLinkIn);
         canvas.save();
-        int dp = AndroidUtilities.m10dp(11.0f) + x;
+        int dp = AndroidUtilities.m9dp(11.0f) + x;
         this.textX = dp;
         float f = (float) dp;
-        int dp2 = AndroidUtilities.m10dp(11.0f) + y;
+        int dp2 = AndroidUtilities.m9dp(11.0f) + y;
         this.textY = dp2;
         canvas.translate(f, (float) dp2);
         if (this.pressedLink != null) {

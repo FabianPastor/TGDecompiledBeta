@@ -22,8 +22,8 @@ public class PlayingGameDrawable extends StatusDrawable {
     private boolean started = false;
 
     /* renamed from: org.telegram.ui.Components.PlayingGameDrawable$1 */
-    class C12591 implements Runnable {
-        C12591() {
+    class C08211 implements Runnable {
+        C08211() {
         }
 
         public void run() {
@@ -65,10 +65,10 @@ public class PlayingGameDrawable extends StatusDrawable {
 
     public void draw(Canvas canvas) {
         int rad;
-        int size = AndroidUtilities.m10dp(10.0f);
+        int size = AndroidUtilities.m9dp(10.0f);
         int y = getBounds().top + ((getIntrinsicHeight() - size) / 2);
         if (!this.isChat) {
-            y += AndroidUtilities.m10dp(1.0f);
+            y += AndroidUtilities.m9dp(1.0f);
         }
         this.paint.setColor(Theme.getColor(Theme.key_actionBarDefaultSubtitle));
         this.rect.set(0.0f, (float) y, (float) size, (float) (y + size));
@@ -78,7 +78,7 @@ public class PlayingGameDrawable extends StatusDrawable {
             rad = (int) ((35.0f * (this.progress - 0.5f)) / 0.5f);
         }
         for (int a = 0; a < 3; a++) {
-            float x = ((float) ((AndroidUtilities.m10dp(5.0f) * a) + AndroidUtilities.m10dp(9.2f))) - (((float) AndroidUtilities.m10dp(5.0f)) * this.progress);
+            float x = ((float) ((AndroidUtilities.m9dp(5.0f) * a) + AndroidUtilities.m9dp(9.2f))) - (((float) AndroidUtilities.m9dp(5.0f)) * this.progress);
             if (a == 2) {
                 this.paint.setAlpha(Math.min(255, (int) ((255.0f * this.progress) / 0.5f)));
             } else if (a != 0) {
@@ -88,12 +88,12 @@ public class PlayingGameDrawable extends StatusDrawable {
             } else {
                 this.paint.setAlpha(255);
             }
-            canvas.drawCircle(x, (float) ((size / 2) + y), (float) AndroidUtilities.m10dp(1.2f), this.paint);
+            canvas.drawCircle(x, (float) ((size / 2) + y), (float) AndroidUtilities.m9dp(1.2f), this.paint);
         }
         this.paint.setAlpha(255);
         canvas.drawArc(this.rect, (float) rad, (float) (360 - (rad * 2)), true, this.paint);
         this.paint.setColor(Theme.getColor(Theme.key_actionBarDefault));
-        canvas.drawCircle((float) AndroidUtilities.m10dp(4.0f), (float) (((size / 2) + y) - AndroidUtilities.m10dp(2.0f)), (float) AndroidUtilities.m10dp(1.0f), this.paint);
+        canvas.drawCircle((float) AndroidUtilities.m9dp(4.0f), (float) (((size / 2) + y) - AndroidUtilities.m9dp(2.0f)), (float) AndroidUtilities.m9dp(1.0f), this.paint);
         checkUpdate();
     }
 
@@ -102,7 +102,7 @@ public class PlayingGameDrawable extends StatusDrawable {
             return;
         }
         if (NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
-            AndroidUtilities.runOnUIThread(new C12591(), 100);
+            AndroidUtilities.runOnUIThread(new C08211(), 100);
         } else {
             update();
         }
@@ -119,10 +119,10 @@ public class PlayingGameDrawable extends StatusDrawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(20.0f);
+        return AndroidUtilities.m9dp(20.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(18.0f);
+        return AndroidUtilities.m9dp(18.0f);
     }
 }

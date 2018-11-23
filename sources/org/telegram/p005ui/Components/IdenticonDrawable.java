@@ -83,10 +83,10 @@ public class IdenticonDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(32.0f);
+        return AndroidUtilities.m9dp(32.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(32.0f);
+        return AndroidUtilities.m9dp(32.0f);
     }
 }

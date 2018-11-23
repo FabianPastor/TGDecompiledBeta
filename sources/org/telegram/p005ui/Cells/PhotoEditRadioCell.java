@@ -23,8 +23,8 @@ public class PhotoEditRadioCell extends FrameLayout {
     private final int[] tintShadowColors = new int[]{0, -45747, -753630, -13056, -8269183, -9321002, -16747844, -10080879};
 
     /* renamed from: org.telegram.ui.Cells.PhotoEditRadioCell$1 */
-    class C08111 implements OnClickListener {
-        C08111() {
+    class C05061 implements OnClickListener {
+        C05061() {
         }
 
         public void onClick(View v) {
@@ -53,10 +53,10 @@ public class PhotoEditRadioCell extends FrameLayout {
         this.tintButtonsContainer.setOrientation(0);
         for (int a = 0; a < this.tintShadowColors.length; a++) {
             RadioButton radioButton = new RadioButton(context);
-            radioButton.setSize(AndroidUtilities.m10dp(20.0f));
+            radioButton.setSize(AndroidUtilities.m9dp(20.0f));
             radioButton.setTag(Integer.valueOf(a));
             this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
-            radioButton.setOnClickListener(new C08111());
+            radioButton.setOnClickListener(new C05061());
         }
         addView(this.tintButtonsContainer, LayoutHelper.createFrame(-1, 40.0f, 51, 96.0f, 0.0f, 24.0f, 0.0f));
     }
@@ -85,7 +85,7 @@ public class PhotoEditRadioCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(40.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(40.0f), NUM));
     }
 
     public void setIconAndTextAndValue(String text, int type, int value) {

@@ -28,7 +28,7 @@ public class LocationLoadingCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((int) (((float) AndroidUtilities.m10dp(56.0f)) * 2.5f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((int) (((float) AndroidUtilities.m9dp(56.0f)) * 2.5f), NUM));
     }
 
     public void setLoading(boolean value) {

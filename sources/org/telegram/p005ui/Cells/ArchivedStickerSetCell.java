@@ -7,7 +7,6 @@ import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -16,6 +15,7 @@ import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.BackupImageView;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.Switch;
+import org.telegram.p005ui.Components.Switch.OnCheckedChangeListener;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 
@@ -81,14 +81,12 @@ public class ArchivedStickerSetCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         if (needCheckBox) {
             this.checkBox = new Switch(context);
-            this.checkBox.setDuplicateParentStateEnabled(false);
-            this.checkBox.setFocusable(false);
-            this.checkBox.setFocusableInTouchMode(false);
+            this.checkBox.setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
             View view2 = this.checkBox;
             if (!LocaleController.isRTL) {
                 i3 = 5;
             }
-            addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, 14.0f, 0.0f, 14.0f, 0.0f));
+            addView(view2, LayoutHelper.createFrame(37, 40.0f, i3 | 16, 16.0f, 0.0f, 16.0f, 0.0f));
         }
     }
 
@@ -105,7 +103,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(64.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(64.0f), NUM));
     }
 
     public void setStickersSet(StickerSetCovered set, boolean divider) {
@@ -115,9 +113,9 @@ public class ArchivedStickerSetCell extends FrameLayout {
         this.textView.setText(this.stickersSet.set.title);
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", set.set.count));
         if (set.cover != null && set.cover.thumb != null && set.cover.thumb.location != null) {
-            this.imageView.setImage(set.cover.thumb.location, null, "webp", null);
+            this.imageView.setImage(set.cover.thumb.location, null, "webp", null, (Object) set);
         } else if (!set.covers.isEmpty()) {
-            this.imageView.setImage(((Document) set.covers.get(0)).thumb.location, null, "webp", null);
+            this.imageView.setImage(((Document) set.covers.get(0)).thumb.location, null, "webp", null, (Object) set);
         }
     }
 
@@ -125,15 +123,16 @@ public class ArchivedStickerSetCell extends FrameLayout {
         Switch switchR = this.checkBox;
         this.onCheckedChangeListener = listener;
         switchR.setOnCheckedChangeListener(listener);
-        this.checkBox.setOnClickListener(ArchivedStickerSetCell$$Lambda$0.$instance);
+        this.checkBox.setOnClickListener(new ArchivedStickerSetCell$$Lambda$0(this));
     }
 
-    static final /* synthetic */ void lambda$setOnCheckClick$0$ArchivedStickerSetCell(View v) {
+    final /* synthetic */ void lambda$setOnCheckClick$0$ArchivedStickerSetCell(View v) {
+        this.checkBox.setChecked(!this.checkBox.isChecked(), true);
     }
 
     public void setChecked(boolean checked) {
         this.checkBox.setOnCheckedChangeListener(null);
-        this.checkBox.setChecked(checked);
+        this.checkBox.setChecked(checked, true);
         this.checkBox.setOnCheckedChangeListener(this.onCheckedChangeListener);
     }
 

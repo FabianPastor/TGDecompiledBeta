@@ -1,20 +1,21 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import org.telegram.p005ui.Components.AlertsCreator.DatePickerDelegate;
 import org.telegram.p005ui.Components.EditTextBoldCursor;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$58 */
-final /* synthetic */ class PassportActivity$$Lambda$58 implements OnClickListener {
+final /* synthetic */ class PassportActivity$$Lambda$58 implements DatePickerDelegate {
     private final PassportActivity arg$1;
-    private final EditTextBoldCursor arg$2;
+    private final int arg$2;
+    private final EditTextBoldCursor arg$3;
 
-    PassportActivity$$Lambda$58(PassportActivity passportActivity, EditTextBoldCursor editTextBoldCursor) {
+    PassportActivity$$Lambda$58(PassportActivity passportActivity, int i, EditTextBoldCursor editTextBoldCursor) {
         this.arg$1 = passportActivity;
-        this.arg$2 = editTextBoldCursor;
+        this.arg$2 = i;
+        this.arg$3 = editTextBoldCursor;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$48$PassportActivity(this.arg$2, dialogInterface, i);
+    public void didSelectDate(int i, int i2, int i3) {
+        this.arg$1.lambda$null$48$PassportActivity(this.arg$2, this.arg$3, i, i2, i3);
     }
 }

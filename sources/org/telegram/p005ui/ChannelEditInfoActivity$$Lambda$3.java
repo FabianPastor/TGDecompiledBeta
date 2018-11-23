@@ -1,18 +1,17 @@
 package org.telegram.p005ui;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.ChannelEditInfoActivity$$Lambda$3 */
-final /* synthetic */ class ChannelEditInfoActivity$$Lambda$3 implements OnEditorActionListener {
+final /* synthetic */ class ChannelEditInfoActivity$$Lambda$3 implements OnClickListener {
     private final ChannelEditInfoActivity arg$1;
 
     ChannelEditInfoActivity$$Lambda$3(ChannelEditInfoActivity channelEditInfoActivity) {
         this.arg$1 = channelEditInfoActivity;
     }
 
-    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.arg$1.lambda$createView$5$ChannelEditInfoActivity(textView, i, keyEvent);
+    public void onClick(View view) {
+        this.arg$1.lambda$createView$4$ChannelEditInfoActivity(view);
     }
 }

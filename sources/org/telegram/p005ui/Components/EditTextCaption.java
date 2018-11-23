@@ -3,8 +3,6 @@ package org.telegram.p005ui.Components;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnShowListener;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -86,9 +84,9 @@ public class EditTextCaption extends EditTextBoldCursor {
         int end;
         Builder builder = new Builder(getContext());
         builder.setTitle(LocaleController.getString("CreateLink", R.string.CreateLink));
-        final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
+        EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(64.0f), NUM));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(64.0f), NUM));
             }
         };
         editText.setTextSize(1, 18.0f);
@@ -114,50 +112,50 @@ public class EditTextCaption extends EditTextBoldCursor {
             this.selectionEnd = -1;
             this.selectionStart = -1;
         }
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Editable editable = EditTextCaption.this.getText();
-                CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
-                if (spans != null && spans.length > 0) {
-                    for (CharacterStyle oldSpan : spans) {
-                        int spanStart = editable.getSpanStart(oldSpan);
-                        int spanEnd = editable.getSpanEnd(oldSpan);
-                        editable.removeSpan(oldSpan);
-                        if (spanStart < start) {
-                            editable.setSpan(oldSpan, spanStart, start, 33);
-                        }
-                        if (spanEnd > end) {
-                            editable.setSpan(oldSpan, end, spanEnd, 33);
-                        }
-                    }
-                }
-                editable.setSpan(new URLSpanReplacement(editText.getText().toString()), start, end, 33);
-                if (EditTextCaption.this.delegate != null) {
-                    EditTextCaption.this.delegate.onSpansChanged();
-                }
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new EditTextCaption$$Lambda$0(this, start, end, editText));
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        builder.show().setOnShowListener(new OnShowListener() {
-            public void onShow(DialogInterface dialog) {
-                editText.requestFocus();
-                AndroidUtilities.showKeyboard(editText);
-            }
-        });
+        builder.show().setOnShowListener(new EditTextCaption$$Lambda$1(editText));
         if (editText != null) {
             MarginLayoutParams layoutParams = (MarginLayoutParams) editText.getLayoutParams();
             if (layoutParams != null) {
                 if (layoutParams instanceof LayoutParams) {
                     ((LayoutParams) layoutParams).gravity = 1;
                 }
-                int dp = AndroidUtilities.m10dp(24.0f);
+                int dp = AndroidUtilities.m9dp(24.0f);
                 layoutParams.leftMargin = dp;
                 layoutParams.rightMargin = dp;
-                layoutParams.height = AndroidUtilities.m10dp(36.0f);
+                layoutParams.height = AndroidUtilities.m9dp(36.0f);
                 editText.setLayoutParams(layoutParams);
             }
             editText.setSelection(0, editText.getText().length());
         }
+    }
+
+    final /* synthetic */ void lambda$makeSelectedUrl$0$EditTextCaption(int start, int end, EditTextBoldCursor editText, DialogInterface dialogInterface, int i) {
+        Editable editable = getText();
+        CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
+        if (spans != null && spans.length > 0) {
+            for (CharacterStyle oldSpan : spans) {
+                int spanStart = editable.getSpanStart(oldSpan);
+                int spanEnd = editable.getSpanEnd(oldSpan);
+                editable.removeSpan(oldSpan);
+                if (spanStart < start) {
+                    editable.setSpan(oldSpan, spanStart, start, 33);
+                }
+                if (spanEnd > end) {
+                    editable.setSpan(oldSpan, end, spanEnd, 33);
+                }
+            }
+        }
+        editable.setSpan(new URLSpanReplacement(editText.getText().toString()), start, end, 33);
+        if (this.delegate != null) {
+            this.delegate.onSpansChanged();
+        }
+    }
+
+    static final /* synthetic */ void lambda$makeSelectedUrl$1$EditTextCaption(EditTextBoldCursor editText, DialogInterface dialog) {
+        editText.requestFocus();
+        AndroidUtilities.showKeyboard(editText);
     }
 
     public void makeSelectedRegular() {
@@ -272,8 +270,8 @@ public class EditTextCaption extends EditTextBoldCursor {
         try {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         } catch (Throwable e) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m10dp(51.0f));
-            FileLog.m14e(e);
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m9dp(51.0f));
+            FileLog.m13e(e);
         }
         this.captionLayout = null;
         if (this.caption != null && this.caption.length() > 0) {
@@ -292,9 +290,9 @@ public class EditTextCaption extends EditTextBoldCursor {
                         if (this.captionLayout.getLineCount() > 0) {
                             this.xOffset = (int) (((float) this.xOffset) + (-this.captionLayout.getLineLeft(0)));
                         }
-                        this.yOffset = ((getMeasuredHeight() - this.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.m10dp(0.5f);
+                        this.yOffset = ((getMeasuredHeight() - this.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.m9dp(0.5f);
                     } catch (Throwable e2) {
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                     }
                 }
             }
@@ -325,7 +323,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 paint.setColor(oldColor);
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 }

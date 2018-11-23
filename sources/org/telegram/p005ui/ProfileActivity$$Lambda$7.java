@@ -1,17 +1,23 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC.User;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$7 */
 final /* synthetic */ class ProfileActivity$$Lambda$7 implements OnClickListener {
     private final ProfileActivity arg$1;
+    private final ArrayList arg$2;
+    private final User arg$3;
 
-    ProfileActivity$$Lambda$7(ProfileActivity profileActivity) {
+    ProfileActivity$$Lambda$7(ProfileActivity profileActivity, ArrayList arrayList, User user) {
         this.arg$1 = profileActivity;
+        this.arg$2 = arrayList;
+        this.arg$3 = user;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$createView$15$ProfileActivity(view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$processOnClickOrPress$14$ProfileActivity(this.arg$2, this.arg$3, dialogInterface, i);
     }
 }

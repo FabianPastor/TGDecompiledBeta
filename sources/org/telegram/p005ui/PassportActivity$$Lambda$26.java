@@ -5,13 +5,13 @@ import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$26 */
 final /* synthetic */ class PassportActivity$$Lambda$26 implements OnClickListener {
-    private final PassportActivity arg$1;
+    private final boolean[] arg$1;
 
-    PassportActivity$$Lambda$26(PassportActivity passportActivity) {
-        this.arg$1 = passportActivity;
+    PassportActivity$$Lambda$26(boolean[] zArr) {
+        this.arg$1 = zArr;
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$createIdentityInterface$39$PassportActivity(view);
+        PassportActivity.lambda$createDocumentDeleteAlert$39$PassportActivity(this.arg$1, view);
     }
 }

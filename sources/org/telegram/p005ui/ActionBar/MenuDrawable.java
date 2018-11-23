@@ -20,7 +20,7 @@ public class MenuDrawable extends Drawable {
 
     public MenuDrawable() {
         this.paint.setColor(-1);
-        this.paint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
     }
 
     public void setRotation(float rotation, boolean animated) {
@@ -64,11 +64,11 @@ public class MenuDrawable extends Drawable {
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
         canvas.rotate(((float) (this.reverseAngle ? -180 : 180)) * this.currentRotation);
-        canvas.drawLine((float) (-AndroidUtilities.m10dp(9.0f)), 0.0f, ((float) AndroidUtilities.m10dp(9.0f)) - (((float) AndroidUtilities.m10dp(3.0f)) * this.currentRotation), 0.0f, this.paint);
-        float endYDiff = (((float) AndroidUtilities.m10dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.m10dp(0.5f)) * Math.abs(this.currentRotation));
-        float endXDiff = ((float) AndroidUtilities.m10dp(9.0f)) - (((float) AndroidUtilities.m10dp(2.5f)) * Math.abs(this.currentRotation));
-        float startYDiff = ((float) AndroidUtilities.m10dp(5.0f)) + (((float) AndroidUtilities.m10dp(2.0f)) * Math.abs(this.currentRotation));
-        float startXDiff = ((float) (-AndroidUtilities.m10dp(9.0f))) + (((float) AndroidUtilities.m10dp(7.5f)) * Math.abs(this.currentRotation));
+        canvas.drawLine((float) (-AndroidUtilities.m9dp(9.0f)), 0.0f, ((float) AndroidUtilities.m9dp(9.0f)) - (((float) AndroidUtilities.m9dp(3.0f)) * this.currentRotation), 0.0f, this.paint);
+        float endYDiff = (((float) AndroidUtilities.m9dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.m9dp(0.5f)) * Math.abs(this.currentRotation));
+        float endXDiff = ((float) AndroidUtilities.m9dp(9.0f)) - (((float) AndroidUtilities.m9dp(2.5f)) * Math.abs(this.currentRotation));
+        float startYDiff = ((float) AndroidUtilities.m9dp(5.0f)) + (((float) AndroidUtilities.m9dp(2.0f)) * Math.abs(this.currentRotation));
+        float startXDiff = ((float) (-AndroidUtilities.m9dp(9.0f))) + (((float) AndroidUtilities.m9dp(7.5f)) * Math.abs(this.currentRotation));
         canvas.drawLine(startXDiff, -startYDiff, endXDiff, -endYDiff, this.paint);
         canvas.drawLine(startXDiff, startYDiff, endXDiff, endYDiff, this.paint);
         canvas.restore();
@@ -86,10 +86,10 @@ public class MenuDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(24.0f);
+        return AndroidUtilities.m9dp(24.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(24.0f);
+        return AndroidUtilities.m9dp(24.0f);
     }
 }

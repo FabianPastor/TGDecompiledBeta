@@ -1,17 +1,20 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import java.util.ArrayList;
 
 /* renamed from: org.telegram.ui.NotificationsSettingsActivity$$Lambda$2 */
-final /* synthetic */ class NotificationsSettingsActivity$$Lambda$2 implements RequestDelegate {
-    static final RequestDelegate $instance = new NotificationsSettingsActivity$$Lambda$2();
+final /* synthetic */ class NotificationsSettingsActivity$$Lambda$2 implements OnClickListener {
+    private final NotificationsSettingsActivity arg$1;
+    private final ArrayList arg$2;
 
-    private NotificationsSettingsActivity$$Lambda$2() {
+    NotificationsSettingsActivity$$Lambda$2(NotificationsSettingsActivity notificationsSettingsActivity, ArrayList arrayList) {
+        this.arg$1 = notificationsSettingsActivity;
+        this.arg$2 = arrayList;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        NotificationsSettingsActivity.m26xafa3bc98(tLObject, tL_error);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$showExceptionsAlert$8$NotificationsSettingsActivity(this.arg$2, dialogInterface, i);
     }
 }

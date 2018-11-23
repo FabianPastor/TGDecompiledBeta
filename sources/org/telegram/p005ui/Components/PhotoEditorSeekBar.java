@@ -17,7 +17,7 @@ public class PhotoEditorSeekBar extends View {
     private boolean pressed = false;
     private float progress = 0.0f;
     private int thumbDX = 0;
-    private int thumbSize = AndroidUtilities.m10dp(16.0f);
+    private int thumbSize = AndroidUtilities.m9dp(16.0f);
 
     /* renamed from: org.telegram.ui.Components.PhotoEditorSeekBar$PhotoEditorSeekBarDelegate */
     public interface PhotoEditorSeekBarDelegate {
@@ -105,15 +105,15 @@ public class PhotoEditorSeekBar extends View {
     protected void onDraw(Canvas canvas) {
         int y = (getMeasuredHeight() - this.thumbSize) / 2;
         int thumbX = (int) (((float) (getMeasuredWidth() - this.thumbSize)) * this.progress);
-        canvas.drawRect((float) (this.thumbSize / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m10dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbSize / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(1.0f)), this.innerPaint);
+        canvas.drawRect((float) (this.thumbSize / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m9dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbSize / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(1.0f)), this.innerPaint);
         if (this.minValue == 0) {
-            canvas.drawRect((float) (this.thumbSize / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m10dp(1.0f)), (float) thumbX, (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(1.0f)), this.outerPaint);
+            canvas.drawRect((float) (this.thumbSize / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m9dp(1.0f)), (float) thumbX, (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(1.0f)), this.outerPaint);
         } else if (this.progress > 0.5f) {
-            canvas.drawRect((float) ((getMeasuredWidth() / 2) - AndroidUtilities.m10dp(1.0f)), (float) ((getMeasuredHeight() - this.thumbSize) / 2), (float) (getMeasuredWidth() / 2), (float) ((getMeasuredHeight() + this.thumbSize) / 2), this.outerPaint);
-            canvas.drawRect((float) (getMeasuredWidth() / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m10dp(1.0f)), (float) thumbX, (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(1.0f)), this.outerPaint);
+            canvas.drawRect((float) ((getMeasuredWidth() / 2) - AndroidUtilities.m9dp(1.0f)), (float) ((getMeasuredHeight() - this.thumbSize) / 2), (float) (getMeasuredWidth() / 2), (float) ((getMeasuredHeight() + this.thumbSize) / 2), this.outerPaint);
+            canvas.drawRect((float) (getMeasuredWidth() / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m9dp(1.0f)), (float) thumbX, (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(1.0f)), this.outerPaint);
         } else {
-            canvas.drawRect((float) (getMeasuredWidth() / 2), (float) ((getMeasuredHeight() - this.thumbSize) / 2), (float) ((getMeasuredWidth() / 2) + AndroidUtilities.m10dp(1.0f)), (float) ((getMeasuredHeight() + this.thumbSize) / 2), this.outerPaint);
-            canvas.drawRect((float) thumbX, (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m10dp(1.0f)), (float) (getMeasuredWidth() / 2), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(1.0f)), this.outerPaint);
+            canvas.drawRect((float) (getMeasuredWidth() / 2), (float) ((getMeasuredHeight() - this.thumbSize) / 2), (float) ((getMeasuredWidth() / 2) + AndroidUtilities.m9dp(1.0f)), (float) ((getMeasuredHeight() + this.thumbSize) / 2), this.outerPaint);
+            canvas.drawRect((float) thumbX, (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m9dp(1.0f)), (float) (getMeasuredWidth() / 2), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(1.0f)), this.outerPaint);
         }
         canvas.drawCircle((float) ((this.thumbSize / 2) + thumbX), (float) ((this.thumbSize / 2) + y), (float) (this.thumbSize / 2), this.outerPaint);
     }

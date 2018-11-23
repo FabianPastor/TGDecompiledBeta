@@ -593,7 +593,6 @@
     <string name="EditName">Name bearbeiten</string>
     <string name="EditedMessage">bearbeitet</string>
     <string name="EmailCopied">E-Mail in die Zwischenablage kopiert</string>
-    <string name="EmailPasswordConfirmText">Bitte folge diesen Schritten um die zweistufige Bestätigung abzuschließen:\10\101. Überprüfe deine Mails (auch den Spam-Ordner)\10%1$s\10\102. Auf den Link klicken.</string>
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Draw single big emoji</string>
     <string name="EmojiUseDefault">Benutze System-Emoji</string>
@@ -1518,7 +1517,6 @@
     <string name="PaymentTransactionTotal">Gesamtsumme</string>
     <string name="PaymentWarning">Warnung</string>
     <string name="PaymentWarningText">Weder Telegram noch %1$s haben Zugriff auf deine Kreditkartendaten. Kreditkartendetails werden nur vom Zahlungssystem %2$s abgewickelt.\10\10Zahlungen gehen direkt an den Entwickler von %1$s. Telegram kann keine Haftung übernehmen, du handelst auf eigene Gefahr. Wende dich bei Problemen bitte direkt an den Entwickler von %1$s oder an deine Bank.</string>
-    <string name="PendingEmailText">Deine E-Mail Adresse %1$s wurde noch verifiziert und ist daher noch nicht aktiv.</string>
     <string name="PermissionContacts">Telegram benötigt Zugriff auf deine Kontakte, um dich auf all deinen Geräten mit deinen Freunden zu verbinden.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram braucht Zugriff auf die Funktion \'Über andere Apps einblenden\'. Nur so können Videos im Bild in Bild Modus wiedergegeben werden.</string>
     <string name="PermissionNoAudio">Telegram benötigt Zugriff auf dein Mikrofon, damit du Sprachnachrichten senden kannst. </string>
@@ -1576,7 +1574,6 @@
     <string name="PrivacyBots">Bots und Webseiten</string>
     <string name="PrivacyBotsInfo">Webseiten, bei denen du mit Telegram angemeldet bist.</string>
     <string name="PrivacyCallsP2PHelp">Deaktivierst du Peer-to-Peer, werden alle Anrufe über die Telegram Server geleitet. Dadurch ist deine IP-Adresse nicht mehr sichtbar, die Gesprächsqualität wird jedoch leicht abnehmen.</string>
-    <string name="PrivacyCallsP2PTitle">Peer-to-Peer</string>
     <string name="PrivacyClearPayment">Zahlungsinformationen</string>
     <string name="PrivacyClearShipping">Versandinformationen</string>
     <string name="PrivacyDeleteCloudDrafts">Alle Cloud-Entwürfe löschen</string>
@@ -1790,7 +1787,6 @@
     <string name="SharedLinksTab">LINKS</string>
     <string name="SharedMedia">Geteilte Medien</string>
     <string name="SharedMediaTab">MEDIEN</string>
-    <string name="SharedMediaTitle">Geteilte Medien</string>
     <string name="SharedMusicTab">AUDIOS</string>
     <string name="SharedPlace">Ort</string>
     <string name="SharedVoiceTab">SPRACHE</string>

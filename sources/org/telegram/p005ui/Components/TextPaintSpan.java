@@ -5,9 +5,7 @@ import android.text.style.MetricAffectingSpan;
 
 /* renamed from: org.telegram.ui.Components.TextPaintSpan */
 public class TextPaintSpan extends MetricAffectingSpan {
-    private int color;
     private TextPaint textPaint;
-    private int textSize;
 
     public TextPaintSpan(TextPaint paint) {
         this.textPaint = paint;
@@ -17,11 +15,17 @@ public class TextPaintSpan extends MetricAffectingSpan {
         p.setColor(this.textPaint.getColor());
         p.setTypeface(this.textPaint.getTypeface());
         p.setFlags(this.textPaint.getFlags());
+        p.setTextSize(this.textPaint.getTextSize());
+        p.baselineShift = this.textPaint.baselineShift;
+        p.bgColor = this.textPaint.bgColor;
     }
 
     public void updateDrawState(TextPaint p) {
         p.setColor(this.textPaint.getColor());
         p.setTypeface(this.textPaint.getTypeface());
         p.setFlags(this.textPaint.getFlags());
+        p.setTextSize(this.textPaint.getTextSize());
+        p.baselineShift = this.textPaint.baselineShift;
+        p.bgColor = this.textPaint.bgColor;
     }
 }

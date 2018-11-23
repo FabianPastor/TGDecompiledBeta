@@ -1,13 +1,15 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class NotificationsController$$Lambda$16 implements Runnable {
-    private final NotificationsController arg$1;
+import android.net.Uri;
 
-    NotificationsController$$Lambda$16(NotificationsController notificationsController) {
-        this.arg$1 = notificationsController;
+final /* synthetic */ class NotificationsController$$Lambda$16 implements Runnable {
+    private final Uri arg$1;
+
+    NotificationsController$$Lambda$16(Uri uri) {
+        this.arg$1 = uri;
     }
 
     public void run() {
-        this.arg$1.lambda$playOutChatSound$30$NotificationsController();
+        ApplicationLoader.applicationContext.revokeUriPermission(this.arg$1, 1);
     }
 }

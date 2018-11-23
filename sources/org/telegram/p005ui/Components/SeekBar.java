@@ -17,7 +17,7 @@ public class SeekBar {
     private int circleColor;
     private SeekBarDelegate delegate;
     private int height;
-    private int lineHeight = AndroidUtilities.m10dp(2.0f);
+    private int lineHeight = AndroidUtilities.m9dp(2.0f);
     private boolean pressed = false;
     private int progressColor;
     private RectF rect = new RectF();
@@ -34,7 +34,7 @@ public class SeekBar {
     public SeekBar(Context context) {
         if (paint == null) {
             paint = new Paint(1);
-            thumbWidth = AndroidUtilities.m10dp(24.0f);
+            thumbWidth = AndroidUtilities.m9dp(24.0f);
         }
     }
 
@@ -128,6 +128,6 @@ public class SeekBar {
         paint.setColor(this.progressColor);
         canvas.drawRoundRect(this.rect, (float) (thumbWidth / 2), (float) (thumbWidth / 2), paint);
         paint.setColor(this.circleColor);
-        canvas.drawCircle((float) (this.thumbX + (thumbWidth / 2)), (float) (this.height / 2), (float) AndroidUtilities.m10dp(this.pressed ? 8.0f : 6.0f), paint);
+        canvas.drawCircle((float) (this.thumbX + (thumbWidth / 2)), (float) (this.height / 2), (float) AndroidUtilities.m9dp(this.pressed ? 8.0f : 6.0f), paint);
     }
 }

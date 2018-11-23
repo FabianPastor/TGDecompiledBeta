@@ -45,8 +45,8 @@ public class CheckBox extends View {
     private TextPaint textPaint;
 
     /* renamed from: org.telegram.ui.Components.CheckBox$1 */
-    class C10391 extends AnimatorListenerAdapter {
-        C10391() {
+    class C06681 extends AnimatorListenerAdapter {
+        C06681() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -74,10 +74,10 @@ public class CheckBox extends View {
             backgroundPaint.setColor(-1);
             backgroundPaint.setStyle(Style.STROKE);
         }
-        eraser2.setStrokeWidth((float) AndroidUtilities.m10dp(28.0f));
-        backgroundPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        eraser2.setStrokeWidth((float) AndroidUtilities.m9dp(28.0f));
+        backgroundPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.textPaint = new TextPaint(1);
-        this.textPaint.setTextSize((float) AndroidUtilities.m10dp(18.0f));
+        this.textPaint.setTextSize((float) AndroidUtilities.m9dp(18.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.checkDrawable = context.getResources().getDrawable(resId).mutate();
     }
@@ -86,9 +86,9 @@ public class CheckBox extends View {
         super.setVisibility(visibility);
         if (visibility == 0 && this.drawBitmap == null) {
             try {
-                this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.m10dp((float) this.size), AndroidUtilities.m10dp((float) this.size), Config.ARGB_4444);
+                this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.m9dp((float) this.size), AndroidUtilities.m9dp((float) this.size), Config.ARGB_4444);
                 this.bitmapCanvas = new Canvas(this.drawBitmap);
-                this.checkBitmap = Bitmap.createBitmap(AndroidUtilities.m10dp((float) this.size), AndroidUtilities.m10dp((float) this.size), Config.ARGB_4444);
+                this.checkBitmap = Bitmap.createBitmap(AndroidUtilities.m9dp((float) this.size), AndroidUtilities.m9dp((float) this.size), Config.ARGB_4444);
                 this.checkCanvas = new Canvas(this.checkBitmap);
             } catch (Throwable th) {
             }
@@ -118,7 +118,7 @@ public class CheckBox extends View {
     public void setSize(int size) {
         this.size = size;
         if (size == 40) {
-            this.textPaint.setTextSize((float) AndroidUtilities.m10dp(24.0f));
+            this.textPaint.setTextSize((float) AndroidUtilities.m9dp(24.0f));
         }
     }
 
@@ -157,7 +157,7 @@ public class CheckBox extends View {
         float[] fArr = new float[1];
         fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
-        this.checkAnimator.addListener(new C10391());
+        this.checkAnimator.addListener(new C06681());
         this.checkAnimator.setDuration(300);
         this.checkAnimator.start();
     }
@@ -212,32 +212,32 @@ public class CheckBox extends View {
     protected void onDraw(Canvas canvas) {
         if (getVisibility() == 0 && this.drawBitmap != null && this.checkBitmap != null) {
             if (this.drawBackground || this.progress != 0.0f) {
-                eraser2.setStrokeWidth((float) AndroidUtilities.m10dp((float) (this.size + 6)));
+                eraser2.setStrokeWidth((float) AndroidUtilities.m9dp((float) (this.size + 6)));
                 this.drawBitmap.eraseColor(0);
                 float rad = (float) (getMeasuredWidth() / 2);
                 float roundProgress = this.progress >= 0.5f ? 1.0f : this.progress / 0.5f;
                 float checkProgress = this.progress < 0.5f ? 0.0f : (this.progress - 0.5f) / 0.5f;
                 float roundProgressCheckState = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
                 if (roundProgressCheckState < progressBounceDiff) {
-                    rad -= (((float) AndroidUtilities.m10dp(2.0f)) * roundProgressCheckState) / progressBounceDiff;
+                    rad -= (((float) AndroidUtilities.m9dp(2.0f)) * roundProgressCheckState) / progressBounceDiff;
                 } else if (roundProgressCheckState < 0.4f) {
-                    rad -= ((float) AndroidUtilities.m10dp(2.0f)) - ((((float) AndroidUtilities.m10dp(2.0f)) * (roundProgressCheckState - progressBounceDiff)) / progressBounceDiff);
+                    rad -= ((float) AndroidUtilities.m9dp(2.0f)) - ((((float) AndroidUtilities.m9dp(2.0f)) * (roundProgressCheckState - progressBounceDiff)) / progressBounceDiff);
                 }
                 if (this.drawBackground) {
                     paint.setColor(NUM);
-                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.m10dp(1.0f)), paint);
-                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.m10dp(1.0f)), backgroundPaint);
+                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.m9dp(1.0f)), paint);
+                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.m9dp(1.0f)), backgroundPaint);
                 }
                 paint.setColor(this.color);
                 if (this.hasBorder) {
-                    rad -= (float) AndroidUtilities.m10dp(2.0f);
+                    rad -= (float) AndroidUtilities.m9dp(2.0f);
                 }
                 this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad, paint);
                 this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (1.0f - roundProgress) * rad, eraser);
                 canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
                 this.checkBitmap.eraseColor(0);
                 if (this.checkedText != null) {
-                    this.checkCanvas.drawText(this.checkedText, (float) ((getMeasuredWidth() - ((int) Math.ceil((double) this.textPaint.measureText(this.checkedText)))) / 2), (float) AndroidUtilities.m10dp(this.size == 40 ? 28.0f : 21.0f), this.textPaint);
+                    this.checkCanvas.drawText(this.checkedText, (float) ((getMeasuredWidth() - ((int) Math.ceil((double) this.textPaint.measureText(this.checkedText)))) / 2), (float) AndroidUtilities.m9dp(this.size == 40 ? 28.0f : 21.0f), this.textPaint);
                 } else {
                     int w = this.checkDrawable.getIntrinsicWidth();
                     int h = this.checkDrawable.getIntrinsicHeight();
@@ -246,7 +246,7 @@ public class CheckBox extends View {
                     this.checkDrawable.setBounds(x, this.checkOffset + y, x + w, (y + h) + this.checkOffset);
                     this.checkDrawable.draw(this.checkCanvas);
                 }
-                this.checkCanvas.drawCircle((float) ((getMeasuredWidth() / 2) - AndroidUtilities.m10dp(2.5f)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(4.0f)), ((float) ((getMeasuredWidth() + AndroidUtilities.m10dp(6.0f)) / 2)) * (1.0f - checkProgress), eraser2);
+                this.checkCanvas.drawCircle((float) ((getMeasuredWidth() / 2) - AndroidUtilities.m9dp(2.5f)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(4.0f)), ((float) ((getMeasuredWidth() + AndroidUtilities.m9dp(6.0f)) / 2)) * (1.0f - checkProgress), eraser2);
                 canvas.drawBitmap(this.checkBitmap, 0.0f, 0.0f, null);
             }
         }

@@ -1,0 +1,14 @@
+package org.telegram.p005ui;
+
+/* renamed from: org.telegram.ui.ArticleViewer$$Lambda$23 */
+final /* synthetic */ class ArticleViewer$$Lambda$23 implements Runnable {
+    private final ArticleViewer arg$1;
+
+    ArticleViewer$$Lambda$23(ArticleViewer articleViewer) {
+        this.arg$1 = articleViewer;
+    }
+
+    public void run() {
+        this.arg$1.lambda$close$27$ArticleViewer();
+    }
+}

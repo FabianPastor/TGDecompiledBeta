@@ -3,8 +3,6 @@ package org.telegram.p005ui.Cells;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffColorFilter;
 import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
@@ -18,8 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -33,8 +30,6 @@ import org.telegram.p005ui.Components.URLSpanNoUnderline;
 
 /* renamed from: org.telegram.ui.Cells.AboutLinkCell */
 public class AboutLinkCell extends FrameLayout {
-    private AboutLinkCellDelegate delegate;
-    private ImageView imageView;
     private String oldText;
     private ClickableSpan pressedLink;
     private SpannableStringBuilder stringBuilder;
@@ -42,34 +37,34 @@ public class AboutLinkCell extends FrameLayout {
     private int textX;
     private int textY;
     private LinkPath urlPath = new LinkPath();
-
-    /* renamed from: org.telegram.ui.Cells.AboutLinkCell$AboutLinkCellDelegate */
-    public interface AboutLinkCellDelegate {
-        void didPressUrl(String str);
-    }
+    private TextView valueTextView;
 
     public AboutLinkCell(Context context) {
-        float f = 16.0f;
+        int i;
+        int i2 = 5;
         super(context);
-        this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
-        View view = this.imageView;
-        int i = (LocaleController.isRTL ? 5 : 3) | 48;
-        float f2 = LocaleController.isRTL ? 0.0f : 16.0f;
-        if (!LocaleController.isRTL) {
-            f = 0.0f;
+        this.valueTextView = new TextView(context);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        this.valueTextView.setTextSize(1, 13.0f);
+        this.valueTextView.setLines(1);
+        this.valueTextView.setMaxLines(1);
+        this.valueTextView.setSingleLine(true);
+        TextView textView = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, f2, 5.0f, f, 0.0f));
+        textView.setGravity(i);
+        View view = this.valueTextView;
+        if (!LocaleController.isRTL) {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2 | 80, 23.0f, 0.0f, 23.0f, 10.0f));
         setWillNotDraw(false);
     }
 
-    public ImageView getImageView() {
-        return this.imageView;
-    }
-
-    public void setDelegate(AboutLinkCellDelegate botHelpCellDelegate) {
-        this.delegate = botHelpCellDelegate;
+    protected void didPressUrl(String url) {
     }
 
     private void resetPressedLink() {
@@ -79,7 +74,11 @@ public class AboutLinkCell extends FrameLayout {
         invalidate();
     }
 
-    public void setTextAndIcon(String text, int resId, boolean parseLinks) {
+    public void setText(String text, boolean parseLinks) {
+        setTextAndValue(text, null, parseLinks);
+    }
+
+    public void setTextAndValue(String text, String value, boolean parseLinks) {
         if (!TextUtils.isEmpty(text)) {
             if (text == null || this.oldText == null || !text.equals(this.oldText)) {
                 this.oldText = text;
@@ -87,13 +86,14 @@ public class AboutLinkCell extends FrameLayout {
                 if (parseLinks) {
                     MessageObject.addLinks(false, this.stringBuilder, false);
                 }
-                Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(20.0f), false);
-                requestLayout();
-                if (resId == 0) {
-                    this.imageView.setImageDrawable(null);
+                Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.m9dp(20.0f), false);
+                if (TextUtils.isEmpty(value)) {
+                    this.valueTextView.setVisibility(8);
                 } else {
-                    this.imageView.setImageResource(resId);
+                    this.valueTextView.setText(value);
+                    this.valueTextView.setVisibility(0);
                 }
+                requestLayout();
             }
         }
     }
@@ -125,7 +125,7 @@ public class AboutLinkCell extends FrameLayout {
                                     this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
                                     this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
                                 } catch (Throwable e) {
-                                    FileLog.m14e(e);
+                                    FileLog.m13e(e);
                                 }
                             } else {
                                 resetPressedLink();
@@ -133,14 +133,14 @@ public class AboutLinkCell extends FrameLayout {
                         }
                     } catch (Throwable e2) {
                         resetPressedLink();
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                     }
                 } else if (this.pressedLink != null) {
                     try {
                         if (this.pressedLink instanceof URLSpanNoUnderline) {
                             String url = ((URLSpanNoUnderline) this.pressedLink).getURL();
-                            if ((url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) && this.delegate != null) {
-                                this.delegate.didPressUrl(url);
+                            if (url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) {
+                                didPressUrl(url);
                             }
                         } else if (this.pressedLink instanceof URLSpan) {
                             Browser.openUrl(getContext(), ((URLSpan) this.pressedLink).getURL());
@@ -148,7 +148,7 @@ public class AboutLinkCell extends FrameLayout {
                             this.pressedLink.onClick(this);
                         }
                     } catch (Throwable e22) {
-                        FileLog.m14e(e22);
+                        FileLog.m13e(e22);
                     }
                     resetPressedLink();
                     result = true;
@@ -166,22 +166,26 @@ public class AboutLinkCell extends FrameLayout {
     @SuppressLint({"DrawAllocation"})
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.stringBuilder != null) {
-            int maxWidth = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.m10dp(87.0f);
+            int maxWidth = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.m9dp(46.0f);
             if (VERSION.SDK_INT >= 24) {
                 this.textLayout = Builder.obtain(this.stringBuilder, 0, this.stringBuilder.length(), Theme.profile_aboutTextPaint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
             } else {
                 this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.textLayout != null ? this.textLayout.getHeight() : AndroidUtilities.m10dp(20.0f)) + AndroidUtilities.m10dp(16.0f), NUM));
+        int height = (this.textLayout != null ? this.textLayout.getHeight() : AndroidUtilities.m9dp(20.0f)) + AndroidUtilities.m9dp(16.0f);
+        if (this.valueTextView.getVisibility() == 0) {
+            height += AndroidUtilities.m9dp(23.0f);
+        }
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(height, NUM));
     }
 
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        int dp = AndroidUtilities.m10dp(LocaleController.isRTL ? 16.0f : 71.0f);
+        int dp = AndroidUtilities.m9dp(23.0f);
         this.textX = dp;
         float f = (float) dp;
-        int dp2 = AndroidUtilities.m10dp(8.0f);
+        int dp2 = AndroidUtilities.m9dp(8.0f);
         this.textY = dp2;
         canvas.translate(f, (float) dp2);
         if (this.pressedLink != null) {
@@ -192,7 +196,7 @@ public class AboutLinkCell extends FrameLayout {
                 this.textLayout.draw(canvas);
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         canvas.restore();
     }

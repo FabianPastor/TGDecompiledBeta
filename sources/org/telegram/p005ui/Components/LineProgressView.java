@@ -27,7 +27,7 @@ public class LineProgressView extends View {
             decelerateInterpolator = new DecelerateInterpolator();
             progressPaint = new Paint(1);
             progressPaint.setStrokeCap(Cap.ROUND);
-            progressPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+            progressPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         }
     }
 
@@ -80,6 +80,10 @@ public class LineProgressView extends View {
         this.currentProgressTime = 0;
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
+    }
+
+    public float getCurrentProgress() {
+        return this.currentProgress;
     }
 
     public void onDraw(Canvas canvas) {

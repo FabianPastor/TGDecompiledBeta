@@ -593,7 +593,6 @@
     <string name="EditName">تعديل الاسم</string>
     <string name="EditedMessage">معدلة</string>
     <string name="EmailCopied">تم نسخ البريد للحافظة</string>
-    <string name="EmailPasswordConfirmText">لإكمال عملية إعدادِ التحقق بخطوتين قم بما يلي رجاءً:\10\10١. تفقَّد بريدك الإلكتروني %1$s (بما في ذلك مجلد الرسائل غير المرغوب فيها).\10\10٢. اضغط على رابط التأكيد.</string>
     <string name="Emoji">الرموز التعبيرية</string>
     <string name="EmojiBigSize">رسمُ رمز تعبيري واحد كبير</string>
     <string name="EmojiUseDefault">استخدم الرموز التعبيرية الافتراضية</string>
@@ -1518,7 +1517,6 @@
     <string name="PaymentTransactionTotal">الإجمالي</string>
     <string name="PaymentWarning">تحذير</string>
     <string name="PaymentWarningText">لا يملك تيليجرام ولا %1$s صلاحياتِ الوصولِ إلى معلومات بطاقتك الإئتمانية. تفاصيل البطاقات الإئتمانية تتم معالجتها مباشرة عن طريق نظام الدفع %2$s.\10\10الدفعات المالية تذهب بشكل مباشر إلى مطور %1$s. لا يوفر تيليجرام أي ضمانات حول عملية الشراء، لذلك استمر على مسئوليتك. في حال وجود مشاكل يمكنك التواصل مع مطور %1$s أو مع المَصرف الخاص بك.</string>
-    <string name="PendingEmailText">بريد الاسترداد الخاص بك %1$s غير مفعل ويَلزمك تفعيله عبر الرسالة الواردة إليه.</string>
     <string name="PermissionContacts">يحتاج تيليجرام إلى الوصول لجهات اتصالك لتتمكن من التواصل مع أصدقائك عبر جميع أجهزتك.</string>
     <string name="PermissionDrawAboveOtherApps">يحتاج تيليجرام إلى صلاحية الظهور فوق التطبيقات لتشغيل المقاطع المرئية في وضع (صورة في الصورة).</string>
     <string name="PermissionNoAudio">يحتاج تيليجرام إلى السماح له بالوصول للمايكروفون الخاص بك لتتمكن من إرسال رسائل صوتية.</string>
@@ -1576,7 +1574,6 @@
     <string name="PrivacyBots">البوتات والمواقع</string>
     <string name="PrivacyBotsInfo">المواقع التي سجلتَ دخولك إليها عبر تيليجرام.</string>
     <string name="PrivacyCallsP2PHelp">تعطيل خيار النِّد للنِّد سيجعل جميع المكالمات معتمِدةً على خوادم تيليجرام لحماية عنوان الـ IP الخاص بك، لكن بالمقابل ستنخفض جودةُ الصوت قليلًا.</string>
-    <string name="PrivacyCallsP2PTitle">النِّد للنِّد</string>
     <string name="PrivacyClearPayment">معلومات الدفع</string>
     <string name="PrivacyClearShipping">معلومات الشحن</string>
     <string name="PrivacyDeleteCloudDrafts">حذف جميع المسودات السحابية</string>
@@ -1790,7 +1787,6 @@
     <string name="SharedLinksTab">روابط</string>
     <string name="SharedMedia">الوسائط المتبادَلة</string>
     <string name="SharedMediaTab">وسائط</string>
-    <string name="SharedMediaTitle">الوسائط المتبادَلة</string>
     <string name="SharedMusicTab">صوتيات</string>
     <string name="SharedPlace">مكان</string>
     <string name="SharedVoiceTab">تسجيلات</string>
@@ -2110,9 +2106,9 @@
     <string name="YourPhone">رقمك</string>
     <string name="chatDate">MMMM d</string>
     <string name="chatFullDate">MMMM d, yyyy</string>
-    <string name="common_google_play_services_enable_button">تمكين</string>
-    <string name="common_google_play_services_enable_text">‏لن يعمل %1$s ما لم يتم تمكين خدمات Google Play.</string>
-    <string name="common_google_play_services_enable_title">‏تمكين خدمات Google Play</string>
+    <string name="common_google_play_services_enable_button">تفعيل</string>
+    <string name="common_google_play_services_enable_text">‏لن يعمل %1$s ما لم يتم تفعيل خدمات Google Play.</string>
+    <string name="common_google_play_services_enable_title">‏تفعيل خدمات Google Play</string>
     <string name="common_google_play_services_install_button">تثبيت</string>
     <string name="common_google_play_services_install_text">‏لن يتم تشغيل %1$s بدون خدمات Google Play، والتي لا تتوفر على جهازك.</string>
     <string name="common_google_play_services_install_title">‏الحصول على خدمات Google Play</string>

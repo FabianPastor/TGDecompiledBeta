@@ -14,7 +14,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.p005ui.ActionBar.C0646ActionBar;
+import org.telegram.p005ui.ActionBar.C0403ActionBar;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.tgnet.TLRPC.RecentMeUrl;
@@ -27,8 +27,8 @@ public class DialogsEmptyCell extends LinearLayout {
     private TextView emptyTextView2;
 
     /* renamed from: org.telegram.ui.Cells.DialogsEmptyCell$1 */
-    class C08001 implements OnTouchListener {
-        C08001() {
+    class C04981 implements OnTouchListener {
+        C04981() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -40,7 +40,7 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener(new C08001());
+        setOnTouchListener(new C04981());
         this.emptyTextView1 = new TextView(context);
         this.emptyTextView1.setText(LocaleController.getString("NoChats", R.string.NoChats));
         this.emptyTextView1.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
@@ -56,8 +56,8 @@ public class DialogsEmptyCell extends LinearLayout {
         this.emptyTextView2.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         this.emptyTextView2.setTextSize(1, 15.0f);
         this.emptyTextView2.setGravity(17);
-        this.emptyTextView2.setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(6.0f), AndroidUtilities.m10dp(8.0f), 0);
-        this.emptyTextView2.setLineSpacing((float) AndroidUtilities.m10dp(2.0f), 1.0f);
+        this.emptyTextView2.setPadding(AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(6.0f), AndroidUtilities.m9dp(8.0f), 0);
+        this.emptyTextView2.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
         addView(this.emptyTextView2, LayoutHelper.createLinear(-2, -2, 0.0f, 0.0f, 0.0f, 20.0f));
     }
 
@@ -81,12 +81,12 @@ public class DialogsEmptyCell extends LinearLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int totalHeight = MeasureSpec.getSize(heightMeasureSpec);
         if (totalHeight == 0) {
-            totalHeight = (AndroidUtilities.displaySize.y - C0646ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            totalHeight = (AndroidUtilities.displaySize.y - C0403ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
         if (this.currentType == 0) {
             ArrayList<RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
             if (!arrayList.isEmpty()) {
-                totalHeight -= (((AndroidUtilities.m10dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.m10dp(50.0f);
+                totalHeight -= (((AndroidUtilities.m9dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.m9dp(50.0f);
             }
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(totalHeight, NUM));
             return;

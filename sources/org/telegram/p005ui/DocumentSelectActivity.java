@@ -40,7 +40,7 @@ import org.telegram.p005ui.ActionBar.ActionBarMenu;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.GraySectionCell;
@@ -66,7 +66,7 @@ public class DocumentSelectActivity extends BaseFragment {
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private int maxSelectedFiles = -1;
-    private BroadcastReceiver receiver = new C13861();
+    private BroadcastReceiver receiver = new C09311();
     private boolean receiverRegistered = false;
     private ArrayList<ListItem> recentItems = new ArrayList();
     private boolean scrolling;
@@ -75,8 +75,8 @@ public class DocumentSelectActivity extends BaseFragment {
     private long sizeLimit = NUM;
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$1 */
-    class C13861 extends BroadcastReceiver {
-        C13861() {
+    class C09311 extends BroadcastReceiver {
+        C09311() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
@@ -96,14 +96,14 @@ public class DocumentSelectActivity extends BaseFragment {
                     DocumentSelectActivity.this.listFiles(DocumentSelectActivity.this.currentDir);
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
-    class C13874 implements OnPreDrawListener {
-        C13874() {
+    class C09324 implements OnPreDrawListener {
+        C09324() {
         }
 
         public boolean onPreDraw() {
@@ -130,7 +130,7 @@ public class DocumentSelectActivity extends BaseFragment {
         private HistoryEntry() {
         }
 
-        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, C13861 x1) {
+        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, C09311 x1) {
             this();
         }
     }
@@ -150,14 +150,14 @@ public class DocumentSelectActivity extends BaseFragment {
             this.ext = TtmlNode.ANONYMOUS_REGION_ID;
         }
 
-        /* synthetic */ ListItem(DocumentSelectActivity x0, C13861 x1) {
+        /* synthetic */ ListItem(DocumentSelectActivity x0, C09311 x1) {
             this();
         }
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
-    class C21122 extends ActionBarMenuOnItemClick {
-        C21122() {
+    class C14352 extends ActionBarMenuOnItemClick {
+        C14352() {
         }
 
         public void onItemClick(int id) {
@@ -174,7 +174,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     }
                     return;
                 }
-                DocumentSelectActivity.this.lambda$checkDiscard$69$PassportActivity();
+                DocumentSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 3 && DocumentSelectActivity.this.delegate != null) {
                 DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet()));
                 for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
@@ -185,8 +185,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$3 */
-    class C21133 extends OnScrollListener {
-        C21133() {
+    class C14363 extends OnScrollListener {
+        C14363() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -285,7 +285,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 ApplicationLoader.applicationContext.unregisterReceiver(this.receiver);
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         super.onFragmentDestroy();
     }
@@ -309,7 +309,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SelectFile", R.string.SelectFile));
-        this.actionBar.setActionBarMenuOnItemClick(new C21122());
+        this.actionBar.setActionBarMenuOnItemClick(new C14352());
         this.selectedFiles.clear();
         this.actionModeViews.clear();
         ActionBarMenu actionMode = this.actionBar.createActionMode();
@@ -319,7 +319,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
         this.selectedMessagesCountTextView.setOnTouchListener(DocumentSelectActivity$$Lambda$0.$instance);
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-        this.actionModeViews.add(actionMode.addItemWithWidth(3, R.drawable.ic_ab_done, AndroidUtilities.m10dp(54.0f)));
+        this.actionModeViews.add(actionMode.addItemWithWidth(3, R.drawable.ic_ab_done, AndroidUtilities.m9dp(54.0f)));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
@@ -337,7 +337,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.listAdapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnScrollListener(new C21133());
+        this.listView.setOnScrollListener(new C14363());
         this.listView.setOnItemLongClickListener(new DocumentSelectActivity$$Lambda$1(this));
         this.listView.setOnItemClickListener(new DocumentSelectActivity$$Lambda$2(this));
         listRoots();
@@ -495,7 +495,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
             Collections.sort(this.recentItems, DocumentSelectActivity$$Lambda$3.$instance);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -522,7 +522,7 @@ public class DocumentSelectActivity extends BaseFragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (this.listView != null) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new C13874());
+            this.listView.getViewTreeObserver().addOnPreDrawListener(new C09324());
         }
     }
 
@@ -650,7 +650,7 @@ public class DocumentSelectActivity extends BaseFragment {
             r7 = move-exception;
      */
     /* JADX WARNING: Missing block: B:51:?, code:
-            org.telegram.messenger.FileLog.m14e(r7);
+            org.telegram.messenger.FileLog.m13e(r7);
      */
     /* JADX WARNING: Missing block: B:73:0x02d5, code:
             r21 = th;
@@ -693,7 +693,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     if (line != null) {
                         if (line.contains("vfat") || line.contains("/mnt")) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11d(line);
+                                FileLog.m10d(line);
                             }
                             StringTokenizer stringTokenizer = new StringTokenizer(line, " ");
                             String unused = stringTokenizer.nextToken();
@@ -726,7 +726,7 @@ public class DocumentSelectActivity extends BaseFragment {
                             bufferedReader2.close();
                             bufferedReader = bufferedReader2;
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                             bufferedReader = bufferedReader2;
                         }
                     }
@@ -739,12 +739,12 @@ public class DocumentSelectActivity extends BaseFragment {
         } catch (Exception e4) {
             e2 = e4;
             try {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
                     } catch (Throwable e22) {
-                        FileLog.m14e(e22);
+                        FileLog.m13e(e22);
                     }
                 }
                 fs = new ListItem(this, null);
@@ -771,7 +771,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     try {
                         bufferedReader.close();
                     } catch (Throwable e222) {
-                        FileLog.m14e(e222);
+                        FileLog.m13e(e222);
                     }
                 }
                 throw th3;
@@ -797,7 +797,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 } catch (Exception e5) {
                     e222 = e5;
                     fs = fs2;
-                    FileLog.m14e(e222);
+                    FileLog.m13e(e222);
                     fs = new ListItem(this, null);
                     fs.title = LocaleController.getString("Gallery", R.string.Gallery);
                     fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
@@ -811,7 +811,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         } catch (Exception e6) {
             e222 = e6;
-            FileLog.m14e(e222);
+            FileLog.m13e(e222);
             fs = new ListItem(this, null);
             fs.title = LocaleController.getString("Gallery", R.string.Gallery);
             fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
@@ -842,7 +842,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
             return LocaleController.formatString("FreeOfTotal", R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return path;
         }
     }

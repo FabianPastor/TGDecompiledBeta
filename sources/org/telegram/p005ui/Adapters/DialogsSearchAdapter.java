@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.LongSparseArray;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -90,7 +92,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         private DialogSearchResult() {
         }
 
-        /* synthetic */ DialogSearchResult(DialogsSearchAdapter x0, C18681 x1) {
+        /* synthetic */ DialogSearchResult(DialogsSearchAdapter x0, C12461 x1) {
             this();
         }
     }
@@ -115,8 +117,12 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$1 */
-    class C18681 implements SearchAdapterHelperDelegate {
-        C18681() {
+    class C12461 implements SearchAdapterHelperDelegate {
+        public SparseArray getExcludeUsers() {
+            return SearchAdapterHelper$SearchAdapterHelperDelegate$$CC.getExcludeUsers(this);
+        }
+
+        C12461() {
         }
 
         public void onDataSetChanged() {
@@ -139,7 +145,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         private CategoryAdapterRecycler() {
         }
 
-        /* synthetic */ CategoryAdapterRecycler(DialogsSearchAdapter x0, C18681 x1) {
+        /* synthetic */ CategoryAdapterRecycler(DialogsSearchAdapter x0, C12461 x1) {
             this();
         }
 
@@ -149,7 +155,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new HintDialogCell(DialogsSearchAdapter.this.mContext);
-            view.setLayoutParams(new LayoutParams(AndroidUtilities.m10dp(80.0f), AndroidUtilities.m10dp(100.0f)));
+            view.setLayoutParams(new LayoutParams(AndroidUtilities.m9dp(80.0f), AndroidUtilities.m9dp(86.0f)));
             return new Holder(view);
         }
 
@@ -177,7 +183,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             cell.setTag(Integer.valueOf(did));
             String name = TtmlNode.ANONYMOUS_REGION_ID;
             if (user != null) {
-                name = ContactsController.formatName(user.first_name, user.last_name);
+                name = UserObject.getFirstName(user);
             } else if (chat != null) {
                 name = chat.title;
             }
@@ -190,7 +196,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public DialogsSearchAdapter(Context context, int messagesSearch, int type) {
-        this.searchAdapterHelper.setDelegate(new C18681());
+        this.searchAdapterHelper.setDelegate(new C12461());
         this.mContext = context;
         this.needMessagesSearch = messagesSearch;
         this.dialogsType = type;
@@ -241,7 +247,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
             TL_messages_searchGlobal req = new TL_messages_searchGlobal();
             req.limit = 20;
-            req.f160q = query;
+            req.f158q = query;
             if (this.lastMessagesSearchString == null || !query.equals(this.lastMessagesSearchString) || this.searchResultMessages.isEmpty()) {
                 req.offset_date = 0;
                 req.offset_id = 0;
@@ -400,7 +406,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 MessagesStorage.getInstance(this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
                 for (a = 0; a < users.size(); a++) {
                     TLObject user = (User) users.get(a);
-                    recentSearchObject = (RecentSearchObject) hashMap.get((long) user.f177id);
+                    recentSearchObject = (RecentSearchObject) hashMap.get((long) user.f176id);
                     if (recentSearchObject != null) {
                         recentSearchObject.object = user;
                     }
@@ -409,7 +415,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             Collections.sort(arrayList, DialogsSearchAdapter$$Lambda$9.$instance);
             AndroidUtilities.runOnUIThread(new DialogsSearchAdapter$$Lambda$10(this, arrayList, hashMap));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -448,7 +454,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -463,7 +469,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM search_recent WHERE 1").stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -561,7 +567,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 dialogSearchResult.date = ConnectionsManager.DEFAULT_DATACENTER_ID;
                 dialogSearchResult.name = savedMessages;
                 dialogSearchResult.object = user;
-                dialogsResult.put((long) user.f177id, dialogSearchResult);
+                dialogsResult.put((long) user.f176id, dialogSearchResult);
                 resultCount = 0 + 1;
             }
             if (!usersToLoad.isEmpty()) {
@@ -592,7 +598,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             if (data != null) {
                                 user = User.TLdeserialize(data, data.readInt32(false), false);
                                 data.reuse();
-                                dialogSearchResult = (DialogSearchResult) dialogsResult.get((long) user.f177id);
+                                dialogSearchResult = (DialogSearchResult) dialogsResult.get((long) user.f176id);
                                 if (user.status != null) {
                                     user.status.expires = cursor.intValue(1);
                                 }
@@ -792,7 +798,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
             updateSearchResults(resultArray, resultArrayNames, encUsers, searchId);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -845,7 +851,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     this.searchTimer = null;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (query == null || query.length() == 0) {
                 this.searchAdapterHelper.unloadRecentHashtags();
@@ -890,7 +896,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         DialogsSearchAdapter.this.searchTimer.cancel();
                         DialogsSearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                     DialogsSearchAdapter.this.searchDialogsInternal(query, searchId);
                     AndroidUtilities.runOnUIThread(new DialogsSearchAdapter$2$$Lambda$0(this, query));
@@ -949,7 +955,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
             TLObject object = ((RecentSearchObject) this.recentSearchObjects.get((i - 1) - offset)).object;
             if (object instanceof User) {
-                TLObject user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((User) object).f177id));
+                TLObject user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((User) object).f176id));
                 if (user != null) {
                     return user;
                 }
@@ -1071,7 +1077,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 break;
         }
         if (viewType == 5) {
-            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.m10dp(100.0f)));
+            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.m9dp(86.0f)));
         } else {
             view.setLayoutParams(new LayoutParams(-1, -2));
         }
@@ -1181,14 +1187,14 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                     username2 = spannableStringBuilder2;
                                 } catch (Throwable e) {
                                     username2 = un;
-                                    FileLog.m14e(e);
+                                    FileLog.m13e(e);
                                 }
                             }
                         }
                     }
                 }
                 boolean savedMessages = false;
-                if (user != null && user.f177id == this.selfUserId) {
+                if (user != null && user.f176id == this.selfUserId) {
                     name2 = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                     username2 = null;
                     savedMessages = true;

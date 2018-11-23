@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.telegram.PhoneFormat.C0195PhoneFormat;
+import org.telegram.PhoneFormat.C0194PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -40,7 +40,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                 this.searchTimer.cancel();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (query == null) {
             this.searchResult.clear();
@@ -55,7 +55,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                     PhonebookSearchAdapter.this.searchTimer.cancel();
                     PhonebookSearchAdapter.this.searchTimer = null;
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 PhonebookSearchAdapter.this.processSearch(query);
             }
@@ -133,7 +133,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                         resultArrayNames.add(AndroidUtilities.generateSearchName("@" + contact.user.username, null, "@" + q));
                     }
                     if (contact.user != null) {
-                        foundUids.put(contact.user.f177id, true);
+                        foundUids.put(contact.user.f176id, true);
                     }
                     resultArray.add(contact);
                 } else {
@@ -215,13 +215,13 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                     user = contact.user;
                 } else {
                     userCell.setCurrentId(contact.contact_id);
-                    userCell.setData(null, (CharSequence) this.searchResultNames.get(position), contact.phones.isEmpty() ? TtmlNode.ANONYMOUS_REGION_ID : C0195PhoneFormat.getInstance().format((String) contact.phones.get(0)), 0);
+                    userCell.setData(null, (CharSequence) this.searchResultNames.get(position), contact.phones.isEmpty() ? TtmlNode.ANONYMOUS_REGION_ID : C0194PhoneFormat.getInstance().format((String) contact.phones.get(0)), 0);
                 }
             } else {
                 user = (User) object;
             }
             if (user != null) {
-                userCell.setData(user, (CharSequence) this.searchResultNames.get(position), C0195PhoneFormat.getInstance().format("+" + user.phone), 0);
+                userCell.setData(user, (CharSequence) this.searchResultNames.get(position), C0194PhoneFormat.getInstance().format("+" + user.phone), 0);
             }
         }
     }

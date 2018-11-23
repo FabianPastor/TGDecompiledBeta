@@ -211,11 +211,12 @@ public class ContactsAdapter extends SectionsAdapter {
                 } else {
                     f2 = 72.0f;
                 }
-                int dp = AndroidUtilities.m10dp(f2);
+                int dp = AndroidUtilities.m9dp(f2);
+                int dp2 = AndroidUtilities.m9dp(8.0f);
                 if (!LocaleController.isRTL) {
                     f = 28.0f;
                 }
-                view.setPadding(dp, 0, AndroidUtilities.m10dp(f), 0);
+                view.setPadding(dp, dp2, AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(8.0f));
                 break;
         }
         return new Holder(view);
@@ -231,12 +232,12 @@ public class ContactsAdapter extends SectionsAdapter {
                 User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) ((ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section - i))).get(position)).user_id));
                 userCell.setData(user, null, null, 0);
                 if (this.checkedMap != null) {
-                    userCell.setChecked(this.checkedMap.indexOfKey(user.f177id) >= 0, !this.scrolling);
+                    userCell.setChecked(this.checkedMap.indexOfKey(user.f176id) >= 0, !this.scrolling);
                 }
                 if (this.ignoreUsers == null) {
                     return;
                 }
-                if (this.ignoreUsers.indexOfKey(user.f177id) >= 0) {
+                if (this.ignoreUsers.indexOfKey(user.f176id) >= 0) {
                     userCell.setAlpha(0.5f);
                     return;
                 } else {
@@ -248,29 +249,29 @@ public class ContactsAdapter extends SectionsAdapter {
                 if (section != 0) {
                     Contact contact = (Contact) ContactsController.getInstance(this.currentAccount).phoneBookContacts.get(position);
                     if (contact.first_name != null && contact.last_name != null) {
-                        textCell.setText(contact.first_name + " " + contact.last_name);
+                        textCell.setText(contact.first_name + " " + contact.last_name, false);
                         return;
                     } else if (contact.first_name == null || contact.last_name != null) {
-                        textCell.setText(contact.last_name);
+                        textCell.setText(contact.last_name, false);
                         return;
                     } else {
-                        textCell.setText(contact.first_name);
+                        textCell.setText(contact.first_name, false);
                         return;
                     }
                 } else if (this.needPhonebook) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.menu_invite);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.menu_invite, false);
                     return;
                 } else if (this.isAdmin) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink), R.drawable.menu_invite);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink), R.drawable.menu_invite, false);
                     return;
                 } else if (position == 0) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup);
+                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup, false);
                     return;
                 } else if (position == 1) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret);
+                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret, false);
                     return;
                 } else if (position == 2) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast);
+                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast, false);
                     return;
                 } else {
                     return;

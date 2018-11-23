@@ -593,7 +593,6 @@
     <string name="EditName">Editar nome</string>
     <string name="EditedMessage">editado</string>
     <string name="EmailCopied">Email copiado para a área de transferência</string>
-    <string name="EmailPasswordConfirmText">Por favor, siga os seguintes passos para completar a configuração da autenticação em duas etapas:\10\101. Verifique seu e-mail (não esqueça da pasta spam)\10%1$s\10\102. Clique no link de validação.</string>
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Desenhe um único emoji grande</string>
     <string name="EmojiUseDefault">Usar emoji padrão do sistema</string>
@@ -1518,7 +1517,6 @@
     <string name="PaymentTransactionTotal">Total</string>
     <string name="PaymentWarning">Atenção</string>
     <string name="PaymentWarningText">Nem o Telegram, nem %1$s terão acesso ao número do seu cartão de crédito. Os detalhes do cartão de crédito serão tratados apenas pelo sistema de pagamentos, %2$s.\10\10Pagamentos irão diretamente para o desenvolvedor de %1$s. O Telegram não pode prover qualquer garantia, então proceda por sua conta e risco. Em caso de problemas, contate o desenvolvedor de %1$s ou o seu banco.</string>
-    <string name="PendingEmailText">O seu e-mail de recuperação %1$s ainda não está ativo e aguarda confirmação.</string>
     <string name="PermissionContacts">Para que você se conecte com amigos em todos os seus dispositivos, seus contatos serão sincronizados continuamente na nuvem fortemente criptografada do Telegram.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram precisa de acesso para sobrescrever outros apps para reproduzir vídeos no modo PiP.</string>
     <string name="PermissionNoAudio">Telegram precisa acessar seu microfone para que você possa enviar mensagens de voz.</string>
@@ -1576,7 +1574,6 @@
     <string name="PrivacyBots">Bots e sites</string>
     <string name="PrivacyBotsInfo">Sites onde você logou usando o Telegram.</string>
     <string name="PrivacyCallsP2PHelp">Desativar o ponta a ponta irá transmitir as chamadas através dos servidores do Telegram, para evitar revelar o seu endereço de IP, mas pode diminuir a qualidade do áudio.</string>
-    <string name="PrivacyCallsP2PTitle">Ponta a Ponta</string>
     <string name="PrivacyClearPayment">Dados de pagamento</string>
     <string name="PrivacyClearShipping">Dados de envio</string>
     <string name="PrivacyDeleteCloudDrafts">Delete All Cloud Drafts</string>
@@ -1790,7 +1787,6 @@
     <string name="SharedLinksTab">LINKS</string>
     <string name="SharedMedia">Mídia Compartilhada</string>
     <string name="SharedMediaTab">MÍDIA</string>
-    <string name="SharedMediaTitle">Mídia Compartilhada</string>
     <string name="SharedMusicTab">ÁUDIO</string>
     <string name="SharedPlace">Local</string>
     <string name="SharedVoiceTab">VOZ</string>

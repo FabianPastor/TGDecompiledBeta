@@ -40,8 +40,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     private AnimatorSet windowAnimatorSet;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$1 */
-    class C06601 implements AnimatorListener {
-        C06601() {
+    class C04171 implements AnimatorListener {
+        C04171() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -60,8 +60,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$2 */
-    class C06612 implements AnimatorListener {
-        C06612() {
+    class C04182 implements AnimatorListener {
+        C04182() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -102,14 +102,14 @@ public class ActionBarPopupWindow extends PopupWindow {
         public ActionBarPopupWindowLayout(Context context) {
             super(context);
             this.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground), Mode.MULTIPLY));
-            setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f));
+            setPadding(AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f));
             setWillNotDraw(false);
             try {
                 this.scrollView = new ScrollView(context);
                 this.scrollView.setVerticalScrollBarEnabled(false);
                 addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.linearLayout = new LinearLayout(context);
             this.linearLayout.setOrientation(1);
@@ -154,7 +154,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 for (a = 0; a < count; a++) {
                     visibleCount += getItemAt(a).getVisibility() == 0 ? 1 : 0;
                 }
-                int height = getMeasuredHeight() - AndroidUtilities.m10dp(16.0f);
+                int height = getMeasuredHeight() - AndroidUtilities.m9dp(16.0f);
                 View child;
                 Integer position;
                 if (this.showedFromBotton) {
@@ -162,7 +162,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                         child = getItemAt(a);
                         if (child.getVisibility() == 0) {
                             position = (Integer) this.positions.get(child);
-                            if (position != null && ((float) (height - ((position.intValue() * AndroidUtilities.m10dp(48.0f)) + AndroidUtilities.m10dp(32.0f)))) > ((float) height) * value) {
+                            if (position != null && ((float) (height - ((position.intValue() * AndroidUtilities.m9dp(48.0f)) + AndroidUtilities.m9dp(32.0f)))) > ((float) height) * value) {
                                 break;
                             }
                             this.lastStartedChild = a - 1;
@@ -174,7 +174,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                         child = getItemAt(a);
                         if (child.getVisibility() == 0) {
                             position = (Integer) this.positions.get(child);
-                            if (position != null && ((float) (((position.intValue() + 1) * AndroidUtilities.m10dp(48.0f)) - AndroidUtilities.m10dp(24.0f))) > ((float) height) * value) {
+                            if (position != null && ((float) (((position.intValue() + 1) * AndroidUtilities.m9dp(48.0f)) - AndroidUtilities.m9dp(24.0f))) > ((float) height) * value) {
                                 break;
                             }
                             this.lastStartedChild = a + 1;
@@ -197,7 +197,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 animatorArr[0] = ObjectAnimator.ofFloat(child, "alpha", new float[]{0.0f, 1.0f});
                 String str = "translationY";
                 float[] fArr = new float[2];
-                fArr[0] = (float) AndroidUtilities.m10dp(this.showedFromBotton ? 6.0f : -6.0f);
+                fArr[0] = (float) AndroidUtilities.m9dp(this.showedFromBotton ? 6.0f : -6.0f);
                 fArr[1] = 0.0f;
                 animatorArr[1] = ObjectAnimator.ofFloat(child, str, fArr);
                 animatorSet.playTogether(animatorArr);
@@ -358,7 +358,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             super.showAsDropDown(anchor, xoff, yoff);
             registerListener(anchor);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -388,7 +388,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.windowAnimatorSet = new AnimatorSet();
             this.windowAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(content, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(content, "backAlpha", new int[]{0, 255})});
             this.windowAnimatorSet.setDuration((long) ((visibleCount * 16) + 150));
-            this.windowAnimatorSet.addListener(new C06601());
+            this.windowAnimatorSet.addListener(new C04171());
             this.windowAnimatorSet.start();
         }
     }
@@ -424,12 +424,12 @@ public class ActionBarPopupWindow extends PopupWindow {
             Animator[] animatorArr = new Animator[2];
             String str = "translationY";
             float[] fArr = new float[1];
-            fArr[0] = (float) AndroidUtilities.m10dp(content.showedFromBotton ? 5.0f : -5.0f);
+            fArr[0] = (float) AndroidUtilities.m9dp(content.showedFromBotton ? 5.0f : -5.0f);
             animatorArr[0] = ObjectAnimator.ofFloat(content, str, fArr);
             animatorArr[1] = ObjectAnimator.ofFloat(content, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.windowAnimatorSet.setDuration(150);
-            this.windowAnimatorSet.addListener(new C06612());
+            this.windowAnimatorSet.addListener(new C04182());
             this.windowAnimatorSet.start();
             return;
         }

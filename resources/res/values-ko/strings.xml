@@ -593,7 +593,6 @@
     <string name="EditName">이름 수정</string>
     <string name="EditedMessage">수정됨</string>
     <string name="EmailCopied">이메일을 클립보드에 복사했습니다</string>
-    <string name="EmailPasswordConfirmText">2단계 인증 설정을 완료하시려면 아래의 절차대로 진행해주세요:\10\101.이메일 확인(스팸 폴더 확인)\10%1$s\10\102.인증 링크 클릭</string>
     <string name="Emoji">이모지</string>
     <string name="EmojiBigSize">큰 이모지 하나 그리기</string>
     <string name="EmojiUseDefault">시스템 기본 이모지 사용</string>
@@ -1518,7 +1517,6 @@
     <string name="PaymentTransactionTotal">전체</string>
     <string name="PaymentWarning">경고</string>
     <string name="PaymentWarningText">텔레그램이나 %1$s은(는) 회원님의 신용카드 정보에 접근할 수 없습니다. 신용카드 정보는 %2$s 결제 시스템에서만 처리됩니다.\10\10결제는 %1$s 개발자에게 직접 됩니다. 텔레그램은 그 어떠한 보장도 하지 않음으로 진행시 위험을 감수하셔야 합니다. 문제 발생 시, %1$s 개발자나 사용하시는 은행에게 문의해 주세요.</string>
-    <string name="PendingEmailText">복구 이메일 %1$s이 아직 활성화되지 않았고 승인을 기다리고 있습니다.</string>
     <string name="PermissionContacts">회원님이 모든 기기에서 친구들과 연락할 수 있도록 하기 위해 텔레그램에게 회원님의 연락처에 접근할 권한이 필요합니다.</string>
     <string name="PermissionDrawAboveOtherApps">화면속화면 모드로 동영상을 재생하려면 텔레그램에게 다른 앱 위에 그릴 수 있는 권한을 부여하셔야 합니다.</string>
     <string name="PermissionNoAudio">음성 메시지를 보내려면 텔레그램에게 마이크 접근 권한을 부여하셔야 합니다.</string>
@@ -1576,7 +1574,6 @@
     <string name="PrivacyBots">봇 및 웹사이트</string>
     <string name="PrivacyBotsInfo">텔레그램을 사용하여 로그인하신 웹사이트입니다.</string>
     <string name="PrivacyCallsP2PHelp">피어투피어를 끄시면, 회원님의 IP 주소를 노출시키지 않도록 모든 전화가 텔레그램 서버를 통해 전달됩니다. 다만 음성 품질이 약간 저하될 수 있습니다.</string>
-    <string name="PrivacyCallsP2PTitle">피어투피어</string>
     <string name="PrivacyClearPayment">결제 정보</string>
     <string name="PrivacyClearShipping">배송 정보</string>
     <string name="PrivacyDeleteCloudDrafts">Delete All Cloud Drafts</string>
@@ -1790,7 +1787,6 @@
     <string name="SharedLinksTab">링크</string>
     <string name="SharedMedia">공유된 미디어</string>
     <string name="SharedMediaTab">미디어</string>
-    <string name="SharedMediaTitle">공유된 미디어</string>
     <string name="SharedMusicTab">오디오</string>
     <string name="SharedPlace">장소</string>
     <string name="SharedVoiceTab">음성</string>

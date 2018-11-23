@@ -19,7 +19,7 @@ public class CloseProgressDrawable extends Drawable {
 
     public CloseProgressDrawable() {
         this.paint.setColor(-9079435);
-        this.paint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.paint.setStrokeCap(Cap.ROUND);
     }
 
@@ -39,13 +39,13 @@ public class CloseProgressDrawable extends Drawable {
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
         canvas.rotate(45.0f);
         this.paint.setAlpha(255 - ((this.currentSegment % 4) * 40));
-        canvas.drawLine((float) (-AndroidUtilities.m10dp(8.0f)), 0.0f, 0.0f, 0.0f, this.paint);
+        canvas.drawLine((float) (-AndroidUtilities.m9dp(8.0f)), 0.0f, 0.0f, 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 1) % 4) * 40));
-        canvas.drawLine(0.0f, (float) (-AndroidUtilities.m10dp(8.0f)), 0.0f, 0.0f, this.paint);
+        canvas.drawLine(0.0f, (float) (-AndroidUtilities.m9dp(8.0f)), 0.0f, 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 2) % 4) * 40));
-        canvas.drawLine(0.0f, 0.0f, (float) AndroidUtilities.m10dp(8.0f), 0.0f, this.paint);
+        canvas.drawLine(0.0f, 0.0f, (float) AndroidUtilities.m9dp(8.0f), 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 3) % 4) * 40));
-        canvas.drawLine(0.0f, 0.0f, 0.0f, (float) AndroidUtilities.m10dp(8.0f), this.paint);
+        canvas.drawLine(0.0f, 0.0f, 0.0f, (float) AndroidUtilities.m9dp(8.0f), this.paint);
         canvas.restore();
         this.lastFrameTime = newTime;
         invalidateSelf();
@@ -62,10 +62,10 @@ public class CloseProgressDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(24.0f);
+        return AndroidUtilities.m9dp(24.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(24.0f);
+        return AndroidUtilities.m9dp(24.0f);
     }
 }

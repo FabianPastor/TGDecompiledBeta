@@ -13,6 +13,6 @@ final /* synthetic */ class PassportActivity$$Lambda$0 implements RequestDelegat
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new PassportActivity$$Lambda$74(tLObject));
+        AndroidUtilities.runOnUIThread(new PassportActivity$$Lambda$75(tLObject));
     }
 }

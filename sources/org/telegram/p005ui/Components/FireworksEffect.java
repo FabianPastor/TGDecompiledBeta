@@ -29,13 +29,13 @@ public class FireworksEffect {
         int type;
         float velocity;
         /* renamed from: vx */
-        float f215vx;
+        float f227vx;
         /* renamed from: vy */
-        float f216vy;
+        float f228vy;
         /* renamed from: x */
-        float f217x;
+        float f229x;
         /* renamed from: y */
-        float f218y;
+        float f230y;
 
         private Particle() {
         }
@@ -44,9 +44,9 @@ public class FireworksEffect {
             switch (this.type) {
                 case 0:
                     FireworksEffect.this.particlePaint.setColor(this.color);
-                    FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.m10dp(1.5f)) * this.scale);
+                    FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.m9dp(1.5f)) * this.scale);
                     FireworksEffect.this.particlePaint.setAlpha((int) (255.0f * this.alpha));
-                    canvas.drawPoint(this.f217x, this.f218y, FireworksEffect.this.particlePaint);
+                    canvas.drawPoint(this.f229x, this.f230y, FireworksEffect.this.particlePaint);
                     return;
                 default:
                     return;
@@ -55,7 +55,7 @@ public class FireworksEffect {
     }
 
     public FireworksEffect() {
-        this.particlePaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.5f));
+        this.particlePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.5f));
         this.particlePaint.setColor(Theme.getColor(Theme.key_actionBarDefaultTitle) & -1644826);
         this.particlePaint.setStrokeCap(Cap.ROUND);
         this.particlePaint.setStyle(Style.STROKE);
@@ -78,9 +78,9 @@ public class FireworksEffect {
                 count--;
             } else {
                 particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(particle.currentTime / particle.lifeTime);
-                particle.f217x += ((particle.f215vx * particle.velocity) * ((float) dt)) / 500.0f;
-                particle.f218y += ((particle.f216vy * particle.velocity) * ((float) dt)) / 500.0f;
-                particle.f216vy += ((float) dt) / 100.0f;
+                particle.f229x += ((particle.f227vx * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.f230y += ((particle.f228vy * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.f228vy += ((float) dt) / 100.0f;
                 particle.currentTime += (float) dt;
             }
             a++;
@@ -98,7 +98,7 @@ public class FireworksEffect {
                 int color;
                 int statusBarHeight = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
                 float cx = Utilities.random.nextFloat() * ((float) parent.getMeasuredWidth());
-                float cy = ((float) statusBarHeight) + (Utilities.random.nextFloat() * ((float) ((parent.getMeasuredHeight() - AndroidUtilities.m10dp(20.0f)) - statusBarHeight)));
+                float cy = ((float) statusBarHeight) + (Utilities.random.nextFloat() * ((float) ((parent.getMeasuredHeight() - AndroidUtilities.m9dp(20.0f)) - statusBarHeight)));
                 switch (Utilities.random.nextInt(4)) {
                     case 0:
                         color = -13357350;
@@ -127,10 +127,10 @@ public class FireworksEffect {
                         newParticle = (Particle) this.freeParticles.get(0);
                         this.freeParticles.remove(0);
                     }
-                    newParticle.f217x = cx;
-                    newParticle.f218y = cy;
-                    newParticle.f215vx = 1.5f * vx;
-                    newParticle.f216vy = vy;
+                    newParticle.f229x = cx;
+                    newParticle.f230y = cy;
+                    newParticle.f227vx = 1.5f * vx;
+                    newParticle.f228vy = vy;
                     newParticle.color = color;
                     newParticle.alpha = 1.0f;
                     newParticle.currentTime = 0.0f;

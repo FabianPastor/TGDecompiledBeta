@@ -26,7 +26,7 @@ public class EmptyTextProgressView extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         this.textView.setGravity(17);
         this.textView.setVisibility(4);
-        this.textView.setPadding(AndroidUtilities.m10dp(20.0f), 0, AndroidUtilities.m10dp(20.0f), 0);
+        this.textView.setPadding(AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f), 0);
         this.textView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
         setOnTouchListener(EmptyTextProgressView$$Lambda$0.$instance);

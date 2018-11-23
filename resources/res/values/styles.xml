@@ -33,6 +33,8 @@
     <style name="HockeyApp.SingleLineInputStyle">
         <item name="android:singleLine">true</item>
     </style>
+    <style name="MyTextViewStyle">
+    </style>
     <style name="PopupAnimation">
         <item name="android:windowEnterAnimation">@anim/popup_in</item>
         <item name="android:windowExitAnimation">@anim/popup_out</item>
@@ -57,6 +59,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:listViewStyle">@style/Theme.TMessages.ListView</item>
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
         <item name="android:itemTextAppearance">@style/ActionBar.Transparent.TMessages.Item</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowActionBarOverlay">false</item>
@@ -80,6 +83,7 @@
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
         <item name="android:actionBarStyle">@style/ActionBar.Transparent.TMessages.Start</item>
     </style>
     <style name="Theme.TMessages.Transparent">

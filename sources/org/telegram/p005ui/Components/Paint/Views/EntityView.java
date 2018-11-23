@@ -33,8 +33,8 @@ public class EntityView extends FrameLayout {
     private UUID uuid = UUID.randomUUID();
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.EntityView$1 */
-    class C11731 extends SimpleOnGestureListener {
-        C11731() {
+    class C07581 extends SimpleOnGestureListener {
+        C07581() {
         }
 
         public void onLongPress(MotionEvent e) {
@@ -74,14 +74,14 @@ public class EntityView extends FrameLayout {
             this.dotPaint.setColor(-12793105);
             this.dotStrokePaint.setColor(-1);
             this.dotStrokePaint.setStyle(Style.STROKE);
-            this.dotStrokePaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+            this.dotStrokePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
         }
 
         protected void updatePosition() {
             Rect bounds = EntityView.this.getSelectionBounds();
             LayoutParams layoutParams = (LayoutParams) getLayoutParams();
-            layoutParams.leftMargin = ((int) bounds.f230x) + EntityView.this.offsetX;
-            layoutParams.topMargin = ((int) bounds.f231y) + EntityView.this.offsetY;
+            layoutParams.leftMargin = ((int) bounds.f242x) + EntityView.this.offsetX;
+            layoutParams.topMargin = ((int) bounds.f243y) + EntityView.this.offsetY;
             layoutParams.width = (int) bounds.width;
             layoutParams.height = (int) bounds.height;
             setLayoutParams(layoutParams);
@@ -120,7 +120,7 @@ public class EntityView extends FrameLayout {
                             EntityView.this.hasTransformed = true;
                             Point translation = new Point(event.getRawX() - EntityView.this.previousLocationX, event.getRawY() - EntityView.this.previousLocationY);
                             float radAngle = (float) Math.toRadians((double) getRotation());
-                            float delta = (float) ((((double) translation.f228x) * Math.cos((double) radAngle)) + (((double) translation.f229y) * Math.sin((double) radAngle)));
+                            float delta = (float) ((((double) translation.f240x) * Math.cos((double) radAngle)) + (((double) translation.f241y) * Math.sin((double) radAngle)));
                             if (this.currentHandle == 1) {
                                 delta *= -1.0f;
                             }
@@ -156,7 +156,7 @@ public class EntityView extends FrameLayout {
     public EntityView(Context context, Point pos) {
         super(context);
         this.position = pos;
-        this.gestureDetector = new GestureDetector(context, new C11731());
+        this.gestureDetector = new GestureDetector(context, new C07581());
     }
 
     public UUID getUUID() {
@@ -197,7 +197,7 @@ public class EntityView extends FrameLayout {
     private boolean onTouchMove(float x, float y) {
         float scale = ((View) getParent()).getScaleX();
         Point translation = new Point((x - this.previousLocationX) / scale, (y - this.previousLocationY) / scale);
-        if (((float) Math.hypot((double) translation.f228x, (double) translation.f229y)) <= (this.hasPanned ? 6.0f : 16.0f)) {
+        if (((float) Math.hypot((double) translation.f240x, (double) translation.f241y)) <= (this.hasPanned ? 6.0f : 16.0f)) {
             return false;
         }
         pan(translation);
@@ -253,16 +253,16 @@ public class EntityView extends FrameLayout {
 
     public void pan(Point translation) {
         Point point = this.position;
-        point.f228x += translation.f228x;
+        point.f240x += translation.f240x;
         point = this.position;
-        point.f229y += translation.f229y;
+        point.f241y += translation.f241y;
         updatePosition();
     }
 
     protected void updatePosition() {
         float halfHeight = ((float) getHeight()) / 2.0f;
-        setX(this.position.f228x - (((float) getWidth()) / 2.0f));
-        setY(this.position.f229y - halfHeight);
+        setX(this.position.f240x - (((float) getWidth()) / 2.0f));
+        setY(this.position.f241y - halfHeight);
         updateSelectionView();
     }
 

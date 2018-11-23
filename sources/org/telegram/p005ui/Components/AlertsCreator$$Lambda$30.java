@@ -1,23 +1,15 @@
 package org.telegram.p005ui.Components;
 
-import android.view.View;
-import android.view.View.OnClickListener;
-import org.telegram.p005ui.ActionBar.AlertDialog;
-import org.telegram.p005ui.Components.AlertsCreator.AccountSelectDelegate;
+import org.telegram.p005ui.Components.NumberPicker.Formatter;
 
 /* renamed from: org.telegram.ui.Components.AlertsCreator$$Lambda$30 */
-final /* synthetic */ class AlertsCreator$$Lambda$30 implements OnClickListener {
-    private final AlertDialog[] arg$1;
-    private final Runnable arg$2;
-    private final AccountSelectDelegate arg$3;
+final /* synthetic */ class AlertsCreator$$Lambda$30 implements Formatter {
+    static final Formatter $instance = new AlertsCreator$$Lambda$30();
 
-    AlertsCreator$$Lambda$30(AlertDialog[] alertDialogArr, Runnable runnable, AccountSelectDelegate accountSelectDelegate) {
-        this.arg$1 = alertDialogArr;
-        this.arg$2 = runnable;
-        this.arg$3 = accountSelectDelegate;
+    private AlertsCreator$$Lambda$30() {
     }
 
-    public void onClick(View view) {
-        AlertsCreator.lambda$createAccountSelectDialog$31$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, view);
+    public String format(int i) {
+        return AlertsCreator.lambda$createTTLAlert$31$AlertsCreator(i);
     }
 }

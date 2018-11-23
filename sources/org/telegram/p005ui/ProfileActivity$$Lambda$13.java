@@ -1,17 +1,20 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.ContactsActivity.ContactsActivityDelegate;
-import org.telegram.tgnet.TLRPC.User;
+import android.animation.AnimatorSet;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$13 */
-final /* synthetic */ class ProfileActivity$$Lambda$13 implements ContactsActivityDelegate {
-    private final ProfileActivity arg$1;
+final /* synthetic */ class ProfileActivity$$Lambda$13 implements Runnable {
+    private final AnimatorSet arg$1;
 
-    ProfileActivity$$Lambda$13(ProfileActivity profileActivity) {
-        this.arg$1 = profileActivity;
+    private ProfileActivity$$Lambda$13(AnimatorSet animatorSet) {
+        this.arg$1 = animatorSet;
     }
 
-    public void didSelectContact(User user, String str, ContactsActivity contactsActivity) {
-        this.arg$1.lambda$openAddMember$22$ProfileActivity(user, str, contactsActivity);
+    static Runnable get$Lambda(AnimatorSet animatorSet) {
+        return new ProfileActivity$$Lambda$13(animatorSet);
+    }
+
+    public void run() {
+        this.arg$1.start();
     }
 }

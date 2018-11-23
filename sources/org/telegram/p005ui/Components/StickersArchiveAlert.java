@@ -33,8 +33,8 @@ public class StickersArchiveAlert extends Builder {
     private ArrayList<StickerSetCovered> stickerSets;
 
     /* renamed from: org.telegram.ui.Components.StickersArchiveAlert$1 */
-    class C13081 implements OnClickListener {
-        C13081() {
+    class C08481 implements OnClickListener {
+        C08481() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -43,8 +43,8 @@ public class StickersArchiveAlert extends Builder {
     }
 
     /* renamed from: org.telegram.ui.Components.StickersArchiveAlert$2 */
-    class C13092 implements OnClickListener {
-        C13092() {
+    class C08492 implements OnClickListener {
+        C08492() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -71,7 +71,7 @@ public class StickersArchiveAlert extends Builder {
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new ArchivedStickerSetCell(this.context, false);
-            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.m10dp(82.0f)));
+            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.m9dp(82.0f)));
             return new Holder(view);
         }
 
@@ -98,7 +98,7 @@ public class StickersArchiveAlert extends Builder {
         TextView textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(1, 16.0f);
-        textView.setPadding(AndroidUtilities.m10dp(23.0f), AndroidUtilities.m10dp(10.0f), AndroidUtilities.m10dp(23.0f), 0);
+        textView.setPadding(AndroidUtilities.m9dp(23.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(23.0f), 0);
         if (set.set.masks) {
             textView.setText(LocaleController.getString("ArchivedMasksAlertInfo", R.string.ArchivedMasksAlertInfo));
         } else {
@@ -109,12 +109,12 @@ public class StickersArchiveAlert extends Builder {
         listView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
         listView.setAdapter(new ListAdapter(context));
         listView.setVerticalScrollBarEnabled(false);
-        listView.setPadding(AndroidUtilities.m10dp(10.0f), 0, AndroidUtilities.m10dp(10.0f), 0);
+        listView.setPadding(AndroidUtilities.m9dp(10.0f), 0, AndroidUtilities.m9dp(10.0f), 0);
         listView.setGlowColor(-657673);
         container.addView(listView, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
-        setNegativeButton(LocaleController.getString("Close", R.string.Close), new C13081());
+        setNegativeButton(LocaleController.getString("Close", R.string.Close), new C08481());
         if (this.parentFragment != null) {
-            setPositiveButton(LocaleController.getString("Settings", R.string.Settings), new C13092());
+            setPositiveButton(LocaleController.getString("Settings", R.string.Settings), new C08492());
         }
     }
 }

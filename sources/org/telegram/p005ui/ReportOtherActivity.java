@@ -17,7 +17,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Components.EditTextBoldCursor;
@@ -41,8 +41,8 @@ public class ReportOtherActivity extends BaseFragment {
     private int message_id = getArguments().getInt("message_id", 0);
 
     /* renamed from: org.telegram.ui.ReportOtherActivity$2 */
-    class C16902 implements OnTouchListener {
-        C16902() {
+    class C11172 implements OnTouchListener {
+        C11172() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -51,8 +51,8 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ReportOtherActivity$3 */
-    class C16913 implements OnEditorActionListener {
-        C16913() {
+    class C11183 implements OnEditorActionListener {
+        C11183() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -65,8 +65,8 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ReportOtherActivity$4 */
-    class C16924 implements Runnable {
-        C16924() {
+    class C11194 implements Runnable {
+        C11194() {
         }
 
         public void run() {
@@ -78,23 +78,23 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ReportOtherActivity$1 */
-    class C22831 extends ActionBarMenuOnItemClick {
+    class C15691 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ReportOtherActivity$1$1 */
-        class C22821 implements RequestDelegate {
-            C22821() {
+        class C15681 implements RequestDelegate {
+            C15681() {
             }
 
             public void run(TLObject response, TL_error error) {
             }
         }
 
-        C22831() {
+        C15691() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ReportOtherActivity.this.lambda$checkDiscard$69$PassportActivity();
+                ReportOtherActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
                 TLObject req;
                 InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
@@ -102,7 +102,7 @@ public class ReportOtherActivity extends BaseFragment {
                 if (ReportOtherActivity.this.message_id != 0) {
                     request = new TL_messages_report();
                     request.peer = peer;
-                    request.f155id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
+                    request.f153id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
                     request.reason = new TL_inputReportReasonOther();
                     request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
                     req = request;
@@ -113,11 +113,11 @@ public class ReportOtherActivity extends BaseFragment {
                     request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
                     req = request;
                 }
-                ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, new C22821());
+                ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, new C15681());
                 if (ReportOtherActivity.this.getParentActivity() != null) {
                     Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
                 }
-                ReportOtherActivity.this.lambda$checkDiscard$69$PassportActivity();
+                ReportOtherActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
@@ -131,13 +131,13 @@ public class ReportOtherActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat));
-        this.actionBar.setActionBarMenuOnItemClick(new C22831());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.actionBar.setActionBarMenuOnItemClick(new C15691());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
         this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C16902());
+        this.fragmentView.setOnTouchListener(new C11172());
         this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -154,9 +154,9 @@ public class ReportOtherActivity extends BaseFragment {
         }
         editTextBoldCursor.setGravity(i);
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.firstNameField.setCursorSize(AndroidUtilities.m10dp(20.0f));
+        this.firstNameField.setCursorSize(AndroidUtilities.m9dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new C16913());
+        this.firstNameField.setOnEditorActionListener(new C11183());
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.firstNameField.setHint(LocaleController.getString("ReportChatDescription", R.string.ReportChatDescription));
         this.firstNameField.setSelection(this.firstNameField.length());
@@ -173,7 +173,7 @@ public class ReportOtherActivity extends BaseFragment {
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
-            AndroidUtilities.runOnUIThread(new C16924(), 100);
+            AndroidUtilities.runOnUIThread(new C11194(), 100);
         }
     }
 

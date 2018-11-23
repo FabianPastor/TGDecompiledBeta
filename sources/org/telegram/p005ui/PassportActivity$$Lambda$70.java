@@ -1,17 +1,18 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$70 */
-final /* synthetic */ class PassportActivity$$Lambda$70 implements OnClickListener {
+final /* synthetic */ class PassportActivity$$Lambda$70 implements RequestDelegate {
     private final PassportActivity arg$1;
 
     PassportActivity$$Lambda$70(PassportActivity passportActivity) {
         this.arg$1 = passportActivity;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$11$PassportActivity(dialogInterface, i);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$null$10$PassportActivity(tLObject, tL_error);
     }
 }

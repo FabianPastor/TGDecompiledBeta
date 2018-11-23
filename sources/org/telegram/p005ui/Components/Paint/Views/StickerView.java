@@ -27,6 +27,7 @@ public class StickerView extends EntityView {
     private ImageReceiver centerImage;
     private FrameLayoutDrawer containerView;
     private boolean mirrored;
+    private Object parentObject;
     private Document sticker;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.StickerView$FrameLayoutDrawer */
@@ -49,13 +50,13 @@ public class StickerView extends EntityView {
         public StickerViewSelectionView(Context context) {
             super(context);
             this.arcPaint.setColor(-1);
-            this.arcPaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+            this.arcPaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
             this.arcPaint.setStyle(Style.STROKE);
         }
 
         protected int pointInsideHandle(float x, float y) {
-            float radius = (float) AndroidUtilities.m10dp(19.5f);
-            float inset = radius + ((float) AndroidUtilities.m10dp(1.0f));
+            float radius = (float) AndroidUtilities.m9dp(19.5f);
+            float inset = radius + ((float) AndroidUtilities.m9dp(1.0f));
             float middle = inset + ((((float) getHeight()) - (inset * 2.0f)) / 2.0f);
             if (x > inset - radius && y > middle - radius && x < inset + radius && y < middle + radius) {
                 return 1;
@@ -72,8 +73,8 @@ public class StickerView extends EntityView {
 
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            float radius = (float) AndroidUtilities.m10dp(4.5f);
-            float inset = (radius + ((float) AndroidUtilities.m10dp(1.0f))) + ((float) AndroidUtilities.m10dp(15.0f));
+            float radius = (float) AndroidUtilities.m9dp(4.5f);
+            float inset = (radius + ((float) AndroidUtilities.m9dp(1.0f))) + ((float) AndroidUtilities.m9dp(15.0f));
             float mainRadius = ((float) (getWidth() / 2)) - inset;
             this.arcRect.set(inset, inset, (mainRadius * 2.0f) + inset, (mainRadius * 2.0f) + inset);
             for (int i = 0; i < 48; i++) {
@@ -87,11 +88,11 @@ public class StickerView extends EntityView {
         }
     }
 
-    public StickerView(Context context, Point position, Size baseSize, Document sticker) {
-        this(context, position, 0.0f, 1.0f, baseSize, sticker);
+    public StickerView(Context context, Point position, Size baseSize, Document sticker, Object parentObject) {
+        this(context, position, 0.0f, 1.0f, baseSize, sticker, parentObject);
     }
 
-    public StickerView(Context context, Point position, float angle, float scale, Size baseSize, Document sticker) {
+    public StickerView(Context context, Point position, float angle, float scale, Size baseSize, Document sticker, Object parentObject) {
         super(context, position);
         this.anchor = -1;
         this.mirrored = false;
@@ -100,18 +101,19 @@ public class StickerView extends EntityView {
         setScale(scale);
         this.sticker = sticker;
         this.baseSize = baseSize;
+        this.parentObject = parentObject;
         for (int a = 0; a < sticker.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) sticker.attributes.get(a);
             if (attribute instanceof TL_documentAttributeSticker) {
                 if (attribute.mask_coords != null) {
-                    this.anchor = attribute.mask_coords.f139n;
+                    this.anchor = attribute.mask_coords.f137n;
                 }
                 this.containerView = new FrameLayoutDrawer(context);
                 addView(this.containerView, LayoutHelper.createFrame(-1, -1.0f));
                 this.centerImage.setAspectFit(true);
                 this.centerImage.setInvalidateAll(true);
                 this.centerImage.setParentView(this.containerView);
-                this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", 1);
+                this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", parentObject, 1);
                 updatePosition();
             }
         }
@@ -120,12 +122,12 @@ public class StickerView extends EntityView {
         this.centerImage.setAspectFit(true);
         this.centerImage.setInvalidateAll(true);
         this.centerImage.setParentView(this.containerView);
-        this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", 1);
+        this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", parentObject, 1);
         updatePosition();
     }
 
     public StickerView(Context context, StickerView stickerView, Point position) {
-        this(context, position, stickerView.getRotation(), stickerView.getScale(), stickerView.baseSize, stickerView.sticker);
+        this(context, position, stickerView.getRotation(), stickerView.getScale(), stickerView.baseSize, stickerView.sticker, stickerView.parentObject);
         if (stickerView.mirrored) {
             mirror();
         }
@@ -142,8 +144,8 @@ public class StickerView extends EntityView {
 
     protected void updatePosition() {
         float halfHeight = this.baseSize.height / 2.0f;
-        setX(this.position.f228x - (this.baseSize.width / 2.0f));
-        setY(this.position.f229y - halfHeight);
+        setX(this.position.f240x - (this.baseSize.width / 2.0f));
+        setY(this.position.f241y - halfHeight);
         updateSelectionView();
     }
 
@@ -169,7 +171,7 @@ public class StickerView extends EntityView {
     protected Rect getSelectionBounds() {
         float scale = ((ViewGroup) getParent()).getScaleX();
         float side = ((float) getWidth()) * (getScale() + 0.4f);
-        return new Rect((this.position.f228x - (side / 2.0f)) * scale, (this.position.f229y - (side / 2.0f)) * scale, side * scale, side * scale);
+        return new Rect((this.position.f240x - (side / 2.0f)) * scale, (this.position.f241y - (side / 2.0f)) * scale, side * scale, side * scale);
     }
 
     protected SelectionView createSelectionView() {

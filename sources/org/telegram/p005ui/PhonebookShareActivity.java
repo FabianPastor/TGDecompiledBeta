@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -16,7 +17,6 @@ import android.provider.ContactsContract.Contacts;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.FrameLayout;
@@ -46,8 +46,8 @@ import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.DividerCell;
@@ -59,8 +59,6 @@ import org.telegram.p005ui.Components.CheckBoxSquare;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.p005ui.PhonebookSelectActivity.PhonebookSelectActivityDelegate;
 import org.telegram.tgnet.TLObject;
@@ -93,291 +91,238 @@ public class PhonebookShareActivity extends BaseFragment {
     private int vcardEndRow;
     private int vcardStartRow;
 
-    /* renamed from: org.telegram.ui.PhonebookShareActivity$7 */
-    class C15497 implements OnClickListener {
+    /* renamed from: org.telegram.ui.PhonebookShareActivity$5 */
+    class C10485 implements OnClickListener {
+        C10485() {
+        }
 
-        /* renamed from: org.telegram.ui.PhonebookShareActivity$7$1 */
-        class C15481 implements DialogInterface.OnClickListener {
-            C15481() {
+        private void fillRowWithType(String type, ContentValues row) {
+            if (type.startsWith("X-")) {
+                row.put("data2", Integer.valueOf(0));
+                row.put("data3", type.substring(2));
+            } else if ("PREF".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(12));
+            } else if ("HOME".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(1));
+            } else if ("MOBILE".equalsIgnoreCase(type) || "CELL".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(2));
+            } else if ("OTHER".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(7));
+            } else if ("WORK".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(3));
+            } else if ("RADIO".equalsIgnoreCase(type) || "VOICE".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(14));
+            } else if ("PAGER".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(6));
+            } else if ("CALLBACK".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(8));
+            } else if ("CAR".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(9));
+            } else if ("ASSISTANT".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(19));
+            } else if ("MMS".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(20));
+            } else if (type.startsWith("FAX")) {
+                row.put("data2", Integer.valueOf(4));
+            } else {
+                row.put("data2", Integer.valueOf(0));
+                row.put("data3", type);
             }
+        }
 
-            private void fillRowWithType(String type, ContentValues row) {
-                if (type.startsWith("X-")) {
-                    row.put("data2", Integer.valueOf(0));
-                    row.put("data3", type.substring(2));
-                } else if ("PREF".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(12));
-                } else if ("HOME".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(1));
-                } else if ("MOBILE".equalsIgnoreCase(type) || "CELL".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(2));
-                } else if ("OTHER".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(7));
-                } else if ("WORK".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(3));
-                } else if ("RADIO".equalsIgnoreCase(type) || "VOICE".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(14));
-                } else if ("PAGER".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(6));
-                } else if ("CALLBACK".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(8));
-                } else if ("CAR".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(9));
-                } else if ("ASSISTANT".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(19));
-                } else if ("MMS".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(20));
-                } else if (type.startsWith("FAX")) {
-                    row.put("data2", Integer.valueOf(4));
-                } else {
-                    row.put("data2", Integer.valueOf(0));
-                    row.put("data3", type);
+        private void fillUrlRowWithType(String type, ContentValues row) {
+            if (type.startsWith("X-")) {
+                row.put("data2", Integer.valueOf(0));
+                row.put("data3", type.substring(2));
+            } else if ("HOMEPAGE".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(1));
+            } else if ("BLOG".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(2));
+            } else if ("PROFILE".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(3));
+            } else if ("HOME".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(4));
+            } else if ("WORK".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(5));
+            } else if ("FTP".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(6));
+            } else if ("OTHER".equalsIgnoreCase(type)) {
+                row.put("data2", Integer.valueOf(7));
+            } else {
+                row.put("data2", Integer.valueOf(0));
+                row.put("data3", type);
+            }
+        }
+
+        public void onClick(DialogInterface dialog, int which) {
+            if (PhonebookShareActivity.this.getParentActivity() != null) {
+                int a;
+                VcardItem item;
+                ContentValues row;
+                Intent intent = null;
+                if (which == 0) {
+                    intent = new Intent("android.intent.action.INSERT");
+                    intent.setType("vnd.android.cursor.dir/raw_contact");
+                } else if (which == 1) {
+                    intent = new Intent("android.intent.action.INSERT_OR_EDIT");
+                    intent.setType("vnd.android.cursor.item/contact");
                 }
-            }
-
-            private void fillUrlRowWithType(String type, ContentValues row) {
-                if (type.startsWith("X-")) {
-                    row.put("data2", Integer.valueOf(0));
-                    row.put("data3", type.substring(2));
-                } else if ("HOMEPAGE".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(1));
-                } else if ("BLOG".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(2));
-                } else if ("PROFILE".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(3));
-                } else if ("HOME".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(4));
-                } else if ("WORK".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(5));
-                } else if ("FTP".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(6));
-                } else if ("OTHER".equalsIgnoreCase(type)) {
-                    row.put("data2", Integer.valueOf(7));
-                } else {
-                    row.put("data2", Integer.valueOf(0));
-                    row.put("data3", type);
+                intent.putExtra("name", ContactsController.formatName(PhonebookShareActivity.this.currentUser.first_name, PhonebookShareActivity.this.currentUser.last_name));
+                ArrayList data = new ArrayList();
+                for (a = 0; a < PhonebookShareActivity.this.phones.size(); a++) {
+                    item = (VcardItem) PhonebookShareActivity.this.phones.get(a);
+                    row = new ContentValues();
+                    row.put("mimetype", "vnd.android.cursor.item/phone_v2");
+                    row.put("data1", item.getValue(false));
+                    fillRowWithType(item.getRawType(false), row);
+                    data.add(row);
                 }
-            }
-
-            public void onClick(DialogInterface dialog, int which) {
-                if (PhonebookShareActivity.this.getParentActivity() != null) {
-                    int a;
-                    VcardItem item;
-                    ContentValues row;
-                    Intent intent = null;
-                    if (which == 0) {
-                        intent = new Intent("android.intent.action.INSERT");
-                        intent.setType("vnd.android.cursor.dir/raw_contact");
-                    } else if (which == 1) {
-                        intent = new Intent("android.intent.action.INSERT_OR_EDIT");
-                        intent.setType("vnd.android.cursor.item/contact");
-                    }
-                    intent.putExtra("name", ContactsController.formatName(PhonebookShareActivity.this.currentUser.first_name, PhonebookShareActivity.this.currentUser.last_name));
-                    ArrayList<ContentValues> data = new ArrayList();
-                    for (a = 0; a < PhonebookShareActivity.this.phones.size(); a++) {
-                        item = (VcardItem) PhonebookShareActivity.this.phones.get(a);
+                boolean orgAdded = false;
+                for (a = 0; a < PhonebookShareActivity.this.other.size(); a++) {
+                    item = (VcardItem) PhonebookShareActivity.this.other.get(a);
+                    String type;
+                    if (item.type == 1) {
                         row = new ContentValues();
-                        row.put("mimetype", "vnd.android.cursor.item/phone_v2");
+                        row.put("mimetype", "vnd.android.cursor.item/email_v2");
                         row.put("data1", item.getValue(false));
                         fillRowWithType(item.getRawType(false), row);
                         data.add(row);
-                    }
-                    boolean orgAdded = false;
-                    for (a = 0; a < PhonebookShareActivity.this.other.size(); a++) {
-                        item = (VcardItem) PhonebookShareActivity.this.other.get(a);
-                        String type;
-                        if (item.type == 1) {
-                            row = new ContentValues();
-                            row.put("mimetype", "vnd.android.cursor.item/email_v2");
-                            row.put("data1", item.getValue(false));
-                            fillRowWithType(item.getRawType(false), row);
-                            data.add(row);
-                        } else if (item.type == 3) {
-                            row = new ContentValues();
-                            row.put("mimetype", "vnd.android.cursor.item/website");
-                            row.put("data1", item.getValue(false));
-                            fillUrlRowWithType(item.getRawType(false), row);
-                            data.add(row);
-                        } else if (item.type == 4) {
-                            row = new ContentValues();
-                            row.put("mimetype", "vnd.android.cursor.item/note");
-                            row.put("data1", item.getValue(false));
-                            data.add(row);
-                        } else if (item.type == 5) {
-                            row = new ContentValues();
-                            row.put("mimetype", "vnd.android.cursor.item/contact_event");
-                            row.put("data1", item.getValue(false));
+                    } else if (item.type == 3) {
+                        row = new ContentValues();
+                        row.put("mimetype", "vnd.android.cursor.item/website");
+                        row.put("data1", item.getValue(false));
+                        fillUrlRowWithType(item.getRawType(false), row);
+                        data.add(row);
+                    } else if (item.type == 4) {
+                        row = new ContentValues();
+                        row.put("mimetype", "vnd.android.cursor.item/note");
+                        row.put("data1", item.getValue(false));
+                        data.add(row);
+                    } else if (item.type == 5) {
+                        row = new ContentValues();
+                        row.put("mimetype", "vnd.android.cursor.item/contact_event");
+                        row.put("data1", item.getValue(false));
+                        row.put("data2", Integer.valueOf(3));
+                        data.add(row);
+                    } else if (item.type == 2) {
+                        row = new ContentValues();
+                        row.put("mimetype", "vnd.android.cursor.item/postal-address_v2");
+                        String[] args = item.getRawValue();
+                        if (args.length > 0) {
+                            row.put("data5", args[0]);
+                        }
+                        if (args.length > 1) {
+                            row.put("data6", args[1]);
+                        }
+                        if (args.length > 2) {
+                            row.put("data4", args[2]);
+                        }
+                        if (args.length > 3) {
+                            row.put("data7", args[3]);
+                        }
+                        if (args.length > 4) {
+                            row.put("data8", args[4]);
+                        }
+                        if (args.length > 5) {
+                            row.put("data9", args[5]);
+                        }
+                        if (args.length > 6) {
+                            row.put("data10", args[6]);
+                        }
+                        type = item.getRawType(false);
+                        if ("HOME".equalsIgnoreCase(type)) {
+                            row.put("data2", Integer.valueOf(1));
+                        } else if ("WORK".equalsIgnoreCase(type)) {
+                            row.put("data2", Integer.valueOf(2));
+                        } else if ("OTHER".equalsIgnoreCase(type)) {
                             row.put("data2", Integer.valueOf(3));
-                            data.add(row);
-                        } else if (item.type == 2) {
-                            row = new ContentValues();
-                            row.put("mimetype", "vnd.android.cursor.item/postal-address_v2");
-                            String[] args = item.getRawValue();
-                            if (args.length > 0) {
-                                row.put("data5", args[0]);
-                            }
-                            if (args.length > 1) {
-                                row.put("data6", args[1]);
-                            }
-                            if (args.length > 2) {
-                                row.put("data4", args[2]);
-                            }
-                            if (args.length > 3) {
-                                row.put("data7", args[3]);
-                            }
-                            if (args.length > 4) {
-                                row.put("data8", args[4]);
-                            }
-                            if (args.length > 5) {
-                                row.put("data9", args[5]);
-                            }
-                            if (args.length > 6) {
-                                row.put("data10", args[6]);
-                            }
-                            type = item.getRawType(false);
-                            if ("HOME".equalsIgnoreCase(type)) {
-                                row.put("data2", Integer.valueOf(1));
-                            } else if ("WORK".equalsIgnoreCase(type)) {
-                                row.put("data2", Integer.valueOf(2));
-                            } else if ("OTHER".equalsIgnoreCase(type)) {
-                                row.put("data2", Integer.valueOf(3));
-                            }
-                            data.add(row);
-                        } else if (item.type == 20) {
-                            row = new ContentValues();
-                            row.put("mimetype", "vnd.android.cursor.item/im");
-                            String imType = item.getRawType(true);
-                            type = item.getRawType(false);
-                            row.put("data1", item.getValue(false));
-                            if ("AIM".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(0));
-                            } else if ("MSN".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(1));
-                            } else if ("YAHOO".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(2));
-                            } else if ("SKYPE".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(3));
-                            } else if ("QQ".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(4));
-                            } else if ("GOOGLE-TALK".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(5));
-                            } else if ("ICQ".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(6));
-                            } else if ("JABBER".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(7));
-                            } else if ("NETMEETING".equalsIgnoreCase(imType)) {
-                                row.put("data5", Integer.valueOf(8));
-                            } else {
-                                row.put("data5", Integer.valueOf(-1));
-                                row.put("data6", item.getRawType(true));
-                            }
-                            if ("HOME".equalsIgnoreCase(type)) {
-                                row.put("data2", Integer.valueOf(1));
-                            } else if ("WORK".equalsIgnoreCase(type)) {
-                                row.put("data2", Integer.valueOf(2));
-                            } else if ("OTHER".equalsIgnoreCase(type)) {
-                                row.put("data2", Integer.valueOf(3));
-                            }
-                            data.add(row);
-                        } else if (item.type == 6 && !orgAdded) {
-                            orgAdded = true;
-                            row = new ContentValues();
-                            row.put("mimetype", "vnd.android.cursor.item/organization");
-                            for (int b = a; b < PhonebookShareActivity.this.other.size(); b++) {
-                                VcardItem orgItem = (VcardItem) PhonebookShareActivity.this.other.get(b);
-                                if (orgItem.type == 6) {
-                                    type = orgItem.getRawType(true);
-                                    if ("ORG".equalsIgnoreCase(type)) {
-                                        String[] value = orgItem.getRawValue();
-                                        if (value.length != 0) {
-                                            if (value.length >= 1) {
-                                                row.put("data1", value[0]);
-                                            }
-                                            if (value.length >= 2) {
-                                                row.put("data5", value[1]);
-                                            }
+                        }
+                        data.add(row);
+                    } else if (item.type == 20) {
+                        row = new ContentValues();
+                        row.put("mimetype", "vnd.android.cursor.item/im");
+                        String imType = item.getRawType(true);
+                        type = item.getRawType(false);
+                        row.put("data1", item.getValue(false));
+                        if ("AIM".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(0));
+                        } else if ("MSN".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(1));
+                        } else if ("YAHOO".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(2));
+                        } else if ("SKYPE".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(3));
+                        } else if ("QQ".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(4));
+                        } else if ("GOOGLE-TALK".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(5));
+                        } else if ("ICQ".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(6));
+                        } else if ("JABBER".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(7));
+                        } else if ("NETMEETING".equalsIgnoreCase(imType)) {
+                            row.put("data5", Integer.valueOf(8));
+                        } else {
+                            row.put("data5", Integer.valueOf(-1));
+                            row.put("data6", item.getRawType(true));
+                        }
+                        if ("HOME".equalsIgnoreCase(type)) {
+                            row.put("data2", Integer.valueOf(1));
+                        } else if ("WORK".equalsIgnoreCase(type)) {
+                            row.put("data2", Integer.valueOf(2));
+                        } else if ("OTHER".equalsIgnoreCase(type)) {
+                            row.put("data2", Integer.valueOf(3));
+                        }
+                        data.add(row);
+                    } else if (item.type == 6 && !orgAdded) {
+                        orgAdded = true;
+                        row = new ContentValues();
+                        row.put("mimetype", "vnd.android.cursor.item/organization");
+                        for (int b = a; b < PhonebookShareActivity.this.other.size(); b++) {
+                            VcardItem orgItem = (VcardItem) PhonebookShareActivity.this.other.get(b);
+                            if (orgItem.type == 6) {
+                                type = orgItem.getRawType(true);
+                                if ("ORG".equalsIgnoreCase(type)) {
+                                    String[] value = orgItem.getRawValue();
+                                    if (value.length != 0) {
+                                        if (value.length >= 1) {
+                                            row.put("data1", value[0]);
                                         }
-                                    } else if ("TITLE".equalsIgnoreCase(type)) {
-                                        row.put("data4", orgItem.getValue(false));
-                                    } else if ("ROLE".equalsIgnoreCase(type)) {
-                                        row.put("data4", orgItem.getValue(false));
+                                        if (value.length >= 2) {
+                                            row.put("data5", value[1]);
+                                        }
                                     }
-                                    String orgType = orgItem.getRawType(true);
-                                    if ("WORK".equalsIgnoreCase(orgType)) {
-                                        row.put("data2", Integer.valueOf(1));
-                                    } else if ("OTHER".equalsIgnoreCase(orgType)) {
-                                        row.put("data2", Integer.valueOf(2));
-                                    }
+                                } else if ("TITLE".equalsIgnoreCase(type)) {
+                                    row.put("data4", orgItem.getValue(false));
+                                } else if ("ROLE".equalsIgnoreCase(type)) {
+                                    row.put("data4", orgItem.getValue(false));
+                                }
+                                String orgType = orgItem.getRawType(true);
+                                if ("WORK".equalsIgnoreCase(orgType)) {
+                                    row.put("data2", Integer.valueOf(1));
+                                } else if ("OTHER".equalsIgnoreCase(orgType)) {
+                                    row.put("data2", Integer.valueOf(2));
                                 }
                             }
-                            data.add(row);
                         }
-                    }
-                    intent.putExtra("finishActivityOnSaveCompleted", true);
-                    intent.putParcelableArrayListExtra(DataSchemeDataSource.SCHEME_DATA, data);
-                    try {
-                        PhonebookShareActivity.this.getParentActivity().startActivity(intent);
-                        PhonebookShareActivity.this.lambda$checkDiscard$69$PassportActivity();
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        data.add(row);
                     }
                 }
-            }
-        }
-
-        C15497() {
-        }
-
-        public void onClick(View v) {
-            if (!PhonebookShareActivity.this.isImport) {
-                StringBuilder builder;
-                if (PhonebookShareActivity.this.currentUser.restriction_reason != null) {
-                    builder = new StringBuilder(PhonebookShareActivity.this.currentUser.restriction_reason);
-                } else {
-                    builder = new StringBuilder(String.format(Locale.US, "BEGIN:VCARD\nVERSION:3.0\nFN:%1$s\nEND:VCARD", new Object[]{ContactsController.formatName(PhonebookShareActivity.this.currentUser.first_name, PhonebookShareActivity.this.currentUser.last_name)}));
+                intent.putExtra("finishActivityOnSaveCompleted", true);
+                intent.putParcelableArrayListExtra(DataSchemeDataSource.SCHEME_DATA, data);
+                try {
+                    PhonebookShareActivity.this.getParentActivity().startActivity(intent);
+                    PhonebookShareActivity.this.lambda$checkDiscard$70$PassportActivity();
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
                 }
-                int idx = builder.lastIndexOf("END:VCARD");
-                if (idx >= 0) {
-                    int a;
-                    VcardItem item;
-                    int b;
-                    PhonebookShareActivity.this.currentUser.phone = null;
-                    for (a = PhonebookShareActivity.this.phones.size() - 1; a >= 0; a--) {
-                        item = (VcardItem) PhonebookShareActivity.this.phones.get(a);
-                        if (item.checked) {
-                            if (PhonebookShareActivity.this.currentUser.phone == null) {
-                                PhonebookShareActivity.this.currentUser.phone = item.getValue(false);
-                            }
-                            for (b = 0; b < item.vcardData.size(); b++) {
-                                builder.insert(idx, ((String) item.vcardData.get(b)) + "\n");
-                            }
-                        }
-                    }
-                    for (a = PhonebookShareActivity.this.other.size() - 1; a >= 0; a--) {
-                        item = (VcardItem) PhonebookShareActivity.this.other.get(a);
-                        if (item.checked) {
-                            for (b = item.vcardData.size() - 1; b >= 0; b--) {
-                                builder.insert(idx, ((String) item.vcardData.get(b)) + "\n");
-                            }
-                        }
-                    }
-                    PhonebookShareActivity.this.currentUser.restriction_reason = builder.toString();
-                }
-                PhonebookShareActivity.this.delegate.didSelectContact(PhonebookShareActivity.this.currentUser);
-                PhonebookShareActivity.this.lambda$checkDiscard$69$PassportActivity();
-            } else if (PhonebookShareActivity.this.getParentActivity() != null) {
-                Builder builder2 = new Builder(PhonebookShareActivity.this.getParentActivity());
-                builder2.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
-                builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                builder2.setItems(new CharSequence[]{LocaleController.getString("CreateNewContact", R.string.CreateNewContact), LocaleController.getString("AddToExistingContact", R.string.AddToExistingContact)}, new C15481());
-                builder2.show();
             }
         }
     }
 
-    /* renamed from: org.telegram.ui.PhonebookShareActivity$8 */
-    class C15508 implements OnPreDrawListener {
-        C15508() {
+    /* renamed from: org.telegram.ui.PhonebookShareActivity$6 */
+    class C10496 implements OnPreDrawListener {
+        C10496() {
         }
 
         public boolean onPreDraw() {
@@ -497,12 +442,12 @@ public class PhonebookShareActivity extends BaseFragment {
             if (this.checkBox != null) {
                 measureChildWithMargins(this.checkBox, widthMeasureSpec, 0, heightMeasureSpec, 0);
             }
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Math.max(AndroidUtilities.m10dp(64.0f), (this.textView.getMeasuredHeight() + this.valueTextView.getMeasuredHeight()) + AndroidUtilities.m10dp(20.0f)));
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Math.max(AndroidUtilities.m9dp(64.0f), (this.textView.getMeasuredHeight() + this.valueTextView.getMeasuredHeight()) + AndroidUtilities.m9dp(20.0f)));
         }
 
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
             super.onLayout(changed, left, top, right, bottom);
-            int y = this.textView.getMeasuredHeight() + AndroidUtilities.m10dp(13.0f);
+            int y = this.textView.getMeasuredHeight() + AndroidUtilities.m9dp(13.0f);
             this.valueTextView.layout(this.valueTextView.getLeft(), y, this.valueTextView.getRight(), this.valueTextView.getMeasuredHeight() + y);
         }
 
@@ -531,132 +476,20 @@ public class PhonebookShareActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$1 */
-    class C22111 extends ActionBarMenuOnItemClick {
-        C22111() {
+    class C15101 extends ActionBarMenuOnItemClick {
+        C15101() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                PhonebookShareActivity.this.lambda$checkDiscard$69$PassportActivity();
+                PhonebookShareActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$4 */
-    class C22124 implements OnItemClickListener {
-        C22124() {
-        }
-
-        public void onItemClick(View view, int position) {
-            VcardItem item;
-            boolean z = true;
-            if (position >= PhonebookShareActivity.this.phoneStartRow && position < PhonebookShareActivity.this.phoneEndRow) {
-                item = (VcardItem) PhonebookShareActivity.this.phones.get(position - PhonebookShareActivity.this.phoneStartRow);
-            } else if (position < PhonebookShareActivity.this.vcardStartRow || position >= PhonebookShareActivity.this.vcardEndRow) {
-                item = null;
-            } else {
-                item = (VcardItem) PhonebookShareActivity.this.other.get(position - PhonebookShareActivity.this.vcardStartRow);
-            }
-            if (item != null) {
-                if (!PhonebookShareActivity.this.isImport) {
-                    if (item.checked) {
-                        z = false;
-                    }
-                    item.checked = z;
-                    if (position >= PhonebookShareActivity.this.phoneStartRow && position < PhonebookShareActivity.this.phoneEndRow) {
-                        boolean hasChecked = false;
-                        for (int a = 0; a < PhonebookShareActivity.this.phones.size(); a++) {
-                            if (((VcardItem) PhonebookShareActivity.this.phones.get(a)).checked) {
-                                hasChecked = true;
-                                break;
-                            }
-                        }
-                        PhonebookShareActivity.this.bottomLayout.setEnabled(hasChecked);
-                        PhonebookShareActivity.this.shareTextView.setAlpha(hasChecked ? 1.0f : 0.5f);
-                    }
-                    ((TextCheckBoxCell) view).setChecked(item.checked);
-                } else if (item.type == 0) {
-                    try {
-                        Intent intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:" + item.getValue(false)));
-                        intent.addFlags(C0016C.ENCODING_PCM_MU_LAW);
-                        PhonebookShareActivity.this.getParentActivity().startActivityForResult(intent, 500);
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                } else if (item.type == 1) {
-                    Browser.openUrl(PhonebookShareActivity.this.getParentActivity(), "mailto:" + item.getValue(false));
-                } else if (item.type == 3) {
-                    String url = item.getValue(false);
-                    if (!url.startsWith("http")) {
-                        url = "http://" + url;
-                    }
-                    Browser.openUrl(PhonebookShareActivity.this.getParentActivity(), url);
-                } else {
-                    Builder builder = new Builder(PhonebookShareActivity.this.getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (i == 0) {
-                                try {
-                                    ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", item.getValue(false)));
-                                    Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
-                                } catch (Throwable e) {
-                                    FileLog.m14e(e);
-                                }
-                            }
-                        }
-                    });
-                    PhonebookShareActivity.this.showDialog(builder.create());
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhonebookShareActivity$5 */
-    class C22135 implements OnItemLongClickListener {
-        C22135() {
-        }
-
-        public boolean onItemClick(View view, int position) {
-            VcardItem item;
-            if (position >= PhonebookShareActivity.this.phoneStartRow && position < PhonebookShareActivity.this.phoneEndRow) {
-                item = (VcardItem) PhonebookShareActivity.this.phones.get(position - PhonebookShareActivity.this.phoneStartRow);
-            } else if (position < PhonebookShareActivity.this.vcardStartRow || position >= PhonebookShareActivity.this.vcardEndRow) {
-                item = null;
-            } else {
-                item = (VcardItem) PhonebookShareActivity.this.other.get(position - PhonebookShareActivity.this.vcardStartRow);
-            }
-            if (item == null) {
-                return false;
-            }
-            Builder builder = new Builder(PhonebookShareActivity.this.getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (i == 0) {
-                        try {
-                            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", item.getValue(false)));
-                            if (item.type == 0) {
-                                Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("PhoneCopied", R.string.PhoneCopied), 0).show();
-                            } else if (item.type == 1) {
-                                Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("EmailCopied", R.string.EmailCopied), 0).show();
-                            } else if (item.type == 3) {
-                                Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
-                            } else {
-                                Toast.makeText(PhonebookShareActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
-                            }
-                        } catch (Throwable e) {
-                            FileLog.m14e(e);
-                        }
-                    }
-                }
-            });
-            PhonebookShareActivity.this.showDialog(builder.create());
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhonebookShareActivity$6 */
-    class C22146 extends OnScrollListener {
-        C22146() {
+    class C15114 extends OnScrollListener {
+        C15114() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -666,7 +499,7 @@ public class PhonebookShareActivity extends BaseFragment {
                 View child = recyclerView.getChildAt(0);
                 if (child != null) {
                     if (PhonebookShareActivity.this.layoutManager.findFirstVisibleItemPosition() == 0) {
-                        int dp = AndroidUtilities.m10dp(88.0f);
+                        int dp = AndroidUtilities.m9dp(88.0f);
                         if (child.getTop() < 0) {
                             i = child.getTop();
                         }
@@ -697,10 +530,10 @@ public class PhonebookShareActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == PhonebookShareActivity.this.overscrollRow) {
-                        ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.m10dp(88.0f));
+                        ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.m9dp(88.0f));
                         return;
                     } else {
-                        ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.m10dp(16.0f));
+                        ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.m9dp(16.0f));
                         return;
                     }
                 case 1:
@@ -748,11 +581,11 @@ public class PhonebookShareActivity extends BaseFragment {
                 case 2:
                     view = new DividerCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    view.setPadding(AndroidUtilities.m10dp(72.0f), 0, 0, 0);
+                    view.setPadding(AndroidUtilities.m9dp(72.0f), AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f));
                     break;
                 case 3:
                     view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -876,7 +709,7 @@ public class PhonebookShareActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22111());
+        this.actionBar.setActionBarMenuOnItemClick(new C15101());
         this.fragmentView = new FrameLayout(context) {
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 if (child != PhonebookShareActivity.this.listView) {
@@ -890,8 +723,8 @@ public class PhonebookShareActivity extends BaseFragment {
                 int childCount = getChildCount();
                 for (int a = 0; a < childCount; a++) {
                     View view = getChildAt(a);
-                    if (view != child && (view instanceof C0646ActionBar) && view.getVisibility() == 0) {
-                        if (((C0646ActionBar) view).getCastShadows()) {
+                    if (view != child && (view instanceof C0403ActionBar) && view.getVisibility() == 0) {
+                        if (((C0403ActionBar) view).getCastShadows()) {
                             actionBarHeight = view.getMeasuredHeight();
                         }
                         PhonebookShareActivity.this.parentLayout.drawHeaderShadow(canvas, actionBarHeight);
@@ -907,20 +740,20 @@ public class PhonebookShareActivity extends BaseFragment {
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager c22153 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager c15123 = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c22153;
-        recyclerListView.setLayoutManager(c22153);
+        this.layoutManager = c15123;
+        recyclerListView.setLayoutManager(c15123);
         this.listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         this.listView.setAdapter(new ListAdapter(context));
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
-        this.listView.setOnItemClickListener(new C22124());
-        this.listView.setOnItemLongClickListener(new C22135());
+        this.listView.setOnItemClickListener(new PhonebookShareActivity$$Lambda$0(this));
+        this.listView.setOnItemLongClickListener(new PhonebookShareActivity$$Lambda$1(this));
         frameLayout.addView(this.actionBar);
         this.extraHeightView = new View(context);
         this.extraHeightView.setPivotY(0.0f);
@@ -930,7 +763,7 @@ public class PhonebookShareActivity extends BaseFragment {
         this.shadowView.setBackgroundResource(R.drawable.header_shadow);
         frameLayout.addView(this.shadowView, LayoutHelper.createFrame(-1, 3.0f));
         this.avatarImage = new BackupImageView(context);
-        this.avatarImage.setRoundRadius(AndroidUtilities.m10dp(21.0f));
+        this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(21.0f));
         this.avatarImage.setPivotX(0.0f);
         this.avatarImage.setPivotY(0.0f);
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(42, 42.0f, 51, 64.0f, 0.0f, 0.0f, 0.0f));
@@ -947,13 +780,13 @@ public class PhonebookShareActivity extends BaseFragment {
         this.nameTextView.setPivotY(0.0f);
         frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 118.0f, 8.0f, 10.0f, 0.0f));
         needLayout();
-        this.listView.setOnScrollListener(new C22146());
+        this.listView.setOnScrollListener(new C15114());
         this.bottomLayout = new FrameLayout(context);
         this.bottomLayout.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor(Theme.key_passport_authorizeBackground), Theme.getColor(Theme.key_passport_authorizeBackgroundSelected)));
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
-        this.bottomLayout.setOnClickListener(new C15497());
+        this.bottomLayout.setOnClickListener(new PhonebookShareActivity$$Lambda$2(this));
         this.shareTextView = new TextView(context);
-        this.shareTextView.setCompoundDrawablePadding(AndroidUtilities.m10dp(8.0f));
+        this.shareTextView.setCompoundDrawablePadding(AndroidUtilities.m9dp(8.0f));
         this.shareTextView.setTextColor(Theme.getColor(Theme.key_passport_authorizeText));
         if (this.isImport) {
             this.shareTextView.setText(LocaleController.getString("AddContactChat", R.string.AddContactChat));
@@ -975,9 +808,155 @@ public class PhonebookShareActivity extends BaseFragment {
         if (this.currentUser.photo != null) {
             photo = this.currentUser.photo.photo_small;
         }
-        this.avatarImage.setImage(photo, "50_50", avatarDrawable);
+        this.avatarImage.setImage(photo, "50_50", avatarDrawable, this.currentUser);
         this.nameTextView.setText(ContactsController.formatName(this.currentUser.first_name, this.currentUser.last_name));
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$1$PhonebookShareActivity(View view, int position) {
+        VcardItem item;
+        boolean z = true;
+        if (position >= this.phoneStartRow && position < this.phoneEndRow) {
+            item = (VcardItem) this.phones.get(position - this.phoneStartRow);
+        } else if (position < this.vcardStartRow || position >= this.vcardEndRow) {
+            item = null;
+        } else {
+            item = (VcardItem) this.other.get(position - this.vcardStartRow);
+        }
+        if (item != null) {
+            if (!this.isImport) {
+                if (item.checked) {
+                    z = false;
+                }
+                item.checked = z;
+                if (position >= this.phoneStartRow && position < this.phoneEndRow) {
+                    boolean hasChecked = false;
+                    for (int a = 0; a < this.phones.size(); a++) {
+                        if (((VcardItem) this.phones.get(a)).checked) {
+                            hasChecked = true;
+                            break;
+                        }
+                    }
+                    this.bottomLayout.setEnabled(hasChecked);
+                    this.shareTextView.setAlpha(hasChecked ? 1.0f : 0.5f);
+                }
+                ((TextCheckBoxCell) view).setChecked(item.checked);
+            } else if (item.type == 0) {
+                try {
+                    Intent intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:" + item.getValue(false)));
+                    intent.addFlags(C0016C.ENCODING_PCM_MU_LAW);
+                    getParentActivity().startActivityForResult(intent, 500);
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
+                }
+            } else if (item.type == 1) {
+                Browser.openUrl(getParentActivity(), "mailto:" + item.getValue(false));
+            } else if (item.type == 3) {
+                String url = item.getValue(false);
+                if (!url.startsWith("http")) {
+                    url = "http://" + url;
+                }
+                Browser.openUrl(getParentActivity(), url);
+            } else {
+                Builder builder = new Builder(getParentActivity());
+                builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, new PhonebookShareActivity$$Lambda$4(this, item));
+                showDialog(builder.create());
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$null$0$PhonebookShareActivity(VcardItem item, DialogInterface dialogInterface, int i) {
+        if (i == 0) {
+            try {
+                ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", item.getValue(false)));
+                Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+        }
+    }
+
+    final /* synthetic */ boolean lambda$createView$3$PhonebookShareActivity(View view, int position) {
+        VcardItem item;
+        if (position >= this.phoneStartRow && position < this.phoneEndRow) {
+            item = (VcardItem) this.phones.get(position - this.phoneStartRow);
+        } else if (position < this.vcardStartRow || position >= this.vcardEndRow) {
+            item = null;
+        } else {
+            item = (VcardItem) this.other.get(position - this.vcardStartRow);
+        }
+        if (item == null) {
+            return false;
+        }
+        Builder builder = new Builder(getParentActivity());
+        builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, new PhonebookShareActivity$$Lambda$3(this, item));
+        showDialog(builder.create());
+        return true;
+    }
+
+    final /* synthetic */ void lambda$null$2$PhonebookShareActivity(VcardItem item, DialogInterface dialogInterface, int i) {
+        if (i == 0) {
+            try {
+                ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", item.getValue(false)));
+                if (item.type == 0) {
+                    Toast.makeText(getParentActivity(), LocaleController.getString("PhoneCopied", R.string.PhoneCopied), 0).show();
+                } else if (item.type == 1) {
+                    Toast.makeText(getParentActivity(), LocaleController.getString("EmailCopied", R.string.EmailCopied), 0).show();
+                } else if (item.type == 3) {
+                    Toast.makeText(getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
+                } else {
+                    Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
+                }
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$createView$4$PhonebookShareActivity(View v) {
+        if (!this.isImport) {
+            StringBuilder builder;
+            if (this.currentUser.restriction_reason != null) {
+                builder = new StringBuilder(this.currentUser.restriction_reason);
+            } else {
+                builder = new StringBuilder(String.format(Locale.US, "BEGIN:VCARD\nVERSION:3.0\nFN:%1$s\nEND:VCARD", new Object[]{ContactsController.formatName(this.currentUser.first_name, this.currentUser.last_name)}));
+            }
+            int idx = builder.lastIndexOf("END:VCARD");
+            if (idx >= 0) {
+                int a;
+                VcardItem item;
+                int b;
+                this.currentUser.phone = null;
+                for (a = this.phones.size() - 1; a >= 0; a--) {
+                    item = (VcardItem) this.phones.get(a);
+                    if (item.checked) {
+                        if (this.currentUser.phone == null) {
+                            this.currentUser.phone = item.getValue(false);
+                        }
+                        for (b = 0; b < item.vcardData.size(); b++) {
+                            builder.insert(idx, ((String) item.vcardData.get(b)) + "\n");
+                        }
+                    }
+                }
+                for (a = this.other.size() - 1; a >= 0; a--) {
+                    item = (VcardItem) this.other.get(a);
+                    if (item.checked) {
+                        for (b = item.vcardData.size() - 1; b >= 0; b--) {
+                            builder.insert(idx, ((String) item.vcardData.get(b)) + "\n");
+                        }
+                    }
+                }
+                this.currentUser.restriction_reason = builder.toString();
+            }
+            this.delegate.didSelectContact(this.currentUser);
+            lambda$checkDiscard$70$PassportActivity();
+        } else if (getParentActivity() != null) {
+            Builder builder2 = new Builder(getParentActivity());
+            builder2.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
+            builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder2.setItems(new CharSequence[]{LocaleController.getString("CreateNewContact", R.string.CreateNewContact), LocaleController.getString("AddToExistingContact", R.string.AddToExistingContact)}, new C10485());
+            builder2.show();
+        }
     }
 
     public void onResume() {
@@ -1002,7 +981,7 @@ public class PhonebookShareActivity extends BaseFragment {
         } else {
             i = 0;
         }
-        int newTop = i + C0646ActionBar.getCurrentActionBarHeight();
+        int newTop = i + C0403ActionBar.getCurrentActionBarHeight();
         if (this.listView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
             if (layoutParams.topMargin != newTop) {
@@ -1012,7 +991,7 @@ public class PhonebookShareActivity extends BaseFragment {
             }
         }
         if (this.avatarImage != null) {
-            float diff = ((float) this.extraHeight) / ((float) AndroidUtilities.m10dp(88.0f));
+            float diff = ((float) this.extraHeight) / ((float) AndroidUtilities.m9dp(88.0f));
             this.extraHeightView.setScaleY(diff);
             this.shadowView.setTranslationY((float) (this.extraHeight + newTop));
             this.avatarImage.setScaleX(((18.0f * diff) + 42.0f) / 42.0f);
@@ -1020,8 +999,8 @@ public class PhonebookShareActivity extends BaseFragment {
             if (this.actionBar.getOccupyStatusBar()) {
                 i2 = AndroidUtilities.statusBarHeight;
             }
-            float avatarY = ((((float) i2) + ((((float) C0646ActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
-            this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m10dp(47.0f))) * diff);
+            float avatarY = ((((float) i2) + ((((float) C0403ActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
+            this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m9dp(47.0f))) * diff);
             this.avatarImage.setTranslationY((float) Math.ceil((double) avatarY));
             this.nameTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
             this.nameTextView.setTranslationY((((float) Math.floor((double) avatarY)) - ((float) Math.ceil((double) AndroidUtilities.density))) + ((float) Math.floor((double) ((7.0f * AndroidUtilities.density) * diff))));
@@ -1032,7 +1011,7 @@ public class PhonebookShareActivity extends BaseFragment {
 
     private void fixLayout() {
         if (this.fragmentView != null) {
-            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C15508());
+            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C10496());
         }
     }
 

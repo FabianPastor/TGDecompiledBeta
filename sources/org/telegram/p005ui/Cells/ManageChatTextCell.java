@@ -53,24 +53,24 @@ public class ManageChatTextCell extends FrameLayout {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = AndroidUtilities.m10dp(48.0f);
-        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.m10dp(24.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(20.0f), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.m10dp(95.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(20.0f), NUM));
+        int height = AndroidUtilities.m9dp(48.0f);
+        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.m9dp(24.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(20.0f), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.m9dp(95.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(20.0f), NUM));
         this.imageView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(height, Integer.MIN_VALUE));
-        setMeasuredDimension(width, (this.divider ? 1 : 0) + AndroidUtilities.m10dp(56.0f));
+        setMeasuredDimension(width, (this.divider ? 1 : 0) + AndroidUtilities.m9dp(56.0f));
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int height = bottom - top;
         int width = right - left;
         int viewTop = (height - this.valueTextView.getTextHeight()) / 2;
-        int viewLeft = LocaleController.isRTL ? AndroidUtilities.m10dp(24.0f) : 0;
+        int viewLeft = LocaleController.isRTL ? AndroidUtilities.m9dp(24.0f) : 0;
         this.valueTextView.layout(viewLeft, viewTop, this.valueTextView.getMeasuredWidth() + viewLeft, this.valueTextView.getMeasuredHeight() + viewTop);
         viewTop = (height - this.textView.getTextHeight()) / 2;
-        viewLeft = !LocaleController.isRTL ? AndroidUtilities.m10dp(71.0f) : AndroidUtilities.m10dp(24.0f);
+        viewLeft = !LocaleController.isRTL ? AndroidUtilities.m9dp(71.0f) : AndroidUtilities.m9dp(24.0f);
         this.textView.layout(viewLeft, viewTop, this.textView.getMeasuredWidth() + viewLeft, this.textView.getMeasuredHeight() + viewTop);
-        viewTop = AndroidUtilities.m10dp(9.0f);
-        viewLeft = !LocaleController.isRTL ? AndroidUtilities.m10dp(16.0f) : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.m10dp(16.0f);
+        viewTop = AndroidUtilities.m9dp(9.0f);
+        viewLeft = !LocaleController.isRTL ? AndroidUtilities.m9dp(16.0f) : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.m9dp(16.0f);
         this.imageView.layout(viewLeft, viewTop, this.imageView.getMeasuredWidth() + viewLeft, this.imageView.getMeasuredHeight() + viewTop);
     }
 
@@ -87,7 +87,7 @@ public class ManageChatTextCell extends FrameLayout {
         } else {
             this.valueTextView.setVisibility(4);
         }
-        this.imageView.setPadding(0, AndroidUtilities.m10dp(7.0f), 0, 0);
+        this.imageView.setPadding(0, AndroidUtilities.m9dp(7.0f), 0, 0);
         this.imageView.setImageResource(resId);
         this.divider = needDivider;
         if (!this.divider) {
@@ -98,7 +98,7 @@ public class ManageChatTextCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.divider) {
-            canvas.drawLine((float) AndroidUtilities.m10dp(71.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine((float) AndroidUtilities.m9dp(71.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

@@ -3,7 +3,6 @@ package org.telegram.p005ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -12,21 +11,17 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
-import org.telegram.p005ui.Components.Switch2;
+import org.telegram.p005ui.Components.Switch;
 
 /* renamed from: org.telegram.ui.Cells.TextCheckCell2 */
 public class TextCheckCell2 extends FrameLayout {
-    private Switch2 checkBox;
+    private Switch checkBox;
     private boolean isMultiline;
     private boolean needDivider;
     private TextView textView;
     private TextView valueTextView;
 
     public TextCheckCell2(Context context) {
-        int i;
-        int i2;
-        float f = 17.0f;
-        int i3 = 3;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -36,46 +31,20 @@ public class TextCheckCell2 extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TruncateAt.END);
-        View view = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 64.0f : 17.0f, 0.0f, LocaleController.isRTL ? 17.0f : 64.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 64.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 64.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
-        TextView textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        textView.setGravity(i2);
+        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setPadding(0, 0, 0, 0);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        View view2 = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        int i4 = i2 | 48;
-        float f2 = LocaleController.isRTL ? 64.0f : 17.0f;
-        if (!LocaleController.isRTL) {
-            f = 64.0f;
-        }
-        addView(view2, LayoutHelper.createFrame(-2, -2.0f, i4, f2, 35.0f, f, 0.0f));
-        this.checkBox = new Switch2(context);
-        view = this.checkBox;
-        if (!LocaleController.isRTL) {
-            i3 = 5;
-        }
-        addView(view, LayoutHelper.createFrame(44, 40.0f, i3 | 16, 14.0f, 0.0f, 14.0f, 0.0f));
+        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 64.0f : 21.0f, 35.0f, LocaleController.isRTL ? 21.0f : 64.0f, 0.0f));
+        this.checkBox = new Switch(context);
+        this.checkBox.setDrawIconType(1);
+        addView(this.checkBox, LayoutHelper.createFrame(37, 40.0f, (LocaleController.isRTL ? 3 : 5) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -83,7 +52,7 @@ public class TextCheckCell2 extends FrameLayout {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
             return;
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(this.valueTextView.getVisibility() == 0 ? 64.0f : 48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(this.valueTextView.getVisibility() == 0 ? 64.0f : 50.0f), NUM));
     }
 
     public void setTextAndCheck(String text, boolean checked, boolean divider) {
@@ -116,7 +85,7 @@ public class TextCheckCell2 extends FrameLayout {
             this.valueTextView.setMaxLines(0);
             this.valueTextView.setSingleLine(false);
             this.valueTextView.setEllipsize(null);
-            this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.m10dp(11.0f));
+            this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.m9dp(11.0f));
         } else {
             this.valueTextView.setLines(1);
             this.valueTextView.setMaxLines(1);
@@ -126,7 +95,7 @@ public class TextCheckCell2 extends FrameLayout {
         }
         LayoutParams layoutParams = (LayoutParams) this.textView.getLayoutParams();
         layoutParams.height = -2;
-        layoutParams.topMargin = AndroidUtilities.m10dp(10.0f);
+        layoutParams.topMargin = AndroidUtilities.m9dp(10.0f);
         this.textView.setLayoutParams(layoutParams);
         if (divider) {
             z = false;
@@ -157,7 +126,7 @@ public class TextCheckCell2 extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

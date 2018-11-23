@@ -1,20 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC.updates_ChannelDifference;
+import android.util.LongSparseArray;
 
 final /* synthetic */ class MessagesController$$Lambda$179 implements Runnable {
     private final MessagesController arg$1;
-    private final ArrayList arg$2;
-    private final updates_ChannelDifference arg$3;
+    private final LongSparseArray arg$2;
 
-    MessagesController$$Lambda$179(MessagesController messagesController, ArrayList arrayList, updates_ChannelDifference updates_channeldifference) {
+    MessagesController$$Lambda$179(MessagesController messagesController, LongSparseArray longSparseArray) {
         this.arg$1 = messagesController;
-        this.arg$2 = arrayList;
-        this.arg$3 = updates_channeldifference;
+        this.arg$2 = longSparseArray;
     }
 
     public void run() {
-        this.arg$1.lambda$null$183$MessagesController(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$182$MessagesController(this.arg$2);
     }
 }

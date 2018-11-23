@@ -19,6 +19,6 @@ final /* synthetic */ class LoginActivity$LoginActivitySmsView$$Lambda$4 impleme
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$onNextPressed$9$LoginActivity$LoginActivitySmsView(this.arg$2, this.arg$3, tLObject, tL_error);
+        this.arg$1.lambda$onNextPressed$8$LoginActivity$LoginActivitySmsView(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

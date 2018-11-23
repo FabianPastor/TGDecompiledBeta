@@ -28,14 +28,14 @@ public class RadialProgressView extends View {
     private boolean risingCircleLength;
     private final float risingTime = 500.0f;
     private final float rotationTime = 2000.0f;
-    private int size = AndroidUtilities.m10dp(40.0f);
+    private int size = AndroidUtilities.m9dp(40.0f);
     private boolean useSelfAlpha;
 
     public RadialProgressView(Context context) {
         super(context);
         this.progressPaint.setStyle(Style.STROKE);
         this.progressPaint.setStrokeCap(Cap.ROUND);
-        this.progressPaint.setStrokeWidth((float) AndroidUtilities.m10dp(3.0f));
+        this.progressPaint.setStrokeWidth((float) AndroidUtilities.m9dp(3.0f));
         this.progressPaint.setColor(this.progressColor);
     }
 

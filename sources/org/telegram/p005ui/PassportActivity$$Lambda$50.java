@@ -1,25 +1,29 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC.TL_secureRequiredType;
+import org.telegram.p005ui.PassportActivity.PassportActivityDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_account_sendVerifyPhoneCode;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$50 */
-final /* synthetic */ class PassportActivity$$Lambda$50 implements OnClickListener {
+final /* synthetic */ class PassportActivity$$Lambda$50 implements Runnable {
     private final PassportActivity arg$1;
-    private final TL_secureRequiredType arg$2;
-    private final ArrayList arg$3;
-    private final boolean arg$4;
+    private final TL_error arg$2;
+    private final String arg$3;
+    private final PassportActivityDelegate arg$4;
+    private final TLObject arg$5;
+    private final TL_account_sendVerifyPhoneCode arg$6;
 
-    PassportActivity$$Lambda$50(PassportActivity passportActivity, TL_secureRequiredType tL_secureRequiredType, ArrayList arrayList, boolean z) {
+    PassportActivity$$Lambda$50(PassportActivity passportActivity, TL_error tL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TL_account_sendVerifyPhoneCode tL_account_sendVerifyPhoneCode) {
         this.arg$1 = passportActivity;
-        this.arg$2 = tL_secureRequiredType;
-        this.arg$3 = arrayList;
-        this.arg$4 = z;
+        this.arg$2 = tL_error;
+        this.arg$3 = str;
+        this.arg$4 = passportActivityDelegate;
+        this.arg$5 = tLObject;
+        this.arg$6 = tL_account_sendVerifyPhoneCode;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$61$PassportActivity(this.arg$2, this.arg$3, this.arg$4, dialogInterface, i);
+    public void run() {
+        this.arg$1.lambda$null$66$PassportActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
     }
 }

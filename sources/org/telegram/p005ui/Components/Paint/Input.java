@@ -47,7 +47,7 @@ public class Input {
                     this.pointsCount = 1;
                     this.clearBuffer = true;
                     return;
-                } else if (location.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.m10dp(5.0f))) {
+                } else if (location.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.m9dp(5.0f))) {
                     if (!this.hasMoved) {
                         this.renderView.onBeganDrawing();
                         this.hasMoved = true;
@@ -135,7 +135,7 @@ public class Input {
         double a1 = Math.pow((double) (1.0f - t), 2.0d);
         double a2 = (double) ((2.0f * (1.0f - t)) * t);
         double a3 = (double) (t * t);
-        return new Point(((midPoint1.f219x * a1) + (prev1.f219x * a2)) + (midPoint2.f219x * a3), ((midPoint1.f220y * a1) + (prev1.f220y * a2)) + (midPoint2.f220y * a3), 1.0d);
+        return new Point(((midPoint1.f231x * a1) + (prev1.f231x * a2)) + (midPoint2.f231x * a3), ((midPoint1.f232y * a1) + (prev1.f232y * a2)) + (midPoint2.f232y * a3), 1.0d);
     }
 
     private void paintPath(final Path path) {
@@ -147,8 +147,8 @@ public class Input {
         this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable() {
 
             /* renamed from: org.telegram.ui.Components.Paint.Input$1$1 */
-            class C11501 implements Runnable {
-                C11501() {
+            class C07351 implements Runnable {
+                C07351() {
                 }
 
                 public void run() {
@@ -158,7 +158,7 @@ public class Input {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new C11501());
+                AndroidUtilities.runOnUIThread(new C07351());
             }
         });
     }

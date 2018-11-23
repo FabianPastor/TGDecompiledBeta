@@ -34,7 +34,7 @@ public class StickerCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec((AndroidUtilities.m10dp(76.0f) + getPaddingLeft()) + getPaddingRight(), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(78.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec((AndroidUtilities.m9dp(76.0f) + getPaddingLeft()) + getPaddingRight(), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(78.0f), NUM));
     }
 
     public void setPressed(boolean pressed) {
@@ -45,23 +45,23 @@ public class StickerCell extends FrameLayout {
         super.setPressed(pressed);
     }
 
-    public void setSticker(Document document, int side) {
+    public void setSticker(Document document, Object parentObject, int side) {
         if (!(document == null || document.thumb == null)) {
-            this.imageView.setImage(document.thumb.location, null, "webp", null);
+            this.imageView.setImage(document.thumb.location, null, "webp", null, parentObject);
         }
         this.sticker = document;
         if (side == -1) {
             setBackgroundResource(R.drawable.stickers_back_left);
-            setPadding(AndroidUtilities.m10dp(7.0f), 0, 0, 0);
+            setPadding(AndroidUtilities.m9dp(7.0f), 0, 0, 0);
         } else if (side == 0) {
             setBackgroundResource(R.drawable.stickers_back_center);
             setPadding(0, 0, 0, 0);
         } else if (side == 1) {
             setBackgroundResource(R.drawable.stickers_back_right);
-            setPadding(0, 0, AndroidUtilities.m10dp(7.0f), 0);
+            setPadding(0, 0, AndroidUtilities.m9dp(7.0f), 0);
         } else if (side == 2) {
             setBackgroundResource(R.drawable.stickers_back_all);
-            setPadding(AndroidUtilities.m10dp(3.0f), 0, AndroidUtilities.m10dp(3.0f), 0);
+            setPadding(AndroidUtilities.m9dp(3.0f), 0, AndroidUtilities.m9dp(3.0f), 0);
         }
         Drawable background = getBackground();
         if (background != null) {

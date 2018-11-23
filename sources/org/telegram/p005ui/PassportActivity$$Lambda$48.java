@@ -1,18 +1,20 @@
 package org.telegram.p005ui;
 
-import org.telegram.messenger.MrzRecognizer.Result;
+import org.telegram.messenger.SecureDocument;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$48 */
 final /* synthetic */ class PassportActivity$$Lambda$48 implements Runnable {
     private final PassportActivity arg$1;
-    private final Result arg$2;
+    private final SecureDocument arg$2;
+    private final int arg$3;
 
-    PassportActivity$$Lambda$48(PassportActivity passportActivity, Result result) {
+    PassportActivity$$Lambda$48(PassportActivity passportActivity, SecureDocument secureDocument, int i) {
         this.arg$1 = passportActivity;
-        this.arg$2 = result;
+        this.arg$2 = secureDocument;
+        this.arg$3 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$71$PassportActivity(this.arg$2);
+        this.arg$1.lambda$null$71$PassportActivity(this.arg$2, this.arg$3);
     }
 }

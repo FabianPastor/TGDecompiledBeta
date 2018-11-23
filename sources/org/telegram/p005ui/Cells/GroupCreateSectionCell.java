@@ -45,11 +45,11 @@ public class GroupCreateSectionCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(40.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(40.0f), NUM));
     }
 
     protected void onDraw(Canvas canvas) {
-        this.drawable.setBounds(0, getMeasuredHeight() - AndroidUtilities.m10dp(3.0f), getMeasuredWidth(), getMeasuredHeight());
+        this.drawable.setBounds(0, getMeasuredHeight() - AndroidUtilities.m9dp(3.0f), getMeasuredWidth(), getMeasuredHeight());
         this.drawable.draw(canvas);
     }
 

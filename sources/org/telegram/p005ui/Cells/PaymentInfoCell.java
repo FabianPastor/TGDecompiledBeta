@@ -8,6 +8,7 @@ import android.widget.TextView;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.WebFile;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.BackupImageView;
 import org.telegram.p005ui.Components.LayoutHelper;
@@ -53,12 +54,12 @@ public class PaymentInfoCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(120.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(120.0f), NUM));
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        top = this.detailTextView.getBottom() + AndroidUtilities.m10dp(3.0f);
+        top = this.detailTextView.getBottom() + AndroidUtilities.m9dp(3.0f);
         this.detailExTextView.layout(this.detailExTextView.getLeft(), top, this.detailExTextView.getRight(), this.detailExTextView.getMeasuredHeight() + top);
     }
 
@@ -72,7 +73,7 @@ public class PaymentInfoCell extends FrameLayout {
         } else {
             maxPhotoWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
         }
-        float scale = ((float) 640) / ((float) (maxPhotoWidth - AndroidUtilities.m10dp(2.0f)));
+        float scale = ((float) 640) / ((float) (maxPhotoWidth - AndroidUtilities.m9dp(2.0f)));
         int width = (int) (((float) 640) / scale);
         int height = (int) (((float) 360) / scale);
         if (invoice.photo == null || !invoice.photo.mime_type.startsWith("image/")) {
@@ -86,6 +87,6 @@ public class PaymentInfoCell extends FrameLayout {
         this.detailTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 33.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
         this.detailExTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 90.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
         this.imageView.setVisibility(0);
-        this.imageView.getImageReceiver().setImage(invoice.photo, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)}), null, null, null, -1, null, 1);
+        this.imageView.getImageReceiver().setImage(WebFile.createWithWebDocument(invoice.photo), null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)}), null, null, null, -1, null, invoice, 1);
     }
 }

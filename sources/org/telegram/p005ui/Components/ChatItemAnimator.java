@@ -2,34 +2,121 @@ package org.telegram.p005ui.Components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.support.annotation.Keep;
+import android.util.LongSparseArray;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.view.ViewTreeObserver.OnPreDrawListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MessageObject.GroupedMessages;
+import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger.support.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.SimpleItemAnimator;
+import org.telegram.p005ui.Cells.ChatMessageCell;
+import org.telegram.p005ui.ChatActivity;
+import org.telegram.tgnet.ConnectionsManager;
 
 /* renamed from: org.telegram.ui.Components.ChatItemAnimator */
 public class ChatItemAnimator extends SimpleItemAnimator {
     private static final boolean DEBUG = false;
-    private static TimeInterpolator sDefaultInterpolator;
-    ArrayList<ViewHolder> mAddAnimations = new ArrayList();
-    ArrayList<ArrayList<ViewHolder>> mAdditionsList = new ArrayList();
-    ArrayList<ViewHolder> mChangeAnimations = new ArrayList();
-    ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList();
-    ArrayList<ViewHolder> mMoveAnimations = new ArrayList();
-    ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList();
-    private ArrayList<ViewHolder> mPendingAdditions = new ArrayList();
-    private ArrayList<ChangeInfo> mPendingChanges = new ArrayList();
-    private ArrayList<MoveInfo> mPendingMoves = new ArrayList();
-    private ArrayList<ViewHolder> mPendingRemovals = new ArrayList();
-    ArrayList<ViewHolder> mRemoveAnimations = new ArrayList();
+    ArrayList<ViewHolder> addAnimations = new ArrayList();
+    private LongSparseArray<AnimatingMessageGroup> animatingGroups = new LongSparseArray();
+    ArrayList<ViewHolder> changeAnimations = new ArrayList();
+    private ChatActivity chatFragment;
+    private RecyclerView list;
+    ArrayList<ViewHolder> moveAnimations = new ArrayList();
+    private ArrayList<ViewHolder> pendingAdditions = new ArrayList();
+    private ArrayList<ChangeInfo> pendingChanges = new ArrayList();
+    private ArrayList<MoveInfo> pendingMoves = new ArrayList();
+    private ArrayList<ViewHolder> pendingRemovals = new ArrayList();
+    private ArrayList<ResizeInfo> pendingResizes = new ArrayList();
+    ArrayList<ViewHolder> removeAnimations = new ArrayList();
+
+    /* renamed from: org.telegram.ui.Components.ChatItemAnimator$1 */
+    class C06591 implements Comparator<ViewHolder> {
+        C06591() {
+        }
+
+        public int compare(ViewHolder o1, ViewHolder o2) {
+            return o1.getAdapterPosition() - o2.getAdapterPosition();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.ChatItemAnimator$AnimatingMessageGroup */
+    private static class AnimatingMessageGroup {
+        public ArrayList<ViewHolder> holders;
+
+        private AnimatingMessageGroup() {
+            this.holders = new ArrayList();
+        }
+
+        /* synthetic */ AnimatingMessageGroup(C06591 x0) {
+            this();
+        }
+
+        @Keep
+        public void setTranslationY(float translationY) {
+            Iterator it = this.holders.iterator();
+            while (it.hasNext()) {
+                ((ViewHolder) it.next()).itemView.setTranslationY(translationY);
+            }
+        }
+
+        @Keep
+        public float getTranslationY() {
+            return ((ViewHolder) this.holders.get(0)).itemView.getTranslationY();
+        }
+
+        @Keep
+        public void setAlpha(float alpha) {
+            Iterator it = this.holders.iterator();
+            while (it.hasNext()) {
+                ((ViewHolder) it.next()).itemView.setAlpha(alpha);
+            }
+        }
+
+        @Keep
+        public float getAlpha() {
+            return ((ViewHolder) this.holders.get(0)).itemView.getAlpha();
+        }
+
+        public int getTotalHeight() {
+            int minTop = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            int maxBottom = Integer.MIN_VALUE;
+            Iterator it = this.holders.iterator();
+            while (it.hasNext()) {
+                ViewHolder holder = (ViewHolder) it.next();
+                minTop = Math.min(minTop, holder.itemView.getTop());
+                maxBottom = Math.max(maxBottom, holder.itemView.getBottom());
+            }
+            return maxBottom - minTop;
+        }
+
+        public void addAndUpdateHolder(ViewHolder holder) {
+            if (!this.holders.isEmpty()) {
+                holder.itemView.setTranslationY(((ViewHolder) this.holders.get(0)).itemView.getTranslationY());
+                holder.itemView.setAlpha(((ViewHolder) this.holders.get(0)).itemView.getAlpha());
+            }
+            this.holders.add(holder);
+        }
+
+        public String toString() {
+            return "AnimatingMessageGroup{holders=" + this.holders + '}';
+        }
+    }
 
     /* renamed from: org.telegram.ui.Components.ChatItemAnimator$ChangeInfo */
     private static class ChangeInfo {
+        public boolean animateTranslation;
         public int fromX;
         public int fromY;
         public ViewHolder newHolder;
@@ -42,16 +129,36 @@ public class ChatItemAnimator extends SimpleItemAnimator {
             this.newHolder = newHolder;
         }
 
-        ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
+        ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX, int toY, boolean animateTranslation) {
             this(oldHolder, newHolder);
             this.fromX = fromX;
             this.fromY = fromY;
             this.toX = toX;
             this.toY = toY;
+            this.animateTranslation = animateTranslation;
         }
 
         public String toString() {
             return "ChangeInfo{oldHolder=" + this.oldHolder + ", newHolder=" + this.newHolder + ", fromX=" + this.fromX + ", fromY=" + this.fromY + ", toX=" + this.toX + ", toY=" + this.toY + '}';
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.ChatItemAnimator$GroupChangeInfo */
+    private static class GroupChangeInfo {
+        public float fromY;
+        public AnimatingMessageGroup newGroup;
+        public AnimatingMessageGroup oldGroup;
+        public int smallestTop;
+        public float toY;
+
+        private GroupChangeInfo() {
+            this.oldGroup = new AnimatingMessageGroup();
+            this.newGroup = new AnimatingMessageGroup();
+            this.smallestTop = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        }
+
+        /* synthetic */ GroupChangeInfo(C06591 x0) {
+            this();
         }
     }
 
@@ -70,105 +177,266 @@ public class ChatItemAnimator extends SimpleItemAnimator {
             this.toX = toX;
             this.toY = toY;
         }
+
+        public String toString() {
+            return "MoveInfo{holder=" + this.holder + ", fromX=" + this.fromX + ", fromY=" + this.fromY + ", toX=" + this.toX + ", toY=" + this.toY + '}';
+        }
     }
 
-    public ChatItemAnimator() {
+    /* renamed from: org.telegram.ui.Components.ChatItemAnimator$ResizeInfo */
+    private static class ResizeInfo {
+        public ItemHolderInfo from;
+        public ViewHolder holder;
+        /* renamed from: to */
+        public ItemHolderInfo f219to;
+
+        public ResizeInfo(ViewHolder holder, ItemHolderInfo from, ItemHolderInfo to) {
+            this.holder = holder;
+            this.from = from;
+            this.f219to = to;
+        }
+    }
+
+    public ChatItemAnimator(RecyclerView parent, ChatActivity fragment) {
+        this.list = parent;
+        this.chatFragment = fragment;
         setAddDuration(200);
-        setRemoveDuration(200);
+        setRemoveDuration(100);
         setChangeDuration(200);
         setMoveDuration(200);
     }
 
     public void runPendingAnimations() {
-        boolean removalsPending;
-        boolean movesPending;
-        boolean changesPending;
-        boolean additionsPending;
-        if (this.mPendingRemovals.isEmpty()) {
-            removalsPending = false;
-        } else {
-            removalsPending = true;
-        }
-        if (this.mPendingMoves.isEmpty()) {
-            movesPending = false;
-        } else {
-            movesPending = true;
-        }
-        if (this.mPendingChanges.isEmpty()) {
-            changesPending = false;
-        } else {
-            changesPending = true;
-        }
-        if (this.mPendingAdditions.isEmpty()) {
-            additionsPending = false;
-        } else {
-            additionsPending = true;
-        }
-        if (removalsPending || movesPending || additionsPending || changesPending) {
-            Iterator it = this.mPendingRemovals.iterator();
-            while (it.hasNext()) {
-                animateRemoveImpl((ViewHolder) it.next());
+        boolean removalsPending = !this.pendingRemovals.isEmpty();
+        boolean movesPending = !this.pendingMoves.isEmpty();
+        boolean changesPending = !this.pendingChanges.isEmpty();
+        boolean additionsPending = !this.pendingAdditions.isEmpty();
+        boolean resizesPending = !this.pendingResizes.isEmpty();
+        if (removalsPending || movesPending || additionsPending || changesPending || resizesPending) {
+            ViewHolder holder;
+            GroupedMessages gm;
+            ArrayList<ViewHolder> group;
+            int i;
+            Iterator it;
+            AnimatingMessageGroup amg;
+            ArrayList<AnimatingMessageGroup> addingGroups = null;
+            LongSparseArray<GroupChangeInfo> changingGroups = null;
+            LongSparseArray<ArrayList<ViewHolder>> groupAdditions = null;
+            LongSparseArray<ArrayList<ViewHolder>> groupRemovals = null;
+            Iterator it2 = this.pendingRemovals.iterator();
+            while (it2.hasNext()) {
+                holder = (ViewHolder) it2.next();
+                if (!(holder.itemView instanceof ChatMessageCell) || ((ChatMessageCell) holder.itemView).getCurrentMessagesGroup() == null) {
+                    animateRemoveImpl(holder);
+                } else {
+                    if (groupRemovals == null) {
+                        groupRemovals = new LongSparseArray();
+                    }
+                    gm = ((ChatMessageCell) holder.itemView).getCurrentMessagesGroup();
+                    group = (ArrayList) groupRemovals.get(gm.groupId);
+                    if (group == null) {
+                        group = new ArrayList();
+                        groupRemovals.put(gm.groupId, group);
+                    }
+                    group.add(holder);
+                }
             }
-            this.mPendingRemovals.clear();
+            if (groupRemovals != null) {
+                for (i = 0; i < groupRemovals.size(); i++) {
+                    group = (ArrayList) groupRemovals.valueAt(i);
+                    if (((ChatMessageCell) ((ViewHolder) group.get(0)).itemView).getCurrentMessagesGroup().posArray.size() == group.size()) {
+                        it = group.iterator();
+                        while (it.hasNext()) {
+                            animateRemoveImpl((ViewHolder) it.next());
+                        }
+                    }
+                }
+            }
+            this.pendingRemovals.clear();
+            ArrayList<MoveInfo> arrayList = new ArrayList(this.pendingMoves);
             if (movesPending) {
-                final ArrayList<MoveInfo> moves = new ArrayList(this.mPendingMoves);
-                this.mMovesList.add(moves);
-                this.mPendingMoves.clear();
-                new Runnable() {
-                    public void run() {
-                        Iterator it = moves.iterator();
-                        while (it.hasNext()) {
-                            MoveInfo moveInfo = (MoveInfo) it.next();
-                            ChatItemAnimator.this.animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY, moveInfo.toX, moveInfo.toY);
-                        }
-                        moves.clear();
-                        ChatItemAnimator.this.mMovesList.remove(moves);
-                    }
-                }.run();
-            }
-            if (changesPending) {
-                final ArrayList<ChangeInfo> changes = new ArrayList(this.mPendingChanges);
-                this.mChangesList.add(changes);
-                this.mPendingChanges.clear();
-                new Runnable() {
-                    public void run() {
-                        Iterator it = changes.iterator();
-                        while (it.hasNext()) {
-                            ChatItemAnimator.this.animateChangeImpl((ChangeInfo) it.next());
-                        }
-                        changes.clear();
-                        ChatItemAnimator.this.mChangesList.remove(changes);
-                    }
-                }.run();
+                Iterator it3 = this.pendingMoves.iterator();
+                while (it3.hasNext()) {
+                    MoveInfo moveInfo = (MoveInfo) it3.next();
+                    animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY, moveInfo.toX, moveInfo.toY);
+                }
+                this.pendingMoves.clear();
             }
             if (additionsPending) {
-                final ArrayList<ViewHolder> additions = new ArrayList(this.mPendingAdditions);
-                this.mAdditionsList.add(additions);
-                this.mPendingAdditions.clear();
-                new Runnable() {
-                    public void run() {
-                        Iterator it = additions.iterator();
-                        while (it.hasNext()) {
-                            ChatItemAnimator.this.animateAddByPushingUp((ViewHolder) it.next());
-                        }
-                        additions.clear();
-                        ChatItemAnimator.this.mAdditionsList.remove(additions);
+                ArrayList<ViewHolder> additions = new ArrayList(this.pendingAdditions);
+                ArrayList<ViewHolder> pushUp = new ArrayList();
+                Collections.sort(additions, new C06591());
+                i = 0;
+                it = additions.iterator();
+                while (it.hasNext()) {
+                    holder = (ViewHolder) it.next();
+                    if (i == holder.getAdapterPosition()) {
+                        pushUp.add(holder);
+                    } else {
+                        animateAddByFadingIn(holder);
                     }
-                }.run();
+                    i++;
+                }
+                int smallestTop = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                int largestBottom = 0;
+                it = pushUp.iterator();
+                while (it.hasNext()) {
+                    holder = (ViewHolder) it.next();
+                    smallestTop = Math.min(smallestTop, holder.itemView.getTop());
+                    largestBottom = Math.max(largestBottom, holder.itemView.getBottom());
+                }
+                it2 = pushUp.iterator();
+                while (it2.hasNext()) {
+                    ViewHolder _holder;
+                    holder = (ViewHolder) it2.next();
+                    float offsetY = 0.0f;
+                    it = this.changeAnimations.iterator();
+                    while (it.hasNext()) {
+                        _holder = (ViewHolder) it.next();
+                        if (holder.itemView.getTop() > _holder.itemView.getTop()) {
+                            offsetY = Math.max(offsetY, _holder.itemView.getTranslationY());
+                        }
+                    }
+                    it = this.moveAnimations.iterator();
+                    while (it.hasNext()) {
+                        _holder = (ViewHolder) it.next();
+                        if (holder.itemView.getTop() > _holder.itemView.getTop()) {
+                            offsetY = Math.max(offsetY, _holder.itemView.getTranslationY());
+                        }
+                    }
+                    it = arrayList.iterator();
+                    while (it.hasNext()) {
+                        MoveInfo move = (MoveInfo) it.next();
+                        if (holder.itemView.getTop() > move.holder.itemView.getTop()) {
+                            offsetY = Math.max(offsetY, move.holder.itemView.getTranslationY());
+                        }
+                    }
+                    if (!(holder.itemView instanceof ChatMessageCell) || ((ChatMessageCell) holder.itemView).getCurrentMessagesGroup() == null) {
+                        holder.itemView.setTranslationY((((float) (largestBottom - smallestTop)) + offsetY) - ((float) holder.itemView.getHeight()));
+                        animateAddByPushingUp(holder);
+                    } else {
+                        gm = ((ChatMessageCell) holder.itemView).getCurrentMessagesGroup();
+                        if (groupAdditions == null) {
+                            groupAdditions = new LongSparseArray();
+                        }
+                        ArrayList<ViewHolder> add = (ArrayList) groupAdditions.get(gm.groupId);
+                        if (add == null) {
+                            add = new ArrayList();
+                            groupAdditions.put(gm.groupId, add);
+                        }
+                        add.add(holder);
+                        amg = (AnimatingMessageGroup) this.animatingGroups.get(gm.groupId);
+                        if (amg != null) {
+                            amg.addAndUpdateHolder(holder);
+                        } else {
+                            amg = new AnimatingMessageGroup();
+                            amg.addAndUpdateHolder(holder);
+                            this.animatingGroups.put(gm.groupId, amg);
+                        }
+                        if (addingGroups == null) {
+                            addingGroups = new ArrayList();
+                        }
+                        if (!addingGroups.contains(amg)) {
+                            addingGroups.add(amg);
+                        }
+                    }
+                }
+                this.pendingAdditions.clear();
+            }
+            if (changesPending) {
+                it2 = this.pendingChanges.iterator();
+                while (it2.hasNext()) {
+                    ChangeInfo change = (ChangeInfo) it2.next();
+                    gm = null;
+                    if ((change.newHolder.itemView instanceof ChatMessageCell) && (change.oldHolder.itemView instanceof ChatMessageCell)) {
+                        gm = ((ChatMessageCell) change.newHolder.itemView).getCurrentMessagesGroup();
+                        if (gm == null) {
+                            gm = ((ChatMessageCell) change.oldHolder.itemView).getCurrentMessagesGroup();
+                        }
+                    }
+                    if (gm != null) {
+                        if (groupRemovals != null) {
+                            if (groupRemovals.get(gm.groupId) != null) {
+                                if (changingGroups == null) {
+                                    changingGroups = new LongSparseArray();
+                                }
+                                GroupChangeInfo gChange = (GroupChangeInfo) changingGroups.get(gm.groupId);
+                                if (gChange == null) {
+                                    GroupChangeInfo groupChangeInfo = new GroupChangeInfo();
+                                    changingGroups.put(gm.groupId, groupChangeInfo);
+                                    it = ((ArrayList) groupRemovals.get(gm.groupId)).iterator();
+                                    while (it.hasNext()) {
+                                        groupChangeInfo.oldGroup.addAndUpdateHolder((ViewHolder) it.next());
+                                    }
+                                }
+                                gChange.oldGroup.addAndUpdateHolder(change.oldHolder);
+                                gChange.newGroup.addAndUpdateHolder(change.newHolder);
+                                if (gChange.smallestTop > change.newHolder.itemView.getTop()) {
+                                    gChange.smallestTop = change.newHolder.itemView.getTop();
+                                    gChange.fromY = (float) change.fromY;
+                                    gChange.toY = (float) change.toY;
+                                }
+                            }
+                        }
+                        if (groupAdditions != null) {
+                            if (groupAdditions.get(gm.groupId) != null) {
+                                amg = (AnimatingMessageGroup) this.animatingGroups.get(gm.groupId);
+                                if (amg != null) {
+                                    amg.addAndUpdateHolder(change.newHolder);
+                                } else {
+                                    amg = new AnimatingMessageGroup();
+                                    it = ((ArrayList) groupAdditions.get(gm.groupId)).iterator();
+                                    while (it.hasNext()) {
+                                        amg.addAndUpdateHolder((ViewHolder) it.next());
+                                    }
+                                    amg.addAndUpdateHolder(change.newHolder);
+                                    this.animatingGroups.put(gm.groupId, amg);
+                                }
+                                if (addingGroups == null) {
+                                    addingGroups = new ArrayList();
+                                }
+                                if (!addingGroups.contains(amg)) {
+                                    addingGroups.add(amg);
+                                }
+                                dispatchChangeFinished(change.oldHolder, true);
+                                change.newHolder.itemView.setAlpha(1.0f);
+                                change.newHolder.itemView.setTranslationY(0.0f);
+                            }
+                        }
+                        animateChangeImpl(change);
+                    } else {
+                        animateChangeImpl(change);
+                    }
+                }
+                this.pendingChanges.clear();
+            }
+            if (!(addingGroups == null || addingGroups.isEmpty())) {
+                it = addingGroups.iterator();
+                while (it.hasNext()) {
+                    AnimatingMessageGroup g = (AnimatingMessageGroup) it.next();
+                    g.setTranslationY((float) g.getTotalHeight());
+                    g.setAlpha(1.0f);
+                    animateAddByPushingUp(g);
+                }
+            }
+            if (changingGroups != null && changingGroups.size() > 0) {
+                for (i = 0; i < changingGroups.size(); i++) {
+                    animateGroupChangeImpl((GroupChangeInfo) changingGroups.valueAt(i));
+                }
             }
         }
     }
 
     public boolean animateRemove(ViewHolder holder) {
         resetAnimation(holder);
-        this.mPendingRemovals.add(holder);
+        this.pendingRemovals.add(holder);
         return true;
     }
 
     private void animateRemoveImpl(final ViewHolder holder) {
         final View view = holder.itemView;
-        final ViewPropertyAnimator animation = view.animate();
-        this.mRemoveAnimations.add(holder);
+        final ViewPropertyAnimator animation = view.animate().withLayer();
+        this.removeAnimations.add(holder);
         animation.setDuration(getRemoveDuration()).alpha(0.0f).setListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
                 ChatItemAnimator.this.dispatchRemoveStarting(holder);
@@ -178,7 +446,7 @@ public class ChatItemAnimator extends SimpleItemAnimator {
                 animation.setListener(null);
                 view.setAlpha(1.0f);
                 ChatItemAnimator.this.dispatchRemoveFinished(holder);
-                ChatItemAnimator.this.mRemoveAnimations.remove(holder);
+                ChatItemAnimator.this.removeAnimations.remove(holder);
                 ChatItemAnimator.this.dispatchFinishedWhenDone();
             }
         }).start();
@@ -187,14 +455,14 @@ public class ChatItemAnimator extends SimpleItemAnimator {
     public boolean animateAdd(ViewHolder holder) {
         resetAnimation(holder);
         holder.itemView.setAlpha(0.0f);
-        this.mPendingAdditions.add(holder);
+        this.pendingAdditions.add(holder);
         return true;
     }
 
     void animateAddByFadingIn(final ViewHolder holder) {
         final View view = holder.itemView;
-        final ViewPropertyAnimator animation = view.animate();
-        this.mAddAnimations.add(holder);
+        final ViewPropertyAnimator animation = view.animate().withLayer();
+        this.addAnimations.add(holder);
         animation.setInterpolator(CubicBezierInterpolator.DEFAULT);
         animation.alpha(1.0f).setDuration(getAddDuration()).setListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
@@ -208,7 +476,7 @@ public class ChatItemAnimator extends SimpleItemAnimator {
             public void onAnimationEnd(Animator animator) {
                 animation.setListener(null);
                 ChatItemAnimator.this.dispatchAddFinished(holder);
-                ChatItemAnimator.this.mAddAnimations.remove(holder);
+                ChatItemAnimator.this.addAnimations.remove(holder);
                 ChatItemAnimator.this.dispatchFinishedWhenDone();
             }
         }).start();
@@ -217,10 +485,9 @@ public class ChatItemAnimator extends SimpleItemAnimator {
     void animateAddByPushingUp(final ViewHolder holder) {
         final View view = holder.itemView;
         final ViewPropertyAnimator animation = view.animate();
-        this.mAddAnimations.add(holder);
+        this.addAnimations.add(holder);
         animation.setInterpolator(CubicBezierInterpolator.DEFAULT);
         view.setAlpha(1.0f);
-        view.setTranslationY((float) view.getHeight());
         animation.translationY(0.0f).setDuration(getAddDuration()).setListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
                 ChatItemAnimator.this.dispatchAddStarting(holder);
@@ -233,10 +500,49 @@ public class ChatItemAnimator extends SimpleItemAnimator {
             public void onAnimationEnd(Animator animator) {
                 animation.setListener(null);
                 ChatItemAnimator.this.dispatchAddFinished(holder);
-                ChatItemAnimator.this.mAddAnimations.remove(holder);
+                ChatItemAnimator.this.addAnimations.remove(holder);
                 ChatItemAnimator.this.dispatchFinishedWhenDone();
             }
         }).start();
+    }
+
+    void animateAddByPushingUp(final AnimatingMessageGroup group) {
+        this.addAnimations.addAll(group.holders);
+        group.setAlpha(1.0f);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(group, "translationY", new float[]{0.0f});
+        anim.setDuration(getAddDuration());
+        anim.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        anim.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationStart(Animator animator) {
+                Iterator it = group.holders.iterator();
+                while (it.hasNext()) {
+                    ChatItemAnimator.this.dispatchAddStarting((ViewHolder) it.next());
+                }
+            }
+
+            public void onAnimationCancel(Animator animator) {
+            }
+
+            public void onAnimationEnd(Animator animator) {
+                Iterator it = group.holders.iterator();
+                while (it.hasNext()) {
+                    ViewHolder holder = (ViewHolder) it.next();
+                    ChatItemAnimator.this.dispatchAddFinished(holder);
+                    ChatItemAnimator.this.addAnimations.remove(holder);
+                    holder.itemView.setTag(R.id.current_animation, null);
+                    holder.itemView.setTranslationY(0.0f);
+                    holder.itemView.setLayerType(0, null);
+                }
+                ChatItemAnimator.this.dispatchFinishedWhenDone();
+            }
+        });
+        Iterator it = group.holders.iterator();
+        while (it.hasNext()) {
+            ViewHolder holder = (ViewHolder) it.next();
+            holder.itemView.setTag(R.id.current_animation, anim);
+            holder.itemView.setLayerType(2, null);
+        }
+        anim.start();
     }
 
     public boolean animateMove(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
@@ -244,23 +550,28 @@ public class ChatItemAnimator extends SimpleItemAnimator {
         fromX = (int) (((float) fromX) + holder.itemView.getTranslationX());
         fromY = (int) (((float) fromY) + holder.itemView.getTranslationY());
         resetAnimation(holder);
-        int deltaX = toX - fromX;
         int deltaY = toY - fromY;
-        if (deltaX == 0 && deltaY == 0) {
+        if (toX - fromX == 0 && deltaY == 0) {
             dispatchMoveFinished(holder);
             return false;
-        }
-        if (deltaX != 0) {
-            view.setTranslationX((float) (-deltaX));
         }
         if (deltaY != 0) {
             view.setTranslationY((float) (-deltaY));
         }
-        this.mPendingMoves.add(new MoveInfo(holder, fromX, fromY, toX, toY));
+        this.pendingMoves.add(new MoveInfo(holder, fromX, fromY, toX, toY));
         return true;
     }
 
-    void animateMoveImpl(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+    private boolean animateMoveAndResize(ViewHolder holder, ItemHolderInfo preInfo, ItemHolderInfo postInfo) {
+        this.pendingResizes.add(new ResizeInfo(holder, preInfo, postInfo));
+        return true;
+    }
+
+    public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder, int fromLeft, int fromTop, int toLeft, int toTop) {
+        return false;
+    }
+
+    void animateMoveImpl(final ViewHolder holder, int fromX, int fromY, int toX, int toY) {
         final View view = holder.itemView;
         final int deltaX = toX - fromX;
         final int deltaY = toY - fromY;
@@ -270,13 +581,20 @@ public class ChatItemAnimator extends SimpleItemAnimator {
         if (deltaY != 0) {
             view.animate().translationY(0.0f);
         }
+        final OnPreDrawListener visiblePartUpdater = new OnPreDrawListener() {
+            public boolean onPreDraw() {
+                ChatItemAnimator.this.updateVisiblePart(holder);
+                return true;
+            }
+        };
         final ViewPropertyAnimator animation = view.animate();
-        this.mMoveAnimations.add(holder);
+        this.moveAnimations.add(holder);
         animation.setInterpolator(CubicBezierInterpolator.DEFAULT);
         final ViewHolder viewHolder = holder;
         animation.setDuration(getMoveDuration()).setListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
                 ChatItemAnimator.this.dispatchMoveStarting(viewHolder);
+                viewHolder.itemView.getViewTreeObserver().addOnPreDrawListener(visiblePartUpdater);
             }
 
             public void onAnimationCancel(Animator animator) {
@@ -291,32 +609,44 @@ public class ChatItemAnimator extends SimpleItemAnimator {
             public void onAnimationEnd(Animator animator) {
                 animation.setListener(null);
                 ChatItemAnimator.this.dispatchMoveFinished(viewHolder);
-                ChatItemAnimator.this.mMoveAnimations.remove(viewHolder);
+                ChatItemAnimator.this.moveAnimations.remove(viewHolder);
+                viewHolder.itemView.getViewTreeObserver().removeOnPreDrawListener(visiblePartUpdater);
                 ChatItemAnimator.this.dispatchFinishedWhenDone();
             }
         }).start();
     }
 
-    public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
+    public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder, ItemHolderInfo preInfo, ItemHolderInfo postInfo) {
         if (oldHolder == newHolder) {
-            return animateMove(oldHolder, fromX, fromY, toX, toY);
+            return animateMove(oldHolder, preInfo.left, preInfo.top, postInfo.left, postInfo.top);
+        }
+        View _oldView = oldHolder.itemView;
+        View _newView = newHolder.itemView;
+        if (_oldView.getWidth() == _newView.getWidth() && _oldView.getHeight() == _newView.getHeight() && preInfo.left == postInfo.left && preInfo.top == postInfo.top) {
+            if ((_oldView instanceof ChatMessageCell) && (_newView instanceof ChatMessageCell)) {
+                if (((ChatMessageCell) _oldView).getActualWidth() == ((ChatMessageCell) _newView).getActualWidth()) {
+                    dispatchChangeFinished(oldHolder, true);
+                    dispatchChangeFinished(newHolder, false);
+                    return false;
+                }
+            }
+            dispatchChangeFinished(oldHolder, true);
+            dispatchChangeFinished(newHolder, false);
+            return false;
         }
         float prevTranslationX = oldHolder.itemView.getTranslationX();
         float prevTranslationY = oldHolder.itemView.getTranslationY();
         float prevAlpha = oldHolder.itemView.getAlpha();
         resetAnimation(oldHolder);
-        int deltaX = (int) (((float) (toX - fromX)) - prevTranslationX);
-        int deltaY = (int) (((float) (toY - fromY)) - prevTranslationY);
-        oldHolder.itemView.setTranslationX(prevTranslationX);
+        int deltaY = 1 != null ? (int) (((float) (postInfo.top - preInfo.top)) - prevTranslationY) : 0;
         oldHolder.itemView.setTranslationY(prevTranslationY);
         oldHolder.itemView.setAlpha(prevAlpha);
         if (newHolder != null) {
             resetAnimation(newHolder);
-            newHolder.itemView.setTranslationX((float) (-deltaX));
             newHolder.itemView.setTranslationY((float) (-deltaY));
             newHolder.itemView.setAlpha(0.0f);
         }
-        this.mPendingChanges.add(new ChangeInfo(oldHolder, newHolder, fromX, fromY, toX, toY));
+        this.pendingChanges.add(new ChangeInfo(oldHolder, newHolder, preInfo.left, preInfo.top, postInfo.left, postInfo.top, true));
         return true;
     }
 
@@ -330,33 +660,47 @@ public class ChatItemAnimator extends SimpleItemAnimator {
         } else {
             newView = null;
         }
+        boolean needAnimateAlpha = true;
         if (view != null) {
-            final ViewPropertyAnimator oldViewAnim = view.animate().setDuration(getChangeDuration());
-            this.mChangeAnimations.add(changeInfo.oldHolder);
-            oldViewAnim.translationX((float) (changeInfo.toX - changeInfo.fromX));
-            oldViewAnim.translationY((float) (changeInfo.toY - changeInfo.fromY));
-            oldViewAnim.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            oldViewAnim.alpha(0.0f).setListener(new AnimatorListenerAdapter() {
-                public void onAnimationStart(Animator animator) {
-                    ChatItemAnimator.this.dispatchChangeStarting(changeInfo.oldHolder, true);
+            if (newView == null || view.getWidth() != newView.getWidth() || view.getHeight() != newView.getHeight() || ((view instanceof ChatMessageCell) && (newView instanceof ChatMessageCell) && ((ChatMessageCell) view).getActualWidth() != ((ChatMessageCell) newView).getActualWidth())) {
+                final ViewPropertyAnimator oldViewAnim = view.animate().withLayer().setDuration(getChangeDuration());
+                this.changeAnimations.add(changeInfo.oldHolder);
+                if (changeInfo.animateTranslation) {
+                    oldViewAnim.translationX((float) (changeInfo.toX - changeInfo.fromX));
+                    oldViewAnim.translationY((float) (changeInfo.toY - changeInfo.fromY));
                 }
+                oldViewAnim.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                oldViewAnim.alpha(0.0f).setListener(new AnimatorListenerAdapter() {
+                    public void onAnimationStart(Animator animator) {
+                        ChatItemAnimator.this.dispatchChangeStarting(changeInfo.oldHolder, true);
+                    }
 
-                public void onAnimationEnd(Animator animator) {
-                    oldViewAnim.setListener(null);
-                    view.setAlpha(1.0f);
-                    view.setTranslationX(0.0f);
-                    view.setTranslationY(0.0f);
-                    ChatItemAnimator.this.dispatchChangeFinished(changeInfo.oldHolder, true);
-                    ChatItemAnimator.this.mChangeAnimations.remove(changeInfo.oldHolder);
-                    ChatItemAnimator.this.dispatchFinishedWhenDone();
-                }
-            }).start();
+                    public void onAnimationEnd(Animator animator) {
+                        oldViewAnim.setListener(null);
+                        view.setAlpha(1.0f);
+                        view.setTranslationX(0.0f);
+                        view.setTranslationY(0.0f);
+                        ChatItemAnimator.this.dispatchChangeFinished(changeInfo.oldHolder, true);
+                        ChatItemAnimator.this.changeAnimations.remove(changeInfo.oldHolder);
+                        ChatItemAnimator.this.dispatchFinishedWhenDone();
+                    }
+                }).start();
+            } else {
+                dispatchChangeFinished(changeInfo.oldHolder, true);
+                needAnimateAlpha = false;
+            }
         }
         if (newView != null) {
-            final ViewPropertyAnimator newViewAnimation = newView.animate();
-            this.mChangeAnimations.add(changeInfo.newHolder);
+            final ViewPropertyAnimator newViewAnimation = newView.animate().withLayer();
+            this.changeAnimations.add(changeInfo.newHolder);
             newViewAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            newViewAnimation.translationX(0.0f).translationY(0.0f).setDuration(getChangeDuration()).alpha(1.0f).setListener(new AnimatorListenerAdapter() {
+            if (changeInfo.animateTranslation) {
+                newViewAnimation.translationX(0.0f).translationY(0.0f);
+            }
+            if (!needAnimateAlpha) {
+                newView.setAlpha(1.0f);
+            }
+            newViewAnimation.setDuration(getChangeDuration()).alpha(1.0f).setListener(new AnimatorListenerAdapter() {
                 public void onAnimationStart(Animator animator) {
                     ChatItemAnimator.this.dispatchChangeStarting(changeInfo.newHolder, false);
                 }
@@ -367,11 +711,101 @@ public class ChatItemAnimator extends SimpleItemAnimator {
                     newView.setTranslationX(0.0f);
                     newView.setTranslationY(0.0f);
                     ChatItemAnimator.this.dispatchChangeFinished(changeInfo.newHolder, false);
-                    ChatItemAnimator.this.mChangeAnimations.remove(changeInfo.newHolder);
+                    ChatItemAnimator.this.changeAnimations.remove(changeInfo.newHolder);
                     ChatItemAnimator.this.dispatchFinishedWhenDone();
                 }
             }).start();
         }
+    }
+
+    private void animateGroupChangeImpl(final GroupChangeInfo change) {
+        ViewHolder holder;
+        Iterator it = change.oldGroup.holders.iterator();
+        while (it.hasNext()) {
+            holder = (ViewHolder) it.next();
+            endAnimation(holder);
+            this.changeAnimations.add(holder);
+        }
+        it = change.newGroup.holders.iterator();
+        while (it.hasNext()) {
+            holder = (ViewHolder) it.next();
+            endAnimation(holder);
+            this.changeAnimations.add(holder);
+        }
+        change.oldGroup.setAlpha(1.0f);
+        change.newGroup.setAlpha(0.0f);
+        change.newGroup.setTranslationY(change.fromY - change.toY);
+        AnimatorSet set = new AnimatorSet();
+        Animator[] animatorArr = new Animator[4];
+        animatorArr[0] = ObjectAnimator.ofFloat(change.newGroup, "alpha", new float[]{1.0f});
+        animatorArr[1] = ObjectAnimator.ofFloat(change.oldGroup, "alpha", new float[]{0.0f});
+        animatorArr[2] = ObjectAnimator.ofFloat(change.newGroup, "translationY", new float[]{0.0f});
+        animatorArr[3] = ObjectAnimator.ofFloat(change.oldGroup, "translationY", new float[]{change.toY - change.fromY});
+        set.playTogether(animatorArr);
+        set.setDuration(getChangeDuration());
+        set.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        set.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                ViewHolder holder;
+                Iterator it = change.oldGroup.holders.iterator();
+                while (it.hasNext()) {
+                    holder = (ViewHolder) it.next();
+                    ChatItemAnimator.this.dispatchChangeFinished(holder, true);
+                    holder.itemView.setTag(R.id.current_animation, null);
+                    holder.itemView.setLayerType(0, null);
+                    ChatItemAnimator.this.changeAnimations.remove(holder);
+                }
+                it = change.newGroup.holders.iterator();
+                while (it.hasNext()) {
+                    holder = (ViewHolder) it.next();
+                    ChatItemAnimator.this.dispatchChangeFinished(holder, false);
+                    holder.itemView.setTag(R.id.current_animation, null);
+                    holder.itemView.setLayerType(0, null);
+                    ChatItemAnimator.this.changeAnimations.remove(holder);
+                }
+                change.oldGroup.setAlpha(1.0f);
+                change.oldGroup.setTranslationY(0.0f);
+                change.newGroup.setAlpha(1.0f);
+                change.newGroup.setTranslationY(0.0f);
+                ChatItemAnimator.this.dispatchFinishedWhenDone();
+            }
+        });
+        it = change.oldGroup.holders.iterator();
+        while (it.hasNext()) {
+            holder = (ViewHolder) it.next();
+            holder.itemView.setTag(R.id.current_animation, set);
+            holder.itemView.setLayerType(2, null);
+        }
+        it = change.newGroup.holders.iterator();
+        while (it.hasNext()) {
+            holder = (ViewHolder) it.next();
+            holder.itemView.setTag(R.id.current_animation, set);
+            holder.itemView.setLayerType(2, null);
+        }
+        set.start();
+    }
+
+    private void animateResizeImpl(final ResizeInfo info) {
+        View view = info.holder.itemView;
+        AnimatorSet set = new AnimatorSet();
+        r2 = new Animator[4];
+        r2[0] = ObjectAnimator.ofInt(view, "top", new int[]{info.from.top, info.f219to.top});
+        r2[1] = ObjectAnimator.ofInt(view, "bottom", new int[]{info.from.bottom, info.f219to.bottom});
+        r2[2] = ObjectAnimator.ofInt(view, TtmlNode.LEFT, new int[]{info.from.left, info.f219to.left});
+        r2[3] = ObjectAnimator.ofInt(view, TtmlNode.RIGHT, new int[]{info.from.right, info.f219to.right});
+        set.playTogether(r2);
+        set.setDuration(getChangeDuration());
+        set.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        set.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationStart(Animator animation) {
+                ChatItemAnimator.this.dispatchChangeStarting(info.holder, true);
+            }
+
+            public void onAnimationEnd(Animator animation) {
+                ChatItemAnimator.this.dispatchChangeFinished(info.holder, true);
+            }
+        });
+        set.start();
     }
 
     private void endChangeAnimation(List<ChangeInfo> infoList, ViewHolder item) {
@@ -410,81 +844,46 @@ public class ChatItemAnimator extends SimpleItemAnimator {
     }
 
     public void endAnimation(ViewHolder item) {
-        int i;
         View view = item.itemView;
         view.animate().cancel();
-        for (i = this.mPendingMoves.size() - 1; i >= 0; i--) {
-            if (((MoveInfo) this.mPendingMoves.get(i)).holder == item) {
-                view.setTranslationY(0.0f);
-                view.setTranslationX(0.0f);
+        Object animator = view.getTag(R.id.current_animation);
+        if (animator != null && (animator instanceof Animator)) {
+            ((Animator) animator).cancel();
+            view.setTag(R.id.current_animation, null);
+        }
+        view.setTranslationY(0.0f);
+        view.setTranslationX(0.0f);
+        view.setAlpha(1.0f);
+        for (int i = this.pendingMoves.size() - 1; i >= 0; i--) {
+            if (((MoveInfo) this.pendingMoves.get(i)).holder == item) {
                 dispatchMoveFinished(item);
-                this.mPendingMoves.remove(i);
+                this.pendingMoves.remove(i);
             }
         }
-        endChangeAnimation(this.mPendingChanges, item);
-        if (this.mPendingRemovals.remove(item)) {
-            view.setAlpha(1.0f);
+        endChangeAnimation(this.pendingChanges, item);
+        if (this.pendingRemovals.remove(item)) {
             dispatchRemoveFinished(item);
         }
-        if (this.mPendingAdditions.remove(item)) {
-            view.setAlpha(1.0f);
+        if (this.pendingAdditions.remove(item)) {
             dispatchAddFinished(item);
         }
-        for (i = this.mChangesList.size() - 1; i >= 0; i--) {
-            ArrayList<ChangeInfo> changes = (ArrayList) this.mChangesList.get(i);
-            endChangeAnimation(changes, item);
-            if (changes.isEmpty()) {
-                this.mChangesList.remove(i);
-            }
+        if (this.removeAnimations.remove(item)) {
         }
-        for (i = this.mMovesList.size() - 1; i >= 0; i--) {
-            ArrayList<MoveInfo> moves = (ArrayList) this.mMovesList.get(i);
-            int j = moves.size() - 1;
-            while (j >= 0) {
-                if (((MoveInfo) moves.get(j)).holder == item) {
-                    view.setTranslationY(0.0f);
-                    view.setTranslationX(0.0f);
-                    dispatchMoveFinished(item);
-                    moves.remove(j);
-                    if (moves.isEmpty()) {
-                        this.mMovesList.remove(i);
-                    }
-                } else {
-                    j--;
-                }
-            }
+        if (this.addAnimations.remove(item)) {
         }
-        for (i = this.mAdditionsList.size() - 1; i >= 0; i--) {
-            ArrayList<ViewHolder> additions = (ArrayList) this.mAdditionsList.get(i);
-            if (additions.remove(item)) {
-                view.setAlpha(1.0f);
-                dispatchAddFinished(item);
-                if (additions.isEmpty()) {
-                    this.mAdditionsList.remove(i);
-                }
-            }
+        if (this.changeAnimations.remove(item)) {
         }
-        if (this.mRemoveAnimations.remove(item)) {
-        }
-        if (this.mAddAnimations.remove(item)) {
-        }
-        if (this.mChangeAnimations.remove(item)) {
-        }
-        if (this.mMoveAnimations.remove(item)) {
+        if (this.moveAnimations.remove(item)) {
         }
         dispatchFinishedWhenDone();
     }
 
     private void resetAnimation(ViewHolder holder) {
-        if (sDefaultInterpolator == null) {
-            sDefaultInterpolator = new ValueAnimator().getInterpolator();
-        }
-        holder.itemView.animate().setInterpolator(sDefaultInterpolator);
         endAnimation(holder);
     }
 
     public boolean isRunning() {
-        if (this.mPendingAdditions.isEmpty() && this.mPendingChanges.isEmpty() && this.mPendingMoves.isEmpty() && this.mPendingRemovals.isEmpty() && this.mMoveAnimations.isEmpty() && this.mRemoveAnimations.isEmpty() && this.mAddAnimations.isEmpty() && this.mChangeAnimations.isEmpty() && this.mMovesList.isEmpty() && this.mAdditionsList.isEmpty() && this.mChangesList.isEmpty()) {
+        if (this.pendingAdditions.isEmpty() && this.pendingChanges.isEmpty() && this.pendingMoves.isEmpty() && this.pendingRemovals.isEmpty() && this.moveAnimations.isEmpty() && this.removeAnimations.isEmpty() && this.addAnimations.isEmpty() && this.changeAnimations.isEmpty()) {
             return false;
         }
         return true;
@@ -493,76 +892,39 @@ public class ChatItemAnimator extends SimpleItemAnimator {
     void dispatchFinishedWhenDone() {
         if (!isRunning()) {
             dispatchAnimationsFinished();
+            this.animatingGroups.clear();
         }
     }
 
     public void endAnimations() {
         int i;
-        View view;
-        ViewHolder item;
-        for (i = this.mPendingMoves.size() - 1; i >= 0; i--) {
-            MoveInfo item2 = (MoveInfo) this.mPendingMoves.get(i);
-            view = item2.holder.itemView;
+        for (i = this.pendingMoves.size() - 1; i >= 0; i--) {
+            MoveInfo item = (MoveInfo) this.pendingMoves.get(i);
+            View view = item.holder.itemView;
             view.setTranslationY(0.0f);
             view.setTranslationX(0.0f);
-            dispatchMoveFinished(item2.holder);
-            this.mPendingMoves.remove(i);
+            dispatchMoveFinished(item.holder);
+            this.pendingMoves.remove(i);
         }
-        for (i = this.mPendingRemovals.size() - 1; i >= 0; i--) {
-            dispatchRemoveFinished((ViewHolder) this.mPendingRemovals.get(i));
-            this.mPendingRemovals.remove(i);
+        for (i = this.pendingRemovals.size() - 1; i >= 0; i--) {
+            dispatchRemoveFinished((ViewHolder) this.pendingRemovals.get(i));
+            this.pendingRemovals.remove(i);
         }
-        for (i = this.mPendingAdditions.size() - 1; i >= 0; i--) {
-            item = (ViewHolder) this.mPendingAdditions.get(i);
-            item.itemView.setAlpha(1.0f);
-            dispatchAddFinished(item);
-            this.mPendingAdditions.remove(i);
+        for (i = this.pendingAdditions.size() - 1; i >= 0; i--) {
+            ViewHolder item2 = (ViewHolder) this.pendingAdditions.get(i);
+            item2.itemView.setAlpha(1.0f);
+            dispatchAddFinished(item2);
+            this.pendingAdditions.remove(i);
         }
-        for (i = this.mPendingChanges.size() - 1; i >= 0; i--) {
-            endChangeAnimationIfNecessary((ChangeInfo) this.mPendingChanges.get(i));
+        for (i = this.pendingChanges.size() - 1; i >= 0; i--) {
+            endChangeAnimationIfNecessary((ChangeInfo) this.pendingChanges.get(i));
         }
-        this.mPendingChanges.clear();
+        this.pendingChanges.clear();
         if (isRunning()) {
-            int j;
-            for (i = this.mMovesList.size() - 1; i >= 0; i--) {
-                ArrayList<MoveInfo> moves = (ArrayList) this.mMovesList.get(i);
-                for (j = moves.size() - 1; j >= 0; j--) {
-                    MoveInfo moveInfo = (MoveInfo) moves.get(j);
-                    view = moveInfo.holder.itemView;
-                    view.setTranslationY(0.0f);
-                    view.setTranslationX(0.0f);
-                    dispatchMoveFinished(moveInfo.holder);
-                    moves.remove(j);
-                    if (moves.isEmpty()) {
-                        this.mMovesList.remove(moves);
-                    }
-                }
-            }
-            for (i = this.mAdditionsList.size() - 1; i >= 0; i--) {
-                ArrayList<ViewHolder> additions = (ArrayList) this.mAdditionsList.get(i);
-                for (j = additions.size() - 1; j >= 0; j--) {
-                    item = (ViewHolder) additions.get(j);
-                    item.itemView.setAlpha(1.0f);
-                    dispatchAddFinished(item);
-                    additions.remove(j);
-                    if (additions.isEmpty()) {
-                        this.mAdditionsList.remove(additions);
-                    }
-                }
-            }
-            for (i = this.mChangesList.size() - 1; i >= 0; i--) {
-                ArrayList<ChangeInfo> changes = (ArrayList) this.mChangesList.get(i);
-                for (j = changes.size() - 1; j >= 0; j--) {
-                    endChangeAnimationIfNecessary((ChangeInfo) changes.get(j));
-                    if (changes.isEmpty()) {
-                        this.mChangesList.remove(changes);
-                    }
-                }
-            }
-            cancelAll(this.mRemoveAnimations);
-            cancelAll(this.mMoveAnimations);
-            cancelAll(this.mAddAnimations);
-            cancelAll(this.mChangeAnimations);
+            cancelAll(this.removeAnimations);
+            cancelAll(this.moveAnimations);
+            cancelAll(this.addAnimations);
+            cancelAll(this.changeAnimations);
             dispatchAnimationsFinished();
         }
     }
@@ -573,7 +935,23 @@ public class ChatItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    public boolean canReuseUpdatedViewHolder(ViewHolder viewHolder, List<Object> payloads) {
-        return !payloads.isEmpty() || super.canReuseUpdatedViewHolder(viewHolder, payloads);
+    private void updateVisiblePart(ViewHolder holder) {
+        if (holder.itemView instanceof ChatMessageCell) {
+            ChatMessageCell cell = holder.itemView;
+            int y = (int) holder.itemView.getY();
+            int top = y >= 0 ? 0 : -y;
+            int height = holder.itemView.getMeasuredHeight();
+            if (height > this.list.getMeasuredHeight()) {
+                height = top + this.list.getMeasuredHeight();
+            }
+            cell.setVisiblePart(top, height - top);
+            if (cell.getMessageObject().isRoundVideo() && MediaController.getInstance().isPlayingMessage(cell.getMessageObject())) {
+                this.chatFragment.updateTextureViewPosition(false);
+            }
+        }
+    }
+
+    public boolean canReuseUpdatedViewHolder(ViewHolder viewHolder, List<Object> list) {
+        return false;
     }
 }

@@ -113,6 +113,6 @@ public class SlidingTabView extends LinearLayout {
             }
         }
         Canvas canvas2 = canvas;
-        canvas2.drawRect(this.tabX, (float) (getHeight() - AndroidUtilities.m10dp(2.0f)), this.tabWidth + this.tabX, (float) getHeight(), this.paint);
+        canvas2.drawRect(this.tabX, (float) (getHeight() - AndroidUtilities.m9dp(2.0f)), this.tabWidth + this.tabX, (float) getHeight(), this.paint);
     }
 }

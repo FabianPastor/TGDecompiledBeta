@@ -2,20 +2,20 @@ package org.telegram.p005ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.DialogsActivity.C21095;
+import org.telegram.p005ui.DialogsActivity.C14325;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 
 /* renamed from: org.telegram.ui.DialogsActivity$5$$Lambda$1 */
 final /* synthetic */ class DialogsActivity$5$$Lambda$1 implements OnClickListener {
-    private final C21095 arg$1;
+    private final C14325 arg$1;
     private final boolean arg$2;
     private final boolean arg$3;
     private final TL_dialog arg$4;
     private final Chat arg$5;
 
-    DialogsActivity$5$$Lambda$1(C21095 c21095, boolean z, boolean z2, TL_dialog tL_dialog, Chat chat) {
-        this.arg$1 = c21095;
+    DialogsActivity$5$$Lambda$1(C14325 c14325, boolean z, boolean z2, TL_dialog tL_dialog, Chat chat) {
+        this.arg$1 = c14325;
         this.arg$2 = z;
         this.arg$3 = z2;
         this.arg$4 = tL_dialog;

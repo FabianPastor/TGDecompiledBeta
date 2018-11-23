@@ -32,7 +32,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
-import org.telegram.p005ui.ActionBar.C0646ActionBar;
+import org.telegram.p005ui.ActionBar.C0403ActionBar;
 import org.telegram.p005ui.PhotoViewer;
 
 /* renamed from: org.telegram.ui.Components.PipVideoView */
@@ -50,8 +50,8 @@ public class PipVideoView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.PipVideoView$2 */
-    class C12512 extends AnimatorListenerAdapter {
-        C12512() {
+    class C08132 extends AnimatorListenerAdapter {
+        C08132() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -67,7 +67,7 @@ public class PipVideoView {
     private class MiniControlsView extends FrameLayout {
         private float bufferedPosition;
         private AnimatorSet currentAnimation;
-        private Runnable hideRunnable = new C12521();
+        private Runnable hideRunnable = new C08141();
         private ImageView inlineButton;
         private boolean isCompleted;
         private boolean isVisible = true;
@@ -75,11 +75,11 @@ public class PipVideoView {
         private float progress;
         private Paint progressInnerPaint;
         private Paint progressPaint;
-        private Runnable progressRunnable = new C12532();
+        private Runnable progressRunnable = new C08152();
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$1 */
-        class C12521 implements Runnable {
-            C12521() {
+        class C08141 implements Runnable {
+            C08141() {
             }
 
             public void run() {
@@ -88,8 +88,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$2 */
-        class C12532 implements Runnable {
-            C12532() {
+        class C08152 implements Runnable {
+            C08152() {
             }
 
             public void run() {
@@ -107,8 +107,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$6 */
-        class C12576 extends AnimatorListenerAdapter {
-            C12576() {
+        class C08196 extends AnimatorListenerAdapter {
+            C08196() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -117,8 +117,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$7 */
-        class C12587 extends AnimatorListenerAdapter {
-            C12587() {
+        class C08207 extends AnimatorListenerAdapter {
+            C08207() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -218,7 +218,7 @@ public class PipVideoView {
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
-                        this.currentAnimation.addListener(new C12576());
+                        this.currentAnimation.addListener(new C08196());
                         this.currentAnimation.start();
                     } else {
                         setAlpha(1.0f);
@@ -230,7 +230,7 @@ public class PipVideoView {
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
-                    this.currentAnimation.addListener(new C12587());
+                    this.currentAnimation.addListener(new C08207());
                     this.currentAnimation.start();
                 } else {
                     setAlpha(0.0f);
@@ -271,14 +271,14 @@ public class PipVideoView {
         protected void onDraw(Canvas canvas) {
             int width = getMeasuredWidth();
             int height = getMeasuredHeight();
-            int progressLineY = height - AndroidUtilities.m10dp(3.0f);
-            int cy = height - AndroidUtilities.m10dp(7.0f);
+            int progressLineY = height - AndroidUtilities.m9dp(3.0f);
+            int cy = height - AndroidUtilities.m9dp(7.0f);
             int progressX = 0 + ((int) (((float) (width - 0)) * this.progress));
             if (this.bufferedPosition != 0.0f) {
                 Canvas canvas2 = canvas;
-                canvas2.drawRect((float) null, (float) progressLineY, (((float) (width - 0)) * this.bufferedPosition) + ((float) null), (float) (AndroidUtilities.m10dp(3.0f) + progressLineY), this.progressInnerPaint);
+                canvas2.drawRect((float) null, (float) progressLineY, (((float) (width - 0)) * this.bufferedPosition) + ((float) null), (float) (AndroidUtilities.m9dp(3.0f) + progressLineY), this.progressInnerPaint);
             }
-            canvas.drawRect((float) null, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.m10dp(3.0f) + progressLineY), this.progressPaint);
+            canvas.drawRect((float) null, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.m9dp(3.0f) + progressLineY), this.progressPaint);
         }
     }
 
@@ -366,10 +366,10 @@ public class PipVideoView {
             }
         };
         if (aspectRatio > 1.0f) {
-            this.videoWidth = AndroidUtilities.m10dp(192.0f);
+            this.videoWidth = AndroidUtilities.m9dp(192.0f);
             this.videoHeight = (int) (((float) this.videoWidth) / aspectRatio);
         } else {
-            this.videoHeight = AndroidUtilities.m10dp(192.0f);
+            this.videoHeight = AndroidUtilities.m9dp(192.0f);
             this.videoWidth = (int) (((float) this.videoHeight) * aspectRatio);
         }
         AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
@@ -415,7 +415,7 @@ public class PipVideoView {
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             return textureView;
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return null;
         }
     }
@@ -452,19 +452,19 @@ public class PipVideoView {
         if (isX) {
             total = AndroidUtilities.displaySize.x - sideSize;
         } else {
-            total = (AndroidUtilities.displaySize.y - sideSize) - C0646ActionBar.getCurrentActionBarHeight();
+            total = (AndroidUtilities.displaySize.y - sideSize) - C0403ActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
-            result = AndroidUtilities.m10dp(10.0f);
+            result = AndroidUtilities.m9dp(10.0f);
         } else if (side == 1) {
-            result = total - AndroidUtilities.m10dp(10.0f);
+            result = total - AndroidUtilities.m9dp(10.0f);
         } else {
-            result = Math.round(((float) (total - AndroidUtilities.m10dp(20.0f))) * p) + AndroidUtilities.m10dp(10.0f);
+            result = Math.round(((float) (total - AndroidUtilities.m9dp(20.0f))) * p) + AndroidUtilities.m9dp(10.0f);
         }
         if (isX) {
             return result;
         }
-        return result + C0646ActionBar.getCurrentActionBarHeight();
+        return result + C0403ActionBar.getCurrentActionBarHeight();
     }
 
     public void close() {
@@ -494,7 +494,7 @@ public class PipVideoView {
         int endY = PipVideoView.getSideCoord(false, 1, 0.0f, this.videoHeight);
         ArrayList<Animator> animators = null;
         Editor editor = this.preferences.edit();
-        int maxDiff = AndroidUtilities.m10dp(20.0f);
+        int maxDiff = AndroidUtilities.m9dp(20.0f);
         boolean slideOut = false;
         if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.videoWidth) / 4)) {
             if (null == null) {
@@ -529,7 +529,7 @@ public class PipVideoView {
             editor.putInt("sidex", 2);
         }
         if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= C0646ActionBar.getCurrentActionBarHeight()) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= C0403ActionBar.getCurrentActionBarHeight()) {
                 if (animators == null) {
                     animators = new ArrayList();
                 }
@@ -556,7 +556,7 @@ public class PipVideoView {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C12512());
+                animatorSet.addListener(new C08132());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();
@@ -572,10 +572,10 @@ public class PipVideoView {
         float px = preferences.getFloat("px", 0.0f);
         float py = preferences.getFloat("py", 0.0f);
         if (aspectRatio > 1.0f) {
-            videoWidth = AndroidUtilities.m10dp(192.0f);
+            videoWidth = AndroidUtilities.m9dp(192.0f);
             videoHeight = (int) (((float) videoWidth) / aspectRatio);
         } else {
-            videoHeight = AndroidUtilities.m10dp(192.0f);
+            videoHeight = AndroidUtilities.m9dp(192.0f);
             videoWidth = (int) (((float) videoHeight) * aspectRatio);
         }
         return new Rect((float) PipVideoView.getSideCoord(true, sidex, px, videoWidth), (float) PipVideoView.getSideCoord(false, sidey, py, videoHeight), (float) videoWidth, (float) videoHeight);

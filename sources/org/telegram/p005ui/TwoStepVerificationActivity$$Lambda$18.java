@@ -1,18 +1,17 @@
 package org.telegram.p005ui;
 
-/* renamed from: org.telegram.ui.TwoStepVerificationActivity$$Lambda$18 */
-final /* synthetic */ class TwoStepVerificationActivity$$Lambda$18 implements Runnable {
-    private final TwoStepVerificationActivity arg$1;
-    private final boolean arg$2;
-    private final byte[] arg$3;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
-    TwoStepVerificationActivity$$Lambda$18(TwoStepVerificationActivity twoStepVerificationActivity, boolean z, byte[] bArr) {
+/* renamed from: org.telegram.ui.TwoStepVerificationActivity$$Lambda$18 */
+final /* synthetic */ class TwoStepVerificationActivity$$Lambda$18 implements OnClickListener {
+    private final TwoStepVerificationActivity arg$1;
+
+    TwoStepVerificationActivity$$Lambda$18(TwoStepVerificationActivity twoStepVerificationActivity) {
         this.arg$1 = twoStepVerificationActivity;
-        this.arg$2 = z;
-        this.arg$3 = bArr;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$22$TwoStepVerificationActivity(this.arg$2, this.arg$3);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$null$34$TwoStepVerificationActivity(dialogInterface, i);
     }
 }

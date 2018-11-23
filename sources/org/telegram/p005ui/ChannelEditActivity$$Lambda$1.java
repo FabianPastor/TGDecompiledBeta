@@ -1,17 +1,17 @@
 package org.telegram.p005ui;
 
+import android.view.MotionEvent;
 import android.view.View;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
+import android.view.View.OnTouchListener;
 
 /* renamed from: org.telegram.ui.ChannelEditActivity$$Lambda$1 */
-final /* synthetic */ class ChannelEditActivity$$Lambda$1 implements OnItemClickListener {
-    private final ChannelEditActivity arg$1;
+final /* synthetic */ class ChannelEditActivity$$Lambda$1 implements OnTouchListener {
+    static final OnTouchListener $instance = new ChannelEditActivity$$Lambda$1();
 
-    ChannelEditActivity$$Lambda$1(ChannelEditActivity channelEditActivity) {
-        this.arg$1 = channelEditActivity;
+    private ChannelEditActivity$$Lambda$1() {
     }
 
-    public void onItemClick(View view, int i) {
-        this.arg$1.lambda$createView$1$ChannelEditActivity(view, i);
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return true;
     }
 }

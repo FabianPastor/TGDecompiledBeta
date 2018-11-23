@@ -51,16 +51,16 @@ public class PhotoFilterCurvesControl extends View {
         setWillNotDraw(false);
         this.curveValue = value;
         this.paint.setColor(-NUM);
-        this.paint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+        this.paint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
         this.paint.setStyle(Style.STROKE);
         this.paintDash.setColor(-NUM);
-        this.paintDash.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paintDash.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.paintDash.setStyle(Style.STROKE);
         this.paintCurve.setColor(-1);
-        this.paintCurve.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paintCurve.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.paintCurve.setStyle(Style.STROKE);
         this.textPaint.setColor(-4210753);
-        this.textPaint.setTextSize((float) AndroidUtilities.m10dp(13.0f));
+        this.textPaint.setTextSize((float) AndroidUtilities.m9dp(13.0f));
     }
 
     public void setDelegate(PhotoFilterCurvesControlDelegate photoFilterCurvesControlDelegate) {
@@ -68,8 +68,8 @@ public class PhotoFilterCurvesControl extends View {
     }
 
     public void setActualArea(float x, float y, float width, float height) {
-        this.actualArea.f230x = x;
-        this.actualArea.f231y = y;
+        this.actualArea.f242x = x;
+        this.actualArea.f243y = y;
         this.actualArea.width = width;
         this.actualArea.height = height;
     }
@@ -90,7 +90,7 @@ public class PhotoFilterCurvesControl extends View {
                     float locationY = event.getY();
                     this.lastX = locationX;
                     this.lastY = locationY;
-                    if (locationX >= this.actualArea.f230x && locationX <= this.actualArea.f230x + this.actualArea.width && locationY >= this.actualArea.f231y && locationY <= this.actualArea.f231y + this.actualArea.height) {
+                    if (locationX >= this.actualArea.f242x && locationX <= this.actualArea.f242x + this.actualArea.width && locationY >= this.actualArea.f243y && locationY <= this.actualArea.f243y + this.actualArea.height) {
                         this.isMoving = true;
                     }
                     this.checkForMoving = false;
@@ -179,7 +179,7 @@ public class PhotoFilterCurvesControl extends View {
 
     private void selectSegmentWithPoint(float pointx) {
         if (this.activeSegment == 0) {
-            this.activeSegment = (int) Math.floor((double) (((pointx - this.actualArea.f230x) / (this.actualArea.width / 5.0f)) + 1.0f));
+            this.activeSegment = (int) Math.floor((double) (((pointx - this.actualArea.f242x) / (this.actualArea.width / 5.0f)) + 1.0f));
         }
     }
 
@@ -196,10 +196,10 @@ public class PhotoFilterCurvesControl extends View {
         float segmentWidth = this.actualArea.width / 5.0f;
         for (int i = 0; i < 4; i++) {
             canvas2 = canvas;
-            canvas2.drawLine((((float) i) * segmentWidth) + (this.actualArea.f230x + segmentWidth), this.actualArea.f231y, (((float) i) * segmentWidth) + (this.actualArea.f230x + segmentWidth), this.actualArea.height + this.actualArea.f231y, this.paint);
+            canvas2.drawLine((((float) i) * segmentWidth) + (this.actualArea.f242x + segmentWidth), this.actualArea.f243y, (((float) i) * segmentWidth) + (this.actualArea.f242x + segmentWidth), this.actualArea.height + this.actualArea.f243y, this.paint);
         }
         canvas2 = canvas;
-        canvas2.drawLine(this.actualArea.f230x, this.actualArea.height + this.actualArea.f231y, this.actualArea.width + this.actualArea.f230x, this.actualArea.f231y, this.paintDash);
+        canvas2.drawLine(this.actualArea.f242x, this.actualArea.height + this.actualArea.f243y, this.actualArea.width + this.actualArea.f242x, this.actualArea.f243y, this.paintDash);
         CurvesValue curvesValue = null;
         switch (this.curveValue.activeType) {
             case 0:
@@ -241,16 +241,16 @@ public class PhotoFilterCurvesControl extends View {
                     str = TtmlNode.ANONYMOUS_REGION_ID;
                     break;
             }
-            canvas.drawText(str, (this.actualArea.f230x + ((segmentWidth - this.textPaint.measureText(str)) / 2.0f)) + (((float) a) * segmentWidth), (this.actualArea.f231y + this.actualArea.height) - ((float) AndroidUtilities.m10dp(4.0f)), this.textPaint);
+            canvas.drawText(str, (this.actualArea.f242x + ((segmentWidth - this.textPaint.measureText(str)) / 2.0f)) + (((float) a) * segmentWidth), (this.actualArea.f243y + this.actualArea.height) - ((float) AndroidUtilities.m9dp(4.0f)), this.textPaint);
         }
         float[] points = curvesValue.interpolateCurve();
         invalidate();
         this.path.reset();
         for (a = 0; a < points.length / 2; a++) {
             if (a == 0) {
-                this.path.moveTo(this.actualArea.f230x + (points[a * 2] * this.actualArea.width), this.actualArea.f231y + ((1.0f - points[(a * 2) + 1]) * this.actualArea.height));
+                this.path.moveTo(this.actualArea.f242x + (points[a * 2] * this.actualArea.width), this.actualArea.f243y + ((1.0f - points[(a * 2) + 1]) * this.actualArea.height));
             } else {
-                this.path.lineTo(this.actualArea.f230x + (points[a * 2] * this.actualArea.width), this.actualArea.f231y + ((1.0f - points[(a * 2) + 1]) * this.actualArea.height));
+                this.path.lineTo(this.actualArea.f242x + (points[a * 2] * this.actualArea.width), this.actualArea.f243y + ((1.0f - points[(a * 2) + 1]) * this.actualArea.height));
             }
         }
         canvas.drawPath(this.path, this.paintCurve);

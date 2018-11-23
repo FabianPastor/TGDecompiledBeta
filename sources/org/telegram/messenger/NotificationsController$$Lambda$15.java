@@ -12,6 +12,6 @@ final /* synthetic */ class NotificationsController$$Lambda$15 implements OnHead
     }
 
     public void onHeaderDecoded(ImageDecoder imageDecoder, ImageInfo imageInfo, Source source) {
-        imageDecoder.setPostProcessor(NotificationsController$$Lambda$19.$instance);
+        imageDecoder.setPostProcessor(NotificationsController$$Lambda$21.$instance);
     }
 }

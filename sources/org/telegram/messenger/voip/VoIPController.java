@@ -93,6 +93,8 @@ public class VoIPController {
 
     private native long nativeInit();
 
+    private static native boolean nativeNeedRate(long j);
+
     private native void nativeRelease(long j);
 
     private native void nativeRequestCallUpgrade(long j);
@@ -141,7 +143,7 @@ public class VoIPController {
         int a = 0;
         while (a < endpoints.length) {
             TL_phoneConnection endpoint = endpoints[a];
-            if (endpoint.f168ip == null || endpoint.f168ip.length() == 0) {
+            if (endpoint.f167ip == null || endpoint.f167ip.length() == 0) {
                 throw new IllegalArgumentException("endpoint " + endpoint + " has empty/null ipv4");
             } else if (endpoint.peer_tag == null || endpoint.peer_tag.length == 16) {
                 a++;
@@ -359,5 +361,10 @@ public class VoIPController {
     public void setEchoCancellationStrength(int strength) {
         ensureNativeInstance();
         nativeSetEchoCancellationStrength(this.nativeInst, strength);
+    }
+
+    public boolean needRate() {
+        ensureNativeInstance();
+        return nativeNeedRate(this.nativeInst);
     }
 }

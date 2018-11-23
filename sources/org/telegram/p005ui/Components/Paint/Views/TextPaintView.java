@@ -24,11 +24,11 @@ public class TextPaintView extends EntityView {
     private Swatch swatch;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.TextPaintView$1 */
-    class C11741 implements TextWatcher {
+    class C07591 implements TextWatcher {
         private int beforeCursorPosition = 0;
         private String text;
 
-        C11741() {
+        C07591() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -56,8 +56,8 @@ public class TextPaintView extends EntityView {
         }
 
         protected int pointInsideHandle(float x, float y) {
-            float radius = (float) AndroidUtilities.m10dp(19.5f);
-            float inset = radius + ((float) AndroidUtilities.m10dp(1.0f));
+            float radius = (float) AndroidUtilities.m9dp(19.5f);
+            float inset = radius + ((float) AndroidUtilities.m9dp(1.0f));
             float width = ((float) getWidth()) - (inset * 2.0f);
             float height = ((float) getHeight()) - (inset * 2.0f);
             float middle = inset + (height / 2.0f);
@@ -76,11 +76,11 @@ public class TextPaintView extends EntityView {
         protected void onDraw(Canvas canvas) {
             int i;
             super.onDraw(canvas);
-            float space = (float) AndroidUtilities.m10dp(3.0f);
-            float length = (float) AndroidUtilities.m10dp(3.0f);
-            float thickness = (float) AndroidUtilities.m10dp(1.0f);
-            float radius = (float) AndroidUtilities.m10dp(4.5f);
-            float inset = (radius + thickness) + ((float) AndroidUtilities.m10dp(15.0f));
+            float space = (float) AndroidUtilities.m9dp(3.0f);
+            float length = (float) AndroidUtilities.m9dp(3.0f);
+            float thickness = (float) AndroidUtilities.m9dp(1.0f);
+            float radius = (float) AndroidUtilities.m9dp(4.5f);
+            float inset = (radius + thickness) + ((float) AndroidUtilities.m9dp(15.0f));
             float width = ((float) getWidth()) - (2.0f * inset);
             float height = ((float) getHeight()) - (2.0f * inset);
             int xCount = (int) Math.floor((double) (width / (space + length)));
@@ -109,7 +109,7 @@ public class TextPaintView extends EntityView {
         this.baseFontSize = fontSize;
         this.editText = new EditTextOutline(context);
         this.editText.setBackgroundColor(0);
-        this.editText.setPadding(AndroidUtilities.m10dp(7.0f), AndroidUtilities.m10dp(7.0f), AndroidUtilities.m10dp(7.0f), AndroidUtilities.m10dp(7.0f));
+        this.editText.setPadding(AndroidUtilities.m9dp(7.0f), AndroidUtilities.m9dp(7.0f), AndroidUtilities.m9dp(7.0f), AndroidUtilities.m9dp(7.0f));
         this.editText.setClickable(false);
         this.editText.setEnabled(false);
         this.editText.setTextSize(0, (float) this.baseFontSize);
@@ -128,7 +128,7 @@ public class TextPaintView extends EntityView {
         setSwatch(swatch);
         setStroke(stroke);
         updatePosition();
-        this.editText.addTextChangedListener(new C11741());
+        this.editText.addTextChangedListener(new C07591());
     }
 
     public TextPaintView(Context context, TextPaintView textPaintView, Point position) {
@@ -200,9 +200,9 @@ public class TextPaintView extends EntityView {
 
     protected Rect getSelectionBounds() {
         float scale = ((ViewGroup) getParent()).getScaleX();
-        float width = (((float) getWidth()) * getScale()) + (((float) AndroidUtilities.m10dp(46.0f)) / scale);
-        float height = (((float) getHeight()) * getScale()) + (((float) AndroidUtilities.m10dp(20.0f)) / scale);
-        return new Rect((this.position.f228x - (width / 2.0f)) * scale, (this.position.f229y - (height / 2.0f)) * scale, width * scale, height * scale);
+        float width = (((float) getWidth()) * getScale()) + (((float) AndroidUtilities.m9dp(46.0f)) / scale);
+        float height = (((float) getHeight()) * getScale()) + (((float) AndroidUtilities.m9dp(20.0f)) / scale);
+        return new Rect((this.position.f240x - (width / 2.0f)) * scale, (this.position.f241y - (height / 2.0f)) * scale, width * scale, height * scale);
     }
 
     protected TextViewSelectionView createSelectionView() {

@@ -34,8 +34,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     private FrameLayout radialProgressView;
 
     /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$1 */
-    class C13371 implements OnClickListener {
-        C13371() {
+    class C08881 implements OnClickListener {
+        C08881() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -44,7 +44,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
             }
             if (UpdateAppAlertDialog.this.appUpdate.document instanceof TL_document) {
                 if (!BlockingUpdateView.openApkInstall(UpdateAppAlertDialog.this.parentActivity, UpdateAppAlertDialog.this.appUpdate.document)) {
-                    FileLoader.getInstance(UpdateAppAlertDialog.this.accountNum).loadFile(UpdateAppAlertDialog.this.appUpdate.document, true, 1);
+                    FileLoader.getInstance(UpdateAppAlertDialog.this.accountNum).loadFile(UpdateAppAlertDialog.this.appUpdate.document, "update", true, 1);
                     UpdateAppAlertDialog.this.showProgress(true);
                 }
             } else if (UpdateAppAlertDialog.this.appUpdate.url != null) {
@@ -55,8 +55,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$2 */
-    class C13382 implements OnClickListener {
-        C13382() {
+    class C08892 implements OnClickListener {
+        C08892() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -83,16 +83,16 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         }
         setDismissDialogByButtons(false);
         setTitle(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
-        setPositiveButton(LocaleController.getString("UpdateNow", R.string.UpdateNow), new C13371());
-        setNeutralButton(LocaleController.getString("Later", R.string.Later), new C13382());
+        setPositiveButton(LocaleController.getString("UpdateNow", R.string.UpdateNow), new C08881());
+        setNeutralButton(LocaleController.getString("Later", R.string.Later), new C08892());
         this.radialProgressView = new FrameLayout(this.parentActivity) {
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
                 int width = right - left;
                 int height = bottom - top;
-                int w = AndroidUtilities.m10dp(24.0f);
+                int w = AndroidUtilities.m9dp(24.0f);
                 int l = (width - w) / 2;
-                int t = ((height - w) / 2) + AndroidUtilities.m10dp(2.0f);
+                int t = ((height - w) / 2) + AndroidUtilities.m9dp(2.0f);
                 UpdateAppAlertDialog.this.radialProgress.setProgressRect(l, t, l + w, t + w);
             }
 
@@ -106,20 +106,20 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         this.radialProgressView.setScaleY(0.1f);
         this.radialProgressView.setVisibility(4);
         this.radialProgress = new RadialProgress(this.radialProgressView);
-        this.radialProgress.setStrokeWidth(AndroidUtilities.m10dp(2.0f));
+        this.radialProgress.setStrokeWidth(AndroidUtilities.m9dp(2.0f));
         this.radialProgress.setBackground(null, true, false);
         this.radialProgress.setProgressColor(Theme.getColor(Theme.key_dialogButton));
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
         String location;
-        if (id == NotificationCenter.FileDidLoaded) {
+        if (id == NotificationCenter.fileDidLoad) {
             location = args[0];
             if (this.fileName != null && this.fileName.equals(location)) {
                 showProgress(false);
                 BlockingUpdateView.openApkInstall(this.parentActivity, this.appUpdate.document);
             }
-        } else if (id == NotificationCenter.FileDidFailedLoad) {
+        } else if (id == NotificationCenter.fileDidFailedLoad) {
             location = (String) args[0];
             if (this.fileName != null && this.fileName.equals(location)) {
                 showProgress(false);
@@ -134,16 +134,16 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
         this.buttonsLayout.addView(this.radialProgressView, LayoutHelper.createFrame(36, 36.0f));
     }
 
     public void dismiss() {
         super.dismiss();
-        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
     }
 

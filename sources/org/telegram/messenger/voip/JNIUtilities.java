@@ -6,6 +6,9 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.os.Build.VERSION;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import com.google.android.exoplayer2.extractor.p003ts.PsExtractor;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -84,8 +87,26 @@ public class JNIUtilities {
             }
             return null;
         } catch (Throwable x) {
-            FileLog.m14e(x);
+            FileLog.m13e(x);
             return null;
         }
+    }
+
+    public static String[] getCarrierInfo() {
+        TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+        if (VERSION.SDK_INT >= 24) {
+            tm = tm.createForSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId());
+        }
+        if (TextUtils.isEmpty(tm.getNetworkOperatorName())) {
+            return null;
+        }
+        String mnc = TtmlNode.ANONYMOUS_REGION_ID;
+        String mcc = TtmlNode.ANONYMOUS_REGION_ID;
+        String carrierID = tm.getNetworkOperator();
+        if (carrierID != null && carrierID.length() > 3) {
+            mcc = carrierID.substring(0, 3);
+            mnc = carrierID.substring(3);
+        }
+        return new String[]{tm.getNetworkOperatorName(), tm.getNetworkCountryIso().toUpperCase(), mcc, mnc};
     }
 }

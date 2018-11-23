@@ -27,6 +27,10 @@ public class TextSettingsCell extends FrameLayout {
     private TextView valueTextView;
 
     public TextSettingsCell(Context context) {
+        this(context, 21);
+    }
+
+    public TextSettingsCell(Context context, int padding) {
         int i;
         int i2;
         int i3 = 3;
@@ -45,7 +49,7 @@ public class TextSettingsCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
@@ -66,7 +70,7 @@ public class TextSettingsCell extends FrameLayout {
         } else {
             i = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -1.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
         this.valueImageView = new ImageView(context);
         this.valueImageView.setScaleType(ScaleType.CENTER);
         this.valueImageView.setVisibility(4);
@@ -75,19 +79,19 @@ public class TextSettingsCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i3 = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, (float) padding, 0.0f, (float) padding, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f));
-        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m10dp(34.0f);
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f));
+        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m9dp(34.0f);
         int width = availableWidth / 2;
         if (this.valueImageView.getVisibility() == 0) {
             this.valueImageView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
         }
         if (this.valueTextView.getVisibility() == 0) {
             this.valueTextView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-            width = (availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.m10dp(8.0f);
+            width = (availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.m9dp(8.0f);
         } else {
             width = availableWidth;
         }
@@ -211,7 +215,7 @@ public class TextSettingsCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

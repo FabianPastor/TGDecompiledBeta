@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import org.telegram.PhoneFormat.C0195PhoneFormat;
+import org.telegram.PhoneFormat.C0194PhoneFormat;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -18,7 +18,7 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -41,13 +41,13 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     private int selectedUserId;
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$1 */
-    class C18961 extends ActionBarMenuOnItemClick {
-        C18961() {
+    class C12631 extends ActionBarMenuOnItemClick {
+        C12631() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                BlockedUsersActivity.this.lambda$checkDiscard$69$PassportActivity();
+                BlockedUsersActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 1) {
                 Bundle args = new Bundle();
                 args.putBoolean("onlyUsers", true);
@@ -103,7 +103,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                     } else if (user.phone == null || user.phone.length() == 0) {
                         number = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                     } else {
-                        number = C0195PhoneFormat.getInstance().format("+" + user.phone);
+                        number = C0194PhoneFormat.getInstance().format("+" + user.phone);
                     }
                     ((UserCell) holder.itemView).setData(user, null, number, 0);
                 }
@@ -121,7 +121,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.blockedUsersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.blockedUsersDidLoad);
         MessagesController.getInstance(this.currentAccount).getBlockedUsers(false);
         return true;
     }
@@ -129,7 +129,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.blockedUsersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.blockedUsersDidLoad);
     }
 
     public View createView(Context context) {
@@ -137,7 +137,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("BlockedUsers", R.string.BlockedUsers));
-        this.actionBar.setActionBarMenuOnItemClick(new C18961());
+        this.actionBar.setActionBarMenuOnItemClick(new C12631());
         this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -198,7 +198,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
             if ((mask & 2) != 0 || (mask & 1) != 0) {
                 updateVisibleRows(mask);
             }
-        } else if (id == NotificationCenter.blockedUsersDidLoaded) {
+        } else if (id == NotificationCenter.blockedUsersDidLoad) {
             this.emptyView.showTextView();
             if (this.listViewAdapter != null) {
                 this.listViewAdapter.notifyDataSetChanged();
@@ -227,7 +227,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public void didSelectContact(User user, String param, ContactsActivity activity) {
         if (user != null) {
-            MessagesController.getInstance(this.currentAccount).blockUser(user.f177id);
+            MessagesController.getInstance(this.currentAccount).blockUser(user.f176id);
         }
     }
 
@@ -237,7 +237,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         r10[9] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
         r10[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteGrayText);
-        r10[12] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
+        r10[12] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         r10[13] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
         r10[14] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
         r10[15] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);

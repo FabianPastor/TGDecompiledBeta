@@ -75,15 +75,15 @@ public class FileUploadOperation {
     private String uploadingFilePath;
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$1 */
-    class C04121 implements Runnable {
-        C04121() {
+    class C02131 implements Runnable {
+        C02131() {
         }
 
         public void run() {
             FileUploadOperation.this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo", 0);
             FileUploadOperation.this.slowNetwork = ConnectionsManager.isConnectionSlow();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("start upload on slow network = " + FileUploadOperation.this.slowNetwork);
+                FileLog.m10d("start upload on slow network = " + FileUploadOperation.this.slowNetwork);
             }
             int a = 0;
             int count = FileUploadOperation.this.slowNetwork ? 1 : 8;
@@ -95,8 +95,8 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$3 */
-    class C04143 implements Runnable {
-        C04143() {
+    class C02153 implements Runnable {
+        C02153() {
         }
 
         public void run() {
@@ -122,17 +122,17 @@ public class FileUploadOperation {
         private UploadCachedResult() {
         }
 
-        /* synthetic */ UploadCachedResult(FileUploadOperation x0, C04121 x1) {
+        /* synthetic */ UploadCachedResult(FileUploadOperation x0, C02131 x1) {
             this();
         }
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$6 */
-    class C04186 implements WriteToSocketDelegate {
+    class C02196 implements WriteToSocketDelegate {
 
         /* renamed from: org.telegram.messenger.FileUploadOperation$6$1 */
-        class C04161 implements Runnable {
-            C04161() {
+        class C02171 implements Runnable {
+            C02171() {
             }
 
             public void run() {
@@ -142,11 +142,11 @@ public class FileUploadOperation {
             }
         }
 
-        C04186() {
+        C02196() {
         }
 
         public void run() {
-            Utilities.stageQueue.postRunnable(new C04161());
+            Utilities.stageQueue.postRunnable(new C02171());
         }
     }
 
@@ -171,7 +171,7 @@ public class FileUploadOperation {
     public void start() {
         if (this.state == 0) {
             this.state = 1;
-            Utilities.stageQueue.postRunnable(new C04121());
+            Utilities.stageQueue.postRunnable(new C02131());
         }
     }
 
@@ -184,7 +184,7 @@ public class FileUploadOperation {
                         int a;
                         FileUploadOperation.this.slowNetwork = slow;
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d("network changed to slow = " + FileUploadOperation.this.slowNetwork);
+                            FileLog.m10d("network changed to slow = " + FileUploadOperation.this.slowNetwork);
                         }
                         for (a = 0; a < FileUploadOperation.this.requestTokens.size(); a++) {
                             ConnectionsManager.getInstance(FileUploadOperation.this.currentAccount).cancelRequest(FileUploadOperation.this.requestTokens.valueAt(a), true);
@@ -223,7 +223,7 @@ public class FileUploadOperation {
     public void cancel() {
         if (this.state != 3) {
             this.state = 2;
-            Utilities.stageQueue.postRunnable(new C04143());
+            Utilities.stageQueue.postRunnable(new C02153());
             this.delegate.didFailedUploadingFile(this);
             cleanup();
         }
@@ -240,7 +240,7 @@ public class FileUploadOperation {
                 this.stream = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -435,7 +435,7 @@ public class FileUploadOperation {
                                 this.fingerprint |= ((digest[a] ^ digest[a + 4]) & 255) << (a * 8);
                             }
                         } catch (Throwable e) {
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                         }
                     }
                     this.uploadedBytesCount = this.readBytesCount;
@@ -553,7 +553,7 @@ public class FileUploadOperation {
                                     FileUploadOperation.this.requestTokens.delete(requestNumFinal);
                                     if (!(response instanceof TL_boolTrue)) {
                                         if (finalRequest != null) {
-                                            FileLog.m12e("23123");
+                                            FileLog.m11e("23123");
                                         }
                                         FileUploadOperation.this.state = 4;
                                         FileUploadOperation.this.delegate.didFailedUploadingFile(FileUploadOperation.this);
@@ -650,11 +650,11 @@ public class FileUploadOperation {
                                     }
                                 }
                             }
-                        }, null, new C04186(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true));
+                        }, null, new C02196(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true));
                     }
                 }
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
                 this.state = 4;
                 this.delegate.didFailedUploadingFile(this);
                 cleanup();

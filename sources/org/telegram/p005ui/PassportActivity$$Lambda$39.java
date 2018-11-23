@@ -1,14 +1,27 @@
 package org.telegram.p005ui;
 
-/* renamed from: org.telegram.ui.PassportActivity$$Lambda$39 */
-final /* synthetic */ class PassportActivity$$Lambda$39 implements Runnable {
-    private final PassportActivity arg$1;
+import android.view.View;
+import android.view.View.OnLongClickListener;
+import org.telegram.messenger.SecureDocument;
+import org.telegram.p005ui.PassportActivity.SecureDocumentCell;
 
-    PassportActivity$$Lambda$39(PassportActivity passportActivity) {
+/* renamed from: org.telegram.ui.PassportActivity$$Lambda$39 */
+final /* synthetic */ class PassportActivity$$Lambda$39 implements OnLongClickListener {
+    private final PassportActivity arg$1;
+    private final int arg$2;
+    private final SecureDocument arg$3;
+    private final SecureDocumentCell arg$4;
+    private final String arg$5;
+
+    PassportActivity$$Lambda$39(PassportActivity passportActivity, int i, SecureDocument secureDocument, SecureDocumentCell secureDocumentCell, String str) {
         this.arg$1 = passportActivity;
+        this.arg$2 = i;
+        this.arg$3 = secureDocument;
+        this.arg$4 = secureDocumentCell;
+        this.arg$5 = str;
     }
 
-    public void run() {
-        this.arg$1.lambda$checkNativeFields$58$PassportActivity();
+    public boolean onLongClick(View view) {
+        return this.arg$1.lambda$addDocumentView$58$PassportActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, view);
     }
 }

@@ -143,7 +143,7 @@ public class ClippingImageView extends View {
                 try {
                     canvas.drawBitmap(this.bmp.bitmap, this.matrix, this.paint);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
             canvas.restore();

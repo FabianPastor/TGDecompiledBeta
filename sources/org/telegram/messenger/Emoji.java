@@ -28,9 +28,9 @@ import java.util.Locale;
 import java.util.Map.Entry;
 
 public class Emoji {
-    private static int bigImgSize = AndroidUtilities.m10dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
+    private static int bigImgSize = AndroidUtilities.m9dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
     private static final int[][] cols = new int[][]{new int[]{16, 16, 16, 16}, new int[]{6, 6, 6, 6}, new int[]{9, 9, 9, 9}, new int[]{9, 9, 9, 9}, new int[]{10, 10, 10, 10}};
-    private static int drawImgSize = AndroidUtilities.m10dp(20.0f);
+    private static int drawImgSize = AndroidUtilities.m9dp(20.0f);
     private static Bitmap[][] emojiBmp = ((Bitmap[][]) Array.newInstance(Bitmap.class, new int[]{5, 4}));
     public static HashMap<String, String> emojiColor = new HashMap();
     public static HashMap<String, Integer> emojiUseHistory = new HashMap();
@@ -116,7 +116,7 @@ public class Emoji {
 
     public static class EmojiSpan extends ImageSpan {
         private FontMetricsInt fontMetrics;
-        private int size = AndroidUtilities.m10dp(20.0f);
+        private int size = AndroidUtilities.m9dp(20.0f);
 
         public EmojiSpan(EmojiDrawable d, int verticalAlignment, int s, FontMetricsInt original) {
             super(d, verticalAlignment);
@@ -124,7 +124,7 @@ public class Emoji {
             if (original != null) {
                 this.size = Math.abs(this.fontMetrics.descent) + Math.abs(this.fontMetrics.ascent);
                 if (this.size == 0) {
-                    this.size = AndroidUtilities.m10dp(20.0f);
+                    this.size = AndroidUtilities.m9dp(20.0f);
                 }
             }
         }
@@ -140,8 +140,8 @@ public class Emoji {
             }
             if (this.fontMetrics == null) {
                 int sz = super.getSize(paint, text, start, end, fm);
-                int offset = AndroidUtilities.m10dp(8.0f);
-                int w = AndroidUtilities.m10dp(10.0f);
+                int offset = AndroidUtilities.m9dp(8.0f);
+                int w = AndroidUtilities.m9dp(10.0f);
                 fm.top = (-w) - offset;
                 fm.bottom = w - offset;
                 fm.ascent = (-w) - offset;
@@ -223,31 +223,31 @@ public class Emoji {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         } catch (Throwable x) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m13e("Error loading emoji", x);
+                FileLog.m12e("Error loading emoji", x);
                 return;
             }
             return;
         }
         Bitmap bitmap = null;
         try {
-            InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "v12_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(scale), Integer.valueOf(page), Integer.valueOf(page2)}));
+            InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "v13_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(scale), Integer.valueOf(page), Integer.valueOf(page2)}));
             Options opts = new Options();
             opts.inJustDecodeBounds = false;
             opts.inSampleSize = imageResize;
             bitmap = BitmapFactory.decodeStream(is, null, opts);
             is.close();
         } catch (Throwable e2) {
-            FileLog.m14e(e2);
+            FileLog.m13e(e2);
         }
         AndroidUtilities.runOnUIThread(new Emoji$$Lambda$0(page, page2, bitmap));
     }
 
     static final /* synthetic */ void lambda$loadEmoji$0$Emoji(int page, int page2, Bitmap finalBitmap) {
         emojiBmp[page][page2] = finalBitmap;
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoad, new Object[0]);
     }
 
     public static void invalidateAll(View view) {
@@ -301,7 +301,7 @@ public class Emoji {
         }
         if (info == null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("No drawable for emoji " + code);
+                FileLog.m10d("No drawable for emoji " + code);
             }
             return null;
         }
@@ -485,7 +485,7 @@ public class Emoji {
                 }
                 i++;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 return cs;
             }
         }
@@ -608,7 +608,7 @@ public class Emoji {
                 }
                 sortEmoji();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             try {
                 str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
@@ -620,7 +620,7 @@ public class Emoji {
                     }
                 }
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
         }
     }

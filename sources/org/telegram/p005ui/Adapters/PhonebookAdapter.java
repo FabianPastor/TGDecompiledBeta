@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.telegram.PhoneFormat.C0195PhoneFormat;
+import org.telegram.PhoneFormat.C0194PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -92,11 +92,12 @@ public class PhonebookAdapter extends SectionsAdapter {
                 } else {
                     f2 = 72.0f;
                 }
-                int dp = AndroidUtilities.m10dp(f2);
+                int dp = AndroidUtilities.m9dp(f2);
+                int dp2 = AndroidUtilities.m9dp(8.0f);
                 if (!LocaleController.isRTL) {
                     f = 28.0f;
                 }
-                view.setPadding(dp, 0, AndroidUtilities.m10dp(f), 0);
+                view.setPadding(dp, dp2, AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(8.0f));
                 break;
         }
         return new Holder(view);
@@ -114,13 +115,13 @@ public class PhonebookAdapter extends SectionsAdapter {
                         user = contact.user;
                     } else {
                         userCell.setCurrentId(contact.contact_id);
-                        userCell.setData(null, ContactsController.formatName(contact.first_name, contact.last_name), contact.phones.isEmpty() ? TtmlNode.ANONYMOUS_REGION_ID : C0195PhoneFormat.getInstance().format((String) contact.phones.get(0)), 0);
+                        userCell.setData(null, ContactsController.formatName(contact.first_name, contact.last_name), contact.phones.isEmpty() ? TtmlNode.ANONYMOUS_REGION_ID : C0194PhoneFormat.getInstance().format((String) contact.phones.get(0)), 0);
                     }
                 } else {
                     user = (User) object;
                 }
                 if (user != null) {
-                    userCell.setData(user, null, C0195PhoneFormat.getInstance().format("+" + user.phone), 0);
+                    userCell.setData(user, null, C0194PhoneFormat.getInstance().format("+" + user.phone), 0);
                     return;
                 }
                 return;

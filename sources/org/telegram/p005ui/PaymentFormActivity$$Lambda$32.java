@@ -1,22 +1,18 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.PaymentFormActivity$$Lambda$32 */
-final /* synthetic */ class PaymentFormActivity$$Lambda$32 implements RequestDelegate {
+final /* synthetic */ class PaymentFormActivity$$Lambda$32 implements Runnable {
     private final PaymentFormActivity arg$1;
-    private final boolean arg$2;
-    private final String arg$3;
+    private final TLObject arg$2;
 
-    PaymentFormActivity$$Lambda$32(PaymentFormActivity paymentFormActivity, boolean z, String str) {
+    PaymentFormActivity$$Lambda$32(PaymentFormActivity paymentFormActivity, TLObject tLObject) {
         this.arg$1 = paymentFormActivity;
-        this.arg$2 = z;
-        this.arg$3 = str;
+        this.arg$2 = tLObject;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$null$27$PaymentFormActivity(this.arg$2, this.arg$3, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$null$35$PaymentFormActivity(this.arg$2);
     }
 }

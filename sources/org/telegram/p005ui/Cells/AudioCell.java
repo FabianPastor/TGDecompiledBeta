@@ -169,16 +169,16 @@ public class AudioCell extends FrameLayout {
             }
             return;
         }
-        MediaController.getInstance().pauseMessage(this.audioEntry.messageObject);
+        MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.audioEntry.messageObject);
         setPlayDrawable(false);
     }
 
     private void setPlayDrawable(boolean play) {
-        Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m10dp(46.0f), Theme.getColor(Theme.key_musicPicker_buttonBackground), Theme.getColor(Theme.key_musicPicker_buttonBackground));
+        Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m9dp(46.0f), Theme.getColor(Theme.key_musicPicker_buttonBackground), Theme.getColor(Theme.key_musicPicker_buttonBackground));
         Drawable drawable = getResources().getDrawable(play ? R.drawable.audiosend_pause : R.drawable.audiosend_play);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_musicPicker_buttonIcon), Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
-        combinedDrawable.setCustomSize(AndroidUtilities.m10dp(46.0f), AndroidUtilities.m10dp(46.0f));
+        combinedDrawable.setCustomSize(AndroidUtilities.m9dp(46.0f), AndroidUtilities.m9dp(46.0f));
         this.playButton.setBackgroundDrawable(combinedDrawable);
     }
 
@@ -207,7 +207,7 @@ public class AudioCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(72.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(72.0f), NUM));
     }
 
     public void setAudio(AudioEntry entry, boolean divider, boolean checked) {
@@ -241,7 +241,7 @@ public class AudioCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) AndroidUtilities.m10dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine((float) AndroidUtilities.m9dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

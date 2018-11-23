@@ -593,7 +593,6 @@
     <string name="EditName">Naam wijzigen</string>
     <string name="EditedMessage">gewijzigd</string>
     <string name="EmailCopied">E-mail gekopieerd naar klembord</string>
-    <string name="EmailPasswordConfirmText">Volg deze stappen om twee-staps-verificatie in te schakelen:\10\101.Controleer je e-mail (kijk voor de zekerheid ook in de ongewenste post)\10%1$s\10\102.n klik op de bevestigingslink.</string>
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Grote emoji gebruiken</string>
     <string name="EmojiUseDefault">Systeem-emoji gebruiken</string>
@@ -1518,7 +1517,6 @@
     <string name="PaymentTransactionTotal">Totaal</string>
     <string name="PaymentWarning">Waarschuwing</string>
     <string name="PaymentWarningText">Noch Telegram, noch %1$s krijgen toegang tot je creditcard-informatie. Creditkaartgegevens worden alleen gebruikt door het het betalingssysteem %2$s.\10\10Betalingen gaan direct naar de ontwikkelaar van %1$s. Telegram kan geen garanties afgeven, doorgaan is op eigen risico. Neem bij problemen contact op met de ontwikkelaar van %1$s of je bank.</string>
-    <string name="PendingEmailText">Je herstel-e-mailadres %1$s is nog niet actief en in afwachting van bevestiging.</string>
     <string name="PermissionContacts">Telegram heeft toegang tot je contacten nodig om vanaf al je apparaten contact te kunnen leggen met je vrienden.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram heeft de toestemming \'over andere apps tekenen\' nodig om video\'s af te spelen in Picture-in-Picture-modus.</string>
     <string name="PermissionNoAudio">Telegram heeft toegang tot je microfoon nodig om spraakberichten te kunnen verzenden.</string>
@@ -1576,7 +1574,6 @@
     <string name="PrivacyBots">Bots en websites</string>
     <string name="PrivacyBotsInfo">Websites waarop je Telegram hebt gebruikt om in te loggen.</string>
     <string name="PrivacyCallsP2PHelp">peer-to-peer uitschakelen zorgt ervoor dat alle gesprekken verlopen via Telegram-servers, dit voorkomt dat je IP-adres zichtbaar is maar verlaagt de audio-kwaliteit enigszins.</string>
-    <string name="PrivacyCallsP2PTitle">Peer-to-Peer</string>
     <string name="PrivacyClearPayment">Betaalinformatie</string>
     <string name="PrivacyClearShipping">Verzendinformatie</string>
     <string name="PrivacyDeleteCloudDrafts">Verwijder alle Cloud-conceptberichten</string>
@@ -1790,7 +1787,6 @@
     <string name="SharedLinksTab">LINKS</string>
     <string name="SharedMedia">Gedeelde media</string>
     <string name="SharedMediaTab">MEDIA</string>
-    <string name="SharedMediaTitle">Gedeelde media</string>
     <string name="SharedMusicTab">AUDIO</string>
     <string name="SharedPlace">Plek</string>
     <string name="SharedVoiceTab">SPRAAK</string>

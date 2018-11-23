@@ -1,12 +1,12 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.ImageLoader.C04233;
+import org.telegram.messenger.ImageLoader.C02203;
 
 final /* synthetic */ class ImageLoader$3$$Lambda$0 implements Runnable {
-    private final C04233 arg$1;
+    private final C02203 arg$1;
 
-    ImageLoader$3$$Lambda$0(C04233 c04233) {
-        this.arg$1 = c04233;
+    ImageLoader$3$$Lambda$0(C02203 c02203) {
+        this.arg$1 = c02203;
     }
 
     public void run() {

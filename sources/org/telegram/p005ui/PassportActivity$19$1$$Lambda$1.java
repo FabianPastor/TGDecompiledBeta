@@ -1,6 +1,6 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.PassportActivity.C219019.C21891;
+import org.telegram.p005ui.PassportActivity.C149219.C14911;
 import org.telegram.p005ui.PassportActivity.ErrorRunnable;
 import org.telegram.p005ui.PassportActivity.PassportActivityDelegate;
 import org.telegram.tgnet.RequestDelegate;
@@ -10,14 +10,14 @@ import org.telegram.tgnet.TLRPC.TL_secureRequiredType;
 
 /* renamed from: org.telegram.ui.PassportActivity$19$1$$Lambda$1 */
 final /* synthetic */ class PassportActivity$19$1$$Lambda$1 implements RequestDelegate {
-    private final C21891 arg$1;
+    private final C14911 arg$1;
     private final String arg$2;
     private final TL_secureRequiredType arg$3;
     private final PassportActivityDelegate arg$4;
     private final ErrorRunnable arg$5;
 
-    PassportActivity$19$1$$Lambda$1(C21891 c21891, String str, TL_secureRequiredType tL_secureRequiredType, PassportActivityDelegate passportActivityDelegate, ErrorRunnable errorRunnable) {
-        this.arg$1 = c21891;
+    PassportActivity$19$1$$Lambda$1(C14911 c14911, String str, TL_secureRequiredType tL_secureRequiredType, PassportActivityDelegate passportActivityDelegate, ErrorRunnable errorRunnable) {
+        this.arg$1 = c14911;
         this.arg$2 = str;
         this.arg$3 = tL_secureRequiredType;
         this.arg$4 = passportActivityDelegate;

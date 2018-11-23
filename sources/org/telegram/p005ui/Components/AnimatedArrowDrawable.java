@@ -14,14 +14,16 @@ import org.telegram.messenger.AndroidUtilities;
 public class AnimatedArrowDrawable extends Drawable {
     private float animProgress;
     private float animateToProgress;
+    private boolean isSmall;
     private long lastUpdateTime;
     private Paint paint = new Paint(1);
     private Path path = new Path();
 
-    public AnimatedArrowDrawable(int color) {
+    public AnimatedArrowDrawable(int color, boolean small) {
         this.paint.setStyle(Style.STROKE);
-        this.paint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.paint.setColor(color);
+        this.isSmall = small;
         updatePath();
     }
 
@@ -33,9 +35,15 @@ public class AnimatedArrowDrawable extends Drawable {
     private void updatePath() {
         this.path.reset();
         float p = (this.animProgress * 2.0f) - 1.0f;
-        this.path.moveTo((float) AndroidUtilities.m10dp(3.0f), ((float) AndroidUtilities.m10dp(12.0f)) - (((float) AndroidUtilities.m10dp(4.0f)) * p));
-        this.path.lineTo((float) AndroidUtilities.m10dp(13.0f), ((float) AndroidUtilities.m10dp(12.0f)) + (((float) AndroidUtilities.m10dp(4.0f)) * p));
-        this.path.lineTo((float) AndroidUtilities.m10dp(23.0f), ((float) AndroidUtilities.m10dp(12.0f)) - (((float) AndroidUtilities.m10dp(4.0f)) * p));
+        if (this.isSmall) {
+            this.path.moveTo((float) AndroidUtilities.m9dp(3.0f), ((float) AndroidUtilities.m9dp(6.0f)) - (((float) AndroidUtilities.m9dp(2.0f)) * p));
+            this.path.lineTo((float) AndroidUtilities.m9dp(8.0f), ((float) AndroidUtilities.m9dp(6.0f)) + (((float) AndroidUtilities.m9dp(2.0f)) * p));
+            this.path.lineTo((float) AndroidUtilities.m9dp(13.0f), ((float) AndroidUtilities.m9dp(6.0f)) - (((float) AndroidUtilities.m9dp(2.0f)) * p));
+            return;
+        }
+        this.path.moveTo((float) AndroidUtilities.m9dp(3.0f), ((float) AndroidUtilities.m9dp(12.0f)) - (((float) AndroidUtilities.m9dp(4.0f)) * p));
+        this.path.lineTo((float) AndroidUtilities.m9dp(13.0f), ((float) AndroidUtilities.m9dp(12.0f)) + (((float) AndroidUtilities.m9dp(4.0f)) * p));
+        this.path.lineTo((float) AndroidUtilities.m9dp(23.0f), ((float) AndroidUtilities.m9dp(12.0f)) - (((float) AndroidUtilities.m9dp(4.0f)) * p));
     }
 
     @Keep
@@ -95,10 +103,10 @@ public class AnimatedArrowDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(26.0f);
+        return AndroidUtilities.m9dp(26.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(26.0f);
+        return AndroidUtilities.m9dp(26.0f);
     }
 }

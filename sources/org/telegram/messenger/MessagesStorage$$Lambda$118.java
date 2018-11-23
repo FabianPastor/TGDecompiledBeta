@@ -1,26 +1,25 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC.photos_Photos;
 
 final /* synthetic */ class MessagesStorage$$Lambda$118 implements Runnable {
     private final MessagesStorage arg$1;
-    private final LongSparseArray arg$2;
-    private final ArrayList arg$3;
-    private final ArrayList arg$4;
-    private final ArrayList arg$5;
-    private final ArrayList arg$6;
+    private final photos_Photos arg$2;
+    private final int arg$3;
+    private final int arg$4;
+    private final long arg$5;
+    private final int arg$6;
 
-    MessagesStorage$$Lambda$118(MessagesStorage messagesStorage, LongSparseArray longSparseArray, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4) {
+    MessagesStorage$$Lambda$118(MessagesStorage messagesStorage, photos_Photos photos_photos, int i, int i2, long j, int i3) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = longSparseArray;
-        this.arg$3 = arrayList;
-        this.arg$4 = arrayList2;
-        this.arg$5 = arrayList3;
-        this.arg$6 = arrayList4;
+        this.arg$2 = photos_photos;
+        this.arg$3 = i;
+        this.arg$4 = i2;
+        this.arg$5 = j;
+        this.arg$6 = i3;
     }
 
     public void run() {
-        this.arg$1.lambda$null$19$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
+        this.arg$1.lambda$null$38$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
     }
 }

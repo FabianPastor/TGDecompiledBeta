@@ -18,7 +18,7 @@ public class TextInfoCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText5));
         this.textView.setTextSize(1, 13.0f);
         this.textView.setGravity(17);
-        this.textView.setPadding(0, AndroidUtilities.m10dp(19.0f), 0, AndroidUtilities.m10dp(19.0f));
+        this.textView.setPadding(0, AndroidUtilities.m9dp(19.0f), 0, AndroidUtilities.m9dp(19.0f));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 17, 17.0f, 0.0f, 17.0f, 0.0f));
     }
 

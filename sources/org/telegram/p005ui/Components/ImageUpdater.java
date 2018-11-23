@@ -1,31 +1,44 @@
 package org.telegram.p005ui.Components;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.media.ExifInterface;
 import android.support.p000v4.content.FileProvider;
+import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController.PhotoEntry;
+import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
+import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.BaseFragment;
+import org.telegram.p005ui.ActionBar.BottomSheet;
+import org.telegram.p005ui.ActionBar.BottomSheet.Builder;
+import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.LaunchActivity;
 import org.telegram.p005ui.PhotoAlbumPickerActivity;
 import org.telegram.p005ui.PhotoAlbumPickerActivity.PhotoAlbumPickerActivityDelegate;
 import org.telegram.p005ui.PhotoCropActivity;
 import org.telegram.p005ui.PhotoCropActivity.PhotoEditActivityDelegate;
+import org.telegram.p005ui.PhotoPickerActivity;
+import org.telegram.p005ui.PhotoPickerActivity.PhotoPickerActivityDelegate;
 import org.telegram.p005ui.PhotoViewer;
 import org.telegram.p005ui.PhotoViewer.EmptyPhotoViewerProvider;
 import org.telegram.tgnet.TLRPC.InputFile;
@@ -39,27 +52,25 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     private int currentAccount = UserConfig.selectedAccount;
     public String currentPicturePath;
     public ImageUpdaterDelegate delegate;
-    public boolean encryptedDocument;
+    private String finalPath;
+    private ImageReceiver imageReceiver = new ImageReceiver(null);
     public BaseFragment parentFragment;
-    File picturePath = null;
+    private File picturePath = null;
     public boolean returnOnly;
-    private PhotoSize smallPhoto;
     public String uploadingImage;
 
     /* renamed from: org.telegram.ui.Components.ImageUpdater$ImageUpdaterDelegate */
     public interface ImageUpdaterDelegate {
-        void didUploadedPhoto(InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2, TL_secureFile tL_secureFile);
+        void didUploadedPhoto(InputFile inputFile, PhotoSize photoSize, TL_secureFile tL_secureFile);
     }
 
-    /* renamed from: org.telegram.ui.Components.ImageUpdater$1 */
-    class C20441 implements PhotoAlbumPickerActivityDelegate {
-        C20441() {
+    /* renamed from: org.telegram.ui.Components.ImageUpdater$2 */
+    class C13812 implements PhotoAlbumPickerActivityDelegate {
+        C13812() {
         }
 
         public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
-            if (!photos.isEmpty()) {
-                ImageUpdater.this.processBitmap(ImageLoader.loadBitmap(((SendingMediaInfo) photos.get(0)).path, null, 800.0f, 800.0f, true));
-            }
+            ImageUpdater.this.didSelectPhotos(photos);
         }
 
         public void startPhotoSelectActivity() {
@@ -68,7 +79,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 photoPickerIntent.setType("image/*");
                 ImageUpdater.this.parentFragment.startActivityForResult(photoPickerIntent, 14);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -80,6 +91,143 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
         }
         this.parentFragment = null;
         this.delegate = null;
+    }
+
+    public void openMenu(boolean hasAvatar, Runnable onDeleteAvatar) {
+        if (this.parentFragment != null && this.parentFragment.getParentActivity() != null) {
+            CharSequence[] items;
+            int[] icons;
+            Builder builder = new Builder(this.parentFragment.getParentActivity());
+            builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto));
+            if (hasAvatar) {
+                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.FromCamera), LocaleController.getString("ChooseFromGallery", R.string.FromGalley), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
+                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search, R.drawable.chats_delete};
+            } else {
+                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.FromCamera), LocaleController.getString("ChooseFromGallery", R.string.FromGalley), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch)};
+                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search};
+            }
+            builder.setItems(items, icons, new ImageUpdater$$Lambda$0(this, onDeleteAvatar));
+            BottomSheet sheet = builder.create();
+            this.parentFragment.showDialog(sheet);
+            TextView titleView = sheet.getTitleView();
+            titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            titleView.setTextSize(1, 18.0f);
+            titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+            sheet.setItemColor(3, Theme.getColor(Theme.key_dialogTextRed2), Theme.getColor(Theme.key_dialogRedIcon));
+        }
+    }
+
+    final /* synthetic */ void lambda$openMenu$0$ImageUpdater(Runnable onDeleteAvatar, DialogInterface dialogInterface, int i) {
+        if (i == 0) {
+            openCamera();
+        } else if (i == 1) {
+            openGallery();
+        } else if (i == 2) {
+            openSearch();
+        } else if (i == 3) {
+            onDeleteAvatar.run();
+        }
+    }
+
+    public void openSearch() {
+        if (this.parentFragment != null) {
+            final HashMap<Object, Object> photos = new HashMap();
+            final ArrayList<Object> order = new ArrayList();
+            PhotoPickerActivity fragment = new PhotoPickerActivity(0, null, photos, order, new ArrayList(), true, false, null);
+            fragment.setDelegate(new PhotoPickerActivityDelegate() {
+                private boolean sendPressed;
+
+                public void selectedPhotosChanged() {
+                }
+
+                private void sendSelectedPhotos(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList) {
+                }
+
+                public void actionButtonPressed(boolean canceled) {
+                    if (!photos.isEmpty() && ImageUpdater.this.delegate != null && !this.sendPressed && !canceled) {
+                        this.sendPressed = true;
+                        ArrayList<SendingMediaInfo> media = new ArrayList();
+                        for (int a = 0; a < order.size(); a++) {
+                            SearchImage object = photos.get(order.get(a));
+                            SendingMediaInfo info = new SendingMediaInfo();
+                            media.add(info);
+                            if (object instanceof SearchImage) {
+                                String charSequence;
+                                ArrayList arrayList;
+                                SearchImage searchImage = object;
+                                if (searchImage.imagePath != null) {
+                                    info.path = searchImage.imagePath;
+                                } else {
+                                    info.searchImage = searchImage;
+                                }
+                                if (searchImage.caption != null) {
+                                    charSequence = searchImage.caption.toString();
+                                } else {
+                                    charSequence = null;
+                                }
+                                info.caption = charSequence;
+                                info.entities = searchImage.entities;
+                                if (searchImage.stickers.isEmpty()) {
+                                    arrayList = null;
+                                } else {
+                                    arrayList = new ArrayList(searchImage.stickers);
+                                }
+                                info.masks = arrayList;
+                                info.ttl = searchImage.ttl;
+                            }
+                        }
+                        ImageUpdater.this.didSelectPhotos(media);
+                    }
+                }
+            });
+            this.parentFragment.presentFragment(fragment);
+        }
+    }
+
+    private void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
+        if (!photos.isEmpty()) {
+            SendingMediaInfo info = (SendingMediaInfo) photos.get(0);
+            Bitmap bitmap = null;
+            if (info.path != null) {
+                bitmap = ImageLoader.loadBitmap(((SendingMediaInfo) photos.get(0)).path, null, 800.0f, 800.0f, true);
+            } else if (info.searchImage != null) {
+                if (info.searchImage.photo != null) {
+                    PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(info.searchImage.photo.sizes, AndroidUtilities.getPhotoSize());
+                    if (photoSize != null) {
+                        File path = FileLoader.getPathToAttach(photoSize, true);
+                        this.finalPath = path.getAbsolutePath();
+                        if (!path.exists()) {
+                            path = FileLoader.getPathToAttach(photoSize, false);
+                            if (!path.exists()) {
+                                path = null;
+                            }
+                        }
+                        if (path != null) {
+                            bitmap = ImageLoader.loadBitmap(path.getAbsolutePath(), null, 800.0f, 800.0f, true);
+                        } else {
+                            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
+                            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
+                            this.uploadingImage = FileLoader.getAttachFileName(photoSize.location);
+                            this.imageReceiver.setImage(photoSize.location, null, null, "jpg", null, 1);
+                        }
+                    }
+                } else if (info.searchImage.imageUrl != null) {
+                    File cacheFile = new File(FileLoader.getDirectory(4), Utilities.MD5(info.searchImage.imageUrl) + "." + ImageLoader.getHttpUrlExtension(info.searchImage.imageUrl, "jpg"));
+                    this.finalPath = cacheFile.getAbsolutePath();
+                    if (!cacheFile.exists() || cacheFile.length() == 0) {
+                        this.uploadingImage = info.searchImage.imageUrl;
+                        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidLoad);
+                        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
+                        this.imageReceiver.setImage(info.searchImage.imageUrl, null, null, "jpg", 1);
+                    } else {
+                        bitmap = ImageLoader.loadBitmap(cacheFile.getAbsolutePath(), null, 800.0f, 800.0f, true);
+                    }
+                } else {
+                    bitmap = null;
+                }
+            }
+            processBitmap(bitmap);
+        }
     }
 
     public void openCamera() {
@@ -103,7 +251,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
                 this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 19);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -112,7 +260,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
         if (this.parentFragment != null) {
             if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
-                fragment.setDelegate(new C20441());
+                fragment.setDelegate(new C13812());
                 this.parentFragment.presentFragment(fragment);
                 return;
             }
@@ -135,7 +283,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 activity.presentFragment(photoCropActivity);
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             processBitmap(ImageLoader.loadBitmap(path, uri, 800.0f, 800.0f, true));
         }
     }
@@ -160,7 +308,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                         break;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             final ArrayList<Object> arrayList = new ArrayList();
             arrayList.add(new PhotoEntry(0, 0, 0, this.currentPicturePath, orientation, false));
@@ -193,31 +341,19 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
 
     private void processBitmap(Bitmap bitmap) {
         if (bitmap != null) {
-            if (this.encryptedDocument) {
-                this.bigPhoto = ImageLoader.scaleAndSaveImage(bitmap, 2048.0f, 2048.0f, 89, false, 320, 320);
-                if (this.delegate != null) {
-                    TL_secureFile secureFile = new TL_secureFile();
-                    secureFile.dc_id = (int) this.bigPhoto.location.volume_id;
-                    secureFile.f200id = (long) this.bigPhoto.location.local_id;
-                    secureFile.date = (int) (System.currentTimeMillis() / 1000);
-                    this.delegate.didUploadedPhoto(null, null, null, secureFile);
-                }
-                SharedConfig.saveConfig();
-                return;
-            }
-            this.smallPhoto = ImageLoader.scaleAndSaveImage(bitmap, 100.0f, 100.0f, 80, false);
             this.bigPhoto = ImageLoader.scaleAndSaveImage(bitmap, 800.0f, 800.0f, 80, false, 320, 320);
             bitmap.recycle();
-            if (this.bigPhoto != null && this.smallPhoto != null) {
-                if (!this.returnOnly) {
-                    UserConfig.getInstance(this.currentAccount).saveConfig(false);
-                    this.uploadingImage = FileLoader.getDirectory(4) + "/" + this.bigPhoto.location.volume_id + "_" + this.bigPhoto.location.local_id + ".jpg";
-                    NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidUpload);
-                    NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailUpload);
-                    FileLoader.getInstance(this.currentAccount).uploadFile(this.uploadingImage, false, true, 16777216);
-                } else if (this.delegate != null) {
-                    this.delegate.didUploadedPhoto(null, this.smallPhoto, this.bigPhoto, null);
-                }
+            if (this.bigPhoto == null) {
+                return;
+            }
+            if (!this.returnOnly) {
+                UserConfig.getInstance(this.currentAccount).saveConfig(false);
+                this.uploadingImage = FileLoader.getDirectory(4) + "/" + this.bigPhoto.location.volume_id + "_" + this.bigPhoto.location.local_id + ".jpg";
+                NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidUpload);
+                NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailUpload);
+                FileLoader.getInstance(this.currentAccount).uploadFile(this.uploadingImage, false, true, 16777216);
+            } else if (this.delegate != null) {
+                this.delegate.didUploadedPhoto(null, this.bigPhoto, null);
             }
         }
     }
@@ -234,10 +370,11 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 if (this.delegate != null) {
-                    this.delegate.didUploadedPhoto((InputFile) args[1], this.smallPhoto, this.bigPhoto, null);
+                    this.delegate.didUploadedPhoto((InputFile) args[1], this.bigPhoto, null);
                 }
                 this.uploadingImage = null;
                 if (this.clearAfterUpdate) {
+                    this.imageReceiver.setImageBitmap((Drawable) null);
                     this.parentFragment = null;
                     this.delegate = null;
                 }
@@ -249,8 +386,23 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 this.uploadingImage = null;
                 if (this.clearAfterUpdate) {
+                    this.imageReceiver.setImageBitmap((Drawable) null);
                     this.parentFragment = null;
                     this.delegate = null;
+                }
+            }
+        } else if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailedLoad || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) {
+            String path = args[0];
+            if (this.uploadingImage != null && path.equals(this.uploadingImage)) {
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidLoad);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);
+                this.uploadingImage = null;
+                if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
+                    processBitmap(ImageLoader.loadBitmap(this.finalPath, null, 800.0f, 800.0f, true));
+                } else {
+                    this.imageReceiver.setImageBitmap((Drawable) null);
                 }
             }
         }

@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
@@ -56,7 +55,6 @@ import org.telegram.p005ui.LaunchActivity;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInfo;
@@ -157,7 +155,7 @@ public class DataQuery {
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_MASK = 1;
     private static RectF bitmapRect;
-    private static Comparator<MessageEntity> entityComparator = new C032552();
+    private static Comparator<MessageEntity> entityComparator = DataQuery$$Lambda$110.$instance;
     private static Paint erasePaint;
     private static Paint roundPaint;
     private static Path roundPath;
@@ -211,434 +209,6 @@ public class DataQuery {
     private LongSparseArray<String> stickersByEmoji = new LongSparseArray();
     private boolean[] stickersLoaded = new boolean[4];
     private ArrayList<Long> unreadStickerSets = new ArrayList();
-
-    /* renamed from: org.telegram.messenger.DataQuery$14 */
-    class C027614 implements Runnable {
-        C027614() {
-        }
-
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x0093  */
-        /* JADX WARNING: Removed duplicated region for block: B:34:0x009a  */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void run() {
-            Throwable e;
-            Throwable th;
-            ArrayList<StickerSetCovered> newStickerArray = null;
-            ArrayList<Long> unread = new ArrayList();
-            int date = 0;
-            int hash = 0;
-            SQLiteCursor cursor = null;
-            try {
-                cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized("SELECT data, unread, date, hash FROM stickers_featured WHERE 1", new Object[0]);
-                if (cursor.next()) {
-                    int count;
-                    int a;
-                    NativeByteBuffer data = cursor.byteBufferValue(0);
-                    if (data != null) {
-                        ArrayList<StickerSetCovered> newStickerArray2 = new ArrayList();
-                        try {
-                            count = data.readInt32(false);
-                            for (a = 0; a < count; a++) {
-                                newStickerArray2.add(StickerSetCovered.TLdeserialize(data, data.readInt32(false), false));
-                            }
-                            data.reuse();
-                            newStickerArray = newStickerArray2;
-                        } catch (Throwable th2) {
-                            th = th2;
-                            newStickerArray = newStickerArray2;
-                            if (cursor != null) {
-                                cursor.dispose();
-                            }
-                            throw th;
-                        }
-                    }
-                    data = cursor.byteBufferValue(1);
-                    if (data != null) {
-                        count = data.readInt32(false);
-                        for (a = 0; a < count; a++) {
-                            unread.add(Long.valueOf(data.readInt64(false)));
-                        }
-                        data.reuse();
-                    }
-                    date = cursor.intValue(2);
-                    hash = DataQuery.this.calcFeaturedStickersHash(newStickerArray);
-                }
-                if (cursor != null) {
-                    cursor.dispose();
-                }
-            } catch (Throwable th3) {
-                e = th3;
-                FileLog.m14e(e);
-                if (cursor != null) {
-                }
-                DataQuery.this.processLoadedFeaturedStickers(newStickerArray, unread, true, date, hash);
-            }
-            DataQuery.this.processLoadedFeaturedStickers(newStickerArray, unread, true, date, hash);
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$16 */
-    class C027816 implements Runnable {
-        C027816() {
-        }
-
-        public void run() {
-            DataQuery.this.loadingFeaturedStickers = false;
-            DataQuery.this.featuredStickersLoaded = true;
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$43 */
-    class C031243 implements Runnable {
-        C031243() {
-        }
-
-        public void run() {
-            final ArrayList<TL_topPeer> hintsNew = new ArrayList();
-            final ArrayList<TL_topPeer> inlineBotsNew = new ArrayList();
-            final ArrayList<User> users = new ArrayList();
-            final ArrayList<Chat> chats = new ArrayList();
-            int selfUserId = UserConfig.getInstance(DataQuery.this.currentAccount).getClientUserId();
-            try {
-                ArrayList<Integer> usersToLoad = new ArrayList();
-                ArrayList<Integer> chatsToLoad = new ArrayList();
-                SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized("SELECT did, type, rating FROM chat_hints WHERE 1 ORDER BY rating DESC", new Object[0]);
-                while (cursor.next()) {
-                    int did = cursor.intValue(0);
-                    if (did != selfUserId) {
-                        int type = cursor.intValue(1);
-                        TL_topPeer peer = new TL_topPeer();
-                        peer.rating = cursor.doubleValue(2);
-                        if (did > 0) {
-                            peer.peer = new TL_peerUser();
-                            peer.peer.user_id = did;
-                            usersToLoad.add(Integer.valueOf(did));
-                        } else {
-                            peer.peer = new TL_peerChat();
-                            peer.peer.chat_id = -did;
-                            chatsToLoad.add(Integer.valueOf(-did));
-                        }
-                        if (type == 0) {
-                            hintsNew.add(peer);
-                        } else if (type == 1) {
-                            inlineBotsNew.add(peer);
-                        }
-                    }
-                }
-                cursor.dispose();
-                if (!usersToLoad.isEmpty()) {
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
-                }
-                if (!chatsToLoad.isEmpty()) {
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
-                }
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        MessagesController.getInstance(DataQuery.this.currentAccount).putUsers(users, true);
-                        MessagesController.getInstance(DataQuery.this.currentAccount).putChats(chats, true);
-                        DataQuery.this.loading = false;
-                        DataQuery.this.loaded = true;
-                        DataQuery.this.hints = hintsNew;
-                        DataQuery.this.inlineBots = inlineBotsNew;
-                        DataQuery.this.buildShortcuts();
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
-                        if (Math.abs(UserConfig.getInstance(DataQuery.this.currentAccount).lastHintsSyncTime - ((int) (System.currentTimeMillis() / 1000))) >= 86400) {
-                            DataQuery.this.loadHints(false);
-                        }
-                    }
-                });
-            } catch (Throwable e) {
-                FileLog.m14e(e);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$45 */
-    class C031745 implements Runnable {
-        C031745() {
-        }
-
-        public void run() {
-            try {
-                MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM chat_hints WHERE 1").stepThis().dispose();
-            } catch (Exception e) {
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$46 */
-    class C031846 implements Comparator<TL_topPeer> {
-        C031846() {
-        }
-
-        public int compare(TL_topPeer lhs, TL_topPeer rhs) {
-            if (lhs.rating > rhs.rating) {
-                return -1;
-            }
-            if (lhs.rating < rhs.rating) {
-                return 1;
-            }
-            return 0;
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$52 */
-    static class C032552 implements Comparator<MessageEntity> {
-        C032552() {
-        }
-
-        public int compare(MessageEntity entity1, MessageEntity entity2) {
-            if (entity1.offset > entity2.offset) {
-                return 1;
-            }
-            if (entity1.offset < entity2.offset) {
-                return -1;
-            }
-            return 0;
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$19 */
-    class C035719 implements RequestDelegate {
-        C035719() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$1 */
-    class C03581 implements RequestDelegate {
-        C03581() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$20 */
-    class C035920 implements RequestDelegate {
-        C035920() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$3 */
-    class C03693 implements RequestDelegate {
-        C03693() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$44 */
-    class C037044 implements RequestDelegate {
-
-        /* renamed from: org.telegram.messenger.DataQuery$44$2 */
-        class C03162 implements Runnable {
-            C03162() {
-            }
-
-            public void run() {
-                UserConfig.getInstance(DataQuery.this.currentAccount).suggestContacts = false;
-                UserConfig.getInstance(DataQuery.this.currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);
-                UserConfig.getInstance(DataQuery.this.currentAccount).saveConfig(false);
-                DataQuery.this.clearTopPeers();
-            }
-        }
-
-        C037044() {
-        }
-
-        public void run(final TLObject response, TL_error error) {
-            if (response instanceof TL_contacts_topPeers) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        final TL_contacts_topPeers topPeers = response;
-                        MessagesController.getInstance(DataQuery.this.currentAccount).putUsers(topPeers.users, false);
-                        MessagesController.getInstance(DataQuery.this.currentAccount).putChats(topPeers.chats, false);
-                        for (int a = 0; a < topPeers.categories.size(); a++) {
-                            TL_topPeerCategoryPeers category = (TL_topPeerCategoryPeers) topPeers.categories.get(a);
-                            if (category.category instanceof TL_topPeerCategoryBotsInline) {
-                                DataQuery.this.inlineBots = category.peers;
-                                UserConfig.getInstance(DataQuery.this.currentAccount).botRatingLoadTime = (int) (System.currentTimeMillis() / 1000);
-                            } else {
-                                DataQuery.this.hints = category.peers;
-                                int selfUserId = UserConfig.getInstance(DataQuery.this.currentAccount).getClientUserId();
-                                for (int b = 0; b < DataQuery.this.hints.size(); b++) {
-                                    if (((TL_topPeer) DataQuery.this.hints.get(b)).peer.user_id == selfUserId) {
-                                        DataQuery.this.hints.remove(b);
-                                        break;
-                                    }
-                                }
-                                UserConfig.getInstance(DataQuery.this.currentAccount).ratingLoadTime = (int) (System.currentTimeMillis() / 1000);
-                            }
-                        }
-                        UserConfig.getInstance(DataQuery.this.currentAccount).saveConfig(false);
-                        DataQuery.this.buildShortcuts();
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-
-                            /* renamed from: org.telegram.messenger.DataQuery$44$1$1$1 */
-                            class C03131 implements Runnable {
-                                C03131() {
-                                }
-
-                                public void run() {
-                                    UserConfig.getInstance(DataQuery.this.currentAccount).suggestContacts = true;
-                                    UserConfig.getInstance(DataQuery.this.currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);
-                                    UserConfig.getInstance(DataQuery.this.currentAccount).saveConfig(false);
-                                }
-                            }
-
-                            public void run() {
-                                try {
-                                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM chat_hints WHERE 1").stepThis().dispose();
-                                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().beginTransaction();
-                                    MessagesStorage.getInstance(DataQuery.this.currentAccount).putUsersAndChats(topPeers.users, topPeers.chats, false, false);
-                                    SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO chat_hints VALUES(?, ?, ?, ?)");
-                                    for (int a = 0; a < topPeers.categories.size(); a++) {
-                                        int type;
-                                        TL_topPeerCategoryPeers category = (TL_topPeerCategoryPeers) topPeers.categories.get(a);
-                                        if (category.category instanceof TL_topPeerCategoryBotsInline) {
-                                            type = 1;
-                                        } else {
-                                            type = 0;
-                                        }
-                                        for (int b = 0; b < category.peers.size(); b++) {
-                                            int did;
-                                            TL_topPeer peer = (TL_topPeer) category.peers.get(b);
-                                            if (peer.peer instanceof TL_peerUser) {
-                                                did = peer.peer.user_id;
-                                            } else if (peer.peer instanceof TL_peerChat) {
-                                                did = -peer.peer.chat_id;
-                                            } else {
-                                                did = -peer.peer.channel_id;
-                                            }
-                                            state.requery();
-                                            state.bindInteger(1, did);
-                                            state.bindInteger(2, type);
-                                            state.bindDouble(3, peer.rating);
-                                            state.bindInteger(4, 0);
-                                            state.step();
-                                        }
-                                    }
-                                    state.dispose();
-                                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
-                                    AndroidUtilities.runOnUIThread(new C03131());
-                                } catch (Throwable e) {
-                                    FileLog.m14e(e);
-                                }
-                            }
-                        });
-                    }
-                });
-            } else if (response instanceof TL_contacts_topPeersDisabled) {
-                AndroidUtilities.runOnUIThread(new C03162());
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$47 */
-    class C037147 implements RequestDelegate {
-        C037147() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$48 */
-    class C037248 implements RequestDelegate {
-        C037248() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$61 */
-    class C037461 implements RequestDelegate {
-
-        /* renamed from: org.telegram.messenger.DataQuery$61$1 */
-        class C03381 implements Runnable {
-            C03381() {
-            }
-
-            public void run() {
-                UserConfig.getInstance(DataQuery.this.currentAccount).draftsLoaded = true;
-                DataQuery.this.loadingDrafts = false;
-                UserConfig.getInstance(DataQuery.this.currentAccount).saveConfig(false);
-            }
-        }
-
-        C037461() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-            if (error == null) {
-                MessagesController.getInstance(DataQuery.this.currentAccount).processUpdates((Updates) response, false);
-                AndroidUtilities.runOnUIThread(new C03381());
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$62 */
-    class C037562 implements RequestDelegate {
-        C037562() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DataQuery$7 */
-    class C03767 implements RequestDelegate {
-        C03767() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-            if (response != null) {
-                final TL_messages_stickerSet set = (TL_messages_stickerSet) response;
-                MessagesStorage.getInstance(DataQuery.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                            state.requery();
-                            state.bindString(1, "s_" + set.set.f111id);
-                            state.bindInteger(2, 6);
-                            state.bindString(3, TtmlNode.ANONYMOUS_REGION_ID);
-                            state.bindString(4, TtmlNode.ANONYMOUS_REGION_ID);
-                            state.bindString(5, TtmlNode.ANONYMOUS_REGION_ID);
-                            state.bindInteger(6, 0);
-                            state.bindInteger(7, 0);
-                            state.bindInteger(8, 0);
-                            state.bindInteger(9, 0);
-                            NativeByteBuffer data = new NativeByteBuffer(set.getObjectSize());
-                            set.serializeToStream(data);
-                            state.bindByteBuffer(10, data);
-                            state.step();
-                            data.reuse();
-                            state.dispose();
-                        } catch (Throwable e) {
-                            FileLog.m14e(e);
-                        }
-                    }
-                });
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        DataQuery.this.groupStickerSets.put(set.set.f111id, set);
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.f111id));
-                    }
-                });
-            }
-        }
-    }
 
     public static DataQuery getInstance(int num) {
         Throwable th;
@@ -778,7 +348,7 @@ public class DataQuery {
         return false;
     }
 
-    public void addRecentSticker(final int type, Document document, int date, boolean remove) {
+    public void addRecentSticker(int type, Object parentObject, Document document, int date, boolean remove) {
         int maxCount;
         boolean found = false;
         for (int a = 0; a < this.recentStickers[type].size(); a++) {
@@ -801,34 +371,21 @@ public class DataQuery {
                 Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("AddedToFavorites", R.string.AddedToFavorites), 0).show();
             }
             TL_messages_faveSticker req = new TL_messages_faveSticker();
-            req.f144id = new TL_inputDocument();
-            req.f144id.f95id = document.f84id;
-            req.f144id.access_hash = document.access_hash;
+            req.f142id = new TL_inputDocument();
+            req.f142id.f95id = document.f84id;
+            req.f142id.access_hash = document.access_hash;
+            req.f142id.file_reference = document.file_reference;
+            if (req.f142id.file_reference == null) {
+                req.f142id.file_reference = new byte[0];
+            }
             req.unfave = remove;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C03581());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$0(this, parentObject, req));
             maxCount = MessagesController.getInstance(this.currentAccount).maxFaveStickersCount;
         } else {
             maxCount = MessagesController.getInstance(this.currentAccount).maxRecentStickersCount;
         }
         if (this.recentStickers[type].size() > maxCount || remove) {
-            final Document old = remove ? document : (Document) this.recentStickers[type].remove(this.recentStickers[type].size() - 1);
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                public void run() {
-                    int cacheType;
-                    if (type == 0) {
-                        cacheType = 3;
-                    } else if (type == 1) {
-                        cacheType = 4;
-                    } else {
-                        cacheType = 5;
-                    }
-                    try {
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.f84id + "' AND type = " + cacheType).stepThis().dispose();
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                }
-            });
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$1(this, type, remove ? document : (Document) this.recentStickers[type].remove(this.recentStickers[type].size() - 1)));
         }
         if (!remove) {
             ArrayList<Document> arrayList = new ArrayList();
@@ -836,7 +393,29 @@ public class DataQuery {
             processLoadedRecentDocuments(type, arrayList, false, date);
         }
         if (type == 2) {
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.recentDocumentsDidLoaded, Boolean.valueOf(false), Integer.valueOf(type));
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.recentDocumentsDidLoad, Boolean.valueOf(false), Integer.valueOf(type));
+        }
+    }
+
+    final /* synthetic */ void lambda$addRecentSticker$0$DataQuery(Object parentObject, TL_messages_faveSticker req, TLObject response, TL_error error) {
+        if (error != null && FileRefController.isFileRefError(error.text) && parentObject != null) {
+            FileRefController.getInstance(this.currentAccount).requestReference(parentObject, req);
+        }
+    }
+
+    final /* synthetic */ void lambda$addRecentSticker$1$DataQuery(int type, Document old) {
+        int cacheType;
+        if (type == 0) {
+            cacheType = 3;
+        } else if (type == 1) {
+            cacheType = 4;
+        } else {
+            cacheType = 5;
+        }
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.f84id + "' AND type = " + cacheType).stepThis().dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
         }
     }
 
@@ -844,23 +423,33 @@ public class DataQuery {
         return new ArrayList(this.recentGifs);
     }
 
-    public void removeRecentGif(final Document document) {
+    public void removeRecentGif(Document document) {
         this.recentGifs.remove(document);
         TL_messages_saveGif req = new TL_messages_saveGif();
-        req.f156id = new TL_inputDocument();
-        req.f156id.f95id = document.f84id;
-        req.f156id.access_hash = document.access_hash;
+        req.f154id = new TL_inputDocument();
+        req.f154id.f95id = document.f84id;
+        req.f154id.access_hash = document.access_hash;
+        req.f154id.file_reference = document.file_reference;
+        if (req.f154id.file_reference == null) {
+            req.f154id.file_reference = new byte[0];
+        }
         req.unsave = true;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C03693());
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + document.f84id + "' AND type = 2").stepThis().dispose();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
-                }
-            }
-        });
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$2(this, req));
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$3(this, document));
+    }
+
+    final /* synthetic */ void lambda$removeRecentGif$2$DataQuery(TL_messages_saveGif req, TLObject response, TL_error error) {
+        if (error != null && FileRefController.isFileRefError(error.text)) {
+            FileRefController.getInstance(this.currentAccount).requestReference("gif", req);
+        }
+    }
+
+    final /* synthetic */ void lambda$removeRecentGif$3$DataQuery(Document document) {
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + document.f84id + "' AND type = 2").stepThis().dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
     public void addRecentGif(Document document, int date) {
@@ -877,24 +466,64 @@ public class DataQuery {
             this.recentGifs.add(0, document);
         }
         if (this.recentGifs.size() > MessagesController.getInstance(this.currentAccount).maxRecentGifsCount) {
-            final Document old = (Document) this.recentGifs.remove(this.recentGifs.size() - 1);
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                public void run() {
-                    try {
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.f84id + "' AND type = 2").stepThis().dispose();
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                }
-            });
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$4(this, (Document) this.recentGifs.remove(this.recentGifs.size() - 1)));
         }
         ArrayList<Document> arrayList = new ArrayList();
         arrayList.add(document);
         processLoadedRecentDocuments(0, arrayList, true, date);
     }
 
+    final /* synthetic */ void lambda$addRecentGif$4$DataQuery(Document old) {
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.f84id + "' AND type = 2").stepThis().dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
     public boolean isLoadingStickers(int type) {
         return this.loadingStickers[type];
+    }
+
+    public void replaceStickerSet(TL_messages_stickerSet set) {
+        TL_messages_stickerSet existingSet = (TL_messages_stickerSet) this.stickerSetsById.get(set.set.f109id);
+        boolean isGroupSet = false;
+        if (existingSet == null) {
+            existingSet = (TL_messages_stickerSet) this.stickerSetsByName.get(set.set.short_name);
+        }
+        if (existingSet == null) {
+            existingSet = (TL_messages_stickerSet) this.groupStickerSets.get(set.set.f109id);
+            if (existingSet != null) {
+                isGroupSet = true;
+            }
+        }
+        if (existingSet != null) {
+            int a;
+            LongSparseArray<Document> documents = new LongSparseArray();
+            int size = set.documents.size();
+            for (a = 0; a < size; a++) {
+                Document document = (Document) set.documents.get(a);
+                documents.put(document.f84id, document);
+            }
+            boolean changed = false;
+            size = existingSet.documents.size();
+            for (a = 0; a < size; a++) {
+                Document newDocument = (Document) documents.get(((Document) set.documents.get(a)).f84id);
+                if (newDocument != null) {
+                    existingSet.documents.set(a, newDocument);
+                    changed = true;
+                }
+            }
+            if (!changed) {
+                return;
+            }
+            if (isGroupSet) {
+                putSetToCache(existingSet);
+                return;
+            }
+            int type = set.set.masks ? 1 : 0;
+            putStickersToCache(type, this.stickerSets[type], this.loadDate[type], this.loadHash[type]);
+        }
     }
 
     public TL_messages_stickerSet getStickerSetByName(String name) {
@@ -906,9 +535,9 @@ public class DataQuery {
     }
 
     public TL_messages_stickerSet getGroupStickerSetById(StickerSet stickerSet) {
-        TL_messages_stickerSet set = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.f111id);
+        TL_messages_stickerSet set = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.f109id);
         if (set == null) {
-            set = (TL_messages_stickerSet) this.groupStickerSets.get(stickerSet.f111id);
+            set = (TL_messages_stickerSet) this.groupStickerSets.get(stickerSet.f109id);
             if (set == null || set.set == null) {
                 loadGroupStickerSet(stickerSet, true);
             } else if (set.set.hash != stickerSet.hash) {
@@ -919,51 +548,90 @@ public class DataQuery {
     }
 
     public void putGroupStickerSet(TL_messages_stickerSet stickerSet) {
-        this.groupStickerSets.put(stickerSet.set.f111id, stickerSet);
+        this.groupStickerSets.put(stickerSet.set.f109id, stickerSet);
     }
 
-    private void loadGroupStickerSet(final StickerSet stickerSet, boolean cache) {
+    private void loadGroupStickerSet(StickerSet stickerSet, boolean cache) {
         if (cache) {
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                public void run() {
-                    try {
-                        TL_messages_stickerSet set;
-                        SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized("SELECT document FROM web_recent_v3 WHERE id = 's_" + stickerSet.f111id + "'", new Object[0]);
-                        if (!cursor.next() || cursor.isNull(0)) {
-                            set = null;
-                        } else {
-                            NativeByteBuffer data = cursor.byteBufferValue(0);
-                            if (data != null) {
-                                set = TL_messages_stickerSet.TLdeserialize(data, data.readInt32(false), false);
-                                data.reuse();
-                            } else {
-                                set = null;
-                            }
-                        }
-                        cursor.dispose();
-                        if (set == null || set.set == null || set.set.hash != stickerSet.hash) {
-                            DataQuery.this.loadGroupStickerSet(stickerSet, false);
-                        }
-                        if (set != null && set.set != null) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    DataQuery.this.groupStickerSets.put(set.set.f111id, set);
-                                    NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.f111id));
-                                }
-                            });
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                }
-            });
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$5(this, stickerSet));
             return;
         }
         TL_messages_getStickerSet req = new TL_messages_getStickerSet();
         req.stickerset = new TL_inputStickerSetID();
-        req.stickerset.f103id = stickerSet.f111id;
+        req.stickerset.f103id = stickerSet.f109id;
         req.stickerset.access_hash = stickerSet.access_hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C03767());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$6(this));
+    }
+
+    final /* synthetic */ void lambda$loadGroupStickerSet$6$DataQuery(StickerSet stickerSet) {
+        try {
+            TL_messages_stickerSet set;
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT document FROM web_recent_v3 WHERE id = 's_" + stickerSet.f109id + "'", new Object[0]);
+            if (!cursor.next() || cursor.isNull(0)) {
+                set = null;
+            } else {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    set = TL_messages_stickerSet.TLdeserialize(data, data.readInt32(false), false);
+                    data.reuse();
+                } else {
+                    set = null;
+                }
+            }
+            cursor.dispose();
+            if (set == null || set.set == null || set.set.hash != stickerSet.hash) {
+                loadGroupStickerSet(stickerSet, false);
+            }
+            if (set != null && set.set != null) {
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$109(this, set));
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$5$DataQuery(TL_messages_stickerSet set) {
+        this.groupStickerSets.put(set.set.f109id, set);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoad, Long.valueOf(set.set.f109id));
+    }
+
+    final /* synthetic */ void lambda$loadGroupStickerSet$8$DataQuery(TLObject response, TL_error error) {
+        if (response != null) {
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$108(this, (TL_messages_stickerSet) response));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$7$DataQuery(TL_messages_stickerSet set) {
+        this.groupStickerSets.put(set.set.f109id, set);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoad, Long.valueOf(set.set.f109id));
+    }
+
+    private void putSetToCache(TL_messages_stickerSet set) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$7(this, set));
+    }
+
+    final /* synthetic */ void lambda$putSetToCache$9$DataQuery(TL_messages_stickerSet set) {
+        try {
+            SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            state.requery();
+            state.bindString(1, "s_" + set.set.f109id);
+            state.bindInteger(2, 6);
+            state.bindString(3, TtmlNode.ANONYMOUS_REGION_ID);
+            state.bindString(4, TtmlNode.ANONYMOUS_REGION_ID);
+            state.bindString(5, TtmlNode.ANONYMOUS_REGION_ID);
+            state.bindInteger(6, 0);
+            state.bindInteger(7, 0);
+            state.bindInteger(8, 0);
+            state.bindInteger(9, 0);
+            NativeByteBuffer data = new NativeByteBuffer(set.getObjectSize());
+            set.serializeToStream(data);
+            state.bindByteBuffer(10, data);
+            state.step();
+            data.reuse();
+            state.dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
     public HashMap<String, ArrayList<Document>> getAllStickers() {
@@ -1024,7 +692,7 @@ public class DataQuery {
         return (int) acc;
     }
 
-    public void loadRecents(final int type, final boolean gif, boolean cache, boolean force) {
+    public void loadRecents(int type, boolean gif, boolean cache, boolean force) {
         if (gif) {
             if (!this.loadingRecentGifs) {
                 this.loadingRecentGifs = true;
@@ -1043,54 +711,7 @@ public class DataQuery {
             return;
         }
         if (cache) {
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                public void run() {
-                    try {
-                        int cacheType;
-                        if (gif) {
-                            cacheType = 2;
-                        } else if (type == 0) {
-                            cacheType = 3;
-                        } else if (type == 1) {
-                            cacheType = 4;
-                        } else {
-                            cacheType = 5;
-                        }
-                        SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized("SELECT document FROM web_recent_v3 WHERE type = " + cacheType + " ORDER BY date DESC", new Object[0]);
-                        final ArrayList<Document> arrayList = new ArrayList();
-                        while (cursor.next()) {
-                            if (!cursor.isNull(0)) {
-                                NativeByteBuffer data = cursor.byteBufferValue(0);
-                                if (data != null) {
-                                    Document document = Document.TLdeserialize(data, data.readInt32(false), false);
-                                    if (document != null) {
-                                        arrayList.add(document);
-                                    }
-                                    data.reuse();
-                                }
-                            }
-                        }
-                        cursor.dispose();
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (gif) {
-                                    DataQuery.this.recentGifs = arrayList;
-                                    DataQuery.this.loadingRecentGifs = false;
-                                    DataQuery.this.recentGifsLoaded = true;
-                                } else {
-                                    DataQuery.this.recentStickers[type] = arrayList;
-                                    DataQuery.this.loadingRecentStickers[type] = false;
-                                    DataQuery.this.recentStickersLoaded[type] = true;
-                                }
-                                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.recentDocumentsDidLoaded, Boolean.valueOf(gif), Integer.valueOf(type));
-                                DataQuery.this.loadRecents(type, gif, false, false);
-                            }
-                        });
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                }
-            });
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$8(this, gif, type));
             return;
         }
         SharedPreferences preferences = MessagesController.getEmojiSettings(this.currentAccount);
@@ -1118,15 +739,7 @@ public class DataQuery {
         if (gif) {
             TL_messages_getSavedGifs req = new TL_messages_getSavedGifs();
             req.hash = calcDocumentsHash(this.recentGifs);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                    ArrayList<Document> arrayList = null;
-                    if (response instanceof TL_messages_savedGifs) {
-                        arrayList = ((TL_messages_savedGifs) response).gifs;
-                    }
-                    DataQuery.this.processLoadedRecentDocuments(type, arrayList, gif, 0);
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$9(this, type, gif));
             return;
         }
         TLObject request;
@@ -1141,138 +754,189 @@ public class DataQuery {
             req2.attached = type == 1;
             request = req2;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new RequestDelegate() {
-            public void run(TLObject response, TL_error error) {
-                ArrayList<Document> arrayList = null;
-                if (type == 2) {
-                    if (response instanceof TL_messages_favedStickers) {
-                        arrayList = ((TL_messages_favedStickers) response).stickers;
-                    }
-                } else if (response instanceof TL_messages_recentStickers) {
-                    arrayList = ((TL_messages_recentStickers) response).stickers;
-                }
-                DataQuery.this.processLoadedRecentDocuments(type, arrayList, gif, 0);
-            }
-        });
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new DataQuery$$Lambda$10(this, type, gif));
     }
 
-    private void processLoadedRecentDocuments(final int type, final ArrayList<Document> documents, final boolean gif, int date) {
-        if (documents != null) {
-            final boolean z = gif;
-            final int i = type;
-            final ArrayList<Document> arrayList = documents;
-            final int i2 = date;
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                public void run() {
-                    try {
-                        int maxCount;
-                        int cacheType;
-                        SQLiteDatabase database = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase();
-                        if (z) {
-                            maxCount = MessagesController.getInstance(DataQuery.this.currentAccount).maxRecentGifsCount;
-                        } else if (i == 2) {
-                            maxCount = MessagesController.getInstance(DataQuery.this.currentAccount).maxFaveStickersCount;
-                        } else {
-                            maxCount = MessagesController.getInstance(DataQuery.this.currentAccount).maxRecentStickersCount;
+    final /* synthetic */ void lambda$loadRecents$11$DataQuery(boolean gif, int type) {
+        int cacheType;
+        if (gif) {
+            cacheType = 2;
+        } else if (type == 0) {
+            cacheType = 3;
+        } else if (type == 1) {
+            cacheType = 4;
+        } else {
+            cacheType = 5;
+        }
+        try {
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT document FROM web_recent_v3 WHERE type = " + cacheType + " ORDER BY date DESC", new Object[0]);
+            ArrayList<Document> arrayList = new ArrayList();
+            while (cursor.next()) {
+                if (!cursor.isNull(0)) {
+                    NativeByteBuffer data = cursor.byteBufferValue(0);
+                    if (data != null) {
+                        Document document = Document.TLdeserialize(data, data.readInt32(false), false);
+                        if (document != null) {
+                            arrayList.add(document);
                         }
-                        database.beginTransaction();
-                        SQLitePreparedStatement state = database.executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                        int count = arrayList.size();
-                        if (z) {
-                            cacheType = 2;
-                        } else if (i == 0) {
-                            cacheType = 3;
-                        } else if (i == 1) {
-                            cacheType = 4;
-                        } else {
-                            cacheType = 5;
-                        }
-                        int a = 0;
-                        while (a < count && a != maxCount) {
-                            Document document = (Document) arrayList.get(a);
-                            state.requery();
-                            state.bindString(1, TtmlNode.ANONYMOUS_REGION_ID + document.f84id);
-                            state.bindInteger(2, cacheType);
-                            state.bindString(3, TtmlNode.ANONYMOUS_REGION_ID);
-                            state.bindString(4, TtmlNode.ANONYMOUS_REGION_ID);
-                            state.bindString(5, TtmlNode.ANONYMOUS_REGION_ID);
-                            state.bindInteger(6, 0);
-                            state.bindInteger(7, 0);
-                            state.bindInteger(8, 0);
-                            state.bindInteger(9, i2 != 0 ? i2 : count - a);
-                            NativeByteBuffer data = new NativeByteBuffer(document.getObjectSize());
-                            document.serializeToStream(data);
-                            state.bindByteBuffer(10, data);
-                            state.step();
-                            if (data != null) {
-                                data.reuse();
-                            }
-                            a++;
-                        }
-                        state.dispose();
-                        database.commitTransaction();
-                        if (arrayList.size() >= maxCount) {
-                            database.beginTransaction();
-                            for (a = maxCount; a < arrayList.size(); a++) {
-                                database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((Document) arrayList.get(a)).f84id + "' AND type = " + cacheType).stepThis().dispose();
-                            }
-                            database.commitTransaction();
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        data.reuse();
                     }
                 }
-            });
+            }
+            cursor.dispose();
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$107(this, gif, arrayList, type));
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$10$DataQuery(boolean gif, ArrayList arrayList, int type) {
+        if (gif) {
+            this.recentGifs = arrayList;
+            this.loadingRecentGifs = false;
+            this.recentGifsLoaded = true;
+        } else {
+            this.recentStickers[type] = arrayList;
+            this.loadingRecentStickers[type] = false;
+            this.recentStickersLoaded[type] = true;
+        }
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.recentDocumentsDidLoad, Boolean.valueOf(gif), Integer.valueOf(type));
+        loadRecents(type, gif, false, false);
+    }
+
+    final /* synthetic */ void lambda$loadRecents$12$DataQuery(int type, boolean gif, TLObject response, TL_error error) {
+        ArrayList<Document> arrayList = null;
+        if (response instanceof TL_messages_savedGifs) {
+            arrayList = ((TL_messages_savedGifs) response).gifs;
+        }
+        processLoadedRecentDocuments(type, arrayList, gif, 0);
+    }
+
+    final /* synthetic */ void lambda$loadRecents$13$DataQuery(int type, boolean gif, TLObject response, TL_error error) {
+        ArrayList<Document> arrayList = null;
+        if (type == 2) {
+            if (response instanceof TL_messages_favedStickers) {
+                arrayList = ((TL_messages_favedStickers) response).stickers;
+            }
+        } else if (response instanceof TL_messages_recentStickers) {
+            arrayList = ((TL_messages_recentStickers) response).stickers;
+        }
+        processLoadedRecentDocuments(type, arrayList, gif, 0);
+    }
+
+    protected void processLoadedRecentDocuments(int type, ArrayList<Document> documents, boolean gif, int date) {
+        if (documents != null) {
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$11(this, gif, type, documents, date));
         }
         if (date == 0) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    Editor editor = MessagesController.getEmojiSettings(DataQuery.this.currentAccount).edit();
-                    if (gif) {
-                        DataQuery.this.loadingRecentGifs = false;
-                        DataQuery.this.recentGifsLoaded = true;
-                        editor.putLong("lastGifLoadTime", System.currentTimeMillis()).commit();
-                    } else {
-                        DataQuery.this.loadingRecentStickers[type] = false;
-                        DataQuery.this.recentStickersLoaded[type] = true;
-                        if (type == 0) {
-                            editor.putLong("lastStickersLoadTime", System.currentTimeMillis()).commit();
-                        } else if (type == 1) {
-                            editor.putLong("lastStickersLoadTimeMask", System.currentTimeMillis()).commit();
-                        } else {
-                            editor.putLong("lastStickersLoadTimeFavs", System.currentTimeMillis()).commit();
-                        }
-                    }
-                    if (documents != null) {
-                        if (gif) {
-                            DataQuery.this.recentGifs = documents;
-                        } else {
-                            DataQuery.this.recentStickers[type] = documents;
-                        }
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.recentDocumentsDidLoaded, Boolean.valueOf(gif), Integer.valueOf(type));
-                    }
-                }
-            });
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$12(this, gif, type, documents));
         }
     }
 
-    public void reorderStickers(int type, final ArrayList<Long> order) {
-        Collections.sort(this.stickerSets[type], new Comparator<TL_messages_stickerSet>() {
-            public int compare(TL_messages_stickerSet lhs, TL_messages_stickerSet rhs) {
-                int index1 = order.indexOf(Long.valueOf(lhs.set.f111id));
-                int index2 = order.indexOf(Long.valueOf(rhs.set.f111id));
-                if (index1 > index2) {
-                    return 1;
-                }
-                if (index1 < index2) {
-                    return -1;
-                }
-                return 0;
+    final /* synthetic */ void lambda$processLoadedRecentDocuments$14$DataQuery(boolean gif, int type, ArrayList documents, int date) {
+        try {
+            int maxCount;
+            int cacheType;
+            SQLiteDatabase database = MessagesStorage.getInstance(this.currentAccount).getDatabase();
+            if (gif) {
+                maxCount = MessagesController.getInstance(this.currentAccount).maxRecentGifsCount;
+            } else if (type == 2) {
+                maxCount = MessagesController.getInstance(this.currentAccount).maxFaveStickersCount;
+            } else {
+                maxCount = MessagesController.getInstance(this.currentAccount).maxRecentStickersCount;
             }
-        });
+            database.beginTransaction();
+            SQLitePreparedStatement state = database.executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            int count = documents.size();
+            if (gif) {
+                cacheType = 2;
+            } else if (type == 0) {
+                cacheType = 3;
+            } else if (type == 1) {
+                cacheType = 4;
+            } else {
+                cacheType = 5;
+            }
+            int a = 0;
+            while (a < count && a != maxCount) {
+                Document document = (Document) documents.get(a);
+                state.requery();
+                state.bindString(1, TtmlNode.ANONYMOUS_REGION_ID + document.f84id);
+                state.bindInteger(2, cacheType);
+                state.bindString(3, TtmlNode.ANONYMOUS_REGION_ID);
+                state.bindString(4, TtmlNode.ANONYMOUS_REGION_ID);
+                state.bindString(5, TtmlNode.ANONYMOUS_REGION_ID);
+                state.bindInteger(6, 0);
+                state.bindInteger(7, 0);
+                state.bindInteger(8, 0);
+                state.bindInteger(9, date != 0 ? date : count - a);
+                NativeByteBuffer data = new NativeByteBuffer(document.getObjectSize());
+                document.serializeToStream(data);
+                state.bindByteBuffer(10, data);
+                state.step();
+                if (data != null) {
+                    data.reuse();
+                }
+                a++;
+            }
+            state.dispose();
+            database.commitTransaction();
+            if (documents.size() >= maxCount) {
+                database.beginTransaction();
+                for (a = maxCount; a < documents.size(); a++) {
+                    database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((Document) documents.get(a)).f84id + "' AND type = " + cacheType).stepThis().dispose();
+                }
+                database.commitTransaction();
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$processLoadedRecentDocuments$15$DataQuery(boolean gif, int type, ArrayList documents) {
+        Editor editor = MessagesController.getEmojiSettings(this.currentAccount).edit();
+        if (gif) {
+            this.loadingRecentGifs = false;
+            this.recentGifsLoaded = true;
+            editor.putLong("lastGifLoadTime", System.currentTimeMillis()).commit();
+        } else {
+            this.loadingRecentStickers[type] = false;
+            this.recentStickersLoaded[type] = true;
+            if (type == 0) {
+                editor.putLong("lastStickersLoadTime", System.currentTimeMillis()).commit();
+            } else if (type == 1) {
+                editor.putLong("lastStickersLoadTimeMask", System.currentTimeMillis()).commit();
+            } else {
+                editor.putLong("lastStickersLoadTimeFavs", System.currentTimeMillis()).commit();
+            }
+        }
+        if (documents != null) {
+            if (gif) {
+                this.recentGifs = documents;
+            } else {
+                this.recentStickers[type] = documents;
+            }
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.recentDocumentsDidLoad, Boolean.valueOf(gif), Integer.valueOf(type));
+        }
+    }
+
+    public void reorderStickers(int type, ArrayList<Long> order) {
+        Collections.sort(this.stickerSets[type], new DataQuery$$Lambda$13(order));
         this.loadHash[type] = calcStickersHash(this.stickerSets[type]);
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoaded, Integer.valueOf(type));
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(type));
         loadStickers(type, false, true);
+    }
+
+    static final /* synthetic */ int lambda$reorderStickers$16$DataQuery(ArrayList order, TL_messages_stickerSet lhs, TL_messages_stickerSet rhs) {
+        int index1 = order.indexOf(Long.valueOf(lhs.set.f109id));
+        int index2 = order.indexOf(Long.valueOf(rhs.set.f109id));
+        if (index1 > index2) {
+            return 1;
+        }
+        if (index1 < index2) {
+            return -1;
+        }
+        return 0;
     }
 
     public void calcNewHash(int type) {
@@ -1280,12 +944,12 @@ public class DataQuery {
     }
 
     public void addNewStickerSet(TL_messages_stickerSet set) {
-        if (this.stickerSetsById.indexOfKey(set.set.f111id) < 0 && !this.stickerSetsByName.containsKey(set.set.short_name)) {
+        if (this.stickerSetsById.indexOfKey(set.set.f109id) < 0 && !this.stickerSetsByName.containsKey(set.set.short_name)) {
             int a;
             int type = set.set.masks ? 1 : 0;
             this.stickerSets[type].add(0, set);
-            this.stickerSetsById.put(set.set.f111id, set);
-            this.installedStickerSetsById.put(set.set.f111id, set);
+            this.stickerSetsById.put(set.set.f109id, set);
+            this.installedStickerSetsById.put(set.set.f109id, set);
             this.stickerSetsByName.put(set.set.short_name, set);
             LongSparseArray<Document> stickersById = new LongSparseArray();
             for (a = 0; a < set.documents.size(); a++) {
@@ -1312,7 +976,7 @@ public class DataQuery {
                 }
             }
             this.loadHash[type] = calcStickersHash(this.stickerSets[type]);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoaded, Integer.valueOf(type));
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(type));
             loadStickers(type, false, true);
         }
     }
@@ -1321,154 +985,194 @@ public class DataQuery {
         if (!this.loadingFeaturedStickers) {
             this.loadingFeaturedStickers = true;
             if (cache) {
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C027614());
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$14(this));
                 return;
             }
-            final TL_messages_getFeaturedStickers req = new TL_messages_getFeaturedStickers();
+            TL_messages_getFeaturedStickers req = new TL_messages_getFeaturedStickers();
             req.hash = force ? 0 : this.loadFeaturedHash;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (response instanceof TL_messages_featuredStickers) {
-                                TL_messages_featuredStickers res = response;
-                                DataQuery.this.processLoadedFeaturedStickers(res.sets, res.unread, false, (int) (System.currentTimeMillis() / 1000), res.hash);
-                                return;
-                            }
-                            DataQuery.this.processLoadedFeaturedStickers(null, null, false, (int) (System.currentTimeMillis() / 1000), req.hash);
-                        }
-                    });
-                }
-            });
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$15(this, req));
         }
     }
 
-    private void processLoadedFeaturedStickers(ArrayList<StickerSetCovered> res, ArrayList<Long> unreadStickers, boolean cache, int date, int hash) {
-        AndroidUtilities.runOnUIThread(new C027816());
-        final boolean z = cache;
-        final ArrayList<StickerSetCovered> arrayList = res;
-        final int i = date;
-        final int i2 = hash;
-        final ArrayList<Long> arrayList2 = unreadStickers;
-        Utilities.stageQueue.postRunnable(new Runnable() {
-
-            /* renamed from: org.telegram.messenger.DataQuery$17$1 */
-            class C02791 implements Runnable {
-                C02791() {
-                }
-
-                public void run() {
-                    if (!(arrayList == null || i2 == 0)) {
-                        DataQuery.this.loadFeaturedHash = i2;
-                    }
-                    DataQuery.this.loadFeaturedStickers(false, false);
-                }
-            }
-
-            /* renamed from: org.telegram.messenger.DataQuery$17$3 */
-            class C02813 implements Runnable {
-                C02813() {
-                }
-
-                public void run() {
-                    DataQuery.this.loadFeaturedDate = i;
-                }
-            }
-
-            public void run() {
-                long j = 1000;
-                if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    Runnable c02791 = new C02791();
-                    if (arrayList != null || z) {
-                        j = 0;
-                    }
-                    AndroidUtilities.runOnUIThread(c02791, j);
-                    if (arrayList == null) {
-                        return;
-                    }
-                }
-                if (arrayList != null) {
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x008b  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x0092  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$loadFeaturedStickers$17$DataQuery() {
+        Throwable e;
+        Throwable th;
+        ArrayList<StickerSetCovered> newStickerArray = null;
+        ArrayList<Long> unread = new ArrayList();
+        int date = 0;
+        int hash = 0;
+        SQLiteCursor cursor = null;
+        try {
+            cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT data, unread, date, hash FROM stickers_featured WHERE 1", new Object[0]);
+            if (cursor.next()) {
+                int count;
+                int a;
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    ArrayList<StickerSetCovered> newStickerArray2 = new ArrayList();
                     try {
-                        final ArrayList<StickerSetCovered> stickerSetsNew = new ArrayList();
-                        final LongSparseArray<StickerSetCovered> stickerSetsByIdNew = new LongSparseArray();
-                        for (int a = 0; a < arrayList.size(); a++) {
-                            StickerSetCovered stickerSet = (StickerSetCovered) arrayList.get(a);
-                            stickerSetsNew.add(stickerSet);
-                            stickerSetsByIdNew.put(stickerSet.set.f111id, stickerSet);
+                        count = data.readInt32(false);
+                        for (a = 0; a < count; a++) {
+                            newStickerArray2.add(StickerSetCovered.TLdeserialize(data, data.readInt32(false), false));
                         }
-                        if (!z) {
-                            DataQuery.this.putFeaturedStickersToCache(stickerSetsNew, arrayList2, i, i2);
+                        data.reuse();
+                        newStickerArray = newStickerArray2;
+                    } catch (Throwable th2) {
+                        th = th2;
+                        newStickerArray = newStickerArray2;
+                        if (cursor != null) {
+                            cursor.dispose();
                         }
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                DataQuery.this.unreadStickerSets = arrayList2;
-                                DataQuery.this.featuredStickerSetsById = stickerSetsByIdNew;
-                                DataQuery.this.featuredStickerSets = stickerSetsNew;
-                                DataQuery.this.loadFeaturedHash = i2;
-                                DataQuery.this.loadFeaturedDate = i;
-                                DataQuery.this.loadStickers(3, true, false);
-                                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.featuredStickersDidLoaded, new Object[0]);
-                            }
-                        });
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        throw th;
                     }
-                } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C02813());
-                    DataQuery.this.putFeaturedStickersToCache(null, null, i, 0);
                 }
+                data = cursor.byteBufferValue(1);
+                if (data != null) {
+                    count = data.readInt32(false);
+                    for (a = 0; a < count; a++) {
+                        unread.add(Long.valueOf(data.readInt64(false)));
+                    }
+                    data.reuse();
+                }
+                date = cursor.intValue(2);
+                hash = calcFeaturedStickersHash(newStickerArray);
             }
-        });
+            if (cursor != null) {
+                cursor.dispose();
+            }
+        } catch (Throwable th3) {
+            e = th3;
+            FileLog.m13e(e);
+            if (cursor != null) {
+            }
+            processLoadedFeaturedStickers(newStickerArray, unread, true, date, hash);
+        }
+        processLoadedFeaturedStickers(newStickerArray, unread, true, date, hash);
+    }
+
+    final /* synthetic */ void lambda$loadFeaturedStickers$19$DataQuery(TL_messages_getFeaturedStickers req, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$106(this, response, req));
+    }
+
+    final /* synthetic */ void lambda$null$18$DataQuery(TLObject response, TL_messages_getFeaturedStickers req) {
+        if (response instanceof TL_messages_featuredStickers) {
+            TL_messages_featuredStickers res = (TL_messages_featuredStickers) response;
+            processLoadedFeaturedStickers(res.sets, res.unread, false, (int) (System.currentTimeMillis() / 1000), res.hash);
+            return;
+        }
+        processLoadedFeaturedStickers(null, null, false, (int) (System.currentTimeMillis() / 1000), req.hash);
+    }
+
+    private void processLoadedFeaturedStickers(ArrayList<StickerSetCovered> res, ArrayList<Long> unreadStickers, boolean cache, int date, int hash) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$16(this));
+        Utilities.stageQueue.postRunnable(new DataQuery$$Lambda$17(this, cache, res, date, hash, unreadStickers));
+    }
+
+    final /* synthetic */ void lambda$processLoadedFeaturedStickers$20$DataQuery() {
+        this.loadingFeaturedStickers = false;
+        this.featuredStickersLoaded = true;
+    }
+
+    final /* synthetic */ void lambda$processLoadedFeaturedStickers$24$DataQuery(boolean cache, ArrayList res, int date, int hash, ArrayList unreadStickers) {
+        if ((cache && (res == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) date)) >= 3600)) || (!cache && res == null && hash == 0)) {
+            Runnable dataQuery$$Lambda$103 = new DataQuery$$Lambda$103(this, res, hash);
+            long j = (res != null || cache) ? 0 : 1000;
+            AndroidUtilities.runOnUIThread(dataQuery$$Lambda$103, j);
+            if (res == null) {
+                return;
+            }
+        }
+        if (res != null) {
+            try {
+                ArrayList<StickerSetCovered> stickerSetsNew = new ArrayList();
+                LongSparseArray<StickerSetCovered> stickerSetsByIdNew = new LongSparseArray();
+                for (int a = 0; a < res.size(); a++) {
+                    StickerSetCovered stickerSet = (StickerSetCovered) res.get(a);
+                    stickerSetsNew.add(stickerSet);
+                    stickerSetsByIdNew.put(stickerSet.set.f109id, stickerSet);
+                }
+                if (!cache) {
+                    putFeaturedStickersToCache(stickerSetsNew, unreadStickers, date, hash);
+                }
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$104(this, unreadStickers, stickerSetsByIdNew, stickerSetsNew, hash, date));
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+        } else if (!cache) {
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$105(this, date));
+            putFeaturedStickersToCache(null, null, date, 0);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$21$DataQuery(ArrayList res, int hash) {
+        if (!(res == null || hash == 0)) {
+            this.loadFeaturedHash = hash;
+        }
+        loadFeaturedStickers(false, false);
+    }
+
+    final /* synthetic */ void lambda$null$22$DataQuery(ArrayList unreadStickers, LongSparseArray stickerSetsByIdNew, ArrayList stickerSetsNew, int hash, int date) {
+        this.unreadStickerSets = unreadStickers;
+        this.featuredStickerSetsById = stickerSetsByIdNew;
+        this.featuredStickerSets = stickerSetsNew;
+        this.loadFeaturedHash = hash;
+        this.loadFeaturedDate = date;
+        loadStickers(3, true, false);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.featuredStickersDidLoad, new Object[0]);
+    }
+
+    final /* synthetic */ void lambda$null$23$DataQuery(int date) {
+        this.loadFeaturedDate = date;
     }
 
     private void putFeaturedStickersToCache(ArrayList<StickerSetCovered> stickers, ArrayList<Long> unreadStickers, int date, int hash) {
-        final ArrayList<StickerSetCovered> stickersFinal = stickers != null ? new ArrayList(stickers) : null;
-        final ArrayList<Long> arrayList = unreadStickers;
-        final int i = date;
-        final int i2 = hash;
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    SQLitePreparedStatement state;
-                    if (stickersFinal != null) {
-                        int a;
-                        state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO stickers_featured VALUES(?, ?, ?, ?, ?)");
-                        state.requery();
-                        int size = 4;
-                        for (a = 0; a < stickersFinal.size(); a++) {
-                            size += ((StickerSetCovered) stickersFinal.get(a)).getObjectSize();
-                        }
-                        NativeByteBuffer data = new NativeByteBuffer(size);
-                        NativeByteBuffer data2 = new NativeByteBuffer((arrayList.size() * 8) + 4);
-                        data.writeInt32(stickersFinal.size());
-                        for (a = 0; a < stickersFinal.size(); a++) {
-                            ((StickerSetCovered) stickersFinal.get(a)).serializeToStream(data);
-                        }
-                        data2.writeInt32(arrayList.size());
-                        for (a = 0; a < arrayList.size(); a++) {
-                            data2.writeInt64(((Long) arrayList.get(a)).longValue());
-                        }
-                        state.bindInteger(1, 1);
-                        state.bindByteBuffer(2, data);
-                        state.bindByteBuffer(3, data2);
-                        state.bindInteger(4, i);
-                        state.bindInteger(5, i2);
-                        state.step();
-                        data.reuse();
-                        data2.reuse();
-                        state.dispose();
-                        return;
-                    }
-                    state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("UPDATE stickers_featured SET date = ?");
-                    state.requery();
-                    state.bindInteger(1, i);
-                    state.step();
-                    state.dispose();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$18(this, stickers != null ? new ArrayList(stickers) : null, unreadStickers, date, hash));
+    }
+
+    final /* synthetic */ void lambda$putFeaturedStickersToCache$25$DataQuery(ArrayList stickersFinal, ArrayList unreadStickers, int date, int hash) {
+        SQLitePreparedStatement state;
+        if (stickersFinal != null) {
+            try {
+                int a;
+                state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO stickers_featured VALUES(?, ?, ?, ?, ?)");
+                state.requery();
+                int size = 4;
+                for (a = 0; a < stickersFinal.size(); a++) {
+                    size += ((StickerSetCovered) stickersFinal.get(a)).getObjectSize();
                 }
+                NativeByteBuffer data = new NativeByteBuffer(size);
+                NativeByteBuffer data2 = new NativeByteBuffer((unreadStickers.size() * 8) + 4);
+                data.writeInt32(stickersFinal.size());
+                for (a = 0; a < stickersFinal.size(); a++) {
+                    ((StickerSetCovered) stickersFinal.get(a)).serializeToStream(data);
+                }
+                data2.writeInt32(unreadStickers.size());
+                for (a = 0; a < unreadStickers.size(); a++) {
+                    data2.writeInt64(((Long) unreadStickers.get(a)).longValue());
+                }
+                state.bindInteger(1, 1);
+                state.bindByteBuffer(2, data);
+                state.bindByteBuffer(3, data2);
+                state.bindInteger(4, date);
+                state.bindInteger(5, hash);
+                state.step();
+                data.reuse();
+                data2.reuse();
+                state.dispose();
+                return;
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+                return;
             }
-        });
+        }
+        state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("UPDATE stickers_featured SET date = ?");
+        state.requery();
+        state.bindInteger(1, date);
+        state.step();
+        state.dispose();
     }
 
     private int calcFeaturedStickersHash(ArrayList<StickerSetCovered> sets) {
@@ -1476,8 +1180,8 @@ public class DataQuery {
         for (int a = 0; a < sets.size(); a++) {
             StickerSet set = ((StickerSetCovered) sets.get(a)).set;
             if (!set.archived) {
-                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.f111id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.f111id))) % 2147483648L;
-                if (this.unreadStickerSets.contains(Long.valueOf(set.f111id))) {
+                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.f109id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.f109id))) % 2147483648L;
+                if (this.unreadStickerSets.contains(Long.valueOf(set.f109id))) {
                     acc = (((acc * 20261) + 2147483648L) + 1) % 2147483648L;
                 }
             }
@@ -1489,12 +1193,15 @@ public class DataQuery {
         if (!this.unreadStickerSets.isEmpty()) {
             this.unreadStickerSets.clear();
             this.loadFeaturedHash = calcFeaturedStickersHash(this.featuredStickerSets);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.featuredStickersDidLoaded, new Object[0]);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.featuredStickersDidLoad, new Object[0]);
             putFeaturedStickersToCache(this.featuredStickerSets, this.unreadStickerSets, this.loadFeaturedDate, this.loadFeaturedHash);
             if (query) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_readFeaturedStickers(), new C035719());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_readFeaturedStickers(), DataQuery$$Lambda$19.$instance);
             }
         }
+    }
+
+    static final /* synthetic */ void lambda$markFaturedStickersAsRead$26$DataQuery(TLObject response, TL_error error) {
     }
 
     public int getFeaturesStickersHashWithoutUnread() {
@@ -1502,35 +1209,38 @@ public class DataQuery {
         for (int a = 0; a < this.featuredStickerSets.size(); a++) {
             StickerSet set = ((StickerSetCovered) this.featuredStickerSets.get(a)).set;
             if (!set.archived) {
-                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.f111id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.f111id))) % 2147483648L;
+                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.f109id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.f109id))) % 2147483648L;
             }
         }
         return (int) acc;
     }
 
-    public void markFaturedStickersByIdAsRead(final long id) {
+    public void markFaturedStickersByIdAsRead(long id) {
         if (this.unreadStickerSets.contains(Long.valueOf(id)) && !this.readingStickerSets.contains(Long.valueOf(id))) {
             this.readingStickerSets.add(Long.valueOf(id));
             TL_messages_readFeaturedStickers req = new TL_messages_readFeaturedStickers();
-            req.f153id.add(Long.valueOf(id));
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C035920());
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    DataQuery.this.unreadStickerSets.remove(Long.valueOf(id));
-                    DataQuery.this.readingStickerSets.remove(Long.valueOf(id));
-                    DataQuery.this.loadFeaturedHash = DataQuery.this.calcFeaturedStickersHash(DataQuery.this.featuredStickerSets);
-                    NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.featuredStickersDidLoaded, new Object[0]);
-                    DataQuery.this.putFeaturedStickersToCache(DataQuery.this.featuredStickerSets, DataQuery.this.unreadStickerSets, DataQuery.this.loadFeaturedDate, DataQuery.this.loadFeaturedHash);
-                }
-            }, 1000);
+            req.f151id.add(Long.valueOf(id));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, DataQuery$$Lambda$20.$instance);
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$21(this, id), 1000);
         }
+    }
+
+    static final /* synthetic */ void lambda$markFaturedStickersByIdAsRead$27$DataQuery(TLObject response, TL_error error) {
+    }
+
+    final /* synthetic */ void lambda$markFaturedStickersByIdAsRead$28$DataQuery(long id) {
+        this.unreadStickerSets.remove(Long.valueOf(id));
+        this.readingStickerSets.remove(Long.valueOf(id));
+        this.loadFeaturedHash = calcFeaturedStickersHash(this.featuredStickerSets);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.featuredStickersDidLoad, new Object[0]);
+        putFeaturedStickersToCache(this.featuredStickerSets, this.unreadStickerSets, this.loadFeaturedDate, this.loadFeaturedHash);
     }
 
     public int getArchivedStickersCount(int type) {
         return this.archivedStickersCount[type];
     }
 
-    public void loadArchivedStickersCount(final int type, boolean cache) {
+    public void loadArchivedStickersCount(int type, boolean cache) {
         boolean z = true;
         if (cache) {
             int count = MessagesController.getNotificationsSettings(this.currentAccount).getInt("archivedStickersCount" + type, -1);
@@ -1539,7 +1249,7 @@ public class DataQuery {
                 return;
             }
             this.archivedStickersCount[type] = count;
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.archivedStickersCountDidLoaded, Integer.valueOf(type));
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.archivedStickersCountDidLoad, Integer.valueOf(type));
             return;
         }
         TL_messages_getArchivedStickers req = new TL_messages_getArchivedStickers();
@@ -1548,66 +1258,45 @@ public class DataQuery {
             z = false;
         }
         req.masks = z;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-            public void run(final TLObject response, final TL_error error) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        if (error == null) {
-                            TL_messages_archivedStickers res = response;
-                            DataQuery.this.archivedStickersCount[type] = res.count;
-                            MessagesController.getNotificationsSettings(DataQuery.this.currentAccount).edit().putInt("archivedStickersCount" + type, res.count).commit();
-                            NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.archivedStickersCountDidLoaded, Integer.valueOf(type));
-                        }
-                    }
-                });
-            }
-        });
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$22(this, type));
+    }
+
+    final /* synthetic */ void lambda$loadArchivedStickersCount$30$DataQuery(int type, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$102(this, error, response, type));
+    }
+
+    final /* synthetic */ void lambda$null$29$DataQuery(TL_error error, TLObject response, int type) {
+        if (error == null) {
+            TL_messages_archivedStickers res = (TL_messages_archivedStickers) response;
+            this.archivedStickersCount[type] = res.count;
+            MessagesController.getNotificationsSettings(this.currentAccount).edit().putInt("archivedStickersCount" + type, res.count).commit();
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.archivedStickersCountDidLoad, Integer.valueOf(type));
+        }
     }
 
     private void processLoadStickersResponse(int type, TL_messages_allStickers res) {
-        final ArrayList<TL_messages_stickerSet> newStickerArray = new ArrayList();
+        ArrayList<TL_messages_stickerSet> newStickerArray = new ArrayList();
         if (res.sets.isEmpty()) {
             processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
             return;
         }
         LongSparseArray<TL_messages_stickerSet> newStickerSets = new LongSparseArray();
         for (int a = 0; a < res.sets.size(); a++) {
-            final StickerSet stickerSet = (StickerSet) res.sets.get(a);
-            TL_messages_stickerSet oldSet = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.f111id);
+            StickerSet stickerSet = (StickerSet) res.sets.get(a);
+            TL_messages_stickerSet oldSet = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.f109id);
             if (oldSet == null || oldSet.set.hash != stickerSet.hash) {
                 newStickerArray.add(null);
-                final int index = a;
+                int index = a;
                 TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                 req.stickerset = new TL_inputStickerSetID();
-                req.stickerset.f103id = stickerSet.f111id;
+                req.stickerset.f103id = stickerSet.f109id;
                 req.stickerset.access_hash = stickerSet.access_hash;
-                final LongSparseArray<TL_messages_stickerSet> longSparseArray = newStickerSets;
-                final TL_messages_allStickers tL_messages_allStickers = res;
-                final int i = type;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                    public void run(final TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                TL_messages_stickerSet res1 = response;
-                                newStickerArray.set(index, res1);
-                                longSparseArray.put(stickerSet.f111id, res1);
-                                if (longSparseArray.size() == tL_messages_allStickers.sets.size()) {
-                                    for (int a = 0; a < newStickerArray.size(); a++) {
-                                        if (newStickerArray.get(a) == null) {
-                                            newStickerArray.remove(a);
-                                        }
-                                    }
-                                    DataQuery.this.processLoadedStickers(i, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), tL_messages_allStickers.hash);
-                                }
-                            }
-                        });
-                    }
-                });
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$23(this, newStickerArray, index, newStickerSets, stickerSet, res, type));
             } else {
                 oldSet.set.archived = stickerSet.archived;
                 oldSet.set.installed = stickerSet.installed;
                 oldSet.set.official = stickerSet.official;
-                newStickerSets.put(oldSet.set.f111id, oldSet);
+                newStickerSets.put(oldSet.set.f109id, oldSet);
                 newStickerArray.add(oldSet);
                 if (newStickerSets.size() == res.sets.size()) {
                     processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
@@ -1616,7 +1305,25 @@ public class DataQuery {
         }
     }
 
-    public void loadStickers(final int type, boolean cache, boolean force) {
+    final /* synthetic */ void lambda$processLoadStickersResponse$32$DataQuery(ArrayList newStickerArray, int index, LongSparseArray newStickerSets, StickerSet stickerSet, TL_messages_allStickers res, int type, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$101(this, response, newStickerArray, index, newStickerSets, stickerSet, res, type));
+    }
+
+    final /* synthetic */ void lambda$null$31$DataQuery(TLObject response, ArrayList newStickerArray, int index, LongSparseArray newStickerSets, StickerSet stickerSet, TL_messages_allStickers res, int type) {
+        TL_messages_stickerSet res1 = (TL_messages_stickerSet) response;
+        newStickerArray.set(index, res1);
+        newStickerSets.put(stickerSet.f109id, res1);
+        if (newStickerSets.size() == res.sets.size()) {
+            for (int a1 = 0; a1 < newStickerArray.size(); a1++) {
+                if (newStickerArray.get(a1) == null) {
+                    newStickerArray.remove(a1);
+                }
+            }
+            processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
+        }
+    }
+
+    public void loadStickers(int type, boolean cache, boolean force) {
         int hash = 0;
         if (!this.loadingStickers[type]) {
             if (type != 3) {
@@ -1626,50 +1333,7 @@ public class DataQuery {
             }
             this.loadingStickers[type] = true;
             if (cache) {
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                    /* JADX WARNING: Removed duplicated region for block: B:28:0x0083  */
-                    /* Code decompiled incorrectly, please refer to instructions dump. */
-                    public void run() {
-                        Throwable e;
-                        Throwable th;
-                        ArrayList<TL_messages_stickerSet> newStickerArray = null;
-                        int date = 0;
-                        int hash = 0;
-                        SQLiteCursor cursor = null;
-                        try {
-                            cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized("SELECT data, date, hash FROM stickers_v2 WHERE id = " + (type + 1), new Object[0]);
-                            if (cursor.next()) {
-                                NativeByteBuffer data = cursor.byteBufferValue(0);
-                                if (data != null) {
-                                    ArrayList<TL_messages_stickerSet> newStickerArray2 = new ArrayList();
-                                    try {
-                                        int count = data.readInt32(false);
-                                        for (int a = 0; a < count; a++) {
-                                            newStickerArray2.add(TL_messages_stickerSet.TLdeserialize(data, data.readInt32(false), false));
-                                        }
-                                        data.reuse();
-                                        newStickerArray = newStickerArray2;
-                                    } catch (Throwable th2) {
-                                        th = th2;
-                                        newStickerArray = newStickerArray2;
-                                        if (cursor != null) {
-                                            cursor.dispose();
-                                        }
-                                        throw th;
-                                    }
-                                }
-                                date = cursor.intValue(1);
-                                hash = DataQuery.calcStickersHash(newStickerArray);
-                            }
-                            if (cursor != null) {
-                                cursor.dispose();
-                            }
-                        } catch (Throwable th3) {
-                            e = th3;
-                        }
-                        DataQuery.this.processLoadedStickers(type, newStickerArray, true, date, hash);
-                    }
-                });
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$24(this, type));
             } else if (type == 3) {
                 TL_messages_allStickers response = new TL_messages_allStickers();
                 response.hash = this.loadFeaturedHash;
@@ -1695,64 +1359,104 @@ public class DataQuery {
                     }
                     tL_messages_getMaskStickers.hash = hash;
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                    public void run(final TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (response instanceof TL_messages_allStickers) {
-                                    DataQuery.this.processLoadStickersResponse(type, (TL_messages_allStickers) response);
-                                } else {
-                                    DataQuery.this.processLoadedStickers(type, null, false, (int) (System.currentTimeMillis() / 1000), hash);
-                                }
-                            }
-                        });
-                    }
-                });
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$25(this, type, hash));
             }
         }
     }
 
-    private void putStickersToCache(int type, ArrayList<TL_messages_stickerSet> stickers, int date, int hash) {
-        final ArrayList<TL_messages_stickerSet> stickersFinal = stickers != null ? new ArrayList(stickers) : null;
-        final int i = type;
-        final int i2 = date;
-        final int i3 = hash;
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    SQLitePreparedStatement state;
-                    if (stickersFinal != null) {
-                        int a;
-                        state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO stickers_v2 VALUES(?, ?, ?, ?)");
-                        state.requery();
-                        int size = 4;
-                        for (a = 0; a < stickersFinal.size(); a++) {
-                            size += ((TL_messages_stickerSet) stickersFinal.get(a)).getObjectSize();
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x007b  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$loadStickers$33$DataQuery(int type) {
+        Throwable e;
+        Throwable th;
+        ArrayList<TL_messages_stickerSet> newStickerArray = null;
+        int date = 0;
+        int hash = 0;
+        SQLiteCursor cursor = null;
+        try {
+            cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT data, date, hash FROM stickers_v2 WHERE id = " + (type + 1), new Object[0]);
+            if (cursor.next()) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    ArrayList<TL_messages_stickerSet> newStickerArray2 = new ArrayList();
+                    try {
+                        int count = data.readInt32(false);
+                        for (int a = 0; a < count; a++) {
+                            newStickerArray2.add(TL_messages_stickerSet.TLdeserialize(data, data.readInt32(false), false));
                         }
-                        NativeByteBuffer data = new NativeByteBuffer(size);
-                        data.writeInt32(stickersFinal.size());
-                        for (a = 0; a < stickersFinal.size(); a++) {
-                            ((TL_messages_stickerSet) stickersFinal.get(a)).serializeToStream(data);
-                        }
-                        state.bindInteger(1, i + 1);
-                        state.bindByteBuffer(2, data);
-                        state.bindInteger(3, i2);
-                        state.bindInteger(4, i3);
-                        state.step();
                         data.reuse();
-                        state.dispose();
-                        return;
+                        newStickerArray = newStickerArray2;
+                    } catch (Throwable th2) {
+                        th = th2;
+                        newStickerArray = newStickerArray2;
+                        if (cursor != null) {
+                            cursor.dispose();
+                        }
+                        throw th;
                     }
-                    state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("UPDATE stickers_v2 SET date = ?");
-                    state.requery();
-                    state.bindInteger(1, i2);
-                    state.step();
-                    state.dispose();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
                 }
+                date = cursor.intValue(1);
+                hash = calcStickersHash(newStickerArray);
             }
-        });
+            if (cursor != null) {
+                cursor.dispose();
+            }
+        } catch (Throwable th3) {
+            e = th3;
+        }
+        processLoadedStickers(type, newStickerArray, true, date, hash);
+    }
+
+    final /* synthetic */ void lambda$loadStickers$35$DataQuery(int type, int hash, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$100(this, response, type, hash));
+    }
+
+    final /* synthetic */ void lambda$null$34$DataQuery(TLObject response, int type, int hash) {
+        if (response instanceof TL_messages_allStickers) {
+            processLoadStickersResponse(type, (TL_messages_allStickers) response);
+            return;
+        }
+        processLoadedStickers(type, null, false, (int) (System.currentTimeMillis() / 1000), hash);
+    }
+
+    private void putStickersToCache(int type, ArrayList<TL_messages_stickerSet> stickers, int date, int hash) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$26(this, stickers != null ? new ArrayList(stickers) : null, type, date, hash));
+    }
+
+    final /* synthetic */ void lambda$putStickersToCache$36$DataQuery(ArrayList stickersFinal, int type, int date, int hash) {
+        SQLitePreparedStatement state;
+        if (stickersFinal != null) {
+            try {
+                int a;
+                state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO stickers_v2 VALUES(?, ?, ?, ?)");
+                state.requery();
+                int size = 4;
+                for (a = 0; a < stickersFinal.size(); a++) {
+                    size += ((TL_messages_stickerSet) stickersFinal.get(a)).getObjectSize();
+                }
+                NativeByteBuffer data = new NativeByteBuffer(size);
+                data.writeInt32(stickersFinal.size());
+                for (a = 0; a < stickersFinal.size(); a++) {
+                    ((TL_messages_stickerSet) stickersFinal.get(a)).serializeToStream(data);
+                }
+                state.bindInteger(1, type + 1);
+                state.bindByteBuffer(2, data);
+                state.bindInteger(3, date);
+                state.bindInteger(4, hash);
+                state.step();
+                data.reuse();
+                state.dispose();
+                return;
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+                return;
+            }
+        }
+        state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("UPDATE stickers_v2 SET date = ?");
+        state.requery();
+        state.bindInteger(1, date);
+        state.step();
+        state.dispose();
     }
 
     public String getStickerSetName(long setId) {
@@ -1791,241 +1495,207 @@ public class DataQuery {
         return (int) acc;
     }
 
-    private void processLoadedStickers(final int type, ArrayList<TL_messages_stickerSet> res, boolean cache, int date, int hash) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                DataQuery.this.loadingStickers[type] = false;
-                DataQuery.this.stickersLoaded[type] = true;
+    private void processLoadedStickers(int type, ArrayList<TL_messages_stickerSet> res, boolean cache, int date, int hash) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$27(this, type));
+        Utilities.stageQueue.postRunnable(new DataQuery$$Lambda$28(this, cache, res, date, hash, type));
+    }
+
+    final /* synthetic */ void lambda$processLoadedStickers$37$DataQuery(int type) {
+        this.loadingStickers[type] = false;
+        this.stickersLoaded[type] = true;
+    }
+
+    final /* synthetic */ void lambda$processLoadedStickers$41$DataQuery(boolean cache, ArrayList res, int date, int hash, int type) {
+        if ((cache && (res == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) date)) >= 3600)) || (!cache && res == null && hash == 0)) {
+            Runnable dataQuery$$Lambda$97 = new DataQuery$$Lambda$97(this, res, hash, type);
+            long j = (res != null || cache) ? 0 : 1000;
+            AndroidUtilities.runOnUIThread(dataQuery$$Lambda$97, j);
+            if (res == null) {
+                return;
             }
-        });
-        final boolean z = cache;
-        final ArrayList<TL_messages_stickerSet> arrayList = res;
-        final int i = date;
-        final int i2 = hash;
-        final int i3 = type;
-        Utilities.stageQueue.postRunnable(new Runnable() {
-
-            /* renamed from: org.telegram.messenger.DataQuery$28$1 */
-            class C02911 implements Runnable {
-                C02911() {
-                }
-
-                public void run() {
-                    if (!(arrayList == null || i2 == 0)) {
-                        DataQuery.this.loadHash[i3] = i2;
-                    }
-                    DataQuery.this.loadStickers(i3, false, false);
-                }
-            }
-
-            /* renamed from: org.telegram.messenger.DataQuery$28$3 */
-            class C02933 implements Runnable {
-                C02933() {
-                }
-
-                public void run() {
-                    DataQuery.this.loadDate[i3] = i;
-                }
-            }
-
-            public void run() {
-                if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    C02911 c02911 = new C02911();
-                    long j = (arrayList != null || z) ? 0 : 1000;
-                    AndroidUtilities.runOnUIThread(c02911, j);
-                    if (arrayList == null) {
-                        return;
-                    }
-                }
-                if (arrayList != null) {
-                    try {
-                        final ArrayList<TL_messages_stickerSet> stickerSetsNew = new ArrayList();
-                        final LongSparseArray<TL_messages_stickerSet> stickerSetsByIdNew = new LongSparseArray();
-                        final HashMap<String, TL_messages_stickerSet> stickerSetsByNameNew = new HashMap();
-                        final LongSparseArray<String> stickersByEmojiNew = new LongSparseArray();
-                        LongSparseArray<Document> stickersByIdNew = new LongSparseArray();
-                        final HashMap<String, ArrayList<Document>> allStickersNew = new HashMap();
-                        for (int a = 0; a < arrayList.size(); a++) {
-                            TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) arrayList.get(a);
-                            if (stickerSet != null) {
-                                int b;
-                                stickerSetsNew.add(stickerSet);
-                                stickerSetsByIdNew.put(stickerSet.set.f111id, stickerSet);
-                                stickerSetsByNameNew.put(stickerSet.set.short_name, stickerSet);
-                                for (b = 0; b < stickerSet.documents.size(); b++) {
-                                    Document document = (Document) stickerSet.documents.get(b);
-                                    if (!(document == null || (document instanceof TL_documentEmpty))) {
-                                        stickersByIdNew.put(document.f84id, document);
+        }
+        if (res != null) {
+            try {
+                ArrayList<TL_messages_stickerSet> stickerSetsNew = new ArrayList();
+                LongSparseArray<TL_messages_stickerSet> stickerSetsByIdNew = new LongSparseArray();
+                HashMap<String, TL_messages_stickerSet> stickerSetsByNameNew = new HashMap();
+                LongSparseArray<String> stickersByEmojiNew = new LongSparseArray();
+                LongSparseArray<Document> stickersByIdNew = new LongSparseArray();
+                HashMap<String, ArrayList<Document>> allStickersNew = new HashMap();
+                for (int a = 0; a < res.size(); a++) {
+                    TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) res.get(a);
+                    if (stickerSet != null) {
+                        int b;
+                        stickerSetsNew.add(stickerSet);
+                        stickerSetsByIdNew.put(stickerSet.set.f109id, stickerSet);
+                        stickerSetsByNameNew.put(stickerSet.set.short_name, stickerSet);
+                        for (b = 0; b < stickerSet.documents.size(); b++) {
+                            Document document = (Document) stickerSet.documents.get(b);
+                            if (!(document == null || (document instanceof TL_documentEmpty))) {
+                                stickersByIdNew.put(document.f84id, document);
+                            }
+                        }
+                        if (!stickerSet.set.archived) {
+                            for (b = 0; b < stickerSet.packs.size(); b++) {
+                                TL_stickerPack stickerPack = (TL_stickerPack) stickerSet.packs.get(b);
+                                if (!(stickerPack == null || stickerPack.emoticon == null)) {
+                                    stickerPack.emoticon = stickerPack.emoticon.replace("\ufe0f", TtmlNode.ANONYMOUS_REGION_ID);
+                                    ArrayList<Document> arrayList = (ArrayList) allStickersNew.get(stickerPack.emoticon);
+                                    if (arrayList == null) {
+                                        arrayList = new ArrayList();
+                                        allStickersNew.put(stickerPack.emoticon, arrayList);
                                     }
-                                }
-                                if (!stickerSet.set.archived) {
-                                    for (b = 0; b < stickerSet.packs.size(); b++) {
-                                        TL_stickerPack stickerPack = (TL_stickerPack) stickerSet.packs.get(b);
-                                        if (!(stickerPack == null || stickerPack.emoticon == null)) {
-                                            stickerPack.emoticon = stickerPack.emoticon.replace("\ufe0f", TtmlNode.ANONYMOUS_REGION_ID);
-                                            ArrayList<Document> arrayList = (ArrayList) allStickersNew.get(stickerPack.emoticon);
-                                            if (arrayList == null) {
-                                                arrayList = new ArrayList();
-                                                allStickersNew.put(stickerPack.emoticon, arrayList);
-                                            }
-                                            for (int c = 0; c < stickerPack.documents.size(); c++) {
-                                                Long id = (Long) stickerPack.documents.get(c);
-                                                if (stickersByEmojiNew.indexOfKey(id.longValue()) < 0) {
-                                                    stickersByEmojiNew.put(id.longValue(), stickerPack.emoticon);
-                                                }
-                                                Document sticker = (Document) stickersByIdNew.get(id.longValue());
-                                                if (sticker != null) {
-                                                    arrayList.add(sticker);
-                                                }
-                                            }
+                                    for (int c = 0; c < stickerPack.documents.size(); c++) {
+                                        Long id = (Long) stickerPack.documents.get(c);
+                                        if (stickersByEmojiNew.indexOfKey(id.longValue()) < 0) {
+                                            stickersByEmojiNew.put(id.longValue(), stickerPack.emoticon);
+                                        }
+                                        Document sticker = (Document) stickersByIdNew.get(id.longValue());
+                                        if (sticker != null) {
+                                            arrayList.add(sticker);
                                         }
                                     }
                                 }
                             }
                         }
-                        if (!z) {
-                            DataQuery.this.putStickersToCache(i3, stickerSetsNew, i, i2);
-                        }
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                int a;
-                                for (a = 0; a < DataQuery.this.stickerSets[i3].size(); a++) {
-                                    StickerSet set = ((TL_messages_stickerSet) DataQuery.this.stickerSets[i3].get(a)).set;
-                                    DataQuery.this.stickerSetsById.remove(set.f111id);
-                                    DataQuery.this.installedStickerSetsById.remove(set.f111id);
-                                    DataQuery.this.stickerSetsByName.remove(set.short_name);
-                                }
-                                for (a = 0; a < stickerSetsByIdNew.size(); a++) {
-                                    DataQuery.this.stickerSetsById.put(stickerSetsByIdNew.keyAt(a), stickerSetsByIdNew.valueAt(a));
-                                    if (i3 != 3) {
-                                        DataQuery.this.installedStickerSetsById.put(stickerSetsByIdNew.keyAt(a), stickerSetsByIdNew.valueAt(a));
-                                    }
-                                }
-                                DataQuery.this.stickerSetsByName.putAll(stickerSetsByNameNew);
-                                DataQuery.this.stickerSets[i3] = stickerSetsNew;
-                                DataQuery.this.loadHash[i3] = i2;
-                                DataQuery.this.loadDate[i3] = i;
-                                if (i3 == 0) {
-                                    DataQuery.this.allStickers = allStickersNew;
-                                    DataQuery.this.stickersByEmoji = stickersByEmojiNew;
-                                } else if (i3 == 3) {
-                                    DataQuery.this.allStickersFeatured = allStickersNew;
-                                }
-                                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoaded, Integer.valueOf(i3));
-                            }
-                        });
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
                     }
-                } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C02933());
-                    DataQuery.this.putStickersToCache(i3, null, i, 0);
                 }
+                if (!cache) {
+                    putStickersToCache(type, stickerSetsNew, date, hash);
+                }
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$98(this, type, stickerSetsByIdNew, stickerSetsByNameNew, stickerSetsNew, hash, date, allStickersNew, stickersByEmojiNew));
+            } catch (Throwable e) {
+                FileLog.m13e(e);
             }
-        });
+        } else if (!cache) {
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$99(this, type, date));
+            putStickersToCache(type, null, date, 0);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$38$DataQuery(ArrayList res, int hash, int type) {
+        if (!(res == null || hash == 0)) {
+            this.loadHash[type] = hash;
+        }
+        loadStickers(type, false, false);
+    }
+
+    final /* synthetic */ void lambda$null$39$DataQuery(int type, LongSparseArray stickerSetsByIdNew, HashMap stickerSetsByNameNew, ArrayList stickerSetsNew, int hash, int date, HashMap allStickersNew, LongSparseArray stickersByEmojiNew) {
+        int a;
+        for (a = 0; a < this.stickerSets[type].size(); a++) {
+            StickerSet set = ((TL_messages_stickerSet) this.stickerSets[type].get(a)).set;
+            this.stickerSetsById.remove(set.f109id);
+            this.installedStickerSetsById.remove(set.f109id);
+            this.stickerSetsByName.remove(set.short_name);
+        }
+        for (a = 0; a < stickerSetsByIdNew.size(); a++) {
+            this.stickerSetsById.put(stickerSetsByIdNew.keyAt(a), stickerSetsByIdNew.valueAt(a));
+            if (type != 3) {
+                this.installedStickerSetsById.put(stickerSetsByIdNew.keyAt(a), stickerSetsByIdNew.valueAt(a));
+            }
+        }
+        this.stickerSetsByName.putAll(stickerSetsByNameNew);
+        this.stickerSets[type] = stickerSetsNew;
+        this.loadHash[type] = hash;
+        this.loadDate[type] = date;
+        if (type == 0) {
+            this.allStickers = allStickersNew;
+            this.stickersByEmoji = stickersByEmojiNew;
+        } else if (type == 3) {
+            this.allStickersFeatured = allStickersNew;
+        }
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(type));
+    }
+
+    final /* synthetic */ void lambda$null$40$DataQuery(int type, int date) {
+        this.loadDate[type] = date;
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:24:0x00c2  */
     /* JADX WARNING: Removed duplicated region for block: B:18:0x0085  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void removeStickersSet(final Context context, final StickerSet stickerSet, int hide, BaseFragment baseFragment, boolean showSettings) {
-        final int type = stickerSet.masks ? 1 : 0;
+    public void removeStickersSet(Context context, StickerSet stickerSet, int hide, BaseFragment baseFragment, boolean showSettings) {
+        int type = stickerSet.masks ? 1 : 0;
         TL_inputStickerSetID stickerSetID = new TL_inputStickerSetID();
         stickerSetID.access_hash = stickerSet.access_hash;
-        stickerSetID.f103id = stickerSet.f111id;
+        stickerSetID.f103id = stickerSet.f109id;
         if (hide != 0) {
             TL_messages_installStickerSet req;
-            final int i;
-            final BaseFragment baseFragment2;
-            final boolean z;
             stickerSet.archived = hide == 1;
             for (int a = 0; a < this.stickerSets[type].size(); a++) {
                 TL_messages_stickerSet set = (TL_messages_stickerSet) this.stickerSets[type].get(a);
-                if (set.set.f111id == stickerSet.f111id) {
+                if (set.set.f109id == stickerSet.f109id) {
                     this.stickerSets[type].remove(a);
                     if (hide == 2) {
                         this.stickerSets[type].add(0, set);
                     } else {
-                        this.stickerSetsById.remove(set.set.f111id);
-                        this.installedStickerSetsById.remove(set.set.f111id);
+                        this.stickerSetsById.remove(set.set.f109id);
+                        this.installedStickerSetsById.remove(set.set.f109id);
                         this.stickerSetsByName.remove(set.set.short_name);
                     }
                     this.loadHash[type] = calcStickersHash(this.stickerSets[type]);
                     putStickersToCache(type, this.stickerSets[type], this.loadDate[type], this.loadHash[type]);
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoaded, Integer.valueOf(type));
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(type));
                     req = new TL_messages_installStickerSet();
                     req.stickerset = stickerSetID;
                     req.archived = hide != 1;
-                    i = hide;
-                    baseFragment2 = baseFragment;
-                    z = showSettings;
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-
-                        /* renamed from: org.telegram.messenger.DataQuery$29$2 */
-                        class C02962 implements Runnable {
-                            C02962() {
-                            }
-
-                            public void run() {
-                                DataQuery.this.loadStickers(type, false, false);
-                            }
-                        }
-
-                        public void run(final TLObject response, TL_error error) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    if (response instanceof TL_messages_stickerSetInstallResultArchive) {
-                                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.needReloadArchivedStickers, Integer.valueOf(type));
-                                        if (i != 1 && baseFragment2 != null && baseFragment2.getParentActivity() != null) {
-                                            baseFragment2.showDialog(new StickersArchiveAlert(baseFragment2.getParentActivity(), z ? baseFragment2 : null, ((TL_messages_stickerSetInstallResultArchive) response).sets).create());
-                                        }
-                                    }
-                                }
-                            });
-                            AndroidUtilities.runOnUIThread(new C02962(), 1000);
-                        }
-                    });
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$29(this, type, hide, baseFragment, showSettings));
                     return;
                 }
             }
             this.loadHash[type] = calcStickersHash(this.stickerSets[type]);
             putStickersToCache(type, this.stickerSets[type], this.loadDate[type], this.loadHash[type]);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoaded, Integer.valueOf(type));
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(type));
             req = new TL_messages_installStickerSet();
             req.stickerset = stickerSetID;
             if (hide != 1) {
             }
             req.archived = hide != 1;
-            i = hide;
-            baseFragment2 = baseFragment;
-            z = showSettings;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, /* anonymous class already generated */);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$29(this, type, hide, baseFragment, showSettings));
             return;
         }
         TL_messages_uninstallStickerSet req2 = new TL_messages_uninstallStickerSet();
         req2.stickerset = stickerSetID;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new RequestDelegate() {
-            public void run(TLObject response, final TL_error error) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        try {
-                            if (error == null) {
-                                if (stickerSet.masks) {
-                                    Toast.makeText(context, LocaleController.getString("MasksRemoved", R.string.MasksRemoved), 0).show();
-                                } else {
-                                    Toast.makeText(context, LocaleController.getString("StickersRemoved", R.string.StickersRemoved), 0).show();
-                                }
-                                DataQuery.this.loadStickers(type, false, true);
-                            }
-                            Toast.makeText(context, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), 0).show();
-                            DataQuery.this.loadStickers(type, false, true);
-                        } catch (Throwable e) {
-                            FileLog.m14e(e);
-                        }
-                    }
-                });
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new DataQuery$$Lambda$30(this, stickerSet, context, type));
+    }
+
+    final /* synthetic */ void lambda$removeStickersSet$44$DataQuery(int type, int hide, BaseFragment baseFragment, boolean showSettings, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$95(this, response, type, hide, baseFragment, showSettings));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$96(this, type), 1000);
+    }
+
+    final /* synthetic */ void lambda$null$42$DataQuery(TLObject response, int type, int hide, BaseFragment baseFragment, boolean showSettings) {
+        if (response instanceof TL_messages_stickerSetInstallResultArchive) {
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.needReloadArchivedStickers, Integer.valueOf(type));
+            if (hide != 1 && baseFragment != null && baseFragment.getParentActivity() != null) {
+                baseFragment.showDialog(new StickersArchiveAlert(baseFragment.getParentActivity(), showSettings ? baseFragment : null, ((TL_messages_stickerSetInstallResultArchive) response).sets).create());
             }
-        });
+        }
+    }
+
+    final /* synthetic */ void lambda$null$43$DataQuery(int type) {
+        loadStickers(type, false, false);
+    }
+
+    final /* synthetic */ void lambda$removeStickersSet$46$DataQuery(StickerSet stickerSet, Context context, int type, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$94(this, error, stickerSet, context, type));
+    }
+
+    final /* synthetic */ void lambda$null$45$DataQuery(TL_error error, StickerSet stickerSet, Context context, int type) {
+        if (error == null) {
+            try {
+                if (stickerSet.masks) {
+                    Toast.makeText(context, LocaleController.getString("MasksRemoved", R.string.MasksRemoved), 0).show();
+                } else {
+                    Toast.makeText(context, LocaleController.getString("StickersRemoved", R.string.StickersRemoved), 0).show();
+                }
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+        } else {
+            Toast.makeText(context, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), 0).show();
+        }
+        loadStickers(type, false, true);
     }
 
     private int getMask() {
@@ -2048,8 +1718,7 @@ public class DataQuery {
     }
 
     private void searchMessagesInChat(String query, long dialog_id, long mergeDialogId, int guid, int direction, boolean internal, User user) {
-        final TL_messages_search req;
-        final long j;
+        TL_messages_search req;
         int max_id = 0;
         long queryWithDialog = dialog_id;
         boolean firstQuery = !internal;
@@ -2128,34 +1797,13 @@ public class DataQuery {
                     req.peer = inputPeer;
                     this.lastMergeDialogId = mergeDialogId;
                     req.limit = 1;
-                    req.f158q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+                    req.f156q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
                     if (user != null) {
                         req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                         req.flags |= 1;
                     }
                     req.filter = new TL_inputMessagesFilterEmpty();
-                    final long j2 = mergeDialogId;
-                    j = dialog_id;
-                    final int i = guid;
-                    final int i2 = direction;
-                    final User user2 = user;
-                    this.mergeReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                        public void run(final TLObject response, TL_error error) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    if (DataQuery.this.lastMergeDialogId == j2) {
-                                        DataQuery.this.mergeReqId = 0;
-                                        if (response != null) {
-                                            messages_Messages res = response;
-                                            DataQuery.this.messagesSearchEndReached[1] = res.messages.isEmpty();
-                                            DataQuery.this.messagesSearchCount[1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
-                                            DataQuery.this.searchMessagesInChat(req.f158q, j, j2, i, i2, true, user2);
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }, 2);
+                    this.mergeReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$31(this, mergeDialogId, req, dialog_id, guid, direction, user), 2);
                     return;
                 }
                 return;
@@ -2168,86 +1816,97 @@ public class DataQuery {
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) queryWithDialog);
         if (req.peer != null) {
             req.limit = 21;
-            req.f158q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+            req.f156q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
             if (user != null) {
                 req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                 req.flags |= 1;
             }
             req.filter = new TL_inputMessagesFilterEmpty();
-            final int currentReqId = this.lastReqId + 1;
+            int currentReqId = this.lastReqId + 1;
             this.lastReqId = currentReqId;
             this.lastSearchQuery = query;
-            j = queryWithDialog;
-            final long j3 = dialog_id;
-            final int i3 = guid;
-            final long j4 = mergeDialogId;
-            final User user3 = user;
-            this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (currentReqId == DataQuery.this.lastReqId) {
-                                DataQuery.this.reqId = 0;
-                                if (response != null) {
-                                    MessageObject messageObject;
-                                    int i;
-                                    messages_Messages res = response;
-                                    int a = 0;
-                                    while (a < res.messages.size()) {
-                                        Message message = (Message) res.messages.get(a);
-                                        if ((message instanceof TL_messageEmpty) || (message.action instanceof TL_messageActionHistoryClear)) {
-                                            res.messages.remove(a);
-                                            a--;
-                                        }
-                                        a++;
-                                    }
-                                    MessagesStorage.getInstance(DataQuery.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
-                                    MessagesController.getInstance(DataQuery.this.currentAccount).putUsers(res.users, false);
-                                    MessagesController.getInstance(DataQuery.this.currentAccount).putChats(res.chats, false);
-                                    if (req.offset_id == 0 && j == j3) {
-                                        DataQuery.this.lastReturnedNum = 0;
-                                        DataQuery.this.searchResultMessages.clear();
-                                        DataQuery.this.searchResultMessagesMap[0].clear();
-                                        DataQuery.this.searchResultMessagesMap[1].clear();
-                                        DataQuery.this.messagesSearchCount[0] = 0;
-                                    }
-                                    boolean added = false;
-                                    for (a = 0; a < Math.min(res.messages.size(), 20); a++) {
-                                        added = true;
-                                        messageObject = new MessageObject(DataQuery.this.currentAccount, (Message) res.messages.get(a), false);
-                                        DataQuery.this.searchResultMessages.add(messageObject);
-                                        SparseArray[] access$4600 = DataQuery.this.searchResultMessagesMap;
-                                        if (j == j3) {
-                                            i = 0;
-                                        } else {
-                                            i = 1;
-                                        }
-                                        access$4600[i].put(messageObject.getId(), messageObject);
-                                    }
-                                    DataQuery.this.messagesSearchEndReached[j == j3 ? 0 : 1] = res.messages.size() != 21;
-                                    int[] access$4000 = DataQuery.this.messagesSearchCount;
-                                    i = j == j3 ? 0 : 1;
-                                    int size = ((res instanceof TL_messages_messagesSlice) || (res instanceof TL_messages_channelMessages)) ? res.count : res.messages.size();
-                                    access$4000[i] = size;
-                                    if (DataQuery.this.searchResultMessages.isEmpty()) {
-                                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i3), Integer.valueOf(0), Integer.valueOf(DataQuery.this.getMask()), Long.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
-                                    } else if (added) {
-                                        if (DataQuery.this.lastReturnedNum >= DataQuery.this.searchResultMessages.size()) {
-                                            DataQuery.this.lastReturnedNum = DataQuery.this.searchResultMessages.size() - 1;
-                                        }
-                                        messageObject = (MessageObject) DataQuery.this.searchResultMessages.get(DataQuery.this.lastReturnedNum);
-                                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i3), Integer.valueOf(messageObject.getId()), Integer.valueOf(DataQuery.this.getMask()), Long.valueOf(messageObject.getDialogId()), Integer.valueOf(DataQuery.this.lastReturnedNum), Integer.valueOf(DataQuery.this.messagesSearchCount[0] + DataQuery.this.messagesSearchCount[1]));
-                                    }
-                                    if (j == j3 && DataQuery.this.messagesSearchEndReached[0] && j4 != 0 && !DataQuery.this.messagesSearchEndReached[1]) {
-                                        DataQuery.this.searchMessagesInChat(DataQuery.this.lastSearchQuery, j3, j4, i3, 0, true, user3);
-                                    }
-                                }
-                            }
-                        }
-                    });
+            this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$32(this, currentReqId, req, queryWithDialog, dialog_id, guid, mergeDialogId, user), 2);
+        }
+    }
+
+    final /* synthetic */ void lambda$searchMessagesInChat$48$DataQuery(long mergeDialogId, TL_messages_search req, long dialog_id, int guid, int direction, User user, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$93(this, mergeDialogId, response, req, dialog_id, guid, direction, user));
+    }
+
+    final /* synthetic */ void lambda$null$47$DataQuery(long mergeDialogId, TLObject response, TL_messages_search req, long dialog_id, int guid, int direction, User user) {
+        if (this.lastMergeDialogId == mergeDialogId) {
+            this.mergeReqId = 0;
+            if (response != null) {
+                messages_Messages res = (messages_Messages) response;
+                this.messagesSearchEndReached[1] = res.messages.isEmpty();
+                this.messagesSearchCount[1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
+                searchMessagesInChat(req.f156q, dialog_id, mergeDialogId, guid, direction, true, user);
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$searchMessagesInChat$50$DataQuery(int currentReqId, TL_messages_search req, long queryWithDialogFinal, long dialog_id, int guid, long mergeDialogId, User user, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$92(this, currentReqId, response, req, queryWithDialogFinal, dialog_id, guid, mergeDialogId, user));
+    }
+
+    final /* synthetic */ void lambda$null$49$DataQuery(int currentReqId, TLObject response, TL_messages_search req, long queryWithDialogFinal, long dialog_id, int guid, long mergeDialogId, User user) {
+        if (currentReqId == this.lastReqId) {
+            this.reqId = 0;
+            if (response != null) {
+                MessageObject messageObject;
+                int i;
+                messages_Messages res = (messages_Messages) response;
+                int a = 0;
+                while (a < res.messages.size()) {
+                    Message message = (Message) res.messages.get(a);
+                    if ((message instanceof TL_messageEmpty) || (message.action instanceof TL_messageActionHistoryClear)) {
+                        res.messages.remove(a);
+                        a--;
+                    }
+                    a++;
                 }
-            }, 2);
+                MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
+                MessagesController.getInstance(this.currentAccount).putUsers(res.users, false);
+                MessagesController.getInstance(this.currentAccount).putChats(res.chats, false);
+                if (req.offset_id == 0 && queryWithDialogFinal == dialog_id) {
+                    this.lastReturnedNum = 0;
+                    this.searchResultMessages.clear();
+                    this.searchResultMessagesMap[0].clear();
+                    this.searchResultMessagesMap[1].clear();
+                    this.messagesSearchCount[0] = 0;
+                }
+                boolean added = false;
+                for (a = 0; a < Math.min(res.messages.size(), 20); a++) {
+                    added = true;
+                    messageObject = new MessageObject(this.currentAccount, (Message) res.messages.get(a), false);
+                    this.searchResultMessages.add(messageObject);
+                    SparseArray[] sparseArrayArr = this.searchResultMessagesMap;
+                    if (queryWithDialogFinal == dialog_id) {
+                        i = 0;
+                    } else {
+                        i = 1;
+                    }
+                    sparseArrayArr[i].put(messageObject.getId(), messageObject);
+                }
+                this.messagesSearchEndReached[queryWithDialogFinal == dialog_id ? 0 : 1] = res.messages.size() != 21;
+                int[] iArr = this.messagesSearchCount;
+                i = queryWithDialogFinal == dialog_id ? 0 : 1;
+                int size = ((res instanceof TL_messages_messagesSlice) || (res instanceof TL_messages_channelMessages)) ? res.count : res.messages.size();
+                iArr[i] = size;
+                if (this.searchResultMessages.isEmpty()) {
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(guid), Integer.valueOf(0), Integer.valueOf(getMask()), Long.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
+                } else if (added) {
+                    if (this.lastReturnedNum >= this.searchResultMessages.size()) {
+                        this.lastReturnedNum = this.searchResultMessages.size() - 1;
+                    }
+                    messageObject = (MessageObject) this.searchResultMessages.get(this.lastReturnedNum);
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(guid), Integer.valueOf(messageObject.getId()), Integer.valueOf(getMask()), Long.valueOf(messageObject.getDialogId()), Integer.valueOf(this.lastReturnedNum), Integer.valueOf(this.messagesSearchCount[0] + this.messagesSearchCount[1]));
+                }
+                if (queryWithDialogFinal == dialog_id && this.messagesSearchEndReached[0] && mergeDialogId != 0 && !this.messagesSearchEndReached[1]) {
+                    searchMessagesInChat(this.lastSearchQuery, dialog_id, mergeDialogId, guid, 0, true, user);
+                }
+            }
         }
     }
 
@@ -2256,7 +1915,7 @@ public class DataQuery {
     }
 
     public void loadMedia(long uid, int count, int max_id, int type, boolean fromCache, int classGuid) {
-        final boolean isChannel = ((int) uid) < 0 && ChatObject.isChannel(-((int) uid), this.currentAccount);
+        boolean isChannel = ((int) uid) < 0 && ChatObject.isChannel(-((int) uid), this.currentAccount);
         int lower_part = (int) uid;
         if (fromCache || lower_part == 0) {
             loadMediaDatabase(uid, count, max_id, type, classGuid, isChannel);
@@ -2276,30 +1935,143 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f158q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.f156q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
-            final int i = count;
-            final long j = uid;
-            final int i2 = max_id;
-            final int i3 = type;
-            final int i4 = classGuid;
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                    if (error == null) {
-                        boolean topReached;
-                        messages_Messages res = (messages_Messages) response;
-                        if (res.messages.size() > i) {
-                            topReached = false;
-                            res.messages.remove(res.messages.size() - 1);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$33(this, count, uid, max_id, type, classGuid, isChannel)), classGuid);
+        }
+    }
+
+    final /* synthetic */ void lambda$loadMedia$51$DataQuery(int count, long uid, int max_id, int type, int classGuid, boolean isChannel, TLObject response, TL_error error) {
+        if (error == null) {
+            boolean topReached;
+            messages_Messages res = (messages_Messages) response;
+            if (res.messages.size() > count) {
+                topReached = false;
+                res.messages.remove(res.messages.size() - 1);
+            } else {
+                topReached = true;
+            }
+            processLoadedMedia(res, uid, count, max_id, type, false, classGuid, isChannel, topReached);
+        }
+    }
+
+    public void getMediaCounts(long uid, int classGuid) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$34(this, uid, classGuid));
+    }
+
+    final /* synthetic */ void lambda$getMediaCounts$56$DataQuery(long uid, int classGuid) {
+        try {
+            int type;
+            int[] counts = new int[]{-1, -1, -1, -1, -1};
+            int[] countsFinal = new int[]{-1, -1, -1, -1, -1};
+            int[] iArr = new int[5];
+            iArr = new int[]{0, 0, 0, 0, 0};
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT type, count, old FROM media_counts_v2 WHERE uid = %d", new Object[]{Long.valueOf(uid)}), new Object[0]);
+            while (cursor.next()) {
+                type = cursor.intValue(0);
+                if (type >= 0 && type < 5) {
+                    int intValue = cursor.intValue(1);
+                    counts[type] = intValue;
+                    countsFinal[type] = intValue;
+                    iArr[type] = cursor.intValue(2);
+                }
+            }
+            cursor.dispose();
+            int lower_part = (int) uid;
+            int a;
+            if (lower_part == 0) {
+                for (a = 0; a < counts.length; a++) {
+                    if (counts[a] == -1) {
+                        cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT COUNT(mid) FROM media_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(a)}), new Object[0]);
+                        if (cursor.next()) {
+                            counts[a] = cursor.intValue(0);
                         } else {
-                            topReached = true;
+                            counts[a] = 0;
                         }
-                        DataQuery.this.processLoadedMedia(res, j, i, i2, i3, false, i4, isChannel, topReached);
+                        cursor.dispose();
+                        putMediaCountDatabase(uid, a, counts[a]);
                     }
                 }
-            }), classGuid);
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$88(this, uid, counts));
+                return;
+            }
+            boolean missing = false;
+            a = 0;
+            while (a < counts.length) {
+                if (counts[a] == -1 || iArr[a] == 1) {
+                    type = a;
+                    TLObject req = new TL_messages_search();
+                    req.limit = 1;
+                    req.offset_id = 0;
+                    if (a == 0) {
+                        req.filter = new TL_inputMessagesFilterPhotoVideo();
+                    } else if (a == 1) {
+                        req.filter = new TL_inputMessagesFilterDocument();
+                    } else if (a == 2) {
+                        req.filter = new TL_inputMessagesFilterRoundVoice();
+                    } else if (a == 3) {
+                        req.filter = new TL_inputMessagesFilterUrl();
+                    } else if (a == 4) {
+                        req.filter = new TL_inputMessagesFilterMusic();
+                    }
+                    req.f156q = TtmlNode.ANONYMOUS_REGION_ID;
+                    req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
+                    if (req.peer == null) {
+                        counts[a] = 0;
+                    } else {
+                        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$89(this, counts, type, uid)), classGuid);
+                        if (counts[a] == -1) {
+                            missing = true;
+                        } else if (iArr[a] == 1) {
+                            counts[a] = -1;
+                        }
+                    }
+                }
+                a++;
+            }
+            if (!missing) {
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$90(this, uid, countsFinal));
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
         }
+    }
+
+    final /* synthetic */ void lambda$null$52$DataQuery(long uid, int[] counts) {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mediaCountsDidLoad, Long.valueOf(uid), counts);
+    }
+
+    final /* synthetic */ void lambda$null$54$DataQuery(int[] counts, int type, long uid, TLObject response, TL_error error) {
+        if (error == null) {
+            messages_Messages res = (messages_Messages) response;
+            if (res instanceof TL_messages_messages) {
+                counts[type] = res.messages.size();
+            } else {
+                counts[type] = res.count;
+            }
+            putMediaCountDatabase(uid, type, counts[type]);
+        } else {
+            counts[type] = 0;
+        }
+        boolean finished = true;
+        for (int i : counts) {
+            if (i == -1) {
+                finished = false;
+                break;
+            }
+        }
+        if (finished) {
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$91(this, uid, counts));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$53$DataQuery(long uid, int[] counts) {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mediaCountsDidLoad, Long.valueOf(uid), counts);
+    }
+
+    final /* synthetic */ void lambda$null$55$DataQuery(long uid, int[] countsFinal) {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mediaCountsDidLoad, Long.valueOf(uid), countsFinal);
     }
 
     public void getMediaCount(long uid, int type, int classGuid, boolean fromCache) {
@@ -2322,34 +2094,31 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f158q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.f156q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
-            final long j = uid;
-            final int i = type;
-            final int i2 = classGuid;
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                    if (error == null) {
-                        int count;
-                        final messages_Messages res = (messages_Messages) response;
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
-                        if (res instanceof TL_messages_messages) {
-                            count = res.messages.size();
-                        } else {
-                            count = res.count;
-                        }
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                MessagesController.getInstance(DataQuery.this.currentAccount).putUsers(res.users, false);
-                                MessagesController.getInstance(DataQuery.this.currentAccount).putChats(res.chats, false);
-                            }
-                        });
-                        DataQuery.this.processLoadedMediaCount(count, j, i, i2, false);
-                    }
-                }
-            }), classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$35(this, uid, type, classGuid)), classGuid);
         }
+    }
+
+    final /* synthetic */ void lambda$getMediaCount$58$DataQuery(long uid, int type, int classGuid, TLObject response, TL_error error) {
+        if (error == null) {
+            int count;
+            messages_Messages res = (messages_Messages) response;
+            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
+            if (res instanceof TL_messages_messages) {
+                count = res.messages.size();
+            } else {
+                count = res.count;
+            }
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$87(this, res));
+            processLoadedMediaCount(count, uid, type, classGuid, false, 0);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$57$DataQuery(messages_Messages res) {
+        MessagesController.getInstance(this.currentAccount).putUsers(res.users, false);
+        MessagesController.getInstance(this.currentAccount).putChats(res.chats, false);
     }
 
     public static int getMediaType(Message message) {
@@ -2423,485 +2192,460 @@ public class DataQuery {
         SparseArray<User> usersDict = new SparseArray();
         for (a = 0; a < res.users.size(); a++) {
             User u = (User) res.users.get(a);
-            usersDict.put(u.f177id, u);
+            usersDict.put(u.f176id, u);
         }
-        final ArrayList<MessageObject> objects = new ArrayList();
+        ArrayList<MessageObject> objects = new ArrayList();
         for (a = 0; a < res.messages.size(); a++) {
             objects.add(new MessageObject(this.currentAccount, (Message) res.messages.get(a), (SparseArray) usersDict, true));
         }
-        final messages_Messages messages_messages = res;
-        final boolean z = fromCache;
-        final long j = uid;
-        final int i = classGuid;
-        final int i2 = type;
-        final boolean z2 = topReached;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                int totalCount = messages_messages.count;
-                MessagesController.getInstance(DataQuery.this.currentAccount).putUsers(messages_messages.users, z);
-                MessagesController.getInstance(DataQuery.this.currentAccount).putChats(messages_messages.chats, z);
-                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.mediaDidLoaded, Long.valueOf(j), Integer.valueOf(totalCount), objects, Integer.valueOf(i), Integer.valueOf(i2), Boolean.valueOf(z2));
-            }
-        });
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$36(this, res, fromCache, uid, objects, classGuid, type, topReached));
     }
 
-    private void processLoadedMediaCount(int count, long uid, int type, int classGuid, boolean fromCache) {
-        final long j = uid;
-        final boolean z = fromCache;
-        final int i = count;
-        final int i2 = type;
-        final int i3 = classGuid;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                int i = 0;
-                int lower_part = (int) j;
-                if (!z || (!(i == -1 || (i == 0 && i2 == 2)) || lower_part == 0)) {
-                    if (!z) {
-                        DataQuery.this.putMediaCountDatabase(j, i2, i);
-                    }
-                    NotificationCenter instance = NotificationCenter.getInstance(DataQuery.this.currentAccount);
-                    int i2 = NotificationCenter.mediaCountDidLoaded;
-                    Object[] objArr = new Object[4];
-                    objArr[0] = Long.valueOf(j);
-                    if (!(z && i == -1)) {
-                        i = i;
-                    }
-                    objArr[1] = Integer.valueOf(i);
-                    objArr[2] = Boolean.valueOf(z);
-                    objArr[3] = Integer.valueOf(i2);
-                    instance.postNotificationName(i2, objArr);
-                    return;
-                }
-                DataQuery.this.getMediaCount(j, i2, i3, false);
+    final /* synthetic */ void lambda$processLoadedMedia$59$DataQuery(messages_Messages res, boolean fromCache, long uid, ArrayList objects, int classGuid, int type, boolean topReached) {
+        int totalCount = res.count;
+        MessagesController.getInstance(this.currentAccount).putUsers(res.users, fromCache);
+        MessagesController.getInstance(this.currentAccount).putChats(res.chats, fromCache);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mediaDidLoad, Long.valueOf(uid), Integer.valueOf(totalCount), objects, Integer.valueOf(classGuid), Integer.valueOf(type), Boolean.valueOf(topReached));
+    }
+
+    private void processLoadedMediaCount(int count, long uid, int type, int classGuid, boolean fromCache, int old) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$37(this, uid, fromCache, count, type, old, classGuid));
+    }
+
+    final /* synthetic */ void lambda$processLoadedMediaCount$60$DataQuery(long uid, boolean fromCache, int count, int type, int old, int classGuid) {
+        int lower_part = (int) uid;
+        boolean reload = fromCache && ((count == -1 || (count == 0 && type == 2)) && lower_part != 0);
+        if (reload || (old == 1 && lower_part != 0)) {
+            getMediaCount(uid, type, classGuid, false);
+        }
+        if (!reload) {
+            if (!fromCache) {
+                putMediaCountDatabase(uid, type, count);
             }
-        });
+            NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
+            int i = NotificationCenter.mediaCountDidLoad;
+            Object[] objArr = new Object[4];
+            objArr[0] = Long.valueOf(uid);
+            if (fromCache && count == -1) {
+                count = 0;
+            }
+            objArr[1] = Integer.valueOf(count);
+            objArr[2] = Boolean.valueOf(fromCache);
+            objArr[3] = Integer.valueOf(type);
+            instance.postNotificationName(i, objArr);
+        }
     }
 
     private void putMediaCountDatabase(long uid, int type, int count) {
-        final long j = uid;
-        final int i = type;
-        final int i2 = count;
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    SQLitePreparedStatement state2 = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO media_counts_v2 VALUES(?, ?, ?)");
-                    state2.requery();
-                    state2.bindLong(1, j);
-                    state2.bindInteger(2, i);
-                    state2.bindInteger(3, i2);
-                    state2.step();
-                    state2.dispose();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
-                }
-            }
-        });
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$38(this, uid, type, count));
+    }
+
+    final /* synthetic */ void lambda$putMediaCountDatabase$61$DataQuery(long uid, int type, int count) {
+        try {
+            SQLitePreparedStatement state2 = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO media_counts_v2 VALUES(?, ?, ?, ?)");
+            state2.requery();
+            state2.bindLong(1, uid);
+            state2.bindInteger(2, type);
+            state2.bindInteger(3, count);
+            state2.bindInteger(4, 0);
+            state2.step();
+            state2.dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
     private void getMediaCountDatabase(long uid, int type, int classGuid) {
-        final long j = uid;
-        final int i = type;
-        final int i2 = classGuid;
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                int count = -1;
-                try {
-                    SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(j), Integer.valueOf(i)}), new Object[0]);
-                    if (cursor.next()) {
-                        count = cursor.intValue(0);
-                    }
-                    cursor.dispose();
-                    int lower_part = (int) j;
-                    if (count == -1 && lower_part == 0) {
-                        cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT COUNT(mid) FROM media_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(j), Integer.valueOf(i)}), new Object[0]);
-                        if (cursor.next()) {
-                            count = cursor.intValue(0);
-                        }
-                        cursor.dispose();
-                        if (count != -1) {
-                            DataQuery.this.putMediaCountDatabase(j, i, count);
-                        }
-                    }
-                    DataQuery.this.processLoadedMediaCount(count, j, i, i2, true);
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$39(this, uid, type, classGuid));
+    }
+
+    final /* synthetic */ void lambda$getMediaCountDatabase$62$DataQuery(long uid, int type, int classGuid) {
+        int count = -1;
+        int old = 0;
+        try {
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT count, old FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
+            if (cursor.next()) {
+                count = cursor.intValue(0);
+                old = cursor.intValue(1);
+            }
+            cursor.dispose();
+            int lower_part = (int) uid;
+            if (count == -1 && lower_part == 0) {
+                cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT COUNT(mid) FROM media_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
+                if (cursor.next()) {
+                    count = cursor.intValue(0);
+                }
+                cursor.dispose();
+                if (count != -1) {
+                    putMediaCountDatabase(uid, type, count);
                 }
             }
-        });
+            processLoadedMediaCount(count, uid, type, classGuid, true, old);
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
     private void loadMediaDatabase(long uid, int count, int max_id, int type, int classGuid, boolean isChannel) {
-        final int i = count;
-        final long j = uid;
-        final int i2 = max_id;
-        final boolean z = isChannel;
-        final int i3 = type;
-        final int i4 = classGuid;
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                TL_messages_messages res = new TL_messages_messages();
-                try {
-                    SQLiteCursor cursor;
-                    boolean topReached;
-                    ArrayList<Integer> usersToLoad = new ArrayList();
-                    ArrayList<Integer> chatsToLoad = new ArrayList();
-                    int countToLoad = i + 1;
-                    SQLiteDatabase database = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase();
-                    boolean isEnd = false;
-                    if (((int) j) != 0) {
-                        int channelId = 0;
-                        long messageMaxId = (long) i2;
-                        if (z) {
-                            channelId = -((int) j);
-                        }
-                        if (!(messageMaxId == 0 || channelId == 0)) {
-                            messageMaxId |= ((long) channelId) << 32;
-                        }
-                        cursor = database.queryFinalized(String.format(Locale.US, "SELECT start FROM media_holes_v2 WHERE uid = %d AND type = %d AND start IN (0, 1)", new Object[]{Long.valueOf(j), Integer.valueOf(i3)}), new Object[0]);
-                        if (cursor.next()) {
-                            isEnd = cursor.intValue(0) == 1;
-                            cursor.dispose();
-                        } else {
-                            cursor.dispose();
-                            cursor = database.queryFinalized(String.format(Locale.US, "SELECT min(mid) FROM media_v2 WHERE uid = %d AND type = %d AND mid > 0", new Object[]{Long.valueOf(j), Integer.valueOf(i3)}), new Object[0]);
-                            if (cursor.next()) {
-                                int mid = cursor.intValue(0);
-                                if (mid != 0) {
-                                    SQLitePreparedStatement state = database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
-                                    state.requery();
-                                    state.bindLong(1, j);
-                                    state.bindInteger(2, i3);
-                                    state.bindInteger(3, 0);
-                                    state.bindInteger(4, mid);
-                                    state.step();
-                                    state.dispose();
-                                }
-                            }
-                            cursor.dispose();
-                        }
-                        long holeMessageId;
-                        if (messageMaxId != 0) {
-                            holeMessageId = 0;
-                            cursor = database.queryFinalized(String.format(Locale.US, "SELECT end FROM media_holes_v2 WHERE uid = %d AND type = %d AND end <= %d ORDER BY end DESC LIMIT 1", new Object[]{Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(i2)}), new Object[0]);
-                            if (cursor.next()) {
-                                holeMessageId = (long) cursor.intValue(0);
-                                if (channelId != 0) {
-                                    holeMessageId |= ((long) channelId) << 32;
-                                }
-                            }
-                            cursor.dispose();
-                            if (holeMessageId > 1) {
-                                cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > 0 AND mid < %d AND mid >= %d AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Long.valueOf(holeMessageId), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
-                            } else {
-                                cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > 0 AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
-                            }
-                        } else {
-                            holeMessageId = 0;
-                            cursor = database.queryFinalized(String.format(Locale.US, "SELECT max(end) FROM media_holes_v2 WHERE uid = %d AND type = %d", new Object[]{Long.valueOf(j), Integer.valueOf(i3)}), new Object[0]);
-                            if (cursor.next()) {
-                                holeMessageId = (long) cursor.intValue(0);
-                                if (channelId != 0) {
-                                    holeMessageId |= ((long) channelId) << 32;
-                                }
-                            }
-                            cursor.dispose();
-                            if (holeMessageId > 1) {
-                                cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid >= %d AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Long.valueOf(holeMessageId), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
-                            } else {
-                                cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > 0 AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
-                            }
-                        }
-                    } else {
-                        isEnd = true;
-                        if (i2 != 0) {
-                            cursor = database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, r.random_id FROM media_v2 as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND type = %d ORDER BY m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
-                        } else {
-                            cursor = database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, r.random_id FROM media_v2 as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND type = %d ORDER BY m.mid ASC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(countToLoad)}), new Object[0]);
-                        }
-                    }
-                    while (cursor.next()) {
-                        AbstractSerializedData data = cursor.byteBufferValue(0);
-                        if (data != null) {
-                            Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
-                            data.reuse();
-                            message.f104id = cursor.intValue(1);
-                            message.dialog_id = j;
-                            if (((int) j) == 0) {
-                                message.random_id = cursor.longValue(2);
-                            }
-                            res.messages.add(message);
-                            MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$40(this, count, uid, max_id, isChannel, type, classGuid));
+    }
+
+    final /* synthetic */ void lambda$loadMediaDatabase$63$DataQuery(int count, long uid, int max_id, boolean isChannel, int type, int classGuid) {
+        TL_messages_messages res = new TL_messages_messages();
+        try {
+            SQLiteCursor cursor;
+            boolean topReached;
+            ArrayList<Integer> usersToLoad = new ArrayList();
+            ArrayList<Integer> chatsToLoad = new ArrayList();
+            int countToLoad = count + 1;
+            SQLiteDatabase database = MessagesStorage.getInstance(this.currentAccount).getDatabase();
+            boolean isEnd = false;
+            if (((int) uid) != 0) {
+                int channelId = 0;
+                long messageMaxId = (long) max_id;
+                if (isChannel) {
+                    channelId = -((int) uid);
+                }
+                if (!(messageMaxId == 0 || channelId == 0)) {
+                    messageMaxId |= ((long) channelId) << 32;
+                }
+                cursor = database.queryFinalized(String.format(Locale.US, "SELECT start FROM media_holes_v2 WHERE uid = %d AND type = %d AND start IN (0, 1)", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
+                if (cursor.next()) {
+                    isEnd = cursor.intValue(0) == 1;
+                    cursor.dispose();
+                } else {
+                    cursor.dispose();
+                    cursor = database.queryFinalized(String.format(Locale.US, "SELECT min(mid) FROM media_v2 WHERE uid = %d AND type = %d AND mid > 0", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
+                    if (cursor.next()) {
+                        int mid = cursor.intValue(0);
+                        if (mid != 0) {
+                            SQLitePreparedStatement state = database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
+                            state.requery();
+                            state.bindLong(1, uid);
+                            state.bindInteger(2, type);
+                            state.bindInteger(3, 0);
+                            state.bindInteger(4, mid);
+                            state.step();
+                            state.dispose();
                         }
                     }
                     cursor.dispose();
-                    if (!usersToLoad.isEmpty()) {
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), res.users);
+                }
+                long holeMessageId;
+                if (messageMaxId != 0) {
+                    holeMessageId = 0;
+                    cursor = database.queryFinalized(String.format(Locale.US, "SELECT end FROM media_holes_v2 WHERE uid = %d AND type = %d AND end <= %d ORDER BY end DESC LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type), Integer.valueOf(max_id)}), new Object[0]);
+                    if (cursor.next()) {
+                        holeMessageId = (long) cursor.intValue(0);
+                        if (channelId != 0) {
+                            holeMessageId |= ((long) channelId) << 32;
+                        }
                     }
-                    if (!chatsToLoad.isEmpty()) {
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), res.chats);
-                    }
-                    if (res.messages.size() > i) {
-                        topReached = false;
-                        res.messages.remove(res.messages.size() - 1);
+                    cursor.dispose();
+                    if (holeMessageId > 1) {
+                        cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > 0 AND mid < %d AND mid >= %d AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(uid), Long.valueOf(messageMaxId), Long.valueOf(holeMessageId), Integer.valueOf(type), Integer.valueOf(countToLoad)}), new Object[0]);
                     } else {
-                        topReached = isEnd;
+                        cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > 0 AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(uid), Long.valueOf(messageMaxId), Integer.valueOf(type), Integer.valueOf(countToLoad)}), new Object[0]);
                     }
-                    DataQuery.this.processLoadedMedia(res, j, i, i2, i3, true, i4, z, topReached);
-                } catch (Throwable e) {
-                    res.messages.clear();
-                    res.chats.clear();
-                    res.users.clear();
-                    FileLog.m14e(e);
-                    DataQuery.this.processLoadedMedia(res, j, i, i2, i3, true, i4, z, false);
-                } catch (Throwable th) {
-                    Throwable th2 = th;
-                    DataQuery.this.processLoadedMedia(res, j, i, i2, i3, true, i4, z, false);
+                } else {
+                    holeMessageId = 0;
+                    cursor = database.queryFinalized(String.format(Locale.US, "SELECT max(end) FROM media_holes_v2 WHERE uid = %d AND type = %d", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
+                    if (cursor.next()) {
+                        holeMessageId = (long) cursor.intValue(0);
+                        if (channelId != 0) {
+                            holeMessageId |= ((long) channelId) << 32;
+                        }
+                    }
+                    cursor.dispose();
+                    if (holeMessageId > 1) {
+                        cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid >= %d AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(uid), Long.valueOf(holeMessageId), Integer.valueOf(type), Integer.valueOf(countToLoad)}), new Object[0]);
+                    } else {
+                        cursor = database.queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > 0 AND type = %d ORDER BY date DESC, mid DESC LIMIT %d", new Object[]{Long.valueOf(uid), Integer.valueOf(type), Integer.valueOf(countToLoad)}), new Object[0]);
+                    }
+                }
+            } else {
+                isEnd = true;
+                if (max_id != 0) {
+                    cursor = database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, r.random_id FROM media_v2 as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND type = %d ORDER BY m.mid ASC LIMIT %d", new Object[]{Long.valueOf(uid), Integer.valueOf(max_id), Integer.valueOf(type), Integer.valueOf(countToLoad)}), new Object[0]);
+                } else {
+                    cursor = database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, r.random_id FROM media_v2 as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND type = %d ORDER BY m.mid ASC LIMIT %d", new Object[]{Long.valueOf(uid), Integer.valueOf(type), Integer.valueOf(countToLoad)}), new Object[0]);
                 }
             }
-        });
+            while (cursor.next()) {
+                AbstractSerializedData data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                    message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                    data.reuse();
+                    message.f104id = cursor.intValue(1);
+                    message.dialog_id = uid;
+                    if (((int) uid) == 0) {
+                        message.random_id = cursor.longValue(2);
+                    }
+                    res.messages.add(message);
+                    MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
+                }
+            }
+            cursor.dispose();
+            if (!usersToLoad.isEmpty()) {
+                MessagesStorage.getInstance(this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), res.users);
+            }
+            if (!chatsToLoad.isEmpty()) {
+                MessagesStorage.getInstance(this.currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), res.chats);
+            }
+            if (res.messages.size() > count) {
+                topReached = false;
+                res.messages.remove(res.messages.size() - 1);
+            } else {
+                topReached = isEnd;
+            }
+            processLoadedMedia(res, uid, count, max_id, type, true, classGuid, isChannel, topReached);
+        } catch (Throwable e) {
+            res.messages.clear();
+            res.chats.clear();
+            res.users.clear();
+            FileLog.m13e(e);
+            processLoadedMedia(res, uid, count, max_id, type, true, classGuid, isChannel, false);
+        } catch (Throwable th) {
+            Throwable th2 = th;
+            processLoadedMedia(res, uid, count, max_id, type, true, classGuid, isChannel, false);
+        }
     }
 
     private void putMediaDatabase(long uid, int type, ArrayList<Message> messages, int max_id, boolean topReached) {
-        final ArrayList<Message> arrayList = messages;
-        final boolean z = topReached;
-        final long j = uid;
-        final int i = max_id;
-        final int i2 = type;
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                int minId = 1;
-                try {
-                    if (arrayList.isEmpty() || z) {
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).doneHolesInMedia(j, i, i2);
-                        if (arrayList.isEmpty()) {
-                            return;
-                        }
-                    }
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().beginTransaction();
-                    SQLitePreparedStatement state2 = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
-                    Iterator it = arrayList.iterator();
-                    while (it.hasNext()) {
-                        Message message = (Message) it.next();
-                        if (DataQuery.canAddMessageToMedia(message)) {
-                            long messageId = (long) message.f104id;
-                            if (message.to_id.channel_id != 0) {
-                                messageId |= ((long) message.to_id.channel_id) << 32;
-                            }
-                            state2.requery();
-                            NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
-                            message.serializeToStream(data);
-                            state2.bindLong(1, messageId);
-                            state2.bindLong(2, j);
-                            state2.bindInteger(3, message.date);
-                            state2.bindInteger(4, i2);
-                            state2.bindByteBuffer(5, data);
-                            state2.step();
-                            data.reuse();
-                        }
-                    }
-                    state2.dispose();
-                    if (!(z && i == 0)) {
-                        if (!z) {
-                            minId = ((Message) arrayList.get(arrayList.size() - 1)).f104id;
-                        }
-                        if (i != 0) {
-                            MessagesStorage.getInstance(DataQuery.this.currentAccount).closeHolesInMedia(j, minId, i, i2);
-                        } else {
-                            MessagesStorage.getInstance(DataQuery.this.currentAccount).closeHolesInMedia(j, minId, ConnectionsManager.DEFAULT_DATACENTER_ID, i2);
-                        }
-                    }
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$41(this, messages, topReached, uid, max_id, type));
+    }
+
+    final /* synthetic */ void lambda$putMediaDatabase$64$DataQuery(ArrayList messages, boolean topReached, long uid, int max_id, int type) {
+        try {
+            if (messages.isEmpty() || topReached) {
+                MessagesStorage.getInstance(this.currentAccount).doneHolesInMedia(uid, max_id, type);
+                if (messages.isEmpty()) {
+                    return;
                 }
             }
-        });
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
+            SQLitePreparedStatement state2 = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
+            Iterator it = messages.iterator();
+            while (it.hasNext()) {
+                Message message = (Message) it.next();
+                if (canAddMessageToMedia(message)) {
+                    long messageId = (long) message.f104id;
+                    if (message.to_id.channel_id != 0) {
+                        messageId |= ((long) message.to_id.channel_id) << 32;
+                    }
+                    state2.requery();
+                    NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
+                    message.serializeToStream(data);
+                    state2.bindLong(1, messageId);
+                    state2.bindLong(2, uid);
+                    state2.bindInteger(3, message.date);
+                    state2.bindInteger(4, type);
+                    state2.bindByteBuffer(5, data);
+                    state2.step();
+                    data.reuse();
+                }
+            }
+            state2.dispose();
+            if (!(topReached && max_id == 0)) {
+                int minId;
+                if (topReached) {
+                    minId = 1;
+                } else {
+                    minId = ((Message) messages.get(messages.size() - 1)).f104id;
+                }
+                if (max_id != 0) {
+                    MessagesStorage.getInstance(this.currentAccount).closeHolesInMedia(uid, minId, max_id, type);
+                } else {
+                    MessagesStorage.getInstance(this.currentAccount).closeHolesInMedia(uid, minId, ConnectionsManager.DEFAULT_DATACENTER_ID, type);
+                }
+            }
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
     public void loadMusic(long uid, long max_id) {
-        final long j = uid;
-        final long j2 = max_id;
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                final ArrayList<MessageObject> arrayList = new ArrayList();
-                try {
-                    SQLiteCursor cursor;
-                    if (((int) j) != 0) {
-                        cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(j), Long.valueOf(j2), Integer.valueOf(4)}), new Object[0]);
-                    } else {
-                        cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(j), Long.valueOf(j2), Integer.valueOf(4)}), new Object[0]);
-                    }
-                    while (cursor.next()) {
-                        NativeByteBuffer data = cursor.byteBufferValue(0);
-                        if (data != null) {
-                            Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
-                            data.reuse();
-                            if (MessageObject.isMusicMessage(message)) {
-                                message.f104id = cursor.intValue(1);
-                                message.dialog_id = j;
-                                arrayList.add(0, new MessageObject(DataQuery.this.currentAccount, message, false));
-                            }
-                        }
-                    }
-                    cursor.dispose();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
-                }
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.musicDidLoaded, Long.valueOf(j), arrayList);
-                    }
-                });
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$42(this, uid, max_id));
+    }
+
+    final /* synthetic */ void lambda$loadMusic$66$DataQuery(long uid, long max_id) {
+        SQLiteCursor cursor;
+        ArrayList<MessageObject> arrayList = new ArrayList();
+        if (((int) uid) != 0) {
+            try {
+                cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(uid), Long.valueOf(max_id), Integer.valueOf(4)}), new Object[0]);
+            } catch (Throwable e) {
+                FileLog.m13e(e);
             }
-        });
+        } else {
+            cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(uid), Long.valueOf(max_id), Integer.valueOf(4)}), new Object[0]);
+        }
+        while (cursor.next()) {
+            NativeByteBuffer data = cursor.byteBufferValue(0);
+            if (data != null) {
+                Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                data.reuse();
+                if (MessageObject.isMusicMessage(message)) {
+                    message.f104id = cursor.intValue(1);
+                    message.dialog_id = uid;
+                    arrayList.add(0, new MessageObject(this.currentAccount, message, false));
+                }
+            }
+        }
+        cursor.dispose();
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$86(this, uid, arrayList));
+    }
+
+    final /* synthetic */ void lambda$null$65$DataQuery(long uid, ArrayList arrayList) {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.musicDidLoad, Long.valueOf(uid), arrayList);
     }
 
     public void buildShortcuts() {
         if (VERSION.SDK_INT >= 25) {
-            final ArrayList<TL_topPeer> hintsFinal = new ArrayList();
+            ArrayList<TL_topPeer> hintsFinal = new ArrayList();
             for (int a = 0; a < this.hints.size(); a++) {
                 hintsFinal.add(this.hints.get(a));
                 if (hintsFinal.size() == 3) {
                     break;
                 }
             }
-            Utilities.globalQueue.postRunnable(new Runnable() {
-                @SuppressLint({"NewApi"})
-                public void run() {
-                    try {
-                        int a;
-                        TL_topPeer hint;
-                        long did;
-                        String id;
-                        ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
-                        List<ShortcutInfo> currentShortcuts = shortcutManager.getDynamicShortcuts();
-                        ArrayList<String> shortcutsToUpdate = new ArrayList();
-                        ArrayList<String> newShortcutsIds = new ArrayList();
-                        ArrayList<String> shortcutsToDelete = new ArrayList();
-                        if (!(currentShortcuts == null || currentShortcuts.isEmpty())) {
-                            newShortcutsIds.add("compose");
-                            for (a = 0; a < hintsFinal.size(); a++) {
-                                hint = (TL_topPeer) hintsFinal.get(a);
-                                if (hint.peer.user_id != 0) {
-                                    did = (long) hint.peer.user_id;
-                                } else {
-                                    did = (long) (-hint.peer.chat_id);
-                                    if (did == 0) {
-                                        did = (long) (-hint.peer.channel_id);
-                                    }
-                                }
-                                newShortcutsIds.add("did" + did);
-                            }
-                            for (a = 0; a < currentShortcuts.size(); a++) {
-                                id = ((ShortcutInfo) currentShortcuts.get(a)).getId();
-                                if (!newShortcutsIds.remove(id)) {
-                                    shortcutsToDelete.add(id);
-                                }
-                                shortcutsToUpdate.add(id);
-                            }
-                            if (newShortcutsIds.isEmpty() && shortcutsToDelete.isEmpty()) {
-                                return;
-                            }
+            Utilities.globalQueue.postRunnable(new DataQuery$$Lambda$43(this, hintsFinal));
+        }
+    }
+
+    final /* synthetic */ void lambda$buildShortcuts$67$DataQuery(ArrayList hintsFinal) {
+        try {
+            int a;
+            TL_topPeer hint;
+            long did;
+            String id;
+            ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
+            List<ShortcutInfo> currentShortcuts = shortcutManager.getDynamicShortcuts();
+            ArrayList<String> shortcutsToUpdate = new ArrayList();
+            ArrayList<String> newShortcutsIds = new ArrayList();
+            ArrayList<String> shortcutsToDelete = new ArrayList();
+            if (!(currentShortcuts == null || currentShortcuts.isEmpty())) {
+                newShortcutsIds.add("compose");
+                for (a = 0; a < hintsFinal.size(); a++) {
+                    hint = (TL_topPeer) hintsFinal.get(a);
+                    if (hint.peer.user_id != 0) {
+                        did = (long) hint.peer.user_id;
+                    } else {
+                        did = (long) (-hint.peer.chat_id);
+                        if (did == 0) {
+                            did = (long) (-hint.peer.channel_id);
                         }
-                        Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                        intent.setAction("new_dialog");
-                        ArrayList<ShortcutInfo> arrayList = new ArrayList();
-                        arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose)).setIntent(intent).build());
-                        if (shortcutsToUpdate.contains("compose")) {
-                            shortcutManager.updateShortcuts(arrayList);
-                        } else {
-                            shortcutManager.addDynamicShortcuts(arrayList);
-                        }
-                        arrayList.clear();
-                        if (!shortcutsToDelete.isEmpty()) {
-                            shortcutManager.removeDynamicShortcuts(shortcutsToDelete);
-                        }
-                        for (a = 0; a < hintsFinal.size(); a++) {
-                            intent = new Intent(ApplicationLoader.applicationContext, OpenChatReceiver.class);
-                            hint = (TL_topPeer) hintsFinal.get(a);
-                            User user = null;
-                            Chat chat = null;
-                            if (hint.peer.user_id != 0) {
-                                intent.putExtra("userId", hint.peer.user_id);
-                                user = MessagesController.getInstance(DataQuery.this.currentAccount).getUser(Integer.valueOf(hint.peer.user_id));
-                                did = (long) hint.peer.user_id;
-                            } else {
-                                int chat_id = hint.peer.chat_id;
-                                if (chat_id == 0) {
-                                    chat_id = hint.peer.channel_id;
-                                }
-                                chat = MessagesController.getInstance(DataQuery.this.currentAccount).getChat(Integer.valueOf(chat_id));
-                                intent.putExtra("chatId", chat_id);
-                                did = (long) (-chat_id);
-                            }
-                            if (user != null || chat != null) {
-                                String name;
-                                TLObject photo = null;
-                                if (user != null) {
-                                    name = ContactsController.formatName(user.first_name, user.last_name);
-                                    if (user.photo != null) {
-                                        photo = user.photo.photo_small;
-                                    }
-                                } else {
-                                    name = chat.title;
-                                    if (chat.photo != null) {
-                                        photo = chat.photo.photo_small;
-                                    }
-                                }
-                                intent.putExtra("currentAccount", DataQuery.this.currentAccount);
-                                intent.setAction("com.tmessages.openchat" + did);
-                                intent.addFlags(ConnectionsManager.FileTypeFile);
-                                Bitmap bitmap = null;
-                                if (photo != null) {
-                                    bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photo, true).toString());
-                                    if (bitmap != null) {
-                                        int size = AndroidUtilities.m10dp(48.0f);
-                                        Bitmap result = Bitmap.createBitmap(size, size, Config.ARGB_8888);
-                                        Canvas canvas = new Canvas(result);
-                                        if (DataQuery.roundPaint == null) {
-                                            DataQuery.roundPaint = new Paint(3);
-                                            DataQuery.bitmapRect = new RectF();
-                                            DataQuery.erasePaint = new Paint(1);
-                                            DataQuery.erasePaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
-                                            DataQuery.roundPath = new Path();
-                                            DataQuery.roundPath.addCircle((float) (size / 2), (float) (size / 2), (float) ((size / 2) - AndroidUtilities.m10dp(2.0f)), Direction.CW);
-                                            DataQuery.roundPath.toggleInverseFillType();
-                                        }
-                                        DataQuery.bitmapRect.set((float) AndroidUtilities.m10dp(2.0f), (float) AndroidUtilities.m10dp(2.0f), (float) AndroidUtilities.m10dp(46.0f), (float) AndroidUtilities.m10dp(46.0f));
-                                        canvas.drawBitmap(bitmap, null, DataQuery.bitmapRect, DataQuery.roundPaint);
-                                        canvas.drawPath(DataQuery.roundPath, DataQuery.erasePaint);
-                                        try {
-                                            canvas.setBitmap(null);
-                                        } catch (Exception e) {
-                                        }
-                                        bitmap = result;
-                                    }
-                                }
-                                id = "did" + did;
-                                if (TextUtils.isEmpty(name)) {
-                                    name = " ";
-                                }
-                                Builder builder = new Builder(ApplicationLoader.applicationContext, id).setShortLabel(name).setLongLabel(name).setIntent(intent);
-                                if (bitmap != null) {
-                                    builder.setIcon(Icon.createWithBitmap(bitmap));
-                                } else {
-                                    builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_user));
-                                }
-                                arrayList.add(builder.build());
-                                if (shortcutsToUpdate.contains(id)) {
-                                    shortcutManager.updateShortcuts(arrayList);
-                                } else {
-                                    shortcutManager.addDynamicShortcuts(arrayList);
-                                }
-                                arrayList.clear();
-                            }
-                        }
-                    } catch (Throwable th) {
                     }
+                    newShortcutsIds.add("did" + did);
                 }
-            });
+                for (a = 0; a < currentShortcuts.size(); a++) {
+                    id = ((ShortcutInfo) currentShortcuts.get(a)).getId();
+                    if (!newShortcutsIds.remove(id)) {
+                        shortcutsToDelete.add(id);
+                    }
+                    shortcutsToUpdate.add(id);
+                }
+                if (newShortcutsIds.isEmpty() && shortcutsToDelete.isEmpty()) {
+                    return;
+                }
+            }
+            Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+            intent.setAction("new_dialog");
+            ArrayList<ShortcutInfo> arrayList = new ArrayList();
+            arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose)).setIntent(intent).build());
+            if (shortcutsToUpdate.contains("compose")) {
+                shortcutManager.updateShortcuts(arrayList);
+            } else {
+                shortcutManager.addDynamicShortcuts(arrayList);
+            }
+            arrayList.clear();
+            if (!shortcutsToDelete.isEmpty()) {
+                shortcutManager.removeDynamicShortcuts(shortcutsToDelete);
+            }
+            for (a = 0; a < hintsFinal.size(); a++) {
+                intent = new Intent(ApplicationLoader.applicationContext, OpenChatReceiver.class);
+                hint = (TL_topPeer) hintsFinal.get(a);
+                User user = null;
+                Chat chat = null;
+                if (hint.peer.user_id != 0) {
+                    intent.putExtra("userId", hint.peer.user_id);
+                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(hint.peer.user_id));
+                    did = (long) hint.peer.user_id;
+                } else {
+                    int chat_id = hint.peer.chat_id;
+                    if (chat_id == 0) {
+                        chat_id = hint.peer.channel_id;
+                    }
+                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(chat_id));
+                    intent.putExtra("chatId", chat_id);
+                    did = (long) (-chat_id);
+                }
+                if (user != null || chat != null) {
+                    String name;
+                    TLObject photo = null;
+                    if (user != null) {
+                        name = ContactsController.formatName(user.first_name, user.last_name);
+                        if (user.photo != null) {
+                            photo = user.photo.photo_small;
+                        }
+                    } else {
+                        name = chat.title;
+                        if (chat.photo != null) {
+                            photo = chat.photo.photo_small;
+                        }
+                    }
+                    intent.putExtra("currentAccount", this.currentAccount);
+                    intent.setAction("com.tmessages.openchat" + did);
+                    intent.addFlags(ConnectionsManager.FileTypeFile);
+                    Bitmap bitmap = null;
+                    if (photo != null) {
+                        bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photo, true).toString());
+                        if (bitmap != null) {
+                            int size = AndroidUtilities.m9dp(48.0f);
+                            Bitmap result = Bitmap.createBitmap(size, size, Config.ARGB_8888);
+                            Canvas canvas = new Canvas(result);
+                            if (roundPaint == null) {
+                                roundPaint = new Paint(3);
+                                bitmapRect = new RectF();
+                                erasePaint = new Paint(1);
+                                erasePaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+                                roundPath = new Path();
+                                roundPath.addCircle((float) (size / 2), (float) (size / 2), (float) ((size / 2) - AndroidUtilities.m9dp(2.0f)), Direction.CW);
+                                roundPath.toggleInverseFillType();
+                            }
+                            bitmapRect.set((float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(46.0f), (float) AndroidUtilities.m9dp(46.0f));
+                            canvas.drawBitmap(bitmap, null, bitmapRect, roundPaint);
+                            canvas.drawPath(roundPath, erasePaint);
+                            try {
+                                canvas.setBitmap(null);
+                            } catch (Exception e) {
+                            }
+                            bitmap = result;
+                        }
+                    }
+                    id = "did" + did;
+                    if (TextUtils.isEmpty(name)) {
+                        name = " ";
+                    }
+                    Builder builder = new Builder(ApplicationLoader.applicationContext, id).setShortLabel(name).setLongLabel(name).setIntent(intent);
+                    if (bitmap != null) {
+                        builder.setIcon(Icon.createWithBitmap(bitmap));
+                    } else {
+                        builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_user));
+                    }
+                    arrayList.add(builder.build());
+                    if (shortcutsToUpdate.contains(id)) {
+                        shortcutManager.updateShortcuts(arrayList);
+                    } else {
+                        shortcutManager.addDynamicShortcuts(arrayList);
+                    }
+                    arrayList.clear();
+                }
+            }
+        } catch (Throwable th) {
         }
     }
 
@@ -2918,13 +2662,162 @@ public class DataQuery {
                 req.bots_inline = true;
                 req.offset = 0;
                 req.limit = 20;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C037044());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$45(this));
             } else if (!this.loaded) {
                 this.loading = true;
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C031243());
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$44(this));
                 this.loaded = true;
             }
         }
+    }
+
+    final /* synthetic */ void lambda$loadHints$69$DataQuery() {
+        ArrayList<TL_topPeer> hintsNew = new ArrayList();
+        ArrayList<TL_topPeer> inlineBotsNew = new ArrayList();
+        ArrayList<User> users = new ArrayList();
+        ArrayList<Chat> chats = new ArrayList();
+        int selfUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
+        try {
+            ArrayList<Integer> usersToLoad = new ArrayList();
+            ArrayList<Integer> chatsToLoad = new ArrayList();
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT did, type, rating FROM chat_hints WHERE 1 ORDER BY rating DESC", new Object[0]);
+            while (cursor.next()) {
+                int did = cursor.intValue(0);
+                if (did != selfUserId) {
+                    int type = cursor.intValue(1);
+                    TL_topPeer peer = new TL_topPeer();
+                    peer.rating = cursor.doubleValue(2);
+                    if (did > 0) {
+                        peer.peer = new TL_peerUser();
+                        peer.peer.user_id = did;
+                        usersToLoad.add(Integer.valueOf(did));
+                    } else {
+                        peer.peer = new TL_peerChat();
+                        peer.peer.chat_id = -did;
+                        chatsToLoad.add(Integer.valueOf(-did));
+                    }
+                    if (type == 0) {
+                        hintsNew.add(peer);
+                    } else if (type == 1) {
+                        inlineBotsNew.add(peer);
+                    }
+                }
+            }
+            cursor.dispose();
+            if (!usersToLoad.isEmpty()) {
+                MessagesStorage.getInstance(this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
+            }
+            if (!chatsToLoad.isEmpty()) {
+                MessagesStorage.getInstance(this.currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
+            }
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$85(this, users, chats, hintsNew, inlineBotsNew));
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$68$DataQuery(ArrayList users, ArrayList chats, ArrayList hintsNew, ArrayList inlineBotsNew) {
+        MessagesController.getInstance(this.currentAccount).putUsers(users, true);
+        MessagesController.getInstance(this.currentAccount).putChats(chats, true);
+        this.loading = false;
+        this.loaded = true;
+        this.hints = hintsNew;
+        this.inlineBots = inlineBotsNew;
+        buildShortcuts();
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
+        if (Math.abs(UserConfig.getInstance(this.currentAccount).lastHintsSyncTime - ((int) (System.currentTimeMillis() / 1000))) >= 86400) {
+            loadHints(false);
+        }
+    }
+
+    final /* synthetic */ void lambda$loadHints$74$DataQuery(TLObject response, TL_error error) {
+        if (response instanceof TL_contacts_topPeers) {
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$81(this, response));
+        } else if (response instanceof TL_contacts_topPeersDisabled) {
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$82(this));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$72$DataQuery(TLObject response) {
+        TL_contacts_topPeers topPeers = (TL_contacts_topPeers) response;
+        MessagesController.getInstance(this.currentAccount).putUsers(topPeers.users, false);
+        MessagesController.getInstance(this.currentAccount).putChats(topPeers.chats, false);
+        for (int a = 0; a < topPeers.categories.size(); a++) {
+            TL_topPeerCategoryPeers category = (TL_topPeerCategoryPeers) topPeers.categories.get(a);
+            if (category.category instanceof TL_topPeerCategoryBotsInline) {
+                this.inlineBots = category.peers;
+                UserConfig.getInstance(this.currentAccount).botRatingLoadTime = (int) (System.currentTimeMillis() / 1000);
+            } else {
+                this.hints = category.peers;
+                int selfUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
+                for (int b = 0; b < this.hints.size(); b++) {
+                    if (((TL_topPeer) this.hints.get(b)).peer.user_id == selfUserId) {
+                        this.hints.remove(b);
+                        break;
+                    }
+                }
+                UserConfig.getInstance(this.currentAccount).ratingLoadTime = (int) (System.currentTimeMillis() / 1000);
+            }
+        }
+        UserConfig.getInstance(this.currentAccount).saveConfig(false);
+        buildShortcuts();
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$83(this, topPeers));
+    }
+
+    final /* synthetic */ void lambda$null$71$DataQuery(TL_contacts_topPeers topPeers) {
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM chat_hints WHERE 1").stepThis().dispose();
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
+            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(topPeers.users, topPeers.chats, false, false);
+            SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO chat_hints VALUES(?, ?, ?, ?)");
+            for (int a = 0; a < topPeers.categories.size(); a++) {
+                int type;
+                TL_topPeerCategoryPeers category = (TL_topPeerCategoryPeers) topPeers.categories.get(a);
+                if (category.category instanceof TL_topPeerCategoryBotsInline) {
+                    type = 1;
+                } else {
+                    type = 0;
+                }
+                for (int b = 0; b < category.peers.size(); b++) {
+                    int did;
+                    TL_topPeer peer = (TL_topPeer) category.peers.get(b);
+                    if (peer.peer instanceof TL_peerUser) {
+                        did = peer.peer.user_id;
+                    } else if (peer.peer instanceof TL_peerChat) {
+                        did = -peer.peer.chat_id;
+                    } else {
+                        did = -peer.peer.channel_id;
+                    }
+                    state.requery();
+                    state.bindInteger(1, did);
+                    state.bindInteger(2, type);
+                    state.bindDouble(3, peer.rating);
+                    state.bindInteger(4, 0);
+                    state.step();
+                }
+            }
+            state.dispose();
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$84(this));
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$70$DataQuery() {
+        UserConfig.getInstance(this.currentAccount).suggestContacts = true;
+        UserConfig.getInstance(this.currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);
+        UserConfig.getInstance(this.currentAccount).saveConfig(false);
+    }
+
+    final /* synthetic */ void lambda$null$73$DataQuery() {
+        UserConfig.getInstance(this.currentAccount).suggestContacts = false;
+        UserConfig.getInstance(this.currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);
+        UserConfig.getInstance(this.currentAccount).saveConfig(false);
+        clearTopPeers();
     }
 
     public void clearTopPeers() {
@@ -2932,8 +2825,15 @@ public class DataQuery {
         this.inlineBots.clear();
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C031745());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$46(this));
         buildShortcuts();
+    }
+
+    final /* synthetic */ void lambda$clearTopPeers$75$DataQuery() {
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM chat_hints WHERE 1").stepThis().dispose();
+        } catch (Exception e) {
+        }
     }
 
     public void increaseInlineRaiting(int uid) {
@@ -2959,13 +2859,23 @@ public class DataQuery {
                 this.inlineBots.add(peer);
             }
             peer.rating += Math.exp((double) (dt / MessagesController.getInstance(this.currentAccount).ratingDecay));
-            Collections.sort(this.inlineBots, new C031846());
+            Collections.sort(this.inlineBots, DataQuery$$Lambda$47.$instance);
             if (this.inlineBots.size() > 20) {
                 this.inlineBots.remove(this.inlineBots.size() - 1);
             }
             savePeer(uid, 1, peer.rating);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
         }
+    }
+
+    static final /* synthetic */ int lambda$increaseInlineRaiting$76$DataQuery(TL_topPeer lhs, TL_topPeer rhs) {
+        if (lhs.rating > rhs.rating) {
+            return -1;
+        }
+        if (lhs.rating < rhs.rating) {
+            return 1;
+        }
+        return 0;
     }
 
     public void removeInline(int uid) {
@@ -2975,12 +2885,15 @@ public class DataQuery {
                 TL_contacts_resetTopPeerRating req = new TL_contacts_resetTopPeerRating();
                 req.category = new TL_topPeerCategoryBotsInline();
                 req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(uid);
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C037147());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, DataQuery$$Lambda$48.$instance);
                 deletePeer(uid, 1);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
                 return;
             }
         }
+    }
+
+    static final /* synthetic */ void lambda$removeInline$77$DataQuery(TLObject response, TL_error error) {
     }
 
     public void removePeer(int uid) {
@@ -2992,120 +2905,112 @@ public class DataQuery {
                 req.category = new TL_topPeerCategoryCorrespondents();
                 req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(uid);
                 deletePeer(uid, 0);
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C037248());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, DataQuery$$Lambda$49.$instance);
                 return;
             }
         }
     }
 
-    public void increasePeerRaiting(final long did) {
+    static final /* synthetic */ void lambda$removePeer$78$DataQuery(TLObject response, TL_error error) {
+    }
+
+    public void increasePeerRaiting(long did) {
         if (UserConfig.getInstance(this.currentAccount).suggestContacts) {
-            final int lower_id = (int) did;
+            int lower_id = (int) did;
             if (lower_id > 0) {
                 User user = lower_id > 0 ? MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id)) : null;
-                if (user != null && !user.bot) {
-                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                        public void run() {
-                            double dt = 0.0d;
-                            int lastTime = 0;
-                            int lastMid = 0;
-                            try {
-                                SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT MAX(mid), MAX(date) FROM messages WHERE uid = %d AND out = 1", new Object[]{Long.valueOf(did)}), new Object[0]);
-                                if (cursor.next()) {
-                                    lastMid = cursor.intValue(0);
-                                    lastTime = cursor.intValue(1);
-                                }
-                                cursor.dispose();
-                                if (lastMid > 0 && UserConfig.getInstance(DataQuery.this.currentAccount).ratingLoadTime != 0) {
-                                    dt = (double) (lastTime - UserConfig.getInstance(DataQuery.this.currentAccount).ratingLoadTime);
-                                }
-                            } catch (Throwable e) {
-                                FileLog.m14e(e);
-                            }
-                            final double dtFinal = dt;
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-
-                                /* renamed from: org.telegram.messenger.DataQuery$49$1$1 */
-                                class C03191 implements Comparator<TL_topPeer> {
-                                    C03191() {
-                                    }
-
-                                    public int compare(TL_topPeer lhs, TL_topPeer rhs) {
-                                        if (lhs.rating > rhs.rating) {
-                                            return -1;
-                                        }
-                                        if (lhs.rating < rhs.rating) {
-                                            return 1;
-                                        }
-                                        return 0;
-                                    }
-                                }
-
-                                public void run() {
-                                    TL_topPeer peer = null;
-                                    for (int a = 0; a < DataQuery.this.hints.size(); a++) {
-                                        TL_topPeer p = (TL_topPeer) DataQuery.this.hints.get(a);
-                                        if ((lower_id < 0 && (p.peer.chat_id == (-lower_id) || p.peer.channel_id == (-lower_id))) || (lower_id > 0 && p.peer.user_id == lower_id)) {
-                                            peer = p;
-                                            break;
-                                        }
-                                    }
-                                    if (peer == null) {
-                                        peer = new TL_topPeer();
-                                        if (lower_id > 0) {
-                                            peer.peer = new TL_peerUser();
-                                            peer.peer.user_id = lower_id;
-                                        } else {
-                                            peer.peer = new TL_peerChat();
-                                            peer.peer.chat_id = -lower_id;
-                                        }
-                                        DataQuery.this.hints.add(peer);
-                                    }
-                                    peer.rating += Math.exp(dtFinal / ((double) MessagesController.getInstance(DataQuery.this.currentAccount).ratingDecay));
-                                    Collections.sort(DataQuery.this.hints, new C03191());
-                                    DataQuery.this.savePeer((int) did, 0, peer.rating);
-                                    NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
-                                }
-                            });
-                        }
-                    });
+                if (user != null && !user.bot && !user.self) {
+                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$50(this, did, lower_id));
                 }
             }
         }
     }
 
-    private void savePeer(int did, int type, double rating) {
-        final int i = did;
-        final int i2 = type;
-        final double d = rating;
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO chat_hints VALUES(?, ?, ?, ?)");
-                    state.requery();
-                    state.bindInteger(1, i);
-                    state.bindInteger(2, i2);
-                    state.bindDouble(3, d);
-                    state.bindInteger(4, ((int) System.currentTimeMillis()) / 1000);
-                    state.step();
-                    state.dispose();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
-                }
+    final /* synthetic */ void lambda$increasePeerRaiting$81$DataQuery(long did, int lower_id) {
+        double dt = 0.0d;
+        int lastTime = 0;
+        int lastMid = 0;
+        try {
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT MAX(mid), MAX(date) FROM messages WHERE uid = %d AND out = 1", new Object[]{Long.valueOf(did)}), new Object[0]);
+            if (cursor.next()) {
+                lastMid = cursor.intValue(0);
+                lastTime = cursor.intValue(1);
             }
-        });
+            cursor.dispose();
+            if (lastMid > 0 && UserConfig.getInstance(this.currentAccount).ratingLoadTime != 0) {
+                dt = (double) (lastTime - UserConfig.getInstance(this.currentAccount).ratingLoadTime);
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$79(this, lower_id, dt, did));
     }
 
-    private void deletePeer(final int did, final int type) {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast(String.format(Locale.US, "DELETE FROM chat_hints WHERE did = %d AND type = %d", new Object[]{Integer.valueOf(did), Integer.valueOf(type)})).stepThis().dispose();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
-                }
+    final /* synthetic */ void lambda$null$80$DataQuery(int lower_id, double dtFinal, long did) {
+        TL_topPeer peer = null;
+        for (int a = 0; a < this.hints.size(); a++) {
+            TL_topPeer p = (TL_topPeer) this.hints.get(a);
+            if ((lower_id < 0 && (p.peer.chat_id == (-lower_id) || p.peer.channel_id == (-lower_id))) || (lower_id > 0 && p.peer.user_id == lower_id)) {
+                peer = p;
+                break;
             }
-        });
+        }
+        if (peer == null) {
+            peer = new TL_topPeer();
+            if (lower_id > 0) {
+                peer.peer = new TL_peerUser();
+                peer.peer.user_id = lower_id;
+            } else {
+                peer.peer = new TL_peerChat();
+                peer.peer.chat_id = -lower_id;
+            }
+            this.hints.add(peer);
+        }
+        peer.rating += Math.exp(dtFinal / ((double) MessagesController.getInstance(this.currentAccount).ratingDecay));
+        Collections.sort(this.hints, DataQuery$$Lambda$80.$instance);
+        savePeer((int) did, 0, peer.rating);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
+    }
+
+    static final /* synthetic */ int lambda$null$79$DataQuery(TL_topPeer lhs, TL_topPeer rhs) {
+        if (lhs.rating > rhs.rating) {
+            return -1;
+        }
+        if (lhs.rating < rhs.rating) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private void savePeer(int did, int type, double rating) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$51(this, did, type, rating));
+    }
+
+    final /* synthetic */ void lambda$savePeer$82$DataQuery(int did, int type, double rating) {
+        try {
+            SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO chat_hints VALUES(?, ?, ?, ?)");
+            state.requery();
+            state.bindInteger(1, did);
+            state.bindInteger(2, type);
+            state.bindDouble(3, rating);
+            state.bindInteger(4, ((int) System.currentTimeMillis()) / 1000);
+            state.step();
+            state.dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    private void deletePeer(int did, int type) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$52(this, did, type));
+    }
+
+    final /* synthetic */ void lambda$deletePeer$83$DataQuery(int did, int type) {
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast(String.format(Locale.US, "DELETE FROM chat_hints WHERE did = %d AND type = %d", new Object[]{Integer.valueOf(did), Integer.valueOf(type)})).stepThis().dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
     private Intent createIntrnalShortcutIntent(long did) {
@@ -3175,11 +3080,11 @@ public class DataQuery {
                         try {
                             bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photo, true).toString());
                         } catch (Throwable e) {
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                         }
                     }
                     if (selfUser || bitmap != null) {
-                        int size = AndroidUtilities.m10dp(58.0f);
+                        int size = AndroidUtilities.m9dp(58.0f);
                         Bitmap result = Bitmap.createBitmap(size, size, Config.ARGB_8888);
                         result.eraseColor(0);
                         Canvas canvas = new Canvas(result);
@@ -3203,9 +3108,9 @@ public class DataQuery {
                             canvas.restore();
                         }
                         Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.book_logo);
-                        int w = AndroidUtilities.m10dp(15.0f);
-                        int left = (size - w) - AndroidUtilities.m10dp(2.0f);
-                        int top = (size - w) - AndroidUtilities.m10dp(2.0f);
+                        int w = AndroidUtilities.m9dp(15.0f);
+                        int left = (size - w) - AndroidUtilities.m9dp(2.0f);
+                        int top = (size - w) - AndroidUtilities.m9dp(2.0f);
                         drawable.setBounds(left, top, left + w, top + w);
                         drawable.draw(canvas);
                         try {
@@ -3258,7 +3163,7 @@ public class DataQuery {
                 ApplicationLoader.applicationContext.sendBroadcast(addIntent);
             }
         } catch (Throwable e3) {
-            FileLog.m14e(e3);
+            FileLog.m13e(e3);
         }
     }
 
@@ -3304,24 +3209,39 @@ public class DataQuery {
                 ApplicationLoader.applicationContext.sendBroadcast(addIntent);
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
-    public MessageObject loadPinnedMessage(final int channelId, final int mid, boolean useQueue) {
-        if (!useQueue) {
-            return loadPinnedMessageInternal(channelId, mid, true);
+    static final /* synthetic */ int lambda$static$84$DataQuery(MessageEntity entity1, MessageEntity entity2) {
+        if (entity1.offset > entity2.offset) {
+            return 1;
         }
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                DataQuery.this.loadPinnedMessageInternal(channelId, mid, false);
-            }
-        });
+        if (entity1.offset < entity2.offset) {
+            return -1;
+        }
+        return 0;
+    }
+
+    public MessageObject loadPinnedMessage(long dialogId, int channelId, int mid, boolean useQueue) {
+        if (!useQueue) {
+            return loadPinnedMessageInternal(dialogId, channelId, mid, true);
+        }
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$53(this, dialogId, channelId, mid));
         return null;
     }
 
-    private MessageObject loadPinnedMessageInternal(int channelId, int mid, boolean returnValue) {
-        long messageId = ((long) mid) | (((long) channelId) << 32);
+    final /* synthetic */ void lambda$loadPinnedMessage$85$DataQuery(long dialogId, int channelId, int mid) {
+        loadPinnedMessageInternal(dialogId, channelId, mid, false);
+    }
+
+    private MessageObject loadPinnedMessageInternal(long dialogId, int channelId, int mid, boolean returnValue) {
+        long messageId;
+        if (channelId != 0) {
+            messageId = ((long) mid) | (((long) channelId) << 32);
+        } else {
+            messageId = (long) mid;
+        }
         Message result = null;
         try {
             NativeByteBuffer data;
@@ -3341,14 +3261,14 @@ public class DataQuery {
                     } else {
                         result.f104id = cursor.intValue(1);
                         result.date = cursor.intValue(2);
-                        result.dialog_id = (long) (-channelId);
+                        result.dialog_id = dialogId;
                         MessagesStorage.addUsersAndChatsFromMessage(result, usersToLoad, chatsToLoad);
                     }
                 }
             }
             cursor.dispose();
             if (result == null) {
-                cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data FROM chat_pinned WHERE uid = %d", new Object[]{Integer.valueOf(channelId)}), new Object[0]);
+                cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data FROM chat_pinned WHERE uid = %d", new Object[]{Long.valueOf(dialogId)}), new Object[0]);
                 if (cursor.next()) {
                     data = cursor.byteBufferValue(0);
                     if (data != null) {
@@ -3358,7 +3278,7 @@ public class DataQuery {
                         if (result.f104id != mid || (result.action instanceof TL_messageActionHistoryClear)) {
                             result = null;
                         } else {
-                            result.dialog_id = (long) (-channelId);
+                            result.dialog_id = dialogId;
                             MessagesStorage.addUsersAndChatsFromMessage(result, usersToLoad, chatsToLoad);
                         }
                     }
@@ -3366,29 +3286,16 @@ public class DataQuery {
                 cursor.dispose();
             }
             if (result == null) {
-                TL_channels_getMessages req = new TL_channels_getMessages();
-                req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-                req.f120id.add(Integer.valueOf(mid));
-                final int i = channelId;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                    public void run(TLObject response, TL_error error) {
-                        boolean ok = false;
-                        if (error == null) {
-                            messages_Messages messagesRes = (messages_Messages) response;
-                            DataQuery.removeEmptyMessages(messagesRes.messages);
-                            if (!messagesRes.messages.isEmpty()) {
-                                ImageLoader.saveMessagesThumbs(messagesRes.messages);
-                                DataQuery.this.broadcastPinnedMessage((Message) messagesRes.messages.get(0), messagesRes.users, messagesRes.chats, false, false);
-                                MessagesStorage.getInstance(DataQuery.this.currentAccount).putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);
-                                DataQuery.this.savePinnedMessage((Message) messagesRes.messages.get(0));
-                                ok = true;
-                            }
-                        }
-                        if (!ok) {
-                            MessagesStorage.getInstance(DataQuery.this.currentAccount).updateChannelPinnedMessage(i, 0);
-                        }
-                    }
-                });
+                if (channelId != 0) {
+                    TL_channels_getMessages req = new TL_channels_getMessages();
+                    req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
+                    req.f118id.add(Integer.valueOf(mid));
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$54(this, channelId));
+                } else {
+                    TL_messages_getMessages req2 = new TL_messages_getMessages();
+                    req2.f149id.add(Integer.valueOf(mid));
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new DataQuery$$Lambda$55(this, channelId));
+                }
             } else if (returnValue) {
                 return broadcastPinnedMessage(result, users, chats, true, returnValue);
             } else {
@@ -3401,32 +3308,78 @@ public class DataQuery {
                 broadcastPinnedMessage(result, users, chats, true, false);
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         return null;
     }
 
-    private void savePinnedMessage(final Message result) {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().beginTransaction();
-                    SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO chat_pinned VALUES(?, ?, ?)");
-                    NativeByteBuffer data = new NativeByteBuffer(result.getObjectSize());
-                    result.serializeToStream(data);
-                    state.requery();
-                    state.bindInteger(1, result.to_id.channel_id);
-                    state.bindInteger(2, result.f104id);
-                    state.bindByteBuffer(3, data);
-                    state.step();
-                    data.reuse();
-                    state.dispose();
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
-                }
+    final /* synthetic */ void lambda$loadPinnedMessageInternal$86$DataQuery(int channelId, TLObject response, TL_error error) {
+        boolean ok = false;
+        if (error == null) {
+            messages_Messages messagesRes = (messages_Messages) response;
+            removeEmptyMessages(messagesRes.messages);
+            if (!messagesRes.messages.isEmpty()) {
+                ImageLoader.saveMessagesThumbs(messagesRes.messages);
+                broadcastPinnedMessage((Message) messagesRes.messages.get(0), messagesRes.users, messagesRes.chats, false, false);
+                MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);
+                savePinnedMessage((Message) messagesRes.messages.get(0));
+                ok = true;
             }
-        });
+        }
+        if (!ok) {
+            MessagesStorage.getInstance(this.currentAccount).updateChatPinnedMessage(channelId, 0);
+        }
+    }
+
+    final /* synthetic */ void lambda$loadPinnedMessageInternal$87$DataQuery(int channelId, TLObject response, TL_error error) {
+        boolean ok = false;
+        if (error == null) {
+            messages_Messages messagesRes = (messages_Messages) response;
+            removeEmptyMessages(messagesRes.messages);
+            if (!messagesRes.messages.isEmpty()) {
+                ImageLoader.saveMessagesThumbs(messagesRes.messages);
+                broadcastPinnedMessage((Message) messagesRes.messages.get(0), messagesRes.users, messagesRes.chats, false, false);
+                MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);
+                savePinnedMessage((Message) messagesRes.messages.get(0));
+                ok = true;
+            }
+        }
+        if (!ok) {
+            MessagesStorage.getInstance(this.currentAccount).updateChatPinnedMessage(channelId, 0);
+        }
+    }
+
+    private void savePinnedMessage(Message result) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$56(this, result));
+    }
+
+    final /* synthetic */ void lambda$savePinnedMessage$88$DataQuery(Message result) {
+        try {
+            long dialogId;
+            if (result.to_id.channel_id != 0) {
+                dialogId = (long) (-result.to_id.channel_id);
+            } else if (result.to_id.chat_id != 0) {
+                dialogId = (long) (-result.to_id.chat_id);
+            } else if (result.to_id.user_id != 0) {
+                dialogId = (long) result.to_id.user_id;
+            } else {
+                return;
+            }
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
+            SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO chat_pinned VALUES(?, ?, ?)");
+            NativeByteBuffer data = new NativeByteBuffer(result.getObjectSize());
+            result.serializeToStream(data);
+            state.requery();
+            state.bindLong(1, dialogId);
+            state.bindInteger(2, result.f104id);
+            state.bindByteBuffer(3, data);
+            state.step();
+            data.reuse();
+            state.dispose();
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
     private MessageObject broadcastPinnedMessage(Message result, ArrayList<User> users, ArrayList<Chat> chats, boolean isCache, boolean returnValue) {
@@ -3434,7 +3387,7 @@ public class DataQuery {
         SparseArray usersDict = new SparseArray();
         for (a = 0; a < users.size(); a++) {
             User user = (User) users.get(a);
-            usersDict.put(user.f177id, user);
+            usersDict.put(user.f176id, user);
         }
         SparseArray chatsDict = new SparseArray();
         for (a = 0; a < chats.size(); a++) {
@@ -3444,20 +3397,14 @@ public class DataQuery {
         if (returnValue) {
             return new MessageObject(this.currentAccount, result, usersDict, chatsDict, false);
         }
-        final ArrayList<User> arrayList = users;
-        final boolean z = isCache;
-        final ArrayList<Chat> arrayList2 = chats;
-        final Message message = result;
-        final SparseArray sparseArray = usersDict;
-        final SparseArray sparseArray2 = chatsDict;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                MessagesController.getInstance(DataQuery.this.currentAccount).putUsers(arrayList, z);
-                MessagesController.getInstance(DataQuery.this.currentAccount).putChats(arrayList2, z);
-                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.didLoadedPinnedMessage, new MessageObject(DataQuery.this.currentAccount, message, sparseArray, sparseArray2, false));
-            }
-        });
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$57(this, users, isCache, chats, result, usersDict, chatsDict));
         return null;
+    }
+
+    final /* synthetic */ void lambda$broadcastPinnedMessage$89$DataQuery(ArrayList users, boolean isCache, ArrayList chats, Message result, SparseArray usersDict, SparseArray chatsDict) {
+        MessagesController.getInstance(this.currentAccount).putUsers(users, isCache);
+        MessagesController.getInstance(this.currentAccount).putChats(chats, isCache);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.pinnedMessageDidLoad, new MessageObject(this.currentAccount, result, usersDict, chatsDict, false));
     }
 
     private static void removeEmptyMessages(ArrayList<Message> messages) {
@@ -3477,8 +3424,8 @@ public class DataQuery {
         MessageObject messageObject;
         ArrayList<MessageObject> messageObjects;
         if (((int) dialogId) == 0) {
-            final ArrayList<Long> replyMessages = new ArrayList();
-            final LongSparseArray<ArrayList<MessageObject>> replyMessageRandomOwners = new LongSparseArray();
+            ArrayList<Long> replyMessages = new ArrayList();
+            LongSparseArray<ArrayList<MessageObject>> replyMessageRandomOwners = new LongSparseArray();
             for (a = 0; a < messages.size(); a++) {
                 messageObject = (MessageObject) messages.get(a);
                 if (messageObject.isReply() && messageObject.replyMessageObject == null) {
@@ -3495,72 +3442,14 @@ public class DataQuery {
                 }
             }
             if (!replyMessages.isEmpty()) {
-                final long j = dialogId;
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-
-                    /* renamed from: org.telegram.messenger.DataQuery$57$1 */
-                    class C03291 implements Runnable {
-                        C03291() {
-                        }
-
-                        public void run() {
-                            NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.didLoadedReplyMessages, Long.valueOf(j));
-                        }
-                    }
-
-                    public void run() {
-                        try {
-                            ArrayList<MessageObject> arrayList;
-                            int b;
-                            SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)", new Object[]{TextUtils.join(",", replyMessages)}), new Object[0]);
-                            while (cursor.next()) {
-                                NativeByteBuffer data = cursor.byteBufferValue(0);
-                                if (data != null) {
-                                    Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
-                                    data.reuse();
-                                    message.f104id = cursor.intValue(1);
-                                    message.date = cursor.intValue(2);
-                                    message.dialog_id = j;
-                                    long value = cursor.longValue(3);
-                                    arrayList = (ArrayList) replyMessageRandomOwners.get(value);
-                                    replyMessageRandomOwners.remove(value);
-                                    if (arrayList != null) {
-                                        MessageObject messageObject = new MessageObject(DataQuery.this.currentAccount, message, false);
-                                        for (b = 0; b < arrayList.size(); b++) {
-                                            MessageObject object = (MessageObject) arrayList.get(b);
-                                            object.replyMessageObject = messageObject;
-                                            object.messageOwner.reply_to_msg_id = messageObject.getId();
-                                            if (object.isMegagroup()) {
-                                                Message message2 = object.replyMessageObject.messageOwner;
-                                                message2.flags |= Integer.MIN_VALUE;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            cursor.dispose();
-                            if (replyMessageRandomOwners.size() != 0) {
-                                for (b = 0; b < replyMessageRandomOwners.size(); b++) {
-                                    arrayList = (ArrayList) replyMessageRandomOwners.valueAt(b);
-                                    for (int a = 0; a < arrayList.size(); a++) {
-                                        ((MessageObject) arrayList.get(a)).messageOwner.reply_to_random_id = 0;
-                                    }
-                                }
-                            }
-                            AndroidUtilities.runOnUIThread(new C03291());
-                        } catch (Throwable e) {
-                            FileLog.m14e(e);
-                        }
-                    }
-                });
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$58(this, replyMessages, dialogId, replyMessageRandomOwners));
                 return;
             }
             return;
         }
-        final ArrayList<Integer> replyMessages2 = new ArrayList();
-        final SparseArray<ArrayList<MessageObject>> replyMessageOwners = new SparseArray();
-        final StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<Integer> replyMessages2 = new ArrayList();
+        SparseArray<ArrayList<MessageObject>> replyMessageOwners = new SparseArray();
+        StringBuilder stringBuilder = new StringBuilder();
         int channelId = 0;
         for (a = 0; a < messages.size(); a++) {
             messageObject = (MessageObject) messages.get(a);
@@ -3587,180 +3476,210 @@ public class DataQuery {
             }
         }
         if (!replyMessages2.isEmpty()) {
-            final int channelIdFinal = channelId;
-            final long j2 = dialogId;
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-
-                /* renamed from: org.telegram.messenger.DataQuery$58$1 */
-                class C03321 implements RequestDelegate {
-                    C03321() {
-                    }
-
-                    public void run(TLObject response, TL_error error) {
-                        if (error == null) {
-                            messages_Messages messagesRes = (messages_Messages) response;
-                            DataQuery.removeEmptyMessages(messagesRes.messages);
-                            ImageLoader.saveMessagesThumbs(messagesRes.messages);
-                            DataQuery.this.broadcastReplyMessages(messagesRes.messages, replyMessageOwners, messagesRes.users, messagesRes.chats, j2, false);
-                            MessagesStorage.getInstance(DataQuery.this.currentAccount).putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);
-                            DataQuery.this.saveReplyMessages(replyMessageOwners, messagesRes.messages);
-                        }
-                    }
-                }
-
-                /* renamed from: org.telegram.messenger.DataQuery$58$2 */
-                class C03332 implements RequestDelegate {
-                    C03332() {
-                    }
-
-                    public void run(TLObject response, TL_error error) {
-                        if (error == null) {
-                            messages_Messages messagesRes = (messages_Messages) response;
-                            DataQuery.removeEmptyMessages(messagesRes.messages);
-                            ImageLoader.saveMessagesThumbs(messagesRes.messages);
-                            DataQuery.this.broadcastReplyMessages(messagesRes.messages, replyMessageOwners, messagesRes.users, messagesRes.chats, j2, false);
-                            MessagesStorage.getInstance(DataQuery.this.currentAccount).putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);
-                            DataQuery.this.saveReplyMessages(replyMessageOwners, messagesRes.messages);
-                        }
-                    }
-                }
-
-                public void run() {
-                    try {
-                        ArrayList<Message> result = new ArrayList();
-                        ArrayList<User> users = new ArrayList();
-                        ArrayList<Chat> chats = new ArrayList();
-                        ArrayList<Integer> usersToLoad = new ArrayList();
-                        ArrayList<Integer> chatsToLoad = new ArrayList();
-                        SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid, date FROM messages WHERE mid IN(%s)", new Object[]{stringBuilder.toString()}), new Object[0]);
-                        while (cursor.next()) {
-                            NativeByteBuffer data = cursor.byteBufferValue(0);
-                            if (data != null) {
-                                Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
-                                data.reuse();
-                                message.f104id = cursor.intValue(1);
-                                message.date = cursor.intValue(2);
-                                message.dialog_id = j2;
-                                MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                                result.add(message);
-                                replyMessages2.remove(Integer.valueOf(message.f104id));
-                            }
-                        }
-                        cursor.dispose();
-                        if (!usersToLoad.isEmpty()) {
-                            MessagesStorage.getInstance(DataQuery.this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
-                        }
-                        if (!chatsToLoad.isEmpty()) {
-                            MessagesStorage.getInstance(DataQuery.this.currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
-                        }
-                        DataQuery.this.broadcastReplyMessages(result, replyMessageOwners, users, chats, j2, true);
-                        if (!replyMessages2.isEmpty()) {
-                            if (channelIdFinal != 0) {
-                                TL_channels_getMessages req = new TL_channels_getMessages();
-                                req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
-                                req.f120id = replyMessages2;
-                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C03321());
-                                return;
-                            }
-                            TL_messages_getMessages req2 = new TL_messages_getMessages();
-                            req2.f151id = replyMessages2;
-                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C03332());
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                }
-            });
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$59(this, stringBuilder, dialogId, replyMessages2, replyMessageOwners, channelId));
         }
     }
 
-    private void saveReplyMessages(final SparseArray<ArrayList<MessageObject>> replyMessageOwners, final ArrayList<Message> result) {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().beginTransaction();
-                    SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("UPDATE messages SET replydata = ? WHERE mid = ?");
-                    for (int a = 0; a < result.size(); a++) {
-                        Message message = (Message) result.get(a);
-                        ArrayList<MessageObject> messageObjects = (ArrayList) replyMessageOwners.get(message.f104id);
-                        if (messageObjects != null) {
-                            NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
-                            message.serializeToStream(data);
-                            for (int b = 0; b < messageObjects.size(); b++) {
-                                MessageObject messageObject = (MessageObject) messageObjects.get(b);
-                                state.requery();
-                                long messageId = (long) messageObject.getId();
-                                if (messageObject.messageOwner.to_id.channel_id != 0) {
-                                    messageId |= ((long) messageObject.messageOwner.to_id.channel_id) << 32;
-                                }
-                                state.bindByteBuffer(1, data);
-                                state.bindLong(2, messageId);
-                                state.step();
+    final /* synthetic */ void lambda$loadReplyMessagesForMessages$91$DataQuery(ArrayList replyMessages, long dialogId, LongSparseArray replyMessageRandomOwners) {
+        try {
+            ArrayList<MessageObject> arrayList;
+            int b;
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)", new Object[]{TextUtils.join(",", replyMessages)}), new Object[0]);
+            while (cursor.next()) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                    message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                    data.reuse();
+                    message.f104id = cursor.intValue(1);
+                    message.date = cursor.intValue(2);
+                    message.dialog_id = dialogId;
+                    long value = cursor.longValue(3);
+                    arrayList = (ArrayList) replyMessageRandomOwners.get(value);
+                    replyMessageRandomOwners.remove(value);
+                    if (arrayList != null) {
+                        MessageObject messageObject = new MessageObject(this.currentAccount, message, false);
+                        for (b = 0; b < arrayList.size(); b++) {
+                            MessageObject object = (MessageObject) arrayList.get(b);
+                            object.replyMessageObject = messageObject;
+                            object.messageOwner.reply_to_msg_id = messageObject.getId();
+                            if (object.isMegagroup()) {
+                                Message message2 = object.replyMessageObject.messageOwner;
+                                message2.flags |= Integer.MIN_VALUE;
                             }
-                            data.reuse();
                         }
                     }
-                    state.dispose();
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
                 }
             }
-        });
+            cursor.dispose();
+            if (replyMessageRandomOwners.size() != 0) {
+                for (b = 0; b < replyMessageRandomOwners.size(); b++) {
+                    arrayList = (ArrayList) replyMessageRandomOwners.valueAt(b);
+                    for (int a = 0; a < arrayList.size(); a++) {
+                        ((MessageObject) arrayList.get(a)).messageOwner.reply_to_random_id = 0;
+                    }
+                }
+            }
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$78(this, dialogId));
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$90$DataQuery(long dialogId) {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(dialogId));
+    }
+
+    final /* synthetic */ void lambda$loadReplyMessagesForMessages$94$DataQuery(StringBuilder stringBuilder, long dialogId, ArrayList replyMessages, SparseArray replyMessageOwners, int channelIdFinal) {
+        try {
+            ArrayList<Message> result = new ArrayList();
+            ArrayList<User> users = new ArrayList();
+            ArrayList<Chat> chats = new ArrayList();
+            ArrayList<Integer> usersToLoad = new ArrayList();
+            ArrayList<Integer> chatsToLoad = new ArrayList();
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid, date FROM messages WHERE mid IN(%s)", new Object[]{stringBuilder.toString()}), new Object[0]);
+            while (cursor.next()) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                    message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                    data.reuse();
+                    message.f104id = cursor.intValue(1);
+                    message.date = cursor.intValue(2);
+                    message.dialog_id = dialogId;
+                    MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
+                    result.add(message);
+                    replyMessages.remove(Integer.valueOf(message.f104id));
+                }
+            }
+            cursor.dispose();
+            if (!usersToLoad.isEmpty()) {
+                MessagesStorage.getInstance(this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
+            }
+            if (!chatsToLoad.isEmpty()) {
+                MessagesStorage.getInstance(this.currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
+            }
+            broadcastReplyMessages(result, replyMessageOwners, users, chats, dialogId, true);
+            if (!replyMessages.isEmpty()) {
+                TLObject req;
+                if (channelIdFinal != 0) {
+                    req = new TL_channels_getMessages();
+                    req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelIdFinal);
+                    req.f118id = replyMessages;
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$76(this, replyMessageOwners, dialogId));
+                    return;
+                }
+                req = new TL_messages_getMessages();
+                req.f149id = replyMessages;
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$77(this, replyMessageOwners, dialogId));
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$92$DataQuery(SparseArray replyMessageOwners, long dialogId, TLObject response, TL_error error) {
+        if (error == null) {
+            messages_Messages messagesRes = (messages_Messages) response;
+            removeEmptyMessages(messagesRes.messages);
+            ImageLoader.saveMessagesThumbs(messagesRes.messages);
+            broadcastReplyMessages(messagesRes.messages, replyMessageOwners, messagesRes.users, messagesRes.chats, dialogId, false);
+            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);
+            saveReplyMessages(replyMessageOwners, messagesRes.messages);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$93$DataQuery(SparseArray replyMessageOwners, long dialogId, TLObject response, TL_error error) {
+        if (error == null) {
+            messages_Messages messagesRes = (messages_Messages) response;
+            removeEmptyMessages(messagesRes.messages);
+            ImageLoader.saveMessagesThumbs(messagesRes.messages);
+            broadcastReplyMessages(messagesRes.messages, replyMessageOwners, messagesRes.users, messagesRes.chats, dialogId, false);
+            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(messagesRes.users, messagesRes.chats, true, true);
+            saveReplyMessages(replyMessageOwners, messagesRes.messages);
+        }
+    }
+
+    private void saveReplyMessages(SparseArray<ArrayList<MessageObject>> replyMessageOwners, ArrayList<Message> result) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$60(this, result, replyMessageOwners));
+    }
+
+    final /* synthetic */ void lambda$saveReplyMessages$95$DataQuery(ArrayList result, SparseArray replyMessageOwners) {
+        try {
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
+            SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("UPDATE messages SET replydata = ? WHERE mid = ?");
+            for (int a = 0; a < result.size(); a++) {
+                Message message = (Message) result.get(a);
+                ArrayList<MessageObject> messageObjects = (ArrayList) replyMessageOwners.get(message.f104id);
+                if (messageObjects != null) {
+                    NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
+                    message.serializeToStream(data);
+                    for (int b = 0; b < messageObjects.size(); b++) {
+                        MessageObject messageObject = (MessageObject) messageObjects.get(b);
+                        state.requery();
+                        long messageId = (long) messageObject.getId();
+                        if (messageObject.messageOwner.to_id.channel_id != 0) {
+                            messageId |= ((long) messageObject.messageOwner.to_id.channel_id) << 32;
+                        }
+                        state.bindByteBuffer(1, data);
+                        state.bindLong(2, messageId);
+                        state.step();
+                    }
+                    data.reuse();
+                }
+            }
+            state.dispose();
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
     private void broadcastReplyMessages(ArrayList<Message> result, SparseArray<ArrayList<MessageObject>> replyMessageOwners, ArrayList<User> users, ArrayList<Chat> chats, long dialog_id, boolean isCache) {
         int a;
-        final SparseArray<User> usersDict = new SparseArray();
+        SparseArray<User> usersDict = new SparseArray();
         for (a = 0; a < users.size(); a++) {
             User user = (User) users.get(a);
-            usersDict.put(user.f177id, user);
+            usersDict.put(user.f176id, user);
         }
-        final SparseArray<Chat> chatsDict = new SparseArray();
+        SparseArray<Chat> chatsDict = new SparseArray();
         for (a = 0; a < chats.size(); a++) {
             Chat chat = (Chat) chats.get(a);
             chatsDict.put(chat.f78id, chat);
         }
-        final ArrayList<User> arrayList = users;
-        final boolean z = isCache;
-        final ArrayList<Chat> arrayList2 = chats;
-        final ArrayList<Message> arrayList3 = result;
-        final SparseArray<ArrayList<MessageObject>> sparseArray = replyMessageOwners;
-        final long j = dialog_id;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                MessagesController.getInstance(DataQuery.this.currentAccount).putUsers(arrayList, z);
-                MessagesController.getInstance(DataQuery.this.currentAccount).putChats(arrayList2, z);
-                boolean changed = false;
-                for (int a = 0; a < arrayList3.size(); a++) {
-                    Message message = (Message) arrayList3.get(a);
-                    ArrayList<MessageObject> arrayList = (ArrayList) sparseArray.get(message.f104id);
-                    if (arrayList != null) {
-                        MessageObject messageObject = new MessageObject(DataQuery.this.currentAccount, message, usersDict, chatsDict, false);
-                        for (int b = 0; b < arrayList.size(); b++) {
-                            MessageObject m = (MessageObject) arrayList.get(b);
-                            m.replyMessageObject = messageObject;
-                            if (m.messageOwner.action instanceof TL_messageActionPinMessage) {
-                                m.generatePinMessageText(null, null);
-                            } else if (m.messageOwner.action instanceof TL_messageActionGameScore) {
-                                m.generateGameMessageText(null);
-                            } else if (m.messageOwner.action instanceof TL_messageActionPaymentSent) {
-                                m.generatePaymentSentMessageText(null);
-                            }
-                            if (m.isMegagroup()) {
-                                Message message2 = m.replyMessageObject.messageOwner;
-                                message2.flags |= Integer.MIN_VALUE;
-                            }
-                        }
-                        changed = true;
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$61(this, users, isCache, chats, result, replyMessageOwners, usersDict, chatsDict, dialog_id));
+    }
+
+    final /* synthetic */ void lambda$broadcastReplyMessages$96$DataQuery(ArrayList users, boolean isCache, ArrayList chats, ArrayList result, SparseArray replyMessageOwners, SparseArray usersDict, SparseArray chatsDict, long dialog_id) {
+        MessagesController.getInstance(this.currentAccount).putUsers(users, isCache);
+        MessagesController.getInstance(this.currentAccount).putChats(chats, isCache);
+        boolean changed = false;
+        for (int a = 0; a < result.size(); a++) {
+            Message message = (Message) result.get(a);
+            ArrayList<MessageObject> arrayList = (ArrayList) replyMessageOwners.get(message.f104id);
+            if (arrayList != null) {
+                MessageObject messageObject = new MessageObject(this.currentAccount, message, usersDict, chatsDict, false);
+                for (int b = 0; b < arrayList.size(); b++) {
+                    MessageObject m = (MessageObject) arrayList.get(b);
+                    m.replyMessageObject = messageObject;
+                    if (m.messageOwner.action instanceof TL_messageActionPinMessage) {
+                        m.generatePinMessageText(null, null);
+                    } else if (m.messageOwner.action instanceof TL_messageActionGameScore) {
+                        m.generateGameMessageText(null);
+                    } else if (m.messageOwner.action instanceof TL_messageActionPaymentSent) {
+                        m.generatePaymentSentMessageText(null);
+                    }
+                    if (m.isMegagroup()) {
+                        Message message2 = m.replyMessageObject.messageOwner;
+                        message2.flags |= Integer.MIN_VALUE;
                     }
                 }
-                if (changed) {
-                    NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.didLoadedReplyMessages, Long.valueOf(j));
-                }
+                changed = true;
             }
-        });
+        }
+        if (changed) {
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(dialog_id));
+        }
     }
 
     public static void sortEntities(ArrayList<MessageEntity> entities) {
@@ -4025,8 +3944,21 @@ public class DataQuery {
     public void loadDrafts() {
         if (!UserConfig.getInstance(this.currentAccount).draftsLoaded && !this.loadingDrafts) {
             this.loadingDrafts = true;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getAllDrafts(), new C037461());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getAllDrafts(), new DataQuery$$Lambda$62(this));
         }
+    }
+
+    final /* synthetic */ void lambda$loadDrafts$98$DataQuery(TLObject response, TL_error error) {
+        if (error == null) {
+            MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$75(this));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$97$DataQuery() {
+        UserConfig.getInstance(this.currentAccount).draftsLoaded = true;
+        this.loadingDrafts = false;
+        UserConfig.getInstance(this.currentAccount).saveConfig(false);
     }
 
     public DraftMessage getDraft(long did) {
@@ -4079,13 +4011,16 @@ public class DataQuery {
                 req.reply_to_msg_id = draftMessage.reply_to_msg_id;
                 req.entities = draftMessage.entities;
                 req.flags = draftMessage.flags;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C037562());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, DataQuery$$Lambda$63.$instance);
             } else {
                 return;
             }
         }
         MessagesController.getInstance(this.currentAccount).sortDialogs(null);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
+    }
+
+    static final /* synthetic */ void lambda$saveDraft$99$DataQuery(TLObject response, TL_error error) {
     }
 
     public void saveDraft(long did, DraftMessage draft, Message replyToMessage, boolean fromServer) {
@@ -4103,7 +4038,7 @@ public class DataQuery {
                 editor.putString(TtmlNode.ANONYMOUS_REGION_ID + did, Utilities.bytesToHex(serializedData.toByteArray()));
                 serializedData.cleanup();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
         if (replyToMessage == null) {
@@ -4136,91 +4071,77 @@ public class DataQuery {
                     } else {
                         channelIdFinal = 0;
                     }
-                    final long messageIdFinal = messageId;
-                    final long j = did;
-                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-
-                        /* renamed from: org.telegram.messenger.DataQuery$63$1 */
-                        class C03401 implements RequestDelegate {
-                            C03401() {
-                            }
-
-                            public void run(TLObject response, TL_error error) {
-                                if (error == null) {
-                                    messages_Messages messagesRes = (messages_Messages) response;
-                                    if (!messagesRes.messages.isEmpty()) {
-                                        DataQuery.this.saveDraftReplyMessage(j, (Message) messagesRes.messages.get(0));
-                                    }
-                                }
-                            }
-                        }
-
-                        /* renamed from: org.telegram.messenger.DataQuery$63$2 */
-                        class C03412 implements RequestDelegate {
-                            C03412() {
-                            }
-
-                            public void run(TLObject response, TL_error error) {
-                                if (error == null) {
-                                    messages_Messages messagesRes = (messages_Messages) response;
-                                    if (!messagesRes.messages.isEmpty()) {
-                                        DataQuery.this.saveDraftReplyMessage(j, (Message) messagesRes.messages.get(0));
-                                    }
-                                }
-                            }
-                        }
-
-                        public void run() {
-                            Message message = null;
-                            try {
-                                SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data FROM messages WHERE mid = %d", new Object[]{Long.valueOf(messageIdFinal)}), new Object[0]);
-                                if (cursor.next()) {
-                                    NativeByteBuffer data = cursor.byteBufferValue(0);
-                                    if (data != null) {
-                                        message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                        message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
-                                        data.reuse();
-                                    }
-                                }
-                                cursor.dispose();
-                                if (message != null) {
-                                    DataQuery.this.saveDraftReplyMessage(j, message);
-                                } else if (channelIdFinal != 0) {
-                                    TL_channels_getMessages req = new TL_channels_getMessages();
-                                    req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
-                                    req.f120id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C03401());
-                                } else {
-                                    TL_messages_getMessages req2 = new TL_messages_getMessages();
-                                    req2.f151id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C03412());
-                                }
-                            } catch (Throwable e) {
-                                FileLog.m14e(e);
-                            }
-                        }
-                    });
+                    long messageIdFinal = messageId;
+                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$64(this, messageIdFinal, channelIdFinal, did));
                 }
             }
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.newDraftReceived, Long.valueOf(did));
         }
     }
 
-    private void saveDraftReplyMessage(final long did, final Message message) {
-        if (message != null) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    DraftMessage draftMessage = (DraftMessage) DataQuery.this.drafts.get(did);
-                    if (draftMessage != null && draftMessage.reply_to_msg_id == message.f104id) {
-                        DataQuery.this.draftMessages.put(did, message);
-                        SerializedData serializedData = new SerializedData(message.getObjectSize());
-                        message.serializeToStream(serializedData);
-                        DataQuery.this.preferences.edit().putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray())).commit();
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.newDraftReceived, Long.valueOf(did));
-                        serializedData.cleanup();
-                    }
+    final /* synthetic */ void lambda$saveDraft$102$DataQuery(long messageIdFinal, int channelIdFinal, long did) {
+        Message message = null;
+        try {
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data FROM messages WHERE mid = %d", new Object[]{Long.valueOf(messageIdFinal)}), new Object[0]);
+            if (cursor.next()) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    message = Message.TLdeserialize(data, data.readInt32(false), false);
+                    message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                    data.reuse();
                 }
-            });
+            }
+            cursor.dispose();
+            if (message != null) {
+                saveDraftReplyMessage(did, message);
+            } else if (channelIdFinal != 0) {
+                TL_channels_getMessages req = new TL_channels_getMessages();
+                req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelIdFinal);
+                req.f118id.add(Integer.valueOf((int) messageIdFinal));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$73(this, did));
+            } else {
+                TL_messages_getMessages req2 = new TL_messages_getMessages();
+                req2.f149id.add(Integer.valueOf((int) messageIdFinal));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new DataQuery$$Lambda$74(this, did));
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$100$DataQuery(long did, TLObject response, TL_error error) {
+        if (error == null) {
+            messages_Messages messagesRes = (messages_Messages) response;
+            if (!messagesRes.messages.isEmpty()) {
+                saveDraftReplyMessage(did, (Message) messagesRes.messages.get(0));
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$null$101$DataQuery(long did, TLObject response, TL_error error) {
+        if (error == null) {
+            messages_Messages messagesRes = (messages_Messages) response;
+            if (!messagesRes.messages.isEmpty()) {
+                saveDraftReplyMessage(did, (Message) messagesRes.messages.get(0));
+            }
+        }
+    }
+
+    private void saveDraftReplyMessage(long did, Message message) {
+        if (message != null) {
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$65(this, did, message));
+        }
+    }
+
+    final /* synthetic */ void lambda$saveDraftReplyMessage$103$DataQuery(long did, Message message) {
+        DraftMessage draftMessage = (DraftMessage) this.drafts.get(did);
+        if (draftMessage != null && draftMessage.reply_to_msg_id == message.f104id) {
+            this.draftMessages.put(did, message);
+            SerializedData serializedData = new SerializedData(message.getObjectSize());
+            message.serializeToStream(serializedData);
+            this.preferences.edit().putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray())).commit();
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.newDraftReceived, Long.valueOf(did));
+            serializedData.cleanup();
         }
     }
 
@@ -4257,93 +4178,91 @@ public class DataQuery {
         this.inTransaction = false;
     }
 
-    public void clearBotKeyboard(final long did, final ArrayList<Integer> messages) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                if (messages != null) {
-                    for (int a = 0; a < messages.size(); a++) {
-                        long did = DataQuery.this.botKeyboardsByMids.get(((Integer) messages.get(a)).intValue());
-                        if (did != 0) {
-                            DataQuery.this.botKeyboards.remove(did);
-                            DataQuery.this.botKeyboardsByMids.delete(((Integer) messages.get(a)).intValue());
-                            NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, null, Long.valueOf(did));
-                        }
-                    }
-                    return;
-                }
-                DataQuery.this.botKeyboards.remove(did);
-                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, null, Long.valueOf(did));
-            }
-        });
+    public void clearBotKeyboard(long did, ArrayList<Integer> messages) {
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$66(this, messages, did));
     }
 
-    public void loadBotKeyboard(final long did) {
+    final /* synthetic */ void lambda$clearBotKeyboard$104$DataQuery(ArrayList messages, long did) {
+        if (messages != null) {
+            for (int a = 0; a < messages.size(); a++) {
+                long did1 = this.botKeyboardsByMids.get(((Integer) messages.get(a)).intValue());
+                if (did1 != 0) {
+                    this.botKeyboards.remove(did1);
+                    this.botKeyboardsByMids.delete(((Integer) messages.get(a)).intValue());
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoad, null, Long.valueOf(did1));
+                }
+            }
+            return;
+        }
+        this.botKeyboards.remove(did);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoad, null, Long.valueOf(did));
+    }
+
+    public void loadBotKeyboard(long did) {
         if (((Message) this.botKeyboards.get(did)) != null) {
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, keyboard, Long.valueOf(did));
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoad, keyboard, Long.valueOf(did));
             return;
         }
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-            public void run() {
-                Message botKeyboard = null;
-                try {
-                    SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_keyboard WHERE uid = %d", new Object[]{Long.valueOf(did)}), new Object[0]);
-                    if (cursor.next() && !cursor.isNull(0)) {
-                        NativeByteBuffer data = cursor.byteBufferValue(0);
-                        if (data != null) {
-                            botKeyboard = Message.TLdeserialize(data, data.readInt32(false), false);
-                            data.reuse();
-                        }
-                    }
-                    cursor.dispose();
-                    if (botKeyboard != null) {
-                        final Message botKeyboardFinal = botKeyboard;
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, botKeyboardFinal, Long.valueOf(did));
-                            }
-                        });
-                    }
-                } catch (Throwable e) {
-                    FileLog.m14e(e);
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$67(this, did));
+    }
+
+    final /* synthetic */ void lambda$loadBotKeyboard$106$DataQuery(long did) {
+        Message botKeyboard = null;
+        try {
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_keyboard WHERE uid = %d", new Object[]{Long.valueOf(did)}), new Object[0]);
+            if (cursor.next() && !cursor.isNull(0)) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    botKeyboard = Message.TLdeserialize(data, data.readInt32(false), false);
+                    data.reuse();
                 }
             }
-        });
+            cursor.dispose();
+            if (botKeyboard != null) {
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$72(this, botKeyboard, did));
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
     }
 
-    public void loadBotInfo(final int uid, boolean cache, final int classGuid) {
+    final /* synthetic */ void lambda$null$105$DataQuery(Message botKeyboardFinal, long did) {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoad, botKeyboardFinal, Long.valueOf(did));
+    }
+
+    public void loadBotInfo(int uid, boolean cache, int classGuid) {
         if (!cache || ((BotInfo) this.botInfos.get(uid)) == null) {
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                public void run() {
-                    BotInfo botInfo = null;
-                    try {
-                        SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info WHERE uid = %d", new Object[]{Integer.valueOf(uid)}), new Object[0]);
-                        if (cursor.next() && !cursor.isNull(0)) {
-                            NativeByteBuffer data = cursor.byteBufferValue(0);
-                            if (data != null) {
-                                botInfo = BotInfo.TLdeserialize(data, data.readInt32(false), false);
-                                data.reuse();
-                            }
-                        }
-                        cursor.dispose();
-                        if (botInfo != null) {
-                            final BotInfo botInfoFinal = botInfo;
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botInfoDidLoaded, botInfoFinal, Integer.valueOf(classGuid));
-                                }
-                            });
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                }
-            });
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$68(this, uid, classGuid));
             return;
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botInfoDidLoaded, botInfo, Integer.valueOf(classGuid));
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botInfoDidLoad, botInfo, Integer.valueOf(classGuid));
     }
 
-    public void putBotKeyboard(final long did, final Message message) {
+    final /* synthetic */ void lambda$loadBotInfo$108$DataQuery(int uid, int classGuid) {
+        BotInfo botInfo = null;
+        try {
+            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info WHERE uid = %d", new Object[]{Integer.valueOf(uid)}), new Object[0]);
+            if (cursor.next() && !cursor.isNull(0)) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    botInfo = BotInfo.TLdeserialize(data, data.readInt32(false), false);
+                    data.reuse();
+                }
+            }
+            cursor.dispose();
+            if (botInfo != null) {
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$71(this, botInfo, classGuid));
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$107$DataQuery(BotInfo botInfoFinal, int classGuid) {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botInfoDidLoad, botInfoFinal, Integer.valueOf(classGuid));
+    }
+
+    public void putBotKeyboard(long did, Message message) {
         if (message != null) {
             int mid = 0;
             try {
@@ -4363,44 +4282,44 @@ public class DataQuery {
                     state.step();
                     data.reuse();
                     state.dispose();
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            Message old = (Message) DataQuery.this.botKeyboards.get(did);
-                            DataQuery.this.botKeyboards.put(did, message);
-                            if (old != null) {
-                                DataQuery.this.botKeyboardsByMids.delete(old.f104id);
-                            }
-                            DataQuery.this.botKeyboardsByMids.put(message.f104id, did);
-                            NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, message, Long.valueOf(did));
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$69(this, did, message));
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
 
-    public void putBotInfo(final BotInfo botInfo) {
+    final /* synthetic */ void lambda$putBotKeyboard$109$DataQuery(long did, Message message) {
+        Message old = (Message) this.botKeyboards.get(did);
+        this.botKeyboards.put(did, message);
+        if (old != null) {
+            this.botKeyboardsByMids.delete(old.f104id);
+        }
+        this.botKeyboardsByMids.put(message.f104id, did);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoad, message, Long.valueOf(did));
+    }
+
+    public void putBotInfo(BotInfo botInfo) {
         if (botInfo != null) {
             this.botInfos.put(botInfo.user_id, botInfo);
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                public void run() {
-                    try {
-                        SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO bot_info(uid, info) VALUES(?, ?)");
-                        state.requery();
-                        NativeByteBuffer data = new NativeByteBuffer(botInfo.getObjectSize());
-                        botInfo.serializeToStream(data);
-                        state.bindInteger(1, botInfo.user_id);
-                        state.bindByteBuffer(2, data);
-                        state.step();
-                        data.reuse();
-                        state.dispose();
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                }
-            });
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$70(this, botInfo));
+        }
+    }
+
+    final /* synthetic */ void lambda$putBotInfo$110$DataQuery(BotInfo botInfo) {
+        try {
+            SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO bot_info(uid, info) VALUES(?, ?)");
+            state.requery();
+            NativeByteBuffer data = new NativeByteBuffer(botInfo.getObjectSize());
+            botInfo.serializeToStream(data);
+            state.bindInteger(1, botInfo.user_id);
+            state.bindByteBuffer(2, data);
+            state.step();
+            data.reuse();
+            state.dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
         }
     }
 }

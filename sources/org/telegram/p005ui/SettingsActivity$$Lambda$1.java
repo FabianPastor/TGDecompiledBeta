@@ -1,17 +1,20 @@
 package org.telegram.p005ui;
 
+import android.content.Context;
 import android.view.View;
-import android.view.View.OnClickListener;
+import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 
 /* renamed from: org.telegram.ui.SettingsActivity$$Lambda$1 */
-final /* synthetic */ class SettingsActivity$$Lambda$1 implements OnClickListener {
+final /* synthetic */ class SettingsActivity$$Lambda$1 implements OnItemClickListener {
     private final SettingsActivity arg$1;
+    private final Context arg$2;
 
-    SettingsActivity$$Lambda$1(SettingsActivity settingsActivity) {
+    SettingsActivity$$Lambda$1(SettingsActivity settingsActivity, Context context) {
         this.arg$1 = settingsActivity;
+        this.arg$2 = context;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$createView$3$SettingsActivity(view);
+    public void onItemClick(View view, int i) {
+        this.arg$1.lambda$createView$6$SettingsActivity(this.arg$2, view, i);
     }
 }

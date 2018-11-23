@@ -30,9 +30,9 @@ public class AccountSelectCell extends FrameLayout {
 
     public AccountSelectCell(Context context) {
         super(context);
-        this.avatarDrawable.setTextSize(AndroidUtilities.m10dp(12.0f));
+        this.avatarDrawable.setTextSize(AndroidUtilities.m9dp(12.0f));
         this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.m10dp(18.0f));
+        this.imageView.setRoundRadius(AndroidUtilities.m9dp(18.0f));
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, 51, 10.0f, 10.0f, 0.0f, 0.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
@@ -52,7 +52,7 @@ public class AccountSelectCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(56.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(56.0f), NUM));
     }
 
     protected void onAttachedToWindow() {
@@ -63,8 +63,8 @@ public class AccountSelectCell extends FrameLayout {
     public void setAccount(int account, boolean check) {
         TLObject avatar;
         this.accountNumber = account;
-        User user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
-        this.avatarDrawable.setInfo(user);
+        Object user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
+        this.avatarDrawable.setInfo((User) user);
         this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
         if (user.photo == null || user.photo.photo_small == null || user.photo.photo_small.volume_id == 0 || user.photo.photo_small.local_id == 0) {
             avatar = null;
@@ -72,7 +72,7 @@ public class AccountSelectCell extends FrameLayout {
             avatar = user.photo.photo_small;
         }
         this.imageView.getImageReceiver().setCurrentAccount(account);
-        this.imageView.setImage(avatar, "50_50", this.avatarDrawable);
+        this.imageView.setImage(avatar, "50_50", this.avatarDrawable, user);
         ImageView imageView = this.checkImageView;
         int i = (check && account == UserConfig.selectedAccount) ? 0 : 4;
         imageView.setVisibility(i);

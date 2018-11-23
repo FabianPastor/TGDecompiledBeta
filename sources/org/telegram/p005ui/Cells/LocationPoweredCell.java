@@ -31,7 +31,7 @@ public class LocationPoweredCell extends FrameLayout {
         this.imageView = new ImageView(context);
         this.imageView.setImageResource(R.drawable.foursquare);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
-        this.imageView.setPadding(0, AndroidUtilities.m10dp(2.0f), 0, 0);
+        this.imageView.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, 0);
         linearLayout.addView(this.imageView, LayoutHelper.createLinear(35, -2));
         this.textView2 = new TextView(context);
         this.textView2.setTextSize(1, 16.0f);
@@ -41,6 +41,6 @@ public class LocationPoweredCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(56.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(56.0f), NUM));
     }
 }

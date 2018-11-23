@@ -34,12 +34,12 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     private class Item {
         public int icon;
         /* renamed from: id */
-        public int f204id;
+        public int f213id;
         public String text;
 
         public Item(int id, String text, int icon) {
             this.icon = icon;
-            this.f204id = id;
+            this.f213id = id;
             this.text = text;
         }
 
@@ -127,7 +127,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
                 view = new DrawerAddCell(this.mContext);
                 break;
             default:
-                view = new EmptyCell(this.mContext, AndroidUtilities.m10dp(8.0f));
+                view = new EmptyCell(this.mContext, AndroidUtilities.m9dp(8.0f));
                 break;
         }
         view.setLayoutParams(new LayoutParams(-1, -2));
@@ -236,7 +236,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         }
         Item item = (Item) this.items.get(position);
         if (item != null) {
-            return item.f204id;
+            return item.f213id;
         }
         return -1;
     }

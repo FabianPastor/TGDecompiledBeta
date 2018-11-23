@@ -19,7 +19,7 @@ import org.telegram.tgnet.ConnectionsManager;
 
 /* renamed from: org.telegram.ui.ActionBar.BaseFragment */
 public class BaseFragment {
-    protected C0646ActionBar actionBar;
+    protected C0403ActionBar actionBar;
     protected Bundle arguments;
     protected int classGuid;
     protected int currentAccount;
@@ -54,7 +54,7 @@ public class BaseFragment {
         this.currentAccount = account;
     }
 
-    public C0646ActionBar getActionBar() {
+    public C0403ActionBar getActionBar() {
         return this.actionBar;
     }
 
@@ -84,11 +84,11 @@ public class BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
             return;
         }
-        C0646ActionBar c0646ActionBar = this.actionBar;
+        C0403ActionBar c0403ActionBar = this.actionBar;
         if (VERSION.SDK_INT >= 21) {
             z = true;
         }
-        c0646ActionBar.setOccupyStatusBar(z);
+        c0403ActionBar.setOccupyStatusBar(z);
     }
 
     protected void clearViews() {
@@ -100,7 +100,7 @@ public class BaseFragment {
                     onRemoveFromParent();
                     parent.removeView(this.fragmentView);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
             this.fragmentView = null;
@@ -111,7 +111,7 @@ public class BaseFragment {
                 try {
                     parent.removeView(this.actionBar);
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
             }
             this.actionBar = null;
@@ -133,7 +133,7 @@ public class BaseFragment {
                         onRemoveFromParent();
                         parent.removeView(this.fragmentView);
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
                 if (!(this.parentLayout == null || this.parentLayout.getContext() == this.fragmentView.getContext())) {
@@ -148,7 +148,7 @@ public class BaseFragment {
                         try {
                             parent.removeView(this.actionBar);
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                         }
                     }
                 }
@@ -163,8 +163,8 @@ public class BaseFragment {
         }
     }
 
-    protected C0646ActionBar createActionBar(Context context) {
-        C0646ActionBar actionBar = new C0646ActionBar(context);
+    protected C0403ActionBar createActionBar(Context context) {
+        C0403ActionBar actionBar = new C0403ActionBar(context);
         actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSelector), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), true);
@@ -234,7 +234,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -299,7 +299,7 @@ public class BaseFragment {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -315,7 +315,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (this.actionBar != null) {
             this.actionBar.onPause();
@@ -360,7 +360,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         try {
             this.visibleDialog = dialog;
@@ -369,7 +369,7 @@ public class BaseFragment {
             this.visibleDialog.show();
             return this.visibleDialog;
         } catch (Throwable e2) {
-            FileLog.m14e(e2);
+            FileLog.m13e(e2);
             return dialog2;
         }
     }

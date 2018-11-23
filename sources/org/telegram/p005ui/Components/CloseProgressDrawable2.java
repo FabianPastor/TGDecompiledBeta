@@ -21,7 +21,7 @@ public class CloseProgressDrawable2 extends Drawable {
 
     public CloseProgressDrawable2() {
         this.paint.setColor(-1);
-        this.paint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.paint.setStrokeCap(Cap.ROUND);
         this.paint.setStyle(Style.STROKE);
     }
@@ -91,21 +91,21 @@ public class CloseProgressDrawable2 extends Drawable {
             progress3 = (this.angle - 630.0f) / 90.0f;
         }
         if (progress1 != 0.0f) {
-            canvas.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.m10dp(8.0f)) * progress1, this.paint);
+            canvas.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.m9dp(8.0f)) * progress1, this.paint);
         }
         if (progress2 != 0.0f) {
-            canvas.drawLine(((float) (-AndroidUtilities.m10dp(8.0f))) * progress2, 0.0f, 0.0f, 0.0f, this.paint);
+            canvas.drawLine(((float) (-AndroidUtilities.m9dp(8.0f))) * progress2, 0.0f, 0.0f, 0.0f, this.paint);
         }
         if (progress3 != 0.0f) {
-            canvas.drawLine(0.0f, ((float) (-AndroidUtilities.m10dp(8.0f))) * progress3, 0.0f, 0.0f, this.paint);
+            canvas.drawLine(0.0f, ((float) (-AndroidUtilities.m9dp(8.0f))) * progress3, 0.0f, 0.0f, this.paint);
         }
         if (progress4 != 1.0f) {
-            canvas.drawLine(((float) AndroidUtilities.m10dp(8.0f)) * progress4, 0.0f, (float) AndroidUtilities.m10dp(8.0f), 0.0f, this.paint);
+            canvas.drawLine(((float) AndroidUtilities.m9dp(8.0f)) * progress4, 0.0f, (float) AndroidUtilities.m9dp(8.0f), 0.0f, this.paint);
         }
         canvas.restore();
         int cx = getBounds().centerX();
         int cy = getBounds().centerY();
-        this.rect.set((float) (cx - AndroidUtilities.m10dp(8.0f)), (float) (cy - AndroidUtilities.m10dp(8.0f)), (float) (AndroidUtilities.m10dp(8.0f) + cx), (float) (AndroidUtilities.m10dp(8.0f) + cy));
+        this.rect.set((float) (cx - AndroidUtilities.m9dp(8.0f)), (float) (cy - AndroidUtilities.m9dp(8.0f)), (float) (AndroidUtilities.m9dp(8.0f) + cx), (float) (AndroidUtilities.m9dp(8.0f) + cy));
         canvas.drawArc(this.rect, (this.angle < 360.0f ? 0.0f : this.angle - 360.0f) - 45.0f, this.angle < 360.0f ? this.angle : 720.0f - this.angle, false, this.paint);
         this.lastFrameTime = newTime;
     }
@@ -122,10 +122,10 @@ public class CloseProgressDrawable2 extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(24.0f);
+        return AndroidUtilities.m9dp(24.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(24.0f);
+        return AndroidUtilities.m9dp(24.0f);
     }
 }

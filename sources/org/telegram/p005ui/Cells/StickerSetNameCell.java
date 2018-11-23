@@ -81,7 +81,7 @@ public class StickerSetNameCell extends FrameLayout {
             }
             this.textView.setText(builder);
         } else {
-            this.textView.setText(Emoji.replaceEmoji(text, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(14.0f), false));
+            this.textView.setText(Emoji.replaceEmoji(text, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(14.0f), false));
         }
         if (resId != 0) {
             this.buttonView.setImageResource(resId);
@@ -104,7 +104,7 @@ public class StickerSetNameCell extends FrameLayout {
         if (this.empty) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(1, NUM));
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(24.0f), NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(24.0f), NUM));
         }
     }
 }

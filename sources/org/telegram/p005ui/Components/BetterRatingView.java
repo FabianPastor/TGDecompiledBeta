@@ -30,24 +30,24 @@ public class BetterRatingView extends View {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension((this.numStars * AndroidUtilities.m10dp(32.0f)) + ((this.numStars - 1) * AndroidUtilities.m10dp(16.0f)), AndroidUtilities.m10dp(32.0f));
+        setMeasuredDimension((this.numStars * AndroidUtilities.m9dp(32.0f)) + ((this.numStars - 1) * AndroidUtilities.m9dp(16.0f)), AndroidUtilities.m9dp(32.0f));
     }
 
     protected void onDraw(Canvas canvas) {
         int i = 0;
         while (i < this.numStars) {
             this.paint.setColor(Theme.getColor(i < this.selectedRating ? Theme.key_calls_ratingStarSelected : Theme.key_calls_ratingStar));
-            canvas.drawBitmap(i < this.selectedRating ? this.filledStar : this.hollowStar, (float) (AndroidUtilities.m10dp(48.0f) * i), 0.0f, this.paint);
+            canvas.drawBitmap(i < this.selectedRating ? this.filledStar : this.hollowStar, (float) (AndroidUtilities.m9dp(48.0f) * i), 0.0f, this.paint);
             i++;
         }
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        float offset = (float) AndroidUtilities.m10dp(-8.0f);
+        float offset = (float) AndroidUtilities.m9dp(-8.0f);
         int i = 0;
         while (i < this.numStars) {
-            if (event.getX() <= offset || event.getX() >= ((float) AndroidUtilities.m10dp(48.0f)) + offset || this.selectedRating == i + 1) {
-                offset += (float) AndroidUtilities.m10dp(48.0f);
+            if (event.getX() <= offset || event.getX() >= ((float) AndroidUtilities.m9dp(48.0f)) + offset || this.selectedRating == i + 1) {
+                offset += (float) AndroidUtilities.m9dp(48.0f);
                 i++;
             } else {
                 this.selectedRating = i + 1;

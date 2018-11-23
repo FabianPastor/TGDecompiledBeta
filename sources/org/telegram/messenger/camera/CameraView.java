@@ -49,8 +49,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private Matrix txform = new Matrix();
 
     /* renamed from: org.telegram.messenger.camera.CameraView$1 */
-    class C05451 implements Runnable {
-        C05451() {
+    class C03011 implements Runnable {
+        C03011() {
         }
 
         public void run() {
@@ -62,8 +62,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     /* renamed from: org.telegram.messenger.camera.CameraView$2 */
-    class C05462 implements Runnable {
-        C05462() {
+    class C03022 implements Runnable {
+        C03022() {
         }
 
         public void run() {
@@ -86,10 +86,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.textureView = new TextureView(context);
         this.textureView.setSurfaceTextureListener(this);
         addView(this.textureView);
-        this.focusAreaSize = AndroidUtilities.m10dp(96.0f);
+        this.focusAreaSize = AndroidUtilities.m9dp(96.0f);
         this.outerPaint.setColor(-1);
         this.outerPaint.setStyle(Style.STROKE);
-        this.outerPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.outerPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.innerPaint.setColor(ConnectionsManager.DEFAULT_DATACENTER_ID);
     }
 
@@ -179,7 +179,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 if (this.previewSize != null && surfaceTexture != null) {
                     surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                     this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);
-                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C05451(), new C05462());
+                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C03011(), new C03022());
                 }
             }
         }
@@ -315,7 +315,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
-            int baseRad = AndroidUtilities.m10dp(30.0f);
+            int baseRad = AndroidUtilities.m9dp(30.0f);
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastDrawTime;
             if (dt < 0 || dt > 17) {

@@ -1,11 +1,17 @@
 package org.telegram.p005ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Vibrator;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
@@ -39,12 +45,14 @@ import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0646ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
+import org.telegram.p005ui.Cells.EditTextSettingsCell;
 import org.telegram.p005ui.Cells.TextInfoPrivacyCell;
 import org.telegram.p005ui.Cells.TextSettingsCell;
 import org.telegram.p005ui.Components.AlertsCreator;
+import org.telegram.p005ui.Components.ContextProgressView;
 import org.telegram.p005ui.Components.EditTextBoldCursor;
 import org.telegram.p005ui.Components.EmptyTextProgressView;
 import org.telegram.p005ui.Components.LayoutHelper;
@@ -54,14 +62,17 @@ import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.C0643xb6caa888;
+import org.telegram.tgnet.TLRPC.C0400xb6caa888;
 import org.telegram.tgnet.TLRPC.PasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC.SecurePasswordKdfAlgo;
+import org.telegram.tgnet.TLRPC.TL_account_cancelPasswordEmail;
+import org.telegram.tgnet.TLRPC.TL_account_confirmPasswordEmail;
 import org.telegram.tgnet.TLRPC.TL_account_getPassword;
 import org.telegram.tgnet.TLRPC.TL_account_getPasswordSettings;
 import org.telegram.tgnet.TLRPC.TL_account_password;
 import org.telegram.tgnet.TLRPC.TL_account_passwordInputSettings;
 import org.telegram.tgnet.TLRPC.TL_account_passwordSettings;
+import org.telegram.tgnet.TLRPC.TL_account_resendPasswordEmail;
 import org.telegram.tgnet.TLRPC.TL_account_updatePasswordSettings;
 import org.telegram.tgnet.TLRPC.TL_auth_passwordRecovery;
 import org.telegram.tgnet.TLRPC.TL_auth_recoverPassword;
@@ -85,13 +96,16 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private int changePasswordRow;
     private int changeRecoveryEmailRow;
     private boolean closeAfterSet;
+    private EditTextSettingsCell codeFieldCell;
     private TL_account_password currentPassword;
     private byte[] currentPasswordHash;
     private byte[] currentSecret;
     private long currentSecretId;
     private boolean destroyed;
     private ActionBarMenuItem doneItem;
+    private AnimatorSet doneItemAnimation;
     private String email;
+    private int emailCodeLength;
     private boolean emailOnly;
     private EmptyTextProgressView emptyView;
     private String firstPassword;
@@ -99,14 +113,16 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private boolean loading;
+    private int passwordCodeFieldRow;
     private EditTextBoldCursor passwordEditText;
-    private int passwordEmailVerifyDetailRow;
     private int passwordEnabledDetailRow;
     private boolean passwordEntered;
     private int passwordSetState;
     private int passwordSetupDetailRow;
     private boolean paused;
     private AlertDialog progressDialog;
+    private ContextProgressView progressView;
+    private int resendCodeRow;
     private int rowCount;
     private ScrollView scrollView;
     private int setPasswordDetailRow;
@@ -120,8 +136,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private boolean waitingForEmail;
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$2 */
-    class C17572 implements Callback {
-        C17572() {
+    class C11362 implements Callback {
+        C11362() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -140,14 +156,32 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
+    /* renamed from: org.telegram.ui.TwoStepVerificationActivity$3 */
+    class C11373 implements TextWatcher {
+        C11373() {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        public void afterTextChanged(Editable s) {
+            if (TwoStepVerificationActivity.this.emailCodeLength != 0 && s.length() == TwoStepVerificationActivity.this.emailCodeLength) {
+                TwoStepVerificationActivity.this.processDone();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$1 */
-    class C23151 extends ActionBarMenuOnItemClick {
-        C23151() {
+    class C15921 extends ActionBarMenuOnItemClick {
+        C15921() {
         }
 
         public void onItemClick(int id) {
             if (id == -1) {
-                TwoStepVerificationActivity.this.lambda$checkDiscard$69$PassportActivity();
+                TwoStepVerificationActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 1) {
                 TwoStepVerificationActivity.this.processDone();
             }
@@ -163,8 +197,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
 
         public boolean isEnabled(ViewHolder holder) {
-            int position = holder.getAdapterPosition();
-            return (position == TwoStepVerificationActivity.this.setPasswordDetailRow || position == TwoStepVerificationActivity.this.shadowRow || position == TwoStepVerificationActivity.this.passwordSetupDetailRow || position == TwoStepVerificationActivity.this.passwordEmailVerifyDetailRow || position == TwoStepVerificationActivity.this.passwordEnabledDetailRow) ? false : true;
+            return holder.getItemViewType() == 0;
         }
 
         public int getItemCount() {
@@ -178,8 +211,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                     view = new TextSettingsCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                default:
+                case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
+                    break;
+                default:
+                    view = TwoStepVerificationActivity.this.codeFieldCell;
                     break;
             }
             return new Holder(view);
@@ -209,45 +245,53 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                         }
                         textCell.setText(string, z);
                         return;
+                    } else if (position == TwoStepVerificationActivity.this.resendCodeRow) {
+                        textCell.setText(LocaleController.getString("ResendCode", R.string.ResendCode), true);
+                        return;
                     } else if (position == TwoStepVerificationActivity.this.setRecoveryEmailRow) {
                         textCell.setText(LocaleController.getString("SetRecoveryEmail", R.string.SetRecoveryEmail), false);
                         return;
                     } else if (position == TwoStepVerificationActivity.this.abortPasswordRow) {
                         textCell.setTag(Theme.key_windowBackgroundWhiteRedText3);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
-                        textCell.setText(LocaleController.getString("AbortPassword", R.string.AbortPassword), false);
-                        return;
+                        if (TwoStepVerificationActivity.this.currentPassword == null || !TwoStepVerificationActivity.this.currentPassword.has_password) {
+                            textCell.setText(LocaleController.getString("AbortPassword", R.string.AbortPassword), false);
+                            return;
+                        } else {
+                            textCell.setText(LocaleController.getString("AbortEmail", R.string.AbortEmail), false);
+                            return;
+                        }
                     } else {
                         return;
                     }
                 case 1:
                     TextInfoPrivacyCell privacyCell = holder.itemView;
-                    Object[] objArr;
                     if (position == TwoStepVerificationActivity.this.setPasswordDetailRow) {
                         privacyCell.setText(LocaleController.getString("SetAdditionalPasswordInfo", R.string.SetAdditionalPasswordInfo));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == TwoStepVerificationActivity.this.shadowRow) {
                         privacyCell.setText(TtmlNode.ANONYMOUS_REGION_ID);
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == TwoStepVerificationActivity.this.passwordSetupDetailRow) {
-                        string = "EmailPasswordConfirmText";
-                        objArr = new Object[1];
-                        objArr[0] = TwoStepVerificationActivity.this.currentPassword.email_unconfirmed_pattern != null ? TwoStepVerificationActivity.this.currentPassword.email_unconfirmed_pattern : TtmlNode.ANONYMOUS_REGION_ID;
-                        privacyCell.setText(LocaleController.formatString(string, R.string.EmailPasswordConfirmText, objArr));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_top, Theme.key_windowBackgroundGrayShadow));
+                        Object[] objArr;
+                        if (TwoStepVerificationActivity.this.currentPassword == null || !TwoStepVerificationActivity.this.currentPassword.has_password) {
+                            string = "EmailPasswordConfirmText2";
+                            objArr = new Object[1];
+                            objArr[0] = TwoStepVerificationActivity.this.currentPassword.email_unconfirmed_pattern != null ? TwoStepVerificationActivity.this.currentPassword.email_unconfirmed_pattern : TtmlNode.ANONYMOUS_REGION_ID;
+                            privacyCell.setText(LocaleController.formatString(string, R.string.EmailPasswordConfirmText2, objArr));
+                        } else {
+                            string = "EmailPasswordConfirmText3";
+                            objArr = new Object[1];
+                            objArr[0] = TwoStepVerificationActivity.this.currentPassword.email_unconfirmed_pattern != null ? TwoStepVerificationActivity.this.currentPassword.email_unconfirmed_pattern : TtmlNode.ANONYMOUS_REGION_ID;
+                            privacyCell.setText(LocaleController.formatString(string, R.string.EmailPasswordConfirmText3, objArr));
+                        }
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_top, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == TwoStepVerificationActivity.this.passwordEnabledDetailRow) {
                         privacyCell.setText(LocaleController.getString("EnabledPasswordText", R.string.EnabledPasswordText));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                        return;
-                    } else if (position == TwoStepVerificationActivity.this.passwordEmailVerifyDetailRow) {
-                        string = "PendingEmailText";
-                        objArr = new Object[1];
-                        objArr[0] = TwoStepVerificationActivity.this.currentPassword.email_unconfirmed_pattern != null ? TwoStepVerificationActivity.this.currentPassword.email_unconfirmed_pattern : TtmlNode.ANONYMOUS_REGION_ID;
-                        privacyCell.setText(LocaleController.formatString(string, R.string.PendingEmailText, objArr));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -258,14 +302,18 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
 
         public int getItemViewType(int position) {
-            if (position == TwoStepVerificationActivity.this.setPasswordDetailRow || position == TwoStepVerificationActivity.this.shadowRow || position == TwoStepVerificationActivity.this.passwordSetupDetailRow || position == TwoStepVerificationActivity.this.passwordEnabledDetailRow || position == TwoStepVerificationActivity.this.passwordEmailVerifyDetailRow) {
+            if (position == TwoStepVerificationActivity.this.setPasswordDetailRow || position == TwoStepVerificationActivity.this.shadowRow || position == TwoStepVerificationActivity.this.passwordSetupDetailRow || position == TwoStepVerificationActivity.this.passwordEnabledDetailRow) {
                 return 1;
+            }
+            if (position == TwoStepVerificationActivity.this.passwordCodeFieldRow) {
+                return 2;
             }
             return 0;
         }
     }
 
     public TwoStepVerificationActivity(int type) {
+        this.emailCodeLength = 6;
         this.passwordEntered = true;
         this.currentPasswordHash = new byte[0];
         this.type = type;
@@ -275,6 +323,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     public TwoStepVerificationActivity(int account, int type) {
+        this.emailCodeLength = 6;
         this.passwordEntered = true;
         this.currentPasswordHash = new byte[0];
         this.currentAccount = account;
@@ -312,7 +361,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.progressDialog = null;
         }
@@ -322,11 +371,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C23151());
+        this.actionBar.setActionBarMenuOnItemClick(new C15921());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
+        this.progressView = new ContextProgressView(context, 1);
+        this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+        this.progressView.setVisibility(4);
         this.scrollView = new ScrollView(context);
         this.scrollView.setFillViewport(true);
         frameLayout.addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
@@ -351,11 +403,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         this.passwordEditText.setTypeface(Typeface.DEFAULT);
         this.passwordEditText.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.passwordEditText.setCursorSize(AndroidUtilities.m10dp(20.0f));
+        this.passwordEditText.setCursorSize(AndroidUtilities.m9dp(20.0f));
         this.passwordEditText.setCursorWidth(1.5f);
         linearLayout.addView(this.passwordEditText, LayoutHelper.createLinear(-1, 36, 51, 40, 32, 40, 0));
         this.passwordEditText.setOnEditorActionListener(new TwoStepVerificationActivity$$Lambda$0(this));
-        this.passwordEditText.setCustomSelectionActionModeCallback(new C17572());
+        this.passwordEditText.setCustomSelectionActionModeCallback(new C11362());
         this.bottomTextView = new TextView(context);
         this.bottomTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
         this.bottomTextView.setTextSize(1, 14.0f);
@@ -370,7 +422,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.bottomButton.setTextSize(1, 14.0f);
         this.bottomButton.setGravity((LocaleController.isRTL ? 5 : 3) | 80);
         this.bottomButton.setText(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip));
-        this.bottomButton.setPadding(0, AndroidUtilities.m10dp(10.0f), 0, 0);
+        this.bottomButton.setPadding(0, AndroidUtilities.m9dp(10.0f), 0, 0);
         linearLayout2.addView(this.bottomButton, LayoutHelper.createLinear(-1, -2, (LocaleController.isRTL ? 5 : 3) | 80, 40, 0, 40, 14));
         this.bottomButton.setOnClickListener(new TwoStepVerificationActivity$$Lambda$1(this));
         if (this.type == 0) {
@@ -387,8 +439,16 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             this.listAdapter = listAdapter;
             recyclerListView.setAdapter(listAdapter);
             this.listView.setOnItemClickListener(new TwoStepVerificationActivity$$Lambda$2(this));
+            this.codeFieldCell = new EditTextSettingsCell(context);
+            this.codeFieldCell.setTextAndHint(TtmlNode.ANONYMOUS_REGION_ID, LocaleController.getString("PasswordCode", R.string.PasswordCode), false);
+            this.codeFieldCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            EditTextBoldCursor editText = this.codeFieldCell.getTextView();
+            editText.setInputType(3);
+            editText.setImeOptions(6);
+            editText.setOnEditorActionListener(new TwoStepVerificationActivity$$Lambda$3(this));
+            editText.addTextChangedListener(new C11373());
             updateRows();
-            this.actionBar.setTitle(LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification));
+            this.actionBar.setTitle(LocaleController.getString("TwoStepVerificationTitle", R.string.TwoStepVerificationTitle));
             this.titleTextView.setText(LocaleController.getString("PleaseEnterCurrentPassword", R.string.PleaseEnterCurrentPassword));
         } else if (this.type == 1) {
             setPasswordSetState(this.passwordSetState);
@@ -416,11 +476,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         if (this.type == 0) {
             if (this.currentPassword.has_recovery) {
                 needShowProgress();
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_auth_requestPasswordRecovery(), new TwoStepVerificationActivity$$Lambda$27(this), 10);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_auth_requestPasswordRecovery(), new TwoStepVerificationActivity$$Lambda$35(this), 10);
             } else if (getParentActivity() != null) {
                 builder = new Builder(getParentActivity());
                 builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", R.string.RestorePasswordResetAccount), new TwoStepVerificationActivity$$Lambda$28(this));
+                builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", R.string.RestorePasswordResetAccount), new TwoStepVerificationActivity$$Lambda$36(this));
                 builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", R.string.RestorePasswordNoEmailTitle));
                 builder.setMessage(LocaleController.getString("RestorePasswordNoEmailText", R.string.RestorePasswordNoEmailText));
                 showDialog(builder.create());
@@ -431,14 +491,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             builder = new Builder(getParentActivity());
             builder.setMessage(LocaleController.getString("YourEmailSkipWarningText", R.string.YourEmailSkipWarningText));
             builder.setTitle(LocaleController.getString("YourEmailSkipWarning", R.string.YourEmailSkipWarning));
-            builder.setPositiveButton(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip), new TwoStepVerificationActivity$$Lambda$29(this));
+            builder.setPositiveButton(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip), new TwoStepVerificationActivity$$Lambda$37(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             showDialog(builder.create());
         }
     }
 
     final /* synthetic */ void lambda$null$3$TwoStepVerificationActivity(TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$30(this, error, response));
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$38(this, error, response));
     }
 
     final /* synthetic */ void lambda$null$2$TwoStepVerificationActivity(TL_error error, TLObject response) {
@@ -448,7 +508,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             Builder builder = new Builder(getParentActivity());
             builder.setMessage(LocaleController.formatString("RestoreEmailSent", R.string.RestoreEmailSent, res.email_pattern));
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$31(this, res));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$39(this, res));
             Dialog dialog = showDialog(builder.create());
             if (dialog != null) {
                 dialog.setCanceledOnTouchOutside(false);
@@ -487,8 +547,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         setNewPassword(false);
     }
 
-    final /* synthetic */ void lambda$createView$8$TwoStepVerificationActivity(View view, int position) {
+    final /* synthetic */ void lambda$createView$9$TwoStepVerificationActivity(View view, int position) {
         TwoStepVerificationActivity fragment;
+        Builder builder;
         if (position == this.setPasswordRow || position == this.changePasswordRow) {
             fragment = new TwoStepVerificationActivity(this.currentAccount, 1);
             fragment.currentPasswordHash = this.currentPasswordHash;
@@ -506,15 +567,29 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             fragment.passwordSetState = 3;
             presentFragment(fragment);
         } else if (position == this.turnPasswordOffRow || position == this.abortPasswordRow) {
-            Builder builder = new Builder(getParentActivity());
-            String text = LocaleController.getString("TurnPasswordOffQuestion", R.string.TurnPasswordOffQuestion);
-            if (this.currentPassword.has_secure_values) {
-                text = text + "\n\n" + LocaleController.getString("TurnPasswordOffPassport", R.string.TurnPasswordOffPassport);
+            String text;
+            builder = new Builder(getParentActivity());
+            if (position != this.abortPasswordRow) {
+                text = LocaleController.getString("TurnPasswordOffQuestion", R.string.TurnPasswordOffQuestion);
+                if (this.currentPassword.has_secure_values) {
+                    text = text + "\n\n" + LocaleController.getString("TurnPasswordOffPassport", R.string.TurnPasswordOffPassport);
+                }
+            } else if (this.currentPassword == null || !this.currentPassword.has_password) {
+                text = LocaleController.getString("CancelPasswordQuestion", R.string.CancelPasswordQuestion);
+            } else {
+                text = LocaleController.getString("CancelEmailQuestion", R.string.CancelEmailQuestion);
             }
             builder.setMessage(text);
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$26(this));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$33(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            showDialog(builder.create());
+        } else if (position == this.resendCodeRow) {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_resendPasswordEmail(), TwoStepVerificationActivity$$Lambda$34.$instance);
+            builder = new Builder(getParentActivity());
+            builder.setMessage(LocaleController.getString("ResendCodeInfo", R.string.ResendCodeInfo));
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             showDialog(builder.create());
         }
     }
@@ -523,12 +598,23 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         setNewPassword(true);
     }
 
+    static final /* synthetic */ void lambda$null$8$TwoStepVerificationActivity(TLObject response, TL_error error) {
+    }
+
+    final /* synthetic */ boolean lambda$createView$10$TwoStepVerificationActivity(TextView textView, int i, KeyEvent keyEvent) {
+        if (i != 6) {
+            return false;
+        }
+        processDone();
+        return true;
+    }
+
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.didSetTwoStepPassword) {
             if (!(args == null || args.length <= 0 || args[0] == null)) {
                 this.currentPasswordHash = (byte[]) args[0];
                 if (this.closeAfterSet && TextUtils.isEmpty(args[4]) && this.closeAfterSet) {
-                    lambda$null$11$ProfileActivity();
+                    lambda$null$10$ProfileActivity();
                 }
             }
             loadPasswordInfo(false);
@@ -545,15 +631,24 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         super.onResume();
         this.paused = false;
         if (this.type == 1) {
-            AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$3(this), 200);
+            AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$4(this), 200);
+        } else if (this.type == 0 && this.codeFieldCell != null && this.codeFieldCell.getVisibility() == 0) {
+            AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$5(this), 200);
         }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
-    final /* synthetic */ void lambda$onResume$9$TwoStepVerificationActivity() {
+    final /* synthetic */ void lambda$onResume$11$TwoStepVerificationActivity() {
         if (this.passwordEditText != null) {
             this.passwordEditText.requestFocus();
             AndroidUtilities.showKeyboard(this.passwordEditText);
+        }
+    }
+
+    final /* synthetic */ void lambda$onResume$12$TwoStepVerificationActivity() {
+        if (this.codeFieldCell != null) {
+            this.codeFieldCell.getTextView().requestFocus();
+            AndroidUtilities.showKeyboard(this.codeFieldCell.getTextView());
         }
     }
 
@@ -567,8 +662,13 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
-        if (isOpen && this.type == 1) {
+        if (!isOpen) {
+            return;
+        }
+        if (this.type == 1) {
             AndroidUtilities.showKeyboard(this.passwordEditText);
+        } else if (this.type == 0 && this.codeFieldCell != null && this.codeFieldCell.getVisibility() == 0) {
+            AndroidUtilities.showKeyboard(this.codeFieldCell.getTextView());
         }
     }
 
@@ -585,8 +685,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public static void initPasswordNewAlgo(TL_account_password password) {
         byte[] salt;
-        if (password.new_algo instanceof C0643xb6caa888) {
-            C0643xb6caa888 algo = password.new_algo;
+        if (password.new_algo instanceof C0400xb6caa888) {
+            C0400xb6caa888 algo = password.new_algo;
             salt = new byte[(algo.salt1.length + 32)];
             Utilities.random.nextBytes(salt);
             System.arraycopy(algo.salt1, 0, salt, 0, algo.salt1.length);
@@ -608,14 +708,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 this.listAdapter.notifyDataSetChanged();
             }
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new TwoStepVerificationActivity$$Lambda$4(this, silent), 10);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new TwoStepVerificationActivity$$Lambda$6(this, silent), 10);
     }
 
-    final /* synthetic */ void lambda$loadPasswordInfo$11$TwoStepVerificationActivity(boolean silent, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$25(this, error, response, silent));
+    final /* synthetic */ void lambda$loadPasswordInfo$14$TwoStepVerificationActivity(boolean silent, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$32(this, error, response, silent));
     }
 
-    final /* synthetic */ void lambda$null$10$TwoStepVerificationActivity(TL_error error, TLObject response, boolean silent) {
+    final /* synthetic */ void lambda$null$13$TwoStepVerificationActivity(TL_error error, TLObject response, boolean silent) {
         if (error == null) {
             this.loading = false;
             this.currentPassword = (TL_account_password) response;
@@ -646,7 +746,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                     if (!(this.waitingForEmail || pendingCurrentAlgo == null)) {
                         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didSetTwoStepPassword);
                         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetTwoStepPassword, null, pendingCurrentAlgo, pendingNewSecureAlgo, pendingSecureRandom, pendingEmail, pendingHint, null, null);
-                        lambda$checkDiscard$69$PassportActivity();
+                        lambda$checkDiscard$70$PassportActivity();
                     }
                 }
             } else {
@@ -661,12 +761,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     private void startShortpoll() {
-        AndroidUtilities.cancelRunOnUIThread(this.shortPollRunnable);
-        this.shortPollRunnable = new TwoStepVerificationActivity$$Lambda$5(this);
+        if (this.shortPollRunnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(this.shortPollRunnable);
+        }
+        this.shortPollRunnable = new TwoStepVerificationActivity$$Lambda$7(this);
         AndroidUtilities.runOnUIThread(this.shortPollRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
     }
 
-    final /* synthetic */ void lambda$startShortpoll$12$TwoStepVerificationActivity() {
+    final /* synthetic */ void lambda$startShortpoll$15$TwoStepVerificationActivity() {
         if (this.shortPollRunnable != null) {
             loadPasswordInfo(true);
             this.shortPollRunnable = null;
@@ -706,7 +808,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             } else if (this.passwordSetState == 3) {
                 this.actionBar.setTitle(LocaleController.getString("RecoveryEmail", R.string.RecoveryEmail));
                 this.titleTextView.setText(LocaleController.getString("YourEmail", R.string.YourEmail));
-                this.passwordEditText.setImeOptions(6);
+                this.passwordEditText.setImeOptions(5);
                 this.passwordEditText.setTransformationMethod(null);
                 this.passwordEditText.setInputType(33);
                 this.bottomTextView.setVisibility(0);
@@ -735,6 +837,26 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     private void updateRows() {
+        StringBuilder lastValue = new StringBuilder();
+        lastValue.append(this.setPasswordRow);
+        lastValue.append(this.setPasswordDetailRow);
+        lastValue.append(this.changePasswordRow);
+        lastValue.append(this.turnPasswordOffRow);
+        lastValue.append(this.setRecoveryEmailRow);
+        lastValue.append(this.changeRecoveryEmailRow);
+        lastValue.append(this.resendCodeRow);
+        lastValue.append(this.abortPasswordRow);
+        lastValue.append(this.passwordSetupDetailRow);
+        lastValue.append(this.passwordCodeFieldRow);
+        lastValue.append(this.passwordEnabledDetailRow);
+        lastValue.append(this.shadowRow);
+        lastValue.append(this.rowCount);
+        boolean wasCodeField;
+        if (this.passwordCodeFieldRow != -1) {
+            wasCodeField = true;
+        } else {
+            wasCodeField = false;
+        }
         this.rowCount = 0;
         this.setPasswordRow = -1;
         this.setPasswordDetailRow = -1;
@@ -743,13 +865,30 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.setRecoveryEmailRow = -1;
         this.changeRecoveryEmailRow = -1;
         this.abortPasswordRow = -1;
+        this.resendCodeRow = -1;
         this.passwordSetupDetailRow = -1;
+        this.passwordCodeFieldRow = -1;
         this.passwordEnabledDetailRow = -1;
-        this.passwordEmailVerifyDetailRow = -1;
         this.shadowRow = -1;
         if (!(this.loading || this.currentPassword == null)) {
             int i;
-            if (this.currentPassword.has_password) {
+            if (this.waitingForEmail) {
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.passwordCodeFieldRow = i;
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.passwordSetupDetailRow = i;
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.resendCodeRow = i;
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.abortPasswordRow = i;
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.shadowRow = i;
+            } else if (this.currentPassword.has_password) {
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.changePasswordRow = i;
@@ -765,25 +904,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                     this.rowCount = i + 1;
                     this.setRecoveryEmailRow = i;
                 }
-                if (this.waitingForEmail) {
-                    i = this.rowCount;
-                    this.rowCount = i + 1;
-                    this.passwordEmailVerifyDetailRow = i;
-                } else {
-                    i = this.rowCount;
-                    this.rowCount = i + 1;
-                    this.passwordEnabledDetailRow = i;
-                }
-            } else if (this.waitingForEmail) {
                 i = this.rowCount;
                 this.rowCount = i + 1;
-                this.passwordSetupDetailRow = i;
-                i = this.rowCount;
-                this.rowCount = i + 1;
-                this.abortPasswordRow = i;
-                i = this.rowCount;
-                this.rowCount = i + 1;
-                this.shadowRow = i;
+                this.passwordEnabledDetailRow = i;
             } else {
                 i = this.rowCount;
                 this.rowCount = i + 1;
@@ -793,28 +916,47 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 this.setPasswordDetailRow = i;
             }
         }
-        if (this.listAdapter != null) {
+        StringBuilder newValue = new StringBuilder();
+        newValue.append(this.setPasswordRow);
+        newValue.append(this.setPasswordDetailRow);
+        newValue.append(this.changePasswordRow);
+        newValue.append(this.turnPasswordOffRow);
+        newValue.append(this.setRecoveryEmailRow);
+        newValue.append(this.changeRecoveryEmailRow);
+        newValue.append(this.resendCodeRow);
+        newValue.append(this.abortPasswordRow);
+        newValue.append(this.passwordSetupDetailRow);
+        newValue.append(this.passwordCodeFieldRow);
+        newValue.append(this.passwordEnabledDetailRow);
+        newValue.append(this.shadowRow);
+        newValue.append(this.rowCount);
+        if (!(this.listAdapter == null || lastValue.toString().equals(newValue.toString()))) {
             this.listAdapter.notifyDataSetChanged();
+            if (this.passwordCodeFieldRow == -1 && getParentActivity() != null && wasCodeField) {
+                AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
+                this.codeFieldCell.setText(TtmlNode.ANONYMOUS_REGION_ID, false);
+            }
         }
-        if (this.passwordEntered) {
+        if (this.fragmentView == null) {
+            return;
+        }
+        if (this.loading || this.passwordEntered) {
             if (this.listView != null) {
                 this.listView.setVisibility(0);
                 this.scrollView.setVisibility(4);
                 this.listView.setEmptyView(this.emptyView);
             }
-            if (this.passwordEditText != null) {
+            if (this.waitingForEmail && this.currentPassword != null) {
+                this.doneItem.setVisibility(0);
+            } else if (this.passwordEditText != null) {
                 this.doneItem.setVisibility(8);
                 this.passwordEditText.setVisibility(4);
                 this.titleTextView.setVisibility(4);
                 this.bottomTextView.setVisibility(4);
                 this.bottomButton.setVisibility(4);
-                if (this.fragmentView != null) {
-                    this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-                    this.fragmentView.setTag(Theme.key_windowBackgroundGray);
-                    return;
-                }
-                return;
             }
+            this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+            this.fragmentView.setTag(Theme.key_windowBackgroundGray);
             return;
         }
         if (this.listView != null) {
@@ -826,10 +968,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         if (this.passwordEditText != null) {
             this.doneItem.setVisibility(0);
             this.passwordEditText.setVisibility(0);
-            if (this.fragmentView != null) {
-                this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                this.fragmentView.setTag(Theme.key_windowBackgroundWhite);
-            }
+            this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            this.fragmentView.setTag(Theme.key_windowBackgroundWhite);
             this.titleTextView.setVisibility(0);
             this.bottomButton.setVisibility(0);
             this.bottomTextView.setVisibility(4);
@@ -839,15 +979,68 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             } else {
                 this.passwordEditText.setHint(this.currentPassword.hint);
             }
-            AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$6(this), 200);
+            AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$8(this), 200);
         }
     }
 
-    final /* synthetic */ void lambda$updateRows$13$TwoStepVerificationActivity() {
+    final /* synthetic */ void lambda$updateRows$16$TwoStepVerificationActivity() {
         if (!isFinishing() && !this.destroyed && this.passwordEditText != null) {
             this.passwordEditText.requestFocus();
             AndroidUtilities.showKeyboard(this.passwordEditText);
         }
+    }
+
+    private void showDoneProgress(final boolean show) {
+        if (this.doneItemAnimation != null) {
+            this.doneItemAnimation.cancel();
+        }
+        this.doneItemAnimation = new AnimatorSet();
+        AnimatorSet animatorSet;
+        Animator[] animatorArr;
+        if (show) {
+            this.progressView.setVisibility(0);
+            this.doneItem.setEnabled(false);
+            animatorSet = this.doneItemAnimation;
+            animatorArr = new Animator[6];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{0.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{1.0f});
+            animatorSet.playTogether(animatorArr);
+        } else {
+            this.doneItem.getImageView().setVisibility(0);
+            this.doneItem.setEnabled(true);
+            animatorSet = this.doneItemAnimation;
+            animatorArr = new Animator[6];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{0.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{1.0f});
+            animatorSet.playTogether(animatorArr);
+        }
+        this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (TwoStepVerificationActivity.this.doneItemAnimation != null && TwoStepVerificationActivity.this.doneItemAnimation.equals(animation)) {
+                    if (show) {
+                        TwoStepVerificationActivity.this.doneItem.getImageView().setVisibility(4);
+                    } else {
+                        TwoStepVerificationActivity.this.progressView.setVisibility(4);
+                    }
+                }
+            }
+
+            public void onAnimationCancel(Animator animation) {
+                if (TwoStepVerificationActivity.this.doneItemAnimation != null && TwoStepVerificationActivity.this.doneItemAnimation.equals(animation)) {
+                    TwoStepVerificationActivity.this.doneItemAnimation = null;
+                }
+            }
+        });
+        this.doneItemAnimation.setDuration(150);
+        this.doneItemAnimation.start();
     }
 
     private void needShowProgress() {
@@ -865,7 +1058,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.progressDialog = null;
         }
@@ -892,6 +1085,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     private void setNewPassword(boolean clear) {
+        if (clear && this.waitingForEmail && this.currentPassword.has_password) {
+            needShowProgress();
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_cancelPasswordEmail(), new TwoStepVerificationActivity$$Lambda$9(this));
+            return;
+        }
         String password = this.firstPassword;
         TL_account_updatePasswordSettings req = new TL_account_updatePasswordSettings();
         if (this.currentPasswordHash == null || this.currentPasswordHash.length == 0) {
@@ -901,16 +1099,16 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         if (clear) {
             UserConfig.getInstance(this.currentAccount).resetSavedPassword();
             this.currentSecret = null;
-            if (!this.waitingForEmail || this.currentPassword.has_password) {
+            if (this.waitingForEmail) {
+                req.new_settings.flags = 2;
+                req.new_settings.email = TtmlNode.ANONYMOUS_REGION_ID;
+                req.password = new TL_inputCheckPasswordEmpty();
+            } else {
                 req.new_settings.flags = 3;
                 req.new_settings.hint = TtmlNode.ANONYMOUS_REGION_ID;
                 req.new_settings.new_password_hash = new byte[0];
                 req.new_settings.new_algo = new TL_passwordKdfAlgoUnknown();
                 req.new_settings.email = TtmlNode.ANONYMOUS_REGION_ID;
-            } else {
-                req.new_settings.flags = 2;
-                req.new_settings.email = TtmlNode.ANONYMOUS_REGION_ID;
-                req.password = new TL_inputCheckPasswordEmpty();
             }
         } else {
             TL_account_passwordInputSettings tL_account_passwordInputSettings;
@@ -933,10 +1131,23 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             }
         }
         needShowProgress();
-        Utilities.globalQueue.postRunnable(new TwoStepVerificationActivity$$Lambda$7(this, req, clear, password));
+        Utilities.globalQueue.postRunnable(new TwoStepVerificationActivity$$Lambda$10(this, req, clear, password));
     }
 
-    final /* synthetic */ void lambda$setNewPassword$20$TwoStepVerificationActivity(TL_account_updatePasswordSettings req, boolean clear, String password) {
+    final /* synthetic */ void lambda$setNewPassword$18$TwoStepVerificationActivity(TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$31(this, error));
+    }
+
+    final /* synthetic */ void lambda$null$17$TwoStepVerificationActivity(TL_error error) {
+        needHideProgress();
+        if (error == null) {
+            loadPasswordInfo(false);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didRemoveTwoStepPassword, new Object[0]);
+            updateRows();
+        }
+    }
+
+    final /* synthetic */ void lambda$setNewPassword$25$TwoStepVerificationActivity(TL_account_updatePasswordSettings req, boolean clear, String password) {
         byte[] newPasswordBytes;
         byte[] newPasswordHash;
         if (req.password == null) {
@@ -947,15 +1158,15 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             newPasswordHash = null;
         } else {
             newPasswordBytes = AndroidUtilities.getStringBytes(password);
-            if (this.currentPassword.new_algo instanceof C0643xb6caa888) {
+            if (this.currentPassword.new_algo instanceof C0400xb6caa888) {
                 newPasswordHash = SRPHelper.getX(newPasswordBytes, this.currentPassword.new_algo);
             } else {
                 newPasswordHash = null;
             }
         }
-        RequestDelegate twoStepVerificationActivity$$Lambda$19 = new TwoStepVerificationActivity$$Lambda$19(this, clear, newPasswordHash, req);
+        RequestDelegate twoStepVerificationActivity$$Lambda$25 = new TwoStepVerificationActivity$$Lambda$25(this, clear, newPasswordHash, req);
         if (clear) {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, twoStepVerificationActivity$$Lambda$19, 10);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, twoStepVerificationActivity$$Lambda$25, 10);
             return;
         }
         if (password != null && this.currentSecret != null && this.currentSecret.length == 32 && (this.currentPassword.new_secure_algo instanceof TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000)) {
@@ -976,29 +1187,29 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             tL_account_passwordInputSettings.flags |= 4;
         }
         TL_error error;
-        if (this.currentPassword.new_algo instanceof C0643xb6caa888) {
+        if (this.currentPassword.new_algo instanceof C0400xb6caa888) {
             if (password != null) {
-                C0643xb6caa888 algo = (C0643xb6caa888) this.currentPassword.new_algo;
+                C0400xb6caa888 algo = (C0400xb6caa888) this.currentPassword.new_algo;
                 req.new_settings.new_password_hash = SRPHelper.getVBytes(newPasswordBytes, algo);
                 if (req.new_settings.new_password_hash == null) {
                     error = new TL_error();
                     error.text = "ALGO_INVALID";
-                    twoStepVerificationActivity$$Lambda$19.run(null, error);
+                    twoStepVerificationActivity$$Lambda$25.run(null, error);
                 }
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, twoStepVerificationActivity$$Lambda$19, 10);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, twoStepVerificationActivity$$Lambda$25, 10);
             return;
         }
         error = new TL_error();
         error.text = "PASSWORD_HASH_INVALID";
-        twoStepVerificationActivity$$Lambda$19.run(null, error);
+        twoStepVerificationActivity$$Lambda$25.run(null, error);
     }
 
-    final /* synthetic */ void lambda$null$19$TwoStepVerificationActivity(boolean clear, byte[] newPasswordHash, TL_account_updatePasswordSettings req, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$20(this, error, clear, response, newPasswordHash, req));
+    final /* synthetic */ void lambda$null$24$TwoStepVerificationActivity(boolean clear, byte[] newPasswordHash, TL_account_updatePasswordSettings req, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$26(this, error, clear, response, newPasswordHash, req));
     }
 
-    final /* synthetic */ void lambda$null$18$TwoStepVerificationActivity(TL_error error, boolean clear, TLObject response, byte[] newPasswordHash, TL_account_updatePasswordSettings req) {
+    final /* synthetic */ void lambda$null$23$TwoStepVerificationActivity(TL_error error, boolean clear, TLObject response, byte[] newPasswordHash, TL_account_updatePasswordSettings req) {
         if (error == null || !"SRP_ID_INVALID".equals(error.text)) {
             needHideProgress();
             Builder builder;
@@ -1008,13 +1219,17 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                     this.currentPassword = null;
                     this.currentPasswordHash = new byte[0];
                     loadPasswordInfo(false);
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didRemovedTwoStepPassword, new Object[0]);
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didRemoveTwoStepPassword, new Object[0]);
                     updateRows();
                     return;
                 } else if (getParentActivity() != null) {
                     builder = new Builder(getParentActivity());
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$22(this, newPasswordHash, req));
-                    builder.setMessage(LocaleController.getString("YourPasswordSuccessText", R.string.YourPasswordSuccessText));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$28(this, newPasswordHash, req));
+                    if (this.currentPassword == null || !this.currentPassword.has_password) {
+                        builder.setMessage(LocaleController.getString("YourPasswordSuccessText", R.string.YourPasswordSuccessText));
+                    } else {
+                        builder.setMessage(LocaleController.getString("YourEmailSuccessText", R.string.YourEmailSuccessText));
+                    }
                     builder.setTitle(LocaleController.getString("YourPasswordSuccess", R.string.YourPasswordSuccess));
                     dialog = showDialog(builder.create());
                     if (dialog != null) {
@@ -1029,9 +1244,10 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             } else if (error == null) {
                 return;
             } else {
-                if ("EMAIL_UNCONFIRMED".equals(error.text)) {
+                if ("EMAIL_UNCONFIRMED".equals(error.text) || error.text.startsWith("EMAIL_UNCONFIRMED_")) {
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetTwoStepPassword, new Object[0]);
                     builder = new Builder(getParentActivity());
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$23(this, req));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$29(this, newPasswordHash, req));
                     builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", R.string.YourEmailAlmostThereText));
                     builder.setTitle(LocaleController.getString("YourEmailAlmostThere", R.string.YourEmailAlmostThere));
                     dialog = showDialog(builder.create());
@@ -1060,14 +1276,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 }
             }
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new TwoStepVerificationActivity$$Lambda$21(this, clear), 8);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new TwoStepVerificationActivity$$Lambda$27(this, clear), 8);
     }
 
-    final /* synthetic */ void lambda$null$15$TwoStepVerificationActivity(boolean clear, TLObject response2, TL_error error2) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$24(this, error2, response2, clear));
+    final /* synthetic */ void lambda$null$20$TwoStepVerificationActivity(boolean clear, TLObject response2, TL_error error2) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$30(this, error2, response2, clear));
     }
 
-    final /* synthetic */ void lambda$null$14$TwoStepVerificationActivity(TL_error error2, TLObject response2, boolean clear) {
+    final /* synthetic */ void lambda$null$19$TwoStepVerificationActivity(TL_error error2, TLObject response2, boolean clear) {
         if (error2 == null) {
             this.currentPassword = (TL_account_password) response2;
             TwoStepVerificationActivity.initPasswordNewAlgo(this.currentPassword);
@@ -1075,23 +1291,23 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
-    final /* synthetic */ void lambda$null$16$TwoStepVerificationActivity(byte[] newPasswordHash, TL_account_updatePasswordSettings req, DialogInterface dialogInterface, int i) {
+    final /* synthetic */ void lambda$null$21$TwoStepVerificationActivity(byte[] newPasswordHash, TL_account_updatePasswordSettings req, DialogInterface dialogInterface, int i) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetTwoStepPassword, newPasswordHash, req.new_settings.new_algo, this.currentPassword.new_secure_algo, this.currentPassword.secure_random, this.email, this.hint, null, this.firstPassword);
-        lambda$checkDiscard$69$PassportActivity();
+        lambda$checkDiscard$70$PassportActivity();
     }
 
-    final /* synthetic */ void lambda$null$17$TwoStepVerificationActivity(TL_account_updatePasswordSettings req, DialogInterface dialogInterface, int i) {
+    final /* synthetic */ void lambda$null$22$TwoStepVerificationActivity(byte[] newPasswordHash, TL_account_updatePasswordSettings req, DialogInterface dialogInterface, int i) {
         if (this.closeAfterSet) {
             TwoStepVerificationActivity activity = new TwoStepVerificationActivity(this.currentAccount, 0);
             activity.setCloseAfterSet(true);
             this.parentLayout.addFragmentToStack(activity, this.parentLayout.fragmentsStack.size() - 1);
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetTwoStepPassword, req.new_settings.new_password_hash, req.new_settings.new_algo, this.currentPassword.new_secure_algo, this.currentPassword.secure_random, this.email, this.hint, this.email, this.firstPassword);
-        lambda$checkDiscard$69$PassportActivity();
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetTwoStepPassword, newPasswordHash, req.new_settings.new_algo, this.currentPassword.new_secure_algo, this.currentPassword.secure_random, this.email, this.hint, this.email, this.firstPassword);
+        lambda$checkDiscard$70$PassportActivity();
     }
 
     private TL_inputCheckPasswordSRP getNewSrpPassword() {
-        if (!(this.currentPassword.current_algo instanceof C0643xb6caa888)) {
+        if (!(this.currentPassword.current_algo instanceof C0400xb6caa888)) {
             return null;
         }
         return SRPHelper.startCheck(this.currentPasswordHash, this.currentPassword.srp_id, this.currentPassword.srp_B, this.currentPassword.current_algo);
@@ -1125,7 +1341,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 req.new_settings.new_secure_settings.secure_secret_id = 0;
                 TL_account_passwordInputSettings tL_account_passwordInputSettings = req.new_settings;
                 tL_account_passwordInputSettings.flags |= 4;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, TwoStepVerificationActivity$$Lambda$8.$instance);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, TwoStepVerificationActivity$$Lambda$11.$instance);
                 this.currentSecret = null;
                 this.currentSecretId = 0;
             }
@@ -1136,7 +1352,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         return true;
     }
 
-    static final /* synthetic */ void lambda$checkSecretValues$21$TwoStepVerificationActivity(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$checkSecretValues$26$TwoStepVerificationActivity(TLObject response, TL_error error) {
     }
 
     private static byte[] getBigIntegerBytes(BigInteger value) {
@@ -1154,18 +1370,25 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             if (!this.passwordEntered) {
                 String oldPassword = this.passwordEditText.getText().toString();
                 if (oldPassword.length() == 0) {
-                    onPasscodeError(false);
+                    onFieldError(this.passwordEditText, false);
                     return;
                 }
                 byte[] oldPasswordBytes = AndroidUtilities.getStringBytes(oldPassword);
                 needShowProgress();
-                Utilities.globalQueue.postRunnable(new TwoStepVerificationActivity$$Lambda$9(this, oldPasswordBytes));
+                Utilities.globalQueue.postRunnable(new TwoStepVerificationActivity$$Lambda$12(this, oldPasswordBytes));
+            } else if (this.waitingForEmail && this.currentPassword != null) {
+                if (this.codeFieldCell.length() == 0) {
+                    onFieldError(this.codeFieldCell.getTextView(), false);
+                    return;
+                }
+                sendEmailConfirm(this.codeFieldCell.getText());
+                showDoneProgress(true);
             }
         } else if (this.type != 1) {
         } else {
             if (this.passwordSetState == 0) {
                 if (this.passwordEditText.getText().length() == 0) {
-                    onPasscodeError(false);
+                    onFieldError(this.passwordEditText, false);
                     return;
                 }
                 this.titleTextView.setText(LocaleController.getString("ReEnterYourPasscode", R.string.ReEnterYourPasscode));
@@ -1179,18 +1402,18 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 try {
                     Toast.makeText(getParentActivity(), LocaleController.getString("PasswordDoNotMatch", R.string.PasswordDoNotMatch), 0).show();
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
-                onPasscodeError(true);
+                onFieldError(this.passwordEditText, true);
             } else if (this.passwordSetState == 2) {
                 this.hint = this.passwordEditText.getText().toString();
                 if (this.hint.toLowerCase().equals(this.firstPassword.toLowerCase())) {
                     try {
                         Toast.makeText(getParentActivity(), LocaleController.getString("PasswordAsHintError", R.string.PasswordAsHintError), 0).show();
                     } catch (Throwable e2) {
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                     }
-                    onPasscodeError(false);
+                    onFieldError(this.passwordEditText, false);
                 } else if (this.currentPassword.has_recovery) {
                     this.email = TtmlNode.ANONYMOUS_REGION_ID;
                     setNewPassword(false);
@@ -1202,33 +1425,33 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 if (isValidEmail(this.email)) {
                     setNewPassword(false);
                 } else {
-                    onPasscodeError(false);
+                    onFieldError(this.passwordEditText, false);
                 }
             } else if (this.passwordSetState == 4) {
                 String code = this.passwordEditText.getText().toString();
                 if (code.length() == 0) {
-                    onPasscodeError(false);
+                    onFieldError(this.passwordEditText, false);
                     return;
                 }
                 TL_auth_recoverPassword req = new TL_auth_recoverPassword();
                 req.code = code;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new TwoStepVerificationActivity$$Lambda$10(this), 10);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new TwoStepVerificationActivity$$Lambda$13(this), 10);
             }
         }
     }
 
-    final /* synthetic */ void lambda$processDone$28$TwoStepVerificationActivity(byte[] oldPasswordBytes) {
+    final /* synthetic */ void lambda$processDone$33$TwoStepVerificationActivity(byte[] oldPasswordBytes) {
         byte[] x_bytes;
         TL_account_getPasswordSettings req = new TL_account_getPasswordSettings();
-        if (this.currentPassword.current_algo instanceof C0643xb6caa888) {
+        if (this.currentPassword.current_algo instanceof C0400xb6caa888) {
             x_bytes = SRPHelper.getX(oldPasswordBytes, this.currentPassword.current_algo);
         } else {
             x_bytes = null;
         }
-        RequestDelegate requestDelegate = new TwoStepVerificationActivity$$Lambda$13(this, oldPasswordBytes, x_bytes);
+        RequestDelegate requestDelegate = new TwoStepVerificationActivity$$Lambda$19(this, oldPasswordBytes, x_bytes);
         TL_error error;
-        if (this.currentPassword.current_algo instanceof C0643xb6caa888) {
-            req.password = SRPHelper.startCheck(x_bytes, this.currentPassword.srp_id, this.currentPassword.srp_B, (C0643xb6caa888) this.currentPassword.current_algo);
+        if (this.currentPassword.current_algo instanceof C0400xb6caa888) {
+            req.password = SRPHelper.startCheck(x_bytes, this.currentPassword.srp_id, this.currentPassword.srp_B, (C0400xb6caa888) this.currentPassword.current_algo);
             if (req.password == null) {
                 error = new TL_error();
                 error.text = "ALGO_INVALID";
@@ -1243,19 +1466,19 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         requestDelegate.run(null, error);
     }
 
-    final /* synthetic */ void lambda$null$27$TwoStepVerificationActivity(byte[] oldPasswordBytes, byte[] x_bytes, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$null$32$TwoStepVerificationActivity(byte[] oldPasswordBytes, byte[] x_bytes, TLObject response, TL_error error) {
         if (error == null) {
-            Utilities.globalQueue.postRunnable(new TwoStepVerificationActivity$$Lambda$14(this, oldPasswordBytes, response, x_bytes));
+            Utilities.globalQueue.postRunnable(new TwoStepVerificationActivity$$Lambda$20(this, oldPasswordBytes, response, x_bytes));
         } else {
-            AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$15(this, error));
+            AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$21(this, error));
         }
     }
 
-    final /* synthetic */ void lambda$null$23$TwoStepVerificationActivity(byte[] oldPasswordBytes, TLObject response, byte[] x_bytes) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$18(this, checkSecretValues(oldPasswordBytes, (TL_account_passwordSettings) response), x_bytes));
+    final /* synthetic */ void lambda$null$28$TwoStepVerificationActivity(byte[] oldPasswordBytes, TLObject response, byte[] x_bytes) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$24(this, checkSecretValues(oldPasswordBytes, (TL_account_passwordSettings) response), x_bytes));
     }
 
-    final /* synthetic */ void lambda$null$22$TwoStepVerificationActivity(boolean secretOk, byte[] x_bytes) {
+    final /* synthetic */ void lambda$null$27$TwoStepVerificationActivity(boolean secretOk, byte[] x_bytes) {
         needHideProgress();
         if (secretOk) {
             this.currentPasswordHash = x_bytes;
@@ -1267,14 +1490,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
     }
 
-    final /* synthetic */ void lambda$null$26$TwoStepVerificationActivity(TL_error error) {
+    final /* synthetic */ void lambda$null$31$TwoStepVerificationActivity(TL_error error) {
         if ("SRP_ID_INVALID".equals(error.text)) {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new TwoStepVerificationActivity$$Lambda$16(this), 8);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new TwoStepVerificationActivity$$Lambda$22(this), 8);
             return;
         }
         needHideProgress();
         if ("PASSWORD_HASH_INVALID".equals(error.text)) {
-            onPasscodeError(true);
+            onFieldError(this.passwordEditText, true);
         } else if (error.text.startsWith("FLOOD_WAIT")) {
             String timeString;
             int time = Utilities.parseInt(error.text).intValue();
@@ -1289,11 +1512,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
-    final /* synthetic */ void lambda$null$25$TwoStepVerificationActivity(TLObject response2, TL_error error2) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$17(this, error2, response2));
+    final /* synthetic */ void lambda$null$30$TwoStepVerificationActivity(TLObject response2, TL_error error2) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$23(this, error2, response2));
     }
 
-    final /* synthetic */ void lambda$null$24$TwoStepVerificationActivity(TL_error error2, TLObject response2) {
+    final /* synthetic */ void lambda$null$29$TwoStepVerificationActivity(TL_error error2, TLObject response2) {
         if (error2 == null) {
             this.currentPassword = (TL_account_password) response2;
             TwoStepVerificationActivity.initPasswordNewAlgo(this.currentPassword);
@@ -1301,14 +1524,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
-    final /* synthetic */ void lambda$processDone$31$TwoStepVerificationActivity(TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$11(this, error));
+    final /* synthetic */ void lambda$processDone$36$TwoStepVerificationActivity(TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$17(this, error));
     }
 
-    final /* synthetic */ void lambda$null$30$TwoStepVerificationActivity(TL_error error) {
+    final /* synthetic */ void lambda$null$35$TwoStepVerificationActivity(TL_error error) {
         if (error == null) {
             Builder builder = new Builder(getParentActivity());
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$12(this));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$18(this));
             builder.setMessage(LocaleController.getString("PasswordReset", R.string.PasswordReset));
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             Dialog dialog = showDialog(builder.create());
@@ -1317,7 +1540,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 dialog.setCancelable(false);
             }
         } else if (error.text.startsWith("CODE_INVALID")) {
-            onPasscodeError(true);
+            onFieldError(this.passwordEditText, true);
         } else if (error.text.startsWith("FLOOD_WAIT")) {
             String timeString;
             int time = Utilities.parseInt(error.text).intValue();
@@ -1332,48 +1555,110 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
-    final /* synthetic */ void lambda$null$29$TwoStepVerificationActivity(DialogInterface dialogInterface, int i) {
+    final /* synthetic */ void lambda$null$34$TwoStepVerificationActivity(DialogInterface dialogInterface, int i) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetTwoStepPassword, new Object[0]);
-        lambda$checkDiscard$69$PassportActivity();
+        lambda$checkDiscard$70$PassportActivity();
     }
 
-    private void onPasscodeError(boolean clear) {
+    private void sendEmailConfirm(String code) {
+        TL_account_confirmPasswordEmail req = new TL_account_confirmPasswordEmail();
+        req.code = code;
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new TwoStepVerificationActivity$$Lambda$14(this), 10);
+    }
+
+    final /* synthetic */ void lambda$sendEmailConfirm$39$TwoStepVerificationActivity(TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$15(this, error));
+    }
+
+    final /* synthetic */ void lambda$null$38$TwoStepVerificationActivity(TL_error error) {
+        if (this.type == 0 && this.waitingForEmail) {
+            showDoneProgress(false);
+        }
+        if (error == null) {
+            if (getParentActivity() != null) {
+                if (this.shortPollRunnable != null) {
+                    AndroidUtilities.cancelRunOnUIThread(this.shortPollRunnable);
+                    this.shortPollRunnable = null;
+                }
+                Builder builder = new Builder(getParentActivity());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$16(this));
+                if (this.currentPassword == null || !this.currentPassword.has_password) {
+                    builder.setMessage(LocaleController.getString("YourPasswordSuccessText", R.string.YourPasswordSuccessText));
+                } else {
+                    builder.setMessage(LocaleController.getString("YourEmailSuccessText", R.string.YourEmailSuccessText));
+                }
+                builder.setTitle(LocaleController.getString("YourPasswordSuccess", R.string.YourPasswordSuccess));
+                Dialog dialog = showDialog(builder.create());
+                if (dialog != null) {
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setCancelable(false);
+                }
+            }
+        } else if (error.text.startsWith("CODE_INVALID")) {
+            onFieldError(this.waitingForEmail ? this.codeFieldCell.getTextView() : this.passwordEditText, true);
+        } else if (error.text.startsWith("FLOOD_WAIT")) {
+            String timeString;
+            int time = Utilities.parseInt(error.text).intValue();
+            if (time < 60) {
+                timeString = LocaleController.formatPluralString("Seconds", time);
+            } else {
+                timeString = LocaleController.formatPluralString("Minutes", time / 60);
+            }
+            showAlertWithText(LocaleController.getString("AppName", R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+        } else {
+            showAlertWithText(LocaleController.getString("AppName", R.string.AppName), error.text);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$37$TwoStepVerificationActivity(DialogInterface dialogInterface, int i) {
+        if (this.type == 0) {
+            loadPasswordInfo(false);
+            this.doneItem.setVisibility(8);
+            return;
+        }
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetTwoStepPassword, this.currentPasswordHash, this.currentPassword.new_algo, this.currentPassword.new_secure_algo, this.currentPassword.secure_random, this.email, this.hint, null, this.firstPassword);
+        lambda$checkDiscard$70$PassportActivity();
+    }
+
+    private void onFieldError(TextView field, boolean clear) {
         if (getParentActivity() != null) {
             Vibrator v = (Vibrator) getParentActivity().getSystemService("vibrator");
             if (v != null) {
                 v.vibrate(200);
             }
             if (clear) {
-                this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
+                field.setText(TtmlNode.ANONYMOUS_REGION_ID);
             }
-            AndroidUtilities.shakeView(this.titleTextView, 2.0f, 0);
+            AndroidUtilities.shakeView(field, 2.0f, 0);
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r9 = new ThemeDescription[22];
-        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhite);
-        r9[2] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundGray);
-        r9[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        r9[4] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        r9[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        r9[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        r9[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
-        r9[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r9[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText3);
-        r9[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        r9[14] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
-        r9[15] = new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
-        r9[16] = new ThemeDescription(this.bottomTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
-        r9[17] = new ThemeDescription(this.bottomButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
-        r9[18] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r9[19] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
-        r9[20] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
-        r9[21] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        return r9;
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[24];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, EditTextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[2] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundGray);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[4] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText3);
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{EditTextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_HINTTEXTCOLOR, new Class[]{EditTextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        themeDescriptionArr[17] = new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[18] = new ThemeDescription(this.bottomTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[19] = new ThemeDescription(this.bottomButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[20] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[21] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[22] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        themeDescriptionArr[23] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        return themeDescriptionArr;
     }
 }

@@ -64,8 +64,8 @@ public class UserConfig {
     public boolean unreadDialogsLoaded = true;
 
     /* renamed from: org.telegram.messenger.UserConfig$1 */
-    class C05211 implements Runnable {
-        C05211() {
+    class C02771 implements Runnable {
+        C02771() {
         }
 
         public void run() {
@@ -158,7 +158,7 @@ public class UserConfig {
             editor.putBoolean("syncContacts", this.syncContacts);
             editor.putBoolean("suggestContacts", this.suggestContacts);
             editor.putBoolean("hasSecureData", this.hasSecureData);
-            editor.putBoolean("notificationsSettingsLoaded", this.notificationsSettingsLoaded);
+            editor.putBoolean("notificationsSettingsLoaded3", this.notificationsSettingsLoaded);
             editor.putInt("3migrateOffsetId", this.migrateOffsetId);
             if (this.migrateOffsetId != -1) {
                 editor.putInt("3migrateOffsetDate", this.migrateOffsetDate);
@@ -224,7 +224,7 @@ public class UserConfig {
                     oldFile.delete();
                 }
             } catch (Throwable e3) {
-                FileLog.m14e(e3);
+                FileLog.m13e(e3);
             }
         }
     }
@@ -240,7 +240,7 @@ public class UserConfig {
     public int getClientUserId() {
         int i;
         synchronized (this.sync) {
-            i = this.currentUser != null ? this.currentUser.f177id : 0;
+            i = this.currentUser != null ? this.currentUser.f176id : 0;
         }
         return i;
     }
@@ -264,7 +264,7 @@ public class UserConfig {
     public void setCurrentUser(User user) {
         synchronized (this.sync) {
             this.currentUser = user;
-            this.clientUserId = user.f177id;
+            this.clientUserId = user.f176id;
         }
     }
 
@@ -300,7 +300,7 @@ public class UserConfig {
             this.syncContacts = preferences.getBoolean("syncContacts", true);
             this.suggestContacts = preferences.getBoolean("suggestContacts", true);
             this.hasSecureData = preferences.getBoolean("hasSecureData", false);
-            this.notificationsSettingsLoaded = preferences.getBoolean("notificationsSettingsLoaded", false);
+            this.notificationsSettingsLoaded = preferences.getBoolean("notificationsSettingsLoaded3", false);
             try {
                 String terms = preferences.getString("terms", null);
                 if (terms != null) {
@@ -312,7 +312,7 @@ public class UserConfig {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (this.currentAccount == 0) {
                 this.lastUpdateCheckTime = preferences.getLong("appUpdateCheckTime", System.currentTimeMillis());
@@ -334,15 +334,15 @@ public class UserConfig {
                             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                             updateTime = Math.max(packageInfo.lastUpdateTime, packageInfo.firstInstallTime);
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                         }
                         if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
                             this.pendingAppUpdate = null;
-                            AndroidUtilities.runOnUIThread(new C05211());
+                            AndroidUtilities.runOnUIThread(new C02771());
                         }
                     }
                 } catch (Throwable e22) {
-                    FileLog.m14e(e22);
+                    FileLog.m13e(e22);
                 }
             }
             this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
@@ -379,7 +379,7 @@ public class UserConfig {
                 }
             }
             if (this.currentUser != null) {
-                this.clientUserId = this.currentUser.f177id;
+                this.clientUserId = this.currentUser.f176id;
             }
             this.configLoaded = true;
             return;

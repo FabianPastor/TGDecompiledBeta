@@ -12,6 +12,6 @@ final /* synthetic */ class TwoStepVerificationActivity$$Lambda$2 implements OnI
     }
 
     public void onItemClick(View view, int i) {
-        this.arg$1.lambda$createView$8$TwoStepVerificationActivity(view, i);
+        this.arg$1.lambda$createView$9$TwoStepVerificationActivity(view, i);
     }
 }

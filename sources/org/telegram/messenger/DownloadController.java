@@ -55,23 +55,8 @@ public class DownloadController implements NotificationCenterDelegate {
     public int[] wifiMaxFileSize = new int[7];
 
     /* renamed from: org.telegram.messenger.DownloadController$1 */
-    class C03791 implements Runnable {
-        C03791() {
-        }
-
-        public void run() {
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.FileDidFailedLoad);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.FileDidLoaded);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.FileLoadProgressChanged);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.FileUploadProgressChanged);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.httpFileDidLoaded);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.httpFileDidFailedLoad);
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DownloadController$2 */
-    class C03802 extends BroadcastReceiver {
-        C03802() {
+    class C02031 extends BroadcastReceiver {
+        C02031() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -82,7 +67,7 @@ public class DownloadController implements NotificationCenterDelegate {
     public interface FileDownloadProgressListener {
         int getObserverTag();
 
-        void onFailedDownload(String str);
+        void onFailedDownload(String str, boolean z);
 
         void onProgressDownload(String str, float f);
 
@@ -158,11 +143,20 @@ public class DownloadController implements NotificationCenterDelegate {
             this.roamingMaxFileSize[a] = preferences.getInt("roamingMaxDownloadSize" + a, sdefault);
         }
         this.globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
-        AndroidUtilities.runOnUIThread(new C03791());
-        ApplicationLoader.applicationContext.registerReceiver(new C03802(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        AndroidUtilities.runOnUIThread(new DownloadController$$Lambda$0(this));
+        ApplicationLoader.applicationContext.registerReceiver(new C02031(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             checkAutodownloadSettings();
         }
+    }
+
+    final /* synthetic */ void lambda$new$0$DownloadController() {
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
     }
 
     public static int maskToIndex(int mask) {
@@ -376,7 +370,7 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         int type;
         int index;
-        if (MessageObject.isPhoto(message)) {
+        if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
             type = 1;
         } else if (MessageObject.isVoiceMessage(message)) {
             type = 2;
@@ -483,7 +477,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     if (downloadObject.object instanceof PhotoSize) {
                         FileLoader.getInstance(this.currentAccount).loadFile((PhotoSize) downloadObject.object, null, downloadObject.secret ? 2 : 0);
                     } else if (downloadObject.object instanceof Document) {
-                        FileLoader.getInstance(this.currentAccount).loadFile((Document) downloadObject.object, false, downloadObject.secret ? 2 : 0);
+                        FileLoader.getInstance(this.currentAccount).loadFile((Document) downloadObject.object, downloadObject.parent, false, downloadObject.secret ? 2 : 0);
                     } else {
                         added = false;
                     }
@@ -645,25 +639,30 @@ public class DownloadController implements NotificationCenterDelegate {
         int a;
         WeakReference<FileDownloadProgressListener> reference;
         Float progress;
-        if (id == NotificationCenter.FileDidFailedLoad || id == NotificationCenter.httpFileDidFailedLoad) {
-            this.listenerInProgress = true;
+        if (id == NotificationCenter.fileDidFailedLoad || id == NotificationCenter.httpFileDidFailedLoad) {
             fileName = args[0];
+            Integer canceled = args[1];
+            this.listenerInProgress = true;
             arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
             if (arrayList != null) {
                 size = arrayList.size();
                 for (a = 0; a < size; a++) {
                     reference = (WeakReference) arrayList.get(a);
                     if (reference.get() != null) {
-                        ((FileDownloadProgressListener) reference.get()).onFailedDownload(fileName);
-                        this.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
+                        ((FileDownloadProgressListener) reference.get()).onFailedDownload(fileName, canceled.intValue() == 1);
+                        if (canceled.intValue() != 1) {
+                            this.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
+                        }
                     }
                 }
-                this.loadingFileObservers.remove(fileName);
+                if (canceled.intValue() != 1) {
+                    this.loadingFileObservers.remove(fileName);
+                }
             }
             this.listenerInProgress = false;
             processLaterArrays();
-            checkDownloadFinished(fileName, ((Integer) args[1]).intValue());
-        } else if (id == NotificationCenter.FileDidLoaded || id == NotificationCenter.httpFileDidLoaded) {
+            checkDownloadFinished(fileName, canceled.intValue());
+        } else if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
             this.listenerInProgress = true;
             fileName = (String) args[0];
             ArrayList<MessageObject> messageObjects = (ArrayList) this.loadingFileMessagesObservers.get(fileName);
@@ -763,7 +762,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }

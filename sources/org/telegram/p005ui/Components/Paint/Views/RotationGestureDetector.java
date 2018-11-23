@@ -6,14 +6,14 @@ import android.view.MotionEvent;
 public class RotationGestureDetector {
     private float angle;
     /* renamed from: fX */
-    private float f222fX;
+    private float f234fX;
     /* renamed from: fY */
-    private float f223fY;
+    private float f235fY;
     private OnRotationGestureListener mListener;
     /* renamed from: sX */
-    private float f224sX;
+    private float f236sX;
     /* renamed from: sY */
-    private float f225sY;
+    private float f237sY;
     private float startAngle;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.RotationGestureDetector$OnRotationGestureListener */
@@ -44,10 +44,10 @@ public class RotationGestureDetector {
         switch (event.getActionMasked()) {
             case 0:
             case 5:
-                this.f224sX = event.getX(0);
-                this.f225sY = event.getY(0);
-                this.f222fX = event.getX(1);
-                this.f223fY = event.getY(1);
+                this.f236sX = event.getX(0);
+                this.f237sY = event.getY(0);
+                this.f234fX = event.getX(1);
+                this.f235fY = event.getY(1);
                 break;
             case 1:
             case 3:
@@ -56,7 +56,7 @@ public class RotationGestureDetector {
             case 2:
                 float nsX = event.getX(0);
                 float nsY = event.getY(0);
-                this.angle = angleBetweenLines(this.f222fX, this.f223fY, this.f224sX, this.f225sY, event.getX(1), event.getY(1), nsX, nsY);
+                this.angle = angleBetweenLines(this.f234fX, this.f235fY, this.f236sX, this.f237sY, event.getX(1), event.getY(1), nsX, nsY);
                 if (this.mListener != null) {
                     if (!Float.isNaN(this.startAngle)) {
                         this.mListener.onRotation(this);

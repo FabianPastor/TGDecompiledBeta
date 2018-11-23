@@ -44,7 +44,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
 
     public PopupAudioView(Context context) {
         super(context);
-        this.timePaint.setTextSize((float) AndroidUtilities.m10dp(16.0f));
+        this.timePaint.setTextSize((float) AndroidUtilities.m9dp(16.0f));
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         this.seekBar = new SeekBar(getContext());
         this.seekBar.setDelegate(this);
@@ -68,19 +68,19 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m10dp(56.0f));
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.m9dp(56.0f));
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (this.currentMessageObject != null) {
-            this.seekBarX = AndroidUtilities.m10dp(54.0f);
-            this.buttonX = AndroidUtilities.m10dp(10.0f);
-            this.timeX = (getMeasuredWidth() - this.timeWidth) - AndroidUtilities.m10dp(16.0f);
-            this.seekBar.setSize((getMeasuredWidth() - AndroidUtilities.m10dp(70.0f)) - this.timeWidth, AndroidUtilities.m10dp(30.0f));
-            this.progressView.width = (getMeasuredWidth() - AndroidUtilities.m10dp(94.0f)) - this.timeWidth;
-            this.progressView.height = AndroidUtilities.m10dp(30.0f);
-            this.seekBarY = AndroidUtilities.m10dp(13.0f);
-            this.buttonY = AndroidUtilities.m10dp(10.0f);
+            this.seekBarX = AndroidUtilities.m9dp(54.0f);
+            this.buttonX = AndroidUtilities.m9dp(10.0f);
+            this.timeX = (getMeasuredWidth() - this.timeWidth) - AndroidUtilities.m9dp(16.0f);
+            this.seekBar.setSize((getMeasuredWidth() - AndroidUtilities.m9dp(70.0f)) - this.timeWidth, AndroidUtilities.m9dp(30.0f));
+            this.progressView.width = (getMeasuredWidth() - AndroidUtilities.m9dp(94.0f)) - this.timeWidth;
+            this.progressView.height = AndroidUtilities.m9dp(30.0f);
+            this.seekBarY = AndroidUtilities.m9dp(13.0f);
+            this.buttonY = AndroidUtilities.m9dp(10.0f);
             updateProgress();
             if (changed || !this.wasLayout) {
                 this.wasLayout = true;
@@ -99,18 +99,18 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
                         canvas.translate((float) this.seekBarX, (float) this.seekBarY);
                         this.seekBar.draw(canvas);
                     } else {
-                        canvas.translate((float) (this.seekBarX + AndroidUtilities.m10dp(12.0f)), (float) this.seekBarY);
+                        canvas.translate((float) (this.seekBarX + AndroidUtilities.m9dp(12.0f)), (float) this.seekBarY);
                         this.progressView.draw(canvas);
                     }
                     canvas.restore();
                     int state = this.buttonState + 5;
                     this.timePaint.setColor(-6182221);
                     Drawable buttonDrawable = Theme.chat_fileStatesDrawable[state][this.buttonPressed];
-                    int side = AndroidUtilities.m10dp(36.0f);
+                    int side = AndroidUtilities.m9dp(36.0f);
                     BaseCell.setDrawableBounds(buttonDrawable, this.buttonX + ((side - buttonDrawable.getIntrinsicWidth()) / 2), this.buttonY + ((side - buttonDrawable.getIntrinsicHeight()) / 2));
                     buttonDrawable.draw(canvas);
                     canvas.save();
-                    canvas.translate((float) this.timeX, (float) AndroidUtilities.m10dp(18.0f));
+                    canvas.translate((float) this.timeX, (float) AndroidUtilities.m9dp(18.0f));
                     this.timeLayout.draw(canvas);
                     canvas.restore();
                     return;
@@ -137,7 +137,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
             invalidate();
             return result;
         }
-        int side = AndroidUtilities.m10dp(36.0f);
+        int side = AndroidUtilities.m9dp(36.0f);
         if (event.getAction() == 0) {
             if (x >= ((float) this.buttonX) && x <= ((float) (this.buttonX + side)) && y >= ((float) this.buttonY) && y <= ((float) (this.buttonY + side))) {
                 this.buttonPressed = 1;
@@ -176,12 +176,12 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
+            if (MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject)) {
                 this.buttonState = 0;
                 invalidate();
             }
         } else if (this.buttonState == 2) {
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
             this.buttonState = 4;
             invalidate();
         } else if (this.buttonState == 3) {
@@ -219,7 +219,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
 
     public void downloadAudioIfNeed() {
         if (this.buttonState == 2) {
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
             this.buttonState = 3;
             invalidate();
         }
@@ -254,7 +254,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
         updateProgress();
     }
 
-    public void onFailedDownload(String fileName) {
+    public void onFailedDownload(String fileName, boolean canceled) {
         updateButtonState();
     }
 

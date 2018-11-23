@@ -11,7 +11,7 @@ import android.os.Build.VERSION;
 import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.p005ui.ActionBar.C0646ActionBar;
+import org.telegram.p005ui.ActionBar.C0403ActionBar;
 
 /* renamed from: org.telegram.ui.Components.SizeNotifierFrameLayout */
 public class SizeNotifierFrameLayout extends FrameLayout {
@@ -63,14 +63,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void notifyHeightChanged() {
         if (this.delegate != null) {
             this.keyboardHeight = getKeyboardHeight();
-            final boolean isWidthGreater = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y;
-            post(new Runnable() {
-                public void run() {
-                    if (SizeNotifierFrameLayout.this.delegate != null) {
-                        SizeNotifierFrameLayout.this.delegate.onSizeChanged(SizeNotifierFrameLayout.this.keyboardHeight, isWidthGreater);
-                    }
-                }
-            });
+            post(new SizeNotifierFrameLayout$$Lambda$0(this, AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y));
+        }
+    }
+
+    final /* synthetic */ void lambda$notifyHeightChanged$0$SizeNotifierFrameLayout(boolean isWidthGreater) {
+        if (this.delegate != null) {
+            this.delegate.onSizeChanged(this.keyboardHeight, isWidthGreater);
         }
     }
 
@@ -103,7 +102,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 canvas.restore();
                 return;
             }
-            int currentActionBarHeight = isActionBarVisible() ? C0646ActionBar.getCurrentActionBarHeight() : 0;
+            int currentActionBarHeight = isActionBarVisible() ? C0403ActionBar.getCurrentActionBarHeight() : 0;
             int i = (VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight;
             int actionBarHeight = currentActionBarHeight + i;
             int viewHeight = getMeasuredHeight() - actionBarHeight;

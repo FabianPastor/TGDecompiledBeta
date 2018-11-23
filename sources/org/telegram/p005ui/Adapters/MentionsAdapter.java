@@ -88,7 +88,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int lastPosition;
     private String lastText;
     private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new C18691()) {
+    private LocationProvider locationProvider = new LocationProvider(new C12471()) {
         public void stop() {
             super.stop();
             MentionsAdapter.this.lastKnownLocation = null;
@@ -127,8 +127,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
-    class C18691 implements LocationProviderDelegate {
-        C18691() {
+    class C12471 implements LocationProviderDelegate {
+        C12471() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -144,8 +144,12 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
-    class C18713 implements SearchAdapterHelperDelegate {
-        C18713() {
+    class C12493 implements SearchAdapterHelperDelegate {
+        public SparseArray getExcludeUsers() {
+            return SearchAdapterHelper$SearchAdapterHelperDelegate$$CC.getExcludeUsers(this);
+        }
+
+        C12493() {
         }
 
         public void onDataSetChanged() {
@@ -171,7 +175,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C18713());
+        this.searchAdapterHelper.setDelegate(new C12493());
     }
 
     public void onDestroy() {
@@ -251,7 +255,7 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public int getContextBotId() {
-        return this.foundContextBot != null ? this.foundContextBot.f177id : 0;
+        return this.foundContextBot != null ? this.foundContextBot.f176id : 0;
     }
 
     public User getContextBotUser() {
@@ -282,7 +286,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
             }
             if (this.foundContextBot.bot_inline_geo) {
-                if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("inlinegeo_" + this.foundContextBot.f177id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
+                if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("inlinegeo_" + this.foundContextBot.f176id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
                     checkLocationPermissionsOrStart();
                 } else {
                     User foundContextBotFinal = this.foundContextBot;
@@ -309,7 +313,7 @@ public class MentionsAdapter extends SelectionAdapter {
     final /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] buttonClicked, User foundContextBotFinal, DialogInterface dialogInterface, int i) {
         buttonClicked[0] = true;
         if (foundContextBotFinal != null) {
-            MessagesController.getNotificationsSettings(this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.f177id, true).commit();
+            MessagesController.getNotificationsSettings(this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.f176id, true).commit();
             checkLocationPermissionsOrStart();
         }
     }
@@ -479,7 +483,7 @@ public class MentionsAdapter extends SelectionAdapter {
             if (query == null || user == null) {
                 this.searchingContextQuery = null;
             } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
-                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.f177id).append("_");
+                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.f176id).append("_");
                 Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? TtmlNode.ANONYMOUS_REGION_ID : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
                 String key = append.append(valueOf).toString();
                 MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
@@ -724,7 +728,7 @@ public class MentionsAdapter extends SelectionAdapter {
                         if (user != null) {
                             if (user.username != null && user.username.length() > 0 && ((usernameString.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) || usernameString.length() == 0)) {
                                 newResult2.add(user);
-                                newResultsHashMap.put(user.f177id, user);
+                                newResultsHashMap.put(user.f176id, user);
                                 count++;
                             }
                             if (count == 5) {
@@ -744,23 +748,23 @@ public class MentionsAdapter extends SelectionAdapter {
                     for (a = 0; a < this.info.participants.participants.size(); a++) {
                         user = messagesController.getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));
                         if (user != null && (usernameOnly || !UserObject.isUserSelf(user))) {
-                            if (newResultsHashMap.indexOfKey(user.f177id) < 0) {
+                            if (newResultsHashMap.indexOfKey(user.f176id) < 0) {
                                 if (usernameString.length() == 0) {
                                     if (!user.deleted) {
                                         newResult2.add(user);
                                     }
                                 } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f177id, user);
+                                    newMap.put(user.f176id, user);
                                 } else if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f177id, user);
+                                    newMap.put(user.f176id, user);
                                 } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f177id, user);
+                                    newMap.put(user.f176id, user);
                                 } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f177id, user);
+                                    newMap.put(user.f176id, user);
                                 }
                             }
                         }
@@ -776,7 +780,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
                     final String str = usernameString;
                     final MessagesController messagesController2 = messagesController;
-                    C06895 c06895 = new Runnable() {
+                    C04465 c04465 = new Runnable() {
                         public void run() {
                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -816,8 +820,8 @@ public class MentionsAdapter extends SelectionAdapter {
                             MentionsAdapter.this.channelReqId = 0;
                         }
                     };
-                    this.searchGlobalRunnable = c06895;
-                    AndroidUtilities.runOnUIThread(c06895, 200);
+                    this.searchGlobalRunnable = c04465;
+                    AndroidUtilities.runOnUIThread(c04465, 200);
                 }
                 Collections.sort(this.searchResultUsernames, new MentionsAdapter$$Lambda$4(newResultsHashMap, users));
                 notifyDataSetChanged();
@@ -895,17 +899,17 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     static final /* synthetic */ int lambda$searchUsernameOrHashtag$5$MentionsAdapter(SparseArray newResultsHashMap, ArrayList users, User lhs, User rhs) {
-        if (newResultsHashMap.indexOfKey(lhs.f177id) >= 0 && newResultsHashMap.indexOfKey(rhs.f177id) >= 0) {
+        if (newResultsHashMap.indexOfKey(lhs.f176id) >= 0 && newResultsHashMap.indexOfKey(rhs.f176id) >= 0) {
             return 0;
         }
-        if (newResultsHashMap.indexOfKey(lhs.f177id) >= 0) {
+        if (newResultsHashMap.indexOfKey(lhs.f176id) >= 0) {
             return -1;
         }
-        if (newResultsHashMap.indexOfKey(rhs.f177id) >= 0) {
+        if (newResultsHashMap.indexOfKey(rhs.f176id) >= 0) {
             return 1;
         }
-        int lhsNum = users.indexOf(Integer.valueOf(lhs.f177id));
-        int rhsNum = users.indexOf(Integer.valueOf(rhs.f177id));
+        int lhsNum = users.indexOf(Integer.valueOf(lhs.f176id));
+        int rhsNum = users.indexOf(Integer.valueOf(rhs.f176id));
         if (lhsNum == -1 || rhsNum == -1) {
             if (lhsNum != -1 && rhsNum == -1) {
                 return -1;
@@ -1077,7 +1081,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 break;
             default:
                 View textView = new TextView(this.mContext);
-                textView.setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f));
+                textView.setPadding(AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f));
                 textView.setTextSize(1, 14.0f);
                 textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
                 view = textView;
