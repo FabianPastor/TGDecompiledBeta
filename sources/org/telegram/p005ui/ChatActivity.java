@@ -11385,7 +11385,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         fixLayout();
         applyDraftMaybe(false);
-        if (!(this.bottomOverlayChat == null || this.bottomOverlayChat.getVisibility() == 0)) {
+        if (!(this.bottomOverlayChat == null || this.bottomOverlayChat.getVisibility() == 0 || this.actionBar.isSearchFieldVisible())) {
             this.chatActivityEnterView.setFieldFocused(true);
         }
         if (this.chatActivityEnterView != null) {

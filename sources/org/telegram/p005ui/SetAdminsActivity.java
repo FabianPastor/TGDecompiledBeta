@@ -3,6 +3,7 @@ package org.telegram.p005ui;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -250,7 +251,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             } catch (Throwable e) {
                 FileLog.m13e(e);
             }
-            if (query == null) {
+            if (TextUtils.isEmpty(query)) {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
                 notifyDataSetChanged();
@@ -349,6 +350,9 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         }
 
         public ChatParticipant getItem(int i) {
+            if (i < 0 || i >= this.searchResult.size()) {
+                return null;
+            }
             return (ChatParticipant) this.searchResult.get(i);
         }
 
@@ -449,15 +453,22 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             int index = -1;
             if (this.listView.getAdapter() == this.searchAdapter) {
                 participant = this.searchAdapter.getItem(position);
-                for (int a = 0; a < this.participants.size(); a++) {
-                    if (((ChatParticipant) this.participants.get(a)).user_id == participant.user_id) {
-                        index = a;
-                        break;
+                if (participant != null) {
+                    for (int a = 0; a < this.participants.size(); a++) {
+                        if (((ChatParticipant) this.participants.get(a)).user_id == participant.user_id) {
+                            index = a;
+                            break;
+                        }
                     }
+                } else {
+                    return;
                 }
-            } else {
-                index = position - this.usersStartRow;
+            }
+            index = position - this.usersStartRow;
+            if (index >= 0 && index < this.participants.size()) {
                 participant = (ChatParticipant) this.participants.get(index);
+            } else {
+                return;
             }
             if (index != -1 && !(participant instanceof TL_chatParticipantCreator)) {
                 ChatParticipant newParticipant;

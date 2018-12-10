@@ -3978,11 +3978,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     public void onAnimationEnd(Animator animation) {
                         ChatActivityEnterView.this.closeAnimationInProgress = false;
                         ChatActivityEnterView.this.stickersExpansionAnim = null;
-                        ChatActivityEnterView.this.emojiView.getLayoutParams().height = origHeight;
-                        ChatActivityEnterView.this.sizeNotifierLayout.requestLayout();
-                        ChatActivityEnterView.this.emojiView.setLayerType(0, null);
-                        ChatActivityEnterView.this.sizeNotifierLayout.setForeground(null);
-                        ChatActivityEnterView.this.sizeNotifierLayout.setWillNotDraw(false);
+                        if (ChatActivityEnterView.this.emojiView != null) {
+                            ChatActivityEnterView.this.emojiView.getLayoutParams().height = origHeight;
+                            ChatActivityEnterView.this.emojiView.setLayerType(0, null);
+                        }
+                        if (ChatActivityEnterView.this.sizeNotifierLayout != null) {
+                            ChatActivityEnterView.this.sizeNotifierLayout.requestLayout();
+                            ChatActivityEnterView.this.sizeNotifierLayout.setForeground(null);
+                            ChatActivityEnterView.this.sizeNotifierLayout.setWillNotDraw(false);
+                        }
                     }
                 });
                 this.stickersExpansionAnim = anims;

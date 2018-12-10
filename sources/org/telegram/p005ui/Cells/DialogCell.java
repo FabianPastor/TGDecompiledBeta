@@ -868,11 +868,20 @@ public class DialogCell extends BaseCell {
 
     public void checkCurrentDialogIndex() {
         if (this.index < getDialogsArray().size()) {
-            TL_dialog dialog = (TL_dialog) getDialogsArray().get(this.index);
+            ArrayList<TL_dialog> dialogsArray = getDialogsArray();
+            TL_dialog dialog = (TL_dialog) dialogsArray.get(this.index);
+            TL_dialog nextDialog = this.index + 1 < dialogsArray.size() ? (TL_dialog) dialogsArray.get(this.index + 1) : null;
             DraftMessage newDraftMessage = DataQuery.getInstance(this.currentAccount).getDraft(this.currentDialogId);
             MessageObject newMessageObject = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.f128id);
             if (this.currentDialogId != dialog.f128id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.mentionCount != dialog.unread_mentions_count || this.markUnread != dialog.unread_mark || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage || this.drawPin != dialog.pinned)))) {
+                boolean z;
                 this.currentDialogId = dialog.f128id;
+                if (!dialog.pinned || nextDialog == null || nextDialog.pinned) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                this.fullSeparator = z;
                 update(0);
             }
         }
@@ -957,6 +966,7 @@ public class DialogCell extends BaseCell {
                     continueUpdate = true;
                 }
                 if (!continueUpdate) {
+                    invalidate();
                     return;
                 }
             }
