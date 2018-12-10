@@ -483,6 +483,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     }
 
     final /* synthetic */ void lambda$onFragmentCreate$1$NotificationsSettingsActivity() {
+        NotificationException exception;
         User user;
         Chat chat;
         ArrayList<NotificationException> usersResult = new ArrayList();
@@ -504,7 +505,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 key = key.replace("notify2_", TtmlNode.ANONYMOUS_REGION_ID);
                 long did = Utilities.parseLong(key).longValue();
                 if (!(did == 0 || did == ((long) selfId))) {
-                    NotificationException exception = new NotificationException();
+                    exception = new NotificationException();
                     exception.did = did;
                     exception.hasCustom = preferences.getBoolean("custom_" + did, false);
                     exception.notify = ((Integer) entry.getValue()).intValue();
@@ -530,14 +531,12 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             if (chat == null) {
                                 chatsToLoad.add(Integer.valueOf(-lower_id));
                                 waitingForLoadExceptions.put(did, exception);
-                            } else if (!(chat.left || chat.kicked)) {
-                                if (chat.migrated_to != null) {
+                            } else if (!(chat.left || chat.kicked || chat.migrated_to != null)) {
+                                if (!ChatObject.isChannel(chat) || chat.megagroup) {
+                                    chatsResult.add(exception);
+                                } else {
+                                    channelsResult.add(exception);
                                 }
-                            }
-                            if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                                chatsResult.add(exception);
-                            } else {
-                                channelsResult.add(exception);
                             }
                         }
                     } else if (high_id != 0) {
@@ -577,7 +576,15 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             for (a = 0; a < size; a++) {
                 chat = (Chat) chats.get(a);
                 if (!(chat.left || chat.kicked || chat.migrated_to != null)) {
+                    exception = (NotificationException) waitingForLoadExceptions.get((long) (-chat.f78id));
                     waitingForLoadExceptions.remove((long) (-chat.f78id));
+                    if (exception != null) {
+                        if (!ChatObject.isChannel(chat) || chat.megagroup) {
+                            chatsResult.add(exception);
+                        } else {
+                            channelsResult.add(exception);
+                        }
+                    }
                 }
             }
             size = users.size();

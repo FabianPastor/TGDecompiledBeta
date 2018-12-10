@@ -287,10 +287,6 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                         return true;
                     }
                 }
-                AlertDialog progressDialog = new AlertDialog(this, 1);
-                progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.setCancelable(false);
                 int bot_id = intent.getIntExtra("bot_id", 0);
                 String nonce = intent.getStringExtra("nonce");
                 String payload = intent.getStringExtra("payload");
@@ -298,13 +294,15 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                 req.bot_id = bot_id;
                 req.scope = intent.getStringExtra("scope");
                 req.public_key = intent.getStringExtra("public_key");
-                int[] requestId = new int[]{0};
                 if (bot_id == 0 || ((TextUtils.isEmpty(payload) && TextUtils.isEmpty(nonce)) || TextUtils.isEmpty(req.scope) || TextUtils.isEmpty(req.public_key))) {
                     finish();
                     return false;
                 }
+                int[] requestId = new int[]{0};
+                AlertDialog progressDialog = new AlertDialog(this, 3);
+                progressDialog.setOnCancelListener(new ExternalActionActivity$$Lambda$5(intentAccount, requestId));
                 progressDialog.show();
-                requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(req, new ExternalActionActivity$$Lambda$5(this, requestId, intentAccount, progressDialog, req, payload, nonce), 10);
+                requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(req, new ExternalActionActivity$$Lambda$6(this, requestId, intentAccount, progressDialog, req, payload, nonce), 10);
             } else {
                 if (AndroidUtilities.isTablet()) {
                     if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
@@ -346,20 +344,20 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         finish();
     }
 
-    final /* synthetic */ void lambda$handleIntent$9$ExternalActionActivity(int[] requestId, int intentAccount, AlertDialog progressDialog, TL_account_getAuthorizationForm req, String payload, String nonce, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$handleIntent$10$ExternalActionActivity(int[] requestId, int intentAccount, AlertDialog progressDialog, TL_account_getAuthorizationForm req, String payload, String nonce, TLObject response, TL_error error) {
         TL_account_authorizationForm authorizationForm = (TL_account_authorizationForm) response;
         if (authorizationForm != null) {
-            requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(new TL_account_getPassword(), new ExternalActionActivity$$Lambda$6(this, progressDialog, intentAccount, authorizationForm, req, payload, nonce));
+            requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(new TL_account_getPassword(), new ExternalActionActivity$$Lambda$7(this, progressDialog, intentAccount, authorizationForm, req, payload, nonce));
             return;
         }
-        AndroidUtilities.runOnUIThread(new ExternalActionActivity$$Lambda$7(this, progressDialog, error));
+        AndroidUtilities.runOnUIThread(new ExternalActionActivity$$Lambda$8(this, progressDialog, error));
     }
 
-    final /* synthetic */ void lambda$null$6$ExternalActionActivity(AlertDialog progressDialog, int intentAccount, TL_account_authorizationForm authorizationForm, TL_account_getAuthorizationForm req, String payload, String nonce, TLObject response1, TL_error error1) {
-        AndroidUtilities.runOnUIThread(new ExternalActionActivity$$Lambda$9(this, progressDialog, response1, intentAccount, authorizationForm, req, payload, nonce));
+    final /* synthetic */ void lambda$null$7$ExternalActionActivity(AlertDialog progressDialog, int intentAccount, TL_account_authorizationForm authorizationForm, TL_account_getAuthorizationForm req, String payload, String nonce, TLObject response1, TL_error error1) {
+        AndroidUtilities.runOnUIThread(new ExternalActionActivity$$Lambda$10(this, progressDialog, response1, intentAccount, authorizationForm, req, payload, nonce));
     }
 
-    final /* synthetic */ void lambda$null$5$ExternalActionActivity(AlertDialog progressDialog, TLObject response1, int intentAccount, TL_account_authorizationForm authorizationForm, TL_account_getAuthorizationForm req, String payload, String nonce) {
+    final /* synthetic */ void lambda$null$6$ExternalActionActivity(AlertDialog progressDialog, TLObject response1, int intentAccount, TL_account_authorizationForm authorizationForm, TL_account_getAuthorizationForm req, String payload, String nonce) {
         try {
             progressDialog.dismiss();
         } catch (Throwable e) {
@@ -385,13 +383,13 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
     }
 
-    final /* synthetic */ void lambda$null$8$ExternalActionActivity(AlertDialog progressDialog, TL_error error) {
+    final /* synthetic */ void lambda$null$9$ExternalActionActivity(AlertDialog progressDialog, TL_error error) {
         try {
             progressDialog.dismiss();
             if ("APP_VERSION_OUTDATED".equals(error.text)) {
                 AlertDialog dialog = AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                 if (dialog != null) {
-                    dialog.setOnDismissListener(new ExternalActionActivity$$Lambda$8(this, error));
+                    dialog.setOnDismissListener(new ExternalActionActivity$$Lambda$9(this, error));
                     return;
                 }
                 setResult(1, new Intent().putExtra("error", error.text));
@@ -408,7 +406,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
     }
 
-    final /* synthetic */ void lambda$null$7$ExternalActionActivity(TL_error error, DialogInterface dialog1) {
+    final /* synthetic */ void lambda$null$8$ExternalActionActivity(TL_error error, DialogInterface dialog1) {
         setResult(1, new Intent().putExtra("error", error.text));
         finish();
     }

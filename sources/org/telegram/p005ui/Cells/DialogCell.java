@@ -53,7 +53,7 @@ public class DialogCell extends BaseCell {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private ImageReceiver avatarImage = new ImageReceiver(this);
     private int avatarTop = AndroidUtilities.m9dp(10.0f);
-    private Chat chat = null;
+    private Chat chat;
     private GroupCreateCheckBox checkBox;
     private int checkDrawLeft;
     private int checkDrawTop = AndroidUtilities.m9dp(18.0f);
@@ -81,16 +81,17 @@ public class DialogCell extends BaseCell {
     private boolean drawPin;
     private boolean drawPinBackground;
     private boolean drawVerified;
-    private EncryptedChat encryptedChat = null;
+    private EncryptedChat encryptedChat;
     private int errorLeft;
     private int errorTop = AndroidUtilities.m9dp(39.0f);
+    public boolean fullSeparator;
     private int halfCheckDrawLeft;
     private int index;
     private boolean isDialogCell;
     private boolean isSelected;
     private int lastMessageDate;
     private CharSequence lastMessageString;
-    private CharSequence lastPrintString = null;
+    private CharSequence lastPrintString;
     private int lastSendState;
     private boolean lastUnreadState;
     private boolean markUnread;
@@ -114,8 +115,8 @@ public class DialogCell extends BaseCell {
     private int timeLeft;
     private int timeTop = AndroidUtilities.m9dp(17.0f);
     private int unreadCount;
-    public boolean useSeparator = false;
-    private User user = null;
+    public boolean useSeparator;
+    private User user;
 
     /* renamed from: org.telegram.ui.Cells.DialogCell$CustomDialog */
     public static class CustomDialog {
@@ -1107,10 +1108,16 @@ public class DialogCell extends BaseCell {
                 Theme.dialogs_pinnedDrawable.draw(canvas);
             }
             if (this.useSeparator) {
-                if (LocaleController.isRTL) {
-                    canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - AndroidUtilities.m9dp((float) AndroidUtilities.leftBaseline)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+                int left;
+                if (this.fullSeparator) {
+                    left = 0;
                 } else {
-                    canvas.drawLine((float) AndroidUtilities.m9dp((float) AndroidUtilities.leftBaseline), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+                    left = AndroidUtilities.m9dp((float) AndroidUtilities.leftBaseline);
+                }
+                if (LocaleController.isRTL) {
+                    canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - left), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+                } else {
+                    canvas.drawLine((float) left, (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
                 }
             }
             this.avatarImage.draw(canvas);

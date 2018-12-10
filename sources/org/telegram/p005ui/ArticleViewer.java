@@ -412,6 +412,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private boolean isVisible;
     private int lastBlockNum = 1;
     private Object lastInsets;
+    private int lastReqId;
     private Drawable layerShadowDrawable;
     private LinearLayoutManager layoutManager;
     private ImageReceiver leftImage = new ImageReceiver();
@@ -3284,7 +3285,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void setBlock(TL_pageBlockPreformatted block) {
             this.currentBlock = block;
             this.scrollView.setScrollX(0);
-            requestLayout();
+            this.textContainer.requestLayout();
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -4616,6 +4617,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.maybeStartTracking = false;
             this.startedTracking = true;
             this.startedTrackingX = (int) ev.getX();
+            ArticleViewer.this.cancelCheckLongPress();
         }
 
         public boolean handleTouchEvent(MotionEvent event) {
@@ -6469,6 +6471,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.linkSheet = null;
             }
             BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
+            builder.setUseFullscreen(true);
             builder.setTitle(urlFinal);
             builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new ArticleViewer$$Lambda$0(this, urlFinal));
             BottomSheet sheet = builder.create();
@@ -6484,7 +6487,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             } else if (this.selectedColor == 2) {
                 sheet.setBackgroundColor(-15461356);
             }
-            hideActionBar();
         }
     }
 
@@ -6538,9 +6540,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.popupWindow.setOnDismissListener(new ArticleViewer$$Lambda$4(this));
             }
             if (this.selectedColor == 2) {
-                this.deleteView.setTextColor(getTextColor());
+                this.deleteView.setTextColor(-5723992);
                 if (this.copyBackgroundDrawable != null) {
-                    this.copyBackgroundDrawable.setColorFilter(new PorterDuffColorFilter(-15461356, Mode.MULTIPLY));
+                    this.copyBackgroundDrawable.setColorFilter(new PorterDuffColorFilter(-14408668, Mode.MULTIPLY));
                 }
             } else {
                 this.deleteView.setTextColor(-14606047);
@@ -7246,12 +7248,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    private void addPageToStack(WebPage webPage, String anchor) {
+    private boolean addPageToStack(WebPage webPage, String anchor) {
         saveCurrentPagePosition();
         this.currentPage = webPage;
         this.pagesStack.add(webPage);
         updateInterfaceForCurrentPage(false);
-        scrollToAnchor(anchor);
+        return scrollToAnchor(anchor);
     }
 
     private boolean scrollToAnchor(String anchor) {
@@ -7274,6 +7276,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.adapter.bindBlockToHolder(type, holder, paragraph, 0, 0);
             createDividerPaint();
             BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
+            builder.setUseFullscreen(true);
             builder.setApplyTopPadding(false);
             LinearLayout linearLayout = new LinearLayout(this.parentActivity);
             linearLayout.setOrientation(1);
@@ -7301,7 +7304,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.linkSheet.setBackgroundColor(-15461356);
             }
             showDialog(this.linkSheet);
-            hideActionBar();
             return true;
         }
         PageBlock originalBlock = (PageBlock) this.blocks.get(row.intValue());
@@ -7357,9 +7359,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.checkingForLongPress = false;
         if (this.pendingCheckForLongPress != null) {
             this.windowView.removeCallbacks(this.pendingCheckForLongPress);
+            this.pendingCheckForLongPress = null;
         }
         if (this.pendingCheckForTap != null) {
             this.windowView.removeCallbacks(this.pendingCheckForTap);
+            this.pendingCheckForTap = null;
         }
     }
 
@@ -7427,6 +7431,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         } else if (richText instanceof TL_textEmail) {
             spannableStringBuilder = new SpannableStringBuilder(getText(parentView, parentRichText, ((TL_textEmail) richText).text, parentBlock, maxWidth));
             innerSpans = (MetricAffectingSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
+            if (spannableStringBuilder.length() == 0) {
+                return spannableStringBuilder;
+            }
             textPaint = (innerSpans == null || innerSpans.length == 0) ? getTextPaint(parentRichText, richText, parentBlock) : null;
             spannableStringBuilder.setSpan(new TextPaintUrlSpan(textPaint, "mailto:" + getUrl(richText)), 0, spannableStringBuilder.length(), 33);
             return spannableStringBuilder;
@@ -7439,6 +7446,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 textPaintWebpageUrlSpan = new TextPaintWebpageUrlSpan(paint, getUrl(richText));
             } else {
                 textPaintWebpageUrlSpan = new TextPaintUrlSpan(paint, getUrl(richText));
+            }
+            if (spannableStringBuilder.length() == 0) {
+                return spannableStringBuilder;
             }
             spannableStringBuilder.setSpan(span, 0, spannableStringBuilder.length(), 33);
             return spannableStringBuilder;
@@ -7470,9 +7480,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         int startLength = spannableStringBuilder2.length();
                         spannableStringBuilder2.append(innerText);
                         if (!(flags == 0 || (innerText instanceof SpannableStringBuilder))) {
-                            if ((flags & 8) == 0 && (flags & 512) == 0) {
-                                spannableStringBuilder2.setSpan(new TextPaintSpan(getTextPaint(parentRichText, innerRichText, parentBlock)), startLength, spannableStringBuilder2.length(), 33);
-                            } else {
+                            if ((flags & 8) != 0 || (flags & 512) != 0) {
                                 String url = getUrl(innerRichText);
                                 if (url == null) {
                                     url = getUrl(parentRichText);
@@ -7482,7 +7490,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                 } else {
                                     textPaintWebpageUrlSpan = new TextPaintUrlSpan(getTextPaint(parentRichText, innerRichText, parentBlock), url);
                                 }
-                                spannableStringBuilder2.setSpan(span, startLength, spannableStringBuilder2.length(), 33);
+                                if (startLength != spannableStringBuilder2.length()) {
+                                    spannableStringBuilder2.setSpan(span, startLength, spannableStringBuilder2.length(), 33);
+                                }
+                            } else if (startLength != spannableStringBuilder2.length()) {
+                                spannableStringBuilder2.setSpan(new TextPaintSpan(getTextPaint(parentRichText, innerRichText, parentBlock)), startLength, spannableStringBuilder2.length(), 33);
                             }
                         }
                         if (extraSpace && a != count - 1) {
@@ -7500,6 +7512,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 } else if (richText instanceof TL_textPhone) {
                     spannableStringBuilder = new SpannableStringBuilder(getText(parentView, parentRichText, ((TL_textPhone) richText).text, parentBlock, maxWidth));
                     innerSpans = (MetricAffectingSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
+                    if (spannableStringBuilder.length() == 0) {
+                        return spannableStringBuilder;
+                    }
                     textPaint = (innerSpans == null || innerSpans.length == 0) ? getTextPaint(parentRichText, richText, parentBlock) : null;
                     spannableStringBuilder.setSpan(new TextPaintUrlSpan(textPaint, "tel:" + getUrl(richText)), 0, spannableStringBuilder.length(), 33);
                     return spannableStringBuilder;
@@ -7861,6 +7876,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             return null;
         }
         CharSequence text;
+        if (width < 0) {
+            width = AndroidUtilities.m9dp(10.0f);
+        }
         int color = getSelectedColor();
         if (quoteLinePaint == null) {
             quoteLinePaint = new Paint();
@@ -8213,22 +8231,26 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     private void openWebpageUrl(String url, String anchor) {
-        if (this.openUrlReqId == 0) {
-            closePhoto(false);
-            showProgressView(true, true);
-            TL_messages_getWebPage req = new TL_messages_getWebPage();
-            req.url = url;
-            req.hash = 0;
-            this.openUrlReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ArticleViewer$$Lambda$5(this, anchor, req));
-        }
-    }
-
-    final /* synthetic */ void lambda$openWebpageUrl$6$ArticleViewer(String anchor, TL_messages_getWebPage req, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$43(this, response, anchor, req));
-    }
-
-    final /* synthetic */ void lambda$null$5$ArticleViewer(TLObject response, String anchor, TL_messages_getWebPage req) {
         if (this.openUrlReqId != 0) {
+            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.openUrlReqId, false);
+            this.openUrlReqId = 0;
+        }
+        int reqId = this.lastReqId + 1;
+        this.lastReqId = reqId;
+        closePhoto(false);
+        showProgressView(true, true);
+        TL_messages_getWebPage req = new TL_messages_getWebPage();
+        req.url = url;
+        req.hash = 0;
+        this.openUrlReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ArticleViewer$$Lambda$5(this, reqId, anchor, req));
+    }
+
+    final /* synthetic */ void lambda$openWebpageUrl$6$ArticleViewer(int reqId, String anchor, TL_messages_getWebPage req, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$43(this, reqId, response, anchor, req));
+    }
+
+    final /* synthetic */ void lambda$null$5$ArticleViewer(int reqId, TLObject response, String anchor, TL_messages_getWebPage req) {
+        if (this.openUrlReqId != 0 && reqId == this.lastReqId) {
             this.openUrlReqId = 0;
             showProgressView(true, false);
             if (!this.isVisible) {
@@ -9163,7 +9185,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     final /* synthetic */ void lambda$setParentActivity$18$ArticleViewer(View v) {
         if (this.currentPage != null && this.parentActivity != null) {
             showDialog(new ShareAlert(this.parentActivity, null, this.currentPage.url, false, this.currentPage.url, true));
-            hideActionBar();
         }
     }
 
@@ -9353,35 +9374,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (messageObject != null) {
             webpage = messageObject.messageOwner.media.webpage;
         }
-        if (first) {
-            TL_messages_getWebPage req = new TL_messages_getWebPage();
-            req.url = webpage.url;
-            if ((webpage.cached_page instanceof TL_pagePart_layer82) || webpage.cached_page.part) {
-                req.hash = 0;
-            } else {
-                req.hash = webpage.hash;
-            }
-            WebPage webPageFinal = webpage;
-            int currentAccount = UserConfig.selectedAccount;
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$19(this, webPageFinal, messageObject, currentAccount));
-        }
-        this.pagesStack.clear();
-        this.collapsed = false;
-        this.backDrawable.setRotation(0.0f, false);
-        this.containerView.setTranslationX(0.0f);
-        this.containerView.setTranslationY(0.0f);
-        this.listView.setTranslationY(0.0f);
-        this.listView.setAlpha(1.0f);
-        this.windowView.setInnerTranslationX(0.0f);
-        this.actionBar.setVisibility(8);
-        this.bottomLayout.setVisibility(8);
-        this.captionTextView.setVisibility(8);
-        this.captionTextViewNext.setVisibility(8);
-        this.shareContainer.setAlpha(0.0f);
-        this.backButton.setAlpha(0.0f);
-        this.settingsButton.setAlpha(0.0f);
-        this.layoutManager.scrollToPositionWithOffset(0, 0);
-        checkScrollAnimated();
         String anchor = null;
         int index;
         if (messageObject != null) {
@@ -9414,7 +9406,34 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 anchor = url.substring(index + 1);
             }
         }
-        addPageToStack(webpage, anchor);
+        this.pagesStack.clear();
+        this.collapsed = false;
+        this.backDrawable.setRotation(0.0f, false);
+        this.containerView.setTranslationX(0.0f);
+        this.containerView.setTranslationY(0.0f);
+        this.listView.setTranslationY(0.0f);
+        this.listView.setAlpha(1.0f);
+        this.windowView.setInnerTranslationX(0.0f);
+        this.actionBar.setVisibility(8);
+        this.bottomLayout.setVisibility(8);
+        this.captionTextView.setVisibility(8);
+        this.captionTextViewNext.setVisibility(8);
+        this.layoutManager.scrollToPositionWithOffset(0, 0);
+        checkScrollAnimated();
+        boolean scrolledToAnchor = addPageToStack(webpage, anchor);
+        if (first) {
+            String anchorFinal = (scrolledToAnchor || anchor == null) ? null : anchor;
+            TL_messages_getWebPage req = new TL_messages_getWebPage();
+            req.url = webpage.url;
+            if ((webpage.cached_page instanceof TL_pagePart_layer82) || webpage.cached_page.part) {
+                req.hash = 0;
+            } else {
+                req.hash = webpage.hash;
+            }
+            WebPage webPageFinal = webpage;
+            int currentAccount = UserConfig.selectedAccount;
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$19(this, webPageFinal, messageObject, anchorFinal, currentAccount));
+        }
         this.lastInsets = null;
         LayoutParams layoutParams;
         if (this.isVisible) {
@@ -9448,13 +9467,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.windowView.setAlpha(0.0f);
         this.containerView.setAlpha(0.0f);
         AnimatorSet animatorSet = new AnimatorSet();
-        Animator[] animatorArr = new Animator[3];
+        r2 = new Animator[3];
         float[] fArr = new float[2];
-        animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, 1.0f});
+        r2[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, 1.0f});
         fArr = new float[2];
-        animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, 1.0f});
-        animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.m9dp(56.0f), 0.0f});
-        animatorSet.playTogether(animatorArr);
+        r2[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, 1.0f});
+        r2[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.m9dp(56.0f), 0.0f});
+        animatorSet.playTogether(r2);
         this.animationEndRunnable = new ArticleViewer$$Lambda$20(this);
         animatorSet.setDuration(150);
         animatorSet.setInterpolator(this.interpolator);
@@ -9464,15 +9483,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (VERSION.SDK_INT >= 18) {
             this.containerView.setLayerType(2, null);
         }
-        showActionBar(ItemTouchHelper.Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         return true;
     }
 
-    final /* synthetic */ void lambda$open$23$ArticleViewer(WebPage webPageFinal, MessageObject messageObject, int currentAccount, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$open$23$ArticleViewer(WebPage webPageFinal, MessageObject messageObject, String anchorFinal, int currentAccount, TLObject response, TL_error error) {
         if (response instanceof TL_webPage) {
             TL_webPage webPage = (TL_webPage) response;
             if (webPage.cached_page != null) {
-                AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$40(this, webPageFinal, webPage, messageObject));
+                AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$40(this, webPageFinal, webPage, messageObject, anchorFinal));
                 LongSparseArray<WebPage> webpages = new LongSparseArray(1);
                 webpages.put(webPage.f182id, webPage);
                 MessagesStorage.getInstance(currentAccount).putWebPages(webpages);
@@ -9480,7 +9498,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$null$22$ArticleViewer(WebPage webPageFinal, TL_webPage webPage, MessageObject messageObject) {
+    final /* synthetic */ void lambda$null$22$ArticleViewer(WebPage webPageFinal, TL_webPage webPage, MessageObject messageObject, String anchorFinal) {
         if (!this.pagesStack.isEmpty() && this.pagesStack.get(0) == webPageFinal && webPage.cached_page != null) {
             if (messageObject != null) {
                 messageObject.messageOwner.media.webpage = webPage;
@@ -9490,6 +9508,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.currentPage = webPage;
                 ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().remove("article" + this.currentPage.f182id).commit();
                 updateInterfaceForCurrentPage(false);
+                if (anchorFinal != null) {
+                    scrollToAnchor(anchorFinal);
+                }
             }
         }
     }
@@ -9507,32 +9528,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     final /* synthetic */ void lambda$open$25$ArticleViewer(AnimatorSet animatorSet) {
         NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
         NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
-        animatorSet.start();
-    }
-
-    private void hideActionBar() {
-        AnimatorSet animatorSet = new AnimatorSet();
-        Animator[] animatorArr = new Animator[4];
-        animatorArr[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{0.0f});
-        animatorArr[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{0.0f});
-        animatorArr[2] = ObjectAnimator.ofFloat(this.settingsButton, "alpha", new float[]{0.0f});
-        animatorArr[3] = ObjectAnimator.ofFloat(this.titleTextView, "alpha", new float[]{0.0f});
-        animatorSet.playTogether(animatorArr);
-        animatorSet.setDuration(250);
-        animatorSet.setInterpolator(new DecelerateInterpolator());
-        animatorSet.start();
-    }
-
-    private void showActionBar(int delay) {
-        AnimatorSet animatorSet = new AnimatorSet();
-        Animator[] animatorArr = new Animator[4];
-        animatorArr[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{1.0f});
-        animatorArr[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{1.0f});
-        animatorArr[2] = ObjectAnimator.ofFloat(this.settingsButton, "alpha", new float[]{1.0f});
-        animatorArr[3] = ObjectAnimator.ofFloat(this.titleTextView, "alpha", new float[]{1.0f});
-        animatorSet.playTogether(animatorArr);
-        animatorSet.setDuration(150);
-        animatorSet.setStartDelay((long) delay);
         animatorSet.start();
     }
 
@@ -9994,7 +9989,6 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     final /* synthetic */ void lambda$showDialog$36$ArticleViewer(DialogInterface dialog1) {
-        showActionBar(120);
         this.visibleDialog = null;
     }
 

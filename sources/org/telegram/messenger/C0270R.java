@@ -537,6 +537,7 @@ public final class CLASSNAMER {
         public static final int notifications_mute2d = NUM;
         public static final int notifications_off = NUM;
         public static final int notifications_on = NUM;
+        public static final int notifications_settings = NUM;
         public static final int notify_members_off = NUM;
         public static final int notify_members_on = NUM;
         public static final int notify_panel_notification_icon_bg = NUM;
@@ -1045,6 +1046,7 @@ public final class CLASSNAMER {
         public static final int AreYouSureClearHistoryGroup = NUM;
         public static final int AreYouSureDeleteAndExit = NUM;
         public static final int AreYouSureDeleteContact = NUM;
+        public static final int AreYouSureDeleteGIF = NUM;
         public static final int AreYouSureDeleteMessages = NUM;
         public static final int AreYouSureDeletePhoto = NUM;
         public static final int AreYouSureDeleteThisChat = NUM;
@@ -2591,6 +2593,7 @@ public final class CLASSNAMER {
         public static final int ReplyToGroup = NUM;
         public static final int ReplyToUser = NUM;
         public static final int ReportChat = NUM;
+        public static final int ReportChatChild = NUM;
         public static final int ReportChatDescription = NUM;
         public static final int ReportChatOther = NUM;
         public static final int ReportChatPornography = NUM;
@@ -2816,6 +2819,7 @@ public final class CLASSNAMER {
         public static final int StopLiveLocationAlertAll = NUM;
         public static final int StopLiveLocationAlertToGroup = NUM;
         public static final int StopLiveLocationAlertToUser = NUM;
+        public static final int StopLoading = NUM;
         public static final int StopVerification = NUM;
         public static final int StorageUsage = NUM;
         public static final int Streaming = NUM;
@@ -3042,6 +3046,7 @@ public final class CLASSNAMER {
         public static final int VoipSettingsRingtone = NUM;
         public static final int VoipUseLessData = NUM;
         public static final int VoipWaiting = NUM;
+        public static final int WaitMore = NUM;
         public static final int WaitingForNetwork = NUM;
         public static final int Warmth = NUM;
         public static final int WebSessionsTitle = NUM;

@@ -1076,12 +1076,6 @@ public class ActionBarLayout extends FrameLayout {
                 View fragmentView = previousFragment.fragmentView;
                 if (fragmentView == null) {
                     fragmentView = previousFragment.createView(this.parentActivity);
-                } else {
-                    parent = (ViewGroup) fragmentView.getParent();
-                    if (parent != null) {
-                        previousFragment.onRemoveFromParent();
-                        parent.removeView(fragmentView);
-                    }
                 }
                 if (previousFragment.actionBar != null && previousFragment.actionBar.getAddToContainer()) {
                     if (this.removeActionBarExtraHeight) {
@@ -1093,6 +1087,11 @@ public class ActionBarLayout extends FrameLayout {
                     }
                     this.containerView.addView(previousFragment.actionBar);
                     previousFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
+                }
+                parent = (ViewGroup) fragmentView.getParent();
+                if (parent != null) {
+                    previousFragment.onRemoveFromParent();
+                    parent.removeView(fragmentView);
                 }
                 this.containerView.addView(fragmentView);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) fragmentView.getLayoutParams();

@@ -1,25 +1,21 @@
 package org.telegram.p005ui;
 
-import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnKeyListener;
 import org.telegram.p005ui.ChangePhoneActivity.LoginActivitySmsView;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_auth_resendCode;
-import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$$Lambda$2 */
-final /* synthetic */ class ChangePhoneActivity$LoginActivitySmsView$$Lambda$2 implements RequestDelegate {
+final /* synthetic */ class ChangePhoneActivity$LoginActivitySmsView$$Lambda$2 implements OnKeyListener {
     private final LoginActivitySmsView arg$1;
-    private final Bundle arg$2;
-    private final TL_auth_resendCode arg$3;
+    private final int arg$2;
 
-    ChangePhoneActivity$LoginActivitySmsView$$Lambda$2(LoginActivitySmsView loginActivitySmsView, Bundle bundle, TL_auth_resendCode tL_auth_resendCode) {
+    ChangePhoneActivity$LoginActivitySmsView$$Lambda$2(LoginActivitySmsView loginActivitySmsView, int i) {
         this.arg$1 = loginActivitySmsView;
-        this.arg$2 = bundle;
-        this.arg$3 = tL_auth_resendCode;
+        this.arg$2 = i;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$resendCode$4$ChangePhoneActivity$LoginActivitySmsView(this.arg$2, this.arg$3, tLObject, tL_error);
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        return this.arg$1.lambda$setParams$4$ChangePhoneActivity$LoginActivitySmsView(this.arg$2, view, i, keyEvent);
     }
 }

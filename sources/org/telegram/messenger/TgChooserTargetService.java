@@ -33,95 +33,12 @@ public class TgChooserTargetService extends ChooserTargetService {
     private Paint roundPaint;
 
     public List<ChooserTarget> onGetChooserTargets(ComponentName targetActivityName, IntentFilter matchedFilter) {
-        final int currentAccount = UserConfig.selectedAccount;
-        final List<ChooserTarget> targets = new ArrayList();
+        int currentAccount = UserConfig.selectedAccount;
+        List<ChooserTarget> targets = new ArrayList();
         if (UserConfig.getInstance(currentAccount).isClientActivated() && MessagesController.getGlobalMainSettings().getBoolean("direct_share", true)) {
             ImageLoader imageLoader = ImageLoader.getInstance();
-            final CountDownLatch countDownLatch = new CountDownLatch(1);
-            final ComponentName componentName = new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName());
-            MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new Runnable() {
-                public void run() {
-                    ArrayList<Integer> dialogs = new ArrayList();
-                    ArrayList<Chat> chats = new ArrayList();
-                    ArrayList<User> users = new ArrayList();
-                    try {
-                        ArrayList<Integer> usersToLoad = new ArrayList();
-                        usersToLoad.add(Integer.valueOf(UserConfig.getInstance(currentAccount).getClientUserId()));
-                        ArrayList<Integer> chatsToLoad = new ArrayList();
-                        SQLiteCursor cursor = MessagesStorage.getInstance(currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs ORDER BY date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(0), Integer.valueOf(30)}), new Object[0]);
-                        while (cursor.next()) {
-                            long id = cursor.longValue(0);
-                            int lower_id = (int) id;
-                            int high_id = (int) (id >> 32);
-                            if (!(lower_id == 0 || high_id == 1)) {
-                                if (lower_id > 0) {
-                                    if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
-                                        usersToLoad.add(Integer.valueOf(lower_id));
-                                    }
-                                } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
-                                    chatsToLoad.add(Integer.valueOf(-lower_id));
-                                }
-                                dialogs.add(Integer.valueOf(lower_id));
-                                if (dialogs.size() == 8) {
-                                    break;
-                                }
-                            }
-                        }
-                        cursor.dispose();
-                        if (!chatsToLoad.isEmpty()) {
-                            MessagesStorage.getInstance(currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
-                        }
-                        if (!usersToLoad.isEmpty()) {
-                            MessagesStorage.getInstance(currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m13e(e);
-                    }
-                    for (int a = 0; a < dialogs.size(); a++) {
-                        Bundle extras = new Bundle();
-                        Icon icon = null;
-                        String name = null;
-                        int id2 = ((Integer) dialogs.get(a)).intValue();
-                        int b;
-                        if (id2 > 0) {
-                            b = 0;
-                            while (b < users.size()) {
-                                User user = (User) users.get(b);
-                                if (user.f176id != id2) {
-                                    b++;
-                                } else if (!user.bot) {
-                                    extras.putLong("dialogId", (long) id2);
-                                    if (!(user.photo == null || user.photo.photo_small == null)) {
-                                        icon = TgChooserTargetService.this.createRoundBitmap(FileLoader.getPathToAttach(user.photo.photo_small, true));
-                                    }
-                                    name = ContactsController.formatName(user.first_name, user.last_name);
-                                }
-                            }
-                        } else {
-                            b = 0;
-                            while (b < chats.size()) {
-                                Chat chat = (Chat) chats.get(b);
-                                if (chat.f78id != (-id2)) {
-                                    b++;
-                                } else if (!ChatObject.isNotInChat(chat) && (!ChatObject.isChannel(chat) || chat.megagroup)) {
-                                    extras.putLong("dialogId", (long) id2);
-                                    if (!(chat.photo == null || chat.photo.photo_small == null)) {
-                                        icon = TgChooserTargetService.this.createRoundBitmap(FileLoader.getPathToAttach(chat.photo.photo_small, true));
-                                    }
-                                    name = chat.title;
-                                }
-                            }
-                        }
-                        if (name != null) {
-                            if (icon == null) {
-                                icon = Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.logo_avatar);
-                            }
-                            targets.add(new ChooserTarget(name, icon, 1.0f, componentName, extras));
-                        }
-                    }
-                    countDownLatch.countDown();
-                }
-            });
+            CountDownLatch countDownLatch = new CountDownLatch(1);
+            MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new TgChooserTargetService$$Lambda$0(this, currentAccount, targets, new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName()), countDownLatch));
             try {
                 countDownLatch.await();
             } catch (Throwable e) {
@@ -129,6 +46,88 @@ public class TgChooserTargetService extends ChooserTargetService {
             }
         }
         return targets;
+    }
+
+    final /* synthetic */ void lambda$onGetChooserTargets$0$TgChooserTargetService(int currentAccount, List targets, ComponentName componentName, CountDownLatch countDownLatch) {
+        ArrayList<Integer> dialogs = new ArrayList();
+        ArrayList<Chat> chats = new ArrayList();
+        ArrayList<User> users = new ArrayList();
+        try {
+            ArrayList<Integer> usersToLoad = new ArrayList();
+            usersToLoad.add(Integer.valueOf(UserConfig.getInstance(currentAccount).getClientUserId()));
+            ArrayList<Integer> chatsToLoad = new ArrayList();
+            SQLiteCursor cursor = MessagesStorage.getInstance(currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs ORDER BY date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(0), Integer.valueOf(30)}), new Object[0]);
+            while (cursor.next()) {
+                long id = cursor.longValue(0);
+                int lower_id = (int) id;
+                int high_id = (int) (id >> 32);
+                if (!(lower_id == 0 || high_id == 1)) {
+                    if (lower_id > 0) {
+                        if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
+                            usersToLoad.add(Integer.valueOf(lower_id));
+                        }
+                    } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
+                        chatsToLoad.add(Integer.valueOf(-lower_id));
+                    }
+                    dialogs.add(Integer.valueOf(lower_id));
+                    if (dialogs.size() == 8) {
+                        break;
+                    }
+                }
+            }
+            cursor.dispose();
+            if (!chatsToLoad.isEmpty()) {
+                MessagesStorage.getInstance(currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
+            }
+            if (!usersToLoad.isEmpty()) {
+                MessagesStorage.getInstance(currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+        for (int a = 0; a < dialogs.size(); a++) {
+            Bundle extras = new Bundle();
+            Icon icon = null;
+            String name = null;
+            int id2 = ((Integer) dialogs.get(a)).intValue();
+            int b;
+            if (id2 > 0) {
+                b = 0;
+                while (b < users.size()) {
+                    User user = (User) users.get(b);
+                    if (user.f176id != id2) {
+                        b++;
+                    } else if (!user.bot) {
+                        extras.putLong("dialogId", (long) id2);
+                        if (!(user.photo == null || user.photo.photo_small == null)) {
+                            icon = createRoundBitmap(FileLoader.getPathToAttach(user.photo.photo_small, true));
+                        }
+                        name = ContactsController.formatName(user.first_name, user.last_name);
+                    }
+                }
+            } else {
+                b = 0;
+                while (b < chats.size()) {
+                    Chat chat = (Chat) chats.get(b);
+                    if (chat.f78id != (-id2)) {
+                        b++;
+                    } else if (!ChatObject.isNotInChat(chat) && (!ChatObject.isChannel(chat) || chat.megagroup)) {
+                        extras.putLong("dialogId", (long) id2);
+                        if (!(chat.photo == null || chat.photo.photo_small == null)) {
+                            icon = createRoundBitmap(FileLoader.getPathToAttach(chat.photo.photo_small, true));
+                        }
+                        name = chat.title;
+                    }
+                }
+            }
+            if (name != null) {
+                if (icon == null) {
+                    icon = Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.logo_avatar);
+                }
+                targets.add(new ChooserTarget(name, icon, 1.0f, componentName, extras));
+            }
+        }
+        countDownLatch.countDown();
     }
 
     private Icon createRoundBitmap(File path) {

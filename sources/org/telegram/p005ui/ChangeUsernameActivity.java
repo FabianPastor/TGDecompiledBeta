@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
@@ -17,10 +16,8 @@ import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -41,7 +38,6 @@ import org.telegram.p005ui.Components.AlertsCreator;
 import org.telegram.p005ui.Components.EditTextBoldCursor;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_checkUsername;
 import org.telegram.tgnet.TLRPC.TL_account_updateUsername;
@@ -64,30 +60,6 @@ public class ChangeUsernameActivity extends BaseFragment {
     private boolean lastNameAvailable;
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$2 */
-    class CLASSNAME implements OnTouchListener {
-        CLASSNAME() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChangeUsernameActivity$3 */
-    class CLASSNAME implements OnEditorActionListener {
-        CLASSNAME() {
-        }
-
-        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-            if (i != 6 || ChangeUsernameActivity.this.doneButton == null) {
-                return false;
-            }
-            ChangeUsernameActivity.this.doneButton.performClick();
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChangeUsernameActivity$4 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
         }
@@ -191,7 +163,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
-        this.fragmentView.setOnTouchListener(new CLASSNAME());
+        this.fragmentView.setOnTouchListener(ChangeUsernameActivity$$Lambda$0.$instance);
         this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -208,7 +180,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.m9dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new CLASSNAME());
+        this.firstNameField.setOnEditorActionListener(new ChangeUsernameActivity$$Lambda$1(this));
         this.firstNameField.addTextChangedListener(new CLASSNAME());
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.checkTextView = new TextView(context);
@@ -237,6 +209,14 @@ public class ChangeUsernameActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    final /* synthetic */ boolean lambda$createView$1$ChangeUsernameActivity(TextView textView, int i, KeyEvent keyEvent) {
+        if (i != 6 || this.doneButton == null) {
+            return false;
+        }
+        this.doneButton.performClick();
+        return true;
+    }
+
     public void onResume() {
         super.onResume();
         if (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
@@ -245,7 +225,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         }
     }
 
-    private boolean checkUserName(final String name, boolean alert) {
+    private boolean checkUserName(String name, boolean alert) {
         if (name == null || name.length() <= 0) {
             this.checkTextView.setVisibility(8);
         } else {
@@ -331,43 +311,36 @@ public class ChangeUsernameActivity extends BaseFragment {
             this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGrayText8);
             this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
             this.lastCheckName = name;
-            this.checkRunnable = new Runnable() {
-
-                /* renamed from: org.telegram.ui.ChangeUsernameActivity$5$1 */
-                class CLASSNAME implements RequestDelegate {
-                    CLASSNAME() {
-                    }
-
-                    public void run(final TLObject response, final TL_error error) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                ChangeUsernameActivity.this.checkReqId = 0;
-                                if (ChangeUsernameActivity.this.lastCheckName != null && ChangeUsernameActivity.this.lastCheckName.equals(name)) {
-                                    if (error == null && (response instanceof TL_boolTrue)) {
-                                        ChangeUsernameActivity.this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
-                                        ChangeUsernameActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
-                                        ChangeUsernameActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
-                                        ChangeUsernameActivity.this.lastNameAvailable = true;
-                                        return;
-                                    }
-                                    ChangeUsernameActivity.this.checkTextView.setText(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
-                                    ChangeUsernameActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
-                                    ChangeUsernameActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
-                                    ChangeUsernameActivity.this.lastNameAvailable = false;
-                                }
-                            }
-                        });
-                    }
-                }
-
-                public void run() {
-                    TL_account_checkUsername req = new TL_account_checkUsername();
-                    req.username = name;
-                    ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).sendRequest(req, new CLASSNAME(), 2);
-                }
-            };
+            this.checkRunnable = new ChangeUsernameActivity$$Lambda$2(this, name);
             AndroidUtilities.runOnUIThread(this.checkRunnable, 300);
             return true;
+        }
+    }
+
+    final /* synthetic */ void lambda$checkUserName$4$ChangeUsernameActivity(String name) {
+        TL_account_checkUsername req = new TL_account_checkUsername();
+        req.username = name;
+        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChangeUsernameActivity$$Lambda$7(this, name), 2);
+    }
+
+    final /* synthetic */ void lambda$null$3$ChangeUsernameActivity(String name, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new ChangeUsernameActivity$$Lambda$8(this, name, error, response));
+    }
+
+    final /* synthetic */ void lambda$null$2$ChangeUsernameActivity(String name, TL_error error, TLObject response) {
+        this.checkReqId = 0;
+        if (this.lastCheckName != null && this.lastCheckName.equals(name)) {
+            if (error == null && (response instanceof TL_boolTrue)) {
+                this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
+                this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
+                this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
+                this.lastNameAvailable = true;
+                return;
+            }
+            this.checkTextView.setText(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
+            this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
+            this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
+            this.lastNameAvailable = false;
         }
     }
 
@@ -384,60 +357,51 @@ public class ChangeUsernameActivity extends BaseFragment {
                     lambda$checkDiscard$70$PassportActivity();
                     return;
                 }
-                final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-                progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.setCancelable(false);
-                final TL_account_updateUsername req = new TL_account_updateUsername();
+                AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+                TL_account_updateUsername req = new TL_account_updateUsername();
                 req.username = newName;
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                    public void run(TLObject response, final TL_error error) {
-                        if (error == null) {
-                            final User user = (User) response;
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    try {
-                                        progressDialog.dismiss();
-                                    } catch (Throwable e) {
-                                        FileLog.m13e(e);
-                                    }
-                                    ArrayList<User> users = new ArrayList();
-                                    users.add(user);
-                                    MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).putUsers(users, false);
-                                    MessagesStorage.getInstance(ChangeUsernameActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
-                                    UserConfig.getInstance(ChangeUsernameActivity.this.currentAccount).saveConfig(true);
-                                    ChangeUsernameActivity.this.lambda$checkDiscard$70$PassportActivity();
-                                }
-                            });
-                            return;
-                        }
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                try {
-                                    progressDialog.dismiss();
-                                } catch (Throwable e) {
-                                    FileLog.m13e(e);
-                                }
-                                AlertsCreator.processError(ChangeUsernameActivity.this.currentAccount, error, ChangeUsernameActivity.this, req, new Object[0]);
-                            }
-                        });
-                    }
-                }, 2);
+                int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChangeUsernameActivity$$Lambda$3(this, progressDialog, req), 2);
                 ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, this.classGuid);
-                progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).cancelRequest(reqId, true);
-                        try {
-                            dialog.dismiss();
-                        } catch (Throwable e) {
-                            FileLog.m13e(e);
-                        }
-                    }
-                });
+                progressDialog.setOnCancelListener(new ChangeUsernameActivity$$Lambda$4(this, reqId));
                 progressDialog.show();
             }
         }
+    }
+
+    final /* synthetic */ void lambda$saveName$7$ChangeUsernameActivity(AlertDialog progressDialog, TL_account_updateUsername req, TLObject response, TL_error error) {
+        if (error == null) {
+            AndroidUtilities.runOnUIThread(new ChangeUsernameActivity$$Lambda$5(this, progressDialog, (User) response));
+        } else {
+            AndroidUtilities.runOnUIThread(new ChangeUsernameActivity$$Lambda$6(this, progressDialog, error, req));
+        }
+    }
+
+    final /* synthetic */ void lambda$null$5$ChangeUsernameActivity(AlertDialog progressDialog, User user1) {
+        try {
+            progressDialog.dismiss();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+        ArrayList<User> users = new ArrayList();
+        users.add(user1);
+        MessagesController.getInstance(this.currentAccount).putUsers(users, false);
+        MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, false, true);
+        UserConfig.getInstance(this.currentAccount).saveConfig(true);
+        lambda$checkDiscard$70$PassportActivity();
+    }
+
+    final /* synthetic */ void lambda$null$6$ChangeUsernameActivity(AlertDialog progressDialog, TL_error error, TL_account_updateUsername req) {
+        try {
+            progressDialog.dismiss();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+        AlertsCreator.processError(this.currentAccount, error, this, req, new Object[0]);
+    }
+
+    final /* synthetic */ void lambda$saveName$8$ChangeUsernameActivity(int reqId, DialogInterface dialog) {
+        ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
     }
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {

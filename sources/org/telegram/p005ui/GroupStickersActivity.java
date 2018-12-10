@@ -438,8 +438,11 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
-        this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+        this.progressView.setAlpha(0.0f);
+        this.progressView.setScaleX(0.1f);
+        this.progressView.setScaleY(0.1f);
         this.progressView.setVisibility(4);
+        this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.nameContainer = new LinearLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(42.0f), NUM));

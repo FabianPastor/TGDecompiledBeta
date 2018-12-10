@@ -1807,7 +1807,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     } else if (PhotoViewer.this.currentMessageObject == null || !PhotoViewer.this.currentMessageObject.isGif()) {
                         builder.setMessage(LocaleController.formatString("AreYouSureDeletePhoto", R.string.AreYouSureDeletePhoto, new Object[0]));
                     } else {
-                        builder.setMessage(LocaleController.formatString("AreYouSure", R.string.AreYouSure, new Object[0]));
+                        builder.setMessage(LocaleController.formatString("AreYouSureDeleteGIF", R.string.AreYouSureDeleteGIF, new Object[0]));
                     }
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     boolean[] deleteForAll = new boolean[1];
@@ -8090,7 +8090,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             if (this.padImageForHorizontalInsets) {
                 canvas.restore();
             }
-            if (this.videoForwardDrawable.isAnimating()) {
+            if (this.aspectRatioFrameLayout != null && this.videoForwardDrawable.isAnimating()) {
                 int h = ((int) (((float) this.aspectRatioFrameLayout.getMeasuredHeight()) * (this.scale - 1.0f))) / 2;
                 this.videoForwardDrawable.setBounds(this.aspectRatioFrameLayout.getLeft(), (this.aspectRatioFrameLayout.getTop() - h) + ((int) (currentTranslationY / currentScale)), this.aspectRatioFrameLayout.getRight(), (this.aspectRatioFrameLayout.getBottom() + h) + ((int) (currentTranslationY / currentScale)));
                 this.videoForwardDrawable.draw(canvas);

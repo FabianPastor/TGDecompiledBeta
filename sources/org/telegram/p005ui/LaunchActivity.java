@@ -1731,10 +1731,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (state == 0 && UserConfig.getActivatedAccountsCount() >= 2 && auth != null) {
             AlertsCreator.createAccountSelectDialog(this, new LaunchActivity$$Lambda$7(this, intentAccount, username, group, sticker, botUser, botChat, message, hasUrl, messageId, game, instantView, auth, lang, unsupportedUrl, code)).show();
         } else if (code == null) {
-            AlertDialog progressDialog = new AlertDialog(this, 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
+            AlertDialog progressDialog = new AlertDialog(this, 3);
             int[] requestId = new int[]{0};
             TLObject req;
             if (username != null) {
@@ -1793,7 +1790,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 }
             }
             if (requestId[0] != 0) {
-                progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new LaunchActivity$$Lambda$15(intentAccount, requestId));
+                progressDialog.setOnCancelListener(new LaunchActivity$$Lambda$15(intentAccount, requestId));
                 try {
                     progressDialog.show();
                 } catch (Exception e) {
@@ -2166,15 +2163,6 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             } else {
                 showAlertDialog(AlertsCreator.createSimpleAlert(this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text));
             }
-        }
-    }
-
-    static final /* synthetic */ void lambda$runLinkRequest$27$LaunchActivity(int intentAccount, int[] requestId, DialogInterface dialog, int which) {
-        ConnectionsManager.getInstance(intentAccount).cancelRequest(requestId[0], true);
-        try {
-            dialog.dismiss();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
         }
     }
 

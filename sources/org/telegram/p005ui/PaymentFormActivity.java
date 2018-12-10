@@ -1039,10 +1039,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing block: B:373:0x1157, code:
+    /* JADX WARNING: Missing block: B:373:0x1173, code:
             r25 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:374:0x1158, code:
+    /* JADX WARNING: Missing block: B:374:0x1174, code:
             org.telegram.messenger.FileLog.m13e(r25);
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1078,8 +1078,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         if (this.currentStep == 0 || this.currentStep == 1 || this.currentStep == 2 || this.currentStep == 3 || this.currentStep == 4 || this.currentStep == 6) {
             this.doneItem = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
             this.progressView = new ContextProgressView(context, 1);
-            this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+            this.progressView.setAlpha(0.0f);
+            this.progressView.setScaleX(0.1f);
+            this.progressView.setScaleY(0.1f);
             this.progressView.setVisibility(4);
+            this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         }
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = (FrameLayout) this.fragmentView;

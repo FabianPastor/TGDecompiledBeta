@@ -772,21 +772,31 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void hideSubItem(int id) {
-        View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
-        if (view != null && view.getVisibility() != 8) {
-            view.setVisibility(8);
+        if (this.popupLayout != null) {
+            View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
+            if (view != null && view.getVisibility() != 8) {
+                view.setVisibility(8);
+            }
         }
     }
 
     public boolean isSubItemVisible(int id) {
+        if (this.popupLayout == null) {
+            return false;
+        }
         View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
-        return view != null && view.getVisibility() == 0;
+        if (view == null || view.getVisibility() != 0) {
+            return false;
+        }
+        return true;
     }
 
     public void showSubItem(int id) {
-        View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
-        if (view != null && view.getVisibility() != 0) {
-            view.setVisibility(0);
+        if (this.popupLayout != null) {
+            View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
+            if (view != null && view.getVisibility() != 0) {
+                view.setVisibility(0);
+            }
         }
     }
 }

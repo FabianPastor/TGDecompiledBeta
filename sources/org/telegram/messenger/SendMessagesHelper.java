@@ -5636,8 +5636,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    /* JADX WARNING: Missing block: B:267:0x0937, code:
-            if (r89.endsWith(".webp") != false) goto L_0x0939;
+    /* JADX WARNING: Missing block: B:271:0x0953, code:
+            if (r89.endsWith(".webp") != false) goto L_0x0955;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     static final /* synthetic */ void lambda$prepareSendingMedia$59$SendMessagesHelper(ArrayList media, long dialog_id, int currentAccount, boolean forceDocument, boolean groupPhotos, MessageObject editingMessageObject, MessageObject reply_to_msg, InputContentInfoCompat inputContent) {
@@ -5677,7 +5677,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                         }
                     }
-                    if (!(tempPath == null && info.uri != null && (MediaController.isGif(info.uri) || MediaController.isWebp(info.uri)))) {
+                    if (!(ImageLoader.shouldSendImageAsDocument(info.path, info.uri) || (tempPath == null && info.uri != null && (MediaController.isGif(info.uri) || MediaController.isWebp(info.uri))))) {
                         if (tempPath != null) {
                             temp = new File(tempPath);
                             originalPath = originalPath + temp.length() + "_" + temp.lastModified();
@@ -5992,7 +5992,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     originalPath = info.uri.toString();
                 }
                 boolean isDocument = false;
-                if (forceDocument) {
+                if (forceDocument || ImageLoader.shouldSendImageAsDocument(info.path, info.uri)) {
                     isDocument = true;
                     extension = FileLoader.getFileExtension(new File(tempPath));
                 } else {

@@ -3419,11 +3419,15 @@ public class TLRPC {
     }
 
     public static abstract class ReportReason extends TLObject {
-        public String text;
-
         public static ReportReason TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             ReportReason result = null;
             switch (constructor) {
+                case -1685456582:
+                    result = new TL_inputReportReasonCopyright();
+                    break;
+                case -1376497949:
+                    result = new TL_inputReportReasonChildAbuse();
+                    break;
                 case -512463606:
                     result = new TL_inputReportReasonOther();
                     break;
@@ -21088,8 +21092,25 @@ public class TLRPC {
         }
     }
 
+    public static class TL_inputReportReasonChildAbuse extends ReportReason {
+        public static int constructor = -NUM;
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_inputReportReasonCopyright extends ReportReason {
+        public static int constructor = -NUM;
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
     public static class TL_inputReportReasonOther extends ReportReason {
         public static int constructor = -512463606;
+        public String text;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.text = stream.readString(exception);

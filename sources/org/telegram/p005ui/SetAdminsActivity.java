@@ -96,6 +96,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                 if (SetAdminsActivity.this.listView.getAdapter() != SetAdminsActivity.this.listAdapter) {
                     SetAdminsActivity.this.listView.setAdapter(SetAdminsActivity.this.listAdapter);
                 }
+                SetAdminsActivity.this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
             }
             if (SetAdminsActivity.this.searchAdapter != null) {
                 SetAdminsActivity.this.searchAdapter.search(null);
@@ -441,7 +442,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     final /* synthetic */ void lambda$createView$0$SetAdminsActivity(View view, int position) {
         boolean z = true;
         boolean z2;
-        if (this.listView.getAdapter() == this.searchAdapter || (position >= this.usersStartRow && position < this.usersEndRow)) {
+        if (this.listView.getAdapter() == this.searchAdapter || (this.listView.getAdapter() == this.listAdapter && position >= this.usersStartRow && position < this.usersEndRow)) {
             ChatParticipant participant;
             UserCell userCell = (UserCell) view;
             this.chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat_id));

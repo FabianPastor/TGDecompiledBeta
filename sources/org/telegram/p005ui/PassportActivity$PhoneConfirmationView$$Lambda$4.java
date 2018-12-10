@@ -1,18 +1,22 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import org.telegram.p005ui.PassportActivity.PhoneConfirmationView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_account_verifyPhone;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$$Lambda$4 */
-final /* synthetic */ class PassportActivity$PhoneConfirmationView$$Lambda$4 implements OnClickListener {
+final /* synthetic */ class PassportActivity$PhoneConfirmationView$$Lambda$4 implements RequestDelegate {
     private final PhoneConfirmationView arg$1;
+    private final TL_account_verifyPhone arg$2;
 
-    PassportActivity$PhoneConfirmationView$$Lambda$4(PhoneConfirmationView phoneConfirmationView) {
+    PassportActivity$PhoneConfirmationView$$Lambda$4(PhoneConfirmationView phoneConfirmationView, TL_account_verifyPhone tL_account_verifyPhone) {
         this.arg$1 = phoneConfirmationView;
+        this.arg$2 = tL_account_verifyPhone;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$onBackPressed$7$PassportActivity$PhoneConfirmationView(dialogInterface, i);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$onNextPressed$7$PassportActivity$PhoneConfirmationView(this.arg$2, tLObject, tL_error);
     }
 }

@@ -335,6 +335,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
 
         public TLObject getItem(int i) {
+            if (i < 0 || i >= this.searchResult.size()) {
+                return null;
+            }
             return (TLObject) this.searchResult.get(i);
         }
 

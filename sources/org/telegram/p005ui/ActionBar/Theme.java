@@ -688,6 +688,8 @@ public class Theme {
     public static final String key_dialogTextRed = "dialogTextRed";
     public static final String key_dialogTextRed2 = "dialogTextRed2";
     public static final String key_dialogTopBackground = "dialogTopBackground";
+    public static final String key_dialog_inlineProgress = "dialog_inlineProgress";
+    public static final String key_dialog_inlineProgressBackground = "dialog_inlineProgressBackground";
     public static final String key_dialog_liveLocationProgress = "dialog_liveLocationProgress";
     public static final String key_divider = "divider";
     public static final String key_emptyListPlaceholder = "emptyListPlaceholder";
@@ -1200,6 +1202,8 @@ public class Theme {
         defaultColors.put(key_dialogBadgeBackground, Integer.valueOf(-12664327));
         defaultColors.put(key_dialogBadgeText, Integer.valueOf(-1));
         defaultColors.put(key_dialogCameraIcon, Integer.valueOf(-1));
+        defaultColors.put(key_dialog_inlineProgressBackground, Integer.valueOf(-151981323));
+        defaultColors.put(key_dialog_inlineProgress, Integer.valueOf(-9735304));
         defaultColors.put(key_windowBackgroundWhite, Integer.valueOf(-1));
         defaultColors.put(key_progressCircle, Integer.valueOf(-11371101));
         defaultColors.put(key_windowBackgroundWhiteGrayIcon, Integer.valueOf(-8288629));
@@ -1710,6 +1714,8 @@ public class Theme {
         fallbackKeys.put(key_chats_actionUnreadIcon, key_profile_actionIcon);
         fallbackKeys.put(key_chats_actionUnreadBackground, key_profile_actionBackground);
         fallbackKeys.put(key_chats_actionUnreadPressedBackground, key_profile_actionPressedBackground);
+        fallbackKeys.put(key_dialog_inlineProgressBackground, key_windowBackgroundGray);
+        fallbackKeys.put(key_dialog_inlineProgress, key_chats_menuItemIcon);
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         ArrayList arrayList = themes;
@@ -2140,7 +2146,7 @@ public class Theme {
     public static ThemeInfo applyThemeFile(File file, String themeName, boolean temporary) {
         boolean z = true;
         try {
-            if (themeName.equals("Default") || themeName.equals("Dark") || themeName.equals("Blue")) {
+            if (themeName.equals("Default") || themeName.equals("Dark") || themeName.equals("Blue") || themeName.equals("Dark Blue")) {
                 return null;
             }
             File finalFile = new File(ApplicationLoader.getFilesDirFixed(), themeName);
@@ -3319,6 +3325,9 @@ public class Theme {
     }
 
     public static int getColor(String key, boolean[] isDefault) {
+        if (Theme.isCurrentThemeDefault()) {
+            return Theme.getDefaultColor(key);
+        }
         Integer color = (Integer) currentColors.get(key);
         if (color == null) {
             String fallbackKey = (String) fallbackKeys.get(key);

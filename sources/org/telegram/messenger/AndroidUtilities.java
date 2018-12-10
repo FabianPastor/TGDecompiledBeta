@@ -43,6 +43,7 @@ import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Video;
 import android.provider.Settings.Global;
+import android.provider.Settings.System;
 import android.support.p000v4.content.FileProvider;
 import android.support.p000v4.view.ViewPager;
 import android.support.p000v4.widget.EdgeEffectCompat;
@@ -1787,6 +1788,19 @@ public class AndroidUtilities {
         }
         builder.append(wholeString.substring(lastIndex, wholeString.length()));
         return builder;
+    }
+
+    public static boolean isAirplaneModeOn() {
+        if (VERSION.SDK_INT < 17) {
+            if (System.getInt(ApplicationLoader.applicationContext.getContentResolver(), "airplane_mode_on", 0) != 0) {
+                return true;
+            }
+            return false;
+        } else if (Global.getInt(ApplicationLoader.applicationContext.getContentResolver(), "airplane_mode_on", 0) == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public static File generateVideoPath() {

@@ -1799,14 +1799,11 @@ public class SecretChatHelper {
     public void startSecretChat(Context context, User user) {
         if (user != null && context != null) {
             this.startingSecretChat = true;
-            AlertDialog progressDialog = new AlertDialog(context, 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
+            AlertDialog progressDialog = new AlertDialog(context, 3);
             TL_messages_getDhConfig req = new TL_messages_getDhConfig();
             req.random_length = 256;
             req.version = MessagesStorage.getInstance(this.currentAccount).getLastSecretVersion();
-            progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new SecretChatHelper$$Lambda$14(this, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SecretChatHelper$$Lambda$13(this, context, progressDialog, user), 2)));
+            progressDialog.setOnCancelListener(new SecretChatHelper$$Lambda$14(this, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SecretChatHelper$$Lambda$13(this, context, progressDialog, user), 2)));
             try {
                 progressDialog.show();
             } catch (Exception e) {
@@ -1931,12 +1928,7 @@ public class SecretChatHelper {
         }
     }
 
-    final /* synthetic */ void lambda$startSecretChat$30$SecretChatHelper(int reqId, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$startSecretChat$30$SecretChatHelper(int reqId, DialogInterface dialog) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
-        try {
-            dialog.dismiss();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
     }
 }

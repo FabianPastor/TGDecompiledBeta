@@ -73,6 +73,7 @@ import org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
 import org.telegram.tgnet.TLRPC.TL_contacts_importContacts;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_inputReportReasonChildAbuse;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonPornography;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonSpam;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonViolence;
@@ -492,7 +493,7 @@ public class AlertsCreator {
             descriptions[3] = str;
             descriptions[4] = LocaleController.getString("NotificationsTurnOff", R.string.NotificationsTurnOff);
             int[] iArr = new int[5];
-            iArr = new int[]{R.drawable.notifications_on, R.drawable.notifications_mute1h, R.drawable.notifications_mute2d, R.drawable.menu_settings, R.drawable.notifications_off};
+            iArr = new int[]{R.drawable.notifications_on, R.drawable.notifications_mute1h, R.drawable.notifications_mute2d, R.drawable.notifications_settings, R.drawable.notifications_off};
             View linearLayout = new LinearLayout(parentFragment.getParentActivity());
             linearLayout.setOrientation(1);
             Builder builder = new Builder(parentFragment.getParentActivity());
@@ -797,18 +798,19 @@ public class AlertsCreator {
         NotificationsController.getInstance(UserConfig.selectedAccount).updateServerNotificationsSettings(dialog_id);
     }
 
-    public static Dialog createReportAlert(Context context, long dialog_id, int messageId, BaseFragment parentFragment) {
-        if (context == null || parentFragment == null) {
-            return null;
+    public static void createReportAlert(Context context, long dialog_id, int messageId, BaseFragment parentFragment) {
+        if (context != null && parentFragment != null) {
+            BottomSheet.Builder builder = new BottomSheet.Builder(context);
+            builder.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat));
+            builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatChild", R.string.ReportChatChild), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new AlertsCreator$$Lambda$13(dialog_id, messageId, parentFragment, context));
+            BottomSheet sheet = builder.create();
+            parentFragment.showDialog(sheet);
+            sheet.setItemColor(2, Theme.getColor(Theme.key_dialogTextRed2), Theme.getColor(Theme.key_dialogRedIcon));
         }
-        BottomSheet.Builder builder = new BottomSheet.Builder(context);
-        builder.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat));
-        builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new AlertsCreator$$Lambda$13(dialog_id, messageId, parentFragment, context));
-        return builder.create();
     }
 
     static final /* synthetic */ void lambda$createReportAlert$14$AlertsCreator(long dialog_id, int messageId, BaseFragment parentFragment, Context context, DialogInterface dialogInterface, int i) {
-        if (i == 3) {
+        if (i == 4) {
             Bundle args = new Bundle();
             args.putLong("dialog_id", dialog_id);
             args.putLong("message_id", (long) messageId);
@@ -827,6 +829,8 @@ public class AlertsCreator {
             } else if (i == 1) {
                 request.reason = new TL_inputReportReasonViolence();
             } else if (i == 2) {
+                request.reason = new TL_inputReportReasonChildAbuse();
+            } else if (i == 3) {
                 request.reason = new TL_inputReportReasonPornography();
             }
             req = request;
@@ -838,6 +842,8 @@ public class AlertsCreator {
             } else if (i == 1) {
                 request.reason = new TL_inputReportReasonViolence();
             } else if (i == 2) {
+                request.reason = new TL_inputReportReasonChildAbuse();
+            } else if (i == 3) {
                 request.reason = new TL_inputReportReasonPornography();
             }
             req = request;

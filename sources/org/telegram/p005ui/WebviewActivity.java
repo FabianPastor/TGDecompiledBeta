@@ -233,8 +233,11 @@ public class WebviewActivity extends BaseFragment {
         ActionBarMenu menu = this.actionBar.createMenu();
         this.progressItem = menu.addItemWithWidth(1, R.drawable.share, AndroidUtilities.m9dp(54.0f));
         this.progressView = new ContextProgressView(context, 1);
+        this.progressView.setAlpha(0.0f);
+        this.progressView.setScaleX(0.1f);
+        this.progressView.setScaleY(0.1f);
+        this.progressView.setVisibility(4);
         this.progressItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
-        this.progressItem.getImageView().setVisibility(4);
         menu.addItem(0, (int) R.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
         this.webView = new WebView(context);
         this.webView.getSettings().setJavaScriptEnabled(true);

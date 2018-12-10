@@ -118,11 +118,8 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
                 ChangeChatNameActivity.this.donePressed = true;
                 if (ChangeChatNameActivity.this.imageUpdater.uploadingImage != null) {
                     ChangeChatNameActivity.this.createAfterUpload = true;
-                    ChangeChatNameActivity.this.progressDialog = new AlertDialog(ChangeChatNameActivity.this.getParentActivity(), 1);
-                    ChangeChatNameActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                    ChangeChatNameActivity.this.progressDialog.setCanceledOnTouchOutside(false);
-                    ChangeChatNameActivity.this.progressDialog.setCancelable(false);
-                    ChangeChatNameActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new ChangeChatNameActivity$1$$Lambda$0(this));
+                    ChangeChatNameActivity.this.progressDialog = new AlertDialog(ChangeChatNameActivity.this.getParentActivity(), 3);
+                    ChangeChatNameActivity.this.progressDialog.setOnCancelListener(new ChangeChatNameActivity$1$$Lambda$0(this));
                     ChangeChatNameActivity.this.progressDialog.show();
                     return;
                 }
@@ -139,15 +136,10 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
             }
         }
 
-        final /* synthetic */ void lambda$onItemClick$0$ChangeChatNameActivity$1(DialogInterface dialog, int which) {
+        final /* synthetic */ void lambda$onItemClick$0$ChangeChatNameActivity$1(DialogInterface dialog) {
             ChangeChatNameActivity.this.createAfterUpload = false;
             ChangeChatNameActivity.this.progressDialog = null;
             ChangeChatNameActivity.this.donePressed = false;
-            try {
-                dialog.dismiss();
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
         }
     }
 

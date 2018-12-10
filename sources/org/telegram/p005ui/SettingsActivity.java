@@ -154,7 +154,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private ImageView writeButton;
     private AnimatorSet writeButtonAnimation;
 
-    /* renamed from: org.telegram.ui.SettingsActivity$10 */
+    /* renamed from: org.telegram.ui.SettingsActivity$11 */
     class CLASSNAME implements OnPreDrawListener {
         CLASSNAME() {
         }
@@ -168,7 +168,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* renamed from: org.telegram.ui.SettingsActivity$7 */
+    /* renamed from: org.telegram.ui.SettingsActivity$8 */
     class CLASSNAME extends ViewOutlineProvider {
         CLASSNAME() {
         }
@@ -302,7 +302,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* renamed from: org.telegram.ui.SettingsActivity$8 */
+    /* renamed from: org.telegram.ui.SettingsActivity$9 */
     class CLASSNAME extends OnScrollListener {
         CLASSNAME() {
         }
@@ -775,7 +775,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         frameLayout.addView(view, LayoutHelper.createFrame(42, 42.0f, i3, f2, 0.0f, (float) i2, 0.0f));
         this.avatarImage.setOnClickListener(new SettingsActivity$$Lambda$2(this));
-        this.nameTextView = new TextView(context);
+        this.nameTextView = new TextView(context) {
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                setPivotX(LocaleController.isRTL ? (float) getMeasuredWidth() : 0.0f);
+            }
+        };
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_profile_title));
         this.nameTextView.setTextSize(1, 18.0f);
         this.nameTextView.setLines(1);
@@ -784,7 +789,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.nameTextView.setEllipsize(TruncateAt.END);
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.nameTextView.setPivotX(0.0f);
         this.nameTextView.setPivotY(0.0f);
         frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 48.0f : 118.0f, 0.0f, LocaleController.isRTL ? 118.0f : 48.0f, 0.0f));
         this.onlineTextView = new TextView(context);
@@ -1034,10 +1038,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
         }
         if (supportUser == null) {
-            AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
+            AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+            progressDialog.setCanCacnel(false);
             progressDialog.show();
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getSupport(), new SettingsActivity$$Lambda$4(this, preferences, progressDialog));
             return;

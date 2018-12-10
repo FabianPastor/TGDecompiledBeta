@@ -1117,84 +1117,84 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             } else {
                 if (PassportActivity.this.currentActivityType == 5) {
                     PassportActivity.this.onPasswordDone(false);
-                    return;
-                }
-                final Runnable finishRunnable = new PassportActivity$3$$Lambda$4(this);
-                ErrorRunnable CLASSNAME = new ErrorRunnable() {
-                    public void onError(String error, String text) {
-                        if ("PHONE_VERIFICATION_NEEDED".equals(error)) {
-                            PassportActivity.this.startPhoneVerification(true, text, finishRunnable, this, PassportActivity.this.delegate);
-                            return;
-                        }
-                        PassportActivity.this.showEditDoneProgress(true, false);
-                    }
-                };
-                String value;
-                if (PassportActivity.this.currentActivityType == 4) {
-                    if (PassportActivity.this.useCurrentValue) {
-                        value = PassportActivity.this.currentEmail;
-                    } else if (!PassportActivity.this.checkFieldsForError()) {
-                        value = PassportActivity.this.inputFields[0].getText().toString();
-                    } else {
-                        return;
-                    }
-                    PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, value, null, null, null, null, null, null, null, null, finishRunnable, CLASSNAME);
-                } else if (PassportActivity.this.currentActivityType == 3) {
-                    if (PassportActivity.this.useCurrentValue) {
-                        value = UserConfig.getInstance(PassportActivity.this.currentAccount).getCurrentUser().phone;
-                    } else if (!PassportActivity.this.checkFieldsForError()) {
-                        value = PassportActivity.this.inputFields[1].getText().toString() + PassportActivity.this.inputFields[2].getText().toString();
-                    } else {
-                        return;
-                    }
-                    PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, value, null, null, null, null, null, null, null, null, finishRunnable, CLASSNAME);
-                } else if (PassportActivity.this.currentActivityType == 2) {
-                    if (PassportActivity.this.uploadingDocuments.isEmpty() && !PassportActivity.this.checkFieldsForError()) {
-                        if (PassportActivity.this.isHasNotAnyChanges()) {
-                            PassportActivity.this.lambda$checkDiscard$70$PassportActivity();
-                            return;
-                        }
-                        JSONObject json = null;
-                        try {
-                            if (!PassportActivity.this.documentOnly) {
-                                JSONObject json2 = new JSONObject();
-                                try {
-                                    json2.put("street_line1", PassportActivity.this.inputFields[0].getText().toString());
-                                    json2.put("street_line2", PassportActivity.this.inputFields[1].getText().toString());
-                                    json2.put("post_code", PassportActivity.this.inputFields[2].getText().toString());
-                                    json2.put("city", PassportActivity.this.inputFields[3].getText().toString());
-                                    json2.put("state", PassportActivity.this.inputFields[4].getText().toString());
-                                    json2.put("country_code", PassportActivity.this.currentCitizeship);
-                                    json = json2;
-                                } catch (Exception e) {
-                                    json = json2;
-                                }
-                            }
-                        } catch (Exception e2) {
-                        }
-                        if (PassportActivity.this.fieldsErrors != null) {
-                            PassportActivity.this.fieldsErrors.clear();
-                        }
-                        if (PassportActivity.this.documentsErrors != null) {
-                            PassportActivity.this.documentsErrors.clear();
-                        }
-                        PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, null, json != null ? json.toString() : null, PassportActivity.this.currentDocumentsType, null, PassportActivity.this.documents, PassportActivity.this.selfieDocument, PassportActivity.this.translationDocuments, null, null, finishRunnable, CLASSNAME);
-                    } else {
-                        return;
-                    }
-                } else if (PassportActivity.this.currentActivityType == 1) {
-                    if (!onIdentityDone(finishRunnable, CLASSNAME)) {
-                        return;
-                    }
-                } else if (PassportActivity.this.currentActivityType == 6) {
-                    TLObject req = new TL_account_verifyEmail();
-                    req.email = (String) PassportActivity.this.currentValues.get("email");
-                    req.code = PassportActivity.this.inputFields[0].getText().toString();
-                    ConnectionsManager.getInstance(PassportActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new PassportActivity$3$$Lambda$5(this, finishRunnable, CLASSNAME, req)), PassportActivity.this.classGuid);
                 } else if (PassportActivity.this.currentActivityType == 7) {
                     PassportActivity.this.views[PassportActivity.this.currentViewNum].onNextPressed();
+                } else {
+                    final Runnable finishRunnable = new PassportActivity$3$$Lambda$4(this);
+                    ErrorRunnable CLASSNAME = new ErrorRunnable() {
+                        public void onError(String error, String text) {
+                            if ("PHONE_VERIFICATION_NEEDED".equals(error)) {
+                                PassportActivity.this.startPhoneVerification(true, text, finishRunnable, this, PassportActivity.this.delegate);
+                                return;
+                            }
+                            PassportActivity.this.showEditDoneProgress(true, false);
+                        }
+                    };
+                    String value;
+                    if (PassportActivity.this.currentActivityType == 4) {
+                        if (PassportActivity.this.useCurrentValue) {
+                            value = PassportActivity.this.currentEmail;
+                        } else if (!PassportActivity.this.checkFieldsForError()) {
+                            value = PassportActivity.this.inputFields[0].getText().toString();
+                        } else {
+                            return;
+                        }
+                        PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, value, null, null, null, null, null, null, null, null, finishRunnable, CLASSNAME);
+                    } else if (PassportActivity.this.currentActivityType == 3) {
+                        if (PassportActivity.this.useCurrentValue) {
+                            value = UserConfig.getInstance(PassportActivity.this.currentAccount).getCurrentUser().phone;
+                        } else if (!PassportActivity.this.checkFieldsForError()) {
+                            value = PassportActivity.this.inputFields[1].getText().toString() + PassportActivity.this.inputFields[2].getText().toString();
+                        } else {
+                            return;
+                        }
+                        PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, value, null, null, null, null, null, null, null, null, finishRunnable, CLASSNAME);
+                    } else if (PassportActivity.this.currentActivityType == 2) {
+                        if (PassportActivity.this.uploadingDocuments.isEmpty() && !PassportActivity.this.checkFieldsForError()) {
+                            if (PassportActivity.this.isHasNotAnyChanges()) {
+                                PassportActivity.this.lambda$checkDiscard$70$PassportActivity();
+                                return;
+                            }
+                            JSONObject json = null;
+                            try {
+                                if (!PassportActivity.this.documentOnly) {
+                                    JSONObject json2 = new JSONObject();
+                                    try {
+                                        json2.put("street_line1", PassportActivity.this.inputFields[0].getText().toString());
+                                        json2.put("street_line2", PassportActivity.this.inputFields[1].getText().toString());
+                                        json2.put("post_code", PassportActivity.this.inputFields[2].getText().toString());
+                                        json2.put("city", PassportActivity.this.inputFields[3].getText().toString());
+                                        json2.put("state", PassportActivity.this.inputFields[4].getText().toString());
+                                        json2.put("country_code", PassportActivity.this.currentCitizeship);
+                                        json = json2;
+                                    } catch (Exception e) {
+                                        json = json2;
+                                    }
+                                }
+                            } catch (Exception e2) {
+                            }
+                            if (PassportActivity.this.fieldsErrors != null) {
+                                PassportActivity.this.fieldsErrors.clear();
+                            }
+                            if (PassportActivity.this.documentsErrors != null) {
+                                PassportActivity.this.documentsErrors.clear();
+                            }
+                            PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, null, json != null ? json.toString() : null, PassportActivity.this.currentDocumentsType, null, PassportActivity.this.documents, PassportActivity.this.selfieDocument, PassportActivity.this.translationDocuments, null, null, finishRunnable, CLASSNAME);
+                        } else {
+                            return;
+                        }
+                    } else if (PassportActivity.this.currentActivityType == 1) {
+                        if (!onIdentityDone(finishRunnable, CLASSNAME)) {
+                            return;
+                        }
+                    } else if (PassportActivity.this.currentActivityType == 6) {
+                        TLObject req = new TL_account_verifyEmail();
+                        req.email = (String) PassportActivity.this.currentValues.get("email");
+                        req.code = PassportActivity.this.inputFields[0].getText().toString();
+                        ConnectionsManager.getInstance(PassportActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new PassportActivity$3$$Lambda$5(this, finishRunnable, CLASSNAME, req)), PassportActivity.this.classGuid);
+                    }
+                    PassportActivity.this.showEditDoneProgress(true, true);
                 }
-                PassportActivity.this.showEditDoneProgress(true, true);
             }
         }
 
@@ -1220,7 +1220,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     public class PhoneConfirmationView extends SlideView implements NotificationCenterDelegate {
         private ImageView blackImageView;
         private ImageView blueImageView;
-        private EditTextBoldCursor codeField;
+        private EditTextBoldCursor[] codeField;
+        private LinearLayout codeFieldContainer;
         private int codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
         private Timer codeTimer;
         private TextView confirmTextView;
@@ -1398,7 +1399,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     this.blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), Mode.MULTIPLY));
                     frameLayout.addView(this.blueImageView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     this.titleTextView.setText(LocaleController.getString("SentAppCodeTitle", R.string.SentAppCodeTitle));
-                } else if (this.verificationType == 2 || this.verificationType == 3) {
+                } else {
                     this.blueImageView = new ImageView(context);
                     this.blueImageView.setImageResource(R.drawable.sms_code);
                     this.blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), Mode.MULTIPLY));
@@ -1408,45 +1409,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 addView(this.titleTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 18, 0, 0));
                 addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 17, 0, 0));
             }
-            this.codeField = new EditTextBoldCursor(context);
-            this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            this.codeField.setHint(LocaleController.getString("Code", R.string.Code));
-            this.codeField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            this.codeField.setCursorSize(AndroidUtilities.m9dp(20.0f));
-            this.codeField.setCursorWidth(1.5f);
-            this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-            this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-            this.codeField.setImeOptions(268435461);
-            this.codeField.setTextSize(1, 18.0f);
-            this.codeField.setMaxLines(1);
-            this.codeField.setPadding(0, 0, 0, 0);
-            this.codeField.setGravity(49);
+            this.codeFieldContainer = new LinearLayout(context);
+            this.codeFieldContainer.setOrientation(0);
+            addView(this.codeFieldContainer, LayoutHelper.createLinear(-2, 36, 1, 0, 30, 0, 0));
             if (this.verificationType == 3) {
-                this.codeField.setEnabled(false);
-                this.codeField.setInputType(0);
-                this.codeField.setVisibility(8);
-            } else {
-                this.codeField.setInputType(3);
-            }
-            addView(this.codeField, LayoutHelper.createLinear(172, 36, 1, 0, 30, 0, 0));
-            this.codeField.addTextChangedListener(new TextWatcher(PassportActivity.this) {
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                public void afterTextChanged(Editable s) {
-                    if (!PhoneConfirmationView.this.ignoreOnTextChange && PhoneConfirmationView.this.length != 0 && CLASSNAMEPhoneFormat.stripExceptNumbers(PhoneConfirmationView.this.codeField.getText().toString()).length() == PhoneConfirmationView.this.length) {
-                        PhoneConfirmationView.this.onNextPressed();
-                    }
-                }
-            });
-            this.codeField.setOnEditorActionListener(new PassportActivity$PhoneConfirmationView$$Lambda$0(this));
-            if (this.verificationType == 3) {
-                this.codeField.setEnabled(false);
-                this.codeField.setInputType(0);
-                this.codeField.setVisibility(8);
+                this.codeFieldContainer.setVisibility(8);
             }
             this.timeText = new TextView(context);
             this.timeText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
@@ -1475,18 +1442,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             }
             addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49, 0, 40, 0, 0));
-            this.problemText.setOnClickListener(new PassportActivity$PhoneConfirmationView$$Lambda$1(this));
+            this.problemText.setOnClickListener(new PassportActivity$PhoneConfirmationView$$Lambda$0(this));
         }
 
-        final /* synthetic */ boolean lambda$new$0$PassportActivity$PhoneConfirmationView(TextView textView, int i, KeyEvent keyEvent) {
-            if (i != 5) {
-                return false;
-            }
-            onNextPressed();
-            return true;
-        }
-
-        final /* synthetic */ void lambda$new$1$PassportActivity$PhoneConfirmationView(View v) {
+        final /* synthetic */ void lambda$new$0$PassportActivity$PhoneConfirmationView(View v) {
             boolean email = false;
             if (!this.nextPressed) {
                 if ((this.nextType == 4 && this.verificationType == 2) || this.nextType == 0) {
@@ -1512,12 +1471,29 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
         }
 
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            if (this.verificationType != 3 && this.blueImageView != null) {
+                int innerHeight = ((this.blueImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getHeight()) + AndroidUtilities.m9dp(35.0f);
+                int height = MeasureSpec.getSize(heightMeasureSpec);
+                int requiredHeight = AndroidUtilities.m9dp(110.0f);
+                int maxHeight = AndroidUtilities.m9dp(291.0f);
+                if (height - innerHeight < requiredHeight) {
+                    setMeasuredDimension(getMeasuredWidth(), innerHeight + requiredHeight);
+                } else if (height > maxHeight) {
+                    setMeasuredDimension(getMeasuredWidth(), maxHeight);
+                } else {
+                    setMeasuredDimension(getMeasuredWidth(), height);
+                }
+            }
+        }
+
         protected void onLayout(boolean changed, int l, int t, int r, int b) {
             super.onLayout(changed, l, t, r, b);
-            if (this.verificationType != 3) {
+            if (this.verificationType != 3 && this.blueImageView != null) {
                 int h;
                 int bottom = this.confirmTextView.getBottom();
-                int height = Math.max(AndroidUtilities.m9dp(120.0f), Math.min(AndroidUtilities.m9dp(291.0f), b - t) - bottom);
+                int height = (b - t) - bottom;
                 if (this.problemText.getVisibility() == 0) {
                     h = this.problemText.getMeasuredHeight();
                     t = (bottom + height) - h;
@@ -1530,9 +1506,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     t = bottom + height;
                 }
                 height = t - bottom;
-                h = this.codeField.getMeasuredHeight();
+                h = this.codeFieldContainer.getMeasuredHeight();
                 t = ((height - h) / 2) + bottom;
-                this.codeField.layout(this.codeField.getLeft(), t, this.codeField.getRight(), t + h);
+                this.codeFieldContainer.layout(this.codeFieldContainer.getLeft(), t, this.codeFieldContainer.getRight(), t + h);
             }
         }
 
@@ -1544,27 +1520,27 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             TL_auth_resendCode req = new TL_auth_resendCode();
             req.phone_number = this.phone;
             req.phone_code_hash = this.phoneHash;
-            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new PassportActivity$PhoneConfirmationView$$Lambda$2(this, params, req), 2);
+            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new PassportActivity$PhoneConfirmationView$$Lambda$1(this, params, req), 2);
         }
 
-        final /* synthetic */ void lambda$resendCode$4$PassportActivity$PhoneConfirmationView(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
-            AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$$Lambda$8(this, error, params, response, req));
+        final /* synthetic */ void lambda$resendCode$3$PassportActivity$PhoneConfirmationView(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
+            AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$$Lambda$9(this, error, params, response, req));
         }
 
-        final /* synthetic */ void lambda$null$3$PassportActivity$PhoneConfirmationView(TL_error error, Bundle params, TLObject response, TL_auth_resendCode req) {
+        final /* synthetic */ void lambda$null$2$PassportActivity$PhoneConfirmationView(TL_error error, Bundle params, TLObject response, TL_auth_resendCode req) {
             this.nextPressed = false;
             if (error == null) {
                 PassportActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response, true);
             } else {
                 AlertDialog dialog = (AlertDialog) AlertsCreator.processError(PassportActivity.this.currentAccount, error, PassportActivity.this, req, new Object[0]);
                 if (dialog != null && error.text.contains("PHONE_CODE_EXPIRED")) {
-                    dialog.setPositiveButtonListener(new PassportActivity$PhoneConfirmationView$$Lambda$9(this));
+                    dialog.setPositiveButtonListener(new PassportActivity$PhoneConfirmationView$$Lambda$10(this));
                 }
             }
             PassportActivity.this.lambda$null$63$PassportActivity();
         }
 
-        final /* synthetic */ void lambda$null$2$PassportActivity$PhoneConfirmationView(DialogInterface dialog1, int which) {
+        final /* synthetic */ void lambda$null$1$PassportActivity$PhoneConfirmationView(DialogInterface dialog1, int which) {
             onBackPressed(true);
             PassportActivity.this.lambda$checkDiscard$70$PassportActivity();
         }
@@ -1578,9 +1554,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
 
         public void setParams(Bundle params, boolean restore) {
-            int i = 8;
             if (params != null) {
-                this.codeField.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 this.waitingForEvent = true;
                 if (this.verificationType == 2) {
                     AndroidUtilities.setWaitingForSms(true);
@@ -1592,26 +1566,89 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.currentParams = params;
                 this.phone = params.getString("phone");
                 this.phoneHash = params.getString("phoneHash");
-                int i2 = params.getInt("timeout");
-                this.time = i2;
-                this.timeout = i2;
+                int i = params.getInt("timeout");
+                this.time = i;
+                this.timeout = i;
                 this.openTime = (int) (System.currentTimeMillis() / 1000);
                 this.nextType = params.getInt("nextType");
                 this.pattern = params.getString("pattern");
                 this.length = params.getInt("length");
-                if (this.length != 0) {
-                    this.codeField.setFilters(new InputFilter[]{new LengthFilter(this.length)});
+                if (this.length == 0) {
+                    this.length = 5;
+                }
+                int a;
+                if (this.codeField == null || this.codeField.length != this.length) {
+                    this.codeField = new EditTextBoldCursor[this.length];
+                    a = 0;
+                    while (a < this.length) {
+                        final int num = a;
+                        this.codeField[a] = new EditTextBoldCursor(getContext());
+                        this.codeField[a].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                        this.codeField[a].setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                        this.codeField[a].setCursorSize(AndroidUtilities.m9dp(20.0f));
+                        this.codeField[a].setCursorWidth(1.5f);
+                        Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
+                        pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
+                        this.codeField[a].setBackgroundDrawable(pressedDrawable);
+                        this.codeField[a].setImeOptions(268435461);
+                        this.codeField[a].setTextSize(1, 20.0f);
+                        this.codeField[a].setMaxLines(1);
+                        this.codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        this.codeField[a].setPadding(0, 0, 0, 0);
+                        this.codeField[a].setGravity(49);
+                        if (this.verificationType == 3) {
+                            this.codeField[a].setEnabled(false);
+                            this.codeField[a].setInputType(0);
+                            this.codeField[a].setVisibility(8);
+                        } else {
+                            this.codeField[a].setInputType(3);
+                        }
+                        this.codeFieldContainer.addView(this.codeField[a], LayoutHelper.createLinear(34, 36, 1, 0, 0, a != this.length + -1 ? 7 : 0, 0));
+                        this.codeField[a].addTextChangedListener(new TextWatcher() {
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            public void afterTextChanged(Editable s) {
+                                if (!PhoneConfirmationView.this.ignoreOnTextChange) {
+                                    int len = s.length();
+                                    if (len >= 1) {
+                                        if (len > 1) {
+                                            String text = s.toString();
+                                            PhoneConfirmationView.this.ignoreOnTextChange = true;
+                                            for (int a = 0; a < Math.min(PhoneConfirmationView.this.length - num, len); a++) {
+                                                if (a == 0) {
+                                                    s.replace(0, len, text.substring(a, a + 1));
+                                                } else {
+                                                    PhoneConfirmationView.this.codeField[num + a].setText(text.substring(a, a + 1));
+                                                }
+                                            }
+                                            PhoneConfirmationView.this.ignoreOnTextChange = false;
+                                        }
+                                        if (num != PhoneConfirmationView.this.length - 1) {
+                                            PhoneConfirmationView.this.codeField[num + 1].setSelection(PhoneConfirmationView.this.codeField[num + 1].length());
+                                            PhoneConfirmationView.this.codeField[num + 1].requestFocus();
+                                        }
+                                        if ((num == PhoneConfirmationView.this.length - 1 || (num == PhoneConfirmationView.this.length - 2 && len >= 2)) && PhoneConfirmationView.this.getCode().length() == PhoneConfirmationView.this.length) {
+                                            PhoneConfirmationView.this.onNextPressed();
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        this.codeField[a].setOnKeyListener(new PassportActivity$PhoneConfirmationView$$Lambda$2(this, num));
+                        this.codeField[a].setOnEditorActionListener(new PassportActivity$PhoneConfirmationView$$Lambda$3(this));
+                        a++;
+                    }
                 } else {
-                    this.codeField.setFilters(new InputFilter[0]);
+                    for (EditTextBoldCursor text : this.codeField) {
+                        text.setText(TtmlNode.ANONYMOUS_REGION_ID);
+                    }
                 }
                 if (this.progressView != null) {
-                    ProgressView progressView = this.progressView;
-                    if (this.nextType != 0) {
-                        i2 = 0;
-                    } else {
-                        i2 = 8;
-                    }
-                    progressView.setVisibility(i2);
+                    this.progressView.setVisibility(this.nextType != 0 ? 0 : 8);
                 }
                 if (this.phone != null) {
                     String number = CLASSNAMEPhoneFormat.getInstance().format("+" + this.phone);
@@ -1625,16 +1662,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                     this.confirmTextView.setText(str);
                     if (this.verificationType != 3) {
-                        AndroidUtilities.showKeyboard(this.codeField);
-                        this.codeField.requestFocus();
+                        AndroidUtilities.showKeyboard(this.codeField[0]);
+                        this.codeField[0].requestFocus();
                     } else {
-                        AndroidUtilities.hideKeyboard(this.codeField);
+                        AndroidUtilities.hideKeyboard(this.codeField[0]);
                     }
                     destroyTimer();
                     destroyCodeTimer();
                     this.lastCurrentTime = (double) System.currentTimeMillis();
-                    TextView textView;
-                    TextView textView2;
                     if (this.verificationType == 3 && (this.nextType == 4 || this.nextType == 2)) {
                         this.problemText.setVisibility(8);
                         this.timeText.setVisibility(0);
@@ -1646,33 +1681,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         createTimer();
                     } else if (this.verificationType == 2 && (this.nextType == 4 || this.nextType == 3)) {
                         this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
-                        textView = this.problemText;
-                        if (this.time < 1000) {
-                            i2 = 0;
-                        } else {
-                            i2 = 8;
-                        }
-                        textView.setVisibility(i2);
-                        textView2 = this.timeText;
-                        if (this.time >= 1000) {
-                            i = 0;
-                        }
-                        textView2.setVisibility(i);
+                        this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
+                        this.timeText.setVisibility(this.time < 1000 ? 8 : 0);
                         createTimer();
                     } else if (this.verificationType == 4 && this.nextType == 2) {
                         this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(2), Integer.valueOf(0)));
-                        textView = this.problemText;
-                        if (this.time < 1000) {
-                            i2 = 0;
-                        } else {
-                            i2 = 8;
-                        }
-                        textView.setVisibility(i2);
-                        textView2 = this.timeText;
-                        if (this.time >= 1000) {
-                            i = 0;
-                        }
-                        textView2.setVisibility(i);
+                        this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
+                        this.timeText.setVisibility(this.time < 1000 ? 8 : 0);
                         createTimer();
                     } else {
                         this.timeText.setVisibility(8);
@@ -1681,6 +1696,24 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             }
+        }
+
+        final /* synthetic */ boolean lambda$setParams$4$PassportActivity$PhoneConfirmationView(int num, View v, int keyCode, KeyEvent event) {
+            if (keyCode != 67 || this.codeField[num].length() != 0 || num <= 0) {
+                return false;
+            }
+            this.codeField[num - 1].setSelection(this.codeField[num - 1].length());
+            this.codeField[num - 1].requestFocus();
+            this.codeField[num - 1].dispatchKeyEvent(event);
+            return true;
+        }
+
+        final /* synthetic */ boolean lambda$setParams$5$PassportActivity$PhoneConfirmationView(TextView textView, int i, KeyEvent keyEvent) {
+            if (i != 5) {
+                return false;
+            }
+            onNextPressed();
+            return true;
         }
 
         private void createCodeTimer() {
@@ -1725,11 +1758,22 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
         }
 
+        private String getCode() {
+            if (this.codeField == null) {
+                return TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            StringBuilder codeBuilder = new StringBuilder();
+            for (EditTextBoldCursor text : this.codeField) {
+                codeBuilder.append(CLASSNAMEPhoneFormat.stripExceptNumbers(text.getText().toString()));
+            }
+            return codeBuilder.toString();
+        }
+
         public void onNextPressed() {
             if (!this.nextPressed) {
-                String code = CLASSNAMEPhoneFormat.stripExceptNumbers(this.codeField.getText().toString());
+                String code = getCode();
                 if (TextUtils.isEmpty(code)) {
-                    AndroidUtilities.shakeView(this.codeField, 2.0f, 0);
+                    AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
                     return;
                 }
                 this.nextPressed = true;
@@ -1741,27 +1785,28 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                 }
                 this.waitingForEvent = false;
+                PassportActivity.this.showEditDoneProgress(true, true);
                 TL_account_verifyPhone req = new TL_account_verifyPhone();
                 req.phone_number = this.phone;
                 req.phone_code = code;
                 req.phone_code_hash = this.phoneHash;
                 destroyTimer();
                 PassportActivity.this.needShowProgress();
-                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new PassportActivity$PhoneConfirmationView$$Lambda$3(this, req), 2);
+                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new PassportActivity$PhoneConfirmationView$$Lambda$4(this, req), 2);
             }
         }
 
-        final /* synthetic */ void lambda$onNextPressed$6$PassportActivity$PhoneConfirmationView(TL_account_verifyPhone req, TLObject response, TL_error error) {
-            AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$$Lambda$6(this, error, req));
+        final /* synthetic */ void lambda$onNextPressed$7$PassportActivity$PhoneConfirmationView(TL_account_verifyPhone req, TLObject response, TL_error error) {
+            AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$$Lambda$7(this, error, req));
         }
 
-        final /* synthetic */ void lambda$null$5$PassportActivity$PhoneConfirmationView(TL_error error, TL_account_verifyPhone req) {
+        final /* synthetic */ void lambda$null$6$PassportActivity$PhoneConfirmationView(TL_error error, TL_account_verifyPhone req) {
             PassportActivity.this.lambda$null$63$PassportActivity();
             this.nextPressed = false;
             if (error == null) {
                 destroyTimer();
                 destroyCodeTimer();
-                PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, (String) PassportActivity.this.currentValues.get("phone"), null, null, null, null, null, null, null, null, new PassportActivity$PhoneConfirmationView$$Lambda$7(PassportActivity.this), null);
+                PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, (String) PassportActivity.this.currentValues.get("phone"), null, null, null, null, null, null, null, null, new PassportActivity$PhoneConfirmationView$$Lambda$8(PassportActivity.this), null);
                 return;
             }
             this.lastError = error.text;
@@ -1779,6 +1824,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (this.verificationType != 3) {
                 AlertsCreator.processError(PassportActivity.this.currentAccount, error, PassportActivity.this, req, new Object[0]);
             }
+            PassportActivity.this.showEditDoneProgress(true, false);
+            if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                for (EditTextBoldCursor text : this.codeField) {
+                    text.setText(TtmlNode.ANONYMOUS_REGION_ID);
+                }
+                this.codeField[0].requestFocus();
+            } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                onBackPressed(true);
+                PassportActivity.this.setPage(0, true, null);
+            }
         }
 
         public boolean onBackPressed(boolean force) {
@@ -1786,7 +1841,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 TL_auth_cancelCode req = new TL_auth_cancelCode();
                 req.phone_number = this.phone;
                 req.phone_code_hash = this.phoneHash;
-                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, PassportActivity$PhoneConfirmationView$$Lambda$5.$instance, 2);
+                ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, PassportActivity$PhoneConfirmationView$$Lambda$6.$instance, 2);
                 destroyTimer();
                 destroyCodeTimer();
                 this.currentParams = null;
@@ -1804,17 +1859,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(LocaleController.getString("StopVerification", R.string.StopVerification));
             builder.setPositiveButton(LocaleController.getString("Continue", R.string.Continue), null);
-            builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), new PassportActivity$PhoneConfirmationView$$Lambda$4(this));
+            builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), new PassportActivity$PhoneConfirmationView$$Lambda$5(this));
             PassportActivity.this.showDialog(builder.create());
             return false;
         }
 
-        final /* synthetic */ void lambda$onBackPressed$7$PassportActivity$PhoneConfirmationView(DialogInterface dialogInterface, int i) {
+        final /* synthetic */ void lambda$onBackPressed$8$PassportActivity$PhoneConfirmationView(DialogInterface dialogInterface, int i) {
             onBackPressed(true);
             PassportActivity.this.setPage(0, true, null);
         }
 
-        static final /* synthetic */ void lambda$onBackPressed$8$PassportActivity$PhoneConfirmationView(TLObject response, TL_error error) {
+        static final /* synthetic */ void lambda$onBackPressed$9$PassportActivity$PhoneConfirmationView(TLObject response, TL_error error) {
         }
 
         public void onDestroyActivity() {
@@ -1833,25 +1888,30 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
         public void onShow() {
             super.onShow();
-            if (this.codeField != null && this.codeField.getVisibility() == 0) {
-                this.codeField.requestFocus();
-                this.codeField.setSelection(this.codeField.length());
-                AndroidUtilities.showKeyboard(this.codeField);
+            if (this.codeFieldContainer != null && this.codeFieldContainer.getVisibility() == 0) {
+                int a = this.codeField.length - 1;
+                while (a >= 0) {
+                    if (a == 0 || this.codeField[a].length() != 0) {
+                        this.codeField[a].requestFocus();
+                        this.codeField[a].setSelection(this.codeField[a].length());
+                        AndroidUtilities.showKeyboard(this.codeField[a]);
+                        return;
+                    }
+                    a--;
+                }
             }
         }
 
         public void didReceivedNotification(int id, int account, Object... args) {
             if (this.waitingForEvent && this.codeField != null) {
                 if (id == NotificationCenter.didReceiveSmsCode) {
-                    this.ignoreOnTextChange = true;
-                    this.codeField.setText(TtmlNode.ANONYMOUS_REGION_ID + args[0]);
-                    this.ignoreOnTextChange = false;
+                    this.codeField[0].setText(TtmlNode.ANONYMOUS_REGION_ID + args[0]);
                     onNextPressed();
                 } else if (id == NotificationCenter.didReceiveCall) {
                     String num = TtmlNode.ANONYMOUS_REGION_ID + args[0];
                     if (AndroidUtilities.checkPhonePattern(this.pattern, num)) {
                         this.ignoreOnTextChange = true;
-                        this.codeField.setText(num);
+                        this.codeField[0].setText(num);
                         this.ignoreOnTextChange = false;
                         onNextPressed();
                     }
@@ -2430,8 +2490,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (!(this.currentActivityType == 0 || this.currentActivityType == 8)) {
             this.doneItem = this.actionBar.createMenu().addItemWithWidth(2, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
             this.progressView = new ContextProgressView(context, 1);
-            this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+            this.progressView.setAlpha(0.0f);
+            this.progressView.setScaleX(0.1f);
+            this.progressView.setScaleY(0.1f);
             this.progressView.setVisibility(4);
+            this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
             if ((this.currentActivityType == 1 || this.currentActivityType == 2) && this.chatAttachAlert != null) {
                 try {
                     if (this.chatAttachAlert.isShowing()) {
@@ -7772,10 +7835,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     public void needShowProgress() {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
-            this.progressDialog = new AlertDialog(getParentActivity(), 1);
-            this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-            this.progressDialog.setCanceledOnTouchOutside(false);
-            this.progressDialog.setCancelable(false);
+            this.progressDialog = new AlertDialog(getParentActivity(), 3);
+            this.progressDialog.setCanCacnel(false);
             this.progressDialog.show();
         }
     }

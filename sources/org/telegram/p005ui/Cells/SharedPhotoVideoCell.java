@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
@@ -275,15 +274,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             } else {
                 photoVideoView.videoInfoContainer.setVisibility(4);
                 PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
-                PhotoSize currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
-                if (messageObject.mediaExists || DownloadController.getInstance(this.currentAccount).canDownloadMedia(messageObject)) {
-                    if (currentPhotoObject == currentPhotoObjectThumb) {
-                        currentPhotoObjectThumb = null;
-                    }
-                    photoVideoView.imageView.getImageReceiver().setImage(currentPhotoObject.location, "100_100", currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, "b", currentPhotoObject.size, null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
-                    return;
-                }
-                photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, currentPhotoObjectThumb.location, "b", null, 0, messageObject);
+                photoVideoView.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80).location, "b", null, 0, messageObject);
                 return;
             }
         }

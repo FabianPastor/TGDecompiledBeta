@@ -171,16 +171,13 @@ public class ChangeBioActivity extends BaseFragment {
                 lambda$checkDiscard$70$PassportActivity();
                 return;
             }
-            AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
+            AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
             TL_account_updateProfile req = new TL_account_updateProfile();
             req.about = newName;
             req.flags |= 4;
             int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChangeBioActivity$$Lambda$2(this, progressDialog, userFull, newName, req), 2);
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, this.classGuid);
-            progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new ChangeBioActivity$$Lambda$3(this, reqId));
+            progressDialog.setOnCancelListener(new ChangeBioActivity$$Lambda$3(this, reqId));
             progressDialog.show();
         }
     }
@@ -213,13 +210,8 @@ public class ChangeBioActivity extends BaseFragment {
         AlertsCreator.processError(this.currentAccount, error, this, req, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$saveName$5$ChangeBioActivity(int reqId, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$saveName$5$ChangeBioActivity(int reqId, DialogInterface dialog) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
-        try {
-            dialog.dismiss();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
     }
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {

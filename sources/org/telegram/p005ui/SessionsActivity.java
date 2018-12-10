@@ -462,10 +462,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     final /* synthetic */ void lambda$null$10$SessionsActivity(int position, boolean[] param, DialogInterface dialogInterface, int option) {
         if (getParentActivity() != null) {
-            AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
+            AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+            progressDialog.setCanCacnel(false);
             progressDialog.show();
             if (this.currentType == 0) {
                 TL_authorization authorization;

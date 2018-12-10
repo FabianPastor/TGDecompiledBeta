@@ -547,10 +547,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         } else if (which == 3) {
             value = 365;
         }
-        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-        progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
+        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+        progressDialog.setCanCacnel(false);
         progressDialog.show();
         TL_account_setAccountTTL req = new TL_account_setAccountTTL();
         req.ttl = new TL_accountDaysTTL();
@@ -575,11 +573,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     }
 
     final /* synthetic */ void lambda$null$8$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
-        Builder builder12 = new Builder(getParentActivity(), 1);
-        builder12.setMessage(LocaleController.getString("Loading", R.string.Loading));
-        this.progressDialog = builder12.show();
-        this.progressDialog.setCanceledOnTouchOutside(false);
-        this.progressDialog.setCancelable(false);
+        this.progressDialog = new Builder(getParentActivity(), 3).show();
+        this.progressDialog.setCanCacnel(false);
         if (this.currentSync != this.newSync) {
             UserConfig instance = UserConfig.getInstance(this.currentAccount);
             boolean z = this.newSync;

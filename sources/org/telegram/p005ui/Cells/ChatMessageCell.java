@@ -2182,15 +2182,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:513:0x0f55  */
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
-    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3930  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3933 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x394a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x394a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1710:0x395f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1715:0x398b  */
-    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cc7  */
-    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cb7  */
-    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1710:0x397c  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x397f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3996 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3996 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1719:0x39ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:1724:0x39d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d13  */
+    /* JADX WARNING: Removed duplicated region for block: B:1809:0x3d03  */
+    /* JADX WARNING: Removed duplicated region for block: B:1798:0x3cd5  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
     /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
     /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
@@ -2214,18 +2214,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x10e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3933 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3930  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x394a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x394a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1710:0x395f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1715:0x398b  */
-    /* JADX WARNING: Removed duplicated region for block: B:1718:0x39a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1779:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cb7  */
-    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cc7  */
-    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1792:0x3CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x397f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1710:0x397c  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3996 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3996 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1719:0x39ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:1724:0x39d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1727:0x39f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:1788:0x3c9c  */
+    /* JADX WARNING: Removed duplicated region for block: B:1809:0x3d03  */
+    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d13  */
+    /* JADX WARNING: Removed duplicated region for block: B:1798:0x3cd5  */
+    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3ce4  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
     /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
     /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
@@ -2249,29 +2249,29 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x10e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3930  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3933 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x394a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x394a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1710:0x395f  */
-    /* JADX WARNING: Removed duplicated region for block: B:1715:0x398b  */
-    /* JADX WARNING: Removed duplicated region for block: B:1718:0x39a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1779:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cc7  */
-    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cb7  */
-    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1792:0x3CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1710:0x397c  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x397f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3996 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3996 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1719:0x39ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:1724:0x39d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1727:0x39f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:1788:0x3c9c  */
+    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d13  */
+    /* JADX WARNING: Removed duplicated region for block: B:1809:0x3d03  */
+    /* JADX WARNING: Removed duplicated region for block: B:1798:0x3cd5  */
+    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3ce4  */
     /* JADX WARNING: Missing block: B:207:0x0682, code:
-            if (r144.equals("article") != false) goto L_0x0684;
+            if (r145.equals("article") != false) goto L_0x0684;
      */
     /* JADX WARNING: Missing block: B:220:0x06b3, code:
-            if (r144.equals("article") != false) goto L_0x06b5;
+            if (r145.equals("article") != false) goto L_0x06b5;
      */
     /* JADX WARNING: Missing block: B:319:0x0968, code:
-            if ("telegram_album".equals(r150) == false) goto L_0x04ae;
+            if ("telegram_album".equals(r151) == false) goto L_0x04ae;
      */
     /* JADX WARNING: Missing block: B:480:0x0e17, code:
-            if (r154.documentAttachType != 4) goto L_0x18ca;
+            if (r156.documentAttachType != 4) goto L_0x18ca;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
@@ -4130,14 +4130,28 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                         }
                     } else {
-                        photoWidth = w;
                         photoHeight = h;
-                        this.backgroundWidth = AndroidUtilities.m9dp(12.0f) + w;
+                        this.currentCaption = messageObject.caption;
+                        if (this.currentCaption != null) {
+                            User fromUser = null;
+                            if (messageObject.isFromUser()) {
+                                fromUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.from_id));
+                            }
+                            widthForCaption = messageObject.getMaxMessageTextWidth(fromUser);
+                            if (photoWidth < widthForCaption - AndroidUtilities.m9dp(10.0f)) {
+                                photoWidth = widthForCaption + AndroidUtilities.m9dp(10.0f);
+                            } else {
+                                photoWidth = w;
+                                widthForCaption = photoWidth - AndroidUtilities.m9dp(10.0f);
+                            }
+                        } else {
+                            photoWidth = w;
+                            widthForCaption = photoWidth - AndroidUtilities.m9dp(10.0f);
+                        }
+                        this.backgroundWidth = AndroidUtilities.m9dp(12.0f) + photoWidth;
                         if (!this.mediaBackground) {
                             this.backgroundWidth += AndroidUtilities.m9dp(9.0f);
                         }
-                        this.currentCaption = messageObject.caption;
-                        widthForCaption = photoWidth - AndroidUtilities.m9dp(10.0f);
                     }
                     if (this.currentCaption != null) {
                         try {

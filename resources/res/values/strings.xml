@@ -163,6 +163,7 @@
     <string name="AreYouSureClearHistoryGroup">Delete all cached text and media from this group?</string>
     <string name="AreYouSureDeleteAndExit">Are you sure you want to delete and leave the group?</string>
     <string name="AreYouSureDeleteContact">Are you sure you want to delete this contact?</string>
+    <string name="AreYouSureDeleteGIF">Are you sure you want to delete this GIF?</string>
     <string name="AreYouSureDeleteMessages">Are you sure you want to delete %1$s?</string>
     <string name="AreYouSureDeletePhoto">Are you sure you want to delete this photo?</string>
     <string name="AreYouSureDeleteThisChat">Are you sure you want to delete this chat?</string>
@@ -1707,6 +1708,7 @@
     <string name="ReplyToGroup">Reply to %1$s</string>
     <string name="ReplyToUser">Reply to %1$s</string>
     <string name="ReportChat">Report</string>
+    <string name="ReportChatChild">Child Abuse</string>
     <string name="ReportChatDescription">Description</string>
     <string name="ReportChatOther">Other</string>
     <string name="ReportChatPornography">Pornography</string>
@@ -1932,6 +1934,7 @@
     <string name="StopLiveLocationAlertAll">Are you sure you want to stop sharing your live location?</string>
     <string name="StopLiveLocationAlertToGroup">Are you sure you want to stop sharing live location with %1$s?</string>
     <string name="StopLiveLocationAlertToUser">Are you sure you want to stop sharing live location with %1$s?</string>
+    <string name="StopLoading">Stop loading?</string>
     <string name="StopVerification">Do you want to stop the phone number verification process?</string>
     <string name="StorageUsage">Storage Usage</string>
     <string name="Streaming">Streaming</string>
@@ -2158,6 +2161,7 @@
     <string name="VoipSettingsRingtone">Ringtone</string>
     <string name="VoipUseLessData">Use less data for calls</string>
     <string name="VoipWaiting">Waiting</string>
+    <string name="WaitMore">Wait more</string>
     <string name="WaitingForNetwork">Waiting for network...</string>
     <string name="Warmth">Warmth</string>
     <string name="WebSessionsTitle">Logged in with Telegram</string>

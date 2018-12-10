@@ -528,10 +528,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         }
         AlertDialog progressDialog = null;
         if (getParentActivity() != null) {
-            progressDialog = new AlertDialog(getParentActivity(), 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
+            progressDialog = new AlertDialog(getParentActivity(), 3);
+            progressDialog.setCanCacnel(false);
             progressDialog.show();
         }
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new PrivacyControlActivity$$Lambda$1(this, progressDialog), 2);

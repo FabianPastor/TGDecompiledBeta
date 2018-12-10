@@ -2709,6 +2709,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$41(this, did));
                         }
                         this.dialogsGroupsOnly.remove(dialog);
+                        this.dialogsForward.remove(dialog);
                         this.dialogs_dict.remove(did);
                         this.dialogs_read_inbox_max.remove(Long.valueOf(did));
                         this.dialogs_read_outbox_max.remove(Long.valueOf(did));
@@ -5803,11 +5804,8 @@ public class MessagesController implements NotificationCenterDelegate {
     public void convertToMegaGroup(Context context, int chat_id) {
         TL_messages_migrateChat req = new TL_messages_migrateChat();
         req.chat_id = chat_id;
-        AlertDialog progressDialog = new AlertDialog(context, 1);
-        progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
-        progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$95(this, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$94(this, context, progressDialog))));
+        AlertDialog progressDialog = new AlertDialog(context, 3);
+        progressDialog.setOnCancelListener(new MessagesController$$Lambda$95(this, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$94(this, context, progressDialog))));
         try {
             progressDialog.show();
         } catch (Exception e) {
@@ -5849,13 +5847,8 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$convertToMegaGroup$144$MessagesController(int reqId, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$convertToMegaGroup$144$MessagesController(int reqId, DialogInterface dialog) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
-        try {
-            dialog.dismiss();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
     }
 
     public void addUsersToChannel(int chat_id, ArrayList<InputUser> users, BaseFragment fragment) {
@@ -10244,6 +10237,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     this.dialogs.remove(dialog);
                     this.dialogsServerOnly.remove(dialog);
                     this.dialogsGroupsOnly.remove(dialog);
+                    this.dialogsForward.remove(dialog);
                     this.dialogs_dict.remove(dialog.f128id);
                     this.dialogs_read_inbox_max.remove(Long.valueOf(dialog.f128id));
                     this.dialogs_read_outbox_max.remove(Long.valueOf(dialog.f128id));
@@ -10393,10 +10387,7 @@ public class MessagesController implements NotificationCenterDelegate {
             int did = (int) originalMessage.getDialogId();
             if (did != 0) {
                 TLObject req;
-                AlertDialog progressDialog = new AlertDialog(fragment.getParentActivity(), 1);
-                progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.setCancelable(false);
+                AlertDialog progressDialog = new AlertDialog(fragment.getParentActivity(), 3);
                 if (did < 0) {
                     chat = getChat(Integer.valueOf(-did));
                 }
@@ -10412,8 +10403,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     request.f118id.add(Integer.valueOf(originalMessage.getId()));
                     req = request;
                 }
-                int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$143(this, progressDialog, fragment, bundle));
-                progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$144(this, reqId, fragment));
+                progressDialog.setOnCancelListener(new MessagesController$$Lambda$144(this, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$143(this, progressDialog, fragment, bundle)), fragment));
                 fragment.setVisibleDialog(progressDialog);
                 progressDialog.show();
                 return false;
@@ -10441,13 +10431,8 @@ public class MessagesController implements NotificationCenterDelegate {
         fragment.presentFragment(new ChatActivity(bundle), true);
     }
 
-    final /* synthetic */ void lambda$checkCanOpenChat$237$MessagesController(int reqId, BaseFragment fragment, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$checkCanOpenChat$237$MessagesController(int reqId, BaseFragment fragment, DialogInterface dialog) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
-        try {
-            dialog.dismiss();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
         if (fragment != null) {
             fragment.setVisibleDialog(null);
         }
@@ -10506,7 +10491,7 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (chat != null) {
                 openChatOrProfileWith(null, chat, fragment, 1, false);
             } else if (fragment.getParentActivity() != null) {
-                AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(fragment.getParentActivity(), 1)};
+                AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(fragment.getParentActivity(), 3)};
                 TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                 req.username = username;
                 AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$146(this, progressDialog, ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$145(this, progressDialog, fragment, type)), fragment), 500);
@@ -10546,20 +10531,12 @@ public class MessagesController implements NotificationCenterDelegate {
 
     final /* synthetic */ void lambda$openByUserName$241$MessagesController(AlertDialog[] progressDialog, int reqId, BaseFragment fragment) {
         if (progressDialog[0] != null) {
-            progressDialog[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
-            progressDialog[0].setCanceledOnTouchOutside(false);
-            progressDialog[0].setCancelable(false);
-            progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new MessagesController$$Lambda$147(this, reqId));
+            progressDialog[0].setOnCancelListener(new MessagesController$$Lambda$147(this, reqId));
             fragment.showDialog(progressDialog[0]);
         }
     }
 
-    final /* synthetic */ void lambda$null$240$MessagesController(int reqId, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$null$240$MessagesController(int reqId, DialogInterface dialog) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
-        try {
-            dialog.dismiss();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
     }
 }

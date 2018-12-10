@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.BitmapFactory;
@@ -175,7 +174,7 @@ public class Browser {
             if (tryTelegraph) {
                 try {
                     if (uri.getHost().toLowerCase().equals("telegra.ph") || uri.toString().toLowerCase().contains("telegram.org/faq")) {
-                        AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context, 1)};
+                        AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context, 3)};
                         TLObject req = new TL_messages_getWebPagePreview();
                         req.message = uri.toString();
                         AndroidUtilities.runOnUIThread(new Browser$$Lambda$1(progressDialog, ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new Browser$$Lambda$0(progressDialog, currentAccount, uri, context, allowCustom))), 1000);
@@ -290,22 +289,10 @@ public class Browser {
     static final /* synthetic */ void lambda$openUrl$3$Browser(AlertDialog[] progressDialog, int reqId) {
         if (progressDialog[0] != null) {
             try {
-                progressDialog[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
-                progressDialog[0].setCanceledOnTouchOutside(false);
-                progressDialog[0].setCancelable(false);
-                progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new Browser$$Lambda$2(reqId));
+                progressDialog[0].setOnCancelListener(new Browser$$Lambda$2(reqId));
                 progressDialog[0].show();
             } catch (Exception e) {
             }
-        }
-    }
-
-    static final /* synthetic */ void lambda$null$2$Browser(int reqId, DialogInterface dialog, int which) {
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).cancelRequest(reqId, true);
-        try {
-            dialog.dismiss();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
         }
     }
 

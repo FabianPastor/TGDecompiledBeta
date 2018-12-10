@@ -174,20 +174,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         ChannelCreateActivity.this.donePressed = true;
                         if (ChannelCreateActivity.this.imageUpdater.uploadingImage != null) {
                             ChannelCreateActivity.this.createAfterUpload = true;
-                            ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 1);
-                            ChannelCreateActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                            ChannelCreateActivity.this.progressDialog.setCanceledOnTouchOutside(false);
-                            ChannelCreateActivity.this.progressDialog.setCancelable(false);
-                            ChannelCreateActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new ChannelCreateActivity$1$$Lambda$0(this));
+                            ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 3);
+                            ChannelCreateActivity.this.progressDialog.setOnCancelListener(new ChannelCreateActivity$1$$Lambda$0(this));
                             ChannelCreateActivity.this.progressDialog.show();
                             return;
                         }
                         int reqId = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, ChannelCreateActivity.this);
-                        ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 1);
-                        ChannelCreateActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                        ChannelCreateActivity.this.progressDialog.setCanceledOnTouchOutside(false);
-                        ChannelCreateActivity.this.progressDialog.setCancelable(false);
-                        ChannelCreateActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new ChannelCreateActivity$1$$Lambda$1(this, reqId));
+                        ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 3);
+                        ChannelCreateActivity.this.progressDialog.setOnCancelListener(new ChannelCreateActivity$1$$Lambda$1(this, reqId));
                         ChannelCreateActivity.this.progressDialog.show();
                     }
                 } else if (ChannelCreateActivity.this.currentStep == 1) {
@@ -219,25 +213,15 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
         }
 
-        final /* synthetic */ void lambda$onItemClick$0$ChannelCreateActivity$1(DialogInterface dialog, int which) {
+        final /* synthetic */ void lambda$onItemClick$0$ChannelCreateActivity$1(DialogInterface dialog) {
             ChannelCreateActivity.this.createAfterUpload = false;
             ChannelCreateActivity.this.progressDialog = null;
             ChannelCreateActivity.this.donePressed = false;
-            try {
-                dialog.dismiss();
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
         }
 
-        final /* synthetic */ void lambda$onItemClick$1$ChannelCreateActivity$1(int reqId, DialogInterface dialog, int which) {
+        final /* synthetic */ void lambda$onItemClick$1$ChannelCreateActivity$1(int reqId, DialogInterface dialog) {
             ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).cancelRequest(reqId, true);
             ChannelCreateActivity.this.donePressed = false;
-            try {
-                dialog.dismiss();
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
         }
     }
 

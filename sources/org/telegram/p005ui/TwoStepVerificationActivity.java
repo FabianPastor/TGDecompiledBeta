@@ -381,8 +381,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
-        this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+        this.progressView.setAlpha(0.0f);
+        this.progressView.setScaleX(0.1f);
+        this.progressView.setScaleY(0.1f);
         this.progressView.setVisibility(4);
+        this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.scrollView = new ScrollView(context);
         this.scrollView.setFillViewport(true);
         frameLayout.addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
@@ -1049,10 +1052,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     private void needShowProgress() {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
-            this.progressDialog = new AlertDialog(getParentActivity(), 1);
-            this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-            this.progressDialog.setCanceledOnTouchOutside(false);
-            this.progressDialog.setCancelable(false);
+            this.progressDialog = new AlertDialog(getParentActivity(), 3);
+            this.progressDialog.setCanCacnel(false);
             this.progressDialog.show();
         }
     }
@@ -1168,9 +1169,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 newPasswordHash = null;
             }
         }
-        RequestDelegate twoStepVerificationActivity$$Lambda$25 = new TwoStepVerificationActivity$$Lambda$25(this, clear, newPasswordHash, req);
+        RequestDelegate requestDelegate = new TwoStepVerificationActivity$$Lambda$25(this, clear, newPasswordHash, req, password);
         if (clear) {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, twoStepVerificationActivity$$Lambda$25, 10);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, requestDelegate, 10);
             return;
         }
         if (password != null && this.currentSecret != null && this.currentSecret.length == 32 && (this.currentPassword.new_secure_algo instanceof TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000)) {
@@ -1198,22 +1199,22 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 if (req.new_settings.new_password_hash == null) {
                     error = new TL_error();
                     error.text = "ALGO_INVALID";
-                    twoStepVerificationActivity$$Lambda$25.run(null, error);
+                    requestDelegate.run(null, error);
                 }
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, twoStepVerificationActivity$$Lambda$25, 10);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, requestDelegate, 10);
             return;
         }
         error = new TL_error();
         error.text = "PASSWORD_HASH_INVALID";
-        twoStepVerificationActivity$$Lambda$25.run(null, error);
+        requestDelegate.run(null, error);
     }
 
-    final /* synthetic */ void lambda$null$24$TwoStepVerificationActivity(boolean clear, byte[] newPasswordHash, TL_account_updatePasswordSettings req, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$26(this, error, clear, response, newPasswordHash, req));
+    final /* synthetic */ void lambda$null$24$TwoStepVerificationActivity(boolean clear, byte[] newPasswordHash, TL_account_updatePasswordSettings req, String password, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationActivity$$Lambda$26(this, error, clear, response, newPasswordHash, req, password));
     }
 
-    final /* synthetic */ void lambda$null$23$TwoStepVerificationActivity(TL_error error, boolean clear, TLObject response, byte[] newPasswordHash, TL_account_updatePasswordSettings req) {
+    final /* synthetic */ void lambda$null$23$TwoStepVerificationActivity(TL_error error, boolean clear, TLObject response, byte[] newPasswordHash, TL_account_updatePasswordSettings req, String password) {
         if (error == null || !"SRP_ID_INVALID".equals(error.text)) {
             needHideProgress();
             Builder builder;
@@ -1229,10 +1230,10 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 } else if (getParentActivity() != null) {
                     builder = new Builder(getParentActivity());
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new TwoStepVerificationActivity$$Lambda$28(this, newPasswordHash, req));
-                    if (this.currentPassword == null || !this.currentPassword.has_password) {
-                        builder.setMessage(LocaleController.getString("YourPasswordSuccessText", R.string.YourPasswordSuccessText));
-                    } else {
+                    if (password == null && this.currentPassword != null && this.currentPassword.has_password) {
                         builder.setMessage(LocaleController.getString("YourEmailSuccessText", R.string.YourEmailSuccessText));
+                    } else {
+                        builder.setMessage(LocaleController.getString("YourPasswordSuccessText", R.string.YourPasswordSuccessText));
                     }
                     builder.setTitle(LocaleController.getString("YourPasswordSuccess", R.string.YourPasswordSuccess));
                     dialog = showDialog(builder.create());

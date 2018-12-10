@@ -39,6 +39,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
+import org.telegram.p005ui.ActionBar.ActionBarMenu;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet.Builder;
@@ -161,11 +162,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                 ChannelEditActivity.this.donePressed = true;
                 if (ChannelEditActivity.this.imageUpdater.uploadingImage != null) {
                     ChannelEditActivity.this.createAfterUpload = true;
-                    ChannelEditActivity.this.progressDialog = new AlertDialog(ChannelEditActivity.this.getParentActivity(), 1);
-                    ChannelEditActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                    ChannelEditActivity.this.progressDialog.setCanceledOnTouchOutside(false);
-                    ChannelEditActivity.this.progressDialog.setCancelable(false);
-                    ChannelEditActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new ChannelEditActivity$1$$Lambda$0(this));
+                    ChannelEditActivity.this.progressDialog = new AlertDialog(ChannelEditActivity.this.getParentActivity(), 3);
+                    ChannelEditActivity.this.progressDialog.setOnCancelListener(new ChannelEditActivity$1$$Lambda$0(this));
                     ChannelEditActivity.this.progressDialog.show();
                     return;
                 }
@@ -180,7 +178,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                 if (!ChannelEditActivity.this.currentChat.title.equals(ChannelEditActivity.this.nameTextView.getText().toString())) {
                     MessagesController.getInstance(ChannelEditActivity.this.currentAccount).changeChatTitle(ChannelEditActivity.this.chatId, ChannelEditActivity.this.nameTextView.getText().toString());
                 }
-                if (!(ChannelEditActivity.this.info == null || ChannelEditActivity.this.info.about.equals(ChannelEditActivity.this.descriptionTextView.getText().toString()))) {
+                if (!(ChannelEditActivity.this.descriptionTextView == null || ChannelEditActivity.this.info == null || ChannelEditActivity.this.info.about.equals(ChannelEditActivity.this.descriptionTextView.getText().toString()))) {
                     MessagesController.getInstance(ChannelEditActivity.this.currentAccount).updateChannelAbout(ChannelEditActivity.this.chatId, ChannelEditActivity.this.descriptionTextView.getText().toString(), ChannelEditActivity.this.info);
                 }
                 if (ChannelEditActivity.this.signMessages != ChannelEditActivity.this.currentChat.signatures) {
@@ -196,15 +194,10 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        final /* synthetic */ void lambda$onItemClick$0$ChannelEditActivity$1(DialogInterface dialog, int which) {
+        final /* synthetic */ void lambda$onItemClick$0$ChannelEditActivity$1(DialogInterface dialog) {
             ChannelEditActivity.this.createAfterUpload = false;
             ChannelEditActivity.this.progressDialog = null;
             ChannelEditActivity.this.donePressed = false;
-            try {
-                dialog.dismiss();
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
         }
     }
 
@@ -297,7 +290,10 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
+        ActionBarMenu menu = this.actionBar.createMenu();
+        if (ChatObject.canChangeChatInfo(this.currentChat)) {
+            this.doneButton = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
+        }
         View CLASSNAME = new SizeNotifierFrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -396,7 +392,6 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         this.avatarContainer.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
         this.avatarImage = new BackupImageView(context);
         this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(32.0f));
-        this.avatarDrawable.setInfo(5, null, null, false);
         View view = this.avatarImage;
         int i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
@@ -410,33 +405,27 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
             f2 = 0.0f;
         }
         frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
-        Paint paint = new Paint(1);
-        paint.setColor(NUM);
-        final Paint paint2 = paint;
-        ImageView avatarEditor = new ImageView(context) {
-            protected void onDraw(Canvas canvas) {
-                if (ChannelEditActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
-                    paint2.setAlpha((int) (85.0f * ChannelEditActivity.this.avatarImage.getImageReceiver().getCurrentAlpha()));
-                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(32.0f), paint2);
+        if (ChatObject.canChangeChatInfo(this.currentChat)) {
+            this.avatarDrawable.setInfo(5, null, null, false);
+            Paint paint = new Paint(1);
+            paint.setColor(NUM);
+            final Paint paint2 = paint;
+            ImageView avatarEditor = new ImageView(context) {
+                protected void onDraw(Canvas canvas) {
+                    if (ChannelEditActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
+                        paint2.setAlpha((int) (85.0f * ChannelEditActivity.this.avatarImage.getImageReceiver().getCurrentAlpha()));
+                        canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(32.0f), paint2);
+                    }
+                    super.onDraw(canvas);
                 }
-                super.onDraw(canvas);
-            }
-        };
-        avatarEditor.setImageResource(R.drawable.menu_camera_av);
-        avatarEditor.setScaleType(ScaleType.CENTER);
-        i = (LocaleController.isRTL ? 5 : 3) | 48;
-        if (LocaleController.isRTL) {
-            f = 0.0f;
+            };
+            avatarEditor.setImageResource(R.drawable.menu_camera_av);
+            avatarEditor.setScaleType(ScaleType.CENTER);
+            frameLayout.addView(avatarEditor, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
+            avatarEditor.setOnClickListener(new ChannelEditActivity$$Lambda$2(this));
         } else {
-            f = 16.0f;
+            this.avatarDrawable.setInfo(5, this.currentChat.title, null, false);
         }
-        if (LocaleController.isRTL) {
-            f2 = 16.0f;
-        } else {
-            f2 = 0.0f;
-        }
-        frameLayout.addView(avatarEditor, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
-        avatarEditor.setOnClickListener(new ChannelEditActivity$$Lambda$2(this));
         this.nameTextView = new EditTextEmoji((Activity) context, CLASSNAME, this);
         if (this.currentChat.megagroup) {
             this.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));

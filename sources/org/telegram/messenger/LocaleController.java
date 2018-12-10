@@ -85,6 +85,7 @@ public class LocaleController {
     private ArrayList<LocaleInfo> otherLanguages = new ArrayList();
     private boolean reloadLastFile;
     public ArrayList<LocaleInfo> remoteLanguages = new ArrayList();
+    public HashMap<String, LocaleInfo> remoteLanguagesDict = new HashMap();
     private Locale systemDefaultLocale;
     private HashMap<String, String> translitChars;
     public ArrayList<LocaleInfo> unofficialLanguages = new ArrayList();
@@ -1036,6 +1037,7 @@ public class LocaleController {
         }
         this.unofficialLanguages.remove(localeInfo);
         this.remoteLanguages.remove(localeInfo);
+        this.remoteLanguagesDict.remove(localeInfo.getKey());
         this.otherLanguages.remove(localeInfo);
         this.languages.remove(localeInfo);
         this.languagesDict.remove(localeInfo.getKey());
@@ -1063,8 +1065,9 @@ public class LocaleController {
             for (String locale2 : locales.split("&")) {
                 localeInfo = LocaleInfo.createWithString(locale2);
                 localeInfo.shortName = localeInfo.shortName.replace("-", "_");
-                if (localeInfo != null) {
+                if (!(this.remoteLanguagesDict.containsKey(localeInfo.getKey()) || localeInfo == null)) {
                     this.remoteLanguages.add(localeInfo);
+                    this.remoteLanguagesDict.put(localeInfo.getKey(), localeInfo);
                 }
             }
         }
@@ -1220,6 +1223,7 @@ public class LocaleController {
             if (getLanguageFromDict(localeInfo.getKey()) == null) {
                 if (localeInfo.isRemote()) {
                     this.remoteLanguages.add(localeInfo);
+                    this.remoteLanguagesDict.put(localeInfo.getKey(), localeInfo);
                     this.languages.add(localeInfo);
                     this.languagesDict.put(localeInfo.getKey(), localeInfo);
                     saveOtherLanguages();
@@ -2486,7 +2490,6 @@ public class LocaleController {
             if (existing == null) {
                 this.languages.add(localeInfo);
                 this.languagesDict.put(localeInfo.getKey(), localeInfo);
-                this.remoteLanguages.add(localeInfo);
             } else {
                 existing.nameEnglish = localeInfo.nameEnglish;
                 existing.name = localeInfo.name;
@@ -2494,9 +2497,11 @@ public class LocaleController {
                 existing.pluralLangCode = localeInfo.pluralLangCode;
                 existing.pathToFile = localeInfo.pathToFile;
                 existing.serverIndex = localeInfo.serverIndex;
-                if (!this.remoteLanguages.contains(existing)) {
-                    this.remoteLanguages.add(localeInfo);
-                }
+                localeInfo = existing;
+            }
+            if (!this.remoteLanguagesDict.containsKey(localeInfo.getKey())) {
+                this.remoteLanguages.add(localeInfo);
+                this.remoteLanguagesDict.put(localeInfo.getKey(), localeInfo);
             }
         }
         a = 0;
@@ -2507,6 +2512,7 @@ public class LocaleController {
                     FileLog.m10d("remove lang " + info.getKey());
                 }
                 this.remoteLanguages.remove(a);
+                this.remoteLanguagesDict.remove(info.getKey());
                 this.languages.remove(info);
                 this.languagesDict.remove(info.getKey());
                 a--;

@@ -788,27 +788,27 @@ public class TableLayout extends View {
                 } else {
                     this.textY = TableLayout.this.itemPaddingTop;
                 }
-                if (!(first || this.textLayout == null || this.textLayout.getLineCount() <= 0)) {
-                    setTextLayout(TableLayout.this.delegate.createTextLayout(this.cell, this.measuredWidth - (TableLayout.this.itemPaddingLeft * 2)));
-                    this.fixedHeight = this.textHeight + (TableLayout.this.itemPaddingTop * 2);
-                }
-                if (this.textLayout == null) {
-                    return;
-                }
-                if (this.textLeft != 0) {
-                    this.textX = -this.textLeft;
-                    if (this.cell.align_right) {
-                        this.textX += (this.measuredWidth - this.textWidth) - TableLayout.this.itemPaddingLeft;
-                        return;
-                    } else if (this.cell.align_center) {
-                        this.textX += Math.round((float) ((this.measuredWidth - this.textWidth) / 2));
-                        return;
-                    } else {
-                        this.textX += TableLayout.this.itemPaddingLeft;
-                        return;
+                if (this.textLayout != null) {
+                    int lineCount = this.textLayout.getLineCount();
+                    if (!first && (lineCount > 1 || (lineCount > 0 && (this.cell.align_center || this.cell.align_right)))) {
+                        setTextLayout(TableLayout.this.delegate.createTextLayout(this.cell, this.measuredWidth - (TableLayout.this.itemPaddingLeft * 2)));
+                        this.fixedHeight = this.textHeight + (TableLayout.this.itemPaddingTop * 2);
                     }
+                    if (this.textLeft != 0) {
+                        this.textX = -this.textLeft;
+                        if (this.cell.align_right) {
+                            this.textX += (this.measuredWidth - this.textWidth) - TableLayout.this.itemPaddingLeft;
+                            return;
+                        } else if (this.cell.align_center) {
+                            this.textX += Math.round((float) ((this.measuredWidth - this.textWidth) / 2));
+                            return;
+                        } else {
+                            this.textX += TableLayout.this.itemPaddingLeft;
+                            return;
+                        }
+                    }
+                    this.textX = TableLayout.this.itemPaddingLeft;
                 }
-                this.textX = TableLayout.this.itemPaddingLeft;
             }
         }
 

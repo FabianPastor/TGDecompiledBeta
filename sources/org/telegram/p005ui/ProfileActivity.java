@@ -3043,15 +3043,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     if (this.currentChat.megagroup && (((this.currentChat.admin_rights != null && this.currentChat.admin_rights.invite_users) || this.currentChat.creator || this.currentChat.democracy) && (this.chatInfo == null || this.chatInfo.participants_count < MessagesController.getInstance(this.currentAccount).maxMegagroupCount))) {
                         this.addItem = menu.addItem(18, (int) R.drawable.group_addmember);
                     }
-                    if (ChatObject.hasAdminRights(chat)) {
+                    if ((chat.megagroup && ChatObject.hasAdminRights(chat)) || (!chat.megagroup && ChatObject.canChangeChatInfo(chat))) {
                         this.editItem = menu.addItem(12, (int) R.drawable.menu_settings_filled);
                         if (null == null) {
                             item = menu.addItem(10, (int) R.drawable.ic_ab_other);
-                        }
-                        if (chat.megagroup) {
-                            item.addSubItem(12, LocaleController.getString("ManageGroupMenu", R.string.ManageGroupMenu));
-                        } else {
-                            item.addSubItem(12, LocaleController.getString("ManageChannelMenu", R.string.ManageChannelMenu));
                         }
                     }
                     if (chat.megagroup) {

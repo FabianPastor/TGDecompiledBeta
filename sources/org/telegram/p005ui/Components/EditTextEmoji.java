@@ -223,6 +223,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
 
     final /* synthetic */ void lambda$new$0$EditTextEmoji(View view) {
         boolean z = true;
+        if (!this.emojiButton.isEnabled()) {
+            return;
+        }
         if (isPopupShowing()) {
             openKeyboardInternal();
             return;
@@ -239,6 +242,27 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
         if (id == NotificationCenter.emojiDidLoad && this.emojiView != null) {
             this.emojiView.invalidateViews();
         }
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.editText.setEnabled(enabled);
+        this.emojiButton.setVisibility(enabled ? 0 : 8);
+        if (enabled) {
+            int dp;
+            EditTextBoldCursor editTextBoldCursor = this.editText;
+            if (LocaleController.isRTL) {
+                dp = AndroidUtilities.m9dp(40.0f);
+            } else {
+                dp = 0;
+            }
+            editTextBoldCursor.setPadding(dp, 0, LocaleController.isRTL ? 0 : AndroidUtilities.m9dp(40.0f), AndroidUtilities.m9dp(8.0f));
+            return;
+        }
+        this.editText.setPadding(0, 0, 0, AndroidUtilities.m9dp(8.0f));
+    }
+
+    public void setFocusable(boolean focusable) {
+        this.editText.setFocusable(focusable);
     }
 
     public void setDelegate(EditTextEmojiDelegate editTextEmojiDelegate) {

@@ -1,22 +1,19 @@
 package org.telegram.p005ui;
 
+import android.view.KeyEvent;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import org.telegram.p005ui.CancelAccountDeletionActivity.LoginActivitySmsView;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
-import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$3 */
-final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$3 implements RequestDelegate {
+final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$3 implements OnEditorActionListener {
     private final LoginActivitySmsView arg$1;
-    private final TL_account_confirmPhone arg$2;
 
-    CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$3(LoginActivitySmsView loginActivitySmsView, TL_account_confirmPhone tL_account_confirmPhone) {
+    CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$3(LoginActivitySmsView loginActivitySmsView) {
         this.arg$1 = loginActivitySmsView;
-        this.arg$2 = tL_account_confirmPhone;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.mo15857x13a210d9(this.arg$2, tLObject, tL_error);
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.arg$1.mo15854x90f7b9c2(textView, i, keyEvent);
     }
 }

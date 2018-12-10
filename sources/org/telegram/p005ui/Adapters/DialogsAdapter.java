@@ -244,18 +244,26 @@ public class DialogsAdapter extends SelectionAdapter {
         int i2 = 1;
         switch (holder.getItemViewType()) {
             case 0:
+                boolean z;
                 DialogCell cell = holder.itemView;
                 TL_dialog dialog = (TL_dialog) getItem(i);
+                TL_dialog nextDialog = (TL_dialog) getItem(i + 1);
                 if (this.hasHints) {
                     i -= MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
                 }
                 cell.useSeparator = i != getItemCount() + -1;
+                if (!dialog.pinned || nextDialog == null || nextDialog.pinned) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                cell.fullSeparator = z;
                 if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
-                    boolean z;
+                    boolean z2;
                     if (dialog.f128id != this.openedDialogId) {
-                        z = false;
+                        z2 = false;
                     }
-                    cell.setDialogSelected(z);
+                    cell.setDialogSelected(z2);
                 }
                 if (this.selectedDialogs != null) {
                     cell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialog.f128id)), false);

@@ -2995,8 +2995,23 @@ public class MessageObject {
         return hasUrls2;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x03fa A:{Catch:{ Exception -> 0x0477 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x042f  */
+    public int getMaxMessageTextWidth(User fromUser) {
+        boolean needShare = this.eventId == 0 && !isOutOwner() && (!(this.messageOwner.fwd_from == null || (this.messageOwner.fwd_from.saved_from_peer == null && this.messageOwner.fwd_from.from_id == 0 && this.messageOwner.fwd_from.channel_id == 0)) || (this.messageOwner.from_id > 0 && (this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice))));
+        this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
+        int i = this.generatedWithMinSize;
+        float f = (needShare || this.eventId != 0) ? 132.0f : 80.0f;
+        int maxWidth = i - AndroidUtilities.m9dp(f);
+        if ((fromUser != null && fromUser.bot) || ((isMegagroup() || !(this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.channel_id == 0)) && !isOut())) {
+            maxWidth -= AndroidUtilities.m9dp(20.0f);
+        }
+        if (this.messageOwner.media instanceof TL_messageMediaGame) {
+            return maxWidth - AndroidUtilities.m9dp(10.0f);
+        }
+        return maxWidth;
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0324 A:{Catch:{ Exception -> 0x03a1 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0359  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void generateLayout(User fromUser) {
         if (this.type == 0 && this.messageOwner.to_id != null && !TextUtils.isEmpty(this.messageText)) {
@@ -3028,17 +3043,7 @@ public class MessageObject {
                 }
             }
             boolean hasUrls = addEntitiesToText(this.messageText, useManualParse);
-            boolean needShare = this.eventId == 0 && !isOutOwner() && (!(this.messageOwner.fwd_from == null || (this.messageOwner.fwd_from.saved_from_peer == null && this.messageOwner.fwd_from.from_id == 0 && this.messageOwner.fwd_from.channel_id == 0)) || (this.messageOwner.from_id > 0 && (this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice))));
-            this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
-            int i = this.generatedWithMinSize;
-            float f = (needShare || this.eventId != 0) ? 132.0f : 80.0f;
-            int maxWidth = i - AndroidUtilities.m9dp(f);
-            if ((fromUser != null && fromUser.bot) || ((isMegagroup() || !(this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.channel_id == 0)) && !isOut())) {
-                maxWidth -= AndroidUtilities.m9dp(20.0f);
-            }
-            if (this.messageOwner.media instanceof TL_messageMediaGame) {
-                maxWidth -= AndroidUtilities.m9dp(10.0f);
-            }
+            int maxWidth = getMaxMessageTextWidth(fromUser);
             if (this.messageOwner.media instanceof TL_messageMediaGame) {
                 paint = Theme.chat_msgGameTextPaint;
             } else {
@@ -4087,8 +4092,16 @@ public class MessageObject {
         return isMediaEmpty(this.messageOwner);
     }
 
+    public boolean isMediaEmptyWebpage() {
+        return isMediaEmptyWebpage(this.messageOwner);
+    }
+
     public static boolean isMediaEmpty(Message message) {
         return message == null || message.media == null || (message.media instanceof TL_messageMediaEmpty) || (message.media instanceof TL_messageMediaWebPage);
+    }
+
+    public static boolean isMediaEmptyWebpage(Message message) {
+        return message == null || message.media == null || (message.media instanceof TL_messageMediaEmpty);
     }
 
     public boolean canEditMessage(Chat chat) {

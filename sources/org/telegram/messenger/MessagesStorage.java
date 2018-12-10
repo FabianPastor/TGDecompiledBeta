@@ -1893,7 +1893,6 @@ public class MessagesStorage {
             this.database.executeFast("DELETE FROM dialogs WHERE did IN " + ids).stepThis().dispose();
             this.database.executeFast("DELETE FROM messages WHERE uid IN " + ids).stepThis().dispose();
             this.database.executeFast("DELETE FROM bot_keyboard WHERE uid IN " + ids).stepThis().dispose();
-            this.database.executeFast("DELETE FROM media_counts_v2 WHERE uid IN " + ids).stepThis().dispose();
             this.database.executeFast("DELETE FROM media_v2 WHERE uid IN " + ids).stepThis().dispose();
             this.database.executeFast("DELETE FROM messages_holes WHERE uid IN " + ids).stepThis().dispose();
             this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid IN " + ids).stepThis().dispose();

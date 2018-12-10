@@ -65,6 +65,7 @@ public class BottomSheet extends Dialog {
     private boolean dismissed;
     private boolean focusable;
     protected boolean fullWidth;
+    protected boolean fullscreen;
     private int[] itemIcons;
     private ArrayList<BottomSheetCell> itemViews = new ArrayList();
     private CharSequence[] items;
@@ -291,6 +292,11 @@ public class BottomSheet extends Dialog {
 
         public BottomSheet setUseFullWidth(boolean value) {
             this.bottomSheet.fullWidth = value;
+            return this.bottomSheet;
+        }
+
+        public BottomSheet setUseFullscreen(boolean value) {
+            this.bottomSheet.fullscreen = value;
             return this.bottomSheet;
         }
     }
@@ -751,6 +757,12 @@ public class BottomSheet extends Dialog {
         params.flags &= -3;
         if (!this.focusable) {
             params.flags |= 131072;
+        }
+        if (this.fullscreen) {
+            if (VERSION.SDK_INT >= 21) {
+                params.flags |= -NUM;
+            }
+            params.flags |= 1024;
         }
         params.height = -1;
         window.setAttributes(params);

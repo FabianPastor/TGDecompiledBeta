@@ -407,28 +407,30 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         public void onViewAttachedToWindow(ViewHolder holder) {
-            boolean enabled = NotificationsController.getInstance(NotificationsCustomSettingsActivity.this.currentAccount).isGlobalNotificationsEnabled(NotificationsCustomSettingsActivity.this.currentType);
-            switch (holder.getItemViewType()) {
-                case 0:
-                    HeaderCell headerCell = holder.itemView;
-                    if (holder.getAdapterPosition() == NotificationsCustomSettingsActivity.this.messageSectionRow) {
-                        headerCell.setEnabled(enabled, null);
+            if (NotificationsCustomSettingsActivity.this.exceptions.isEmpty()) {
+                boolean enabled = NotificationsController.getInstance(NotificationsCustomSettingsActivity.this.currentAccount).isGlobalNotificationsEnabled(NotificationsCustomSettingsActivity.this.currentType);
+                switch (holder.getItemViewType()) {
+                    case 0:
+                        HeaderCell headerCell = holder.itemView;
+                        if (holder.getAdapterPosition() == NotificationsCustomSettingsActivity.this.messageSectionRow) {
+                            headerCell.setEnabled(enabled, null);
+                            return;
+                        } else {
+                            headerCell.setEnabled(true, null);
+                            return;
+                        }
+                    case 1:
+                        holder.itemView.setEnabled(enabled, null);
                         return;
-                    } else {
-                        headerCell.setEnabled(true, null);
+                    case 3:
+                        holder.itemView.setEnabled(enabled, null);
                         return;
-                    }
-                case 1:
-                    holder.itemView.setEnabled(enabled, null);
-                    return;
-                case 3:
-                    holder.itemView.setEnabled(enabled, null);
-                    return;
-                case 5:
-                    holder.itemView.setEnabled(enabled, null);
-                    return;
-                default:
-                    return;
+                    case 5:
+                        holder.itemView.setEnabled(enabled, null);
+                        return;
+                    default:
+                        return;
+                }
             }
         }
 
@@ -839,6 +841,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 this.listView.getAdapter().notifyItemRemoved(this.exceptionsSectionRow);
             }
             updateRows();
+            checkRowsEnabled();
             return;
         }
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
@@ -908,41 +911,43 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     private void checkRowsEnabled() {
-        int count = this.listView.getChildCount();
-        ArrayList<Animator> animators = new ArrayList();
-        boolean enabled = NotificationsController.getInstance(this.currentAccount).isGlobalNotificationsEnabled(this.currentType);
-        for (int a = 0; a < count; a++) {
-            Holder holder = (Holder) this.listView.getChildViewHolder(this.listView.getChildAt(a));
-            switch (holder.getItemViewType()) {
-                case 0:
-                    HeaderCell headerCell = holder.itemView;
-                    if (holder.getAdapterPosition() != this.messageSectionRow) {
+        if (this.exceptions.isEmpty()) {
+            int count = this.listView.getChildCount();
+            ArrayList<Animator> animators = new ArrayList();
+            boolean enabled = NotificationsController.getInstance(this.currentAccount).isGlobalNotificationsEnabled(this.currentType);
+            for (int a = 0; a < count; a++) {
+                Holder holder = (Holder) this.listView.getChildViewHolder(this.listView.getChildAt(a));
+                switch (holder.getItemViewType()) {
+                    case 0:
+                        HeaderCell headerCell = holder.itemView;
+                        if (holder.getAdapterPosition() != this.messageSectionRow) {
+                            break;
+                        }
+                        headerCell.setEnabled(enabled, animators);
                         break;
-                    }
-                    headerCell.setEnabled(enabled, animators);
-                    break;
-                case 1:
-                    holder.itemView.setEnabled(enabled, animators);
-                    break;
-                case 3:
-                    holder.itemView.setEnabled(enabled, animators);
-                    break;
-                case 5:
-                    holder.itemView.setEnabled(enabled, animators);
-                    break;
-                default:
-                    break;
+                    case 1:
+                        holder.itemView.setEnabled(enabled, animators);
+                        break;
+                    case 3:
+                        holder.itemView.setEnabled(enabled, animators);
+                        break;
+                    case 5:
+                        holder.itemView.setEnabled(enabled, animators);
+                        break;
+                    default:
+                        break;
+                }
             }
-        }
-        if (!animators.isEmpty()) {
-            if (this.animatorSet != null) {
-                this.animatorSet.cancel();
+            if (!animators.isEmpty()) {
+                if (this.animatorSet != null) {
+                    this.animatorSet.cancel();
+                }
+                this.animatorSet = new AnimatorSet();
+                this.animatorSet.playTogether(animators);
+                this.animatorSet.addListener(new CLASSNAME());
+                this.animatorSet.setDuration(150);
+                this.animatorSet.start();
             }
-            this.animatorSet = new AnimatorSet();
-            this.animatorSet.playTogether(animators);
-            this.animatorSet.addListener(new CLASSNAME());
-            this.animatorSet.setDuration(150);
-            this.animatorSet.start();
         }
     }
 

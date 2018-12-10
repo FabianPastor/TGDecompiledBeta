@@ -480,6 +480,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.floatingButtonIcon.setImageResource(R.drawable.checkbig);
         this.floatingButtonContainer.addView(this.floatingButtonIcon, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f));
         this.progressView = new ContextProgressView(context, 1);
+        this.progressView.setAlpha(0.0f);
+        this.progressView.setScaleX(0.1f);
+        this.progressView.setScaleY(0.1f);
         this.progressView.setVisibility(4);
         this.floatingButtonContainer.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         return this.fragmentView;

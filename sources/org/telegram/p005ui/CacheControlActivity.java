@@ -248,10 +248,8 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     private void cleanupFolders() {
-        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-        progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
+        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+        progressDialog.setCanCacnel(false);
         progressDialog.show();
         Utilities.globalQueue.postRunnable(new CacheControlActivity$$Lambda$1(this, progressDialog));
     }
@@ -430,10 +428,8 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     final /* synthetic */ void lambda$null$7$CacheControlActivity(DialogInterface dialogInterface, int i) {
-        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-        progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
+        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+        progressDialog.setCanCacnel(false);
         progressDialog.show();
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new CacheControlActivity$$Lambda$7(this, progressDialog));
     }

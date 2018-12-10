@@ -1,9 +1,9 @@
 package org.telegram.messenger;
 
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnCancelListener;
 
-final /* synthetic */ class MessagesController$$Lambda$95 implements OnClickListener {
+final /* synthetic */ class MessagesController$$Lambda$95 implements OnCancelListener {
     private final MessagesController arg$1;
     private final int arg$2;
 
@@ -12,7 +12,7 @@ final /* synthetic */ class MessagesController$$Lambda$95 implements OnClickList
         this.arg$2 = i;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$convertToMegaGroup$144$MessagesController(this.arg$2, dialogInterface, i);
+    public void onCancel(DialogInterface dialogInterface) {
+        this.arg$1.lambda$convertToMegaGroup$144$MessagesController(this.arg$2, dialogInterface);
     }
 }

@@ -3240,6 +3240,40 @@ public class ImageLoader {
         runHttpFileLoadTasks(null, 0);
     }
 
+    public static boolean shouldSendImageAsDocument(String path, Uri uri) {
+        Options bmOptions = new Options();
+        bmOptions.inJustDecodeBounds = true;
+        if (!(path != null || uri == null || uri.getScheme() == null)) {
+            if (uri.getScheme().contains("file")) {
+                path = uri.getPath();
+            } else {
+                try {
+                    path = AndroidUtilities.getPath(uri);
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
+                }
+            }
+        }
+        if (path != null) {
+            BitmapFactory.decodeFile(path, bmOptions);
+        } else if (uri != null) {
+            try {
+                InputStream inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
+                BitmapFactory.decodeStream(inputStream, null, bmOptions);
+                inputStream.close();
+            } catch (Throwable e2) {
+                FileLog.m13e(e2);
+                return false;
+            }
+        }
+        float photoW = (float) bmOptions.outWidth;
+        float photoH = (float) bmOptions.outHeight;
+        if (photoW / photoH > 10.0f || photoH / photoW > 10.0f) {
+            return true;
+        }
+        return false;
+    }
+
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Bitmap loadBitmap(String path, Uri uri, float maxWidth, float maxHeight, boolean useMaxScale) {
         float scaleFactor;

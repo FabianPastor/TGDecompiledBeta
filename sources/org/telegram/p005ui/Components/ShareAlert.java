@@ -698,6 +698,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         super(context, true);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
+        this.fullscreen = fullScreen;
         this.linkToCopy = copyLink;
         this.sendingMessageObjects = messages;
         this.searchAdapter = new ShareSearchAdapter(context);
@@ -724,6 +725,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 }
             });
         }
+        final boolean z = fullScreen;
         this.containerView = new FrameLayout(context) {
             private boolean ignoreLayout = false;
 
@@ -742,7 +744,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 float f = 8.0f;
                 int height = MeasureSpec.getSize(heightMeasureSpec);
-                if (VERSION.SDK_INT >= 21) {
+                if (VERSION.SDK_INT >= 21 && !z) {
                     height -= AndroidUtilities.statusBarHeight;
                 }
                 int contentSize = (AndroidUtilities.m9dp(48.0f) + (Math.max(3, (int) Math.ceil((double) (((float) Math.max(ShareAlert.this.searchAdapter.getItemCount(), ShareAlert.this.listAdapter.getItemCount())) / 4.0f))) * AndroidUtilities.m9dp(100.0f))) + ShareAlert.backgroundPaddingTop;
