@@ -134,13 +134,13 @@ public class LoginActivity extends BaseFragment {
     private int currentViewNum;
     private ActionBarMenuItem doneItem;
     private AnimatorSet doneItemAnimation;
+    private ContextProgressView doneProgressView;
     private boolean newAccount;
     private Dialog permissionsDialog;
     private ArrayList<String> permissionsItems;
     private Dialog permissionsShowDialog;
     private ArrayList<String> permissionsShowItems;
     private int progressRequestId;
-    private ContextProgressView progressView;
     private boolean syncContacts;
     private SlideView[] views;
 
@@ -175,7 +175,7 @@ public class LoginActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == 1) {
-                if (LoginActivity.this.progressView.getTag() == null) {
+                if (LoginActivity.this.doneProgressView.getTag() == null) {
                     LoginActivity.this.views[LoginActivity.this.currentViewNum].onNextPressed();
                 } else if (LoginActivity.this.getParentActivity() != null) {
                     Builder builder = new Builder(LoginActivity.this.getParentActivity());
@@ -286,7 +286,7 @@ public class LoginActivity extends BaseFragment {
         }
 
         final /* synthetic */ void lambda$new$4$LoginActivity$LoginActivityPasswordView(View view) {
-            if (LoginActivity.this.progressView.getTag() == null) {
+            if (LoginActivity.this.doneProgressView.getTag() == null) {
                 if (this.has_recovery) {
                     LoginActivity.this.needShowProgress(0);
                     ConnectionsManager.getInstance(LoginActivity.this.currentAccount).sendRequest(new TL_auth_requestPasswordRecovery(), new LoginActivity$LoginActivityPasswordView$$Lambda$12(this), 10);
@@ -337,7 +337,7 @@ public class LoginActivity extends BaseFragment {
         }
 
         final /* synthetic */ void lambda$new$8$LoginActivity$LoginActivityPasswordView(View view) {
-            if (LoginActivity.this.progressView.getTag() == null) {
+            if (LoginActivity.this.doneProgressView.getTag() == null) {
                 Builder builder = new Builder(LoginActivity.this.getParentActivity());
                 builder.setMessage(LocaleController.getString("ResetMyAccountWarningText", R.string.ResetMyAccountWarningText));
                 builder.setTitle(LocaleController.getString("ResetMyAccountWarning", R.string.ResetMyAccountWarning));
@@ -949,7 +949,7 @@ public class LoginActivity extends BaseFragment {
         }
 
         final /* synthetic */ void lambda$new$6$LoginActivity$LoginActivityRegisterView(View view) {
-            if (LoginActivity.this.progressView.getTag() == null) {
+            if (LoginActivity.this.doneProgressView.getTag() == null) {
                 onBackPressed(false);
             }
         }
@@ -1206,7 +1206,7 @@ public class LoginActivity extends BaseFragment {
         }
 
         final /* synthetic */ void lambda$new$3$LoginActivity$LoginActivityResetWaitView(View view) {
-            if (this.this$0.progressView.getTag() == null && Math.abs(ConnectionsManager.getInstance(this.this$0.currentAccount).getCurrentTime() - this.startTime) >= this.waitTime) {
+            if (this.this$0.doneProgressView.getTag() == null && Math.abs(ConnectionsManager.getInstance(this.this$0.currentAccount).getCurrentTime() - this.startTime) >= this.waitTime) {
                 Builder builder = new Builder(this.this$0.getParentActivity());
                 builder.setMessage(LocaleController.getString("ResetMyAccountWarningText", R.string.ResetMyAccountWarningText));
                 builder.setTitle(LocaleController.getString("ResetMyAccountWarning", R.string.ResetMyAccountWarning));
@@ -1553,7 +1553,7 @@ public class LoginActivity extends BaseFragment {
                     } catch (Exception e) {
                         LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
                     }
-                } else if (this.progressView.getTag() == null) {
+                } else if (LoginActivity.this.doneProgressView.getTag() == null) {
                     resendCode();
                 }
             }
@@ -2871,12 +2871,12 @@ public class LoginActivity extends BaseFragment {
         ActionBarMenu menu = this.actionBar.createMenu();
         this.actionBar.setAllowOverlayTitle(true);
         this.doneItem = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
-        this.progressView = new ContextProgressView(context, 1);
-        this.progressView.setAlpha(0.0f);
-        this.progressView.setScaleX(0.1f);
-        this.progressView.setScaleY(0.1f);
-        this.progressView.setVisibility(4);
-        this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+        this.doneProgressView = new ContextProgressView(context, 1);
+        this.doneProgressView.setAlpha(0.0f);
+        this.doneProgressView.setScaleX(0.1f);
+        this.doneProgressView.setScaleY(0.1f);
+        this.doneProgressView.setVisibility(4);
+        this.doneItem.addView(this.doneProgressView, LayoutHelper.createFrame(-1, -1.0f));
         this.fragmentView = new ScrollView(context);
         ScrollView scrollView = this.fragmentView;
         scrollView.setFillViewport(true);
@@ -3148,25 +3148,25 @@ public class LoginActivity extends BaseFragment {
         AnimatorSet animatorSet;
         Animator[] animatorArr;
         if (show) {
-            this.progressView.setTag(Integer.valueOf(1));
-            this.progressView.setVisibility(0);
+            this.doneProgressView.setTag(Integer.valueOf(1));
+            this.doneProgressView.setVisibility(0);
             animatorSet = this.doneItemAnimation;
             animatorArr = new Animator[6];
             animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{0.1f});
             animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{0.1f});
             animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{1.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.doneProgressView, "scaleX", new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.doneProgressView, "scaleY", new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.doneProgressView, "alpha", new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
         } else {
-            this.progressView.setTag(null);
+            this.doneProgressView.setTag(null);
             this.doneItem.getImageView().setVisibility(0);
             animatorSet = this.doneItemAnimation;
             animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{0.0f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.doneProgressView, "scaleX", new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.doneProgressView, "scaleY", new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.doneProgressView, "alpha", new float[]{0.0f});
             animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{1.0f});
             animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{1.0f});
             animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{1.0f});
@@ -3178,7 +3178,7 @@ public class LoginActivity extends BaseFragment {
                     if (show) {
                         LoginActivity.this.doneItem.getImageView().setVisibility(4);
                     } else {
-                        LoginActivity.this.progressView.setVisibility(4);
+                        LoginActivity.this.doneProgressView.setVisibility(4);
                     }
                 }
             }

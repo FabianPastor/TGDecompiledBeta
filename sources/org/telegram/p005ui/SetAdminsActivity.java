@@ -442,7 +442,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     final /* synthetic */ void lambda$createView$0$SetAdminsActivity(View view, int position) {
         boolean z = true;
         boolean z2;
-        if (this.listView.getAdapter() == this.searchAdapter || (this.listView.getAdapter() == this.listAdapter && position >= this.usersStartRow && position < this.usersEndRow)) {
+        if (view instanceof UserCell) {
             ChatParticipant participant;
             UserCell userCell = (UserCell) view;
             this.chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat_id));
