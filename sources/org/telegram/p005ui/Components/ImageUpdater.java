@@ -65,8 +65,8 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     }
 
     /* renamed from: org.telegram.ui.Components.ImageUpdater$2 */
-    class C13812 implements PhotoAlbumPickerActivityDelegate {
-        C13812() {
+    class CLASSNAME implements PhotoAlbumPickerActivityDelegate {
+        CLASSNAME() {
         }
 
         public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
@@ -260,7 +260,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
         if (this.parentFragment != null) {
             if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
-                fragment.setDelegate(new C13812());
+                fragment.setDelegate(new CLASSNAME());
                 this.parentFragment.presentFragment(fragment);
                 return;
             }

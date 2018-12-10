@@ -56,8 +56,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     private CropRectangle tempRect = new CropRectangle();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$1 */
-    class C06751 implements OnPreDrawListener {
-        C06751() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -68,8 +68,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$7 */
-    class C06817 implements OnCancelListener {
-        C06817() {
+    class CLASSNAME implements OnCancelListener {
+        CLASSNAME() {
         }
 
         public void onCancel(DialogInterface dialog) {
@@ -119,7 +119,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         /* renamed from: y */
         private float f223y;
 
-        /* synthetic */ CropState(CropView x0, Bitmap x1, int x2, C06751 x3) {
+        /* synthetic */ CropState(CropView x0, Bitmap x1, int x2, CLASSNAME x3) {
             this(x1, x2);
         }
 
@@ -272,7 +272,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (fform) {
             this.areaView.setDimVisibility(false);
         }
-        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C06751());
+        this.imageView.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         this.imageView.setImageBitmap(this.bitmap);
     }
 
@@ -709,7 +709,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 }
             }).create();
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setOnCancelListener(new C06817());
+            dialog.setOnCancelListener(new CLASSNAME());
             dialog.show();
         }
     }

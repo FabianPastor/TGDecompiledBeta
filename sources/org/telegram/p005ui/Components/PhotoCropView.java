@@ -39,8 +39,8 @@ public class PhotoCropView extends FrameLayout {
     private CropRotationWheel wheelView;
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$3 */
-    class C07783 implements Runnable {
-        C07783() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -61,8 +61,8 @@ public class PhotoCropView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$1 */
-    class C07791 implements CropViewListener {
-        C07791() {
+    class CLASSNAME implements CropViewListener {
+        CLASSNAME() {
         }
 
         public void onChange(boolean reset) {
@@ -77,8 +77,8 @@ public class PhotoCropView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$2 */
-    class C07802 implements RotationWheelListener {
-        C07802() {
+    class CLASSNAME implements RotationWheelListener {
+        CLASSNAME() {
         }
 
         public void onStart() {
@@ -126,11 +126,11 @@ public class PhotoCropView extends FrameLayout {
         requestLayout();
         if (this.cropView == null) {
             this.cropView = new CropView(getContext());
-            this.cropView.setListener(new C07791());
+            this.cropView.setListener(new CLASSNAME());
             this.cropView.setBottomPadding((float) AndroidUtilities.m9dp(64.0f));
             addView(this.cropView);
             this.wheelView = new CropRotationWheel(getContext());
-            this.wheelView.setListener(new C07802());
+            this.wheelView.setListener(new CLASSNAME());
             addView(this.wheelView, LayoutHelper.createFrame(-1, -2.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         this.cropView.setVisibility(0);
@@ -236,7 +236,7 @@ public class PhotoCropView extends FrameLayout {
 
     public void startAnimationRunnable() {
         if (this.animationRunnable == null) {
-            this.animationRunnable = new C07783();
+            this.animationRunnable = new CLASSNAME();
             AndroidUtilities.runOnUIThread(this.animationRunnable, 1500);
         }
     }

@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.HeaderCell;
@@ -71,8 +71,8 @@ public class ProxySettingsActivity extends BaseFragment {
     private TypeCell[] typeCell;
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$2 */
-    class C11152 implements TextWatcher {
-        C11152() {
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,8 +87,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$3 */
-    class C11163 implements TextWatcher {
-        C11163() {
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -192,8 +192,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ProxySettingsActivity$1 */
-    class C15661 extends ActionBarMenuOnItemClick {
-        C15661() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -264,7 +264,7 @@ public class ProxySettingsActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C15661());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -313,10 +313,10 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
             if (a == 0) {
                 this.inputFields[a].setInputType(524305);
-                this.inputFields[a].addTextChangedListener(new C11152());
+                this.inputFields[a].addTextChangedListener(new CLASSNAME());
             } else if (a == 1) {
                 this.inputFields[a].setInputType(2);
-                this.inputFields[a].addTextChangedListener(new C11163());
+                this.inputFields[a].addTextChangedListener(new CLASSNAME());
             } else if (a == 3) {
                 this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                 this.inputFields[a].setTypeface(Typeface.DEFAULT);
@@ -402,33 +402,33 @@ public class ProxySettingsActivity extends BaseFragment {
         try {
             String url;
             if (!TextUtils.isEmpty(address)) {
-                params.append("server=").append(URLEncoder.encode(address, C0016C.UTF8_NAME));
+                params.append("server=").append(URLEncoder.encode(address, CLASSNAMEC.UTF8_NAME));
             }
             if (!TextUtils.isEmpty(port)) {
                 if (params.length() != 0) {
                     params.append("&");
                 }
-                params.append("port=").append(URLEncoder.encode(port, C0016C.UTF8_NAME));
+                params.append("port=").append(URLEncoder.encode(port, CLASSNAMEC.UTF8_NAME));
             }
             if (this.currentType == 1) {
                 url = "https://t.me/proxy?";
                 if (params.length() != 0) {
                     params.append("&");
                 }
-                params.append("secret=").append(URLEncoder.encode(secret, C0016C.UTF8_NAME));
+                params.append("secret=").append(URLEncoder.encode(secret, CLASSNAMEC.UTF8_NAME));
             } else {
                 url = "https://t.me/socks?";
                 if (!TextUtils.isEmpty(user)) {
                     if (params.length() != 0) {
                         params.append("&");
                     }
-                    params.append("user=").append(URLEncoder.encode(user, C0016C.UTF8_NAME));
+                    params.append("user=").append(URLEncoder.encode(user, CLASSNAMEC.UTF8_NAME));
                 }
                 if (!TextUtils.isEmpty(password)) {
                     if (params.length() != 0) {
                         params.append("&");
                     }
-                    params.append("pass=").append(URLEncoder.encode(password, C0016C.UTF8_NAME));
+                    params.append("pass=").append(URLEncoder.encode(password, CLASSNAMEC.UTF8_NAME));
                 }
             }
             if (params.length() != 0) {
@@ -436,7 +436,7 @@ public class ProxySettingsActivity extends BaseFragment {
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra("android.intent.extra.TEXT", url + params.toString());
                 Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareLink", R.string.ShareLink));
-                chooserIntent.setFlags(C0016C.ENCODING_PCM_MU_LAW);
+                chooserIntent.setFlags(CLASSNAMEC.ENCODING_PCM_MU_LAW);
                 getParentActivity().startActivity(chooserIntent);
             }
         } catch (Exception e) {

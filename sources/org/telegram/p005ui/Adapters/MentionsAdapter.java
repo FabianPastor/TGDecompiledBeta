@@ -88,7 +88,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int lastPosition;
     private String lastText;
     private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new C12471()) {
+    private LocationProvider locationProvider = new LocationProvider(new CLASSNAME()) {
         public void stop() {
             super.stop();
             MentionsAdapter.this.lastKnownLocation = null;
@@ -127,8 +127,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
-    class C12471 implements LocationProviderDelegate {
-        C12471() {
+    class CLASSNAME implements LocationProviderDelegate {
+        CLASSNAME() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -144,12 +144,12 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
-    class C12493 implements SearchAdapterHelperDelegate {
+    class CLASSNAME implements SearchAdapterHelperDelegate {
         public SparseArray getExcludeUsers() {
             return SearchAdapterHelper$SearchAdapterHelperDelegate$$CC.getExcludeUsers(this);
         }
 
-        C12493() {
+        CLASSNAME() {
         }
 
         public void onDataSetChanged() {
@@ -175,7 +175,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C12493());
+        this.searchAdapterHelper.setDelegate(new CLASSNAME());
     }
 
     public void onDestroy() {
@@ -780,7 +780,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
                     final String str = usernameString;
                     final MessagesController messagesController2 = messagesController;
-                    C04465 c04465 = new Runnable() {
+                    CLASSNAME CLASSNAME = new Runnable() {
                         public void run() {
                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -820,8 +820,8 @@ public class MentionsAdapter extends SelectionAdapter {
                             MentionsAdapter.this.channelReqId = 0;
                         }
                     };
-                    this.searchGlobalRunnable = c04465;
-                    AndroidUtilities.runOnUIThread(c04465, 200);
+                    this.searchGlobalRunnable = CLASSNAME;
+                    AndroidUtilities.runOnUIThread(CLASSNAME, 200);
                 }
                 Collections.sort(this.searchResultUsernames, new MentionsAdapter$$Lambda$4(newResultsHashMap, users));
                 notifyDataSetChanged();

@@ -2,7 +2,7 @@ package org.telegram.p005ui;
 
 import java.util.ArrayList;
 import org.telegram.messenger.SecureDocument;
-import org.telegram.p005ui.PassportActivity.C149219.C14911;
+import org.telegram.p005ui.PassportActivity.CLASSNAME.CLASSNAME;
 import org.telegram.p005ui.PassportActivity.ErrorRunnable;
 import org.telegram.tgnet.TLRPC.TL_account_saveSecureValue;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -11,7 +11,7 @@ import org.telegram.tgnet.TLRPC.TL_secureValue;
 
 /* renamed from: org.telegram.ui.PassportActivity$19$1$$Lambda$0 */
 final /* synthetic */ class PassportActivity$19$1$$Lambda$0 implements Runnable {
-    private final C14911 arg$1;
+    private final CLASSNAME arg$1;
     private final TL_secureValue arg$10;
     private final ArrayList arg$11;
     private final SecureDocument arg$12;
@@ -31,8 +31,8 @@ final /* synthetic */ class PassportActivity$19$1$$Lambda$0 implements Runnable 
     private final TL_secureRequiredType arg$8;
     private final TL_secureValue arg$9;
 
-    PassportActivity$19$1$$Lambda$0(C14911 c14911, TL_error tL_error, ErrorRunnable errorRunnable, String str, TL_account_saveSecureValue tL_account_saveSecureValue, boolean z, TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, TL_secureValue tL_secureValue, TL_secureValue tL_secureValue2, ArrayList arrayList, SecureDocument secureDocument, SecureDocument secureDocument2, SecureDocument secureDocument3, ArrayList arrayList2, String str2, String str3, int i, Runnable runnable) {
-        this.arg$1 = c14911;
+    PassportActivity$19$1$$Lambda$0(CLASSNAME CLASSNAME, TL_error tL_error, ErrorRunnable errorRunnable, String str, TL_account_saveSecureValue tL_account_saveSecureValue, boolean z, TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, TL_secureValue tL_secureValue, TL_secureValue tL_secureValue2, ArrayList arrayList, SecureDocument secureDocument, SecureDocument secureDocument2, SecureDocument secureDocument3, ArrayList arrayList2, String str2, String str3, int i, Runnable runnable) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = tL_error;
         this.arg$3 = errorRunnable;
         this.arg$4 = str;

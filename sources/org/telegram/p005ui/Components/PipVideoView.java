@@ -32,7 +32,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.PhotoViewer;
 
 /* renamed from: org.telegram.ui.Components.PipVideoView */
@@ -50,8 +50,8 @@ public class PipVideoView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.PipVideoView$2 */
-    class C08132 extends AnimatorListenerAdapter {
-        C08132() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -67,7 +67,7 @@ public class PipVideoView {
     private class MiniControlsView extends FrameLayout {
         private float bufferedPosition;
         private AnimatorSet currentAnimation;
-        private Runnable hideRunnable = new C08141();
+        private Runnable hideRunnable = new CLASSNAME();
         private ImageView inlineButton;
         private boolean isCompleted;
         private boolean isVisible = true;
@@ -75,11 +75,11 @@ public class PipVideoView {
         private float progress;
         private Paint progressInnerPaint;
         private Paint progressPaint;
-        private Runnable progressRunnable = new C08152();
+        private Runnable progressRunnable = new CLASSNAME();
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$1 */
-        class C08141 implements Runnable {
-            C08141() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -88,8 +88,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$2 */
-        class C08152 implements Runnable {
-            C08152() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -107,8 +107,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$6 */
-        class C08196 extends AnimatorListenerAdapter {
-            C08196() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -117,8 +117,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$7 */
-        class C08207 extends AnimatorListenerAdapter {
-            C08207() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -218,7 +218,7 @@ public class PipVideoView {
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
-                        this.currentAnimation.addListener(new C08196());
+                        this.currentAnimation.addListener(new CLASSNAME());
                         this.currentAnimation.start();
                     } else {
                         setAlpha(1.0f);
@@ -230,7 +230,7 @@ public class PipVideoView {
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
-                    this.currentAnimation.addListener(new C08207());
+                    this.currentAnimation.addListener(new CLASSNAME());
                     this.currentAnimation.start();
                 } else {
                     setAlpha(0.0f);
@@ -452,7 +452,7 @@ public class PipVideoView {
         if (isX) {
             total = AndroidUtilities.displaySize.x - sideSize;
         } else {
-            total = (AndroidUtilities.displaySize.y - sideSize) - C0403ActionBar.getCurrentActionBarHeight();
+            total = (AndroidUtilities.displaySize.y - sideSize) - CLASSNAMEActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
             result = AndroidUtilities.m9dp(10.0f);
@@ -464,7 +464,7 @@ public class PipVideoView {
         if (isX) {
             return result;
         }
-        return result + C0403ActionBar.getCurrentActionBarHeight();
+        return result + CLASSNAMEActionBar.getCurrentActionBarHeight();
     }
 
     public void close() {
@@ -529,7 +529,7 @@ public class PipVideoView {
             editor.putInt("sidex", 2);
         }
         if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= C0403ActionBar.getCurrentActionBarHeight()) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= CLASSNAMEActionBar.getCurrentActionBarHeight()) {
                 if (animators == null) {
                     animators = new ArrayList();
                 }
@@ -556,7 +556,7 @@ public class PipVideoView {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C08132());
+                animatorSet.addListener(new CLASSNAME());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

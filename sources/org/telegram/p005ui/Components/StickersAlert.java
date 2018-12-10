@@ -116,8 +116,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private Pattern urlPattern;
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$8 */
-    class C08468 extends AnimatorListenerAdapter {
-        C08468() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -130,7 +130,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         private LinkMovementMethodMy() {
         }
 
-        /* synthetic */ LinkMovementMethodMy(C08441 x0) {
+        /* synthetic */ LinkMovementMethodMy(CLASSNAME x0) {
             this();
         }
 
@@ -162,8 +162,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$3 */
-    class C14043 extends SpanSizeLookup {
-        C14043() {
+    class CLASSNAME extends SpanSizeLookup {
+        CLASSNAME() {
         }
 
         public int getSpanSize(int position) {
@@ -175,8 +175,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$4 */
-    class C14054 extends ItemDecoration {
-        C14054() {
+    class CLASSNAME extends ItemDecoration {
+        CLASSNAME() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -188,8 +188,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$5 */
-    class C14065 extends OnScrollListener {
-        C14065() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -539,19 +539,19 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
         this.layoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.layoutManager.setSpanSizeLookup(new C14043());
+        this.layoutManager.setSpanSizeLookup(new CLASSNAME());
         recyclerListView = this.gridView;
         Adapter gridAdapter = new GridAdapter(context);
         this.adapter = gridAdapter;
         recyclerListView.setAdapter(gridAdapter);
         this.gridView.setVerticalScrollBarEnabled(false);
-        this.gridView.addItemDecoration(new C14054());
+        this.gridView.addItemDecoration(new CLASSNAME());
         this.gridView.setPadding(AndroidUtilities.m9dp(10.0f), 0, AndroidUtilities.m9dp(10.0f), 0);
         this.gridView.setClipToPadding(false);
         this.gridView.setEnabled(true);
         this.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
         this.gridView.setOnTouchListener(new StickersAlert$$Lambda$3(this));
-        this.gridView.setOnScrollListener(new C14065());
+        this.gridView.setOnScrollListener(new CLASSNAME());
         this.stickersOnItemClickListener = new StickersAlert$$Lambda$4(this);
         this.gridView.setOnItemClickListener(this.stickersOnItemClickListener);
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 48.0f));
@@ -962,7 +962,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         animatorArr[0] = ObjectAnimator.ofFloat(this.stickerPreviewLayout, "alpha", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
         animatorSet.setDuration(200);
-        animatorSet.addListener(new C08468());
+        animatorSet.addListener(new CLASSNAME());
         animatorSet.start();
     }
 

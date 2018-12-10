@@ -19,7 +19,7 @@ import android.os.Environment;
 import android.support.media.ExifInterface;
 import android.text.TextUtils;
 import android.util.SparseArray;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.ByteArrayOutputStream;
@@ -102,8 +102,8 @@ public class ImageLoader {
     private SparseArray<String> waitingForQualityThumbByTag = new SparseArray();
 
     /* renamed from: org.telegram.messenger.ImageLoader$3 */
-    class C02203 extends BroadcastReceiver {
-        C02203() {
+    class CLASSNAME extends BroadcastReceiver {
+        CLASSNAME() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
@@ -181,7 +181,7 @@ public class ImageLoader {
                     }
                 }
                 this.canRetry = false;
-                JSONArray array = new JSONObject(new String(outbuf2.toByteArray(), C0016C.UTF8_NAME)).getJSONArray("results");
+                JSONArray array = new JSONObject(new String(outbuf2.toByteArray(), CLASSNAMEC.UTF8_NAME)).getJSONArray("results");
                 if (array.length() > 0) {
                     String artworkUrl100 = array.getJSONObject(0).getString("artworkUrl100");
                     if (this.small) {
@@ -384,7 +384,7 @@ public class ImageLoader {
             this.thumbs = new ArrayList();
         }
 
-        /* synthetic */ CacheImage(ImageLoader x0, C02211 x1) {
+        /* synthetic */ CacheImage(ImageLoader x0, CLASSNAME x1) {
             this();
         }
 
@@ -2014,7 +2014,7 @@ public class ImageLoader {
         private ThumbGenerateInfo() {
         }
 
-        /* synthetic */ ThumbGenerateInfo(ImageLoader x0, C02211 x1) {
+        /* synthetic */ ThumbGenerateInfo(ImageLoader x0, CLASSNAME x1) {
             this();
         }
     }
@@ -2233,7 +2233,7 @@ public class ImageLoader {
             });
         }
         FileLoader.setMediaDirs(mediaDirs);
-        BroadcastReceiver receiver = new C02203();
+        BroadcastReceiver receiver = new CLASSNAME();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
         filter.addAction("android.intent.action.MEDIA_CHECKING");

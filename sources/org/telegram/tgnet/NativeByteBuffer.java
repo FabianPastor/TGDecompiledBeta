@@ -1,13 +1,13 @@
 package org.telegram.tgnet;
 
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class NativeByteBuffer extends AbstractSerializedData {
-    private static final ThreadLocal<NativeByteBuffer> addressWrapper = new C03981();
+    private static final ThreadLocal<NativeByteBuffer> addressWrapper = new CLASSNAME();
     protected long address;
     public ByteBuffer buffer;
     private boolean justCalc;
@@ -15,8 +15,8 @@ public class NativeByteBuffer extends AbstractSerializedData {
     public boolean reused;
 
     /* renamed from: org.telegram.tgnet.NativeByteBuffer$1 */
-    static class C03981 extends ThreadLocal<NativeByteBuffer> {
-        C03981() {
+    static class CLASSNAME extends ThreadLocal<NativeByteBuffer> {
+        CLASSNAME() {
         }
 
         protected NativeByteBuffer initialValue() {
@@ -34,7 +34,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public static native void native_reuse(long j);
 
-    /* synthetic */ NativeByteBuffer(int x0, boolean x1, C03981 x2) {
+    /* synthetic */ NativeByteBuffer(int x0, boolean x1, CLASSNAME x2) {
         this(x0, x1);
     }
 
@@ -208,7 +208,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public void writeString(String s) {
         try {
-            writeByteArray(s.getBytes(C0016C.UTF8_NAME));
+            writeByteArray(s.getBytes(CLASSNAMEC.UTF8_NAME));
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m11e("write string error");
@@ -463,7 +463,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
             for (int i = sl; (l + i) % 4 != 0; i++) {
                 this.buffer.get();
             }
-            return new String(b, C0016C.UTF8_NAME);
+            return new String(b, CLASSNAMEC.UTF8_NAME);
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);

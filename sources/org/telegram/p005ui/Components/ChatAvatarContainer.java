@@ -21,7 +21,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ChatActivity;
@@ -159,7 +159,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int currentActionBarHeight = (C0403ActionBar.getCurrentActionBarHeight() - AndroidUtilities.m9dp(42.0f)) / 2;
+        int currentActionBarHeight = (CLASSNAMEActionBar.getCurrentActionBarHeight() - AndroidUtilities.m9dp(42.0f)) / 2;
         int i = (VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight;
         int viewTop = currentActionBarHeight + i;
         this.avatarImageView.layout(AndroidUtilities.m9dp(8.0f), viewTop, AndroidUtilities.m9dp(50.0f), AndroidUtilities.m9dp(42.0f) + viewTop);

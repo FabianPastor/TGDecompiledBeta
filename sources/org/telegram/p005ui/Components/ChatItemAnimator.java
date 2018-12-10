@@ -42,8 +42,8 @@ public class ChatItemAnimator extends SimpleItemAnimator {
     ArrayList<ViewHolder> removeAnimations = new ArrayList();
 
     /* renamed from: org.telegram.ui.Components.ChatItemAnimator$1 */
-    class C06591 implements Comparator<ViewHolder> {
-        C06591() {
+    class CLASSNAME implements Comparator<ViewHolder> {
+        CLASSNAME() {
         }
 
         public int compare(ViewHolder o1, ViewHolder o2) {
@@ -59,7 +59,7 @@ public class ChatItemAnimator extends SimpleItemAnimator {
             this.holders = new ArrayList();
         }
 
-        /* synthetic */ AnimatingMessageGroup(C06591 x0) {
+        /* synthetic */ AnimatingMessageGroup(CLASSNAME x0) {
             this();
         }
 
@@ -157,7 +157,7 @@ public class ChatItemAnimator extends SimpleItemAnimator {
             this.smallestTop = ConnectionsManager.DEFAULT_DATACENTER_ID;
         }
 
-        /* synthetic */ GroupChangeInfo(C06591 x0) {
+        /* synthetic */ GroupChangeInfo(CLASSNAME x0) {
             this();
         }
     }
@@ -265,7 +265,7 @@ public class ChatItemAnimator extends SimpleItemAnimator {
             if (additionsPending) {
                 ArrayList<ViewHolder> additions = new ArrayList(this.pendingAdditions);
                 ArrayList<ViewHolder> pushUp = new ArrayList();
-                Collections.sort(additions, new C06591());
+                Collections.sort(additions, new CLASSNAME());
                 i = 0;
                 it = additions.iterator();
                 while (it.hasNext()) {

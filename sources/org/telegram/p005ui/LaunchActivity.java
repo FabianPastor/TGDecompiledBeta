@@ -178,8 +178,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private AlertDialog visibleDialog;
 
     /* renamed from: org.telegram.ui.LaunchActivity$4 */
-    class C09744 implements OnDismissListener {
-        C09744() {
+    class CLASSNAME implements OnDismissListener {
+        CLASSNAME() {
         }
 
         public void onDismiss(DialogInterface dialog) {
@@ -208,8 +208,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$5 */
-    class C09755 implements Runnable {
-        C09755() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -228,8 +228,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$3 */
-    class C14623 implements TermsOfServiceViewDelegate {
-        C14623() {
+    class CLASSNAME implements TermsOfServiceViewDelegate {
+        CLASSNAME() {
         }
 
         public void onAcceptTerms(int account) {
@@ -333,7 +333,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         setContentView(this.drawerLayoutContainer, new LayoutParams(-1, -1));
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(16);
-            View c09731 = new RelativeLayout(this) {
+            View CLASSNAME = new RelativeLayout(this) {
                 private boolean inLayout;
 
                 public void requestLayout() {
@@ -387,24 +387,24 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
                 }
             };
-            this.drawerLayoutContainer.addView(c09731, LayoutHelper.createFrame(-1, -1.0f));
+            this.drawerLayoutContainer.addView(CLASSNAME, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
             BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
-            c09731.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            c09731.addView(this.actionBarLayout);
+            CLASSNAME.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            CLASSNAME.addView(this.actionBarLayout);
             this.rightActionBarLayout = new ActionBarLayout(this);
             this.rightActionBarLayout.init(rightFragmentsStack);
             this.rightActionBarLayout.setDelegate(this);
-            c09731.addView(this.rightActionBarLayout);
+            CLASSNAME.addView(this.rightActionBarLayout);
             this.shadowTabletSide = new FrameLayout(this);
             this.shadowTabletSide.setBackgroundColor(NUM);
-            c09731.addView(this.shadowTabletSide);
+            CLASSNAME.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
             this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            c09731.addView(this.shadowTablet);
+            CLASSNAME.addView(this.shadowTablet);
             this.shadowTablet.setOnTouchListener(new LaunchActivity$$Lambda$0(this));
             this.shadowTablet.setOnClickListener(LaunchActivity$$Lambda$1.$instance);
             this.layersActionBarLayout = new ActionBarLayout(this);
@@ -416,7 +416,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
             this.layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            c09731.addView(this.layersActionBarLayout);
+            CLASSNAME.addView(this.layersActionBarLayout);
         } else {
             this.drawerLayoutContainer.addView(this.actionBarLayout, new LayoutParams(-1, -1));
         }
@@ -959,7 +959,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (this.termsOfServiceView == null) {
             this.termsOfServiceView = new TermsOfServiceView(this);
             this.drawerLayoutContainer.addView(this.termsOfServiceView, LayoutHelper.createFrame(-1, -1.0f));
-            this.termsOfServiceView.setDelegate(new C14623());
+            this.termsOfServiceView.setDelegate(new CLASSNAME());
         }
         TL_help_termsOfService currentTos = UserConfig.getInstance(account).unacceptedTermsOfService;
         if (currentTos != tos && (currentTos == null || !currentTos.f133id.data.equals(tos.f133id.data))) {
@@ -2240,7 +2240,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         try {
             this.visibleDialog = builder.show();
             this.visibleDialog.setCanceledOnTouchOutside(true);
-            this.visibleDialog.setOnDismissListener(new C09744());
+            this.visibleDialog.setOnDismissListener(new CLASSNAME());
             return this.visibleDialog;
         } catch (Throwable e2) {
             FileLog.m13e(e2);
@@ -3049,7 +3049,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-            this.lockRunnable = new C09755();
+            this.lockRunnable = new CLASSNAME();
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(this.lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {

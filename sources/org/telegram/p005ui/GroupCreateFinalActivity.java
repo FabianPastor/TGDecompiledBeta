@@ -47,7 +47,7 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -97,8 +97,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private InputFile uploadedAvatar;
 
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$6 */
-    class C09476 extends ViewOutlineProvider {
-        C09476() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -108,8 +108,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$1 */
-    class C14441 extends ActionBarMenuOnItemClick {
-        C14441() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -120,8 +120,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$5 */
-    class C14465 extends OnScrollListener {
-        C14465() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -281,8 +281,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("NewGroup", R.string.NewGroup));
-        this.actionBar.setActionBarMenuOnItemClick(new C14441());
-        View c14452 = new SizeNotifierFrameLayout(context) {
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
+        View CLASSNAME = new SizeNotifierFrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -362,10 +362,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 notifyHeightChanged();
             }
         };
-        this.fragmentView = c14452;
+        this.fragmentView = CLASSNAME;
         this.fragmentView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         this.fragmentView.setOnTouchListener(GroupCreateFinalActivity$$Lambda$1.$instance);
-        c14452 = new LinearLayout(context) {
+        CLASSNAME = new LinearLayout(context) {
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 boolean result = super.drawChild(canvas, child, drawingTime);
                 if (child == GroupCreateFinalActivity.this.listView) {
@@ -374,10 +374,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 return result;
             }
         };
-        c14452.setOrientation(1);
-        c14452.addView(c14452, LayoutHelper.createFrame(-1, -1.0f));
+        CLASSNAME.setOrientation(1);
+        CLASSNAME.addView(CLASSNAME, LayoutHelper.createFrame(-1, -1.0f));
         this.editTextContainer = new FrameLayout(context);
-        c14452.addView(this.editTextContainer, LayoutHelper.createLinear(-1, -2));
+        CLASSNAME.addView(this.editTextContainer, LayoutHelper.createLinear(-1, -2));
         this.avatarImage = new BackupImageView(context);
         this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(32.0f));
         this.avatarDrawable.setInfo(5, null, null, this.chatType == 1);
@@ -412,7 +412,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         avatarEditor.setScaleType(ScaleType.CENTER);
         this.editTextContainer.addView(avatarEditor, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
         avatarEditor.setOnClickListener(new GroupCreateFinalActivity$$Lambda$2(this));
-        this.editText = new EditTextEmoji((Activity) context, c14452, this);
+        this.editText = new EditTextEmoji((Activity) context, CLASSNAME, this);
         this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
         if (this.nameToSet != null) {
             this.editText.setText(this.nameToSet);
@@ -430,8 +430,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         this.listView.addItemDecoration(new GroupCreateDividerItemDecoration());
-        c14452.addView(this.listView, LayoutHelper.createLinear(-1, -1));
-        this.listView.setOnScrollListener(new C14465());
+        CLASSNAME.addView(this.listView, LayoutHelper.createLinear(-1, -1));
+        this.listView.setOnScrollListener(new CLASSNAME());
         this.floatingButtonContainer = new FrameLayout(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m9dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
@@ -447,7 +447,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButtonIcon, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButtonIcon, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             this.floatingButtonContainer.setStateListAnimator(animator);
-            this.floatingButtonContainer.setOutlineProvider(new C09476());
+            this.floatingButtonContainer.setOutlineProvider(new CLASSNAME());
         }
         View view2 = this.floatingButtonContainer;
         int i2 = VERSION.SDK_INT >= 21 ? 56 : 60;
@@ -472,7 +472,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         } else {
             f2 = 14.0f;
         }
-        c14452.addView(view2, LayoutHelper.createFrame(i2, f3, i, f, 0.0f, f2, 14.0f));
+        CLASSNAME.addView(view2, LayoutHelper.createFrame(i2, f3, i, f, 0.0f, f2, 14.0f));
         this.floatingButtonContainer.setOnClickListener(new GroupCreateFinalActivity$$Lambda$3(this));
         this.floatingButtonIcon = new ImageView(context);
         this.floatingButtonIcon.setScaleType(ScaleType.CENTER);

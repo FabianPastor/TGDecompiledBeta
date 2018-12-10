@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import java.io.File;
 import java.io.FileInputStream;
 import org.telegram.messenger.AndroidUtilities;
@@ -155,7 +155,7 @@ public class ThemeCell extends FrameLayout {
                             if (bytes[a] == (byte) 10) {
                                 linesRead++;
                                 int len = (a - start) + 1;
-                                String line = new String(bytes, start, len - 1, C0016C.UTF8_NAME);
+                                String line = new String(bytes, start, len - 1, CLASSNAMEC.UTF8_NAME);
                                 if (line.startsWith("WPS")) {
                                     break;
                                 }

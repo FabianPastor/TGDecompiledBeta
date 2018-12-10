@@ -5,10 +5,10 @@ import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.ActionBar.ActionBar$$Lambda$0 */
 final /* synthetic */ class ActionBar$$Lambda$0 implements OnClickListener {
-    private final C0403ActionBar arg$1;
+    private final CLASSNAMEActionBar arg$1;
 
-    ActionBar$$Lambda$0(C0403ActionBar c0403ActionBar) {
-        this.arg$1 = c0403ActionBar;
+    ActionBar$$Lambda$0(CLASSNAMEActionBar CLASSNAMEActionBar) {
+        this.arg$1 = CLASSNAMEActionBar;
     }
 
     public void onClick(View view) {

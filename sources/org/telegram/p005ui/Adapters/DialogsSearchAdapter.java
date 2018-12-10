@@ -92,7 +92,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         private DialogSearchResult() {
         }
 
-        /* synthetic */ DialogSearchResult(DialogsSearchAdapter x0, C12461 x1) {
+        /* synthetic */ DialogSearchResult(DialogsSearchAdapter x0, CLASSNAME x1) {
             this();
         }
     }
@@ -117,12 +117,12 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$1 */
-    class C12461 implements SearchAdapterHelperDelegate {
+    class CLASSNAME implements SearchAdapterHelperDelegate {
         public SparseArray getExcludeUsers() {
             return SearchAdapterHelper$SearchAdapterHelperDelegate$$CC.getExcludeUsers(this);
         }
 
-        C12461() {
+        CLASSNAME() {
         }
 
         public void onDataSetChanged() {
@@ -145,7 +145,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         private CategoryAdapterRecycler() {
         }
 
-        /* synthetic */ CategoryAdapterRecycler(DialogsSearchAdapter x0, C12461 x1) {
+        /* synthetic */ CategoryAdapterRecycler(DialogsSearchAdapter x0, CLASSNAME x1) {
             this();
         }
 
@@ -196,7 +196,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public DialogsSearchAdapter(Context context, int messagesSearch, int type) {
-        this.searchAdapterHelper.setDelegate(new C12461());
+        this.searchAdapterHelper.setDelegate(new CLASSNAME());
         this.mContext = context;
         this.needMessagesSearch = messagesSearch;
         this.dialogsType = type;

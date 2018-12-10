@@ -64,7 +64,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.extractor.p003ts.PsExtractor;
 import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
@@ -82,7 +82,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -140,8 +140,8 @@ import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.Theme.ThemeInfo;
@@ -352,7 +352,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private ChatAvatarContainer avatarContainer;
     private ChatBigEmptyView bigEmptyView;
     private MessageObject botButtons;
-    private PhotoViewerProvider botContextProvider = new C13212();
+    private PhotoViewerProvider botContextProvider = new CLASSNAME();
     private ArrayList<Object> botContextResults;
     private SparseArray<BotInfo> botInfo = new SparseArray();
     private MessageObject botReplyButtons;
@@ -471,8 +471,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean needSelectFromMessageId;
     private int newMentionsCount;
     private int newUnreadMessageCount;
-    OnItemClickListenerExtended onItemClickListener = new C13124();
-    OnItemLongClickListenerExtended onItemLongClickListener = new C13093();
+    OnItemClickListenerExtended onItemClickListener = new CLASSNAME();
+    OnItemLongClickListenerExtended onItemLongClickListener = new CLASSNAME();
     private boolean openAnimationEnded;
     private boolean openSearchKeyboard;
     private View overlayView;
@@ -485,7 +485,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean pausedOnLastMessage;
     private String pendingLinkSearchString;
     private Runnable pendingWebPageTimeoutRunnable;
-    private PhotoViewerProvider photoViewerProvider = new C13201();
+    private PhotoViewerProvider photoViewerProvider = new CLASSNAME();
     private FileLocation pinnedImageLocation;
     private View pinnedLineView;
     private BackupImageView pinnedMessageImageView;
@@ -562,8 +562,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean wasPaused;
 
     /* renamed from: org.telegram.ui.ChatActivity$14 */
-    class C056914 implements OnClickListener {
-        C056914() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         private void loadLastUnreadMention() {
@@ -631,8 +631,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$31 */
-    class C057931 extends ViewOutlineProvider {
-        C057931() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @TargetApi(21)
@@ -642,8 +642,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$36 */
-    class C058336 extends AnimatorListenerAdapter {
-        C058336() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -665,8 +665,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$37 */
-    class C058437 extends AnimatorListenerAdapter {
-        C058437() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -688,11 +688,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$38 */
-    class C058638 extends AnimatorListenerAdapter {
+    class CLASSNAME extends AnimatorListenerAdapter {
 
         /* renamed from: org.telegram.ui.ChatActivity$38$1 */
-        class C05851 extends AnimatorListenerAdapter {
-            C05851() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -702,7 +702,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         }
 
-        C058638() {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -715,7 +715,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 Animator[] animatorArr = new Animator[1];
                 animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.mediaBanTooltip, "alpha", new float[]{0.0f});
                 AnimatorSet.playTogether(animatorArr);
-                AnimatorSet.addListener(new C05851());
+                AnimatorSet.addListener(new CLASSNAME());
                 AnimatorSet.setDuration(300);
                 AnimatorSet.start();
             }
@@ -723,11 +723,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$39 */
-    class C058839 extends AnimatorListenerAdapter {
+    class CLASSNAME extends AnimatorListenerAdapter {
 
         /* renamed from: org.telegram.ui.ChatActivity$39$1 */
-        class C05871 extends AnimatorListenerAdapter {
-            C05871() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -737,7 +737,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         }
 
-        C058839() {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -750,7 +750,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 Animator[] animatorArr = new Animator[1];
                 animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.gifHintTextView, "alpha", new float[]{0.0f});
                 AnimatorSet.playTogether(animatorArr);
-                AnimatorSet.addListener(new C05871());
+                AnimatorSet.addListener(new CLASSNAME());
                 AnimatorSet.setDuration(300);
                 AnimatorSet.start();
             }
@@ -758,8 +758,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$40 */
-    class C058940 extends AnimatorListenerAdapter {
-        C058940() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -777,8 +777,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$41 */
-    class C059041 extends AnimatorListenerAdapter {
-        C059041() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -795,8 +795,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$42 */
-    class C059142 extends AnimatorListenerAdapter {
-        C059142() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -807,8 +807,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$45 */
-    class C059245 extends AnimatorListenerAdapter {
-        C059245() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -818,8 +818,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$46 */
-    class C059346 extends AnimatorListenerAdapter {
-        C059346() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -829,8 +829,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$49 */
-    class C059549 extends AnimatorListenerAdapter {
-        C059549() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -847,11 +847,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$50 */
-    class C059750 implements Runnable {
+    class CLASSNAME implements Runnable {
 
         /* renamed from: org.telegram.ui.ChatActivity$50$1 */
-        class C05961 extends AnimatorListenerAdapter {
-            C05961() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -868,7 +868,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         }
 
-        C059750() {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -884,15 +884,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, "translationY", new float[]{(float) (-AndroidUtilities.m9dp(50.0f))});
                 access$19800.playTogether(animatorArr);
                 ChatActivity.this.alertViewAnimator.setDuration(200);
-                ChatActivity.this.alertViewAnimator.addListener(new C05961());
+                ChatActivity.this.alertViewAnimator.addListener(new CLASSNAME());
                 ChatActivity.this.alertViewAnimator.start();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$51 */
-    class C059851 extends AnimatorListenerAdapter {
-        C059851() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -910,8 +910,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$52 */
-    class C059952 extends AnimatorListenerAdapter {
-        C059952() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -928,8 +928,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$53 */
-    class C060053 extends AnimatorListenerAdapter {
-        C060053() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -947,8 +947,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$54 */
-    class C060154 extends AnimatorListenerAdapter {
-        C060154() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -965,8 +965,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$55 */
-    class C060255 implements OnPreDrawListener {
-        C060255() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -978,8 +978,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$10 */
-    class C129910 extends SpanSizeLookup {
-        C129910() {
+    class CLASSNAME extends SpanSizeLookup {
+        CLASSNAME() {
         }
 
         public int getSpanSize(int position) {
@@ -998,8 +998,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$11 */
-    class C130011 extends ItemDecoration {
-        C130011() {
+    class CLASSNAME extends ItemDecoration {
+        CLASSNAME() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -1033,13 +1033,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$12 */
-    class C130112 extends OnScrollListener {
+    class CLASSNAME extends OnScrollListener {
         private final int scrollValue = AndroidUtilities.m9dp(100.0f);
         private float totalDy = 0.0f;
 
         /* renamed from: org.telegram.ui.ChatActivity$12$1 */
-        class C05681 extends AnimatorListenerAdapter {
-            C05681() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -1049,7 +1049,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         }
 
-        C130112() {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -1087,7 +1087,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.floatingDateView, "alpha", new float[]{1.0f});
                     access$13700.playTogether(animatorArr);
-                    ChatActivity.this.floatingDateAnimation.addListener(new C05681());
+                    ChatActivity.this.floatingDateAnimation.addListener(new CLASSNAME());
                     ChatActivity.this.floatingDateAnimation.start();
                 }
             }
@@ -1119,8 +1119,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$19 */
-    class C130219 extends SpanSizeLookup {
-        C130219() {
+    class CLASSNAME extends SpanSizeLookup {
+        CLASSNAME() {
         }
 
         public int getSpanSize(int position) {
@@ -1135,8 +1135,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$20 */
-    class C130320 extends ItemDecoration {
-        C130320() {
+    class CLASSNAME extends ItemDecoration {
+        CLASSNAME() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -1166,11 +1166,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$21 */
-    class C130421 implements MentionsAdapterDelegate {
+    class CLASSNAME implements MentionsAdapterDelegate {
 
         /* renamed from: org.telegram.ui.ChatActivity$21$1 */
-        class C05711 extends AnimatorListenerAdapter {
-            C05711() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -1187,8 +1187,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         /* renamed from: org.telegram.ui.ChatActivity$21$2 */
-        class C05722 extends AnimatorListenerAdapter {
-            C05722() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -1206,7 +1206,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         }
 
-        C130421() {
+        CLASSNAME() {
         }
 
         public void needChangePanelVisibility(boolean show) {
@@ -1248,7 +1248,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.mentionContainer.setTag(null);
                     ChatActivity.this.mentionListAnimation = new AnimatorSet();
                     ChatActivity.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(ChatActivity.this.mentionContainer, "alpha", new float[]{0.0f, 1.0f})});
-                    ChatActivity.this.mentionListAnimation.addListener(new C05711());
+                    ChatActivity.this.mentionListAnimation.addListener(new CLASSNAME());
                     ChatActivity.this.mentionListAnimation.setDuration(200);
                     ChatActivity.this.mentionListAnimation.start();
                     return;
@@ -1270,7 +1270,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 Animator[] animatorArr = new Animator[1];
                 animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.mentionContainer, "alpha", new float[]{0.0f});
                 access$15600.playTogether(animatorArr);
-                ChatActivity.this.mentionListAnimation.addListener(new C05722());
+                ChatActivity.this.mentionListAnimation.addListener(new CLASSNAME());
                 ChatActivity.this.mentionListAnimation.setDuration(200);
                 ChatActivity.this.mentionListAnimation.start();
                 return;
@@ -1299,8 +1299,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$22 */
-    class C130522 extends OnScrollListener {
-        C130522() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -1333,8 +1333,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$23 */
-    class C130623 implements ChatActivityEnterViewDelegate {
-        C130623() {
+    class CLASSNAME implements ChatActivityEnterViewDelegate {
+        CLASSNAME() {
         }
 
         public void onMessageSend(CharSequence message) {
@@ -1472,7 +1472,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
         public void onWindowSizeChanged(int size) {
             boolean z = true;
-            if (size < AndroidUtilities.m9dp(72.0f) + C0403ActionBar.getCurrentActionBarHeight()) {
+            if (size < AndroidUtilities.m9dp(72.0f) + CLASSNAMEActionBar.getCurrentActionBarHeight()) {
                 ChatActivity.this.allowStickersPanel = false;
                 if (ChatActivity.this.stickersPanel.getVisibility() == 0) {
                     ChatActivity.this.stickersPanel.setVisibility(4);
@@ -1567,8 +1567,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$25 */
-    class C130725 implements StickerPreviewViewerDelegate {
-        C130725() {
+    class CLASSNAME implements StickerPreviewViewerDelegate {
+        CLASSNAME() {
         }
 
         public void sendSticker(Document sticker, Object parent) {
@@ -1589,8 +1589,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$34 */
-    class C130834 implements ChatAttachViewDelegate {
-        C130834() {
+    class CLASSNAME implements ChatAttachViewDelegate {
+        CLASSNAME() {
         }
 
         public void didPressedButton(int button) {
@@ -1680,8 +1680,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$3 */
-    class C13093 implements OnItemLongClickListenerExtended {
-        C13093() {
+    class CLASSNAME implements OnItemLongClickListenerExtended {
+        CLASSNAME() {
         }
 
         public boolean onItemClick(View view, int position, float x, float y) {
@@ -1710,8 +1710,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$43 */
-    class C131043 implements PhotoAlbumPickerActivityDelegate {
-        C131043() {
+    class CLASSNAME implements PhotoAlbumPickerActivityDelegate {
+        CLASSNAME() {
         }
 
         public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
@@ -1741,8 +1741,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$44 */
-    class C131144 implements DocumentSelectActivityDelegate {
-        C131144() {
+    class CLASSNAME implements DocumentSelectActivityDelegate {
+        CLASSNAME() {
         }
 
         public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files) {
@@ -1768,8 +1768,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$4 */
-    class C13124 implements OnItemClickListenerExtended {
-        C13124() {
+    class CLASSNAME implements OnItemClickListenerExtended {
+        CLASSNAME() {
         }
 
         public void onItemClick(View view, int position, float x, float y) {
@@ -1791,8 +1791,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$5 */
-    class C13135 extends ActionBarMenuOnItemClick {
-        C13135() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -2035,10 +2035,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$6 */
-    class C13146 extends ActionBarMenuItemSearchListener {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
         boolean searchWas;
 
-        C13146() {
+        CLASSNAME() {
         }
 
         public void onSearchCollapse() {
@@ -2137,8 +2137,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         private int rowCount;
 
         /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$1 */
-        class C13161 implements ChatMessageCellDelegate {
-            C13161() {
+        class CLASSNAME implements ChatMessageCellDelegate {
+            CLASSNAME() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -2502,8 +2502,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$2 */
-        class C13172 implements ChatActionCellDelegate {
-            C13172() {
+        class CLASSNAME implements ChatActionCellDelegate {
+            CLASSNAME() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -2628,13 +2628,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.chatMessageCellsCache.remove(0);
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                chatMessageCell.setDelegate(new C13161());
+                chatMessageCell.setDelegate(new CLASSNAME());
                 if (ChatActivity.this.currentEncryptedChat == null) {
                     chatMessageCell.setAllowAssistant(true);
                 }
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C13172());
+                ((ChatActionCell) view).setDelegate(new CLASSNAME());
             } else if (viewType == 2) {
                 view = new ChatUnreadCell(this.mContext);
             } else if (viewType == 3) {
@@ -2785,8 +2785,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         animatorSet.addListener(new AnimatorListenerAdapter() {
 
                                             /* renamed from: org.telegram.ui.ChatActivity$ChatActivityAdapter$3$1$1 */
-                                            class C06031 extends AnimatorListenerAdapter {
-                                                C06031() {
+                                            class CLASSNAME extends AnimatorListenerAdapter {
+                                                CLASSNAME() {
                                                 }
 
                                                 public void onAnimationEnd(Animator animation) {
@@ -2803,7 +2803,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                                 animatorSet.playTogether(r1);
                                                 animatorSet.setDuration(100);
                                                 animatorSet.setInterpolator(new DecelerateInterpolator());
-                                                animatorSet.addListener(new C06031());
+                                                animatorSet.addListener(new CLASSNAME());
                                                 animatorSet.start();
                                             }
                                         });
@@ -3040,8 +3040,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$1 */
-    class C13201 extends EmptyPhotoViewerProvider {
-        C13201() {
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -3102,8 +3102,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.ChatActivity$2 */
-    class C13212 extends EmptyPhotoViewerProvider {
-        C13212() {
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -3544,7 +3544,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         } else {
             this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C13135());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.avatarContainer = new ChatAvatarContainer(context, this, this.currentEncryptedChat != null);
         if (this.inPreviewMode) {
             this.avatarContainer.setOccupyStatusBar(false);
@@ -3561,7 +3561,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         ActionBarMenu menu = this.actionBar.createMenu();
         if (this.currentEncryptedChat == null && !this.isBroadcast) {
-            this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C13146());
+            this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME());
             this.searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
             this.searchItem.setVisibility(8);
         }
@@ -4528,13 +4528,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 return false;
             }
         };
-        this.chatLayoutManager.setSpanSizeLookup(new C129910());
+        this.chatLayoutManager.setSpanSizeLookup(new CLASSNAME());
         this.chatListView.setLayoutManager(this.chatLayoutManager);
-        this.chatListView.addItemDecoration(new C130011());
+        this.chatListView.addItemDecoration(new CLASSNAME());
         this.contentView.addView(this.chatListView, LayoutHelper.createFrame(-1, -1.0f));
         this.chatListView.setOnItemLongClickListener(this.onItemLongClickListener);
         this.chatListView.setOnItemClickListener(this.onItemClickListener);
-        this.chatListView.setOnScrollListener(new C130112());
+        this.chatListView.setOnScrollListener(new CLASSNAME());
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(4);
         this.contentView.addView(this.progressView, LayoutHelper.createFrame(-1, -1, 51));
@@ -4665,7 +4665,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.mentiondownButton = new FrameLayout(context);
         this.mentiondownButton.setVisibility(4);
         this.contentView.addView(this.mentiondownButton, LayoutHelper.createFrame(46, 59.0f, 85, 0.0f, 0.0f, 7.0f, 5.0f));
-        this.mentiondownButton.setOnClickListener(new C056914());
+        this.mentiondownButton.setOnClickListener(new CLASSNAME());
         this.mentiondownButton.setOnLongClickListener(new ChatActivity$$Lambda$13(this));
         if (!this.isBroadcast) {
             this.mentionContainer = new FrameLayout(context) {
@@ -4842,8 +4842,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     return super.getFlowItemCount();
                 }
             };
-            this.mentionGridLayoutManager.setSpanSizeLookup(new C130219());
-            this.mentionListView.addItemDecoration(new C130320());
+            this.mentionGridLayoutManager.setSpanSizeLookup(new CLASSNAME());
+            this.mentionListView.addItemDecoration(new CLASSNAME());
             this.mentionListView.setItemAnimator(null);
             this.mentionListView.setLayoutAnimation(null);
             this.mentionListView.setClipToPadding(false);
@@ -4851,7 +4851,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.mentionListView.setOverScrollMode(2);
             this.mentionContainer.addView(this.mentionListView, LayoutHelper.createFrame(-1, -1.0f));
             recyclerListView = this.mentionListView;
-            chatActivityAdapter = new MentionsAdapter(context, false, this.dialog_id, new C130421());
+            chatActivityAdapter = new MentionsAdapter(context, false, this.dialog_id, new CLASSNAME());
             this.mentionsAdapter = chatActivityAdapter;
             recyclerListView.setAdapter(chatActivityAdapter);
             if (!ChatObject.isChannel(this.currentChat) || (this.currentChat != null && this.currentChat.megagroup)) {
@@ -4869,7 +4869,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.mentionsOnItemClickListener = chatActivity$$Lambda$15;
             recyclerListView.setOnItemClickListener(chatActivity$$Lambda$15);
             this.mentionListView.setOnItemLongClickListener(new ChatActivity$$Lambda$16(this));
-            this.mentionListView.setOnScrollListener(new C130522());
+            this.mentionListView.setOnScrollListener(new CLASSNAME());
         }
         this.pagedownButtonImage = new ImageView(context);
         this.pagedownButtonImage.setImageResource(R.drawable.pagedown);
@@ -4950,7 +4950,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.chatActivityEnterView.setVisibility(4);
         }
         this.contentView.addView(this.chatActivityEnterView, this.contentView.getChildCount() - 1, LayoutHelper.createFrame(-1, -2, 83));
-        this.chatActivityEnterView.setDelegate(new C130623());
+        this.chatActivityEnterView.setDelegate(new CLASSNAME());
         fragmentContextView = new FrameLayout(context) {
             public void setTranslationY(float translationY) {
                 super.setTranslationY(translationY);
@@ -5047,8 +5047,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.stickersPanel = new FrameLayout(context);
         this.stickersPanel.setVisibility(8);
         this.contentView.addView(this.stickersPanel, LayoutHelper.createFrame(-2, 81.5f, 83, 0.0f, 0.0f, 0.0f, 38.0f));
-        StickerPreviewViewerDelegate c130725 = new C130725();
-        final StickerPreviewViewerDelegate stickerPreviewViewerDelegate = c130725;
+        StickerPreviewViewerDelegate CLASSNAME = new CLASSNAME();
+        final StickerPreviewViewerDelegate stickerPreviewViewerDelegate = CLASSNAME;
         this.stickersListView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent event) {
                 boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, ChatActivity.this.stickersListView, 0, stickerPreviewViewerDelegate);
@@ -5059,7 +5059,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         };
         this.stickersListView.setTag(Integer.valueOf(3));
-        this.stickersListView.setOnTouchListener(new ChatActivity$$Lambda$20(this, c130725));
+        this.stickersListView.setOnTouchListener(new ChatActivity$$Lambda$20(this, CLASSNAME));
         this.stickersListView.setDisallowInterceptTouchEvents(true);
         LayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(0);
@@ -5616,7 +5616,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         ChatActivity.this.contentView.invalidate();
                     }
                 };
-                this.roundVideoContainer.setOutlineProvider(new C057931());
+                this.roundVideoContainer.setOutlineProvider(new CLASSNAME());
                 this.roundVideoContainer.setClipToOutline(true);
             } else {
                 this.roundVideoContainer = new FrameLayout(getParentActivity()) {
@@ -5949,7 +5949,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private void createChatAttachView() {
         if (getParentActivity() != null && this.chatAttachAlert == null) {
             this.chatAttachAlert = new ChatAttachAlert(getParentActivity(), this);
-            this.chatAttachAlert.setDelegate(new C130834());
+            this.chatAttachAlert.setDelegate(new CLASSNAME());
         }
     }
 
@@ -6084,7 +6084,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         } else if (this.currentUser.bot) {
             builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfoBot", R.string.AreYouSureShareMyContactInfoBot));
         } else {
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", R.string.AreYouSureShareMyContactInfoUser, C0194PhoneFormat.getInstance().format("+" + UserConfig.getInstance(this.currentAccount).getCurrentUser().phone), ContactsController.formatName(this.currentUser.first_name, this.currentUser.last_name))));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", R.string.AreYouSureShareMyContactInfoUser, CLASSNAMEPhoneFormat.getInstance().format("+" + UserConfig.getInstance(this.currentAccount).getCurrentUser().phone), ContactsController.formatName(this.currentUser.first_name, this.currentUser.last_name))));
         }
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatActivity$$Lambda$29(this, messageObject));
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -6103,7 +6103,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         Animator[] animatorArr = new Animator[1];
         animatorArr[0] = ObjectAnimator.ofFloat(this.voiceHintTextView, "alpha", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
-        this.voiceHintAnimation.addListener(new C058336());
+        this.voiceHintAnimation.addListener(new CLASSNAME());
         this.voiceHintAnimation.setDuration(300);
         this.voiceHintAnimation.start();
     }
@@ -6161,7 +6161,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 Animator[] animatorArr = new Animator[1];
                 animatorArr[0] = ObjectAnimator.ofFloat(this.voiceHintTextView, "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
-                this.voiceHintAnimation.addListener(new C058437());
+                this.voiceHintAnimation.addListener(new CLASSNAME());
                 this.voiceHintAnimation.setDuration(300);
                 this.voiceHintAnimation.start();
             }
@@ -6191,7 +6191,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     this.mediaBanTooltip.setVisibility(0);
                     AnimatorSet AnimatorSet = new AnimatorSet();
                     AnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.mediaBanTooltip, "alpha", new float[]{0.0f, 1.0f})});
-                    AnimatorSet.addListener(new C058638());
+                    AnimatorSet.addListener(new CLASSNAME());
                     AnimatorSet.setDuration(300);
                     AnimatorSet.start();
                 }
@@ -6222,7 +6222,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         frameLayout.addView(this.gifHintTextView, index + 1, LayoutHelper.createFrame(-2, -2.0f, 83, 5.0f, 0.0f, 5.0f, 3.0f));
                         AnimatorSet AnimatorSet = new AnimatorSet();
                         AnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.gifHintTextView, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.emojiButtonRed, "alpha", new float[]{0.0f, 1.0f})});
-                        AnimatorSet.addListener(new C058839());
+                        AnimatorSet.addListener(new CLASSNAME());
                         AnimatorSet.setDuration(300);
                         AnimatorSet.start();
                     }
@@ -6258,7 +6258,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 this.mentionContainer.setVisibility(0);
                 this.mentionListAnimation = new AnimatorSet();
                 this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.mentionContainer, "alpha", new float[]{0.0f, 1.0f})});
-                this.mentionListAnimation.addListener(new C059041());
+                this.mentionListAnimation.addListener(new CLASSNAME());
                 this.mentionListAnimation.setDuration(200);
                 this.mentionListAnimation.start();
             }
@@ -6272,7 +6272,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             Animator[] animatorArr = new Animator[1];
             animatorArr[0] = ObjectAnimator.ofFloat(this.mentionContainer, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
-            this.mentionListAnimation.addListener(new C058940());
+            this.mentionListAnimation.addListener(new CLASSNAME());
             this.mentionListAnimation.setDuration(200);
             this.mentionListAnimation.start();
         }
@@ -6289,7 +6289,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(this.floatingDateView, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
-                    this.floatingDateAnimation.addListener(new C059142());
+                    this.floatingDateAnimation.addListener(new CLASSNAME());
                     this.floatingDateAnimation.setStartDelay(500);
                     this.floatingDateAnimation.start();
                     return;
@@ -6436,7 +6436,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     i = 100;
                 }
                 fragment.setMaxSelectedPhotos(i);
-                fragment.setDelegate(new C131043());
+                fragment.setDelegate(new CLASSNAME());
                 presentFragment(fragment);
                 return;
             }
@@ -6482,7 +6482,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     i = -1;
                 }
                 fragment3.setMaxSelectedFiles(i);
-                fragment3.setDelegate(new C131144());
+                fragment3.setDelegate(new CLASSNAME());
                 presentFragment(fragment3);
                 return;
             }
@@ -7652,7 +7652,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         animatorSet.playTogether(animatorArr);
                     }
                     this.pagedownButtonAnimation.setDuration(200);
-                    this.pagedownButtonAnimation.addListener(new C059245());
+                    this.pagedownButtonAnimation.addListener(new CLASSNAME());
                     this.pagedownButtonAnimation.start();
                     return;
                 }
@@ -7677,7 +7677,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else {
                             this.mentiondownButtonAnimation = ObjectAnimator.ofFloat(this.mentiondownButton, "translationY", new float[]{(float) AndroidUtilities.m9dp(100.0f)}).setDuration(200);
                         }
-                        this.mentiondownButtonAnimation.addListener(new C059346());
+                        this.mentiondownButtonAnimation.addListener(new CLASSNAME());
                         this.mentiondownButtonAnimation.start();
                         return;
                     }
@@ -8171,7 +8171,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 } else if (TextUtils.isEmpty(this.currentUser.phone)) {
                     this.avatarContainer.setTitle(UserObject.getUserName(this.currentUser));
                 } else {
-                    this.avatarContainer.setTitle(C0194PhoneFormat.getInstance().format("+" + this.currentUser.phone));
+                    this.avatarContainer.setTitle(CLASSNAMEPhoneFormat.getInstance().format("+" + this.currentUser.phone));
                 }
             }
         }
@@ -8314,7 +8314,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     String firstExtraction = extractUriFrom.split("/1/")[1];
                     int index = firstExtraction.indexOf("/ACTUAL");
                     if (index != -1) {
-                        uri = Uri.parse(URLDecoder.decode(firstExtraction.substring(0, index), C0016C.UTF8_NAME));
+                        uri = Uri.parse(URLDecoder.decode(firstExtraction.substring(0, index), CLASSNAMEC.UTF8_NAME));
                     }
                 } catch (Throwable e) {
                     FileLog.m13e(e);
@@ -11020,7 +11020,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 animatorArr[0] = ObjectAnimator.ofFloat(this.alertView, "translationY", new float[]{0.0f});
                 animatorSet.playTogether(animatorArr);
                 this.alertViewAnimator.setDuration(200);
-                this.alertViewAnimator.addListener(new C059549());
+                this.alertViewAnimator.addListener(new CLASSNAME());
                 this.alertViewAnimator.start();
             }
             this.alertNameTextView.setText(name);
@@ -11028,9 +11028,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.hideAlertViewRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.hideAlertViewRunnable);
             }
-            Runnable c059750 = new C059750();
-            this.hideAlertViewRunnable = c059750;
-            AndroidUtilities.runOnUIThread(c059750, 3000);
+            Runnable CLASSNAME = new CLASSNAME();
+            this.hideAlertViewRunnable = CLASSNAME;
+            AndroidUtilities.runOnUIThread(CLASSNAME, 3000);
         }
     }
 
@@ -11048,7 +11048,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 animatorArr[0] = ObjectAnimator.ofFloat(this.pinnedMessageView, "translationY", new float[]{(float) (-AndroidUtilities.m9dp(50.0f))});
                 animatorSet.playTogether(animatorArr);
                 this.pinnedMessageViewAnimator.setDuration(200);
-                this.pinnedMessageViewAnimator.addListener(new C059851());
+                this.pinnedMessageViewAnimator.addListener(new CLASSNAME());
                 this.pinnedMessageViewAnimator.start();
                 return;
             }
@@ -11097,7 +11097,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         animatorArr[0] = ObjectAnimator.ofFloat(this.pinnedMessageView, "translationY", new float[]{0.0f});
                         animatorSet.playTogether(animatorArr);
                         this.pinnedMessageViewAnimator.setDuration(200);
-                        this.pinnedMessageViewAnimator.addListener(new C059952());
+                        this.pinnedMessageViewAnimator.addListener(new CLASSNAME());
                         this.pinnedMessageViewAnimator.start();
                     } else {
                         this.pinnedMessageView.setTranslationY(0.0f);
@@ -11191,7 +11191,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     animatorArr[0] = ObjectAnimator.ofFloat(this.reportSpamView, "translationY", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.reportSpamViewAnimator.setDuration(200);
-                    this.reportSpamViewAnimator.addListener(new C060154());
+                    this.reportSpamViewAnimator.addListener(new CLASSNAME());
                     this.reportSpamViewAnimator.start();
                 }
             } else if (this.reportSpamView.getTag() == null) {
@@ -11208,7 +11208,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 animatorArr[0] = ObjectAnimator.ofFloat(this.reportSpamView, "translationY", new float[]{(float) (-AndroidUtilities.m9dp(50.0f))});
                 animatorSet.playTogether(animatorArr);
                 this.reportSpamViewAnimator.setDuration(200);
-                this.reportSpamViewAnimator.addListener(new C060053());
+                this.reportSpamViewAnimator.addListener(new CLASSNAME());
                 this.reportSpamViewAnimator.start();
             }
             checkListViewPaddings();
@@ -11708,9 +11708,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 ((ViewGroup) this.fragmentView).addView(this.fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
             }
         } else {
-            C0403ActionBar c0403ActionBar = this.actionBar;
+            CLASSNAMEActionBar CLASSNAMEActionBar = this.actionBar;
             boolean z = this.parentLayout == null || this.parentLayout.fragmentsStack.isEmpty() || this.parentLayout.fragmentsStack.get(0) == this || this.parentLayout.fragmentsStack.size() == 1;
-            c0403ActionBar.setBackButtonDrawable(new BackDrawable(z));
+            CLASSNAMEActionBar.setBackButtonDrawable(new BackDrawable(z));
             if (!(this.fragmentContextView == null || this.fragmentContextView.getParent() == null)) {
                 this.fragmentView.setPadding(0, 0, 0, 0);
                 ((ViewGroup) this.fragmentView).removeView(this.fragmentContextView);
@@ -11721,7 +11721,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     private void fixLayout() {
         if (this.avatarContainer != null) {
-            this.avatarContainer.getViewTreeObserver().addOnPreDrawListener(new C060255());
+            this.avatarContainer.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 
@@ -12153,7 +12153,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ArrayList<Animator> animators = new ArrayList();
                             for (a = 0; a < this.actionModeViews.size(); a++) {
                                 View view = (View) this.actionModeViews.get(a);
-                                view.setPivotY((float) (C0403ActionBar.getCurrentActionBarHeight() / 2));
+                                view.setPivotY((float) (CLASSNAMEActionBar.getCurrentActionBarHeight() / 2));
                                 AndroidUtilities.clearDrawableAnimation(view);
                                 animators.add(ObjectAnimator.ofFloat(view, "scaleY", new float[]{0.1f, 1.0f}));
                             }
@@ -12786,7 +12786,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 case 17:
                     try {
                         intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:" + this.selectedObject.messageOwner.media.phone_number));
-                        intent.addFlags(C0016C.ENCODING_PCM_MU_LAW);
+                        intent.addFlags(CLASSNAMEC.ENCODING_PCM_MU_LAW);
                         getParentActivity().startActivityForResult(intent, 500);
                         break;
                     } catch (Throwable e2) {

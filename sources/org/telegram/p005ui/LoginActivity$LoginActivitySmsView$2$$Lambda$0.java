@@ -1,13 +1,13 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.LoginActivity.LoginActivitySmsView.C09832;
+import org.telegram.p005ui.LoginActivity.LoginActivitySmsView.CLASSNAME;
 
 /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$2$$Lambda$0 */
 final /* synthetic */ class LoginActivity$LoginActivitySmsView$2$$Lambda$0 implements Runnable {
-    private final C09832 arg$1;
+    private final CLASSNAME arg$1;
 
-    LoginActivity$LoginActivitySmsView$2$$Lambda$0(C09832 c09832) {
-        this.arg$1 = c09832;
+    LoginActivity$LoginActivitySmsView$2$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void run() {

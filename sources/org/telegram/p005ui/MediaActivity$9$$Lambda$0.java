@@ -2,15 +2,15 @@ package org.telegram.p005ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.MediaActivity.C14769;
+import org.telegram.p005ui.MediaActivity.CLASSNAME;
 
 /* renamed from: org.telegram.ui.MediaActivity$9$$Lambda$0 */
 final /* synthetic */ class MediaActivity$9$$Lambda$0 implements OnClickListener {
-    private final C14769 arg$1;
+    private final CLASSNAME arg$1;
     private final String arg$2;
 
-    MediaActivity$9$$Lambda$0(C14769 c14769, String str) {
-        this.arg$1 = c14769;
+    MediaActivity$9$$Lambda$0(CLASSNAME CLASSNAME, String str) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = str;
     }
 

@@ -3,7 +3,7 @@ package org.telegram.messenger;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -94,7 +94,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                         int accountFinal;
                         byte[] strBytes = new byte[nativeByteBuffer.readInt32(true)];
                         nativeByteBuffer.readBytes(strBytes, true);
-                        String str = new String(strBytes, C0016C.UTF8_NAME);
+                        String str = new String(strBytes, CLASSNAMEC.UTF8_NAME);
                         try {
                             Object userIdObject;
                             int accountUserId;

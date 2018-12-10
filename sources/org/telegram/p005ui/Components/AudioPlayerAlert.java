@@ -69,8 +69,8 @@ import org.telegram.p005ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchLi
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Cells.AudioPlayerCell;
@@ -92,7 +92,7 @@ import org.telegram.tgnet.TLRPC.User;
 /* renamed from: org.telegram.ui.Components.AudioPlayerAlert */
 public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgressListener, NotificationCenterDelegate {
     private int TAG;
-    private C0403ActionBar actionBar;
+    private CLASSNAMEActionBar actionBar;
     private AnimatorSet actionBarAnimation;
     private AnimatorSet animatorSet;
     private TextView authorTextView;
@@ -144,8 +144,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     private int topBeforeSwitch;
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$5 */
-    class C06145 extends AnimatorListenerAdapter {
-        C06145() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -168,8 +168,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$2 */
-    class C13372 extends ActionBarMenuItemSearchListener {
-        C13372() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchCollapse() {
@@ -209,8 +209,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$3 */
-    class C13383 extends ActionBarMenuOnItemClick {
-        C13383() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -223,8 +223,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$8 */
-    class C13408 extends OnScrollListener {
-        C13408() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -451,13 +451,13 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int padding;
                 int height = MeasureSpec.getSize(heightMeasureSpec);
-                int contentSize = (((AndroidUtilities.m9dp(178.0f) + (AudioPlayerAlert.this.playlist.size() * AndroidUtilities.m9dp(56.0f))) + AudioPlayerAlert.backgroundPaddingTop) + C0403ActionBar.getCurrentActionBarHeight()) + AndroidUtilities.statusBarHeight;
+                int contentSize = (((AndroidUtilities.m9dp(178.0f) + (AudioPlayerAlert.this.playlist.size() * AndroidUtilities.m9dp(56.0f))) + AudioPlayerAlert.backgroundPaddingTop) + CLASSNAMEActionBar.getCurrentActionBarHeight()) + AndroidUtilities.statusBarHeight;
                 heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, NUM);
                 if (AudioPlayerAlert.this.searching) {
-                    padding = (C0403ActionBar.getCurrentActionBarHeight() + AndroidUtilities.m9dp(178.0f)) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                    padding = (CLASSNAMEActionBar.getCurrentActionBarHeight() + AndroidUtilities.m9dp(178.0f)) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
                 } else {
                     padding = contentSize < height ? height - contentSize : contentSize < height ? 0 : height - ((height / 5) * 3);
-                    padding += (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + C0403ActionBar.getCurrentActionBarHeight();
+                    padding += (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight();
                 }
                 if (AudioPlayerAlert.this.listView.getPaddingTop() != padding) {
                     this.ignoreLayout = true;
@@ -466,13 +466,13 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 }
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 AudioPlayerAlert.this.inFullSize = getMeasuredHeight() >= height;
-                int availableHeight = ((height - C0403ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.m9dp(120.0f);
+                int availableHeight = ((height - CLASSNAMEActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.m9dp(120.0f);
                 int maxSize = Math.max(availableHeight, getMeasuredWidth());
                 AudioPlayerAlert.this.thumbMaxX = ((getMeasuredWidth() - maxSize) / 2) - AndroidUtilities.m9dp(17.0f);
                 AudioPlayerAlert.this.thumbMaxY = AndroidUtilities.m9dp(19.0f);
                 AudioPlayerAlert.this.panelEndTranslation = (float) (getMeasuredHeight() - AudioPlayerAlert.this.playerLayout.getMeasuredHeight());
                 AudioPlayerAlert.this.thumbMaxScale = (((float) maxSize) / ((float) AudioPlayerAlert.this.placeholderImageView.getMeasuredWidth())) - 1.0f;
-                AudioPlayerAlert.this.endTranslation = (float) (C0403ActionBar.getCurrentActionBarHeight() + AndroidUtilities.m9dp(5.0f));
+                AudioPlayerAlert.this.endTranslation = (float) (CLASSNAMEActionBar.getCurrentActionBarHeight() + AndroidUtilities.m9dp(5.0f));
                 int scaledHeight = (int) Math.ceil((double) (((float) AudioPlayerAlert.this.placeholderImageView.getMeasuredHeight()) * (1.0f + AudioPlayerAlert.this.thumbMaxScale)));
                 if (scaledHeight > availableHeight) {
                     AudioPlayerAlert.this.endTranslation = AudioPlayerAlert.this.endTranslation - ((float) (scaledHeight - availableHeight));
@@ -500,7 +500,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         };
         this.containerView.setWillNotDraw(false);
         this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
-        this.actionBar = new C0403ActionBar(context);
+        this.actionBar = new CLASSNAMEActionBar(context);
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_player_actionBar));
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setItemsColor(Theme.getColor(Theme.key_player_actionBarItems), false);
@@ -544,8 +544,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             }
         }
         this.avatarContainer.setSubtitle(LocaleController.getString("AudioTitle", R.string.AudioTitle));
-        C0403ActionBar c0403ActionBar = this.actionBar;
-        c0403ActionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
+        CLASSNAMEActionBar CLASSNAMEActionBar = this.actionBar;
+        CLASSNAMEActionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
         ActionBarMenu menu = this.actionBar.createMenu();
         this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
         this.menuItem.addSubItem(1, LocaleController.getString("Forward", R.string.Forward));
@@ -553,7 +553,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.menuItem.addSubItem(4, LocaleController.getString("ShowInChat", R.string.ShowInChat));
         this.menuItem.setTranslationX((float) AndroidUtilities.m9dp(48.0f));
         this.menuItem.setAlpha(0.0f);
-        this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C13372());
+        this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME());
         EditTextBoldCursor editText = this.searchItem.getSearchField();
         editText.setHint(LocaleController.getString("Search", R.string.Search));
         editText.setTextColor(Theme.getColor(Theme.key_player_actionBarTitle));
@@ -563,7 +563,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             this.actionBar.showActionModeTop();
             this.actionBar.setActionModeTopColor(Theme.getColor(Theme.key_player_actionBarTop));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C13383());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.shadow = new View(context);
         this.shadow.setAlpha(0.0f);
         this.shadow.setBackgroundResource(R.drawable.header_shadow);
@@ -792,7 +792,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         recyclerListView.setAdapter(listAdapter);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
         this.listView.setOnItemClickListener(AudioPlayerAlert$$Lambda$10.$instance);
-        this.listView.setOnScrollListener(new C13408());
+        this.listView.setOnScrollListener(new CLASSNAME());
         this.playlist = MediaController.getInstance().getPlaylist();
         this.listAdapter.notifyDataSetChanged();
         this.containerView.addView(this.playerLayout, LayoutHelper.createFrame(-1, 178.0f));
@@ -832,11 +832,11 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             float[] fArr2 = new float[1];
             fArr2[0] = this.isInFullMode ? 0.0f : 1.0f;
             animatorArr2[0] = ObjectAnimator.ofFloat(this, str2, fArr2);
-            C0403ActionBar c0403ActionBar = this.actionBar;
+            CLASSNAMEActionBar CLASSNAMEActionBar = this.actionBar;
             String str3 = "alpha";
             float[] fArr3 = new float[1];
             fArr3[0] = this.isInFullMode ? 0.0f : 1.0f;
-            animatorArr2[1] = ObjectAnimator.ofFloat(c0403ActionBar, str3, fArr3);
+            animatorArr2[1] = ObjectAnimator.ofFloat(CLASSNAMEActionBar, str3, fArr3);
             View view2 = this.shadow;
             String str4 = "alpha";
             float[] fArr4 = new float[1];
@@ -859,7 +859,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         }
         this.animatorSet.setInterpolator(new DecelerateInterpolator());
         this.animatorSet.setDuration(250);
-        this.animatorSet.addListener(new C06145());
+        this.animatorSet.addListener(new CLASSNAME());
         this.animatorSet.start();
         if (this.hasOptions) {
             this.menuItem.setVisibility(0);

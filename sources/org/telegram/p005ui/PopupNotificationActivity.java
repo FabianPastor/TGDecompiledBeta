@@ -32,7 +32,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import com.google.android.exoplayer2.extractor.p003ts.PsExtractor;
 import java.util.ArrayList;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
@@ -54,8 +54,8 @@ import org.telegram.messenger.WebFile;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.AvatarDrawable;
 import org.telegram.p005ui.Components.BackupImageView;
@@ -84,7 +84,7 @@ import org.telegram.tgnet.TLRPC.User;
 /* renamed from: org.telegram.ui.PopupNotificationActivity */
 public class PopupNotificationActivity extends Activity implements NotificationCenterDelegate {
     private static final int id_chat_compose_panel = 1000;
-    private C0403ActionBar actionBar;
+    private CLASSNAMEActionBar actionBar;
     private boolean animationInProgress = false;
     private long animationStartTime = 0;
     private ArrayList<ViewGroup> audioViews = new ArrayList();
@@ -122,8 +122,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private WakeLock wakeLock = null;
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$5 */
-    class C11065 extends AnimatorListenerAdapter {
-        C11065() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -135,30 +135,30 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$6 */
-    class C11076 implements OnPreDrawListener {
-        C11076() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
             if (PopupNotificationActivity.this.avatarContainer != null) {
                 PopupNotificationActivity.this.avatarContainer.getViewTreeObserver().removeOnPreDrawListener(this);
             }
-            int padding = (C0403ActionBar.getCurrentActionBarHeight() - AndroidUtilities.m9dp(48.0f)) / 2;
+            int padding = (CLASSNAMEActionBar.getCurrentActionBarHeight() - AndroidUtilities.m9dp(48.0f)) / 2;
             PopupNotificationActivity.this.avatarContainer.setPadding(PopupNotificationActivity.this.avatarContainer.getPaddingLeft(), padding, PopupNotificationActivity.this.avatarContainer.getPaddingRight(), padding);
             return true;
         }
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$7 */
-    class C11087 implements OnPreDrawListener {
-        C11087() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
             PopupNotificationActivity.this.messageContainer.getViewTreeObserver().removeOnPreDrawListener(this);
             if (!(PopupNotificationActivity.this.checkTransitionAnimation() || PopupNotificationActivity.this.startedMoving)) {
                 MarginLayoutParams layoutParams = (MarginLayoutParams) PopupNotificationActivity.this.messageContainer.getLayoutParams();
-                layoutParams.topMargin = C0403ActionBar.getCurrentActionBarHeight();
+                layoutParams.topMargin = CLASSNAMEActionBar.getCurrentActionBarHeight();
                 layoutParams.bottomMargin = AndroidUtilities.m9dp(48.0f);
                 layoutParams.width = -1;
                 layoutParams.height = -1;
@@ -198,8 +198,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$3 */
-    class C15483 implements ChatActivityEnterViewDelegate {
-        C15483() {
+    class CLASSNAME implements ChatActivityEnterViewDelegate {
+        CLASSNAME() {
         }
 
         public void onMessageSend(CharSequence message) {
@@ -272,8 +272,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.PopupNotificationActivity$4 */
-    class C15494 extends ActionBarMenuOnItemClick {
-        C15494() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -423,10 +423,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.chatActivityEnterView = new ChatActivityEnterView(this, contentView, null, false);
         this.chatActivityEnterView.setId(id_chat_compose_panel);
         this.popupContainer.addView(this.chatActivityEnterView, LayoutHelper.createRelative(-1, -2, 12));
-        this.chatActivityEnterView.setDelegate(new C15483());
+        this.chatActivityEnterView.setDelegate(new CLASSNAME());
         this.messageContainer = new FrameLayoutTouch(this);
         this.popupContainer.addView(this.messageContainer, 0);
-        this.actionBar = new C0403ActionBar(this);
+        this.actionBar = new CLASSNAMEActionBar(this);
         this.actionBar.setOccupyStatusBar(false);
         this.actionBar.setBackButtonImage(R.drawable.ic_close_white);
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
@@ -492,7 +492,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.bottomMargin = AndroidUtilities.m9dp(4.0f);
         layoutParams2.gravity = 80;
         this.onlineTextView.setLayoutParams(layoutParams2);
-        this.actionBar.setActionBarMenuOnItemClick(new C15494());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(268435462, "screen");
         this.wakeLock.setReferenceCounted(false);
         handleIntent(getIntent());
@@ -655,7 +655,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(animators);
                     animatorSet.setDuration((long) time);
-                    animatorSet.addListener(new C11065());
+                    animatorSet.addListener(new CLASSNAME());
                     animatorSet.start();
                     this.animationInProgress = true;
                     this.animationStartTime = System.currentTimeMillis();
@@ -1084,10 +1084,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     private void fixLayout() {
         if (this.avatarContainer != null) {
-            this.avatarContainer.getViewTreeObserver().addOnPreDrawListener(new C11076());
+            this.avatarContainer.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
         if (this.messageContainer != null) {
-            this.messageContainer.getViewTreeObserver().addOnPreDrawListener(new C11087());
+            this.messageContainer.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 
@@ -1229,7 +1229,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             } else if (this.currentUser.phone == null || this.currentUser.phone.length() == 0) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else {
-                this.nameTextView.setText(C0194PhoneFormat.getInstance().format("+" + this.currentUser.phone));
+                this.nameTextView.setText(CLASSNAMEPhoneFormat.getInstance().format("+" + this.currentUser.phone));
             }
             if (this.currentUser == null || this.currentUser.f176id != 777000) {
                 CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentMessageObject.currentAccount).printingStrings.get(this.currentMessageObject.getDialogId());

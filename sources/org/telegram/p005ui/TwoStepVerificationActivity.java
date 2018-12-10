@@ -45,7 +45,7 @@ import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.EditTextSettingsCell;
@@ -62,7 +62,7 @@ import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.C0400xb6caa888;
+import org.telegram.tgnet.TLRPC.CLASSNAMExb6caa888;
 import org.telegram.tgnet.TLRPC.PasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC.SecurePasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC.TL_account_cancelPasswordEmail;
@@ -136,8 +136,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private boolean waitingForEmail;
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$2 */
-    class C11362 implements Callback {
-        C11362() {
+    class CLASSNAME implements Callback {
+        CLASSNAME() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -157,8 +157,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$3 */
-    class C11373 implements TextWatcher {
-        C11373() {
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -175,8 +175,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$1 */
-    class C15921 extends ActionBarMenuOnItemClick {
-        C15921() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -371,7 +371,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C15921());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -407,7 +407,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.passwordEditText.setCursorWidth(1.5f);
         linearLayout.addView(this.passwordEditText, LayoutHelper.createLinear(-1, 36, 51, 40, 32, 40, 0));
         this.passwordEditText.setOnEditorActionListener(new TwoStepVerificationActivity$$Lambda$0(this));
-        this.passwordEditText.setCustomSelectionActionModeCallback(new C11362());
+        this.passwordEditText.setCustomSelectionActionModeCallback(new CLASSNAME());
         this.bottomTextView = new TextView(context);
         this.bottomTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
         this.bottomTextView.setTextSize(1, 14.0f);
@@ -446,7 +446,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             editText.setInputType(3);
             editText.setImeOptions(6);
             editText.setOnEditorActionListener(new TwoStepVerificationActivity$$Lambda$3(this));
-            editText.addTextChangedListener(new C11373());
+            editText.addTextChangedListener(new CLASSNAME());
             updateRows();
             this.actionBar.setTitle(LocaleController.getString("TwoStepVerificationTitle", R.string.TwoStepVerificationTitle));
             this.titleTextView.setText(LocaleController.getString("PleaseEnterCurrentPassword", R.string.PleaseEnterCurrentPassword));
@@ -685,8 +685,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public static void initPasswordNewAlgo(TL_account_password password) {
         byte[] salt;
-        if (password.new_algo instanceof C0400xb6caa888) {
-            C0400xb6caa888 algo = password.new_algo;
+        if (password.new_algo instanceof CLASSNAMExb6caa888) {
+            CLASSNAMExb6caa888 algo = password.new_algo;
             salt = new byte[(algo.salt1.length + 32)];
             Utilities.random.nextBytes(salt);
             System.arraycopy(algo.salt1, 0, salt, 0, algo.salt1.length);
@@ -1158,7 +1158,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             newPasswordHash = null;
         } else {
             newPasswordBytes = AndroidUtilities.getStringBytes(password);
-            if (this.currentPassword.new_algo instanceof C0400xb6caa888) {
+            if (this.currentPassword.new_algo instanceof CLASSNAMExb6caa888) {
                 newPasswordHash = SRPHelper.getX(newPasswordBytes, this.currentPassword.new_algo);
             } else {
                 newPasswordHash = null;
@@ -1187,9 +1187,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             tL_account_passwordInputSettings.flags |= 4;
         }
         TL_error error;
-        if (this.currentPassword.new_algo instanceof C0400xb6caa888) {
+        if (this.currentPassword.new_algo instanceof CLASSNAMExb6caa888) {
             if (password != null) {
-                C0400xb6caa888 algo = (C0400xb6caa888) this.currentPassword.new_algo;
+                CLASSNAMExb6caa888 algo = (CLASSNAMExb6caa888) this.currentPassword.new_algo;
                 req.new_settings.new_password_hash = SRPHelper.getVBytes(newPasswordBytes, algo);
                 if (req.new_settings.new_password_hash == null) {
                     error = new TL_error();
@@ -1307,7 +1307,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     private TL_inputCheckPasswordSRP getNewSrpPassword() {
-        if (!(this.currentPassword.current_algo instanceof C0400xb6caa888)) {
+        if (!(this.currentPassword.current_algo instanceof CLASSNAMExb6caa888)) {
             return null;
         }
         return SRPHelper.startCheck(this.currentPasswordHash, this.currentPassword.srp_id, this.currentPassword.srp_B, this.currentPassword.current_algo);
@@ -1443,15 +1443,15 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     final /* synthetic */ void lambda$processDone$33$TwoStepVerificationActivity(byte[] oldPasswordBytes) {
         byte[] x_bytes;
         TL_account_getPasswordSettings req = new TL_account_getPasswordSettings();
-        if (this.currentPassword.current_algo instanceof C0400xb6caa888) {
+        if (this.currentPassword.current_algo instanceof CLASSNAMExb6caa888) {
             x_bytes = SRPHelper.getX(oldPasswordBytes, this.currentPassword.current_algo);
         } else {
             x_bytes = null;
         }
         RequestDelegate requestDelegate = new TwoStepVerificationActivity$$Lambda$19(this, oldPasswordBytes, x_bytes);
         TL_error error;
-        if (this.currentPassword.current_algo instanceof C0400xb6caa888) {
-            req.password = SRPHelper.startCheck(x_bytes, this.currentPassword.srp_id, this.currentPassword.srp_B, (C0400xb6caa888) this.currentPassword.current_algo);
+        if (this.currentPassword.current_algo instanceof CLASSNAMExb6caa888) {
+            req.password = SRPHelper.startCheck(x_bytes, this.currentPassword.srp_id, this.currentPassword.srp_B, (CLASSNAMExb6caa888) this.currentPassword.current_algo);
             if (req.password == null) {
                 error = new TL_error();
                 error.text = "ALGO_INVALID";

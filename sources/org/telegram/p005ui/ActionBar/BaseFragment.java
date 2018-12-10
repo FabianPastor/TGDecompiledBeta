@@ -19,7 +19,7 @@ import org.telegram.tgnet.ConnectionsManager;
 
 /* renamed from: org.telegram.ui.ActionBar.BaseFragment */
 public class BaseFragment {
-    protected C0403ActionBar actionBar;
+    protected CLASSNAMEActionBar actionBar;
     protected Bundle arguments;
     protected int classGuid;
     protected int currentAccount;
@@ -54,7 +54,7 @@ public class BaseFragment {
         this.currentAccount = account;
     }
 
-    public C0403ActionBar getActionBar() {
+    public CLASSNAMEActionBar getActionBar() {
         return this.actionBar;
     }
 
@@ -84,11 +84,11 @@ public class BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
             return;
         }
-        C0403ActionBar c0403ActionBar = this.actionBar;
+        CLASSNAMEActionBar CLASSNAMEActionBar = this.actionBar;
         if (VERSION.SDK_INT >= 21) {
             z = true;
         }
-        c0403ActionBar.setOccupyStatusBar(z);
+        CLASSNAMEActionBar.setOccupyStatusBar(z);
     }
 
     protected void clearViews() {
@@ -163,8 +163,8 @@ public class BaseFragment {
         }
     }
 
-    protected C0403ActionBar createActionBar(Context context) {
-        C0403ActionBar actionBar = new C0403ActionBar(context);
+    protected CLASSNAMEActionBar createActionBar(Context context) {
+        CLASSNAMEActionBar actionBar = new CLASSNAMEActionBar(context);
         actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSelector), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), true);

@@ -8,8 +8,8 @@ public class BuildVars {
     public static boolean CHECK_UPDATES = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = true;
-    public static String HOCKEY_APP_HASH = "a5b5c4f551dadedc9918d9766a22ca7c";
-    public static String HOCKEY_APP_HASH_DEBUG = "f972660267c948d2b5d04761f1c1a8f3";
+    public static String HOCKEY_APP_HASH = "a5b5c4f551dadedCLASSNAMEd9766a22ca7c";
+    public static String HOCKEY_APP_HASH_DEBUG = "f972660267CLASSNAMEd2b5d04761f1c1a8f3";
     public static boolean LOGS_ENABLED;
     public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
 

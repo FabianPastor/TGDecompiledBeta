@@ -32,13 +32,13 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewStructure;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.util.MimeTypes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import net.hockeyapp.android.UpdateFragment;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -253,7 +253,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private StaticLayout instantViewLayout;
     private Drawable instantViewSelectorDrawable;
     private int instantWidth;
-    private Runnable invalidateRunnable = new C04961();
+    private Runnable invalidateRunnable = new CLASSNAME();
     private boolean isAvatarVisible;
     public boolean isChat;
     private boolean isCheckPressed = true;
@@ -365,8 +365,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int widthForButtons;
 
     /* renamed from: org.telegram.ui.Cells.ChatMessageCell$1 */
-    class C04961 implements Runnable {
-        C04961() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -400,7 +400,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         private BotButton() {
         }
 
-        /* synthetic */ BotButton(ChatMessageCell x0, C04961 x1) {
+        /* synthetic */ BotButton(ChatMessageCell x0, CLASSNAME x1) {
             this();
         }
     }
@@ -2222,7 +2222,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:1710:0x3954  */
     /* JADX WARNING: Removed duplicated region for block: B:1715:0x3980  */
     /* JADX WARNING: Removed duplicated region for block: B:1718:0x3999  */
-    /* JADX WARNING: Removed duplicated region for block: B:1779:0x3c45  */
+    /* JADX WARNING: Removed duplicated region for block: B:1779:0x3CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cac  */
     /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cbc  */
     /* JADX WARNING: Removed duplicated region for block: B:1789:0x3c7e  */
@@ -2257,7 +2257,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:1710:0x3954  */
     /* JADX WARNING: Removed duplicated region for block: B:1715:0x3980  */
     /* JADX WARNING: Removed duplicated region for block: B:1718:0x3999  */
-    /* JADX WARNING: Removed duplicated region for block: B:1779:0x3c45  */
+    /* JADX WARNING: Removed duplicated region for block: B:1779:0x3CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cbc  */
     /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cac  */
     /* JADX WARNING: Removed duplicated region for block: B:1789:0x3c7e  */
@@ -3598,7 +3598,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (TextUtils.isEmpty(phone2)) {
                         phone = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                     } else {
-                        phone = C0194PhoneFormat.getInstance().format(phone2);
+                        phone = CLASSNAMEPhoneFormat.getInstance().format(phone2);
                     }
                 } else {
                     phone = messageObject.vCardData;
@@ -3738,8 +3738,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         maxWidth -= AndroidUtilities.m9dp(54.0f);
                         photoWidth = this.backgroundWidth - AndroidUtilities.m9dp(21.0f);
                         photoHeight = AndroidUtilities.m9dp(195.0f);
-                        double rad = ((double) C0016C.ENCODING_PCM_MU_LAW) / 3.141592653589793d;
-                        lat = ((1.5707963267948966d - (2.0d * Math.atan(Math.exp((((double) (Math.round(((double) C0016C.ENCODING_PCM_MU_LAW) - ((Math.log((1.0d + Math.sin((3.141592653589793d * lat) / 180.0d)) / (1.0d - Math.sin((3.141592653589793d * lat) / 180.0d))) * rad) / 2.0d)) - ((long) (AndroidUtilities.m9dp(10.3f) << 6)))) - ((double) C0016C.ENCODING_PCM_MU_LAW)) / rad)))) * 180.0d) / 3.141592653589793d;
+                        double rad = ((double) CLASSNAMEC.ENCODING_PCM_MU_LAW) / 3.141592653589793d;
+                        lat = ((1.5707963267948966d - (2.0d * Math.atan(Math.exp((((double) (Math.round(((double) CLASSNAMEC.ENCODING_PCM_MU_LAW) - ((Math.log((1.0d + Math.sin((3.141592653589793d * lat) / 180.0d)) / (1.0d - Math.sin((3.141592653589793d * lat) / 180.0d))) * rad) / 2.0d)) - ((long) (AndroidUtilities.m9dp(10.3f) << 6)))) - ((double) CLASSNAMEC.ENCODING_PCM_MU_LAW)) / rad)))) * 180.0d) / 3.141592653589793d;
                         this.currentUrl = AndroidUtilities.formapMapUrl(this.currentAccount, lat, lon, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) photoHeight) / AndroidUtilities.density), false, 15);
                         this.currentWebFile = WebFile.createWithGeoPoint(lat, lon, point.access_hash, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) photoHeight) / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil((double) AndroidUtilities.density)));
                         z = isCurrentLocationTimeExpired(messageObject);

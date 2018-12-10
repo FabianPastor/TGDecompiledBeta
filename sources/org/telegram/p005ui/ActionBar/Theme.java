@@ -41,7 +41,7 @@ import android.os.SystemClock;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.StateSet;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import java.io.File;
 import java.io.FileInputStream;
@@ -92,7 +92,7 @@ public class Theme {
     private static final int LIGHT_SENSOR_THEME_SWITCH_NEAR_THRESHOLD = 12000;
     private static final float MAXIMUM_LUX_BREAKPOINT = 500.0f;
     private static Method StateListDrawable_getStateDrawableMethod = null;
-    private static SensorEventListener ambientSensorListener = new C04417();
+    private static SensorEventListener ambientSensorListener = new CLASSNAME();
     public static float autoNightBrighnessThreshold = 0.0f;
     public static String autoNightCityName = null;
     public static int autoNightDayEndTime = 0;
@@ -838,9 +838,9 @@ public class Theme {
     private static SensorManager sensorManager;
     private static int serviceMessageColor;
     private static int serviceSelectedMessageColor;
-    private static Runnable switchDayBrightnessRunnable = new C04351();
+    private static Runnable switchDayBrightnessRunnable = new CLASSNAME();
     private static boolean switchDayRunnableScheduled;
-    private static Runnable switchNightBrightnessRunnable = new C04362();
+    private static Runnable switchNightBrightnessRunnable = new CLASSNAME();
     private static boolean switchNightRunnableScheduled;
     private static final Object sync = new Object();
     private static Drawable themedWallpaper;
@@ -851,8 +851,8 @@ public class Theme {
     private static final Object wallpaperSync = new Object();
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$1 */
-    static class C04351 implements Runnable {
-        C04351() {
+    static class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -862,8 +862,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$2 */
-    static class C04362 implements Runnable {
-        C04362() {
+    static class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -873,8 +873,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$3 */
-    static class C04373 extends StateListDrawable {
-        C04373() {
+    static class CLASSNAME extends StateListDrawable {
+        CLASSNAME() {
         }
 
         public boolean selectDrawable(int index) {
@@ -898,8 +898,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$4 */
-    static class C04384 extends StateListDrawable {
-        C04384() {
+    static class CLASSNAME extends StateListDrawable {
+        CLASSNAME() {
         }
 
         public boolean selectDrawable(int index) {
@@ -923,8 +923,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$5 */
-    static class C04395 extends StateListDrawable {
-        C04395() {
+    static class CLASSNAME extends StateListDrawable {
+        CLASSNAME() {
         }
 
         public boolean selectDrawable(int index) {
@@ -948,8 +948,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$6 */
-    static class C04406 extends Drawable {
-        C04406() {
+    static class CLASSNAME extends Drawable {
+        CLASSNAME() {
         }
 
         public void draw(Canvas canvas) {
@@ -969,8 +969,8 @@ public class Theme {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.Theme$7 */
-    static class C04417 implements SensorEventListener {
-        C04417() {
+    static class CLASSNAME implements SensorEventListener {
+        CLASSNAME() {
         }
 
         public void onSensorChanged(SensorEvent event) {
@@ -1865,7 +1865,7 @@ public class Theme {
         if (pressedColor != 0) {
             pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, Mode.MULTIPLY));
         }
-        StateListDrawable stateListDrawable = new C04373();
+        StateListDrawable stateListDrawable = new CLASSNAME();
         stateListDrawable.setEnterFadeDuration(1);
         stateListDrawable.setExitFadeDuration(Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         stateListDrawable.addState(new int[]{16842913}, pressedDrawable);
@@ -1879,7 +1879,7 @@ public class Theme {
         defaultDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(alert ? key_dialogInputField : key_windowBackgroundWhiteInputField), Mode.MULTIPLY));
         Drawable pressedDrawable = resources.getDrawable(R.drawable.search_dark_activated).mutate();
         pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(alert ? key_dialogInputFieldActivated : key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
-        StateListDrawable stateListDrawable = new C04384();
+        StateListDrawable stateListDrawable = new CLASSNAME();
         stateListDrawable.addState(new int[]{16842910, 16842908}, pressedDrawable);
         stateListDrawable.addState(new int[]{16842908}, pressedDrawable);
         stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
@@ -1952,7 +1952,7 @@ public class Theme {
         if (pressedColor != 0) {
             pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, Mode.MULTIPLY));
         }
-        StateListDrawable stateListDrawable = new C04395();
+        StateListDrawable stateListDrawable = new CLASSNAME();
         stateListDrawable.addState(new int[]{16842919}, pressedDrawable);
         stateListDrawable.addState(new int[]{16842913}, pressedDrawable);
         stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
@@ -2102,7 +2102,7 @@ public class Theme {
             Drawable maskDrawable = null;
             if (maskType == 1) {
                 maskPaint.setColor(-1);
-                maskDrawable = new C04406();
+                maskDrawable = new CLASSNAME();
             } else if (maskType == 2) {
                 maskDrawable = new ColorDrawable(-1);
             }
@@ -2586,7 +2586,7 @@ public class Theme {
                     for (int a = 0; a < read; a++) {
                         if (bytes[a] == (byte) 10) {
                             int len = (a - start) + 1;
-                            String line = new String(bytes, start, len - 1, C0016C.UTF8_NAME);
+                            String line = new String(bytes, start, len - 1, CLASSNAMEC.UTF8_NAME);
                             if (line.startsWith("WPS")) {
                                 themedWallpaperFileOffset = currentPosition + len;
                                 finished = true;

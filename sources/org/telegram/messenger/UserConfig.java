@@ -64,8 +64,8 @@ public class UserConfig {
     public boolean unreadDialogsLoaded = true;
 
     /* renamed from: org.telegram.messenger.UserConfig$1 */
-    class C02771 implements Runnable {
-        C02771() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -338,7 +338,7 @@ public class UserConfig {
                         }
                         if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
                             this.pendingAppUpdate = null;
-                            AndroidUtilities.runOnUIThread(new C02771());
+                            AndroidUtilities.runOnUIThread(new CLASSNAME());
                         }
                     }
                 } catch (Throwable e22) {

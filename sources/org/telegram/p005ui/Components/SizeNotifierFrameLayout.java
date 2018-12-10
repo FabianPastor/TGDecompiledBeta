@@ -11,7 +11,7 @@ import android.os.Build.VERSION;
 import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 
 /* renamed from: org.telegram.ui.Components.SizeNotifierFrameLayout */
 public class SizeNotifierFrameLayout extends FrameLayout {
@@ -102,7 +102,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 canvas.restore();
                 return;
             }
-            int currentActionBarHeight = isActionBarVisible() ? C0403ActionBar.getCurrentActionBarHeight() : 0;
+            int currentActionBarHeight = isActionBarVisible() ? CLASSNAMEActionBar.getCurrentActionBarHeight() : 0;
             int i = (VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight;
             int actionBarHeight = currentActionBarHeight + i;
             int viewHeight = getMeasuredHeight() - actionBarHeight;

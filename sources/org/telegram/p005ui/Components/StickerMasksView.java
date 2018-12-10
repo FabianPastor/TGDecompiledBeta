@@ -61,8 +61,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$2 */
-    class C14002 extends SpanSizeLookup {
-        C14002() {
+    class CLASSNAME extends SpanSizeLookup {
+        CLASSNAME() {
         }
 
         public int getSpanSize(int position) {
@@ -74,8 +74,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$3 */
-    class C14013 extends OnScrollListener {
-        C14013() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -235,7 +235,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         LayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
         this.stickersLayoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.stickersLayoutManager.setSpanSizeLookup(new C14002());
+        this.stickersLayoutManager.setSpanSizeLookup(new CLASSNAME());
         this.stickersGridView.setPadding(0, AndroidUtilities.m9dp(4.0f), 0, 0);
         this.stickersGridView.setClipToPadding(false);
         recyclerListView = this.stickersGridView;
@@ -261,7 +261,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         addView(this.scrollSlidingTabStrip, LayoutHelper.createFrame(-1, 48, 51));
         updateStickerTabs();
         this.scrollSlidingTabStrip.setDelegate(new StickerMasksView$$Lambda$2(this));
-        this.stickersGridView.setOnScrollListener(new C14013());
+        this.stickersGridView.setOnScrollListener(new CLASSNAME());
     }
 
     final /* synthetic */ boolean lambda$new$0$StickerMasksView(View v, MotionEvent event) {

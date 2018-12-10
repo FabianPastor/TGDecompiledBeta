@@ -42,7 +42,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.extractor.p003ts.PsExtractor;
 import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import com.google.android.exoplayer2.p004ui.AspectRatioFrameLayout;
@@ -87,8 +87,8 @@ import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet.Builder;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.Theme.ThemeInfo;
@@ -181,7 +181,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private RadialProgressView progressBar;
     private FrameLayout progressView;
     private View progressView2;
-    private PhotoViewerProvider provider = new C12841();
+    private PhotoViewerProvider provider = new CLASSNAME();
     private FrameLayout roundVideoContainer;
     private MessageObject scrollToMessage;
     private int scrollToOffsetOnRecreate = 0;
@@ -201,8 +201,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private boolean wasPaused = false;
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$11 */
-    class C054911 extends ViewOutlineProvider {
-        C054911() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @TargetApi(21)
@@ -212,8 +212,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$13 */
-    class C055113 extends AnimatorListenerAdapter {
-        C055113() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -224,8 +224,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$14 */
-    class C055214 implements OnPreDrawListener {
-        C055214() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -237,8 +237,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$2 */
-    class C12782 extends ActionBarMenuOnItemClick {
-        C12782() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -249,8 +249,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$3 */
-    class C12793 extends ActionBarMenuItemSearchListener {
-        C12793() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchCollapse() {
@@ -276,13 +276,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$7 */
-    class C12817 extends OnScrollListener {
+    class CLASSNAME extends OnScrollListener {
         private final int scrollValue = AndroidUtilities.m9dp(100.0f);
         private float totalDy = 0.0f;
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$7$1 */
-        class C05531 extends AnimatorListenerAdapter {
-            C05531() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -292,7 +292,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
         }
 
-        C12817() {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -319,7 +319,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 Animator[] animatorArr = new Animator[1];
                 animatorArr[0] = ObjectAnimator.ofFloat(ChannelAdminLogActivity.this.floatingDateView, "alpha", new float[]{1.0f});
                 access$3300.playTogether(animatorArr);
-                ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new C05531());
+                ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new CLASSNAME());
                 ChannelAdminLogActivity.this.floatingDateAnimation.start();
             }
             ChannelAdminLogActivity.this.checkScrollForLoad(true);
@@ -336,8 +336,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         private int rowCount;
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$1 */
-        class C12821 implements ChatMessageCellDelegate {
-            C12821() {
+        class CLASSNAME implements ChatMessageCellDelegate {
+            CLASSNAME() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -570,8 +570,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$2 */
-        class C12832 implements ChatActionCellDelegate {
-            C12832() {
+        class CLASSNAME implements ChatActionCellDelegate {
+            CLASSNAME() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -656,11 +656,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     ChannelAdminLogActivity.this.chatMessageCellsCache.remove(0);
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                chatMessageCell.setDelegate(new C12821());
+                chatMessageCell.setDelegate(new CLASSNAME());
                 chatMessageCell.setAllowAssistant(true);
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C12832());
+                ((ChatActionCell) view).setDelegate(new CLASSNAME());
             } else if (viewType == 2) {
                 view = new ChatUnreadCell(this.mContext);
             } else if (viewType == 3) {
@@ -853,8 +853,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$1 */
-    class C12841 extends EmptyPhotoViewerProvider {
-        C12841() {
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -1146,15 +1146,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.hasOwnBackground = true;
         Theme.createChatResources(context, false);
         this.actionBar.setAddToContainer(false);
-        C0403ActionBar c0403ActionBar = this.actionBar;
+        CLASSNAMEActionBar CLASSNAMEActionBar = this.actionBar;
         boolean z = VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet();
-        c0403ActionBar.setOccupyStatusBar(z);
+        CLASSNAMEActionBar.setOccupyStatusBar(z);
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
-        this.actionBar.setActionBarMenuOnItemClick(new C12782());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.avatarContainer = new ChatAvatarContainer(context, null, false);
         this.avatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet());
         this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C12793());
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME());
         this.searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         this.avatarContainer.setEnabled(false);
         this.avatarContainer.setTitle(this.currentChat.title);
@@ -1348,7 +1348,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.chatLayoutManager.setStackFromEnd(true);
         this.chatListView.setLayoutManager(this.chatLayoutManager);
         this.contentView.addView(this.chatListView, LayoutHelper.createFrame(-1, -1.0f));
-        this.chatListView.setOnScrollListener(new C12817());
+        this.chatListView.setOnScrollListener(new CLASSNAME());
         if (this.scrollToPositionOnRecreate != -1) {
             this.chatLayoutManager.scrollToPositionWithOffset(this.scrollToPositionOnRecreate, this.scrollToOffsetOnRecreate);
             this.scrollToPositionOnRecreate = -1;
@@ -1654,7 +1654,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         ChannelAdminLogActivity.this.contentView.invalidate();
                     }
                 };
-                this.roundVideoContainer.setOutlineProvider(new C054911());
+                this.roundVideoContainer.setOutlineProvider(new CLASSNAME());
                 this.roundVideoContainer.setClipToOutline(true);
             } else {
                 this.roundVideoContainer = new FrameLayout(getParentActivity()) {
@@ -1883,7 +1883,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 case 17:
                     try {
                         intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:" + this.selectedObject.messageOwner.media.phone_number));
-                        intent.addFlags(C0016C.ENCODING_PCM_MU_LAW);
+                        intent.addFlags(CLASSNAMEC.ENCODING_PCM_MU_LAW);
                         getParentActivity().startActivityForResult(intent, 500);
                         break;
                     } catch (Throwable e2) {
@@ -1991,7 +1991,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(this.floatingDateView, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
-                    this.floatingDateAnimation.addListener(new C055113());
+                    this.floatingDateAnimation.addListener(new CLASSNAME());
                     this.floatingDateAnimation.setStartDelay(500);
                     this.floatingDateAnimation.start();
                     return;
@@ -2237,7 +2237,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
     private void fixLayout() {
         if (this.avatarContainer != null) {
-            this.avatarContainer.getViewTreeObserver().addOnPreDrawListener(new C055214());
+            this.avatarContainer.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 

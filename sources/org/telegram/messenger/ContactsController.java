@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
@@ -626,7 +626,7 @@ public class ContactsController {
                             }
                             boolean isGoodAccountType = accountType.indexOf(".sim") != 0;
                             if (!TextUtils.isEmpty(number)) {
-                                number = C0194PhoneFormat.stripExceptNumbers(number, true);
+                                number = CLASSNAMEPhoneFormat.stripExceptNumbers(number, true);
                                 if (!TextUtils.isEmpty(number)) {
                                     String shortNumber = number;
                                     if (number.startsWith("+")) {

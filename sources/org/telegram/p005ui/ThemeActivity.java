@@ -46,7 +46,7 @@ import org.telegram.messenger.time.SunDate;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet.Builder;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
@@ -105,7 +105,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         private GpsLocationListener() {
         }
 
-        /* synthetic */ GpsLocationListener(ThemeActivity x0, C15841 x1) {
+        /* synthetic */ GpsLocationListener(ThemeActivity x0, CLASSNAME x1) {
             this();
         }
 
@@ -127,8 +127,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.ThemeActivity$1 */
-    class C15841 extends ActionBarMenuOnItemClick {
-        C15841() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -687,7 +687,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         } else {
             this.actionBar.setTitle(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C15841());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.listAdapter = new ListAdapter(context);
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));

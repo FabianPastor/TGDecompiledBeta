@@ -13,7 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import java.io.Closeable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -473,7 +473,7 @@ public class NotificationBadge {
         componentName = launchIntent.getComponent();
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
-        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, C0016C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, CLASSNAMEC.DEFAULT_BUFFER_SEGMENT_SIZE);
         if (resolveInfo != null) {
             currentHomePackage = resolveInfo.activityInfo.packageName;
             for (Class<? extends Badger> b : BADGERS) {
@@ -491,7 +491,7 @@ public class NotificationBadge {
                 return true;
             }
         }
-        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, C0016C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, CLASSNAMEC.DEFAULT_BUFFER_SEGMENT_SIZE);
         if (resolveInfos != null) {
             for (int a = 0; a < resolveInfos.size(); a++) {
                 currentHomePackage = ((ResolveInfo) resolveInfos.get(a)).activityInfo.packageName;

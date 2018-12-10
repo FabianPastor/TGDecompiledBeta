@@ -7,8 +7,8 @@ import android.content.Intent;
 public class AppStartReceiver extends BroadcastReceiver {
 
     /* renamed from: org.telegram.messenger.AppStartReceiver$1 */
-    class C01991 implements Runnable {
-        C01991() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -17,6 +17,6 @@ public class AppStartReceiver extends BroadcastReceiver {
     }
 
     public void onReceive(Context context, Intent intent) {
-        AndroidUtilities.runOnUIThread(new C01991());
+        AndroidUtilities.runOnUIThread(new CLASSNAME());
     }
 }

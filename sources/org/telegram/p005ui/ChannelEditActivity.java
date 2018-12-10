@@ -42,7 +42,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet.Builder;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -127,8 +127,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     private InputFile uploadedAvatar;
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$4 */
-    class C05614 implements TextWatcher {
-        C05614() {
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -142,8 +142,8 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.ChannelEditActivity$1 */
-    class C12891 extends ActionBarMenuOnItemClick {
-        C12891() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -296,9 +296,9 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         }
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C12891());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
-        View c12902 = new SizeNotifierFrameLayout(context) {
+        View CLASSNAME = new SizeNotifierFrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -378,14 +378,14 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                 notifyHeightChanged();
             }
         };
-        c12902.setOnTouchListener(ChannelEditActivity$$Lambda$1.$instance);
-        this.fragmentView = c12902;
+        CLASSNAME.setOnTouchListener(ChannelEditActivity$$Lambda$1.$instance);
+        this.fragmentView = CLASSNAME;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        c12902 = new ScrollView(context);
-        c12902.setFillViewport(true);
-        c12902.addView(c12902, LayoutHelper.createFrame(-1, -1.0f));
+        CLASSNAME = new ScrollView(context);
+        CLASSNAME.setFillViewport(true);
+        CLASSNAME.addView(CLASSNAME, LayoutHelper.createFrame(-1, -1.0f));
         LinearLayout linearLayout1 = new LinearLayout(context);
-        c12902.addView(linearLayout1, new LayoutParams(-1, -2));
+        CLASSNAME.addView(linearLayout1, new LayoutParams(-1, -2));
         linearLayout1.setOrientation(1);
         this.actionBar.setTitle(LocaleController.getString("ChannelEdit", R.string.ChannelEdit));
         this.avatarContainer = new LinearLayout(context);
@@ -437,7 +437,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         }
         frameLayout.addView(avatarEditor, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
         avatarEditor.setOnClickListener(new ChannelEditActivity$$Lambda$2(this));
-        this.nameTextView = new EditTextEmoji((Activity) context, c12902, this);
+        this.nameTextView = new EditTextEmoji((Activity) context, CLASSNAME, this);
         if (this.currentChat.megagroup) {
             this.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));
         } else {
@@ -476,7 +476,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         this.descriptionTextView.setCursorWidth(1.5f);
         this.settingsContainer.addView(this.descriptionTextView, LayoutHelper.createLinear(-1, -2, 23.0f, 12.0f, 23.0f, 6.0f));
         this.descriptionTextView.setOnEditorActionListener(new ChannelEditActivity$$Lambda$3(this));
-        this.descriptionTextView.addTextChangedListener(new C05614());
+        this.descriptionTextView.addTextChangedListener(new CLASSNAME());
         if ((this.currentChat.creator && (this.info == null || this.info.can_set_username)) || (this.currentChat.megagroup && (this.currentChat.creator || (this.currentChat.admin_rights != null && this.currentChat.admin_rights.change_info)))) {
             this.settingsLineView = new View(context);
             this.settingsLineView.setBackgroundColor(Theme.getColor(Theme.key_divider));

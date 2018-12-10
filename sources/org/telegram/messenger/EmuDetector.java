@@ -8,7 +8,7 @@ import android.os.Build;
 import android.support.p000v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -158,7 +158,7 @@ public class EmuDetector {
         PackageManager packageManager = this.mContext.getPackageManager();
         for (String pkgName : this.mListPackageName) {
             Intent tryIntent = packageManager.getLaunchIntentForPackage(pkgName);
-            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, C0016C.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
+            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, CLASSNAMEC.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
                 return true;
             }
         }

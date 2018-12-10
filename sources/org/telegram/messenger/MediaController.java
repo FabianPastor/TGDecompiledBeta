@@ -41,7 +41,7 @@ import android.util.SparseArray;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.p004ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -188,7 +188,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private long recordDialogId;
     private DispatchQueue recordQueue = new DispatchQueue("recordQueue");
     private MessageObject recordReplyingMessageObject;
-    private Runnable recordRunnable = new C02481();
+    private Runnable recordRunnable = new CLASSNAME();
     private short[] recordSamples = new short[1024];
     private Runnable recordStartRunnable;
     private long recordStartTime;
@@ -219,8 +219,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private boolean voiceMessagesPlaylistUnread;
 
     /* renamed from: org.telegram.messenger.MediaController$1 */
-    class C02481 implements Runnable {
-        C02481() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -316,8 +316,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$2 */
-    class C02492 extends PhoneStateListener {
-        C02492() {
+    class CLASSNAME extends PhoneStateListener {
+        CLASSNAME() {
         }
 
         public void onCallStateChanged(int state, String incomingNumber) {
@@ -619,7 +619,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.currentObserverToken = 0;
         }
 
-        /* synthetic */ StopMediaObserverRunnable(MediaController x0, C02481 x1) {
+        /* synthetic */ StopMediaObserverRunnable(MediaController x0, CLASSNAME x1) {
             this();
         }
 
@@ -672,8 +672,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     /* renamed from: org.telegram.messenger.MediaController$4 */
-    class C12124 implements VideoPlayerDelegate {
-        C12124() {
+    class CLASSNAME implements VideoPlayerDelegate {
+        CLASSNAME() {
         }
 
         public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -938,7 +938,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             FileLog.m13e(e);
         }
         try {
-            PhoneStateListener phoneStateListener = new C02492();
+            PhoneStateListener phoneStateListener = new CLASSNAME();
             TelephonyManager mgr = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
             if (mgr != null) {
                 mgr.listen(phoneStateListener, 32);
@@ -1049,13 +1049,13 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             }
                             duration = MediaController.this.audioPlayer.getDuration();
                             progress = MediaController.this.audioPlayer.getCurrentPosition();
-                            if (duration == C0016C.TIME_UNSET || duration < 0) {
+                            if (duration == CLASSNAMEC.TIME_UNSET || duration < 0) {
                                 value = 0.0f;
                             } else {
                                 value = ((float) progress) / ((float) duration);
                             }
                             bufferedValue = ((float) MediaController.this.audioPlayer.getBufferedPosition()) / ((float) duration);
-                            if (duration == C0016C.TIME_UNSET || progress < 0 || MediaController.this.seekToProgressPending != 0.0f) {
+                            if (duration == CLASSNAMEC.TIME_UNSET || progress < 0 || MediaController.this.seekToProgressPending != 0.0f) {
                                 return;
                             }
                             MediaController.this.lastProgress = progress;
@@ -1797,7 +1797,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         try {
             if (this.audioPlayer != null) {
                 long duration = this.audioPlayer.getDuration();
-                if (duration == C0016C.TIME_UNSET) {
+                if (duration == CLASSNAMEC.TIME_UNSET) {
                     this.seekToProgressPending = progress;
                 } else {
                     int seekTo = (int) (((float) duration) * progress);
@@ -2284,7 +2284,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.playlist.clear();
             this.shuffledPlaylist.clear();
             this.videoPlayer = new VideoPlayer();
-            this.videoPlayer.setDelegate(new C12124());
+            this.videoPlayer.setDelegate(new CLASSNAME());
             this.currentAspectRatioFrameLayoutReady = false;
             if (this.pipRoundVideoView != null || !MessagesController.getInstance(messageObject.currentAccount).isDialogVisible(messageObject.getDialogId())) {
                 if (this.pipRoundVideoView == null) {
@@ -2361,7 +2361,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     byte[] bArr;
                     int reference = FileLoader.getInstance(messageObject.currentAccount).getFileReference(messageObject);
                     Document document = messageObject.getDocument();
-                    StringBuilder append = new StringBuilder().append("?account=").append(messageObject.currentAccount).append("&id=").append(document.f84id).append("&hash=").append(document.access_hash).append("&dc=").append(document.dc_id).append("&size=").append(document.size).append("&mime=").append(URLEncoder.encode(document.mime_type, C0016C.UTF8_NAME)).append("&rid=").append(reference).append("&name=").append(URLEncoder.encode(FileLoader.getDocumentFileName(document), C0016C.UTF8_NAME)).append("&reference=");
+                    StringBuilder append = new StringBuilder().append("?account=").append(messageObject.currentAccount).append("&id=").append(document.f84id).append("&hash=").append(document.access_hash).append("&dc=").append(document.dc_id).append("&size=").append(document.size).append("&mime=").append(URLEncoder.encode(document.mime_type, CLASSNAMEC.UTF8_NAME)).append("&rid=").append(reference).append("&name=").append(URLEncoder.encode(FileLoader.getDocumentFileName(document), CLASSNAMEC.UTF8_NAME)).append("&reference=");
                     if (document.file_reference != null) {
                         bArr = document.file_reference;
                     } else {
@@ -2417,7 +2417,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             try {
                 if (this.playingMessageObject.audioProgress != 0.0f) {
                     duration = this.audioPlayer.getDuration();
-                    if (duration == C0016C.TIME_UNSET) {
+                    if (duration == CLASSNAMEC.TIME_UNSET) {
                         duration = ((long) this.playingMessageObject.getDuration()) * 1000;
                     }
                     this.videoPlayer.seekTo((long) ((int) (((float) duration) * this.playingMessageObject.audioProgress)));
@@ -2432,7 +2432,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             try {
                 if (this.playingMessageObject.audioProgress != 0.0f) {
                     duration = this.audioPlayer.getDuration();
-                    if (duration == C0016C.TIME_UNSET) {
+                    if (duration == CLASSNAMEC.TIME_UNSET) {
                         duration = ((long) this.playingMessageObject.getDuration()) * 1000;
                     }
                     this.audioPlayer.seekTo((long) ((int) (((float) duration) * this.playingMessageObject.audioProgress)));
@@ -3838,7 +3838,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:122:0x03b6} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{Splitter: B:122:0x03b6, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x01e9 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
     /* JADX WARNING: Removed duplicated region for block: B:66:0x01ee A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x01f3 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
@@ -3847,7 +3847,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: Removed duplicated region for block: B:75:0x020b A:{SYNTHETIC, Splitter: B:75:0x020b} */
     /* JADX WARNING: Removed duplicated region for block: B:381:0x0993  */
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0212  */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:122:0x03b6} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{Splitter: B:122:0x03b6, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x01e9 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
     /* JADX WARNING: Removed duplicated region for block: B:66:0x01ee A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x01f3 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
@@ -3856,7 +3856,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: Removed duplicated region for block: B:75:0x020b A:{SYNTHETIC, Splitter: B:75:0x020b} */
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0212  */
     /* JADX WARNING: Removed duplicated region for block: B:381:0x0993  */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:122:0x03b6} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{Splitter: B:122:0x03b6, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Missing block: B:90:0x027e, code:
             if (r61.equals("nokia") != false) goto L_0x0280;
      */

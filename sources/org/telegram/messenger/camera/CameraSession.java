@@ -19,7 +19,7 @@ import org.telegram.messenger.FileLog;
 
 public class CameraSession {
     public static final int ORIENTATION_HYSTERESIS = 5;
-    private AutoFocusCallback autoFocusCallback = new C02991();
+    private AutoFocusCallback autoFocusCallback = new CLASSNAME();
     protected CameraInfo cameraInfo;
     private String currentFlashMode;
     private int currentOrientation;
@@ -38,8 +38,8 @@ public class CameraSession {
     private boolean sameTakePictureOrientation;
 
     /* renamed from: org.telegram.messenger.camera.CameraSession$1 */
-    class C02991 implements AutoFocusCallback {
-        C02991() {
+    class CLASSNAME implements AutoFocusCallback {
+        CLASSNAME() {
         }
 
         public void onAutoFocus(boolean success, Camera camera) {

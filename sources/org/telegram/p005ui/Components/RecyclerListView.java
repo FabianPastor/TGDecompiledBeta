@@ -62,7 +62,7 @@ public class RecyclerListView extends RecyclerView {
     private boolean interceptedByChild;
     private boolean isChildViewEnabled;
     private boolean longPressCalled;
-    private AdapterDataObserver observer = new C13911();
+    private AdapterDataObserver observer = new CLASSNAME();
     private OnInterceptTouchListener onInterceptTouchListener;
     private OnItemClickListener onItemClickListener;
     private OnItemClickListenerExtended onItemClickListenerExtended;
@@ -341,8 +341,8 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$1 */
-    class C13911 extends AdapterDataObserver {
-        C13911() {
+    class CLASSNAME extends AdapterDataObserver {
+        CLASSNAME() {
         }
 
         public void onChanged() {
@@ -361,10 +361,10 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* renamed from: org.telegram.ui.Components.RecyclerListView$2 */
-    class C13922 extends OnScrollListener {
+    class CLASSNAME extends OnScrollListener {
         boolean scrollingByUser;
 
-        C13922() {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -678,7 +678,7 @@ public class RecyclerListView extends RecyclerView {
         }
 
         /* renamed from: lambda$onInterceptTouchEvent$0$RecyclerListView$RecyclerListViewItemClickListener */
-        final /* synthetic */ void mo16784xe03c43c() {
+        final /* synthetic */ void mo16784xe03CLASSNAMEc() {
             if (RecyclerListView.this.selectChildRunnable != null && RecyclerListView.this.currentChildView != null) {
                 RecyclerListView.this.onChildPressed(RecyclerListView.this.currentChildView, true);
                 RecyclerListView.this.selectChildRunnable = null;
@@ -915,7 +915,7 @@ public class RecyclerListView extends RecyclerView {
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
-        super.setOnScrollListener(new C13922());
+        super.setOnScrollListener(new CLASSNAME());
         addOnItemTouchListener(new RecyclerListViewItemClickListener(context));
     }
 

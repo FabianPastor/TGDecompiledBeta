@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
@@ -20,7 +20,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -46,8 +46,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     private int user_id;
 
     /* renamed from: org.telegram.ui.ContactAddActivity$1 */
-    class C14121 extends ActionBarMenuOnItemClick {
-        C14121() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -94,7 +94,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         } else {
             this.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C14121());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.fragmentView = new ScrollView(context);
         LinearLayout linearLayout = new LinearLayout(context);
@@ -162,7 +162,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
         if (user != null) {
             if (user.phone == null && this.phone != null) {
-                user.phone = C0194PhoneFormat.stripExceptNumbers(this.phone);
+                user.phone = CLASSNAMEPhoneFormat.stripExceptNumbers(this.phone);
             }
             this.firstNameField.setText(user.first_name);
             this.firstNameField.setSelection(this.firstNameField.length());
@@ -192,7 +192,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         if (this.nameTextView != null) {
             Object user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
             if (user != null) {
-                this.nameTextView.setText(C0194PhoneFormat.getInstance().format("+" + user.phone));
+                this.nameTextView.setText(CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone));
                 this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentAccount, user));
                 TLObject photo = null;
                 if (user.photo != null) {

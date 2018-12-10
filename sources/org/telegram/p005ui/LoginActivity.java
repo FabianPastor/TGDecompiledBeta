@@ -57,7 +57,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
 import org.telegram.messenger.ApplicationLoader;
@@ -78,8 +78,8 @@ import org.telegram.p005ui.ActionBar.ActionBarMenu;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.CheckBoxCell;
@@ -92,7 +92,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.C0400xb6caa888;
+import org.telegram.tgnet.TLRPC.CLASSNAMExb6caa888;
 import org.telegram.tgnet.TLRPC.PasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC.TL_account_deleteAccount;
 import org.telegram.tgnet.TLRPC.TL_account_getPassword;
@@ -162,8 +162,8 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.LoginActivity$1 */
-    class C14701 extends ActionBarMenuOnItemClick {
-        C14701() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -432,22 +432,22 @@ public class LoginActivity extends BaseFragment {
             byte[] x_bytes;
             PasswordKdfAlgo current_algo = null;
             if (this.passwordType == 1) {
-                PasswordKdfAlgo algo = new C0400xb6caa888();
+                PasswordKdfAlgo algo = new CLASSNAMExb6caa888();
                 algo.salt1 = this.current_salt1;
                 algo.salt2 = this.current_salt2;
                 algo.f201g = this.current_g;
                 algo.f202p = this.current_p;
                 current_algo = algo;
             }
-            if (current_algo instanceof C0400xb6caa888) {
-                x_bytes = SRPHelper.getX(AndroidUtilities.getStringBytes(oldPassword), (C0400xb6caa888) current_algo);
+            if (current_algo instanceof CLASSNAMExb6caa888) {
+                x_bytes = SRPHelper.getX(AndroidUtilities.getStringBytes(oldPassword), (CLASSNAMExb6caa888) current_algo);
             } else {
                 x_bytes = null;
             }
             TL_auth_checkPassword req = new TL_auth_checkPassword();
             RequestDelegate requestDelegate = new LoginActivity$LoginActivityPasswordView$$Lambda$5(this);
-            if (current_algo instanceof C0400xb6caa888) {
-                C0400xb6caa888 algo2 = (C0400xb6caa888) current_algo;
+            if (current_algo instanceof CLASSNAMExb6caa888) {
+                CLASSNAMExb6caa888 algo2 = (CLASSNAMExb6caa888) current_algo;
                 algo2.salt1 = this.current_salt1;
                 algo2.salt2 = this.current_salt2;
                 algo2.f201g = this.current_g;
@@ -817,7 +817,7 @@ public class LoginActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$showTermsOfService$3$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo17124x12ed5c70(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo17124x12ed5CLASSNAME(DialogInterface dialog, int which) {
             Builder builder1 = new Builder(LoginActivity.this.getParentActivity());
             builder1.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
             builder1.setMessage(LocaleController.getString("TosDecline", R.string.TosDecline));
@@ -1084,8 +1084,8 @@ public class LoginActivity extends BaseFragment {
         private int waitTime;
 
         /* renamed from: org.telegram.ui.LoginActivity$LoginActivityResetWaitView$1 */
-        class C09811 implements Runnable {
-            C09811() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -1241,9 +1241,9 @@ public class LoginActivity extends BaseFragment {
                 this.phoneCode = params.getString("code");
                 this.startTime = params.getInt("startTime");
                 this.waitTime = params.getInt("waitTime");
-                this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ResetAccountInfo", R.string.ResetAccountInfo, LocaleController.addNbsp(C0194PhoneFormat.getInstance().format("+" + this.requestPhone)))));
+                this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ResetAccountInfo", R.string.ResetAccountInfo, LocaleController.addNbsp(CLASSNAMEPhoneFormat.getInstance().format("+" + this.requestPhone)))));
                 updateTimeText();
-                this.timeRunnable = new C09811();
+                this.timeRunnable = new CLASSNAME();
                 AndroidUtilities.runOnUIThread(this.timeRunnable, 1000);
             }
         }
@@ -1310,8 +1310,8 @@ public class LoginActivity extends BaseFragment {
         private boolean waitingForEvent;
 
         /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$2 */
-        class C09832 extends TimerTask {
-            C09832() {
+        class CLASSNAME extends TimerTask {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -1332,8 +1332,8 @@ public class LoginActivity extends BaseFragment {
         }
 
         /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$3 */
-        class C09843 extends TimerTask {
-            C09843() {
+        class CLASSNAME extends TimerTask {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -1508,7 +1508,7 @@ public class LoginActivity extends BaseFragment {
                         PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                         String version = String.format(Locale.US, "%s (%d)", new Object[]{pInfo.versionName, Integer.valueOf(pInfo.versionCode)});
                         Intent mailer = new Intent("android.intent.action.SEND");
-                        mailer.setType("message/rfc822");
+                        mailer.setType("message/rfCLASSNAME");
                         mailer.putExtra("android.intent.extra.EMAIL", new String[]{"sms@stel.com"});
                         mailer.putExtra("android.intent.extra.SUBJECT", "Android registration/login issue " + version + " " + this.emailPhone);
                         mailer.putExtra("android.intent.extra.TEXT", "Phone: " + this.requestPhone + "\nApp version: " + version + "\nOS version: SDK " + VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + this.lastError);
@@ -1701,7 +1701,7 @@ public class LoginActivity extends BaseFragment {
                     this.progressView.setVisibility(this.nextType != 0 ? 0 : 8);
                 }
                 if (this.phone != null) {
-                    String number = C0194PhoneFormat.getInstance().format(this.phone);
+                    String number = CLASSNAMEPhoneFormat.getInstance().format(this.phone);
                     CharSequence str = TtmlNode.ANONYMOUS_REGION_ID;
                     if (this.currentType == 1) {
                         str = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", R.string.SentAppCode));
@@ -1789,7 +1789,7 @@ public class LoginActivity extends BaseFragment {
                 this.codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
                 this.codeTimer = new Timer();
                 this.lastCodeTime = (double) System.currentTimeMillis();
-                this.codeTimer.schedule(new C09832(), 0, 1000);
+                this.codeTimer.schedule(new CLASSNAME(), 0, 1000);
             }
         }
 
@@ -1809,7 +1809,7 @@ public class LoginActivity extends BaseFragment {
         private void createTimer() {
             if (this.timeTimer == null) {
                 this.timeTimer = new Timer();
-                this.timeTimer.schedule(new C09843(), 0, 1000);
+                this.timeTimer.schedule(new CLASSNAME(), 0, 1000);
             }
         }
 
@@ -1829,7 +1829,7 @@ public class LoginActivity extends BaseFragment {
         private String getCode() {
             StringBuilder codeBuilder = new StringBuilder();
             for (EditTextBoldCursor text : this.codeField) {
-                codeBuilder.append(C0194PhoneFormat.stripExceptNumbers(text.getText().toString()));
+                codeBuilder.append(CLASSNAMEPhoneFormat.stripExceptNumbers(text.getText().toString()));
             }
             return codeBuilder.toString();
         }
@@ -1937,8 +1937,8 @@ public class LoginActivity extends BaseFragment {
                 if (TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
                     int i;
                     Bundle bundle = new Bundle();
-                    if (password.current_algo instanceof C0400xb6caa888) {
-                        C0400xb6caa888 algo = password.current_algo;
+                    if (password.current_algo instanceof CLASSNAMExb6caa888) {
+                        CLASSNAMExb6caa888 algo = password.current_algo;
                         bundle.putString("current_salt1", Utilities.bytesToHex(algo.salt1));
                         bundle.putString("current_salt2", Utilities.bytesToHex(algo.salt2));
                         bundle.putString("current_p", Utilities.bytesToHex(algo.f202p));
@@ -2173,7 +2173,7 @@ public class LoginActivity extends BaseFragment {
                 public void afterTextChanged(Editable editable) {
                     if (!PhoneView.this.ignoreOnTextChange) {
                         PhoneView.this.ignoreOnTextChange = true;
-                        String text = C0194PhoneFormat.stripExceptNumbers(PhoneView.this.codeField.getText().toString());
+                        String text = CLASSNAMEPhoneFormat.stripExceptNumbers(PhoneView.this.codeField.getText().toString());
                         PhoneView.this.codeField.setText(text);
                         if (text.length() == 0) {
                             PhoneView.this.countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
@@ -2549,7 +2549,7 @@ public class LoginActivity extends BaseFragment {
                 } else if (this.codeField.length() == 0) {
                     LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                 } else {
-                    String phone = C0194PhoneFormat.stripExceptNumbers(TtmlNode.ANONYMOUS_REGION_ID + this.codeField.getText() + this.phoneField.getText());
+                    String phone = CLASSNAMEPhoneFormat.stripExceptNumbers(TtmlNode.ANONYMOUS_REGION_ID + this.codeField.getText() + this.phoneField.getText());
                     if (LoginActivity.this.getParentActivity() instanceof LaunchActivity) {
                         for (int a = 0; a < 3; a++) {
                             UserConfig userConfig = UserConfig.getInstance(a);
@@ -2597,7 +2597,7 @@ public class LoginActivity extends BaseFragment {
                     Bundle params = new Bundle();
                     params.putString("phone", "+" + this.codeField.getText() + " " + this.phoneField.getText());
                     try {
-                        params.putString("ephone", "+" + C0194PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()) + " " + C0194PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
+                        params.putString("ephone", "+" + CLASSNAMEPhoneFormat.stripExceptNumbers(this.codeField.getText().toString()) + " " + CLASSNAMEPhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
                     } catch (Throwable e22) {
                         FileLog.m13e(e22);
                         params.putString("ephone", "+" + phone);
@@ -2685,7 +2685,7 @@ public class LoginActivity extends BaseFragment {
                     }
                     if (!LoginActivity.this.newAccount) {
                         if (allowCall || allowSms) {
-                            String number = C0194PhoneFormat.stripExceptNumbers(tm.getLine1Number());
+                            String number = CLASSNAMEPhoneFormat.stripExceptNumbers(tm.getLine1Number());
                             String textToSet = null;
                             boolean ok = false;
                             if (!TextUtils.isEmpty(number)) {
@@ -2807,7 +2807,7 @@ public class LoginActivity extends BaseFragment {
 
     public View createView(Context context) {
         this.actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        this.actionBar.setActionBarMenuOnItemClick(new C14701());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         ActionBarMenu menu = this.actionBar.createMenu();
         this.actionBar.setAllowOverlayTitle(true);
         this.doneButton = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
@@ -2861,9 +2861,9 @@ public class LoginActivity extends BaseFragment {
                 }
             }
             if (this.currentViewNum == a) {
-                C0403ActionBar c0403ActionBar = this.actionBar;
+                CLASSNAMEActionBar CLASSNAMEActionBar = this.actionBar;
                 int i = (this.views[a].needBackButton() || this.newAccount) ? R.drawable.ic_ab_back : 0;
-                c0403ActionBar.setBackButtonImage(i);
+                CLASSNAMEActionBar.setBackButtonImage(i);
                 this.views[a].setVisibility(0);
                 this.views[a].onShow();
                 if (a == 3 || a == 8) {
@@ -3059,7 +3059,7 @@ public class LoginActivity extends BaseFragment {
             PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             String version = String.format(Locale.US, "%s (%d)", new Object[]{pInfo.versionName, Integer.valueOf(pInfo.versionCode)});
             Intent mailer = new Intent("android.intent.action.SEND");
-            mailer.setType("message/rfc822");
+            mailer.setType("message/rfCLASSNAME");
             mailer.putExtra("android.intent.extra.EMAIL", new String[]{"login@stel.com"});
             if (banned) {
                 mailer.putExtra("android.intent.extra.SUBJECT", "Banned phone number: " + phoneNumber);
@@ -3115,17 +3115,17 @@ public class LoginActivity extends BaseFragment {
             }
             this.doneButton.setVisibility(0);
         }
-        C0403ActionBar c0403ActionBar;
+        CLASSNAMEActionBar CLASSNAMEActionBar;
         if (animated) {
             float f;
             final SlideView outView = this.views[this.currentViewNum];
             final SlideView newView = this.views[page];
             this.currentViewNum = page;
-            c0403ActionBar = this.actionBar;
+            CLASSNAMEActionBar = this.actionBar;
             if (!(newView.needBackButton() || this.newAccount)) {
                 i = 0;
             }
-            c0403ActionBar.setBackButtonImage(i);
+            CLASSNAMEActionBar.setBackButtonImage(i);
             newView.setParams(params, false);
             this.actionBar.setTitle(newView.getHeaderName());
             newView.onShow();
@@ -3173,11 +3173,11 @@ public class LoginActivity extends BaseFragment {
             }).setDuration(300).translationX(0.0f).start();
             return;
         }
-        c0403ActionBar = this.actionBar;
+        CLASSNAMEActionBar = this.actionBar;
         if (!(this.views[page].needBackButton() || this.newAccount)) {
             i = 0;
         }
-        c0403ActionBar.setBackButtonImage(i);
+        CLASSNAMEActionBar.setBackButtonImage(i);
         this.views[this.currentViewNum].setVisibility(8);
         this.currentViewNum = page;
         this.views[page].setParams(params, false);

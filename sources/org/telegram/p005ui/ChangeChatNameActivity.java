@@ -29,7 +29,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Cells.ShadowSectionCell;
 import org.telegram.p005ui.Cells.TextInfoPrivacyCell;
@@ -66,11 +66,11 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
     private InputFile uploadedAvatar;
 
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$4 */
-    class C05244 implements OnClickListener {
+    class CLASSNAME implements OnClickListener {
 
         /* renamed from: org.telegram.ui.ChangeChatNameActivity$4$1 */
-        class C05231 implements DialogInterface.OnClickListener {
-            C05231() {
+        class CLASSNAME implements DialogInterface.OnClickListener {
+            CLASSNAME() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -85,22 +85,22 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
             }
         }
 
-        C05244() {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
             Builder builder = new Builder(ChangeChatNameActivity.this.getParentActivity());
             builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C05231());
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new CLASSNAME());
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             ChangeChatNameActivity.this.showDialog(builder.create());
         }
     }
 
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$1 */
-    class C12701 extends ActionBarMenuOnItemClick {
-        C12701() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -174,10 +174,10 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ChannelEdit", R.string.ChannelEdit));
-        this.actionBar.setActionBarMenuOnItemClick(new C12701());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
-        View c12712 = new SizeNotifierFrameLayout(context) {
+        View CLASSNAME = new SizeNotifierFrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -257,19 +257,19 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
                 notifyHeightChanged();
             }
         };
-        this.fragmentView = c12712;
+        this.fragmentView = CLASSNAME;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.fragmentView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         this.fragmentView.setOnTouchListener(ChangeChatNameActivity$$Lambda$0.$instance);
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
-        c12712.addView(linearLayout, LayoutHelper.createFrame(-1, -1.0f));
-        c12712 = new LinearLayout(context);
-        c12712.setOrientation(1);
-        c12712.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        linearLayout.addView(c12712, LayoutHelper.createLinear(-1, -2));
+        CLASSNAME.addView(linearLayout, LayoutHelper.createFrame(-1, -1.0f));
+        CLASSNAME = new LinearLayout(context);
+        CLASSNAME.setOrientation(1);
+        CLASSNAME.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        linearLayout.addView(CLASSNAME, LayoutHelper.createLinear(-1, -2));
         FrameLayout frameLayout = new FrameLayout(context);
-        c12712.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
+        CLASSNAME.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
         this.avatarImage = new BackupImageView(context);
         this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(32.0f));
         this.avatarDrawable.setInfo(5, null, null, false);
@@ -313,7 +313,7 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
         }
         frameLayout.addView(avatarEditor, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
         avatarEditor.setOnClickListener(new ChangeChatNameActivity$$Lambda$1(this));
-        this.editText = new EditTextEmoji((Activity) context, c12712, this);
+        this.editText = new EditTextEmoji((Activity) context, CLASSNAME, this);
         this.editText.setHint(LocaleController.getString("GroupName", R.string.GroupName));
         this.editText.setFilters(new InputFilter[]{new LengthFilter(100)});
         view = this.editText;
@@ -324,24 +324,24 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
             f2 = 5.0f;
         }
         frameLayout.addView(view, LayoutHelper.createFrame(-1, -2.0f, 16, f, 0.0f, f2, 0.0f));
-        c12712 = new ShadowSectionCell(context, 20);
-        linearLayout.addView(c12712, LayoutHelper.createLinear(-1, -2));
+        CLASSNAME = new ShadowSectionCell(context, 20);
+        linearLayout.addView(CLASSNAME, LayoutHelper.createLinear(-1, -2));
         if (this.currentChat.creator) {
             FrameLayout container3 = new FrameLayout(context);
             container3.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             linearLayout.addView(container3, LayoutHelper.createLinear(-1, -2));
-            c12712 = new TextSettingsCell(context);
-            c12712.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
-            c12712.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            c12712.setText(LocaleController.getString("DeleteMega", R.string.DeleteMega), false);
-            container3.addView(c12712, LayoutHelper.createFrame(-1, -2.0f));
-            c12712.setOnClickListener(new C05244());
+            CLASSNAME = new TextSettingsCell(context);
+            CLASSNAME.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
+            CLASSNAME.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            CLASSNAME.setText(LocaleController.getString("DeleteMega", R.string.DeleteMega), false);
+            container3.addView(CLASSNAME, LayoutHelper.createFrame(-1, -2.0f));
+            CLASSNAME.setOnClickListener(new CLASSNAME());
             TextInfoPrivacyCell infoCell2 = new TextInfoPrivacyCell(context);
             infoCell2.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             infoCell2.setText(LocaleController.getString("MegaDeleteInfo", R.string.MegaDeleteInfo));
             linearLayout.addView(infoCell2, LayoutHelper.createLinear(-1, -2));
         } else {
-            c12712.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            CLASSNAME.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         }
         this.editText.setText(this.currentChat.title);
         this.editText.setSelection(this.editText.length());

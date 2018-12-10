@@ -18,7 +18,7 @@ import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -48,8 +48,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.PhonebookSelectActivity$1 */
-    class C15051 extends ActionBarMenuOnItemClick {
-        C15051() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -60,8 +60,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.PhonebookSelectActivity$2 */
-    class C15062 extends ActionBarMenuItemSearchListener {
-        C15062() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchExpand() {
@@ -92,8 +92,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.PhonebookSelectActivity$6 */
-    class C15076 extends OnScrollListener {
-        C15076() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -126,8 +126,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SelectContact", R.string.SelectContact));
-        this.actionBar.setActionBarMenuOnItemClick(new C15051());
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C15062()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
+        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         this.searchListViewAdapter = new PhonebookSearchAdapter(context) {
             protected void onUpdateSearchResults(String query) {
                 if (!TextUtils.isEmpty(query) && PhonebookSelectActivity.this.listView != null && PhonebookSelectActivity.this.listView.getAdapter() != PhonebookSelectActivity.this.searchListViewAdapter) {
@@ -173,7 +173,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         this.listView.setAdapter(this.listViewAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new PhonebookSelectActivity$$Lambda$0(this));
-        this.listView.setOnScrollListener(new C15076());
+        this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
     }
 

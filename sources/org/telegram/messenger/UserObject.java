@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 import android.text.TextUtils;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
 import org.telegram.tgnet.TLRPC.TL_userDeleted_old2;
@@ -27,7 +27,7 @@ public class UserObject {
             return LocaleController.getString("HiddenName", R.string.HiddenName);
         }
         String name = ContactsController.formatName(user.first_name, user.last_name);
-        return (name.length() != 0 || user.phone == null || user.phone.length() == 0) ? name : C0194PhoneFormat.getInstance().format("+" + user.phone);
+        return (name.length() != 0 || user.phone == null || user.phone.length() == 0) ? name : CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
     }
 
     public static String getFirstName(User user) {

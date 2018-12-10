@@ -26,7 +26,7 @@ import android.os.IBinder;
 import android.support.p000v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.extractor.p003ts.PsExtractor;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
@@ -55,8 +55,8 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     private RemoteControlClient remoteControlClient;
 
     /* renamed from: org.telegram.messenger.MusicPlayerService$1 */
-    class C02541 extends Callback {
-        C02541() {
+    class CLASSNAME extends Callback {
+        CLASSNAME() {
         }
 
         public void onPlay() {
@@ -80,14 +80,14 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.messenger.MusicPlayerService$2 */
-    class C02552 implements Runnable {
-        C02552() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
             int i = 2;
             if (MusicPlayerService.this.remoteControlClient != null && MediaController.getInstance().getPlayingMessageObject() != null) {
-                if (((long) MediaController.getInstance().getPlayingMessageObject().audioPlayerDuration) == C0016C.TIME_UNSET) {
+                if (((long) MediaController.getInstance().getPlayingMessageObject().audioPlayerDuration) == CLASSNAMEC.TIME_UNSET) {
                     AndroidUtilities.runOnUIThread(this, 500);
                     return;
                 }
@@ -148,7 +148,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             Drawable placeholder = getResources().getDrawable(R.drawable.nocover_big);
             placeholder.setBounds(0, 0, this.albumArtPlaceholder.getWidth(), this.albumArtPlaceholder.getHeight());
             placeholder.draw(new Canvas(this.albumArtPlaceholder));
-            this.mediaSession.setCallback(new C02541());
+            this.mediaSession.setCallback(new CLASSNAME());
             this.mediaSession.setActive(true);
         }
         super.onCreate();
@@ -253,10 +253,10 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
         Notification notification;
         if (VERSION.SDK_INT >= 21) {
             boolean isPlaying = !MediaController.getInstance().isMessagePaused();
-            PendingIntent pendingPrev = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PREVIOUS).setComponent(new ComponentName(this, MusicPlayerReceiver.class)), C0016C.ENCODING_PCM_MU_LAW);
-            PendingIntent pendingStop = PendingIntent.getService(getApplicationContext(), 0, new Intent(this, getClass()).setAction(getPackageName() + ".STOP_PLAYER"), C0016C.ENCODING_PCM_MU_LAW);
-            PendingIntent pendingPlaypause = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(isPlaying ? NOTIFY_PAUSE : NOTIFY_PLAY).setComponent(new ComponentName(this, MusicPlayerReceiver.class)), C0016C.ENCODING_PCM_MU_LAW);
-            PendingIntent pendingNext = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_NEXT).setComponent(new ComponentName(this, MusicPlayerReceiver.class)), C0016C.ENCODING_PCM_MU_LAW);
+            PendingIntent pendingPrev = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PREVIOUS).setComponent(new ComponentName(this, MusicPlayerReceiver.class)), CLASSNAMEC.ENCODING_PCM_MU_LAW);
+            PendingIntent pendingStop = PendingIntent.getService(getApplicationContext(), 0, new Intent(this, getClass()).setAction(getPackageName() + ".STOP_PLAYER"), CLASSNAMEC.ENCODING_PCM_MU_LAW);
+            PendingIntent pendingPlaypause = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(isPlaying ? NOTIFY_PAUSE : NOTIFY_PLAY).setComponent(new ComponentName(this, MusicPlayerReceiver.class)), CLASSNAMEC.ENCODING_PCM_MU_LAW);
+            PendingIntent pendingNext = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_NEXT).setComponent(new ComponentName(this, MusicPlayerReceiver.class)), CLASSNAMEC.ENCODING_PCM_MU_LAW);
             Notification.Builder bldr = new Notification.Builder(this);
             int[] iArr = new int[3];
             bldr.setSmallIcon(R.drawable.player).setOngoing(isPlaying).setContentTitle(songName).setContentText(authorName).setSubText(audioInfo != null ? audioInfo.getAlbum() : null).setContentIntent(contentIntent).setDeleteIntent(pendingStop).setShowWhen(false).setCategory("transport").setPriority(2).setStyle(new MediaStyle().setMediaSession(this.mediaSession.getSessionToken()).setShowActionsInCompactView(new int[]{0, 1, 2}));
@@ -382,7 +382,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
                     }
                 }
                 metadataEditor.apply();
-                AndroidUtilities.runOnUIThread(new C02552(), 1000);
+                AndroidUtilities.runOnUIThread(new CLASSNAME(), 1000);
             }
             if (MediaController.getInstance().isDownloadingCurrentMessage()) {
                 this.remoteControlClient.setPlaybackState(8);

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -18,7 +18,7 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -41,8 +41,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     private int selectedUserId;
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$1 */
-    class C12631 extends ActionBarMenuOnItemClick {
-        C12631() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -103,7 +103,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                     } else if (user.phone == null || user.phone.length() == 0) {
                         number = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                     } else {
-                        number = C0194PhoneFormat.getInstance().format("+" + user.phone);
+                        number = CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
                     }
                     ((UserCell) holder.itemView).setData(user, null, number, 0);
                 }
@@ -137,7 +137,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("BlockedUsers", R.string.BlockedUsers));
-        this.actionBar.setActionBarMenuOnItemClick(new C12631());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;

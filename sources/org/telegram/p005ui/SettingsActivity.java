@@ -48,7 +48,7 @@ import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -79,8 +79,8 @@ import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.EmptyCell;
@@ -144,7 +144,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private TextView onlineTextView;
     private int overscrollRow;
     private int privacyRow;
-    private PhotoViewerProvider provider = new C15801();
+    private PhotoViewerProvider provider = new CLASSNAME();
     private int rowCount;
     private int settingsSectionRow;
     private int settingsSectionRow2;
@@ -155,8 +155,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private AnimatorSet writeButtonAnimation;
 
     /* renamed from: org.telegram.ui.SettingsActivity$10 */
-    class C112710 implements OnPreDrawListener {
-        C112710() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -169,8 +169,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$7 */
-    class C11297 extends ViewOutlineProvider {
-        C11297() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -184,7 +184,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         private LinkMovementMethodMy() {
         }
 
-        /* synthetic */ LinkMovementMethodMy(C15801 x0) {
+        /* synthetic */ LinkMovementMethodMy(CLASSNAME x0) {
             this();
         }
 
@@ -199,8 +199,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$2 */
-    class C15762 extends ActionBarMenuOnItemClick {
-        C15762() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -224,10 +224,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$6 */
-    class C15786 implements OnItemLongClickListener {
+    class CLASSNAME implements OnItemLongClickListener {
         private int pressCount = 0;
 
-        C15786() {
+        CLASSNAME() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -303,8 +303,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$8 */
-    class C15798 extends OnScrollListener {
-        C15798() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -330,8 +330,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$1 */
-    class C15801 extends EmptyPhotoViewerProvider {
-        C15801() {
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -431,7 +431,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         if (user == null || user.phone == null || user.phone.length() == 0) {
                             value = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                         } else {
-                            value = C0194PhoneFormat.getInstance().format("+" + user.phone);
+                            value = CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
                         }
                         textCell2.setTextAndValue(value, LocaleController.getString("TapToChangePhone", R.string.TapToChangePhone), true);
                         return;
@@ -681,7 +681,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C15762());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         ActionBarMenuItem item = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_other);
         item.addSubItem(1, LocaleController.getString("EditName", R.string.EditName));
         item.addSubItem(2, LocaleController.getString("LogOut", R.string.LogOut));
@@ -699,8 +699,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 int childCount = getChildCount();
                 for (int a = 0; a < childCount; a++) {
                     View view = getChildAt(a);
-                    if (view != child && (view instanceof C0403ActionBar) && view.getVisibility() == 0) {
-                        if (((C0403ActionBar) view).getCastShadows()) {
+                    if (view != child && (view instanceof CLASSNAMEActionBar) && view.getVisibility() == 0) {
+                        if (((CLASSNAMEActionBar) view).getCastShadows()) {
                             actionBarHeight = view.getMeasuredHeight();
                         }
                         SettingsActivity.this.parentLayout.drawHeaderShadow(canvas, actionBarHeight);
@@ -716,20 +716,20 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager c15814 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager CLASSNAME = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c15814;
-        recyclerListView.setLayoutManager(c15814);
+        this.layoutManager = CLASSNAME;
+        recyclerListView.setLayoutManager(CLASSNAME);
         this.listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
         this.listView.setOnItemClickListener(new SettingsActivity$$Lambda$1(this, context));
-        this.listView.setOnItemLongClickListener(new C15786());
+        this.listView.setOnItemLongClickListener(new CLASSNAME());
         frameLayout.addView(this.actionBar);
         this.extraHeightView = new View(context);
         this.extraHeightView.setPivotY(0.0f);
@@ -783,12 +783,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.writeButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.writeButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             this.writeButton.setStateListAnimator(animator);
-            this.writeButton.setOutlineProvider(new C11297());
+            this.writeButton.setOutlineProvider(new CLASSNAME());
         }
         frameLayout.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f));
         this.writeButton.setOnClickListener(new SettingsActivity$$Lambda$3(this));
         needLayout();
-        this.listView.setOnScrollListener(new C15798());
+        this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
     }
 
@@ -1079,7 +1079,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     private void needLayout() {
-        int newTop = (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + C0403ActionBar.getCurrentActionBarHeight();
+        int newTop = (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight();
         if (this.listView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
             if (layoutParams.topMargin != newTop) {
@@ -1092,7 +1092,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             float diff = ((float) this.extraHeight) / ((float) AndroidUtilities.m9dp(88.0f));
             this.extraHeightView.setScaleY(diff);
             this.shadowView.setTranslationY((float) (this.extraHeight + newTop));
-            this.writeButton.setTranslationY((float) ((((this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + C0403ActionBar.getCurrentActionBarHeight()) + this.extraHeight) - AndroidUtilities.m9dp(29.5f)));
+            this.writeButton.setTranslationY((float) ((((this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight()) + this.extraHeight) - AndroidUtilities.m9dp(29.5f)));
             final boolean setVisible = diff > 0.2f;
             if (setVisible != (this.writeButton.getTag() == null)) {
                 if (setVisible) {
@@ -1139,7 +1139,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
             this.avatarImage.setScaleX((42.0f + (18.0f * diff)) / 42.0f);
             this.avatarImage.setScaleY((42.0f + (18.0f * diff)) / 42.0f);
-            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) C0403ActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
+            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) CLASSNAMEActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
             this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m9dp(47.0f))) * diff);
             this.avatarImage.setTranslationY((float) Math.ceil((double) avatarY));
             this.nameTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
@@ -1153,7 +1153,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     private void fixLayout() {
         if (this.fragmentView != null) {
-            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C112710());
+            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 
@@ -1196,7 +1196,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 if (VERSION.SDK_INT >= 24) {
                     i.addFlags(1);
                 }
-                i.setType("message/rfc822");
+                i.setType("message/rfCLASSNAME");
                 i.putExtra("android.intent.extra.EMAIL", TtmlNode.ANONYMOUS_REGION_ID);
                 i.putExtra("android.intent.extra.SUBJECT", "last logs");
                 i.putParcelableArrayListExtra("android.intent.extra.STREAM", uris);

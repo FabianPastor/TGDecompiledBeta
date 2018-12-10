@@ -33,8 +33,8 @@ public class StickersArchiveAlert extends Builder {
     private ArrayList<StickerSetCovered> stickerSets;
 
     /* renamed from: org.telegram.ui.Components.StickersArchiveAlert$1 */
-    class C08481 implements OnClickListener {
-        C08481() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -43,8 +43,8 @@ public class StickersArchiveAlert extends Builder {
     }
 
     /* renamed from: org.telegram.ui.Components.StickersArchiveAlert$2 */
-    class C08492 implements OnClickListener {
-        C08492() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -112,9 +112,9 @@ public class StickersArchiveAlert extends Builder {
         listView.setPadding(AndroidUtilities.m9dp(10.0f), 0, AndroidUtilities.m9dp(10.0f), 0);
         listView.setGlowColor(-657673);
         container.addView(listView, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
-        setNegativeButton(LocaleController.getString("Close", R.string.Close), new C08481());
+        setNegativeButton(LocaleController.getString("Close", R.string.Close), new CLASSNAME());
         if (this.parentFragment != null) {
-            setPositiveButton(LocaleController.getString("Settings", R.string.Settings), new C08492());
+            setPositiveButton(LocaleController.getString("Settings", R.string.Settings), new CLASSNAME());
         }
     }
 }

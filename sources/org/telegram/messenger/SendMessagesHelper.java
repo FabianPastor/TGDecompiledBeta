@@ -223,7 +223,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     private int currentAccount;
     private ChatFull currentChatInfo = null;
     private HashMap<String, ArrayList<DelayedMessage>> delayedMessages = new HashMap();
-    private LocationProvider locationProvider = new LocationProvider(new C12141());
+    private LocationProvider locationProvider = new LocationProvider(new CLASSNAME());
     private SparseArray<Message> sendingMessages = new SparseArray();
     private SparseArray<MessageObject> unsentMessages = new SparseArray();
     private HashMap<String, Boolean> waitingForCallback = new HashMap();
@@ -363,8 +363,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         private GpsLocationListener networkLocationListener = new GpsLocationListener(this, null);
 
         /* renamed from: org.telegram.messenger.SendMessagesHelper$LocationProvider$1 */
-        class C02731 implements Runnable {
-            C02731() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -385,7 +385,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             private GpsLocationListener() {
             }
 
-            /* synthetic */ GpsLocationListener(LocationProvider x0, C12141 x1) {
+            /* synthetic */ GpsLocationListener(LocationProvider x0, CLASSNAME x1) {
                 this();
             }
 
@@ -463,7 +463,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (this.locationQueryCancelRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.locationQueryCancelRunnable);
             }
-            this.locationQueryCancelRunnable = new C02731();
+            this.locationQueryCancelRunnable = new CLASSNAME();
             AndroidUtilities.runOnUIThread(this.locationQueryCancelRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         }
 
@@ -485,7 +485,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         private MediaSendPrepareWorker() {
         }
 
-        /* synthetic */ MediaSendPrepareWorker(C12141 x0) {
+        /* synthetic */ MediaSendPrepareWorker(CLASSNAME x0) {
             this();
         }
     }
@@ -504,8 +504,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
-    class C12141 implements LocationProviderDelegate {
-        C12141() {
+    class CLASSNAME implements LocationProviderDelegate {
+        CLASSNAME() {
         }
 
         public void onLocationAcquired(Location location) {

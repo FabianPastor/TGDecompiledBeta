@@ -79,7 +79,7 @@ public class FastDateParser implements Serializable, DateParser {
         private Strategy() {
         }
 
-        /* synthetic */ Strategy(C12321 x0) {
+        /* synthetic */ Strategy(CLASSNAME x0) {
             this();
         }
 

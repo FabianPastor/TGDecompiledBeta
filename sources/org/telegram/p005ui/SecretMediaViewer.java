@@ -35,7 +35,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.p004ui.AspectRatioFrameLayout;
 import java.io.File;
 import java.util.ArrayList;
@@ -53,8 +53,8 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
@@ -73,7 +73,7 @@ import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener, NotificationCenterDelegate {
     @SuppressLint({"StaticFieldLeak"})
     private static volatile SecretMediaViewer Instance = null;
-    private C0403ActionBar actionBar;
+    private CLASSNAMEActionBar actionBar;
     private float animateToClipBottom;
     private float animateToClipHorizontal;
     private float animateToClipTop;
@@ -154,8 +154,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     private boolean zooming;
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
-    class C11215 extends AnimatorListenerAdapter {
-        C11215() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -167,8 +167,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$6 */
-    class C11226 extends AnimatorListenerAdapter {
-        C11226() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -180,8 +180,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$8 */
-    class C11248 extends AnimatorListenerAdapter {
-        C11248() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -193,8 +193,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$9 */
-    class C11259 extends AnimatorListenerAdapter {
-        C11259() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -290,7 +290,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             private Particle() {
             }
 
-            /* synthetic */ Particle(SecretDeleteTimer x0, C15701 x1) {
+            /* synthetic */ Particle(SecretDeleteTimer x0, CLASSNAME x1) {
                 this();
             }
         }
@@ -365,7 +365,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 } else if (SecretMediaViewer.this.videoPlayer != null) {
                     long duration = SecretMediaViewer.this.videoPlayer.getDuration();
                     long position = SecretMediaViewer.this.videoPlayer.getCurrentPosition();
-                    if (duration == C0016C.TIME_UNSET || position == C0016C.TIME_UNSET) {
+                    if (duration == CLASSNAMEC.TIME_UNSET || position == CLASSNAMEC.TIME_UNSET) {
                         progress = 1.0f;
                     } else {
                         progress = 1.0f - (((float) position) / ((float) duration));
@@ -421,8 +421,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
-    class C15701 implements VideoPlayerDelegate {
-        C15701() {
+    class CLASSNAME implements VideoPlayerDelegate {
+        CLASSNAME() {
         }
 
         public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -493,8 +493,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
-    class C15724 extends ActionBarMenuOnItemClick {
-        C15724() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -601,7 +601,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             if (this.videoPlayer == null) {
                 this.videoPlayer = new VideoPlayer();
                 this.videoPlayer.setTextureView(this.videoTextureView);
-                this.videoPlayer.setDelegate(new C15701());
+                this.videoPlayer.setDelegate(new CLASSNAME());
             }
             this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
             this.videoPlayer.setPlayWhenReady(true);
@@ -683,7 +683,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                     super.onLayout(changed, left, top, right, bottom);
                     if (SecretMediaViewer.this.secretDeleteTimer != null) {
-                        int y = ((C0403ActionBar.getCurrentActionBarHeight() - SecretMediaViewer.this.secretDeleteTimer.getMeasuredHeight()) / 2) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                        int y = ((CLASSNAMEActionBar.getCurrentActionBarHeight() - SecretMediaViewer.this.secretDeleteTimer.getMeasuredHeight()) / 2) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
                         SecretMediaViewer.this.secretDeleteTimer.layout(SecretMediaViewer.this.secretDeleteTimer.getLeft(), y, SecretMediaViewer.this.secretDeleteTimer.getRight(), SecretMediaViewer.this.secretDeleteTimer.getMeasuredHeight() + y);
                     }
                 }
@@ -702,7 +702,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             }
             this.gestureDetector = new GestureDetector(this.containerView.getContext(), this);
             this.gestureDetector.setOnDoubleTapListener(this);
-            this.actionBar = new C0403ActionBar(activity);
+            this.actionBar = new CLASSNAMEActionBar(activity);
             this.actionBar.setTitleColor(-1);
             this.actionBar.setSubtitleColor(-1);
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
@@ -711,7 +711,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitleRightMargin(AndroidUtilities.m9dp(70.0f));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-            this.actionBar.setActionBarMenuOnItemClick(new C15724());
+            this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
             this.secretDeleteTimer = new SecretDeleteTimer(activity);
             this.containerView.addView(this.secretDeleteTimer, LayoutHelper.createFrame(119, 48.0f, 53, 0.0f, 0.0f, 0.0f, 0.0f));
             this.windowLayoutParams = new LayoutParams();
@@ -871,7 +871,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 this.photoAnimationInProgress = 3;
                 this.photoAnimationEndRunnable = new SecretMediaViewer$$Lambda$1(this);
                 this.imageMoveAnimation.setDuration(250);
-                this.imageMoveAnimation.addListener(new C11215());
+                this.imageMoveAnimation.addListener(new CLASSNAME());
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();
                 if (VERSION.SDK_INT >= 18) {
                     this.containerView.setLayerType(2, null);
@@ -911,31 +911,31 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         }
         this.actionBar.setEnabled(show);
         this.isActionBarVisible = show;
-        C0403ActionBar c0403ActionBar;
+        CLASSNAMEActionBar CLASSNAMEActionBar;
         if (animated) {
             ArrayList<Animator> arrayList = new ArrayList();
-            c0403ActionBar = this.actionBar;
+            CLASSNAMEActionBar = this.actionBar;
             String str = "alpha";
             float[] fArr = new float[1];
             if (!show) {
                 f = 0.0f;
             }
             fArr[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(c0403ActionBar, str, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(CLASSNAMEActionBar, str, fArr));
             this.currentActionBarAnimation = new AnimatorSet();
             this.currentActionBarAnimation.playTogether(arrayList);
             if (!show) {
-                this.currentActionBarAnimation.addListener(new C11226());
+                this.currentActionBarAnimation.addListener(new CLASSNAME());
             }
             this.currentActionBarAnimation.setDuration(200);
             this.currentActionBarAnimation.start();
             return;
         }
-        c0403ActionBar = this.actionBar;
+        CLASSNAMEActionBar = this.actionBar;
         if (!show) {
             f = 0.0f;
         }
-        c0403ActionBar.setAlpha(f);
+        CLASSNAMEActionBar.setAlpha(f);
         if (!show) {
             this.actionBar.setVisibility(8);
         }
@@ -1261,7 +1261,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.photoAnimationInProgress = 2;
             this.photoAnimationEndRunnable = new SecretMediaViewer$$Lambda$4(this, object);
             animatorSet2.setDuration(200);
-            animatorSet2.addListener(new C11248());
+            animatorSet2.addListener(new CLASSNAME());
             this.photoTransitionAnimationStartTime = System.currentTimeMillis();
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(2, null);
@@ -1542,7 +1542,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f})});
             this.imageMoveAnimation.setInterpolator(this.interpolator);
             this.imageMoveAnimation.setDuration((long) duration);
-            this.imageMoveAnimation.addListener(new C11259());
+            this.imageMoveAnimation.addListener(new CLASSNAME());
             this.imageMoveAnimation.start();
         }
     }

@@ -13,7 +13,7 @@ import android.text.TextUtils.TruncateAt;
 import android.text.style.ForegroundColorSpan;
 import android.view.View.MeasureSpec;
 import java.util.ArrayList;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -619,7 +619,7 @@ public class DialogCell extends BaseCell {
                 } else if (this.user.phone == null || this.user.phone.length() == 0) {
                     nameString = UserObject.getUserName(this.user);
                 } else {
-                    nameString = C0194PhoneFormat.getInstance().format("+" + this.user.phone);
+                    nameString = CLASSNAMEPhoneFormat.getInstance().format("+" + this.user.phone);
                 }
                 if (this.encryptedChat != null) {
                     currentNamePaint = Theme.dialogs_nameEncryptedPaint;

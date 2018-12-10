@@ -24,28 +24,28 @@ import org.telegram.tgnet.TLRPC.TL_pageTableCell;
 public class TableLayout extends View {
     public static final int ALIGN_BOUNDS = 0;
     public static final int ALIGN_MARGINS = 1;
-    public static final Alignment BASELINE = new C08586();
+    public static final Alignment BASELINE = new CLASSNAME();
     public static final Alignment BOTTOM = TRAILING;
     private static final int CAN_STRETCH = 2;
-    public static final Alignment CENTER = new C08575();
+    public static final Alignment CENTER = new CLASSNAME();
     private static final int DEFAULT_ALIGNMENT_MODE = 1;
     private static final int DEFAULT_COUNT = Integer.MIN_VALUE;
     private static final boolean DEFAULT_ORDER_PRESERVED = true;
     private static final int DEFAULT_ORIENTATION = 0;
     private static final boolean DEFAULT_USE_DEFAULT_MARGINS = false;
     public static final Alignment END = TRAILING;
-    public static final Alignment FILL = new C08607();
+    public static final Alignment FILL = new CLASSNAME();
     public static final int HORIZONTAL = 0;
     private static final int INFLEXIBLE = 0;
-    private static final Alignment LEADING = new C08542();
+    private static final Alignment LEADING = new CLASSNAME();
     public static final Alignment LEFT = TableLayout.createSwitchingAlignment(START);
     static final int MAX_SIZE = 100000;
     public static final Alignment RIGHT = TableLayout.createSwitchingAlignment(END);
     public static final Alignment START = LEADING;
     public static final Alignment TOP = LEADING;
-    private static final Alignment TRAILING = new C08553();
+    private static final Alignment TRAILING = new CLASSNAME();
     public static final int UNDEFINED = Integer.MIN_VALUE;
-    static final Alignment UNDEFINED_ALIGNMENT = new C08531();
+    static final Alignment UNDEFINED_ALIGNMENT = new CLASSNAME();
     static final int UNINITIALIZED_HASH = 0;
     public static final int VERTICAL = 1;
     private Path backgroundPath = new Path();
@@ -160,7 +160,7 @@ public class TableLayout extends View {
         public int[] trailingMargins;
         public boolean trailingMarginsValid;
 
-        /* synthetic */ Axis(TableLayout x0, boolean x1, C08531 x2) {
+        /* synthetic */ Axis(TableLayout x0, boolean x1, CLASSNAME x2) {
             this(x1);
         }
 
@@ -701,7 +701,7 @@ public class TableLayout extends View {
         public int before;
         public int flexibility;
 
-        /* synthetic */ Bounds(C08531 x0) {
+        /* synthetic */ Bounds(CLASSNAME x0) {
             this();
         }
 
@@ -1150,7 +1150,7 @@ public class TableLayout extends View {
         public final K[] keys;
         public final V[] values;
 
-        /* synthetic */ PackedMap(Object[] x0, Object[] x1, C08531 x2) {
+        /* synthetic */ PackedMap(Object[] x0, Object[] x1, CLASSNAME x2) {
             this(x0, x1);
         }
 
@@ -1199,7 +1199,7 @@ public class TableLayout extends View {
         final boolean startDefined;
         float weight;
 
-        /* synthetic */ Spec(boolean x0, int x1, int x2, Alignment x3, float x4, C08531 x5) {
+        /* synthetic */ Spec(boolean x0, int x1, int x2, Alignment x3, float x4, CLASSNAME x5) {
             this(x0, x1, x2, x3, x4);
         }
 
@@ -1273,8 +1273,8 @@ public class TableLayout extends View {
     }
 
     /* renamed from: org.telegram.ui.Components.TableLayout$1 */
-    static class C08531 extends Alignment {
-        C08531() {
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
         }
 
         int getGravityOffset(Child view, int cellDelta) {
@@ -1287,8 +1287,8 @@ public class TableLayout extends View {
     }
 
     /* renamed from: org.telegram.ui.Components.TableLayout$2 */
-    static class C08542 extends Alignment {
-        C08542() {
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
         }
 
         int getGravityOffset(Child view, int cellDelta) {
@@ -1301,8 +1301,8 @@ public class TableLayout extends View {
     }
 
     /* renamed from: org.telegram.ui.Components.TableLayout$3 */
-    static class C08553 extends Alignment {
-        C08553() {
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
         }
 
         int getGravityOffset(Child view, int cellDelta) {
@@ -1315,8 +1315,8 @@ public class TableLayout extends View {
     }
 
     /* renamed from: org.telegram.ui.Components.TableLayout$5 */
-    static class C08575 extends Alignment {
-        C08575() {
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
         }
 
         int getGravityOffset(Child view, int cellDelta) {
@@ -1329,13 +1329,13 @@ public class TableLayout extends View {
     }
 
     /* renamed from: org.telegram.ui.Components.TableLayout$6 */
-    static class C08586 extends Alignment {
+    static class CLASSNAME extends Alignment {
 
         /* renamed from: org.telegram.ui.Components.TableLayout$6$1 */
-        class C08591 extends Bounds {
+        class CLASSNAME extends Bounds {
             private int size;
 
-            C08591() {
+            CLASSNAME() {
                 super();
             }
 
@@ -1358,7 +1358,7 @@ public class TableLayout extends View {
             }
         }
 
-        C08586() {
+        CLASSNAME() {
         }
 
         int getGravityOffset(Child view, int cellDelta) {
@@ -1370,13 +1370,13 @@ public class TableLayout extends View {
         }
 
         public Bounds getBounds() {
-            return new C08591();
+            return new CLASSNAME();
         }
     }
 
     /* renamed from: org.telegram.ui.Components.TableLayout$7 */
-    static class C08607 extends Alignment {
-        C08607() {
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
         }
 
         int getGravityOffset(Child view, int cellDelta) {

@@ -2,15 +2,15 @@ package org.telegram.p005ui;
 
 import java.util.ArrayList;
 import org.telegram.p005ui.DialogsActivity.DialogsActivityDelegate;
-import org.telegram.p005ui.PhotoViewer.C15396;
+import org.telegram.p005ui.PhotoViewer.CLASSNAME;
 
 /* renamed from: org.telegram.ui.PhotoViewer$6$$Lambda$0 */
 final /* synthetic */ class PhotoViewer$6$$Lambda$0 implements DialogsActivityDelegate {
-    private final C15396 arg$1;
+    private final CLASSNAME arg$1;
     private final ArrayList arg$2;
 
-    PhotoViewer$6$$Lambda$0(C15396 c15396, ArrayList arrayList) {
-        this.arg$1 = c15396;
+    PhotoViewer$6$$Lambda$0(CLASSNAME CLASSNAME, ArrayList arrayList) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = arrayList;
     }
 

@@ -64,7 +64,7 @@ import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
@@ -193,7 +193,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             this.max_id = new int[]{0, 0};
         }
 
-        /* synthetic */ SharedMediaData(MediaActivity x0, C14781 x1) {
+        /* synthetic */ SharedMediaData(MediaActivity x0, CLASSNAME x1) {
             this();
         }
 
@@ -264,8 +264,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$2 */
-    class C14712 extends ActionBarMenuOnItemClick {
-        C14712() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -506,8 +506,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$3 */
-    class C14723 implements ScrollSlidingTabStripDelegate {
-        C14723() {
+    class CLASSNAME implements ScrollSlidingTabStripDelegate {
+        CLASSNAME() {
         }
 
         public void onPageSelected(int id, boolean forward) {
@@ -556,8 +556,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$4 */
-    class C14734 extends ActionBarMenuItemSearchListener {
-        C14734() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchExpand() {
@@ -598,8 +598,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$9 */
-    class C14769 implements SharedLinkCellDelegate {
-        C14769() {
+    class CLASSNAME implements SharedLinkCellDelegate {
+        CLASSNAME() {
         }
 
         public void needOpenWebView(WebPage webPage) {
@@ -633,8 +633,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$1 */
-    class C14781 extends EmptyPhotoViewerProvider {
-        C14781() {
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -1316,8 +1316,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         private Context mContext;
 
         /* renamed from: org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter$1 */
-        class C14771 implements SharedPhotoVideoCellDelegate {
-            C14771() {
+        class CLASSNAME implements SharedPhotoVideoCellDelegate {
+            CLASSNAME() {
             }
 
             public void didClickItem(SharedPhotoVideoCell cell, int index, MessageObject messageObject, int a) {
@@ -1381,7 +1381,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         view = (View) MediaActivity.this.cellCache.get(0);
                         MediaActivity.this.cellCache.remove(0);
                     }
-                    ((SharedPhotoVideoCell) view).setDelegate(new C14771());
+                    ((SharedPhotoVideoCell) view).setDelegate(new CLASSNAME());
                     MediaActivity.this.cache.add((SharedPhotoVideoCell) view);
                     break;
                 default:
@@ -1475,9 +1475,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.actionModeViews = new ArrayList();
         this.info = null;
         this.columnsCount = 4;
-        this.provider = new C14781();
+        this.provider = new CLASSNAME();
         this.sharedMediaData = new SharedMediaData[5];
-        this.sharedLinkCellDelegate = new C14769();
+        this.sharedLinkCellDelegate = new CLASSNAME();
         this.hasMedia = media;
         this.initialTab = initTab;
     }
@@ -1518,14 +1518,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
 
     public View createView(Context context) {
         int a;
-        View c14746;
+        View CLASSNAME;
         this.searching = false;
         this.searchWas = false;
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setTitle(LocaleController.getString("SharedContentTitle", R.string.SharedContentTitle));
         this.actionBar.setExtraHeight(AndroidUtilities.m9dp(44.0f));
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C14712());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.scrollSlidingTextTabStrip = new ScrollSlidingTextTabStrip(context);
         this.scrollSlidingTextTabStrip.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         if (this.initialTab != -1) {
@@ -1534,13 +1534,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             this.initialTab = -1;
         }
         this.actionBar.addView(this.scrollSlidingTextTabStrip, LayoutHelper.createFrame(-1, 44, 83));
-        this.scrollSlidingTextTabStrip.setDelegate(new C14723());
+        this.scrollSlidingTextTabStrip.setDelegate(new CLASSNAME());
         for (a = 1; a >= 0; a--) {
             this.selectedFiles[a].clear();
         }
         this.cantDeleteMessagesCount = 0;
         this.actionModeViews.clear();
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C14734());
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME());
         this.searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         this.searchItem.setVisibility(8);
         this.searchItemState = 0;
@@ -1740,8 +1740,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     MediaActivity.this.scrollSlidingTextTabStrip.selectTabWithId(MediaActivity.this.mediaPages[0].selectedType, 1.0f);
                                 }
                                 MediaActivity.this.tabsAnimationInProgress = false;
-                                C09895.this.maybeStartTracking = false;
-                                C09895.this.startedTracking = false;
+                                CLASSNAME.this.maybeStartTracking = false;
+                                CLASSNAME.this.startedTracking = false;
                                 MediaActivity.this.actionBar.setEnabled(true);
                                 MediaActivity.this.scrollSlidingTextTabStrip.setEnabled(true);
                             }
@@ -1780,7 +1780,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     scrollToPositionOnRecreate = -1;
                 }
             }
-            c14746 = new MediaPage(context) {
+            CLASSNAME = new MediaPage(context) {
                 public void setTranslationX(float translationX) {
                     super.setTranslationX(translationX);
                     if (MediaActivity.this.tabsAnimationInProgress && MediaActivity.this.mediaPages[0] == this) {
@@ -1794,16 +1794,16 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     }
                 }
             };
-            frameLayout.addView(c14746, LayoutHelper.createFrame(-1, -1.0f));
-            this.mediaPages[a] = c14746;
+            frameLayout.addView(CLASSNAME, LayoutHelper.createFrame(-1, -1.0f));
+            this.mediaPages[a] = CLASSNAME;
             final LinearLayoutManager layoutManager = this.mediaPages[a].layoutManager = new LinearLayoutManager(context, 1, false);
             this.mediaPages[a].listView = new RecyclerListView(context);
             this.mediaPages[a].listView.setClipToPadding(false);
             this.mediaPages[a].listView.setSectionsType(2);
             this.mediaPages[a].listView.setLayoutManager(layoutManager);
             this.mediaPages[a].addView(this.mediaPages[a].listView, LayoutHelper.createFrame(-1, -1.0f));
-            this.mediaPages[a].listView.setOnItemClickListener(new MediaActivity$$Lambda$1(this, c14746));
-            final View view = c14746;
+            this.mediaPages[a].listView.setOnItemClickListener(new MediaActivity$$Lambda$1(this, CLASSNAME));
+            final View view = CLASSNAME;
             this.mediaPages[a].listView.setOnScrollListener(new OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     boolean z = true;
@@ -1846,7 +1846,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     }
                 }
             });
-            this.mediaPages[a].listView.setOnItemLongClickListener(new MediaActivity$$Lambda$2(this, c14746));
+            this.mediaPages[a].listView.setOnItemLongClickListener(new MediaActivity$$Lambda$2(this, CLASSNAME));
             if (a == 0 && scrollToPositionOnRecreate != -1) {
                 layoutManager.scrollToPositionWithOffset(scrollToPositionOnRecreate, scrollToOffsetOnRecreate);
             }
@@ -1884,9 +1884,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         updateTabs();
         switchToCurrentSelectedMode(false);
         if (!AndroidUtilities.isTablet()) {
-            c14746 = new FragmentContextView(context, this, false);
-            this.fragmentContextView = c14746;
-            frameLayout.addView(c14746, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, 8.0f, 0.0f, 0.0f));
+            CLASSNAME = new FragmentContextView(context, this, false);
+            this.fragmentContextView = CLASSNAME;
+            frameLayout.addView(CLASSNAME, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, 8.0f, 0.0f, 0.0f));
         }
         return this.fragmentView;
     }

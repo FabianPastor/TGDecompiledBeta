@@ -51,8 +51,8 @@ public class Browser {
     private static CustomTabsSession customTabsSession;
 
     /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class C02841 implements ServiceConnectionCallback {
-        C02841() {
+    static class CLASSNAME implements ServiceConnectionCallback {
+        CLASSNAME() {
         }
 
         public void onServiceConnected(CustomTabsClient client) {
@@ -75,7 +75,7 @@ public class Browser {
         private NavigationCallback() {
         }
 
-        /* synthetic */ NavigationCallback(C02841 x0) {
+        /* synthetic */ NavigationCallback(CLASSNAME x0) {
             this();
         }
 
@@ -118,7 +118,7 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new C02841());
+                customTabsServiceConnection = new ServiceConnection(new CLASSNAME());
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }

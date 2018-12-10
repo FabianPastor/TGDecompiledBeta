@@ -2,14 +2,14 @@ package org.telegram.p005ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import org.telegram.p005ui.StickerPreviewViewer.C11321;
+import org.telegram.p005ui.StickerPreviewViewer.CLASSNAME;
 
 /* renamed from: org.telegram.ui.StickerPreviewViewer$1$$Lambda$1 */
 final /* synthetic */ class StickerPreviewViewer$1$$Lambda$1 implements OnDismissListener {
-    private final C11321 arg$1;
+    private final CLASSNAME arg$1;
 
-    StickerPreviewViewer$1$$Lambda$1(C11321 c11321) {
-        this.arg$1 = c11321;
+    StickerPreviewViewer$1$$Lambda$1(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void onDismiss(DialogInterface dialogInterface) {

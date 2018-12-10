@@ -34,8 +34,8 @@ public class Switch extends View {
     private String trackColorKey = Theme.key_switch2Track;
 
     /* renamed from: org.telegram.ui.Components.Switch$1 */
-    class C08501 extends AnimatorListenerAdapter {
-        C08501() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -44,8 +44,8 @@ public class Switch extends View {
     }
 
     /* renamed from: org.telegram.ui.Components.Switch$2 */
-    class C08512 extends AnimatorListenerAdapter {
-        C08512() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -122,7 +122,7 @@ public class Switch extends View {
         fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
         this.checkAnimator.setDuration(250);
-        this.checkAnimator.addListener(new C08501());
+        this.checkAnimator.addListener(new CLASSNAME());
         this.checkAnimator.start();
     }
 
@@ -132,7 +132,7 @@ public class Switch extends View {
         fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.iconAnimator = ObjectAnimator.ofFloat(this, str, fArr);
         this.iconAnimator.setDuration(250);
-        this.iconAnimator.addListener(new C08512());
+        this.iconAnimator.addListener(new CLASSNAME());
         this.iconAnimator.start();
     }
 

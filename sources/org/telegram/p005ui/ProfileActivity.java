@@ -33,12 +33,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
@@ -69,8 +69,8 @@ import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
@@ -213,7 +213,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private int photosRow;
     private boolean playProfileAnimation;
     private int[] prevMediaCount = new int[]{-1, -1, -1, -1, -1};
-    private PhotoViewerProvider provider = new C15581();
+    private PhotoViewerProvider provider = new CLASSNAME();
     private boolean recreateMenuAfterAnimation;
     private int rowCount;
     private int selectedUser;
@@ -236,8 +236,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private int voiceRow;
 
     /* renamed from: org.telegram.ui.ProfileActivity$9 */
-    class C11129 implements OnPreDrawListener {
-        C11129() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -260,7 +260,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), ((ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + C0403ActionBar.getCurrentActionBarHeight()) + AndroidUtilities.m9dp(91.0f));
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), ((ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight()) + AndroidUtilities.m9dp(91.0f));
         }
 
         public void setBackgroundColor(int color) {
@@ -280,8 +280,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$3 */
-    class C15553 extends ActionBarMenuOnItemClick {
-        C15553() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -476,8 +476,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$8 */
-    class C15568 extends OnScrollListener {
-        C15568() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -489,8 +489,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$1 */
-    class C15581 extends EmptyPhotoViewerProvider {
-        C15581() {
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -636,7 +636,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         if (TextUtils.isEmpty(user.phone)) {
                             text = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                         } else {
-                            text = C0194PhoneFormat.getInstance().format("+" + user.phone);
+                            text = CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
                         }
                         detailCell.setTextAndValue(text, LocaleController.getString("PhoneMobile", R.string.PhoneMobile), false);
                         return;
@@ -1042,9 +1042,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    protected C0403ActionBar createActionBar(Context context) {
+    protected CLASSNAMEActionBar createActionBar(Context context) {
         boolean z;
-        C0403ActionBar actionBar = new C0403ActionBar(context) {
+        CLASSNAMEActionBar actionBar = new CLASSNAMEActionBar(context) {
             public boolean onTouchEvent(MotionEvent event) {
                 return super.onTouchEvent(event);
             }
@@ -1069,7 +1069,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         Theme.createProfileResources(context);
         this.hasOwnBackground = true;
         this.extraHeight = AndroidUtilities.m9dp(88.0f);
-        this.actionBar.setActionBarMenuOnItemClick(new C15553());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         createActionBarMenu();
         this.listAdapter = new ListAdapter(context);
         this.avatarDrawable = new AvatarDrawable();
@@ -1220,7 +1220,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             a++;
         }
         needLayout();
-        this.listView.setOnScrollListener(new C15568());
+        this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
     }
 
@@ -1642,7 +1642,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if (i == 0) {
             try {
                 Intent intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:+" + user.phone));
-                intent.addFlags(C0016C.ENCODING_PCM_MU_LAW);
+                intent.addFlags(CLASSNAMEC.ENCODING_PCM_MU_LAW);
                 getParentActivity().startActivityForResult(intent, 500);
             } catch (Throwable e) {
                 FileLog.m13e(e);
@@ -1819,7 +1819,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         } else {
             i = 0;
         }
-        int newTop = i + C0403ActionBar.getCurrentActionBarHeight();
+        int newTop = i + CLASSNAMEActionBar.getCurrentActionBarHeight();
         if (!(this.listView == null || this.openAnimationInProgress)) {
             layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
             if (layoutParams.topMargin != newTop) {
@@ -1835,7 +1835,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             } else {
                 i = 0;
             }
-            float avatarY = ((((float) i) + ((((float) C0403ActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
+            float avatarY = ((((float) i) + ((((float) CLASSNAMEActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
             this.avatarImage.setScaleX(((18.0f * diff) + 42.0f) / 42.0f);
             this.avatarImage.setScaleY(((18.0f * diff) + 42.0f) / 42.0f);
             this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m9dp(47.0f))) * diff);
@@ -1887,7 +1887,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
     private void fixLayout() {
         if (this.fragmentView != null) {
-            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C11129());
+            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 
@@ -2886,7 +2886,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 for (a = 0; a < 2; a++) {
                     if (this.nameTextView[a] != null) {
                         if (a == 0 && user.f176id != UserConfig.getInstance(this.currentAccount).getClientUserId() && user.f176id / 1000 != 777 && user.f176id / 1000 != 333 && user.phone != null && user.phone.length() != 0 && ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.f176id)) == null && (ContactsController.getInstance(this.currentAccount).contactsDict.size() != 0 || !ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
-                            String phoneString = C0194PhoneFormat.getInstance().format("+" + user.phone);
+                            String phoneString = CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
                             if (!this.nameTextView[a].getText().equals(phoneString)) {
                                 this.nameTextView[a].setText(phoneString);
                             }

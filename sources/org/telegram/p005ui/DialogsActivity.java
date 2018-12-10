@@ -68,7 +68,7 @@ import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.MenuDrawable;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
@@ -169,8 +169,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private TextView unreadFloatingButtonCounter;
 
     /* renamed from: org.telegram.ui.DialogsActivity$12 */
-    class C092412 extends AnimatorListenerAdapter {
-        C092412() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -179,8 +179,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$13 */
-    class C092513 extends AnimatorListenerAdapter {
-        C092513() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -189,8 +189,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$14 */
-    class C092614 extends AnimatorListenerAdapter {
-        C092614() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -199,8 +199,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$15 */
-    class C092715 implements OnGlobalLayoutListener {
-        C092715() {
+    class CLASSNAME implements OnGlobalLayoutListener {
+        CLASSNAME() {
         }
 
         public void onGlobalLayout() {
@@ -219,8 +219,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$6 */
-    class C09286 extends ViewOutlineProvider {
-        C09286() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -230,8 +230,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$7 */
-    class C09297 extends ViewOutlineProvider {
-        C09297() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -241,8 +241,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$8 */
-    class C09308 extends ViewOutlineProvider {
-        C09308() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -257,8 +257,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$10 */
-    class C142710 implements DialogsSearchAdapterDelegate {
-        C142710() {
+    class CLASSNAME implements DialogsSearchAdapterDelegate {
+        CLASSNAME() {
         }
 
         public void searchStateChanged(boolean search) {
@@ -322,8 +322,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$11 */
-    class C142811 implements ChatActivityEnterViewDelegate {
-        C142811() {
+    class CLASSNAME implements ChatActivityEnterViewDelegate {
+        CLASSNAME() {
         }
 
         public void onMessageSend(CharSequence message) {
@@ -391,8 +391,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$1 */
-    class C14291 extends ActionBarMenuItemSearchListener {
-        C14291() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchExpand() {
@@ -478,8 +478,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$2 */
-    class C14302 extends ActionBarMenuOnItemClick {
-        C14302() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -511,8 +511,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$5 */
-    class C14325 implements OnItemLongClickListenerExtended {
-        C14325() {
+    class CLASSNAME implements OnItemLongClickListenerExtended {
+        CLASSNAME() {
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:164:0x0519  */
@@ -819,10 +819,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$9 */
-    class C14339 extends OnScrollListener {
+    class CLASSNAME extends OnScrollListener {
         private boolean scrollingManually;
 
-        C14339() {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -984,7 +984,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             updatePasscodeButton();
             updateProxyButton(false);
         }
-        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C14291()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         if (this.onlySelect) {
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             if (this.dialogsType == 3 && this.selectAlertString == null) {
@@ -1032,7 +1032,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C14302());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         if (this.sideMenu != null) {
             this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
             this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
@@ -1158,7 +1158,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         backupImageView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new DialogsActivity$$Lambda$2(this));
-        this.listView.setOnItemLongClickListener(new C14325());
+        this.listView.setOnItemLongClickListener(new CLASSNAME());
         this.searchEmptyView = new EmptyTextProgressView(context);
         this.searchEmptyView.setVisibility(8);
         this.searchEmptyView.setShowAtCenter(true);
@@ -1186,7 +1186,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(animator);
-            this.floatingButton.setOutlineProvider(new C09286());
+            this.floatingButton.setOutlineProvider(new CLASSNAME());
         }
         View view = this.floatingButton;
         int i3 = VERSION.SDK_INT >= 21 ? 56 : 60;
@@ -1269,7 +1269,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.unreadFloatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.unreadFloatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             this.unreadFloatingButton.setStateListAnimator(animator);
-            this.unreadFloatingButton.setOutlineProvider(new C09297());
+            this.unreadFloatingButton.setOutlineProvider(new CLASSNAME());
         }
         FrameLayout frameLayout = this.unreadFloatingButtonContainer;
         View view2 = this.unreadFloatingButton;
@@ -1293,7 +1293,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
         if (VERSION.SDK_INT >= 21) {
             this.unreadFloatingButtonCounter.setElevation((float) AndroidUtilities.m9dp(5.0f));
-            this.unreadFloatingButtonCounter.setOutlineProvider(new C09308());
+            this.unreadFloatingButtonCounter.setOutlineProvider(new CLASSNAME());
         }
         this.unreadFloatingButtonCounter.setTextColor(Theme.getColor(Theme.key_chat_goDownButtonCounter));
         this.unreadFloatingButtonCounter.setGravity(17);
@@ -1301,7 +1301,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.unreadFloatingButtonCounter.setMinWidth(AndroidUtilities.m9dp(23.0f));
         this.unreadFloatingButtonCounter.setPadding(AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(1.0f));
         this.unreadFloatingButtonContainer.addView(this.unreadFloatingButtonCounter, LayoutHelper.createFrame(-2, 23, 49));
-        this.listView.setOnScrollListener(new C14339());
+        this.listView.setOnScrollListener(new CLASSNAME());
         if (this.searchString == null) {
             this.dialogsAdapter = new DialogsAdapter(context, this.dialogsType, this.onlySelect);
             if (AndroidUtilities.isTablet() && this.openedDialogId != 0) {
@@ -1316,7 +1316,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             type = 1;
         }
         this.dialogsSearchAdapter = new DialogsSearchAdapter(context, type, this.dialogsType);
-        this.dialogsSearchAdapter.setDelegate(new C142710());
+        this.dialogsSearchAdapter.setDelegate(new CLASSNAME());
         this.listView.setEmptyView(this.progressView);
         if (this.searchString != null) {
             this.actionBar.openSearchField(this.searchString, false);
@@ -1337,7 +1337,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             this.commentView.setForceShowSendButton(true, false);
             this.commentView.setVisibility(8);
             backupImageView.addView(this.commentView, LayoutHelper.createFrame(-1, -2, 83));
-            this.commentView.setDelegate(new C142811());
+            this.commentView.setDelegate(new CLASSNAME());
         }
         if (!this.onlySelect) {
             checkUnreadCount(false);
@@ -1696,7 +1696,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             } else if (this.unreadFloatingButtonContainer.getTag() != null) {
                 this.unreadFloatingButtonContainer.setTag(null);
                 if (animated) {
-                    this.unreadFloatingButtonContainer.animate().alpha(0.0f).setDuration(200).setInterpolator(new DecelerateInterpolator()).setListener(new C092412()).start();
+                    this.unreadFloatingButtonContainer.animate().alpha(0.0f).setDuration(200).setInterpolator(new DecelerateInterpolator()).setListener(new CLASSNAME()).start();
                     return;
                 }
                 this.unreadFloatingButtonContainer.setAlpha(0.0f);
@@ -1747,7 +1747,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     animatorSet.playTogether(animatorArr);
                     animatorSet.setDuration(180);
                     animatorSet.setInterpolator(new DecelerateInterpolator());
-                    animatorSet.addListener(new C092614());
+                    animatorSet.addListener(new CLASSNAME());
                     animatorSet.start();
                     this.commentView.setTag(Integer.valueOf(1));
                 }
@@ -1768,7 +1768,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 animatorSet.playTogether(animatorArr);
                 animatorSet.setDuration(180);
                 animatorSet.setInterpolator(new DecelerateInterpolator());
-                animatorSet.addListener(new C092513());
+                animatorSet.addListener(new CLASSNAME());
                 animatorSet.start();
                 this.commentView.setTag(null);
                 this.listView.requestLayout();
@@ -1827,7 +1827,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (!this.onlySelect && this.floatingButton != null) {
-            this.floatingButton.getViewTreeObserver().addOnGlobalLayoutListener(new C092715());
+            this.floatingButton.getViewTreeObserver().addOnGlobalLayoutListener(new CLASSNAME());
         }
     }
 

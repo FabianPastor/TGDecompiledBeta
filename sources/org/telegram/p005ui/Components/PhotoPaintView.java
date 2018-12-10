@@ -43,7 +43,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.p005ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.Paint.Brush;
 import org.telegram.p005ui.Components.Paint.Brush.Elliptical;
@@ -111,8 +111,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private UndoStore undoStore;
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$8 */
-    class C08028 extends AnimatorListenerAdapter {
-        C08028() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -134,8 +134,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$1 */
-    class C13831 implements RenderViewDelegate {
-        C13831() {
+    class CLASSNAME implements RenderViewDelegate {
+        CLASSNAME() {
         }
 
         public void onBeganDrawing() {
@@ -158,8 +158,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$2 */
-    class C13842 implements EntitiesContainerViewDelegate {
-        C13842() {
+    class CLASSNAME implements EntitiesContainerViewDelegate {
+        CLASSNAME() {
         }
 
         public boolean shouldReceiveTouches() {
@@ -176,8 +176,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$4 */
-    class C13854 implements ColorPickerDelegate {
-        C13854() {
+    class CLASSNAME implements ColorPickerDelegate {
+        CLASSNAME() {
         }
 
         public void onBeganColorPicking() {
@@ -213,8 +213,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$7 */
-    class C13867 implements Listener {
-        C13867() {
+    class CLASSNAME implements Listener {
+        CLASSNAME() {
         }
 
         public void onStickerSelected(Object parentObject, Document sticker) {
@@ -237,13 +237,13 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.curtainView.setVisibility(4);
         addView(this.curtainView);
         this.renderView = new RenderView(context, new Painting(getPaintingSize()), bitmap, this.orientation);
-        this.renderView.setDelegate(new C13831());
+        this.renderView.setDelegate(new CLASSNAME());
         this.renderView.setUndoStore(this.undoStore);
         this.renderView.setQueue(this.queue);
         this.renderView.setVisibility(4);
         this.renderView.setBrush(this.brushes[0]);
         addView(this.renderView, LayoutHelper.createFrame(-1, -1, 51));
-        this.entitiesView = new EntitiesContainerView(context, new C13842());
+        this.entitiesView = new EntitiesContainerView(context, new CLASSNAME());
         this.entitiesView.setPivotX(0.0f);
         this.entitiesView.setPivotY(0.0f);
         addView(this.entitiesView);
@@ -265,7 +265,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         addView(this.selectionContainerView);
         this.colorPicker = new ColorPicker(context);
         addView(this.colorPicker);
-        this.colorPicker.setDelegate(new C13854());
+        this.colorPicker.setDelegate(new CLASSNAME());
         this.toolsView = new FrameLayout(context);
         this.toolsView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         addView(this.toolsView, LayoutHelper.createFrame(-1, 48, 83));
@@ -533,13 +533,13 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
         setMeasuredDimension(width, height);
-        int maxHeight = (AndroidUtilities.displaySize.y - C0403ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.m9dp(48.0f);
+        int maxHeight = (AndroidUtilities.displaySize.y - CLASSNAMEActionBar.getCurrentActionBarHeight()) - AndroidUtilities.m9dp(48.0f);
         if (this.bitmapToEdit != null) {
             bitmapW = isSidewardOrientation() ? (float) this.bitmapToEdit.getHeight() : (float) this.bitmapToEdit.getWidth();
             bitmapH = isSidewardOrientation() ? (float) this.bitmapToEdit.getWidth() : (float) this.bitmapToEdit.getHeight();
         } else {
             bitmapW = (float) width;
-            bitmapH = (float) ((height - C0403ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.m9dp(48.0f));
+            bitmapH = (float) ((height - CLASSNAMEActionBar.getCurrentActionBarHeight()) - AndroidUtilities.m9dp(48.0f));
         }
         float renderWidth = (float) width;
         float renderHeight = (float) Math.floor((double) ((renderWidth * bitmapH) / bitmapW));
@@ -564,8 +564,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         int width = right - left;
         int height = bottom - top;
         int status = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
-        int actionBarHeight = C0403ActionBar.getCurrentActionBarHeight();
-        int actionBarHeight2 = C0403ActionBar.getCurrentActionBarHeight() + status;
+        int actionBarHeight = CLASSNAMEActionBar.getCurrentActionBarHeight();
+        int actionBarHeight2 = CLASSNAMEActionBar.getCurrentActionBarHeight() + status;
         int maxHeight = (AndroidUtilities.displaySize.y - actionBarHeight) - AndroidUtilities.m9dp(48.0f);
         if (this.bitmapToEdit != null) {
             bitmapW = isSidewardOrientation() ? (float) this.bitmapToEdit.getHeight() : (float) this.bitmapToEdit.getWidth();
@@ -579,7 +579,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             renderWidth = (float) Math.floor((double) ((((float) maxHeight) * bitmapW) / bitmapH));
         }
         int x = (int) Math.ceil((double) ((width - this.renderView.getMeasuredWidth()) / 2));
-        int y = ((((((height - actionBarHeight2) - AndroidUtilities.m9dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2) + actionBarHeight2) - C0403ActionBar.getCurrentActionBarHeight()) + AndroidUtilities.m9dp(8.0f);
+        int y = ((((((height - actionBarHeight2) - AndroidUtilities.m9dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2) + actionBarHeight2) - CLASSNAMEActionBar.getCurrentActionBarHeight()) + AndroidUtilities.m9dp(8.0f);
         this.renderView.layout(x, y, this.renderView.getMeasuredWidth() + x, this.renderView.getMeasuredHeight() + y);
         float scale = renderWidth / this.paintingSize.width;
         this.entitiesView.setScaleX(scale);
@@ -733,7 +733,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             this.pickingSticker = true;
             if (this.stickersView == null) {
                 this.stickersView = new StickerMasksView(getContext());
-                this.stickersView.setListener(new C13867());
+                this.stickersView.setListener(new CLASSNAME());
                 addView(this.stickersView, LayoutHelper.createFrame(-1, -1, 51));
             }
             this.stickersView.setVisibility(0);
@@ -748,7 +748,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             this.pickingSticker = false;
             Animator a = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{1.0f, 0.0f});
             a.setDuration(200);
-            a.addListener(new C08028());
+            a.addListener(new CLASSNAME());
             a.start();
         }
     }

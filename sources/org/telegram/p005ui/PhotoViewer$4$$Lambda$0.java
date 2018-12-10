@@ -1,13 +1,13 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.PhotoViewer.C11034;
+import org.telegram.p005ui.PhotoViewer.CLASSNAME;
 
 /* renamed from: org.telegram.ui.PhotoViewer$4$$Lambda$0 */
 final /* synthetic */ class PhotoViewer$4$$Lambda$0 implements Runnable {
-    private final C11034 arg$1;
+    private final CLASSNAME arg$1;
 
-    PhotoViewer$4$$Lambda$0(C11034 c11034) {
-        this.arg$1 = c11034;
+    PhotoViewer$4$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void run() {

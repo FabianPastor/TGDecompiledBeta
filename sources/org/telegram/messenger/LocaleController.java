@@ -10,7 +10,7 @@ import android.content.res.Configuration;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -1096,7 +1096,7 @@ public class LocaleController {
                 XmlPullParser parser = Xml.newPullParser();
                 FileInputStream stream2 = new FileInputStream(file);
                 try {
-                    parser.setInput(stream2, C0016C.UTF8_NAME);
+                    parser.setInput(stream2, CLASSNAMEC.UTF8_NAME);
                     String name = null;
                     String value = null;
                     String attrName = null;
@@ -2595,14 +2595,14 @@ public class LocaleController {
             this.translitChars.put("\u011b", "e");
             this.translitChars.put("\ufb03", "ffi");
             this.translitChars.put("\u01a1", "o");
-            this.translitChars.put("\u2c79", "r");
+            this.translitChars.put("\u2CLASSNAME", "r");
             this.translitChars.put("\u1ed3", "o");
             this.translitChars.put("\u01d0", "i");
             this.translitChars.put("\ua755", TtmlNode.TAG_P);
             this.translitChars.put("\u00fd", "y");
             this.translitChars.put("\u1e1d", "e");
             this.translitChars.put("\u2092", "o");
-            this.translitChars.put("\u2c65", "a");
+            this.translitChars.put("\u2CLASSNAME", "a");
             this.translitChars.put("\u0299", "b");
             this.translitChars.put("\u1e1b", "e");
             this.translitChars.put("\u0188", "c");
@@ -2691,7 +2691,7 @@ public class LocaleController {
             this.translitChars.put("\u01a3", "oi");
             this.translitChars.put("\ua751", TtmlNode.TAG_P);
             this.translitChars.put("\u0127", "h");
-            this.translitChars.put("\u2c74", "v");
+            this.translitChars.put("\u2CLASSNAME", "v");
             this.translitChars.put("\u1e87", "w");
             this.translitChars.put("\u01f9", "n");
             this.translitChars.put("\u026f", "m");
@@ -2769,7 +2769,7 @@ public class LocaleController {
             this.translitChars.put("\u1ec7", "e");
             this.translitChars.put("\u1ebf", "e");
             this.translitChars.put("\u012d", "i");
-            this.translitChars.put("\u2c78", "e");
+            this.translitChars.put("\u2CLASSNAME", "e");
             this.translitChars.put("\u1e6f", "t");
             this.translitChars.put("\u1d91", "d");
             this.translitChars.put("\u1e27", "h");
@@ -2867,13 +2867,13 @@ public class LocaleController {
             this.translitChars.put("\u1eb1", "a");
             this.translitChars.put("\u1d1b", "t");
             this.translitChars.put("\u01b4", "y");
-            this.translitChars.put("\u2c66", "t");
+            this.translitChars.put("\u2CLASSNAME", "t");
             this.translitChars.put("\u0437", "z");
-            this.translitChars.put("\u2c61", "l");
+            this.translitChars.put("\u2CLASSNAME", "l");
             this.translitChars.put("\u0237", "j");
             this.translitChars.put("\u1d76", "z");
             this.translitChars.put("\u1e2b", "h");
-            this.translitChars.put("\u2c73", "w");
+            this.translitChars.put("\u2CLASSNAME", "w");
             this.translitChars.put("\u1e35", "k");
             this.translitChars.put("\u1edd", "o");
             this.translitChars.put("\u00ee", "i");
@@ -2941,7 +2941,7 @@ public class LocaleController {
             this.translitChars.put("\u01ad", "t");
             this.translitChars.put("\u1e2f", "i");
             this.translitChars.put("\u01fd", "ae");
-            this.translitChars.put("\u2c71", "v");
+            this.translitChars.put("\u2CLASSNAME", "v");
             this.translitChars.put("\u0276", "oe");
             this.translitChars.put("\u1e43", "m");
             this.translitChars.put("\u017c", "z");
@@ -3022,7 +3022,7 @@ public class LocaleController {
             this.translitChars.put("\u1d72", "r");
             this.translitChars.put("\u028f", "y");
             this.translitChars.put("\u1d6e", "f");
-            this.translitChars.put("\u2c68", "h");
+            this.translitChars.put("\u2CLASSNAME", "h");
             this.translitChars.put("\u014f", "o");
             this.translitChars.put("\u00fa", "u");
             this.translitChars.put("\u1e5b", "r");

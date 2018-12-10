@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
 import java.nio.ByteBuffer;
-import org.telegram.messenger.MediaController.C02481;
+import org.telegram.messenger.MediaController.CLASSNAME;
 
 final /* synthetic */ class MediaController$1$$Lambda$0 implements Runnable {
-    private final C02481 arg$1;
+    private final CLASSNAME arg$1;
     private final ByteBuffer arg$2;
     private final boolean arg$3;
 
-    MediaController$1$$Lambda$0(C02481 c02481, ByteBuffer byteBuffer, boolean z) {
-        this.arg$1 = c02481;
+    MediaController$1$$Lambda$0(CLASSNAME CLASSNAME, ByteBuffer byteBuffer, boolean z) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = byteBuffer;
         this.arg$3 = z;
     }

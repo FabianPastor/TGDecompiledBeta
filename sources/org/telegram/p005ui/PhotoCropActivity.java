@@ -21,7 +21,7 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 
 /* renamed from: org.telegram.ui.PhotoCropActivity */
@@ -56,8 +56,8 @@ public class PhotoCropActivity extends BaseFragment {
         int viewWidth;
 
         /* renamed from: org.telegram.ui.PhotoCropActivity$PhotoCropView$1 */
-        class C10541 implements OnTouchListener {
-            C10541() {
+        class CLASSNAME implements OnTouchListener {
+            CLASSNAME() {
             }
 
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -252,7 +252,7 @@ public class PhotoCropActivity extends BaseFragment {
             this.halfPaint = new Paint();
             this.halfPaint.setColor(-939524096);
             setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
-            setOnTouchListener(new C10541());
+            setOnTouchListener(new CLASSNAME());
         }
 
         private void updateBitmapSize() {
@@ -379,8 +379,8 @@ public class PhotoCropActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhotoCropActivity$1 */
-    class C15181 extends ActionBarMenuOnItemClick {
-        C15181() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -450,7 +450,7 @@ public class PhotoCropActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("CropImage", R.string.CropImage));
-        this.actionBar.setActionBarMenuOnItemClick(new C15181());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         View photoCropView = new PhotoCropView(context);
         this.view = photoCropView;

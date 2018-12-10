@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -47,7 +47,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
     private boolean keyboardVisible;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
-    private Runnable openKeyboardRunnable = new C06831();
+    private Runnable openKeyboardRunnable = new CLASSNAME();
     private Activity parentActivity;
     private BaseFragment parentFragment;
     private boolean showKeyboardOnResume;
@@ -55,8 +55,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
     private boolean waitingForKeyboardOpen;
 
     /* renamed from: org.telegram.ui.Components.EditTextEmoji$1 */
-    class C06831 implements Runnable {
-        C06831() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -75,8 +75,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.EditTextEmoji$3 */
-    class C13593 implements Listener {
-        C13593() {
+    class CLASSNAME implements Listener {
+        CLASSNAME() {
         }
 
         public boolean onBackspace() {
@@ -188,7 +188,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
         this.editText.setTextSize(1, 16.0f);
         this.editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.editText.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        this.editText.setImeOptions(C0016C.ENCODING_PCM_MU_LAW);
+        this.editText.setImeOptions(CLASSNAMEC.ENCODING_PCM_MU_LAW);
         this.editText.setInputType(16385);
         EditTextBoldCursor editTextBoldCursor = this.editText;
         if (LocaleController.isRTL) {
@@ -408,7 +408,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
             if (AndroidUtilities.isTablet()) {
                 this.emojiView.setForseMultiwindowLayout(true);
             }
-            this.emojiView.setListener(new C13593());
+            this.emojiView.setListener(new CLASSNAME());
             this.sizeNotifierLayout.addView(this.emojiView);
         }
     }

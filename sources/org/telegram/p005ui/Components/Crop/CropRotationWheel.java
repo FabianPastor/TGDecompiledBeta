@@ -35,8 +35,8 @@ public class CropRotationWheel extends FrameLayout {
     private Paint whitePaint = new Paint();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$1 */
-    class C06731 implements OnClickListener {
-        C06731() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -47,8 +47,8 @@ public class CropRotationWheel extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$2 */
-    class C06742 implements OnClickListener {
-        C06742() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -86,13 +86,13 @@ public class CropRotationWheel extends FrameLayout {
         this.aspectRatioButton.setImageResource(R.drawable.tool_cropfix);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.aspectRatioButton.setScaleType(ScaleType.CENTER);
-        this.aspectRatioButton.setOnClickListener(new C06731());
+        this.aspectRatioButton.setOnClickListener(new CLASSNAME());
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
         this.rotation90Button = new ImageView(context);
         this.rotation90Button.setImageResource(R.drawable.tool_rotate);
         this.rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.rotation90Button.setScaleType(ScaleType.CENTER);
-        this.rotation90Button.setOnClickListener(new C06742());
+        this.rotation90Button.setOnClickListener(new CLASSNAME());
         addView(this.rotation90Button, LayoutHelper.createFrame(70, 64, 21));
         this.degreesLabel = new TextView(context);
         this.degreesLabel.setTextColor(-1);

@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -78,7 +78,7 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
                     File finalFile = new File(finalPath);
                     if (finalFile.exists()) {
                         FileLog.m10d(finalFile + " already exists");
-                        return ParcelFileDescriptor.open(finalFile, C0016C.ENCODING_PCM_MU_LAW);
+                        return ParcelFileDescriptor.open(finalFile, CLASSNAMEC.ENCODING_PCM_MU_LAW);
                     }
                     Long _startTime = (Long) this.fileStartTimes.get(name);
                     long startTime = _startTime != null ? _startTime.longValue() : System.currentTimeMillis();
@@ -91,7 +91,7 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
                                 FileLog.m14w("Waiting for " + name + " to download timed out");
                             }
                             if (!TextUtils.isEmpty(fallbackPath)) {
-                                return ParcelFileDescriptor.open(new File(fallbackPath), C0016C.ENCODING_PCM_MU_LAW);
+                                return ParcelFileDescriptor.open(new File(fallbackPath), CLASSNAMEC.ENCODING_PCM_MU_LAW);
                             }
                             throw new FileNotFoundException("Download timed out");
                         }
@@ -103,7 +103,7 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
                             }
                         }
                     }
-                    return ParcelFileDescriptor.open(finalFile, C0016C.ENCODING_PCM_MU_LAW);
+                    return ParcelFileDescriptor.open(finalFile, CLASSNAMEC.ENCODING_PCM_MU_LAW);
                 default:
                     throw new FileNotFoundException("Invalid URI");
             }

@@ -60,7 +60,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -115,8 +115,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     private SpansContainer spansContainer;
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$10 */
-    class C093510 extends AnimatorListenerAdapter {
-        C093510() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -125,8 +125,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$5 */
-    class C09385 implements Callback {
-        C09385() {
+    class CLASSNAME implements Callback {
+        CLASSNAME() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -146,10 +146,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$6 */
-    class C09396 implements OnKeyListener {
+    class CLASSNAME implements OnKeyListener {
         private boolean wasEmpty;
 
-        C09396() {
+        CLASSNAME() {
         }
 
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -168,8 +168,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$7 */
-    class C09407 implements TextWatcher {
-        C09407() {
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -195,8 +195,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
-    class C09419 extends ViewOutlineProvider {
-        C09419() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -219,8 +219,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         private View removingSpan;
 
         /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
-        class C09431 extends AnimatorListenerAdapter {
-            C09431() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -339,7 +339,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             }
             this.animationStarted = false;
             this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new C09431());
+            this.currentAnimation.addListener(new CLASSNAME());
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
@@ -383,8 +383,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
-    class C14401 extends ActionBarMenuOnItemClick {
-        C14401() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -397,8 +397,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
-    class C14428 extends OnScrollListener {
-        C14428() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -746,7 +746,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         } else {
             this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C14401());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.fragmentView = new ViewGroup(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int maxSize;
@@ -848,10 +848,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         } else {
             this.editText.setHintText(LocaleController.getString("NeverShareWithPlaceholder", R.string.NeverShareWithPlaceholder));
         }
-        this.editText.setCustomSelectionActionModeCallback(new C09385());
+        this.editText.setCustomSelectionActionModeCallback(new CLASSNAME());
         this.editText.setOnEditorActionListener(new GroupCreateActivity$$Lambda$1(this));
-        this.editText.setOnKeyListener(new C09396());
-        this.editText.addTextChangedListener(new C09407());
+        this.editText.setOnKeyListener(new CLASSNAME());
+        this.editText.addTextChangedListener(new CLASSNAME());
         this.emptyView = new EmptyTextProgressView(context);
         if (ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
             this.emptyView.showProgress();
@@ -878,7 +878,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         recyclerListView.addItemDecoration(groupCreateDividerItemDecoration);
         frameLayout.addView(this.listView);
         this.listView.setOnItemClickListener(new GroupCreateActivity$$Lambda$2(this));
-        this.listView.setOnScrollListener(new C14428());
+        this.listView.setOnScrollListener(new CLASSNAME());
         if (this.showFabButton) {
             this.floatingButton = new ImageView(context);
             this.floatingButton.setScaleType(ScaleType.CENTER);
@@ -900,7 +900,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
                 animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
                 this.floatingButton.setStateListAnimator(animator);
-                this.floatingButton.setOutlineProvider(new C09419());
+                this.floatingButton.setOutlineProvider(new CLASSNAME());
             }
             frameLayout.addView(this.floatingButton);
             this.floatingButton.setOnClickListener(new GroupCreateActivity$$Lambda$3(this));
@@ -1132,7 +1132,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 animatorArr[1] = ObjectAnimator.ofFloat(this.floatingButton, "scaleY", new float[]{0.0f});
                 animatorArr[2] = ObjectAnimator.ofFloat(this.floatingButton, "alpha", new float[]{0.0f});
                 animatorSet.playTogether(animatorArr);
-                this.currentDoneButtonAnimation.addListener(new C093510());
+                this.currentDoneButtonAnimation.addListener(new CLASSNAME());
             }
             this.currentDoneButtonAnimation.setDuration(180);
             this.currentDoneButtonAnimation.start();

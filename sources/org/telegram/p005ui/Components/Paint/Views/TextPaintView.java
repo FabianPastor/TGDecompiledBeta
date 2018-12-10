@@ -7,7 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;
 import org.telegram.p005ui.Components.LayoutHelper;
@@ -24,11 +24,11 @@ public class TextPaintView extends EntityView {
     private Swatch swatch;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.TextPaintView$1 */
-    class C07591 implements TextWatcher {
+    class CLASSNAME implements TextWatcher {
         private int beforeCursorPosition = 0;
         private String text;
 
-        C07591() {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -118,7 +118,7 @@ public class TextPaintView extends EntityView {
         this.editText.setTypeface(null, 1);
         this.editText.setGravity(17);
         this.editText.setHorizontallyScrolling(false);
-        this.editText.setImeOptions(C0016C.ENCODING_PCM_MU_LAW);
+        this.editText.setImeOptions(CLASSNAMEC.ENCODING_PCM_MU_LAW);
         this.editText.setFocusableInTouchMode(true);
         this.editText.setInputType(this.editText.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS);
         addView(this.editText, LayoutHelper.createFrame(-2, -2, 51));
@@ -128,7 +128,7 @@ public class TextPaintView extends EntityView {
         setSwatch(swatch);
         setStroke(stroke);
         updatePosition();
-        this.editText.addTextChangedListener(new C07591());
+        this.editText.addTextChangedListener(new CLASSNAME());
     }
 
     public TextPaintView(Context context, TextPaintView textPaintView, Point position) {

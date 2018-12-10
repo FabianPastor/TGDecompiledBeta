@@ -1,18 +1,18 @@
 package org.telegram.p005ui;
 
 import org.telegram.messenger.MessagesStorage;
-import org.telegram.p005ui.ChatActivity.C056914;
+import org.telegram.p005ui.ChatActivity.CLASSNAME;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.ChatActivity$14$$Lambda$1 */
 final /* synthetic */ class ChatActivity$14$$Lambda$1 implements RequestDelegate {
-    private final C056914 arg$1;
+    private final CLASSNAME arg$1;
     private final MessagesStorage arg$2;
 
-    ChatActivity$14$$Lambda$1(C056914 c056914, MessagesStorage messagesStorage) {
-        this.arg$1 = c056914;
+    ChatActivity$14$$Lambda$1(CLASSNAME CLASSNAME, MessagesStorage messagesStorage) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = messagesStorage;
     }
 

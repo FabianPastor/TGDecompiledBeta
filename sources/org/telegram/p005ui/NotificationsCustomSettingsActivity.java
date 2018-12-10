@@ -35,7 +35,7 @@ import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -87,8 +87,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     private boolean searching;
 
     /* renamed from: org.telegram.ui.NotificationsCustomSettingsActivity$4 */
-    class C10034 extends AnimatorListenerAdapter {
-        C10034() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -99,8 +99,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.NotificationsCustomSettingsActivity$1 */
-    class C14841 extends ActionBarMenuOnItemClick {
-        C14841() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -111,8 +111,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.NotificationsCustomSettingsActivity$2 */
-    class C14852 extends ActionBarMenuItemSearchListener {
-        C14852() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchExpand() {
@@ -151,8 +151,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.NotificationsCustomSettingsActivity$3 */
-    class C14863 extends OnScrollListener {
-        C14863() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -660,9 +660,9 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         } else {
             this.actionBar.setTitle(LocaleController.getString("Notifications", R.string.Notifications));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C14841());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         if (!(this.exceptions == null || this.exceptions.isEmpty())) {
-            this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C14852()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+            this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         }
         this.searchListViewAdapter = new SearchAdapter(context);
         this.fragmentView = new FrameLayout(context);
@@ -683,7 +683,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         this.adapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         this.listView.setOnItemClickListener(new NotificationsCustomSettingsActivity$$Lambda$0(this));
-        this.listView.setOnScrollListener(new C14863());
+        this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
     }
 
@@ -940,7 +940,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             }
             this.animatorSet = new AnimatorSet();
             this.animatorSet.playTogether(animators);
-            this.animatorSet.addListener(new C10034());
+            this.animatorSet.addListener(new CLASSNAME());
             this.animatorSet.setDuration(150);
             this.animatorSet.start();
         }

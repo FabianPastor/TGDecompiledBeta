@@ -69,8 +69,8 @@ public class AdminLogFilterAlert extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.AdminLogFilterAlert$3 */
-    class C13353 extends OnScrollListener {
-        C13353() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -447,7 +447,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         this.listView.setClipToPadding(false);
         this.listView.setEnabled(true);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.listView.setOnScrollListener(new C13353());
+        this.listView.setOnScrollListener(new CLASSNAME());
         this.listView.setOnItemClickListener(new AdminLogFilterAlert$$Lambda$0(this));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View shadow = new View(context);

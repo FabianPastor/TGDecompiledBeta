@@ -408,7 +408,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private int currentDeletingTaskTime;
     public String dcDomainName;
     public boolean defaultP2pContacts;
-    private final Comparator<TL_dialog> dialogComparator = new C02522();
+    private final Comparator<TL_dialog> dialogComparator = new CLASSNAME();
     public LongSparseArray<MessageObject> dialogMessage = new LongSparseArray();
     public SparseArray<MessageObject> dialogMessagesByIds = new SparseArray();
     public LongSparseArray<MessageObject> dialogMessagesByRandomIds = new LongSparseArray();
@@ -477,7 +477,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private ConcurrentHashMap<String, TLObject> objectsByUsernames = new ConcurrentHashMap(100, 1.0f, 2);
     private boolean offlineSent;
     public ConcurrentHashMap<Integer, Integer> onlinePrivacy = new ConcurrentHashMap(20, 1.0f, 2);
-    private Runnable passwordCheckRunnable = new C02511();
+    private Runnable passwordCheckRunnable = new CLASSNAME();
     public boolean preloadFeaturedStickers;
     public LongSparseArray<CharSequence> printingStrings = new LongSparseArray();
     public LongSparseArray<Integer> printingStringsTypes = new LongSparseArray();
@@ -523,8 +523,8 @@ public class MessagesController implements NotificationCenterDelegate {
     public int webFileDatacenterId;
 
     /* renamed from: org.telegram.messenger.MessagesController$1 */
-    class C02511 implements Runnable {
-        C02511() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -533,8 +533,8 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.MessagesController$2 */
-    class C02522 implements Comparator<TL_dialog> {
-        C02522() {
+    class CLASSNAME implements Comparator<TL_dialog> {
+        CLASSNAME() {
         }
 
         public int compare(TL_dialog dialog1, TL_dialog dialog2) {
@@ -582,7 +582,7 @@ public class MessagesController implements NotificationCenterDelegate {
         private ReadTask() {
         }
 
-        /* synthetic */ ReadTask(MessagesController x0, C02511 x1) {
+        /* synthetic */ ReadTask(MessagesController x0, CLASSNAME x1) {
             this();
         }
     }
@@ -591,7 +591,7 @@ public class MessagesController implements NotificationCenterDelegate {
         private UserActionUpdatesPts() {
         }
 
-        /* synthetic */ UserActionUpdatesPts(MessagesController x0, C02511 x1) {
+        /* synthetic */ UserActionUpdatesPts(MessagesController x0, CLASSNAME x1) {
             this();
         }
     }
@@ -600,7 +600,7 @@ public class MessagesController implements NotificationCenterDelegate {
         private UserActionUpdatesSeq() {
         }
 
-        /* synthetic */ UserActionUpdatesSeq(MessagesController x0, C02511 x1) {
+        /* synthetic */ UserActionUpdatesSeq(MessagesController x0, CLASSNAME x1) {
             this();
         }
     }

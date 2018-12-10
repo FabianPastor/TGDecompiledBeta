@@ -44,7 +44,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +63,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.ActionBarLayout;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.TextColorThemeCell;
@@ -93,8 +93,8 @@ public class ThemeEditorView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.ThemeEditorView$3 */
-    class C08723 extends AnimatorListenerAdapter {
-        C08723() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -105,8 +105,8 @@ public class ThemeEditorView {
     }
 
     /* renamed from: org.telegram.ui.Components.ThemeEditorView$4 */
-    class C08734 extends AnimatorListenerAdapter {
-        C08734() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -137,8 +137,8 @@ public class ThemeEditorView {
         private int topBeforeSwitch;
 
         /* renamed from: org.telegram.ui.Components.ThemeEditorView$EditorAlert$10 */
-        class C087410 extends AnimatorListenerAdapter {
-            C087410() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -149,8 +149,8 @@ public class ThemeEditorView {
         }
 
         /* renamed from: org.telegram.ui.Components.ThemeEditorView$EditorAlert$9 */
-        class C08819 extends AnimatorListenerAdapter {
-            C08819() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -217,7 +217,7 @@ public class ThemeEditorView {
                     } else if (a == 3) {
                         this.colorEditText[a].setHint("alpha");
                     }
-                    this.colorEditText[a].setImeOptions((a == 3 ? 6 : 5) | C0016C.ENCODING_PCM_MU_LAW);
+                    this.colorEditText[a].setImeOptions((a == 3 ? 6 : 5) | CLASSNAMEC.ENCODING_PCM_MU_LAW);
                     this.colorEditText[a].setFilters(new InputFilter[]{new LengthFilter(3)});
                     final int num = a;
                     this.linearLayout.addView(this.colorEditText[a], LayoutHelper.createLinear(55, 36, 0.0f, 0.0f, a != 3 ? 16.0f : 0.0f, 0.0f));
@@ -742,7 +742,7 @@ public class ThemeEditorView {
                 animatorSet.playTogether(animatorArr);
                 animatorSet.setDuration(150);
                 animatorSet.setInterpolator(ThemeEditorView.this.decelerateInterpolator);
-                animatorSet.addListener(new C08819());
+                animatorSet.addListener(new CLASSNAME());
                 animatorSet.start();
                 this.previousScrollPosition = this.scrollOffsetY;
                 return;
@@ -766,7 +766,7 @@ public class ThemeEditorView {
             animatorSet.playTogether(animatorArr);
             animatorSet.setDuration(150);
             animatorSet.setInterpolator(ThemeEditorView.this.decelerateInterpolator);
-            animatorSet.addListener(new C087410());
+            animatorSet.addListener(new CLASSNAME());
             animatorSet.start();
             this.listAdapter.notifyItemChanged(ThemeEditorView.this.currentThemeDesriptionPosition);
         }
@@ -864,8 +864,8 @@ public class ThemeEditorView {
             private float startY;
 
             /* renamed from: org.telegram.ui.Components.ThemeEditorView$1$1 */
-            class C08691 implements OnDismissListener {
-                C08691() {
+            class CLASSNAME implements OnDismissListener {
+                CLASSNAME() {
                 }
 
                 public void onDismiss(DialogInterface dialog) {
@@ -873,8 +873,8 @@ public class ThemeEditorView {
             }
 
             /* renamed from: org.telegram.ui.Components.ThemeEditorView$1$2 */
-            class C08702 implements OnDismissListener {
-                C08702() {
+            class CLASSNAME implements OnDismissListener {
+                CLASSNAME() {
                 }
 
                 public void onDismiss(DialogInterface dialog) {
@@ -923,8 +923,8 @@ public class ThemeEditorView {
                                 ThemeDescription[] items = fragment.getThemeDescriptions();
                                 if (items != null) {
                                     ThemeEditorView.this.editorAlert = new EditorAlert(ThemeEditorView.this.parentActivity, items);
-                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C08691());
-                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new C08702());
+                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new CLASSNAME());
+                                    ThemeEditorView.this.editorAlert.setOnDismissListener(new CLASSNAME());
                                     ThemeEditorView.this.editorAlert.show();
                                     ThemeEditorView.this.hide();
                                 }
@@ -1031,7 +1031,7 @@ public class ThemeEditorView {
         if (isX) {
             total = AndroidUtilities.displaySize.x - sideSize;
         } else {
-            total = (AndroidUtilities.displaySize.y - sideSize) - C0403ActionBar.getCurrentActionBarHeight();
+            total = (AndroidUtilities.displaySize.y - sideSize) - CLASSNAMEActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
             result = AndroidUtilities.m9dp(10.0f);
@@ -1043,7 +1043,7 @@ public class ThemeEditorView {
         if (isX) {
             return result;
         }
-        return result + C0403ActionBar.getCurrentActionBarHeight();
+        return result + CLASSNAMEActionBar.getCurrentActionBarHeight();
     }
 
     private void hide() {
@@ -1053,7 +1053,7 @@ public class ThemeEditorView {
                 animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleX", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleY", new float[]{1.0f, 0.0f})});
                 animatorSet.setInterpolator(this.decelerateInterpolator);
                 animatorSet.setDuration(150);
-                animatorSet.addListener(new C08723());
+                animatorSet.addListener(new CLASSNAME());
                 animatorSet.start();
                 this.hidden = true;
             } catch (Exception e) {
@@ -1144,7 +1144,7 @@ public class ThemeEditorView {
             editor.putInt("sidex", 2);
         }
         if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= C0403ActionBar.getCurrentActionBarHeight()) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= CLASSNAMEActionBar.getCurrentActionBarHeight()) {
                 if (animators == null) {
                     animators = new ArrayList();
                 }
@@ -1171,7 +1171,7 @@ public class ThemeEditorView {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C08734());
+                animatorSet.addListener(new CLASSNAME());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

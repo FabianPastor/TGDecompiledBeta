@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.FileLoader.C02051;
+import org.telegram.messenger.FileLoader.CLASSNAME;
 
 final /* synthetic */ class FileLoader$1$$Lambda$1 implements Runnable {
-    private final C02051 arg$1;
+    private final CLASSNAME arg$1;
     private final boolean arg$2;
     private final String arg$3;
     private final boolean arg$4;
 
-    FileLoader$1$$Lambda$1(C02051 c02051, boolean z, String str, boolean z2) {
-        this.arg$1 = c02051;
+    FileLoader$1$$Lambda$1(CLASSNAME CLASSNAME, boolean z, String str, boolean z2) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = z;
         this.arg$3 = str;
         this.arg$4 = z2;

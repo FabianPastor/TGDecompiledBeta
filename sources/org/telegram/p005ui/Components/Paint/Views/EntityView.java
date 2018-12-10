@@ -33,8 +33,8 @@ public class EntityView extends FrameLayout {
     private UUID uuid = UUID.randomUUID();
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.EntityView$1 */
-    class C07581 extends SimpleOnGestureListener {
-        C07581() {
+    class CLASSNAME extends SimpleOnGestureListener {
+        CLASSNAME() {
         }
 
         public void onLongPress(MotionEvent e) {
@@ -156,7 +156,7 @@ public class EntityView extends FrameLayout {
     public EntityView(Context context, Point pos) {
         super(context);
         this.position = pos;
-        this.gestureDetector = new GestureDetector(context, new C07581());
+        this.gestureDetector = new GestureDetector(context, new CLASSNAME());
     }
 
     public UUID getUUID() {

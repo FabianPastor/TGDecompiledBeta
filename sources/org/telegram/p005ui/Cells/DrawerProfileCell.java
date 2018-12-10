@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
@@ -166,7 +166,7 @@ public class DrawerProfileCell extends FrameLayout {
             this.accountsShowed = accounts;
             this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
             this.nameTextView.setText(UserObject.getUserName(user));
-            this.phoneTextView.setText(C0194PhoneFormat.getInstance().format("+" + user.phone));
+            this.phoneTextView.setText(CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone));
             Drawable avatarDrawable = new AvatarDrawable(user);
             avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
             this.avatarImageView.setImage(photo, "50_50", avatarDrawable, (Object) user);

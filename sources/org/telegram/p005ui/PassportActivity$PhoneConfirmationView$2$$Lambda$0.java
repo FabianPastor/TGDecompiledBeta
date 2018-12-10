@@ -1,13 +1,13 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.PassportActivity.PhoneConfirmationView.C10272;
+import org.telegram.p005ui.PassportActivity.PhoneConfirmationView.CLASSNAME;
 
 /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$2$$Lambda$0 */
 final /* synthetic */ class PassportActivity$PhoneConfirmationView$2$$Lambda$0 implements Runnable {
-    private final C10272 arg$1;
+    private final CLASSNAME arg$1;
 
-    PassportActivity$PhoneConfirmationView$2$$Lambda$0(C10272 c10272) {
-        this.arg$1 = c10272;
+    PassportActivity$PhoneConfirmationView$2$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void run() {

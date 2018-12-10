@@ -75,8 +75,8 @@ import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -144,7 +144,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private Location myLocation;
     private boolean onResumeCalled;
     private ActionBarMenuItem otherItem;
-    private int overScrollHeight = ((AndroidUtilities.displaySize.x - C0403ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.m9dp(66.0f));
+    private int overScrollHeight = ((AndroidUtilities.displaySize.x - CLASSNAMEActionBar.getCurrentActionBarHeight()) - AndroidUtilities.m9dp(66.0f));
     private ImageView routeButton;
     private LocationActivitySearchAdapter searchAdapter;
     private RecyclerListView searchListView;
@@ -156,8 +156,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private boolean wasResults;
 
     /* renamed from: org.telegram.ui.LocationActivity$4 */
-    class C09774 extends ViewOutlineProvider {
-        C09774() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -167,8 +167,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$9 */
-    class C09789 extends ViewOutlineProvider {
-        C09789() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -193,8 +193,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$1 */
-    class C14641 extends ActionBarMenuOnItemClick {
-        C14641() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -225,8 +225,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$2 */
-    class C14652 extends ActionBarMenuItemSearchListener {
-        C14652() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchExpand() {
@@ -264,8 +264,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$6 */
-    class C14666 extends OnScrollListener {
-        C14666() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -289,8 +289,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$8 */
-    class C14688 extends OnScrollListener {
-        C14688() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -360,11 +360,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAddToContainer(false);
-        this.actionBar.setActionBarMenuOnItemClick(new C14641());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         ActionBarMenu menu = this.actionBar.createMenu();
         if (this.messageObject == null) {
             this.actionBar.setTitle(LocaleController.getString("ShareLocation", R.string.ShareLocation));
-            menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C14652()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+            menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         } else if (this.messageObject.isLiveLocation()) {
             this.actionBar.setTitle(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation));
         } else {
@@ -409,7 +409,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.locationButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.locationButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             this.locationButton.setStateListAnimator(animator);
-            this.locationButton.setOutlineProvider(new C09774());
+            this.locationButton.setOutlineProvider(new CLASSNAME());
         }
         if (this.messageObject != null) {
             this.userLocation = new Location("network");
@@ -435,15 +435,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         recyclerListView.setAdapter(locationActivityAdapter);
         this.listView.setVerticalScrollBarEnabled(false);
         recyclerListView = this.listView;
-        LayoutManager c14695 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager CLASSNAME = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c14695;
-        recyclerListView.setLayoutManager(c14695);
+        this.layoutManager = CLASSNAME;
+        recyclerListView.setLayoutManager(CLASSNAME);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
-        this.listView.setOnScrollListener(new C14666());
+        this.listView.setOnScrollListener(new CLASSNAME());
         this.listView.setOnItemClickListener(new LocationActivity$$Lambda$0(this));
         this.adapter.setDelegate(this.dialogId, new LocationActivity$$Lambda$1(this));
         this.adapter.setOverScrollHeight(this.overScrollHeight);
@@ -522,7 +522,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.searchAdapter = locationActivityAdapter;
             recyclerListView.setAdapter(locationActivityAdapter);
             frameLayout.addView(this.searchListView, LayoutHelper.createFrame(-1, -1, 51));
-            this.searchListView.setOnScrollListener(new C14688());
+            this.searchListView.setOnScrollListener(new CLASSNAME());
             this.searchListView.setOnItemClickListener(new LocationActivity$$Lambda$3(this));
         } else if (!this.messageObject.isLiveLocation()) {
             float f;
@@ -547,7 +547,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.routeButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
                 animator.addState(new int[0], ObjectAnimator.ofFloat(this.routeButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
                 this.routeButton.setStateListAnimator(animator);
-                this.routeButton.setOutlineProvider(new C09789());
+                this.routeButton.setOutlineProvider(new CLASSNAME());
             }
             View view2 = this.routeButton;
             int i2 = VERSION.SDK_INT >= 21 ? 56 : 60;
@@ -992,7 +992,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     private void fixLayoutInternal(boolean resume) {
         if (this.listView != null) {
-            int height = (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + C0403ActionBar.getCurrentActionBarHeight();
+            int height = (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight();
             int viewHeight = this.fragmentView.getMeasuredHeight();
             if (viewHeight != 0) {
                 this.overScrollHeight = (viewHeight - AndroidUtilities.m9dp(66.0f)) - height;

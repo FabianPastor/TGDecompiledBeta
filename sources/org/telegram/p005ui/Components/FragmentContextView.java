@@ -52,7 +52,7 @@ import org.telegram.tgnet.TLRPC.User;
 public class FragmentContextView extends FrameLayout implements NotificationCenterDelegate {
     private FragmentContextView additionalContextView;
     private AnimatorSet animatorSet;
-    private Runnable checkLocationRunnable = new C07071();
+    private Runnable checkLocationRunnable = new CLASSNAME();
     private ImageView closeButton;
     private int currentStyle = -1;
     private boolean firstLocationsLoaded;
@@ -71,8 +71,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private float yPosition;
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$1 */
-    class C07071 implements Runnable {
-        C07071() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -82,8 +82,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$2 */
-    class C07082 extends AnimatorListenerAdapter {
-        C07082() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -95,8 +95,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$3 */
-    class C07093 extends AnimatorListenerAdapter {
-        C07093() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -107,8 +107,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$4 */
-    class C07104 extends AnimatorListenerAdapter {
-        C07104() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -120,8 +120,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$5 */
-    class C07115 extends AnimatorListenerAdapter {
-        C07115() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -132,8 +132,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$6 */
-    class C07126 extends AnimatorListenerAdapter {
-        C07126() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -145,8 +145,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.Components.FragmentContextView$7 */
-    class C07137 extends AnimatorListenerAdapter {
-        C07137() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -520,7 +520,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
                     animatorSet.playTogether(animatorArr);
                     this.animatorSet.setDuration(200);
-                    this.animatorSet.addListener(new C07093());
+                    this.animatorSet.addListener(new CLASSNAME());
                     this.animatorSet.start();
                 }
                 this.visible = true;
@@ -582,7 +582,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.animatorSet.setDuration(200);
-            this.animatorSet.addListener(new C07082());
+            this.animatorSet.addListener(new CLASSNAME());
             this.animatorSet.start();
         }
     }
@@ -684,7 +684,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
                 animatorSet.playTogether(animatorArr);
                 this.animatorSet.setDuration(200);
-                this.animatorSet.addListener(new C07104());
+                this.animatorSet.addListener(new CLASSNAME());
                 this.animatorSet.start();
                 return;
             } else {
@@ -719,7 +719,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
                 animatorSet.playTogether(animatorArr);
                 this.animatorSet.setDuration(200);
-                this.animatorSet.addListener(new C07115());
+                this.animatorSet.addListener(new CLASSNAME());
                 this.animatorSet.start();
             }
             this.visible = true;
@@ -796,7 +796,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
                     animatorSet.playTogether(animatorArr);
                     this.animatorSet.setDuration(200);
-                    this.animatorSet.addListener(new C07137());
+                    this.animatorSet.addListener(new CLASSNAME());
                     this.animatorSet.start();
                 }
                 this.visible = true;
@@ -821,7 +821,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             animatorArr[0] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.animatorSet.setDuration(200);
-            this.animatorSet.addListener(new C07126());
+            this.animatorSet.addListener(new CLASSNAME());
             this.animatorSet.start();
         }
     }

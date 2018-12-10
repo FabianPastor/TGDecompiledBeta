@@ -1,13 +1,13 @@
 package org.telegram.p005ui.Components;
 
-import org.telegram.p005ui.Components.WebPlayerView.C08962.C08951;
+import org.telegram.p005ui.Components.WebPlayerView.CLASSNAME.CLASSNAME;
 
 /* renamed from: org.telegram.ui.Components.WebPlayerView$2$1$$Lambda$0 */
 final /* synthetic */ class WebPlayerView$2$1$$Lambda$0 implements Runnable {
-    private final C08951 arg$1;
+    private final CLASSNAME arg$1;
 
-    WebPlayerView$2$1$$Lambda$0(C08951 c08951) {
-        this.arg$1 = c08951;
+    WebPlayerView$2$1$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void run() {

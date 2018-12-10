@@ -81,8 +81,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     private ViewPager viewPager;
 
     /* renamed from: org.telegram.ui.IntroActivity$1 */
-    class C09621 implements SurfaceTextureListener {
-        C09621() {
+    class CLASSNAME implements SurfaceTextureListener {
+        CLASSNAME() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -166,8 +166,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.IntroActivity$2 */
-    class C14552 implements OnPageChangeListener {
-        C14552() {
+    class CLASSNAME implements OnPageChangeListener {
+        CLASSNAME() {
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -202,7 +202,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     public class EGLThread extends DispatchQueue {
         private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
         private final int EGL_OPENGL_ES2_BIT = 4;
-        private Runnable drawRunnable = new C09631();
+        private Runnable drawRunnable = new CLASSNAME();
         private EGL10 egl10;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
@@ -218,8 +218,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         private int[] textures = new int[23];
 
         /* renamed from: org.telegram.ui.IntroActivity$EGLThread$1 */
-        class C09631 implements Runnable {
-            C09631() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -404,7 +404,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         private IntroAdapter() {
         }
 
-        /* synthetic */ IntroAdapter(IntroActivity x0, C09621 x1) {
+        /* synthetic */ IntroAdapter(IntroActivity x0, CLASSNAME x1) {
             this();
         }
 
@@ -474,13 +474,13 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
         scrollView = new TextureView(this);
         frameLayout2.addView(scrollView, LayoutHelper.createFrame(Callback.DEFAULT_DRAG_ANIMATION_DURATION, 150, 17));
-        scrollView.setSurfaceTextureListener(new C09621());
+        scrollView.setSurfaceTextureListener(new CLASSNAME());
         this.viewPager = new ViewPager(this);
         this.viewPager.setAdapter(new IntroAdapter(this, null));
         this.viewPager.setPageMargin(0);
         this.viewPager.setOffscreenPageLimit(1);
         frameLayout.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
-        this.viewPager.addOnPageChangeListener(new C14552());
+        this.viewPager.addOnPageChangeListener(new CLASSNAME());
         scrollView = new TextView(this);
         scrollView.setText(LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
         scrollView.setGravity(17);

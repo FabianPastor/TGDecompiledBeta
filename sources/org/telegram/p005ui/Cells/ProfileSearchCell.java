@@ -9,7 +9,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ImageReceiver;
@@ -263,7 +263,7 @@ public class ProfileSearchCell extends BaseCell {
             if (this.user == null || this.user.phone == null || this.user.phone.length() == 0) {
                 nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
             } else {
-                nameString = C0194PhoneFormat.getInstance().format("+" + this.user.phone);
+                nameString = CLASSNAMEPhoneFormat.getInstance().format("+" + this.user.phone);
             }
         }
         if (this.encryptedChat != null) {

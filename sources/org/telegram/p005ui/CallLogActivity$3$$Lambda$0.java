@@ -1,15 +1,15 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.CallLogActivity.C12663;
+import org.telegram.p005ui.CallLogActivity.CLASSNAME;
 import org.telegram.p005ui.CallLogActivity.CallLogRow;
 
 /* renamed from: org.telegram.ui.CallLogActivity$3$$Lambda$0 */
 final /* synthetic */ class CallLogActivity$3$$Lambda$0 implements Runnable {
-    private final C12663 arg$1;
+    private final CLASSNAME arg$1;
     private final CallLogRow arg$2;
 
-    CallLogActivity$3$$Lambda$0(C12663 c12663, CallLogRow callLogRow) {
-        this.arg$1 = c12663;
+    CallLogActivity$3$$Lambda$0(CLASSNAME CLASSNAME, CallLogRow callLogRow) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = callLogRow;
     }
 

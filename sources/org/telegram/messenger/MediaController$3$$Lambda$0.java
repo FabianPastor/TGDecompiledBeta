@@ -1,13 +1,13 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MediaController.C02503;
+import org.telegram.messenger.MediaController.CLASSNAME;
 
 final /* synthetic */ class MediaController$3$$Lambda$0 implements Runnable {
-    private final C02503 arg$1;
+    private final CLASSNAME arg$1;
     private final MessageObject arg$2;
 
-    MediaController$3$$Lambda$0(C02503 c02503, MessageObject messageObject) {
-        this.arg$1 = c02503;
+    MediaController$3$$Lambda$0(CLASSNAME CLASSNAME, MessageObject messageObject) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = messageObject;
     }
 

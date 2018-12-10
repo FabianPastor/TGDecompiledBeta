@@ -1,6 +1,6 @@
 package org.telegram.tgnet;
 
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -254,7 +254,7 @@ public class SerializedData extends AbstractSerializedData {
 
     public void writeString(String s) {
         try {
-            writeByteArray(s.getBytes(C0016C.UTF8_NAME));
+            writeByteArray(s.getBytes(CLASSNAMEC.UTF8_NAME));
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m11e("write string error");
@@ -400,7 +400,7 @@ public class SerializedData extends AbstractSerializedData {
                 this.f266in.read();
                 this.len++;
             }
-            return new String(b, C0016C.UTF8_NAME);
+            return new String(b, CLASSNAMEC.UTF8_NAME);
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);

@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import java.io.File;
 import java.util.Collections;
@@ -103,8 +103,8 @@ public class VoIPHelper {
                     new Builder((Context) activity).setTitle(LocaleController.getString("VoipOngoingAlertTitle", R.string.VoipOngoingAlertTitle)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", R.string.VoipOngoingAlert, ContactsController.formatName(callUser.first_name, callUser.last_name), ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.Components.voip.VoIPHelper$2$1 */
-                        class C09071 implements Runnable {
-                            C09071() {
+                        class CLASSNAME implements Runnable {
+                            CLASSNAME() {
                             }
 
                             public void run() {
@@ -114,7 +114,7 @@ public class VoIPHelper {
 
                         public void onClick(DialogInterface dialog, int which) {
                             if (VoIPService.getSharedInstance() != null) {
-                                VoIPService.getSharedInstance().hangUp(new C09071());
+                                VoIPService.getSharedInstance().hangUp(new CLASSNAME());
                             } else {
                                 VoIPHelper.doInitiateCall(user, activity);
                             }
@@ -122,7 +122,7 @@ public class VoIPHelper {
                     }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show();
                     return;
                 }
-                activity.startActivity(new Intent(activity, VoIPActivity.class).addFlags(C0016C.ENCODING_PCM_MU_LAW));
+                activity.startActivity(new Intent(activity, VoIPActivity.class).addFlags(CLASSNAMEC.ENCODING_PCM_MU_LAW));
             } else if (VoIPService.callIShouldHavePutIntoIntent == null) {
                 VoIPHelper.doInitiateCall(user, activity);
             }
@@ -227,7 +227,7 @@ public class VoIPHelper {
         final boolean[] includeLogs = new boolean[]{true};
         linearLayout = new CheckBoxCell(context, 1);
         final View view = linearLayout;
-        View.OnClickListener c09115 = new View.OnClickListener() {
+        View.OnClickListener CLASSNAME = new View.OnClickListener() {
             public void onClick(View v) {
                 boolean z;
                 boolean[] zArr = includeLogs;
@@ -242,14 +242,14 @@ public class VoIPHelper {
         };
         linearLayout.setText(LocaleController.getString("CallReportIncludeLogs", R.string.CallReportIncludeLogs), null, true, false);
         linearLayout.setClipToPadding(false);
-        linearLayout.setOnClickListener(c09115);
+        linearLayout.setOnClickListener(CLASSNAME);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
         linearLayout = new TextView(context);
         linearLayout.setTextSize(2, 14.0f);
         linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
         linearLayout.setText(LocaleController.getString("CallReportLogsExplain", R.string.CallReportLogsExplain));
         linearLayout.setPadding(AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f), 0);
-        linearLayout.setOnClickListener(c09115);
+        linearLayout.setOnClickListener(CLASSNAME);
         linearLayout.addView(linearLayout);
         linearLayout.setVisibility(8);
         linearLayout.setVisibility(8);
@@ -297,7 +297,7 @@ public class VoIPHelper {
         }).create();
         if (BuildVars.DEBUG_VERSION && log.exists()) {
             final Context context3 = context;
-            OnClickListener c09158 = new OnClickListener() {
+            OnClickListener CLASSNAME = new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(context3, LaunchActivity.class);
                     intent.setAction("android.intent.action.SEND");
@@ -305,7 +305,7 @@ public class VoIPHelper {
                     context3.startActivity(intent);
                 }
             };
-            alert.setNeutralButton("Send log", c09158);
+            alert.setNeutralButton("Send log", CLASSNAME);
         }
         final AlertDialog alertDialog = alert;
         alert.setOnShowListener(new OnShowListener() {

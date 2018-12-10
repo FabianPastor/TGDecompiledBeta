@@ -15,7 +15,7 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Base64;
 import android.util.SparseArray;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSink;
 import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.BufferedReader;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.Emoji.EmojiSpan;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
@@ -781,14 +781,14 @@ public class MessageObject {
                     if (phone.contains("#") || phone.contains("*")) {
                         result.append(phone);
                     } else {
-                        result.append(C0194PhoneFormat.getInstance().format(phone));
+                        result.append(CLASSNAMEPhoneFormat.getInstance().format(phone));
                     }
                 }
                 for (a = 0; a < currentData.emails.size(); a++) {
                     if (result.length() > 0) {
                         result.append(10);
                     }
-                    result.append(C0194PhoneFormat.getInstance().format((String) currentData.emails.get(a)));
+                    result.append(CLASSNAMEPhoneFormat.getInstance().format((String) currentData.emails.get(a)));
                 }
                 if (TextUtils.isEmpty(currentData.company)) {
                     return result;
@@ -2962,7 +2962,7 @@ public class MessageObject {
                             }
                         } else if (entity instanceof TL_messageEntityPhone) {
                             hasUrls = true;
-                            String tel = C0194PhoneFormat.stripExceptNumbers(url);
+                            String tel = CLASSNAMEPhoneFormat.stripExceptNumbers(url);
                             if (url.startsWith("+")) {
                                 tel = "+" + tel;
                             }
@@ -3986,7 +3986,7 @@ public class MessageObject {
                     return null;
                 }
                 try {
-                    return "athumb://itunes.apple.com/search?term=" + URLEncoder.encode(performer + " - " + title, C0016C.UTF8_NAME) + "&entity=song&limit=4" + (small ? "&s=1" : TtmlNode.ANONYMOUS_REGION_ID);
+                    return "athumb://itunes.apple.com/search?term=" + URLEncoder.encode(performer + " - " + title, CLASSNAMEC.UTF8_NAME) + "&entity=song&limit=4" + (small ? "&s=1" : TtmlNode.ANONYMOUS_REGION_ID);
                 } catch (Exception e) {
                 }
             }

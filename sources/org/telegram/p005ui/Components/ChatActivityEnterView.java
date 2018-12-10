@@ -50,7 +50,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import java.io.File;
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ChatActivity;
 import org.telegram.p005ui.Components.EmojiView.DragListener;
@@ -206,8 +206,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private Drawable micDrawable;
     private boolean needShowTopView;
     private ImageView notifyButton;
-    private Runnable onFinishInitCameraRunnable = new C06405();
-    private Runnable openKeyboardRunnable = new C06291();
+    private Runnable onFinishInitCameraRunnable = new CLASSNAME();
+    private Runnable openKeyboardRunnable = new CLASSNAME();
     private Paint paint = new Paint(1);
     private Paint paintRecord = new Paint(1);
     private Activity parentActivity;
@@ -217,7 +217,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private MessageObject pendingMessageObject;
     private Drawable playDrawable;
     private CloseProgressDrawable2 progressDrawable;
-    private Runnable recordAudioVideoRunnable = new C06416();
+    private Runnable recordAudioVideoRunnable = new CLASSNAME();
     private boolean recordAudioVideoRunnableStarted;
     private ImageView recordCancelImage;
     private TextView recordCancelText;
@@ -272,7 +272,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private LinearLayout textFieldContainer;
     private View topView;
     private boolean topViewShowed;
-    private Runnable updateExpandabilityRunnable = new C06372();
+    private Runnable updateExpandabilityRunnable = new CLASSNAME();
     private ImageView videoSendButton;
     private VideoTimelineView videoTimelineView;
     private VideoEditedInfo videoToSendMessageObject;
@@ -280,10 +280,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private WakeLock wakeLock;
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$10 */
-    class C062010 implements OnEditorActionListener {
+    class CLASSNAME implements OnEditorActionListener {
         boolean ctrlPressed = false;
 
-        C062010() {
+        CLASSNAME() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -309,10 +309,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$11 */
-    class C062111 implements TextWatcher {
+    class CLASSNAME implements TextWatcher {
         boolean processChange = false;
 
-        C062111() {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -373,10 +373,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$12 */
-    class C062212 implements OnClickListener {
+    class CLASSNAME implements OnClickListener {
         private Toast visibleToast;
 
-        C062212() {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -403,8 +403,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$14 */
-    class C062314 extends AnimatorListenerAdapter {
-        C062314() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -415,8 +415,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$17 */
-    class C062617 extends AnimatorListenerAdapter {
-        C062617() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -435,8 +435,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$18 */
-    class C062718 extends AnimatorListenerAdapter {
-        C062718() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -445,8 +445,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$19 */
-    class C062819 extends AnimatorListenerAdapter {
-        C062819() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -463,8 +463,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$1 */
-    class C06291 implements Runnable {
-        C06291() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -478,8 +478,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$21 */
-    class C063121 extends AnimatorListenerAdapter {
-        C063121() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -501,8 +501,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$22 */
-    class C063222 extends AnimatorListenerAdapter {
-        C063222() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -523,8 +523,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$23 */
-    class C063323 extends AnimatorListenerAdapter {
-        C063323() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -536,8 +536,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$24 */
-    class C063424 extends AnimatorListenerAdapter {
-        C063424() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -555,8 +555,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$27 */
-    class C063527 extends AnimatorListenerAdapter {
-        C063527() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -566,10 +566,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$2 */
-    class C06372 implements Runnable {
+    class CLASSNAME implements Runnable {
         private int lastKnownPage = -1;
 
-        C06372() {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -603,8 +603,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$5 */
-    class C06405 implements Runnable {
-        C06405() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -615,8 +615,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$6 */
-    class C06416 implements Runnable {
-        C06416() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -681,10 +681,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$9 */
-    class C06439 implements OnKeyListener {
+    class CLASSNAME implements OnKeyListener {
         boolean ctrlPressed = false;
 
-        C06439() {
+        CLASSNAME() {
         }
 
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -1099,8 +1099,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$13 */
-    class C134213 implements VideoTimelineViewDelegate {
-        C134213() {
+    class CLASSNAME implements VideoTimelineViewDelegate {
+        CLASSNAME() {
         }
 
         public void onLeftProgressChanged(float progress) {
@@ -1127,8 +1127,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$25 */
-    class C134325 implements Listener {
-        C134325() {
+    class CLASSNAME implements Listener {
+        CLASSNAME() {
         }
 
         public boolean onBackspace() {
@@ -1272,11 +1272,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$26 */
-    class C134426 implements DragListener {
+    class CLASSNAME implements DragListener {
         int initialOffset;
         boolean wasExpanded;
 
-        C134426() {
+        CLASSNAME() {
         }
 
         public void onDragStart() {
@@ -1287,7 +1287,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 ChatActivityEnterView.this.stickersDragging = true;
                 this.wasExpanded = ChatActivityEnterView.this.stickersExpanded;
                 ChatActivityEnterView.this.stickersExpanded = true;
-                ChatActivityEnterView.this.stickersExpandedHeight = (((ChatActivityEnterView.this.sizeNotifierLayout.getHeight() - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - C0403ActionBar.getCurrentActionBarHeight()) - ChatActivityEnterView.this.getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
+                ChatActivityEnterView.this.stickersExpandedHeight = (((ChatActivityEnterView.this.sizeNotifierLayout.getHeight() - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - CLASSNAMEActionBar.getCurrentActionBarHeight()) - ChatActivityEnterView.this.getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 ChatActivityEnterView.this.emojiView.getLayoutParams().height = ChatActivityEnterView.this.stickersExpandedHeight;
                 ChatActivityEnterView.this.emojiView.setLayerType(2, null);
                 ChatActivityEnterView.this.sizeNotifierLayout.requestLayout();
@@ -1435,9 +1435,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         };
         this.messageEditText.setDelegate(new ChatActivityEnterView$$Lambda$1(this));
         updateFieldHint();
-        int flags = C0016C.ENCODING_PCM_MU_LAW;
+        int flags = CLASSNAMEC.ENCODING_PCM_MU_LAW;
         if (!(this.parentFragment == null || this.parentFragment.getCurrentEncryptedChat() == null)) {
-            flags = C0016C.ENCODING_PCM_MU_LAW | 16777216;
+            flags = CLASSNAMEC.ENCODING_PCM_MU_LAW | 16777216;
         }
         this.messageEditText.setImeOptions(flags);
         this.messageEditText.setInputType((this.messageEditText.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS) | 131072);
@@ -1451,9 +1451,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.messageEditText.setHintColor(Theme.getColor(Theme.key_chat_messagePanelHint));
         this.messageEditText.setHintTextColor(Theme.getColor(Theme.key_chat_messagePanelHint));
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 80, 52.0f, 0.0f, isChat ? 50.0f : 2.0f, 0.0f));
-        this.messageEditText.setOnKeyListener(new C06439());
-        this.messageEditText.setOnEditorActionListener(new C062010());
-        this.messageEditText.addTextChangedListener(new C062111());
+        this.messageEditText.setOnKeyListener(new CLASSNAME());
+        this.messageEditText.setOnEditorActionListener(new CLASSNAME());
+        this.messageEditText.addTextChangedListener(new CLASSNAME());
         if (isChat) {
             this.attachLayout = new LinearLayout(context);
             this.attachLayout.setOrientation(0);
@@ -1473,7 +1473,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.notifyButton.setScaleType(ScaleType.CENTER);
             this.notifyButton.setVisibility(this.canWriteToChannel ? 0 : 8);
             this.attachLayout.addView(this.notifyButton, LayoutHelper.createLinear(48, 48));
-            this.notifyButton.setOnClickListener(new C062212());
+            this.notifyButton.setOnClickListener(new CLASSNAME());
             this.attachButton = new ImageView(context);
             this.attachButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), Mode.MULTIPLY));
             this.attachButton.setImageResource(R.drawable.ic_ab_attach);
@@ -1497,7 +1497,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.videoTimelineView = new VideoTimelineView(context);
         this.videoTimelineView.setColor(-11817481);
         this.videoTimelineView.setRoundFrames(true);
-        this.videoTimelineView.setDelegate(new C134213());
+        this.videoTimelineView.setDelegate(new CLASSNAME());
         this.recordedAudioPanel.addView(this.videoTimelineView, LayoutHelper.createFrame(-1, 32.0f, 19, 40.0f, 0.0f, 0.0f, 0.0f));
         this.recordedAudioBackground = new View(context);
         this.recordedAudioBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m9dp(16.0f), Theme.getColor(Theme.key_chat_recordedVoiceBackground)));
@@ -1963,7 +1963,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 fArr[0] = visible ? 0.0f : 1.0f;
                 animatorArr[5] = ObjectAnimator.ofFloat(imageView, str, fArr);
                 animatorSet.playTogether(animatorArr);
-                this.audioVideoButtonAnimation.addListener(new C062314());
+                this.audioVideoButtonAnimation.addListener(new CLASSNAME());
                 this.audioVideoButtonAnimation.setInterpolator(new DecelerateInterpolator());
                 this.audioVideoButtonAnimation.setDuration(150);
                 this.audioVideoButtonAnimation.start();
@@ -2217,7 +2217,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(this.topView, "translationY", new float[]{(float) this.topView.getLayoutParams().height});
                     animatorSet.playTogether(animatorArr);
-                    this.currentTopViewAnimation.addListener(new C062617());
+                    this.currentTopViewAnimation.addListener(new CLASSNAME());
                     this.currentTopViewAnimation.setDuration(200);
                     this.currentTopViewAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
                     this.currentTopViewAnimation.start();
@@ -2245,7 +2245,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (this.topView == null) {
             return;
         }
-        if (size < AndroidUtilities.m9dp(72.0f) + C0403ActionBar.getCurrentActionBarHeight()) {
+        if (size < AndroidUtilities.m9dp(72.0f) + CLASSNAMEActionBar.getCurrentActionBarHeight()) {
             if (this.allowShowTopView) {
                 this.allowShowTopView = false;
                 if (this.needShowTopView) {
@@ -2510,7 +2510,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         animatorArr[0] = ObjectAnimator.ofFloat(this.recordedAudioPanel, "alpha", new float[]{0.0f});
         AnimatorSet.playTogether(animatorArr);
         AnimatorSet.setDuration(200);
-        AnimatorSet.addListener(new C062718());
+        AnimatorSet.addListener(new CLASSNAME());
         AnimatorSet.start();
     }
 
@@ -2637,7 +2637,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             animatorArr[1] = ObjectAnimator.ofFloat(this.attachLayout, "scaleX", new float[]{0.0f});
                             animatorSet.playTogether(animatorArr);
                             this.runningAnimation2.setDuration(100);
-                            this.runningAnimation2.addListener(new C062819());
+                            this.runningAnimation2.addListener(new CLASSNAME());
                             this.runningAnimation2.start();
                             updateFieldRight(0);
                             if (this.delegate != null && getVisibility() == 0) {
@@ -2780,7 +2780,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                     this.runningAnimation.playTogether(animators);
                     this.runningAnimation.setDuration(150);
-                    this.runningAnimation.addListener(new C063222());
+                    this.runningAnimation.addListener(new CLASSNAME());
                     this.runningAnimation.start();
                 }
             } else if (!animated) {
@@ -2853,7 +2853,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 this.runningAnimation.playTogether(animators);
                 this.runningAnimation.setDuration(150);
-                this.runningAnimation.addListener(new C063121());
+                this.runningAnimation.addListener(new CLASSNAME());
                 this.runningAnimation.start();
             }
         }
@@ -2907,7 +2907,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 animatorArr[2] = ObjectAnimator.ofFloat(this.audioVideoButtonContainer, "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
                 this.runningAnimationAudio.setDuration(300);
-                this.runningAnimationAudio.addListener(new C063424());
+                this.runningAnimationAudio.addListener(new CLASSNAME());
                 this.runningAnimationAudio.setInterpolator(new AccelerateInterpolator());
                 this.runningAnimationAudio.start();
             }
@@ -2948,7 +2948,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             animatorArr[2] = ObjectAnimator.ofFloat(this.audioVideoButtonContainer, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.runningAnimationAudio.setDuration(300);
-            this.runningAnimationAudio.addListener(new C063323());
+            this.runningAnimationAudio.addListener(new CLASSNAME());
             this.runningAnimationAudio.setInterpolator(new DecelerateInterpolator());
             this.runningAnimationAudio.start();
         }
@@ -3453,8 +3453,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (this.emojiView == null) {
             this.emojiView = new EmojiView(this.allowStickers, this.allowGifs, this.parentActivity, this.info);
             this.emojiView.setVisibility(8);
-            this.emojiView.setListener(new C134325());
-            this.emojiView.setDragListener(new C134426());
+            this.emojiView.setListener(new CLASSNAME());
+            this.emojiView.setDragListener(new CLASSNAME());
             this.sizeNotifierLayout.addView(this.emojiView);
             checkChannelRights();
         }
@@ -3947,7 +3947,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 } else {
                     i = 0;
                 }
-                this.stickersExpandedHeight = (((height - i) - C0403ActionBar.getCurrentActionBarHeight()) - getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
+                this.stickersExpandedHeight = (((height - i) - CLASSNAMEActionBar.getCurrentActionBarHeight()) - getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 this.emojiView.getLayoutParams().height = this.stickersExpandedHeight;
                 this.sizeNotifierLayout.requestLayout();
                 this.sizeNotifierLayout.setForeground(new ScrimDrawable());
@@ -3962,7 +3962,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     anims.setDuration(400);
                     anims.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                     ((ObjectAnimator) anims.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$Lambda$18(this, origHeight));
-                    anims.addListener(new C063527());
+                    anims.addListener(new CLASSNAME());
                     this.stickersExpansionAnim = anims;
                     this.emojiView.setLayerType(2, null);
                     anims.start();

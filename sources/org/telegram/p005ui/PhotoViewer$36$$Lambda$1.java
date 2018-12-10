@@ -1,15 +1,15 @@
 package org.telegram.p005ui;
 
 import android.animation.AnimatorSet;
-import org.telegram.p005ui.PhotoViewer.C109336;
+import org.telegram.p005ui.PhotoViewer.CLASSNAME;
 
 /* renamed from: org.telegram.ui.PhotoViewer$36$$Lambda$1 */
 final /* synthetic */ class PhotoViewer$36$$Lambda$1 implements Runnable {
-    private final C109336 arg$1;
+    private final CLASSNAME arg$1;
     private final AnimatorSet arg$2;
 
-    PhotoViewer$36$$Lambda$1(C109336 c109336, AnimatorSet animatorSet) {
-        this.arg$1 = c109336;
+    PhotoViewer$36$$Lambda$1(CLASSNAME CLASSNAME, AnimatorSet animatorSet) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = animatorSet;
     }
 

@@ -40,14 +40,14 @@ public class TermsOfServiceView extends FrameLayout {
     private TextView textView;
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1 */
-    class C08651 implements OnClickListener {
+    class CLASSNAME implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1$1 */
-        class C08641 implements DialogInterface.OnClickListener {
+        class CLASSNAME implements DialogInterface.OnClickListener {
 
             /* renamed from: org.telegram.ui.Components.TermsOfServiceView$1$1$1 */
-            class C08621 implements DialogInterface.OnClickListener {
-                C08621() {
+            class CLASSNAME implements DialogInterface.OnClickListener {
+                CLASSNAME() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -87,26 +87,26 @@ public class TermsOfServiceView extends FrameLayout {
                 }
             }
 
-            C08641() {
+            CLASSNAME() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
                 Builder builder = new Builder(TermsOfServiceView.this.getContext());
                 builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), new C08621());
+                builder.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), new CLASSNAME());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.show();
             }
         }
 
-        C08651() {
+        CLASSNAME() {
         }
 
         public void onClick(View view) {
             Builder builder = new Builder(view.getContext());
             builder.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
-            builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", R.string.DeclineDeactivate), new C08641());
+            builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", R.string.DeclineDeactivate), new CLASSNAME());
             builder.setNegativeButton(LocaleController.getString("Back", R.string.Back), null);
             builder.setMessage(LocaleController.getString("TosUpdateDecline", R.string.TosUpdateDecline));
             builder.show();
@@ -114,11 +114,11 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$2 */
-    class C08672 implements OnClickListener {
+    class CLASSNAME implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.TermsOfServiceView$2$1 */
-        class C08661 implements DialogInterface.OnClickListener {
-            C08661() {
+        class CLASSNAME implements DialogInterface.OnClickListener {
+            CLASSNAME() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -126,14 +126,14 @@ public class TermsOfServiceView extends FrameLayout {
             }
         }
 
-        C08672() {
+        CLASSNAME() {
         }
 
         public void onClick(View view) {
             if (TermsOfServiceView.this.currentTos.min_age_confirm != 0) {
                 Builder builder = new Builder(view.getContext());
                 builder.setTitle(LocaleController.getString("TosAgeTitle", R.string.TosAgeTitle));
-                builder.setPositiveButton(LocaleController.getString("Agree", R.string.Agree), new C08661());
+                builder.setPositiveButton(LocaleController.getString("Agree", R.string.Agree), new CLASSNAME());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.setMessage(LocaleController.formatString("TosAgeText", R.string.TosAgeText, LocaleController.formatPluralString("Years", TermsOfServiceView.this.currentTos.min_age_confirm)));
                 builder.show();
@@ -151,8 +151,8 @@ public class TermsOfServiceView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.TermsOfServiceView$3 */
-    class C08683 implements RequestDelegate {
-        C08683() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -197,7 +197,7 @@ public class TermsOfServiceView extends FrameLayout {
         declineTextView.setTextSize(1, 16.0f);
         declineTextView.setPadding(AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(10.0f));
         addView(declineTextView, LayoutHelper.createFrame(-2, -2.0f, 83, 16.0f, 0.0f, 16.0f, 16.0f));
-        declineTextView.setOnClickListener(new C08651());
+        declineTextView.setOnClickListener(new CLASSNAME());
         TextView acceptTextView = new TextView(context);
         acceptTextView.setText(LocaleController.getString("Accept", R.string.Accept).toUpperCase());
         acceptTextView.setGravity(17);
@@ -213,14 +213,14 @@ public class TermsOfServiceView extends FrameLayout {
         }
         acceptTextView.setPadding(AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(10.0f));
         addView(acceptTextView, LayoutHelper.createFrame(-2, -2.0f, 85, 16.0f, 0.0f, 16.0f, 16.0f));
-        acceptTextView.setOnClickListener(new C08672());
+        acceptTextView.setOnClickListener(new CLASSNAME());
     }
 
     private void accept() {
         this.delegate.onAcceptTerms(this.currentAccount);
         TL_help_acceptTermsOfService req = new TL_help_acceptTermsOfService();
         req.f132id = this.currentTos.f133id;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C08683());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
     }
 
     public void show(int account, TL_help_termsOfService tos) {

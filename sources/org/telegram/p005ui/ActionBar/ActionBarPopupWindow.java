@@ -40,8 +40,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     private AnimatorSet windowAnimatorSet;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$1 */
-    class C04171 implements AnimatorListener {
-        C04171() {
+    class CLASSNAME implements AnimatorListener {
+        CLASSNAME() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -60,8 +60,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$2 */
-    class C04182 implements AnimatorListener {
-        C04182() {
+    class CLASSNAME implements AnimatorListener {
+        CLASSNAME() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -388,7 +388,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.windowAnimatorSet = new AnimatorSet();
             this.windowAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(content, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(content, "backAlpha", new int[]{0, 255})});
             this.windowAnimatorSet.setDuration((long) ((visibleCount * 16) + 150));
-            this.windowAnimatorSet.addListener(new C04171());
+            this.windowAnimatorSet.addListener(new CLASSNAME());
             this.windowAnimatorSet.start();
         }
     }
@@ -429,7 +429,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             animatorArr[1] = ObjectAnimator.ofFloat(content, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.windowAnimatorSet.setDuration(150);
-            this.windowAnimatorSet.addListener(new C04182());
+            this.windowAnimatorSet.addListener(new CLASSNAME());
             this.windowAnimatorSet.start();
             return;
         }

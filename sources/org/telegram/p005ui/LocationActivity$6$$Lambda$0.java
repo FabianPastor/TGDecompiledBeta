@@ -1,13 +1,13 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.LocationActivity.C14666;
+import org.telegram.p005ui.LocationActivity.CLASSNAME;
 
 /* renamed from: org.telegram.ui.LocationActivity$6$$Lambda$0 */
 final /* synthetic */ class LocationActivity$6$$Lambda$0 implements Runnable {
-    private final C14666 arg$1;
+    private final CLASSNAME arg$1;
 
-    LocationActivity$6$$Lambda$0(C14666 c14666) {
-        this.arg$1 = c14666;
+    LocationActivity$6$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void run() {

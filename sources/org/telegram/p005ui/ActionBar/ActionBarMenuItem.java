@@ -67,8 +67,8 @@ public class ActionBarMenuItem extends FrameLayout {
     private int subMenuOpenSide;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$3 */
-    class C04143 implements Callback {
-        C04143() {
+    class CLASSNAME implements Callback {
+        CLASSNAME() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -88,8 +88,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$4 */
-    class C04154 implements TextWatcher {
-        C04154() {
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -605,10 +605,10 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchField.setPadding(0, 0, 0, 0);
                 this.searchField.setInputType(this.searchField.getInputType() | 524288);
                 if (VERSION.SDK_INT < 23) {
-                    this.searchField.setCustomSelectionActionModeCallback(new C04143());
+                    this.searchField.setCustomSelectionActionModeCallback(new CLASSNAME());
                 }
                 this.searchField.setOnEditorActionListener(new ActionBarMenuItem$$Lambda$6(this));
-                this.searchField.addTextChangedListener(new C04154());
+                this.searchField.addTextChangedListener(new CLASSNAME());
                 this.searchField.setImeOptions(33554435);
                 this.searchField.setTextIsSelectable(false);
                 if (LocaleController.isRTL) {

@@ -63,8 +63,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     private PasscodeView passcodeView;
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$1 */
-    class C09331 implements OnGlobalLayoutListener {
-        C09331() {
+    class CLASSNAME implements OnGlobalLayoutListener {
+        CLASSNAME() {
         }
 
         public void onGlobalLayout() {
@@ -76,8 +76,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$2 */
-    class C09342 implements Runnable {
-        C09342() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -484,7 +484,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
 
     public void fixLayout() {
         if (AndroidUtilities.isTablet() && this.actionBarLayout != null) {
-            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C09331());
+            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new CLASSNAME());
         }
     }
 
@@ -536,7 +536,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
-            this.lockRunnable = new C09342();
+            this.lockRunnable = new CLASSNAME();
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(this.lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {

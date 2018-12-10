@@ -73,7 +73,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.android.internal.telephony.ITelephony;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.BufferedReader;
@@ -97,7 +97,7 @@ import java.util.regex.Pattern;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.beta.R;
@@ -179,7 +179,7 @@ public class AndroidUtilities {
             this.vcard = new StringBuilder();
         }
 
-        /* synthetic */ VcardData(C01951 x0) {
+        /* synthetic */ VcardData(CLASSNAME x0) {
             this();
         }
     }
@@ -199,7 +199,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0016C.UTF8_NAME;
+            String nameCharset = CLASSNAMEC.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -239,7 +239,7 @@ public class AndroidUtilities {
             String valueType = this.fullData.substring(0, idx);
             String value = this.fullData.substring(idx + 1, this.fullData.length());
             String nameEncoding = null;
-            String nameCharset = C0016C.UTF8_NAME;
+            String nameCharset = CLASSNAMEC.UTF8_NAME;
             String[] params = valueType.split(";");
             for (String split : params) {
                 String[] args2 = split.split("=");
@@ -275,7 +275,7 @@ public class AndroidUtilities {
             }
             if (format) {
                 if (this.type == 0) {
-                    return C0194PhoneFormat.getInstance().format(result.toString());
+                    return CLASSNAMEPhoneFormat.getInstance().format(result.toString());
                 }
                 if (this.type == 5) {
                     String[] date = result.toString().split("T");
@@ -364,8 +364,8 @@ public class AndroidUtilities {
     }
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$4 */
-    static class C01984 extends CrashManagerListener {
-        C01984() {
+    static class CLASSNAME extends CrashManagerListener {
+        CLASSNAME() {
         }
 
         public boolean includeDeviceData() {
@@ -614,7 +614,7 @@ public class AndroidUtilities {
 
     public static byte[] getStringBytes(String src) {
         try {
-            return src.getBytes(C0016C.UTF8_NAME);
+            return src.getBytes(CLASSNAMEC.UTF8_NAME);
         } catch (Exception e) {
             return new byte[0];
         }
@@ -638,7 +638,7 @@ public class AndroidUtilities {
         stream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
         ArrayList<VcardData> vcardDatas = new ArrayList();
         VcardData currentData = null;
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, C0016C.UTF8_NAME));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, CLASSNAMEC.UTF8_NAME));
         String pendingLine = null;
         boolean currentIsPhoto = false;
         VcardItem currentItem = null;
@@ -1154,7 +1154,7 @@ public class AndroidUtilities {
             return true;
         }
         String[] args = pattern.split("\\*");
-        phone = C0194PhoneFormat.stripExceptNumbers(phone);
+        phone = CLASSNAMEPhoneFormat.stripExceptNumbers(phone);
         int checkStart = 0;
         for (String arg : args) {
             if (!TextUtils.isEmpty(arg)) {
@@ -1210,7 +1210,7 @@ public class AndroidUtilities {
             if (callLogContentObserver == null) {
                 ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
                 Uri uri = Calls.CONTENT_URI;
-                ContentObserver c01951 = new ContentObserver(new Handler()) {
+                ContentObserver CLASSNAME = new ContentObserver(new Handler()) {
                     public boolean deliverSelfNotifications() {
                         return true;
                     }
@@ -1220,16 +1220,16 @@ public class AndroidUtilities {
                         AndroidUtilities.removeLoginPhoneCall(number, false);
                     }
                 };
-                callLogContentObserver = c01951;
-                contentResolver.registerContentObserver(uri, true, c01951);
-                Runnable c01962 = new Runnable() {
+                callLogContentObserver = CLASSNAME;
+                contentResolver.registerContentObserver(uri, true, CLASSNAME);
+                Runnable CLASSNAME = new Runnable() {
                     public void run() {
                         AndroidUtilities.unregisterRunnable = null;
                         AndroidUtilities.registerLoginContentObserver(false, number);
                     }
                 };
-                unregisterRunnable = c01962;
-                runOnUIThread(c01962, 10000);
+                unregisterRunnable = CLASSNAME;
+                runOnUIThread(CLASSNAME, 10000);
             }
         } else if (callLogContentObserver != null) {
             if (unregisterRunnable != null) {
@@ -1554,7 +1554,7 @@ public class AndroidUtilities {
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C01984());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new CLASSNAME());
     }
 
     public static void checkForUpdates(Activity context) {

@@ -62,7 +62,7 @@ public class StickerPreviewViewer {
     private Runnable openStickerPreviewRunnable;
     private Activity parentActivity;
     private float showProgress;
-    private Runnable showSheetRunnable = new C11321();
+    private Runnable showSheetRunnable = new CLASSNAME();
     private int startX;
     private int startY;
     private StaticLayout stickerEmojiLayout;
@@ -71,8 +71,8 @@ public class StickerPreviewViewer {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.StickerPreviewViewer$1 */
-    class C11321 implements Runnable {
-        C11321() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {

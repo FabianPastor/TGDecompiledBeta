@@ -1,14 +1,14 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.GroupCreateActivity.GroupCreateAdapter.C09422;
+import org.telegram.p005ui.GroupCreateActivity.GroupCreateAdapter.CLASSNAME;
 
 /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2$$Lambda$0 */
 final /* synthetic */ class GroupCreateActivity$GroupCreateAdapter$2$$Lambda$0 implements Runnable {
-    private final C09422 arg$1;
+    private final CLASSNAME arg$1;
     private final String arg$2;
 
-    GroupCreateActivity$GroupCreateAdapter$2$$Lambda$0(C09422 c09422, String str) {
-        this.arg$1 = c09422;
+    GroupCreateActivity$GroupCreateAdapter$2$$Lambda$0(CLASSNAME CLASSNAME, String str) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = str;
     }
 

@@ -2,14 +2,14 @@ package org.telegram.p005ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.ChannelEditActivity.C12891;
+import org.telegram.p005ui.ChannelEditActivity.CLASSNAME;
 
 /* renamed from: org.telegram.ui.ChannelEditActivity$1$$Lambda$0 */
 final /* synthetic */ class ChannelEditActivity$1$$Lambda$0 implements OnClickListener {
-    private final C12891 arg$1;
+    private final CLASSNAME arg$1;
 
-    ChannelEditActivity$1$$Lambda$0(C12891 c12891) {
-        this.arg$1 = c12891;
+    ChannelEditActivity$1$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {

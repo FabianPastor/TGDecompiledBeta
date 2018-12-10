@@ -2,14 +2,14 @@ package org.telegram.p005ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.ProfileActivity.C15553;
+import org.telegram.p005ui.ProfileActivity.CLASSNAME;
 
 /* renamed from: org.telegram.ui.ProfileActivity$3$$Lambda$0 */
 final /* synthetic */ class ProfileActivity$3$$Lambda$0 implements OnClickListener {
-    private final C15553 arg$1;
+    private final CLASSNAME arg$1;
 
-    ProfileActivity$3$$Lambda$0(C15553 c15553) {
-        this.arg$1 = c15553;
+    ProfileActivity$3$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {

@@ -1,11 +1,11 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.FileLoader.C02051;
+import org.telegram.messenger.FileLoader.CLASSNAME;
 import org.telegram.tgnet.TLRPC.InputEncryptedFile;
 import org.telegram.tgnet.TLRPC.InputFile;
 
 final /* synthetic */ class FileLoader$1$$Lambda$0 implements Runnable {
-    private final C02051 arg$1;
+    private final CLASSNAME arg$1;
     private final boolean arg$2;
     private final String arg$3;
     private final boolean arg$4;
@@ -15,8 +15,8 @@ final /* synthetic */ class FileLoader$1$$Lambda$0 implements Runnable {
     private final byte[] arg$8;
     private final FileUploadOperation arg$9;
 
-    FileLoader$1$$Lambda$0(C02051 c02051, boolean z, String str, boolean z2, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, FileUploadOperation fileUploadOperation) {
-        this.arg$1 = c02051;
+    FileLoader$1$$Lambda$0(CLASSNAME CLASSNAME, boolean z, String str, boolean z2, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, FileUploadOperation fileUploadOperation) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = z;
         this.arg$3 = str;
         this.arg$4 = z2;

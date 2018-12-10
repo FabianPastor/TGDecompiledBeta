@@ -3,7 +3,7 @@ package org.telegram.messenger;
 import org.telegram.messenger.beta.R;
 
 /* renamed from: org.telegram.messenger.R */
-public final class C0270R {
+public final class CLASSNAMER {
 
     /* renamed from: org.telegram.messenger.R$anim */
     public static final class anim {
@@ -166,7 +166,7 @@ public final class C0270R {
     }
 
     /* renamed from: org.telegram.messenger.R$drawable */
-    public static final class C0268drawable {
+    public static final class CLASSNAMEdrawable {
         public static final int ab_progress = NUM;
         public static final int abc_ic_menu_share_mtrl_alpha = NUM;
         public static final int account_add = NUM;
@@ -700,7 +700,7 @@ public final class C0270R {
     }
 
     /* renamed from: org.telegram.messenger.R$id */
-    public static final class C0269id {
+    public static final class CLASSNAMEid {
         public static final int action_container = NUM;
         public static final int action_divider = NUM;
         public static final int action_image = NUM;

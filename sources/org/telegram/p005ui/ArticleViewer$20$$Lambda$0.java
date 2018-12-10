@@ -1,13 +1,13 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.ArticleViewer.C046020;
+import org.telegram.p005ui.ArticleViewer.CLASSNAME;
 
 /* renamed from: org.telegram.ui.ArticleViewer$20$$Lambda$0 */
 final /* synthetic */ class ArticleViewer$20$$Lambda$0 implements Runnable {
-    private final C046020 arg$1;
+    private final CLASSNAME arg$1;
 
-    ArticleViewer$20$$Lambda$0(C046020 c046020) {
-        this.arg$1 = c046020;
+    ArticleViewer$20$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void run() {

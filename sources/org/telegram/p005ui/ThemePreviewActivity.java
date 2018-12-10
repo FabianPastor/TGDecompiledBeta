@@ -42,7 +42,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.ActionBar.MenuDrawable;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.Theme.ThemeInfo;
@@ -79,7 +79,7 @@ import org.telegram.tgnet.TLRPC.User;
 
 /* renamed from: org.telegram.ui.ThemePreviewActivity */
 public class ThemePreviewActivity extends BaseFragment implements NotificationCenterDelegate {
-    private C0403ActionBar actionBar2;
+    private CLASSNAMEActionBar actionBar2;
     private boolean applied;
     private ThemeInfo applyingTheme;
     private DialogsAdapter dialogsAdapter;
@@ -93,8 +93,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     private File themeFile;
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$3 */
-    class C11343 extends ViewOutlineProvider {
-        C11343() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -104,8 +104,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$1 */
-    class C15861 extends ActionBarMenuItemSearchListener {
-        C15861() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchExpand() {
@@ -123,8 +123,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$5 */
-    class C15885 implements OnPageChangeListener {
-        C15885() {
+    class CLASSNAME implements OnPageChangeListener {
+        CLASSNAME() {
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -139,8 +139,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$6 */
-    class C15896 extends PagerAdapter {
-        C15896() {
+    class CLASSNAME extends PagerAdapter {
+        CLASSNAME() {
         }
 
         public int getCount() {
@@ -327,8 +327,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         private ArrayList<MessageObject> messages = new ArrayList();
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1 */
-        class C15901 implements ChatMessageCellDelegate {
-            C15901() {
+        class CLASSNAME implements ChatMessageCellDelegate {
+            CLASSNAME() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -384,8 +384,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$2 */
-        class C15912 implements ChatActionCellDelegate {
-            C15912() {
+        class CLASSNAME implements ChatActionCellDelegate {
+            CLASSNAME() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -551,10 +551,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             View view = null;
             if (viewType == 0) {
                 view = new ChatMessageCell(this.mContext);
-                ((ChatMessageCell) view).setDelegate(new C15901());
+                ((ChatMessageCell) view).setDelegate(new CLASSNAME());
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C15912());
+                ((ChatActionCell) view).setDelegate(new CLASSNAME());
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
@@ -611,7 +611,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         float f2;
         float f3;
         this.page1 = new FrameLayout(context);
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C15861()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME()).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         this.actionBar.setBackButtonDrawable(new MenuDrawable());
         this.actionBar.setAddToContainer(false);
         this.actionBar.setTitle(LocaleController.getString("ThemePreview", R.string.ThemePreview));
@@ -664,7 +664,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(animator);
-            this.floatingButton.setOutlineProvider(new C11343());
+            this.floatingButton.setOutlineProvider(new CLASSNAME());
         }
         FrameLayout frameLayout = this.page1;
         View view = this.floatingButton;
@@ -735,8 +735,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
         View viewPager = new ViewPager(context);
-        viewPager.addOnPageChangeListener(new C15885());
-        viewPager.setAdapter(new C15896());
+        viewPager.addOnPageChangeListener(new CLASSNAME());
+        viewPager.setAdapter(new CLASSNAME());
         AndroidUtilities.setViewPagerEdgeEffectColor(viewPager, Theme.getColor(Theme.key_actionBarDefault));
         frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         viewPager = new View(context);

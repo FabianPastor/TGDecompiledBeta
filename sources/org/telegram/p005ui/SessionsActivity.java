@@ -30,8 +30,8 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.CheckBoxCell;
@@ -90,8 +90,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     private TextView textView2;
 
     /* renamed from: org.telegram.ui.SessionsActivity$1 */
-    class C15731 extends ActionBarMenuOnItemClick {
-        C15731() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -214,7 +214,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     if (layoutParams != null) {
                         int i;
                         int dp = AndroidUtilities.m9dp(220.0f);
-                        int currentActionBarHeight = (AndroidUtilities.displaySize.y - C0403ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.m9dp(128.0f);
+                        int currentActionBarHeight = (AndroidUtilities.displaySize.y - CLASSNAMEActionBar.getCurrentActionBarHeight()) - AndroidUtilities.m9dp(128.0f);
                         if (VERSION.SDK_INT >= 21) {
                             i = AndroidUtilities.statusBarHeight;
                         } else {
@@ -300,7 +300,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         } else {
             this.actionBar.setTitle(LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C15731());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -309,7 +309,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.emptyLayout.setOrientation(1);
         this.emptyLayout.setGravity(17);
         this.emptyLayout.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-        this.emptyLayout.setLayoutParams(new AbsListView.LayoutParams(-1, AndroidUtilities.displaySize.y - C0403ActionBar.getCurrentActionBarHeight()));
+        this.emptyLayout.setLayoutParams(new AbsListView.LayoutParams(-1, AndroidUtilities.displaySize.y - CLASSNAMEActionBar.getCurrentActionBarHeight()));
         this.imageView = new ImageView(context);
         if (this.currentType == 0) {
             this.imageView.setImageResource(R.drawable.devices);

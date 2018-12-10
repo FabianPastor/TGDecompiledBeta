@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.upstream.DataSchemeDataSource;
 import java.io.File;
 import java.util.ArrayList;
@@ -46,8 +46,8 @@ import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.DividerCell;
@@ -92,8 +92,8 @@ public class PhonebookShareActivity extends BaseFragment {
     private int vcardStartRow;
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$5 */
-    class C10485 implements OnClickListener {
-        C10485() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         private void fillRowWithType(String type, ContentValues row) {
@@ -321,8 +321,8 @@ public class PhonebookShareActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$6 */
-    class C10496 implements OnPreDrawListener {
-        C10496() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -476,8 +476,8 @@ public class PhonebookShareActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$1 */
-    class C15101 extends ActionBarMenuOnItemClick {
-        C15101() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -488,8 +488,8 @@ public class PhonebookShareActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhonebookShareActivity$4 */
-    class C15114 extends OnScrollListener {
-        C15114() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -709,7 +709,7 @@ public class PhonebookShareActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C15101());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.fragmentView = new FrameLayout(context) {
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 if (child != PhonebookShareActivity.this.listView) {
@@ -723,8 +723,8 @@ public class PhonebookShareActivity extends BaseFragment {
                 int childCount = getChildCount();
                 for (int a = 0; a < childCount; a++) {
                     View view = getChildAt(a);
-                    if (view != child && (view instanceof C0403ActionBar) && view.getVisibility() == 0) {
-                        if (((C0403ActionBar) view).getCastShadows()) {
+                    if (view != child && (view instanceof CLASSNAMEActionBar) && view.getVisibility() == 0) {
+                        if (((CLASSNAMEActionBar) view).getCastShadows()) {
                             actionBarHeight = view.getMeasuredHeight();
                         }
                         PhonebookShareActivity.this.parentLayout.drawHeaderShadow(canvas, actionBarHeight);
@@ -740,13 +740,13 @@ public class PhonebookShareActivity extends BaseFragment {
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager c15123 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager CLASSNAME = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c15123;
-        recyclerListView.setLayoutManager(c15123);
+        this.layoutManager = CLASSNAME;
+        recyclerListView.setLayoutManager(CLASSNAME);
         this.listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         this.listView.setAdapter(new ListAdapter(context));
@@ -780,7 +780,7 @@ public class PhonebookShareActivity extends BaseFragment {
         this.nameTextView.setPivotY(0.0f);
         frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 118.0f, 8.0f, 10.0f, 0.0f));
         needLayout();
-        this.listView.setOnScrollListener(new C15114());
+        this.listView.setOnScrollListener(new CLASSNAME());
         this.bottomLayout = new FrameLayout(context);
         this.bottomLayout.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor(Theme.key_passport_authorizeBackground), Theme.getColor(Theme.key_passport_authorizeBackgroundSelected)));
         frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
@@ -844,7 +844,7 @@ public class PhonebookShareActivity extends BaseFragment {
             } else if (item.type == 0) {
                 try {
                     Intent intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:" + item.getValue(false)));
-                    intent.addFlags(C0016C.ENCODING_PCM_MU_LAW);
+                    intent.addFlags(CLASSNAMEC.ENCODING_PCM_MU_LAW);
                     getParentActivity().startActivityForResult(intent, 500);
                 } catch (Throwable e) {
                     FileLog.m13e(e);
@@ -954,7 +954,7 @@ public class PhonebookShareActivity extends BaseFragment {
             Builder builder2 = new Builder(getParentActivity());
             builder2.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
             builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-            builder2.setItems(new CharSequence[]{LocaleController.getString("CreateNewContact", R.string.CreateNewContact), LocaleController.getString("AddToExistingContact", R.string.AddToExistingContact)}, new C10485());
+            builder2.setItems(new CharSequence[]{LocaleController.getString("CreateNewContact", R.string.CreateNewContact), LocaleController.getString("AddToExistingContact", R.string.AddToExistingContact)}, new CLASSNAME());
             builder2.show();
         }
     }
@@ -981,7 +981,7 @@ public class PhonebookShareActivity extends BaseFragment {
         } else {
             i = 0;
         }
-        int newTop = i + C0403ActionBar.getCurrentActionBarHeight();
+        int newTop = i + CLASSNAMEActionBar.getCurrentActionBarHeight();
         if (this.listView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
             if (layoutParams.topMargin != newTop) {
@@ -999,7 +999,7 @@ public class PhonebookShareActivity extends BaseFragment {
             if (this.actionBar.getOccupyStatusBar()) {
                 i2 = AndroidUtilities.statusBarHeight;
             }
-            float avatarY = ((((float) i2) + ((((float) C0403ActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
+            float avatarY = ((((float) i2) + ((((float) CLASSNAMEActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
             this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m9dp(47.0f))) * diff);
             this.avatarImage.setTranslationY((float) Math.ceil((double) avatarY));
             this.nameTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
@@ -1011,7 +1011,7 @@ public class PhonebookShareActivity extends BaseFragment {
 
     private void fixLayout() {
         if (this.fragmentView != null) {
-            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C10496());
+            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 

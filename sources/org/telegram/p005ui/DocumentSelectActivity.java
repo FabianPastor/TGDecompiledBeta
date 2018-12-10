@@ -40,7 +40,7 @@ import org.telegram.p005ui.ActionBar.ActionBarMenu;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0403ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.GraySectionCell;
@@ -66,7 +66,7 @@ public class DocumentSelectActivity extends BaseFragment {
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private int maxSelectedFiles = -1;
-    private BroadcastReceiver receiver = new C09311();
+    private BroadcastReceiver receiver = new CLASSNAME();
     private boolean receiverRegistered = false;
     private ArrayList<ListItem> recentItems = new ArrayList();
     private boolean scrolling;
@@ -75,8 +75,8 @@ public class DocumentSelectActivity extends BaseFragment {
     private long sizeLimit = NUM;
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$1 */
-    class C09311 extends BroadcastReceiver {
-        C09311() {
+    class CLASSNAME extends BroadcastReceiver {
+        CLASSNAME() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
@@ -102,8 +102,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
-    class C09324 implements OnPreDrawListener {
-        C09324() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -130,7 +130,7 @@ public class DocumentSelectActivity extends BaseFragment {
         private HistoryEntry() {
         }
 
-        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, C09311 x1) {
+        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, CLASSNAME x1) {
             this();
         }
     }
@@ -150,14 +150,14 @@ public class DocumentSelectActivity extends BaseFragment {
             this.ext = TtmlNode.ANONYMOUS_REGION_ID;
         }
 
-        /* synthetic */ ListItem(DocumentSelectActivity x0, C09311 x1) {
+        /* synthetic */ ListItem(DocumentSelectActivity x0, CLASSNAME x1) {
             this();
         }
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
-    class C14352 extends ActionBarMenuOnItemClick {
-        C14352() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -185,8 +185,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$3 */
-    class C14363 extends OnScrollListener {
-        C14363() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -309,7 +309,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SelectFile", R.string.SelectFile));
-        this.actionBar.setActionBarMenuOnItemClick(new C14352());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.selectedFiles.clear();
         this.actionModeViews.clear();
         ActionBarMenu actionMode = this.actionBar.createActionMode();
@@ -337,7 +337,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.listAdapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnScrollListener(new C14363());
+        this.listView.setOnScrollListener(new CLASSNAME());
         this.listView.setOnItemLongClickListener(new DocumentSelectActivity$$Lambda$1(this));
         this.listView.setOnItemClickListener(new DocumentSelectActivity$$Lambda$2(this));
         listRoots();
@@ -522,7 +522,7 @@ public class DocumentSelectActivity extends BaseFragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (this.listView != null) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new C09324());
+            this.listView.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 
@@ -644,7 +644,7 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x02f7 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x02d5 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:11:0x0094} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x02d5 A:{Splitter: B:11:0x0094, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:49:0x01bd, code:
             r7 = move-exception;

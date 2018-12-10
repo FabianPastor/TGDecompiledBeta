@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-import com.google.android.exoplayer2.C0016C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
-import org.telegram.PhoneFormat.C0194PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
@@ -3014,7 +3014,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$50(this, chat_id, countDownLatch, force, byChannelUsers));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x0205 A:{ExcHandler: all (r2_51 'th' java.lang.Throwable), Splitter: B:8:0x004b} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x0205 A:{Splitter: B:8:0x004b, ExcHandler: all (r2_51 'th' java.lang.Throwable)} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:58:0x019c, code:
             r16 = e;
@@ -3390,7 +3390,7 @@ public class MessagesStorage {
                             continue;
                         } else {
                             if (sphone.length() == 8 && phone.length() != 8) {
-                                sphone = C0194PhoneFormat.stripExceptNumbers(phone);
+                                sphone = CLASSNAMEPhoneFormat.stripExceptNumbers(phone);
                             }
                             contact.shortPhones.add(sphone);
                             contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(5)));
@@ -3480,7 +3480,7 @@ public class MessagesStorage {
                         continue;
                     } else {
                         if (sphone.length() == 8 && phone.length() != 8) {
-                            sphone = C0194PhoneFormat.stripExceptNumbers(phone);
+                            sphone = CLASSNAMEPhoneFormat.stripExceptNumbers(phone);
                         }
                         contact.shortPhones.add(sphone);
                         contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(6)));
@@ -3968,9 +3968,9 @@ public class MessagesStorage {
                             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
                         } else {
                             if (holeMessageMaxId == 0) {
-                                holeMessageMaxId = C0016C.NANOS_PER_SECOND;
+                                holeMessageMaxId = CLASSNAMEC.NANOS_PER_SECOND;
                                 if (channelId != 0) {
-                                    holeMessageMaxId = C0016C.NANOS_PER_SECOND | (((long) channelId) << 32);
+                                    holeMessageMaxId = CLASSNAMEC.NANOS_PER_SECOND | (((long) channelId) << 32);
                                 }
                             }
                             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND (m.mid <= %d OR m.mid < 0) ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMinId), Integer.valueOf(count_query / 2), Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
