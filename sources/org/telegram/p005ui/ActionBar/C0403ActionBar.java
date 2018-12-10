@@ -40,6 +40,7 @@ public class CLASSNAMEActionBar extends FrameLayout {
     private boolean allowOverlayTitle;
     private ImageView backButtonImageView;
     private boolean castShadows;
+    private boolean clipContent;
     private int extraHeight;
     private FireworksEffect fireworksEffect;
     private FontMetricsInt fontMetricsInt;
@@ -213,6 +214,11 @@ public class CLASSNAMEActionBar extends FrameLayout {
     }
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean clip = this.clipContent && (child == this.titleTextView || child == this.subtitleTextView || child == this.actionMode || child == this.menu || child == this.backButtonImageView);
+        if (clip) {
+            canvas.save();
+            canvas.clipRect(0.0f, ((float) (this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0)) + (-getTranslationY()), (float) getMeasuredWidth(), (float) getMeasuredHeight());
+        }
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL && child == this.titleTextView) {
             Drawable drawable = Theme.getCurrentHolidayDrawable();
@@ -238,7 +244,17 @@ public class CLASSNAMEActionBar extends FrameLayout {
                 }
             }
         }
+        if (clip) {
+            canvas.restore();
+        }
         return result;
+    }
+
+    public void setTranslationY(float translationY) {
+        super.setTranslationY(translationY);
+        if (this.clipContent) {
+            invalidate();
+        }
     }
 
     public void setBackButtonImage(int resource) {
@@ -265,6 +281,10 @@ public class CLASSNAMEActionBar extends FrameLayout {
 
     public boolean getAddToContainer() {
         return this.addToContainer;
+    }
+
+    public void setClipContent(boolean value) {
+        this.clipContent = value;
     }
 
     public void setSubtitle(CharSequence value) {

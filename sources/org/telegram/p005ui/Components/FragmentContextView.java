@@ -37,6 +37,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ChatActivity;
 import org.telegram.p005ui.DialogsActivity;
@@ -371,6 +372,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.topPadding = value;
         if (this.fragment != null && getParent() != null) {
             View view = this.fragment.getFragmentView();
+            CLASSNAMEActionBar actionBar = this.fragment.getActionBar();
             int additionalPadding = 0;
             if (!(this.additionalContextView == null || this.additionalContextView.getVisibility() != 0 || this.additionalContextView.getParent() == null)) {
                 additionalPadding = AndroidUtilities.m9dp(36.0f);
@@ -436,7 +438,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         for (int a = 0; a < 3; a++) {
             NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.messagePlayingDidReset);
             NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-            NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+            NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.messagePlayingDidStart);
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndedCall);
@@ -456,7 +458,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         for (int a = 0; a < 3; a++) {
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.messagePlayingDidReset);
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.messagePlayingDidStarted);
+            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.messagePlayingDidStart);
         }
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didEndedCall);
@@ -484,7 +486,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     checkLocationString();
                 }
             }
-        } else if (id == NotificationCenter.messagePlayingDidStarted || id == NotificationCenter.messagePlayingPlayStateChanged || id == NotificationCenter.messagePlayingDidReset || id == NotificationCenter.didEndedCall) {
+        } else if (id == NotificationCenter.messagePlayingDidStart || id == NotificationCenter.messagePlayingPlayStateChanged || id == NotificationCenter.messagePlayingDidReset || id == NotificationCenter.didEndedCall) {
             checkPlayer(false);
         } else if (id == NotificationCenter.didStartedCall) {
             checkCall(false);

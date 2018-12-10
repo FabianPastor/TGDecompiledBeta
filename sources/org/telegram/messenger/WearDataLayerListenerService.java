@@ -127,7 +127,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
                                         NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.fileDidLoad);
-                                        FileLoader.getInstance(WearDataLayerListenerService.this.currentAccount).loadFile(user2.photo.photo_small, user2, null, 0, 1);
+                                        FileLoader.getInstance(WearDataLayerListenerService.this.currentAccount).loadFile(user2.photo.photo_small, user2, null, 0, 1, 1);
                                     }
                                 });
                                 try {
@@ -170,7 +170,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     barrier = new CyclicBarrier(2);
                     CLASSNAME = new NotificationCenterDelegate() {
                         public void didReceivedNotification(int id, int account, Object... args) {
-                            if (id == NotificationCenter.didReceivedNewMessages && ((Long) args[0]).longValue() == 777000) {
+                            if (id == NotificationCenter.didReceiveNewMessages && ((Long) args[0]).longValue() == 777000) {
                                 ArrayList<MessageObject> arr = args[1];
                                 if (arr.size() > 0) {
                                     MessageObject msg = (MessageObject) arr.get(0);
@@ -191,7 +191,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     notificationCenterDelegate = CLASSNAME;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.didReceivedNewMessages);
+                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.didReceiveNewMessages);
                         }
                     });
                     try {
@@ -201,7 +201,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     notificationCenterDelegate = CLASSNAME;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.didReceivedNewMessages);
+                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.didReceiveNewMessages);
                         }
                     });
                     dataOutputStream = new DataOutputStream(((GetOutputStreamResult) ch.getOutputStream(apiClient).await()).getOutputStream());

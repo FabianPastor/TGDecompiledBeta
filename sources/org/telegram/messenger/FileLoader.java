@@ -428,35 +428,35 @@ public class FileLoader {
             if (cacheType == 0 && photo != null && (photo.size == 0 || photo.location.key != null)) {
                 cacheType = 1;
             }
-            loadFile(null, null, null, photo.location, null, ext, photo.size, false, cacheType);
+            loadFile(null, null, null, photo.location, null, ext, photo.size, 0, cacheType);
         }
     }
 
-    public void loadFile(SecureDocument secureDocument, boolean force) {
+    public void loadFile(SecureDocument secureDocument, int priority) {
         if (secureDocument != null) {
-            loadFile(null, secureDocument, null, null, null, null, 0, force, 1);
+            loadFile(null, secureDocument, null, null, null, null, 0, priority, 1);
         }
     }
 
-    public void loadFile(Document document, Object parentObject, boolean force, int cacheType) {
+    public void loadFile(Document document, Object parentObject, int priority, int cacheType) {
         if (document != null) {
             if (!(cacheType != 0 || document == null || document.key == null)) {
                 cacheType = 1;
             }
-            loadFile(document, null, null, null, parentObject, null, 0, force, cacheType);
+            loadFile(document, null, null, null, parentObject, null, 0, priority, cacheType);
         }
     }
 
-    public void loadFile(WebFile document, boolean force, int cacheType) {
-        loadFile(null, null, document, null, null, null, 0, force, cacheType);
+    public void loadFile(WebFile document, int priority, int cacheType) {
+        loadFile(null, null, document, null, null, null, 0, priority, cacheType);
     }
 
-    public void loadFile(FileLocation location, Object parentObject, String ext, int size, int cacheType) {
+    public void loadFile(FileLocation location, Object parentObject, String ext, int size, int priority, int cacheType) {
         if (location != null) {
             if (cacheType == 0 && (size == 0 || !(location == null || location.key == null))) {
                 cacheType = 1;
             }
-            loadFile(null, null, null, location, parentObject, ext, size, true, cacheType);
+            loadFile(null, null, null, location, parentObject, ext, size, priority, cacheType);
         }
     }
 
@@ -478,7 +478,7 @@ public class FileLoader {
         }
     }
 
-    private FileLoadOperation loadFileInternal(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, Object parentObject, String locationExt, int locationSize, boolean force, FileStreamLoadOperation stream, int streamOffset, int cacheType) {
+    private FileLoadOperation loadFileInternal(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, Object parentObject, String locationExt, int locationSize, int priority, FileStreamLoadOperation stream, int streamOffset, int cacheType) {
         String fileName = null;
         if (location != null) {
             fileName = getAttachFileName(location, locationExt);
@@ -572,39 +572,35 @@ public class FileLoader {
                     photoLoadOperationQueue = getPhotoLoadOperationQueue(datacenterId);
                     loadOperationQueue = getLoadOperationQueue(datacenterId);
                     this.loadOperationPaths.put(fileName, operation);
-                    int maxCount = force ? 3 : 1;
+                    operation.setPriority(priority);
+                    int maxCount;
                     int count;
                     if (type == 1) {
+                        maxCount = priority > 0 ? 3 : 1;
                         count = this.currentAudioLoadOperationsCount.get(datacenterId);
-                        if (streamOffset != 0 || count < maxCount) {
-                            if (!operation.start(stream, streamOffset)) {
-                                return operation;
-                            }
-                            this.currentAudioLoadOperationsCount.put(datacenterId, count + 1);
+                        if (streamOffset == 0 && count >= maxCount) {
+                            addOperationToQueue(operation, audioLoadOperationQueue);
                             return operation;
-                        } else if (force) {
-                            audioLoadOperationQueue.add(0, operation);
+                        } else if (!operation.start(stream, streamOffset)) {
                             return operation;
                         } else {
-                            audioLoadOperationQueue.add(operation);
+                            this.currentAudioLoadOperationsCount.put(datacenterId, count + 1);
                             return operation;
                         }
                     } else if (location != null || MessageObject.isImageWebDocument(webDocument)) {
+                        maxCount = priority > 0 ? 6 : 2;
                         count = this.currentPhotoLoadOperationsCount.get(datacenterId);
-                        if (streamOffset != 0 || count < maxCount) {
-                            if (!operation.start(stream, streamOffset)) {
-                                return operation;
-                            }
-                            this.currentPhotoLoadOperationsCount.put(datacenterId, count + 1);
+                        if (streamOffset == 0 && count >= maxCount) {
+                            addOperationToQueue(operation, photoLoadOperationQueue);
                             return operation;
-                        } else if (force) {
-                            photoLoadOperationQueue.add(0, operation);
+                        } else if (!operation.start(stream, streamOffset)) {
                             return operation;
                         } else {
-                            photoLoadOperationQueue.add(operation);
+                            this.currentPhotoLoadOperationsCount.put(datacenterId, count + 1);
                             return operation;
                         }
                     } else {
+                        maxCount = priority > 0 ? 3 : 1;
                         count = this.currentLoadOperationsCount.get(datacenterId);
                         if (streamOffset != 0 || count < maxCount) {
                             if (operation.start(stream, streamOffset)) {
@@ -616,15 +612,11 @@ public class FileLoader {
                             }
                             pauseCurrentFileLoadOperations(operation);
                             return operation;
-                        } else if (force) {
-                            loadOperationQueue.add(0, operation);
-                            return operation;
-                        } else {
-                            loadOperationQueue.add(operation);
-                            return operation;
                         }
+                        addOperationToQueue(operation, loadOperationQueue);
+                        return operation;
                     }
-                } else if (streamOffset == 0 && !force) {
+                } else if (streamOffset == 0 && priority <= 0) {
                     return operation;
                 } else {
                     LinkedList<FileLoadOperation> downloadQueue;
@@ -689,7 +681,24 @@ public class FileLoader {
         return null;
     }
 
-    private void loadFile(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, Object parentObject, String locationExt, int locationSize, boolean force, int cacheType) {
+    private void addOperationToQueue(FileLoadOperation operation, LinkedList<FileLoadOperation> queue) {
+        int priority = operation.getPriority();
+        if (priority > 0) {
+            int index = queue.size();
+            int size = queue.size();
+            for (int a = 0; a < size; a++) {
+                if (((FileLoadOperation) queue.get(a)).getPriority() < priority) {
+                    index = a;
+                    break;
+                }
+            }
+            queue.add(index, operation);
+            return;
+        }
+        queue.add(operation);
+    }
+
+    private void loadFile(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, Object parentObject, String locationExt, int locationSize, int priority, int cacheType) {
         String fileName;
         if (location != null) {
             fileName = getAttachFileName(location, locationExt);
@@ -703,11 +712,11 @@ public class FileLoader {
         if (!(TextUtils.isEmpty(fileName) || fileName.contains("-2147483648"))) {
             this.loadOperationPathsUI.put(fileName, Boolean.valueOf(true));
         }
-        fileLoaderQueue.postRunnable(new FileLoader$$Lambda$5(this, document, secureDocument, webDocument, location, parentObject, locationExt, locationSize, force, cacheType));
+        fileLoaderQueue.postRunnable(new FileLoader$$Lambda$5(this, document, secureDocument, webDocument, location, parentObject, locationExt, locationSize, priority, cacheType));
     }
 
-    final /* synthetic */ void lambda$loadFile$5$FileLoader(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, Object parentObject, String locationExt, int locationSize, boolean force, int cacheType) {
-        loadFileInternal(document, secureDocument, webDocument, location, parentObject, locationExt, locationSize, force, null, 0, cacheType);
+    final /* synthetic */ void lambda$loadFile$5$FileLoader(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, Object parentObject, String locationExt, int locationSize, int priority, int cacheType) {
+        loadFileInternal(document, secureDocument, webDocument, location, parentObject, locationExt, locationSize, priority, null, 0, cacheType);
     }
 
     protected FileLoadOperation loadStreamFile(FileStreamLoadOperation stream, Document document, Object parentObject, int offset) {
@@ -723,7 +732,7 @@ public class FileLoader {
     }
 
     final /* synthetic */ void lambda$loadStreamFile$6$FileLoader(FileLoadOperation[] result, Document document, Object parentObject, FileStreamLoadOperation stream, int offset, CountDownLatch semaphore) {
-        result[0] = loadFileInternal(document, null, null, null, parentObject, null, 0, true, stream, offset, 0);
+        result[0] = loadFileInternal(document, null, null, null, parentObject, null, 0, 1, stream, offset, 0);
         semaphore.countDown();
     }
 
@@ -749,7 +758,7 @@ public class FileLoader {
                 }
             }
             while (!audioLoadOperationQueue.isEmpty()) {
-                if (((FileLoadOperation) audioLoadOperationQueue.get(0)).isForceRequest()) {
+                if (((FileLoadOperation) audioLoadOperationQueue.get(0)).getPriority() != 0) {
                     maxCount = 3;
                 } else {
                     maxCount = 1;
@@ -775,12 +784,7 @@ public class FileLoader {
                 }
             }
             while (!photoLoadOperationQueue.isEmpty()) {
-                if (((FileLoadOperation) photoLoadOperationQueue.get(0)).isForceRequest()) {
-                    maxCount = 3;
-                } else {
-                    maxCount = 1;
-                }
-                if (count < maxCount) {
+                if (count < (((FileLoadOperation) photoLoadOperationQueue.get(0)).getPriority() != 0 ? 6 : 2)) {
                     operation = (FileLoadOperation) photoLoadOperationQueue.poll();
                     if (operation != null && operation.start()) {
                         count++;

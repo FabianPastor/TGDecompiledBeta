@@ -1,16 +1,17 @@
 package org.telegram.p005ui;
 
-/* renamed from: org.telegram.ui.ProfileActivity$$Lambda$12 */
-final /* synthetic */ class ProfileActivity$$Lambda$12 implements Runnable {
-    private final ProfileActivity arg$1;
-    private final Object[] arg$2;
+import org.telegram.p005ui.ContactsActivity.ContactsActivityDelegate;
+import org.telegram.tgnet.TLRPC.User;
 
-    ProfileActivity$$Lambda$12(ProfileActivity profileActivity, Object[] objArr) {
+/* renamed from: org.telegram.ui.ProfileActivity$$Lambda$12 */
+final /* synthetic */ class ProfileActivity$$Lambda$12 implements ContactsActivityDelegate {
+    private final ProfileActivity arg$1;
+
+    ProfileActivity$$Lambda$12(ProfileActivity profileActivity) {
         this.arg$1 = profileActivity;
-        this.arg$2 = objArr;
     }
 
-    public void run() {
-        this.arg$1.lambda$didReceivedNotification$20$ProfileActivity(this.arg$2);
+    public void didSelectContact(User user, String str, ContactsActivity contactsActivity) {
+        this.arg$1.lambda$openAddMember$20$ProfileActivity(user, str, contactsActivity);
     }
 }

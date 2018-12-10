@@ -62,6 +62,7 @@ import org.telegram.p005ui.Components.GroupCreateDividerItemDecoration;
 import org.telegram.p005ui.Components.ImageUpdater;
 import org.telegram.p005ui.Components.ImageUpdater.ImageUpdaterDelegate;
 import org.telegram.p005ui.Components.LayoutHelper;
+import org.telegram.p005ui.Components.RadialProgressView;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
@@ -70,7 +71,6 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.tgnet.TLRPC.PhotoSize;
-import org.telegram.tgnet.TLRPC.TL_secureFile;
 import org.telegram.tgnet.TLRPC.User;
 
 /* renamed from: org.telegram.ui.GroupCreateFinalActivity */
@@ -78,8 +78,13 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private static final int done_button = 1;
     private GroupCreateAdapter adapter;
     private FileLocation avatar;
+    private AnimatorSet avatarAnimation;
+    private FileLocation avatarBig;
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private ImageView avatarEditor;
     private BackupImageView avatarImage;
+    private View avatarOverlay;
+    private RadialProgressView avatarProgressView;
     private int chatType;
     private boolean createAfterUpload;
     private AnimatorSet doneItemAnimation;
@@ -96,7 +101,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private ArrayList<Integer> selectedContacts;
     private InputFile uploadedAvatar;
 
-    /* renamed from: org.telegram.ui.GroupCreateFinalActivity$6 */
+    /* renamed from: org.telegram.ui.GroupCreateFinalActivity$8 */
     class CLASSNAME extends ViewOutlineProvider {
         CLASSNAME() {
         }
@@ -119,7 +124,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
     }
 
-    /* renamed from: org.telegram.ui.GroupCreateFinalActivity$5 */
+    /* renamed from: org.telegram.ui.GroupCreateFinalActivity$7 */
     class CLASSNAME extends OnScrollListener {
         CLASSNAME() {
         }
@@ -365,7 +370,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.fragmentView = CLASSNAME;
         this.fragmentView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         this.fragmentView.setOnTouchListener(GroupCreateFinalActivity$$Lambda$1.$instance);
-        CLASSNAME = new LinearLayout(context) {
+        LinearLayout linearLayout = new LinearLayout(context) {
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 boolean result = super.drawChild(canvas, child, drawingTime);
                 if (child == GroupCreateFinalActivity.this.listView) {
@@ -374,11 +379,25 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 return result;
             }
         };
-        CLASSNAME.setOrientation(1);
-        CLASSNAME.addView(CLASSNAME, LayoutHelper.createFrame(-1, -1.0f));
+        linearLayout.setOrientation(1);
+        CLASSNAME.addView(linearLayout, LayoutHelper.createFrame(-1, -1.0f));
         this.editTextContainer = new FrameLayout(context);
-        CLASSNAME.addView(this.editTextContainer, LayoutHelper.createLinear(-1, -2));
-        this.avatarImage = new BackupImageView(context);
+        linearLayout.addView(this.editTextContainer, LayoutHelper.createLinear(-1, -2));
+        this.avatarImage = new BackupImageView(context) {
+            public void invalidate() {
+                if (GroupCreateFinalActivity.this.avatarOverlay != null) {
+                    GroupCreateFinalActivity.this.avatarOverlay.invalidate();
+                }
+                super.invalidate();
+            }
+
+            public void invalidate(int l, int t, int r, int b) {
+                if (GroupCreateFinalActivity.this.avatarOverlay != null) {
+                    GroupCreateFinalActivity.this.avatarOverlay.invalidate();
+                }
+                super.invalidate(l, t, r, b);
+            }
+        };
         this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(32.0f));
         this.avatarDrawable.setInfo(5, null, null, this.chatType == 1);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
@@ -399,19 +418,50 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         Paint paint = new Paint(1);
         paint.setColor(NUM);
         final Paint paint2 = paint;
-        ImageView avatarEditor = new ImageView(context) {
+        this.avatarOverlay = new View(context) {
             protected void onDraw(Canvas canvas) {
-                if (GroupCreateFinalActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
+                if (GroupCreateFinalActivity.this.avatarImage != null && GroupCreateFinalActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
                     paint2.setAlpha((int) (85.0f * GroupCreateFinalActivity.this.avatarImage.getImageReceiver().getCurrentAlpha()));
                     canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(32.0f), paint2);
                 }
-                super.onDraw(canvas);
             }
         };
-        avatarEditor.setImageResource(R.drawable.menu_camera_av);
-        avatarEditor.setScaleType(ScaleType.CENTER);
-        this.editTextContainer.addView(avatarEditor, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
-        avatarEditor.setOnClickListener(new GroupCreateFinalActivity$$Lambda$2(this));
+        frameLayout = this.editTextContainer;
+        view = this.avatarOverlay;
+        i = (LocaleController.isRTL ? 5 : 3) | 48;
+        if (LocaleController.isRTL) {
+            f = 0.0f;
+        } else {
+            f = 16.0f;
+        }
+        if (LocaleController.isRTL) {
+            f2 = 16.0f;
+        } else {
+            f2 = 0.0f;
+        }
+        frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 16.0f, f2, 16.0f));
+        this.avatarOverlay.setOnClickListener(new GroupCreateFinalActivity$$Lambda$2(this));
+        this.avatarEditor = new ImageView(context) {
+            public void invalidate(int l, int t, int r, int b) {
+                super.invalidate(l, t, r, b);
+                GroupCreateFinalActivity.this.avatarOverlay.invalidate();
+            }
+
+            public void invalidate() {
+                super.invalidate();
+                GroupCreateFinalActivity.this.avatarOverlay.invalidate();
+            }
+        };
+        this.avatarEditor.setScaleType(ScaleType.CENTER);
+        this.avatarEditor.setImageResource(R.drawable.menu_camera_av);
+        this.avatarEditor.setEnabled(false);
+        this.avatarEditor.setClickable(false);
+        this.editTextContainer.addView(this.avatarEditor, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
+        this.avatarProgressView = new RadialProgressView(context);
+        this.avatarProgressView.setSize(AndroidUtilities.m9dp(30.0f));
+        this.avatarProgressView.setProgressColor(-1);
+        this.editTextContainer.addView(this.avatarProgressView, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
+        showAvatarProgress(false, false);
         this.editText = new EditTextEmoji((Activity) context, CLASSNAME, this);
         this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
         if (this.nameToSet != null) {
@@ -430,7 +480,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         this.listView.addItemDecoration(new GroupCreateDividerItemDecoration());
-        CLASSNAME.addView(this.listView, LayoutHelper.createLinear(-1, -1));
+        linearLayout.addView(this.listView, LayoutHelper.createLinear(-1, -1));
         this.listView.setOnScrollListener(new CLASSNAME());
         this.floatingButtonContainer = new FrameLayout(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m9dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
@@ -494,7 +544,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     final /* synthetic */ void lambda$null$2$GroupCreateFinalActivity() {
         this.avatar = null;
+        this.avatarBig = null;
         this.uploadedAvatar = null;
+        showAvatarProgress(false, true);
         this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, null);
     }
 
@@ -520,16 +572,79 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
     }
 
-    public void didUploadedPhoto(InputFile file, PhotoSize photoSize, TL_secureFile secureFile) {
-        AndroidUtilities.runOnUIThread(new GroupCreateFinalActivity$$Lambda$4(this, file, photoSize));
+    public void didUploadPhoto(InputFile file, PhotoSize bigSize, PhotoSize smallSize) {
+        AndroidUtilities.runOnUIThread(new GroupCreateFinalActivity$$Lambda$4(this, file, smallSize, bigSize));
     }
 
-    final /* synthetic */ void lambda$didUploadedPhoto$5$GroupCreateFinalActivity(InputFile file, PhotoSize photoSize) {
-        this.uploadedAvatar = file;
-        this.avatar = photoSize.location;
+    final /* synthetic */ void lambda$didUploadPhoto$5$GroupCreateFinalActivity(InputFile file, PhotoSize smallSize, PhotoSize bigSize) {
+        if (file != null) {
+            this.uploadedAvatar = file;
+            if (this.createAfterUpload) {
+                MessagesController.getInstance(this.currentAccount).createChat(this.editText.getText().toString(), this.selectedContacts, null, this.chatType, this);
+            }
+            showAvatarProgress(false, true);
+            return;
+        }
+        this.avatar = smallSize.location;
+        this.avatarBig = bigSize.location;
         this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, null);
-        if (this.createAfterUpload) {
-            MessagesController.getInstance(this.currentAccount).createChat(this.editText.getText().toString(), this.selectedContacts, null, this.chatType, this);
+        showAvatarProgress(true, false);
+    }
+
+    private void showAvatarProgress(final boolean show, boolean animated) {
+        if (this.avatarEditor != null) {
+            if (this.avatarAnimation != null) {
+                this.avatarAnimation.cancel();
+                this.avatarAnimation = null;
+            }
+            if (animated) {
+                this.avatarAnimation = new AnimatorSet();
+                AnimatorSet animatorSet;
+                Animator[] animatorArr;
+                if (show) {
+                    this.avatarProgressView.setVisibility(0);
+                    animatorSet = this.avatarAnimation;
+                    animatorArr = new Animator[2];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{0.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{1.0f});
+                    animatorSet.playTogether(animatorArr);
+                } else {
+                    this.avatarEditor.setVisibility(0);
+                    animatorSet = this.avatarAnimation;
+                    animatorArr = new Animator[2];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{1.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{0.0f});
+                    animatorSet.playTogether(animatorArr);
+                }
+                this.avatarAnimation.setDuration(180);
+                this.avatarAnimation.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animation) {
+                        if (GroupCreateFinalActivity.this.avatarAnimation != null && GroupCreateFinalActivity.this.avatarEditor != null) {
+                            if (show) {
+                                GroupCreateFinalActivity.this.avatarEditor.setVisibility(4);
+                            } else {
+                                GroupCreateFinalActivity.this.avatarProgressView.setVisibility(4);
+                            }
+                            GroupCreateFinalActivity.this.avatarAnimation = null;
+                        }
+                    }
+
+                    public void onAnimationCancel(Animator animation) {
+                        GroupCreateFinalActivity.this.avatarAnimation = null;
+                    }
+                });
+                this.avatarAnimation.start();
+            } else if (show) {
+                this.avatarEditor.setAlpha(1.0f);
+                this.avatarEditor.setVisibility(4);
+                this.avatarProgressView.setAlpha(1.0f);
+                this.avatarProgressView.setVisibility(0);
+            } else {
+                this.avatarEditor.setAlpha(1.0f);
+                this.avatarEditor.setVisibility(0);
+                this.avatarProgressView.setAlpha(0.0f);
+                this.avatarProgressView.setVisibility(4);
+            }
         }
     }
 
@@ -599,7 +714,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             args2.putInt("chat_id", chat_id);
             presentFragment(new ChatActivity(args2), true);
             if (this.uploadedAvatar != null) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(chat_id, this.uploadedAvatar);
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(chat_id, this.uploadedAvatar, this.avatar, this.avatarBig);
             }
         }
     }

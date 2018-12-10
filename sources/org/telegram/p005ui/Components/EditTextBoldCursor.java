@@ -27,7 +27,6 @@ import android.widget.TextView.BufferType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
@@ -106,8 +105,7 @@ public class EditTextBoldCursor extends EditText {
                 this.mCursorDrawable = (Drawable[]) mCursorDrawableField.get(this.editor);
                 mCursorDrawableResField.set(this, Integer.valueOf(R.drawable.field_carret_empty));
             }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
+        } catch (Throwable th2) {
         }
         this.cursorSize = AndroidUtilities.m9dp(24.0f);
     }
@@ -132,8 +130,7 @@ public class EditTextBoldCursor extends EditText {
                 OnPreDrawListener onPreDrawListener = this.listenerFixer;
                 onPreDrawListener.getClass();
                 AndroidUtilities.runOnUIThread(EditTextBoldCursor$$Lambda$0.get$Lambda(onPreDrawListener), 500);
-            } catch (Throwable e) {
-                FileLog.m13e(e);
+            } catch (Throwable th) {
             }
             this.fixed = true;
         }

@@ -1,23 +1,17 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$10 */
-final /* synthetic */ class ProfileActivity$$Lambda$10 implements RequestDelegate {
+final /* synthetic */ class ProfileActivity$$Lambda$10 implements OnClickListener {
     private final ProfileActivity arg$1;
-    private final TL_channels_getParticipants arg$2;
-    private final int arg$3;
 
-    ProfileActivity$$Lambda$10(ProfileActivity profileActivity, TL_channels_getParticipants tL_channels_getParticipants, int i) {
+    ProfileActivity$$Lambda$10(ProfileActivity profileActivity) {
         this.arg$1 = profileActivity;
-        this.arg$2 = tL_channels_getParticipants;
-        this.arg$3 = i;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$getChannelParticipants$18$ProfileActivity(this.arg$2, this.arg$3, tLObject, tL_error);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$leaveChatPressed$17$ProfileActivity(dialogInterface, i);
     }
 }

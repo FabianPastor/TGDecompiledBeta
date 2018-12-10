@@ -282,7 +282,7 @@ public class VoIPHelper {
                             MessagesController.getInstance(currentAccount).processUpdates((TL_updates) response, false);
                         }
                         if (includeLogs[0] && log.exists() && req.rating < 4) {
-                            SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, "text/plain", 4244000, null, null, null);
+                            SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, null, "text/plain", 4244000, null, null, null);
                             Toast.makeText(context2, LocaleController.getString("CallReportSent", R.string.CallReportSent), 1).show();
                         }
                     }

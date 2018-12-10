@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.Peer;
@@ -202,9 +201,9 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         int[] masksArray;
         int result = 0;
-        if (ConnectionsManager.isConnectedToWiFi()) {
+        if (ApplicationLoader.isConnectedToWiFi()) {
             masksArray = this.wifiDownloadMask;
-        } else if (ConnectionsManager.isRoaming()) {
+        } else if (ApplicationLoader.isRoaming()) {
             masksArray = this.roamingDownloadMask;
         } else {
             masksArray = this.mobileDataDownloadMask;
@@ -277,7 +276,12 @@ public class DownloadController implements NotificationCenterDelegate {
             this.lastCheckMask = currentMask;
             if ((currentMask & 1) == 0) {
                 for (a = 0; a < this.photoDownloadQueue.size(); a++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((PhotoSize) ((DownloadObject) this.photoDownloadQueue.get(a)).object);
+                    DownloadObject downloadObject = (DownloadObject) this.photoDownloadQueue.get(a);
+                    if (downloadObject.object instanceof PhotoSize) {
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((PhotoSize) downloadObject.object);
+                    } else if (downloadObject.object instanceof Document) {
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) downloadObject.object);
+                    }
                 }
                 this.photoDownloadQueue.clear();
             } else if (this.photoDownloadQueue.isEmpty()) {
@@ -403,10 +407,10 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         int mask;
         int maxSize;
-        if (ConnectionsManager.isConnectedToWiFi()) {
+        if (ApplicationLoader.isConnectedToWiFi()) {
             mask = this.wifiDownloadMask[index];
             maxSize = this.wifiMaxFileSize[maskToIndex(type)];
-        } else if (ConnectionsManager.isRoaming()) {
+        } else if (ApplicationLoader.isRoaming()) {
             mask = this.roamingDownloadMask[index];
             maxSize = this.roamingMaxFileSize[maskToIndex(type)];
         } else {
@@ -425,13 +429,13 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         int mask;
         int a;
-        if (ConnectionsManager.isConnectedToWiFi()) {
+        if (ApplicationLoader.isConnectedToWiFi()) {
             mask = 0;
             for (a = 0; a < 4; a++) {
                 mask |= this.wifiDownloadMask[a];
             }
             return mask;
-        } else if (ConnectionsManager.isRoaming()) {
+        } else if (ApplicationLoader.isRoaming()) {
             mask = 0;
             for (a = 0; a < 4; a++) {
                 mask |= this.roamingDownloadMask[a];
@@ -477,7 +481,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     if (downloadObject.object instanceof PhotoSize) {
                         FileLoader.getInstance(this.currentAccount).loadFile((PhotoSize) downloadObject.object, null, downloadObject.secret ? 2 : 0);
                     } else if (downloadObject.object instanceof Document) {
-                        FileLoader.getInstance(this.currentAccount).loadFile((Document) downloadObject.object, downloadObject.parent, false, downloadObject.secret ? 2 : 0);
+                        FileLoader.getInstance(this.currentAccount).loadFile((Document) downloadObject.object, downloadObject.parent, 0, downloadObject.secret ? 2 : 0);
                     } else {
                         added = false;
                     }

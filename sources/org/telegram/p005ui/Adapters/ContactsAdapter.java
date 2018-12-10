@@ -201,7 +201,7 @@ public class ContactsAdapter extends SectionsAdapter {
                 break;
             case 2:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("Contacts", R.string.Contacts).toUpperCase());
+                ((GraySectionCell) view).setText(LocaleController.getString("Contacts", R.string.Contacts));
                 break;
             default:
                 float f2;

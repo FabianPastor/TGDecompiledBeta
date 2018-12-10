@@ -1,19 +1,16 @@
 package org.telegram.p005ui;
 
-import java.util.ArrayList;
 import org.telegram.p005ui.PhotoViewer.CLASSNAME;
 
 /* renamed from: org.telegram.ui.PhotoViewer$36$$Lambda$0 */
 final /* synthetic */ class PhotoViewer$36$$Lambda$0 implements Runnable {
     private final CLASSNAME arg$1;
-    private final ArrayList arg$2;
 
-    PhotoViewer$36$$Lambda$0(CLASSNAME CLASSNAME, ArrayList arrayList) {
+    PhotoViewer$36$$Lambda$0(CLASSNAME CLASSNAME) {
         this.arg$1 = CLASSNAME;
-        this.arg$2 = arrayList;
     }
 
     public void run() {
-        this.arg$1.lambda$onPreDraw$0$PhotoViewer$36(this.arg$2);
+        this.arg$1.lambda$onAnimationEnd$0$PhotoViewer$36();
     }
 }

@@ -162,7 +162,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         if (this.miniButtonState == 0) {
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), true, false, true);
             invalidate();
         } else if (this.miniButtonState == 1) {
@@ -179,7 +179,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
     public void didPressedButton() {
         if (this.buttonState == 0) {
             if (this.miniButtonState == 0) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             }
             if (MediaController.getInstance().findMessageInPlaylistAndPlay(this.currentMessageObject)) {
                 if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
@@ -199,7 +199,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             }
         } else if (this.buttonState == 2) {
             this.radialProgress.setProgress(0.0f, false);
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.buttonState = 4;
             this.radialProgress.setIcon(getIconForCurrentState(), true, false, true);
             invalidate();

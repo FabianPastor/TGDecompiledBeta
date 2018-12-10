@@ -1,18 +1,18 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.TLObject;
+import org.telegram.p005ui.ChannelRightsEditActivity.ChannelRightsEditActivityDelegate;
+import org.telegram.tgnet.TLRPC.TL_channelAdminRights;
+import org.telegram.tgnet.TLRPC.TL_channelBannedRights;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$18 */
-final /* synthetic */ class ProfileActivity$$Lambda$18 implements Runnable {
+final /* synthetic */ class ProfileActivity$$Lambda$18 implements ChannelRightsEditActivityDelegate {
     private final ProfileActivity arg$1;
-    private final TLObject arg$2;
 
-    ProfileActivity$$Lambda$18(ProfileActivity profileActivity, TLObject tLObject) {
+    ProfileActivity$$Lambda$18(ProfileActivity profileActivity) {
         this.arg$1 = profileActivity;
-        this.arg$2 = tLObject;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$8$ProfileActivity(this.arg$2);
+    public void didSetRights(int i, TL_channelAdminRights tL_channelAdminRights, TL_channelBannedRights tL_channelBannedRights) {
+        this.arg$1.lambda$null$10$ProfileActivity(i, tL_channelAdminRights, tL_channelBannedRights);
     }
 }

@@ -7,8 +7,11 @@ import android.app.Notification.MediaStyle;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -47,6 +50,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     private static boolean supportLockScreenControls;
     private Bitmap albumArtPlaceholder;
     private AudioManager audioManager;
+    private BroadcastReceiver headsetPlugReceiver = new CLASSNAME();
     private ImageReceiver imageReceiver;
     private String loadingFilePath;
     private MediaSession mediaSession;
@@ -55,6 +59,18 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     private RemoteControlClient remoteControlClient;
 
     /* renamed from: org.telegram.messenger.MusicPlayerService$1 */
+    class CLASSNAME extends BroadcastReceiver {
+        CLASSNAME() {
+        }
+
+        public void onReceive(Context context, Intent intent) {
+            if ("android.media.AUDIO_BECOMING_NOISY".equals(intent.getAction())) {
+                MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.MusicPlayerService$2 */
     class CLASSNAME extends Callback {
         CLASSNAME() {
         }
@@ -79,7 +95,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
         }
     }
 
-    /* renamed from: org.telegram.messenger.MusicPlayerService$2 */
+    /* renamed from: org.telegram.messenger.MusicPlayerService$3 */
     class CLASSNAME implements Runnable {
         CLASSNAME() {
         }
@@ -151,6 +167,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             this.mediaSession.setCallback(new CLASSNAME());
             this.mediaSession.setActive(true);
         }
+        registerReceiver(this.headsetPlugReceiver, new IntentFilter("android.media.AUDIO_BECOMING_NOISY"));
         super.onCreate();
     }
 
@@ -409,6 +426,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
 
     @SuppressLint({"NewApi"})
     public void onDestroy() {
+        unregisterReceiver(this.headsetPlugReceiver);
         super.onDestroy();
         if (this.remoteControlClient != null) {
             MetadataEditor metadataEditor = this.remoteControlClient.editMetadata(true);

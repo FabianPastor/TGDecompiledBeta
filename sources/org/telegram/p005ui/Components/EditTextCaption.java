@@ -147,7 +147,10 @@ public class EditTextCaption extends EditTextBoldCursor {
                 }
             }
         }
-        editable.setSpan(new URLSpanReplacement(editText.getText().toString()), start, end, 33);
+        try {
+            editable.setSpan(new URLSpanReplacement(editText.getText().toString()), start, end, 33);
+        } catch (Exception e) {
+        }
         if (this.delegate != null) {
             this.delegate.onSpansChanged();
         }

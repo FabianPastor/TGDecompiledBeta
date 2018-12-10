@@ -2133,7 +2133,6 @@
     <string name="formatterDay12H">h:mm a</string>
     <string name="formatterDay24H">HH:mm</string>
     <string name="formatterMonth">dd MMM</string>
-    <string name="formatterMonthYear">MMMM yyyy</string>
     <string name="formatterStats12H">dd MMM yyyy, h:mm a</string>
     <string name="formatterStats24H">dd MMM yyyy, HH:mm</string>
     <string name="formatterWeek">EEE</string>

@@ -58,6 +58,7 @@ import org.telegram.tgnet.TLRPC.DraftMessage;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.EncryptedMessage;
 import org.telegram.tgnet.TLRPC.ExportedChatInvite;
+import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputChannel;
 import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.tgnet.TLRPC.InputPeer;
@@ -68,6 +69,7 @@ import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.Peer;
 import org.telegram.tgnet.TLRPC.PeerNotifySettings;
 import org.telegram.tgnet.TLRPC.PhoneCall;
+import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.RecentMeUrl;
 import org.telegram.tgnet.TLRPC.SendMessageAction;
@@ -166,6 +168,7 @@ import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageActionChannelCreate;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
+import org.telegram.tgnet.TLRPC.TL_messageActionChatEditPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
 import org.telegram.tgnet.TLRPC.TL_messageActionCreatedBroadcastList;
 import org.telegram.tgnet.TLRPC.TL_messageActionHistoryClear;
@@ -234,6 +237,7 @@ import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallRequested;
 import org.telegram.tgnet.TLRPC.TL_phone_discardCall;
+import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photos_deletePhotos;
 import org.telegram.tgnet.TLRPC.TL_photos_getUserPhotos;
@@ -1044,6 +1048,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$null$3$MessagesController() {
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(2));
         UserConfig.getInstance(this.currentAccount).saveConfig(true);
     }
@@ -2926,15 +2931,18 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, info, Integer.valueOf(0), Boolean.valueOf(byChannelUsers), pinnedMessageObject);
     }
 
-    public void loadUserInfo(User user, CountDownLatch countDownLatch, boolean force) {
-        MessagesStorage.getInstance(this.currentAccount).loadUserInfo(user, countDownLatch, force);
+    public void loadUserInfo(User user, boolean force, int classGuid) {
+        MessagesStorage.getInstance(this.currentAccount).loadUserInfo(user, force, classGuid);
     }
 
-    public void processUserInfo(User user, TL_userFull info, boolean fromCache, boolean force, MessageObject pinnedMessageObject) {
+    public void processUserInfo(User user, TL_userFull info, boolean fromCache, boolean force, MessageObject pinnedMessageObject, int classGuid) {
         if (fromCache) {
-            loadFullUser(user, 0, force);
+            loadFullUser(user, classGuid, force);
         }
         if (info != null) {
+            if (this.fullUsers.get(user.f176id) == null) {
+                this.fullUsers.put(user.f176id, info);
+            }
             AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$49(this, user, info, pinnedMessageObject));
         }
     }
@@ -6263,7 +6271,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    public void changeChatAvatar(int chat_id, InputFile uploadedAvatar) {
+    public void changeChatAvatar(int chat_id, InputFile uploadedAvatar, FileLocation smallSize, FileLocation bigSize) {
         TLObject request;
         TLObject req;
         if (ChatObject.isChannel(chat_id, this.currentAccount)) {
@@ -6287,12 +6295,45 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             request = req;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$108(this), 64);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new MessagesController$$Lambda$108(this, smallSize, bigSize), 64);
     }
 
-    final /* synthetic */ void lambda$changeChatAvatar$167$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$changeChatAvatar$167$MessagesController(FileLocation smallSize, FileLocation bigSize, TLObject response, TL_error error) {
         if (error == null) {
-            processUpdates((Updates) response, false);
+            Updates updates = (Updates) response;
+            Photo photo = null;
+            int N = updates.updates.size();
+            for (int a = 0; a < N; a++) {
+                Update update = (Update) updates.updates.get(a);
+                Message message;
+                if (update instanceof TL_updateNewChannelMessage) {
+                    message = ((TL_updateNewChannelMessage) update).message;
+                    if ((message.action instanceof TL_messageActionChatEditPhoto) && (message.action.photo instanceof TL_photo)) {
+                        photo = message.action.photo;
+                        break;
+                    }
+                } else if (update instanceof TL_updateNewMessage) {
+                    message = ((TL_updateNewMessage) update).message;
+                    if ((message.action instanceof TL_messageActionChatEditPhoto) && (message.action.photo instanceof TL_photo)) {
+                        photo = message.action.photo;
+                        break;
+                    }
+                } else {
+                    continue;
+                }
+            }
+            if (photo != null) {
+                PhotoSize small = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 150);
+                if (!(small == null || smallSize == null)) {
+                    FileLoader.getPathToAttach(smallSize, true).renameTo(FileLoader.getPathToAttach(small, true));
+                    ImageLoader.getInstance().replaceImageInCache(smallSize.volume_id + "_" + smallSize.local_id + "@50_50", small.location.volume_id + "_" + small.location.local_id + "@50_50", small.location, true);
+                }
+                PhotoSize big = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 800);
+                if (!(big == null || bigSize == null)) {
+                    FileLoader.getPathToAttach(bigSize, true).renameTo(FileLoader.getPathToAttach(big, true));
+                }
+            }
+            processUpdates(updates, false);
         }
     }
 
@@ -7086,7 +7127,7 @@ public class MessagesController implements NotificationCenterDelegate {
             req.qts = qts;
             if (this.getDifferenceFirstSync) {
                 req.flags |= 1;
-                if (ConnectionsManager.isConnectedOrConnectingToWiFi()) {
+                if (ApplicationLoader.isConnectedOrConnectingToWiFi()) {
                     req.pts_total_limit = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS;
                 } else {
                     req.pts_total_limit = 1000;
@@ -9397,7 +9438,7 @@ public class MessagesController implements NotificationCenterDelegate {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$138(this, pushMessages));
         }
         if (messagesArr != null) {
-            StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, messagesArr.size());
+            StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ApplicationLoader.getCurrentNetworkType(), 1, messagesArr.size());
             MessagesStorage.getInstance(this.currentAccount).putMessages((ArrayList) messagesArr, true, true, false, DownloadController.getInstance(this.currentAccount).getAutodownloadMask());
         }
         if (editingMessages != null) {
@@ -10174,7 +10215,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             }
             DataQuery.getInstance(this.currentAccount).loadReplyMessagesForMessages(messages, uid);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didReceivedNewMessages, Long.valueOf(uid), messages);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didReceiveNewMessages, Long.valueOf(uid), messages);
             if (lastMessage != null) {
                 TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(uid);
                 MessageObject object;

@@ -1,15 +1,8 @@
 package org.telegram.tgnet;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -20,7 +13,6 @@ import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.upstream.DataSchemeDataSource;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings.Builder;
@@ -36,7 +28,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +40,6 @@ import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.EmuDetector;
-import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.KeepAliveJob;
 import org.telegram.messenger.LocaleController;
@@ -99,16 +89,6 @@ public class ConnectionsManager {
     private long lastPauseTime = System.currentTimeMillis();
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
 
-    /* renamed from: org.telegram.tgnet.ConnectionsManager$10 */
-    static class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(3));
-        }
-    }
-
     /* renamed from: org.telegram.tgnet.ConnectionsManager$1 */
     static class CLASSNAME extends ThreadLocal<HashMap<String, ResolvedDomain>> {
         CLASSNAME() {
@@ -116,17 +96,6 @@ public class ConnectionsManager {
 
         protected HashMap<String, ResolvedDomain> initialValue() {
             return new HashMap();
-        }
-    }
-
-    /* renamed from: org.telegram.tgnet.ConnectionsManager$3 */
-    class CLASSNAME extends BroadcastReceiver {
-        CLASSNAME() {
-        }
-
-        public void onReceive(Context context, Intent intent) {
-            ConnectionsManager.this.checkConnection();
-            FileLoader.getInstance(ConnectionsManager.this.currentAccount).onNetworkChanged(ConnectionsManager.isConnectionSlow());
         }
     }
 
@@ -210,40 +179,22 @@ public class ConnectionsManager {
             }
         }
 
-        protected void onPostExecute(final NativeByteBuffer result) {
-            Utilities.stageQueue.postRunnable(new Runnable() {
-                public void run() {
-                    if (result != null) {
-                        ConnectionsManager.native_applyDnsConfig(AzureLoadTask.this.currentAccount, result.address, UserConfig.getInstance(AzureLoadTask.this.currentAccount).getClientPhone());
-                    } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m10d("failed to get azure result");
-                    }
-                    ConnectionsManager.currentTask = null;
-                }
-            });
+        protected void onPostExecute(NativeByteBuffer result) {
+            Utilities.stageQueue.postRunnable(new ConnectionsManager$AzureLoadTask$$Lambda$0(this, result));
+        }
+
+        final /* synthetic */ void lambda$onPostExecute$0$ConnectionsManager$AzureLoadTask(NativeByteBuffer result) {
+            if (result != null) {
+                ConnectionsManager.native_applyDnsConfig(this.currentAccount, result.address, UserConfig.getInstance(this.currentAccount).getClientPhone());
+            } else if (BuildVars.LOGS_ENABLED) {
+                FileLog.m10d("failed to get azure result");
+            }
+            ConnectionsManager.currentTask = null;
         }
     }
 
     private static class DnsTxtLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
         private int currentAccount;
-
-        /* renamed from: org.telegram.tgnet.ConnectionsManager$DnsTxtLoadTask$1 */
-        class CLASSNAME implements Comparator<String> {
-            CLASSNAME() {
-            }
-
-            public int compare(String o1, String o2) {
-                int l1 = o1.length();
-                int l2 = o2.length();
-                if (l1 > l2) {
-                    return -1;
-                }
-                if (l1 < l2) {
-                    return 1;
-                }
-                return 0;
-            }
-        }
 
         public DnsTxtLoadTask(int instance) {
             this.currentAccount = instance;
@@ -319,7 +270,7 @@ public class ConnectionsManager {
                         for (a = 0; a < len; a++) {
                             arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                         }
-                        Collections.sort(arrayList, new CLASSNAME());
+                        Collections.sort(arrayList, ConnectionsManager$DnsTxtLoadTask$$Lambda$0.$instance);
                         StringBuilder builder = new StringBuilder();
                         for (a = 0; a < arrayList.size(); a++) {
                             builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
@@ -369,83 +320,41 @@ public class ConnectionsManager {
             }
         }
 
-        protected void onPostExecute(final NativeByteBuffer result) {
-            Utilities.stageQueue.postRunnable(new Runnable() {
-                public void run() {
-                    if (result != null) {
-                        ConnectionsManager.currentTask = null;
-                        ConnectionsManager.native_applyDnsConfig(DnsTxtLoadTask.this.currentAccount, result.address, UserConfig.getInstance(DnsTxtLoadTask.this.currentAccount).getClientPhone());
-                        return;
-                    }
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m10d("failed to get dns txt result");
-                        FileLog.m10d("start azure task");
-                    }
-                    AzureLoadTask task = new AzureLoadTask(DnsTxtLoadTask.this.currentAccount);
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                    ConnectionsManager.currentTask = task;
-                }
-            });
+        static final /* synthetic */ int lambda$doInBackground$0$ConnectionsManager$DnsTxtLoadTask(String o1, String o2) {
+            int l1 = o1.length();
+            int l2 = o2.length();
+            if (l1 > l2) {
+                return -1;
+            }
+            if (l1 < l2) {
+                return 1;
+            }
+            return 0;
+        }
+
+        protected void onPostExecute(NativeByteBuffer result) {
+            Utilities.stageQueue.postRunnable(new ConnectionsManager$DnsTxtLoadTask$$Lambda$1(this, result));
+        }
+
+        final /* synthetic */ void lambda$onPostExecute$1$ConnectionsManager$DnsTxtLoadTask(NativeByteBuffer result) {
+            if (result != null) {
+                ConnectionsManager.currentTask = null;
+                ConnectionsManager.native_applyDnsConfig(this.currentAccount, result.address, UserConfig.getInstance(this.currentAccount).getClientPhone());
+                return;
+            }
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m10d("failed to get dns txt result");
+                FileLog.m10d("start azure task");
+            }
+            AzureLoadTask task = new AzureLoadTask(this.currentAccount);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+            ConnectionsManager.currentTask = task;
         }
     }
 
     private static class FirebaseTask extends AsyncTask<Void, Void, NativeByteBuffer> {
         private int currentAccount;
         private FirebaseRemoteConfig firebaseRemoteConfig;
-
-        /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$2 */
-        class CLASSNAME implements Runnable {
-            CLASSNAME() {
-            }
-
-            public void run() {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("failed to get firebase result");
-                    FileLog.m10d("start dns txt task");
-                }
-                DnsTxtLoadTask task = new DnsTxtLoadTask(FirebaseTask.this.currentAccount);
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                ConnectionsManager.currentTask = task;
-            }
-        }
-
-        /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$1 */
-        class CLASSNAME implements OnCompleteListener<Void> {
-            CLASSNAME() {
-            }
-
-            public void onComplete(Task<Void> finishedTask) {
-                final boolean success = finishedTask.isSuccessful();
-                Utilities.stageQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        ConnectionsManager.currentTask = null;
-                        String config = null;
-                        if (success) {
-                            FirebaseTask.this.firebaseRemoteConfig.activateFetched();
-                            config = FirebaseTask.this.firebaseRemoteConfig.getString("ipconfigv2");
-                        }
-                        if (TextUtils.isEmpty(config)) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m10d("failed to get firebase result");
-                                FileLog.m10d("start dns txt task");
-                            }
-                            DnsTxtLoadTask task = new DnsTxtLoadTask(FirebaseTask.this.currentAccount);
-                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            ConnectionsManager.currentTask = task;
-                            return;
-                        }
-                        byte[] bytes = Base64.decode(config, 0);
-                        try {
-                            NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
-                            buffer.writeBytes(bytes);
-                            ConnectionsManager.native_applyDnsConfig(FirebaseTask.this.currentAccount, buffer.address, UserConfig.getInstance(FirebaseTask.this.currentAccount).getClientPhone());
-                        } catch (Throwable e) {
-                            FileLog.m13e(e);
-                        }
-                    }
-                });
-            }
-        }
 
         public FirebaseTask(int instance) {
             this.currentAccount = instance;
@@ -462,12 +371,53 @@ public class ConnectionsManager {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m10d("current firebase value = " + currentValue);
                 }
-                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new CLASSNAME());
+                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new ConnectionsManager$FirebaseTask$$Lambda$0(this));
                 return null;
             } catch (Throwable e) {
-                Utilities.stageQueue.postRunnable(new CLASSNAME());
+                Utilities.stageQueue.postRunnable(new ConnectionsManager$FirebaseTask$$Lambda$1(this));
                 FileLog.m13e(e);
             }
+        }
+
+        final /* synthetic */ void lambda$doInBackground$1$ConnectionsManager$FirebaseTask(Task finishedTask) {
+            Utilities.stageQueue.postRunnable(new ConnectionsManager$FirebaseTask$$Lambda$2(this, finishedTask.isSuccessful()));
+        }
+
+        final /* synthetic */ void lambda$null$0$ConnectionsManager$FirebaseTask(boolean success) {
+            ConnectionsManager.currentTask = null;
+            String config = null;
+            if (success) {
+                this.firebaseRemoteConfig.activateFetched();
+                config = this.firebaseRemoteConfig.getString("ipconfigv2");
+            }
+            if (TextUtils.isEmpty(config)) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m10d("failed to get firebase result");
+                    FileLog.m10d("start dns txt task");
+                }
+                DnsTxtLoadTask task = new DnsTxtLoadTask(this.currentAccount);
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                ConnectionsManager.currentTask = task;
+                return;
+            }
+            byte[] bytes = Base64.decode(config, 0);
+            try {
+                NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
+                buffer.writeBytes(bytes);
+                ConnectionsManager.native_applyDnsConfig(this.currentAccount, buffer.address, UserConfig.getInstance(this.currentAccount).getClientPhone());
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+        }
+
+        final /* synthetic */ void lambda$doInBackground$2$ConnectionsManager$FirebaseTask() {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m10d("failed to get firebase result");
+                FileLog.m10d("start dns txt task");
+            }
+            DnsTxtLoadTask task = new DnsTxtLoadTask(this.currentAccount);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+            ConnectionsManager.currentTask = task;
         }
 
         protected void onPostExecute(NativeByteBuffer result) {
@@ -641,86 +591,69 @@ public class ConnectionsManager {
     }
 
     public int sendRequest(TLObject object, RequestDelegate onComplete, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connetionType, boolean immediate) {
-        final int requestToken = this.lastRequestToken.getAndIncrement();
-        final TLObject tLObject = object;
-        final RequestDelegate requestDelegate = onComplete;
-        final QuickAckDelegate quickAckDelegate = onQuickAck;
-        final WriteToSocketDelegate writeToSocketDelegate = onWriteToSocket;
-        final int i = flags;
-        final int i2 = datacenterId;
-        final int i3 = connetionType;
-        final boolean z = immediate;
-        Utilities.stageQueue.postRunnable(new Runnable() {
-
-            /* renamed from: org.telegram.tgnet.ConnectionsManager$2$1 */
-            class CLASSNAME implements RequestDelegateInternal {
-                CLASSNAME() {
-                }
-
-                public void run(long response, int errorCode, String errorText, int networkType) {
-                    Throwable e;
-                    TLObject resp = null;
-                    TL_error error = null;
-                    if (response != 0) {
-                        try {
-                            NativeByteBuffer buff = NativeByteBuffer.wrap(response);
-                            buff.reused = true;
-                            resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                        } catch (Exception e2) {
-                            e = e2;
-                            FileLog.m13e(e);
-                            return;
-                        }
-                    } else if (errorText != null) {
-                        TL_error error2 = new TL_error();
-                        try {
-                            error2.code = errorCode;
-                            error2.text = errorText;
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11e(tLObject + " got error " + error2.code + " " + error2.text);
-                            }
-                            error = error2;
-                        } catch (Exception e3) {
-                            e = e3;
-                            error = error2;
-                            FileLog.m13e(e);
-                            return;
-                        }
-                    }
-                    if (resp != null) {
-                        resp.networkType = networkType;
-                    }
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m10d("java received " + resp + " error = " + error);
-                    }
-                    final TLObject finalResponse = resp;
-                    final TL_error finalError = error;
-                    Utilities.stageQueue.postRunnable(new Runnable() {
-                        public void run() {
-                            requestDelegate.run(finalResponse, finalError);
-                            if (finalResponse != null) {
-                                finalResponse.freeResources();
-                            }
-                        }
-                    });
-                }
-            }
-
-            public void run() {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("send request " + tLObject + " with token = " + requestToken);
-                }
-                try {
-                    NativeByteBuffer buffer = new NativeByteBuffer(tLObject.getObjectSize());
-                    tLObject.serializeToStream(buffer);
-                    tLObject.freeResources();
-                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new CLASSNAME(), quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
-                } catch (Throwable e) {
-                    FileLog.m13e(e);
-                }
-            }
-        });
+        int requestToken = this.lastRequestToken.getAndIncrement();
+        Utilities.stageQueue.postRunnable(new ConnectionsManager$$Lambda$0(this, object, requestToken, onComplete, onQuickAck, onWriteToSocket, flags, datacenterId, connetionType, immediate));
         return requestToken;
+    }
+
+    final /* synthetic */ void lambda$sendRequest$2$ConnectionsManager(TLObject object, int requestToken, RequestDelegate onComplete, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connetionType, boolean immediate) {
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.m10d("send request " + object + " with token = " + requestToken);
+        }
+        try {
+            NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
+            object.serializeToStream(buffer);
+            object.freeResources();
+            native_sendRequest(this.currentAccount, buffer.address, new ConnectionsManager$$Lambda$10(object, onComplete), onQuickAck, onWriteToSocket, flags, datacenterId, connetionType, immediate, requestToken);
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    static final /* synthetic */ void lambda$null$1$ConnectionsManager(TLObject object, RequestDelegate onComplete, long response, int errorCode, String errorText, int networkType) {
+        Throwable e;
+        TLObject resp = null;
+        TL_error error = null;
+        if (response != 0) {
+            try {
+                NativeByteBuffer buff = NativeByteBuffer.wrap(response);
+                buff.reused = true;
+                resp = object.deserializeResponse(buff, buff.readInt32(true), true);
+            } catch (Exception e2) {
+                e = e2;
+                FileLog.m13e(e);
+                return;
+            }
+        } else if (errorText != null) {
+            TL_error error2 = new TL_error();
+            try {
+                error2.code = errorCode;
+                error2.text = errorText;
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m11e(object + " got error " + error2.code + " " + error2.text);
+                }
+                error = error2;
+            } catch (Exception e3) {
+                e = e3;
+                error = error2;
+                FileLog.m13e(e);
+                return;
+            }
+        }
+        if (resp != null) {
+            resp.networkType = networkType;
+        }
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.m10d("java received " + resp + " error = " + error);
+        }
+        Utilities.stageQueue.postRunnable(new ConnectionsManager$$Lambda$11(onComplete, resp, error));
+    }
+
+    static final /* synthetic */ void lambda$null$0$ConnectionsManager(RequestDelegate onComplete, TLObject finalResponse, TL_error finalError) {
+        onComplete.run(finalResponse, finalError);
+        if (finalResponse != null) {
+            finalResponse.freeResources();
+        }
     }
 
     public void cancelRequest(int token, boolean notifyServer) {
@@ -754,9 +687,9 @@ public class ConnectionsManager {
         native_setUserId(this.currentAccount, id);
     }
 
-    private void checkConnection() {
+    public void checkConnection() {
         native_setUseIpv6(this.currentAccount, useIpv6Address());
-        native_setNetworkAvailable(this.currentAccount, isNetworkOnline(), getCurrentNetworkType(), isConnectionSlow());
+        native_setNetworkAvailable(this.currentAccount, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), ApplicationLoader.isConnectionSlow());
     }
 
     public void setPushConnectionEnabled(boolean value) {
@@ -773,9 +706,8 @@ public class ConnectionsManager {
         if (preferences.getBoolean("proxy_enabled", false) && !TextUtils.isEmpty(proxyAddress)) {
             native_setProxySettings(this.currentAccount, proxyAddress, proxyPort, proxyUsername, proxyPassword, proxySecret);
         }
-        native_init(this.currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
+        native_init(this.currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
         checkConnection();
-        ApplicationLoader.applicationContext.registerReceiver(new CLASSNAME(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     public static void setLangCode(String langCode) {
@@ -863,71 +795,51 @@ public class ConnectionsManager {
         }
     }
 
-    public static void onUnparsedMessageReceived(long address, final int currentAccount) {
+    public static void onUnparsedMessageReceived(long address, int currentAccount) {
         try {
             NativeByteBuffer buff = NativeByteBuffer.wrap(address);
             buff.reused = true;
-            final TLObject message = TLClassStore.Instance().TLdeserialize(buff, buff.readInt32(true), true);
+            TLObject message = TLClassStore.Instance().TLdeserialize(buff, buff.readInt32(true), true);
             if (message instanceof Updates) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m10d("java received " + message);
                 }
                 KeepAliveJob.finishJob();
-                Utilities.stageQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        MessagesController.getInstance(currentAccount).processUpdates((Updates) message, false);
-                    }
-                });
+                Utilities.stageQueue.postRunnable(new ConnectionsManager$$Lambda$1(currentAccount, message));
+            } else if (BuildVars.LOGS_ENABLED) {
+                FileLog.m10d(String.format("java received unknown constructor 0x%x", new Object[]{Integer.valueOf(constructor)}));
             }
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
     }
 
-    public static void onUpdate(final int currentAccount) {
-        Utilities.stageQueue.postRunnable(new Runnable() {
-            public void run() {
-                MessagesController.getInstance(currentAccount).updateTimerProc();
-            }
-        });
+    public static void onUpdate(int currentAccount) {
+        Utilities.stageQueue.postRunnable(new ConnectionsManager$$Lambda$2(currentAccount));
     }
 
-    public static void onSessionCreated(final int currentAccount) {
-        Utilities.stageQueue.postRunnable(new Runnable() {
-            public void run() {
-                MessagesController.getInstance(currentAccount).getDifference();
-            }
-        });
+    public static void onSessionCreated(int currentAccount) {
+        Utilities.stageQueue.postRunnable(new ConnectionsManager$$Lambda$3(currentAccount));
     }
 
-    public static void onConnectionStateChanged(final int state, final int currentAccount) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                ConnectionsManager.getInstance(currentAccount).connectionState = state;
-                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didUpdateConnectionState, new Object[0]);
-            }
-        });
+    public static void onConnectionStateChanged(int state, int currentAccount) {
+        AndroidUtilities.runOnUIThread(new ConnectionsManager$$Lambda$4(currentAccount, state));
     }
 
-    public static void onLogout(final int currentAccount) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                if (UserConfig.getInstance(currentAccount).getClientUserId() != 0) {
-                    UserConfig.getInstance(currentAccount).clearConfig();
-                    MessagesController.getInstance(currentAccount).performLogout(0);
-                }
-            }
-        });
+    static final /* synthetic */ void lambda$onConnectionStateChanged$6$ConnectionsManager(int currentAccount, int state) {
+        getInstance(currentAccount).connectionState = state;
+        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didUpdateConnectionState, new Object[0]);
     }
 
-    public static int getCurrentNetworkType() {
-        if (isConnectedOrConnectingToWiFi()) {
-            return 1;
+    public static void onLogout(int currentAccount) {
+        AndroidUtilities.runOnUIThread(new ConnectionsManager$$Lambda$5(currentAccount));
+    }
+
+    static final /* synthetic */ void lambda$onLogout$7$ConnectionsManager(int currentAccount) {
+        if (UserConfig.getInstance(currentAccount).getClientUserId() != 0) {
+            UserConfig.getInstance(currentAccount).clearConfig();
+            MessagesController.getInstance(currentAccount).performLogout(0);
         }
-        if (isRoaming()) {
-            return 2;
-        }
-        return 0;
     }
 
     public static int getInitFlags() {
@@ -945,42 +857,42 @@ public class ConnectionsManager {
         }
     }
 
-    public static void onRequestNewServerIpAndPort(final int second, final int currentAccount) {
-        Utilities.stageQueue.postRunnable(new Runnable() {
-            public void run() {
-                if (ConnectionsManager.currentTask == null && ((second != 0 || Math.abs(ConnectionsManager.lastDnsRequestTime - System.currentTimeMillis()) >= 10000) && ConnectionsManager.isNetworkOnline())) {
-                    ConnectionsManager.lastDnsRequestTime = System.currentTimeMillis();
-                    if (second == 2) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m10d("start azure dns task");
-                        }
-                        AzureLoadTask task = new AzureLoadTask(currentAccount);
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        ConnectionsManager.currentTask = task;
-                    } else if (second == 1) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m10d("start dns txt task");
-                        }
-                        DnsTxtLoadTask task2 = new DnsTxtLoadTask(currentAccount);
-                        task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        ConnectionsManager.currentTask = task2;
-                    } else {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m10d("start firebase task");
-                        }
-                        FirebaseTask task3 = new FirebaseTask(currentAccount);
-                        task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                        ConnectionsManager.currentTask = task3;
-                    }
-                } else if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("don't start task, current task = " + ConnectionsManager.currentTask + " next task = " + second + " time diff = " + Math.abs(ConnectionsManager.lastDnsRequestTime - System.currentTimeMillis()) + " network = " + ConnectionsManager.isNetworkOnline());
+    public static void onRequestNewServerIpAndPort(int second, int currentAccount) {
+        Utilities.stageQueue.postRunnable(new ConnectionsManager$$Lambda$6(second, currentAccount));
+    }
+
+    static final /* synthetic */ void lambda$onRequestNewServerIpAndPort$8$ConnectionsManager(int second, int currentAccount) {
+        if (currentTask == null && ((second != 0 || Math.abs(lastDnsRequestTime - System.currentTimeMillis()) >= 10000) && ApplicationLoader.isNetworkOnline())) {
+            lastDnsRequestTime = System.currentTimeMillis();
+            if (second == 2) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m10d("start azure dns task");
                 }
+                AzureLoadTask task = new AzureLoadTask(currentAccount);
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                currentTask = task;
+            } else if (second == 1) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m10d("start dns txt task");
+                }
+                DnsTxtLoadTask task2 = new DnsTxtLoadTask(currentAccount);
+                task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                currentTask = task2;
+            } else {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m10d("start firebase task");
+                }
+                FirebaseTask task3 = new FirebaseTask(currentAccount);
+                task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                currentTask = task3;
             }
-        });
+        } else if (BuildVars.LOGS_ENABLED) {
+            FileLog.m10d("don't start task, current task = " + currentTask + " next task = " + second + " time diff = " + Math.abs(lastDnsRequestTime - System.currentTimeMillis()) + " network = " + ApplicationLoader.isNetworkOnline());
+        }
     }
 
     public static void onProxyError() {
-        AndroidUtilities.runOnUIThread(new CLASSNAME());
+        AndroidUtilities.runOnUIThread(ConnectionsManager$$Lambda$7.$instance);
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:20:0x00a6 A:{SYNTHETIC, Splitter: B:20:0x00a6} */
@@ -1102,17 +1014,13 @@ public class ConnectionsManager {
         }
     }
 
-    public static void onUpdateConfig(long address, final int currentAccount) {
+    public static void onUpdateConfig(long address, int currentAccount) {
         try {
             NativeByteBuffer buff = NativeByteBuffer.wrap(address);
             buff.reused = true;
-            final TL_config message = TL_config.TLdeserialize(buff, buff.readInt32(true), true);
+            TL_config message = TL_config.TLdeserialize(buff, buff.readInt32(true), true);
             if (message != null) {
-                Utilities.stageQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        MessagesController.getInstance(currentAccount).updateConfig(message);
-                    }
-                });
+                Utilities.stageQueue.postRunnable(new ConnectionsManager$$Lambda$8(currentAccount, message));
             }
         } catch (Throwable e) {
             FileLog.m13e(e);
@@ -1154,54 +1062,17 @@ public class ConnectionsManager {
         return i;
     }
 
-    public static boolean isRoaming() {
-        try {
-            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
-            if (netInfo != null) {
-                return netInfo.isRoaming();
-            }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
-        return false;
+    public void setIsUpdating(boolean value) {
+        AndroidUtilities.runOnUIThread(new ConnectionsManager$$Lambda$9(this, value));
     }
 
-    public static boolean isConnectedOrConnectingToWiFi() {
-        try {
-            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
-            State state = netInfo.getState();
-            if (netInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
-                return true;
+    final /* synthetic */ void lambda$setIsUpdating$11$ConnectionsManager(boolean value) {
+        if (this.isUpdating != value) {
+            this.isUpdating = value;
+            if (this.connectionState == 3) {
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didUpdateConnectionState, new Object[0]);
             }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
         }
-        return false;
-    }
-
-    public static boolean isConnectedToWiFi() {
-        try {
-            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
-            if (netInfo != null && netInfo.getState() == State.CONNECTED) {
-                return true;
-            }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
-        return false;
-    }
-
-    public void setIsUpdating(final boolean value) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                if (ConnectionsManager.this.isUpdating != value) {
-                    ConnectionsManager.this.isUpdating = value;
-                    if (ConnectionsManager.this.connectionState == 3) {
-                        NotificationCenter.getInstance(ConnectionsManager.this.currentAccount).postNotificationName(NotificationCenter.didUpdateConnectionState, new Object[0]);
-                    }
-                }
-            }
-        });
     }
 
     @SuppressLint({"NewApi"})
@@ -1266,46 +1137,6 @@ public class ConnectionsManager {
         } catch (Throwable e2) {
             FileLog.m13e(e2);
             return false;
-        }
-    }
-
-    public static boolean isConnectionSlow() {
-        try {
-            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
-            if (netInfo.getType() == 0) {
-                switch (netInfo.getSubtype()) {
-                    case 1:
-                    case 2:
-                    case 4:
-                    case 7:
-                    case 11:
-                        return true;
-                }
-            }
-        } catch (Throwable th) {
-        }
-        return false;
-    }
-
-    public static boolean isNetworkOnline() {
-        try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
-            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-            if (netInfo != null && (netInfo.isConnectedOrConnecting() || netInfo.isAvailable())) {
-                return true;
-            }
-            netInfo = connectivityManager.getNetworkInfo(0);
-            if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-                return true;
-            }
-            netInfo = connectivityManager.getNetworkInfo(1);
-            if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
-                return false;
-            }
-            return true;
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-            return true;
         }
     }
 }

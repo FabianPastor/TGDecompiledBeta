@@ -377,6 +377,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     private byte[] savedPasswordHash;
     private byte[] savedSaltedPassword;
     private TextSettingsCell scanDocumentCell;
+    private int scrollHeight;
     private ScrollView scrollView;
     private ShadowSectionCell sectionCell;
     private ShadowSectionCell sectionCell2;
@@ -1248,16 +1249,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         private int verificationType;
         private boolean waitingForEvent;
 
-        /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$2 */
+        /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$4 */
         class CLASSNAME extends TimerTask {
             CLASSNAME() {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$2$$Lambda$0(this));
+                AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$4$$Lambda$0(this));
             }
 
-            final /* synthetic */ void lambda$run$0$PassportActivity$PhoneConfirmationView$2() {
+            final /* synthetic */ void lambda$run$0$PassportActivity$PhoneConfirmationView$4() {
                 double currentTime = (double) System.currentTimeMillis();
                 double diff = currentTime - PhoneConfirmationView.this.lastCodeTime;
                 PhoneConfirmationView.this.lastCodeTime = currentTime;
@@ -1270,10 +1271,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$3 */
+        /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$5 */
         class CLASSNAME extends TimerTask {
 
-            /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$3$1 */
+            /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$5$1 */
             class CLASSNAME implements Runnable {
                 CLASSNAME() {
                 }
@@ -1314,7 +1315,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             TL_auth_resendCode req = new TL_auth_resendCode();
                             req.phone_number = PhoneConfirmationView.this.phone;
                             req.phone_code_hash = PhoneConfirmationView.this.phoneHash;
-                            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new PassportActivity$PhoneConfirmationView$3$1$$Lambda$0(this), 2);
+                            ConnectionsManager.getInstance(PassportActivity.this.currentAccount).sendRequest(req, new PassportActivity$PhoneConfirmationView$5$1$$Lambda$0(this), 2);
                         } else if (PhoneConfirmationView.this.nextType == 3) {
                             AndroidUtilities.setWaitingForSms(false);
                             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
@@ -1325,13 +1326,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
                 }
 
-                final /* synthetic */ void lambda$run$1$PassportActivity$PhoneConfirmationView$3$1(TLObject response, TL_error error) {
+                final /* synthetic */ void lambda$run$1$PassportActivity$PhoneConfirmationView$5$1(TLObject response, TL_error error) {
                     if (error != null && error.text != null) {
-                        AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$3$1$$Lambda$1(this, error));
+                        AndroidUtilities.runOnUIThread(new PassportActivity$PhoneConfirmationView$5$1$$Lambda$1(this, error));
                     }
                 }
 
-                final /* synthetic */ void lambda$null$0$PassportActivity$PhoneConfirmationView$3$1(TL_error error) {
+                final /* synthetic */ void lambda$null$0$PassportActivity$PhoneConfirmationView$5$1(TL_error error) {
                     PhoneConfirmationView.this.lastError = error.text;
                 }
             }
@@ -1411,16 +1412,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
             this.codeFieldContainer = new LinearLayout(context);
             this.codeFieldContainer.setOrientation(0);
-            addView(this.codeFieldContainer, LayoutHelper.createLinear(-2, 36, 1, 0, 30, 0, 0));
+            addView(this.codeFieldContainer, LayoutHelper.createLinear(-2, 36, 1));
             if (this.verificationType == 3) {
                 this.codeFieldContainer.setVisibility(8);
             }
-            this.timeText = new TextView(context);
+            this.timeText = new TextView(context, PassportActivity.this) {
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), Integer.MIN_VALUE));
+                }
+            };
             this.timeText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.timeText.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
             if (this.verificationType == 3) {
                 this.timeText.setTextSize(1, 14.0f);
-                addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 30, 0, 0));
+                addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
                 this.progressView = new ProgressView(context);
                 this.timeText.setGravity(LocaleController.isRTL ? 5 : 3);
                 addView(this.progressView, LayoutHelper.createLinear(-1, 3, 0.0f, 12.0f, 0.0f, 0.0f));
@@ -1428,9 +1433,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.timeText.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, AndroidUtilities.m9dp(10.0f));
                 this.timeText.setTextSize(1, 15.0f);
                 this.timeText.setGravity(49);
-                addView(this.timeText, LayoutHelper.createLinear(-2, -2, 49, 0, 30, 0, 0));
+                addView(this.timeText, LayoutHelper.createLinear(-2, -2, 49));
             }
-            this.problemText = new TextView(context);
+            this.problemText = new TextView(context, PassportActivity.this) {
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), Integer.MIN_VALUE));
+                }
+            };
             this.problemText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             this.problemText.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
             this.problemText.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, AndroidUtilities.m9dp(10.0f));
@@ -1441,7 +1450,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             } else {
                 this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             }
-            addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49, 0, 40, 0, 0));
+            addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49));
             this.problemText.setOnClickListener(new PassportActivity$PhoneConfirmationView$$Lambda$0(this));
         }
 
@@ -1474,16 +1483,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             if (this.verificationType != 3 && this.blueImageView != null) {
-                int innerHeight = ((this.blueImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getHeight()) + AndroidUtilities.m9dp(35.0f);
-                int height = MeasureSpec.getSize(heightMeasureSpec);
-                int requiredHeight = AndroidUtilities.m9dp(110.0f);
+                int innerHeight = ((this.blueImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getMeasuredHeight()) + AndroidUtilities.m9dp(35.0f);
+                int requiredHeight = AndroidUtilities.m9dp(80.0f);
                 int maxHeight = AndroidUtilities.m9dp(291.0f);
-                if (height - innerHeight < requiredHeight) {
+                if (PassportActivity.this.scrollHeight - innerHeight < requiredHeight) {
                     setMeasuredDimension(getMeasuredWidth(), innerHeight + requiredHeight);
-                } else if (height > maxHeight) {
+                } else if (PassportActivity.this.scrollHeight > maxHeight) {
                     setMeasuredDimension(getMeasuredWidth(), maxHeight);
                 } else {
-                    setMeasuredDimension(getMeasuredWidth(), height);
+                    setMeasuredDimension(getMeasuredWidth(), PassportActivity.this.scrollHeight);
                 }
             }
         }
@@ -1493,7 +1501,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (this.verificationType != 3 && this.blueImageView != null) {
                 int h;
                 int bottom = this.confirmTextView.getBottom();
-                int height = (b - t) - bottom;
+                int height = getMeasuredHeight() - bottom;
                 if (this.problemText.getVisibility() == 0) {
                     h = this.problemText.getMeasuredHeight();
                     t = (bottom + height) - h;
@@ -2451,6 +2459,18 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             View CLASSNAME = new ScrollView(context) {
                 protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
                     return false;
+                }
+
+                public boolean requestChildRectangleOnScreen(View child, Rect rectangle, boolean immediate) {
+                    if (PassportActivity.this.currentViewNum == 1 || PassportActivity.this.currentViewNum == 2 || PassportActivity.this.currentViewNum == 4) {
+                        rectangle.bottom += AndroidUtilities.m9dp(40.0f);
+                    }
+                    return super.requestChildRectangleOnScreen(child, rectangle, immediate);
+                }
+
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    PassportActivity.this.scrollHeight = MeasureSpec.getSize(heightMeasureSpec) - AndroidUtilities.m9dp(30.0f);
+                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 }
             };
             this.scrollView = CLASSNAME;

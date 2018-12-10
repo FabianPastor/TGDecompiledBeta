@@ -314,7 +314,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
 
     public void didReceivedNotification(int id, int account, Object... args) {
         CallLogRow row;
-        if (id == NotificationCenter.didReceivedNewMessages && this.firstLoaded) {
+        if (id == NotificationCenter.didReceiveNewMessages && this.firstLoaded) {
             Iterator it = args[1].iterator();
             while (it.hasNext()) {
                 MessageObject msg = (MessageObject) it.next();
@@ -367,14 +367,14 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         getCalls(0, 50);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didReceiveNewMessages);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didReceiveNewMessages);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagesDeleted);
     }
 

@@ -55,7 +55,10 @@ public class LinkPath extends Path {
         }
         float lineRight = this.currentLayout.getLineRight(this.currentLine);
         float lineLeft = this.currentLayout.getLineLeft(this.currentLine);
-        if (left < lineRight) {
+        if (left >= lineRight) {
+            return;
+        }
+        if (left > lineLeft || right > lineLeft) {
             if (right > lineRight) {
                 right = lineRight;
             }

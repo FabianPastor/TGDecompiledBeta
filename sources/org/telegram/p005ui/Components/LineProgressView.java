@@ -10,15 +10,15 @@ import org.telegram.messenger.AndroidUtilities;
 
 /* renamed from: org.telegram.ui.Components.LineProgressView */
 public class LineProgressView extends View {
-    private static DecelerateInterpolator decelerateInterpolator = null;
-    private static Paint progressPaint = null;
+    private static DecelerateInterpolator decelerateInterpolator;
+    private static Paint progressPaint;
     private float animatedAlphaValue = 1.0f;
-    private float animatedProgressValue = 0.0f;
-    private float animationProgressStart = 0.0f;
+    private float animatedProgressValue;
+    private float animationProgressStart;
     private int backColor;
-    private float currentProgress = 0.0f;
-    private long currentProgressTime = 0;
-    private long lastUpdateTime = 0;
+    private float currentProgress;
+    private long currentProgressTime;
+    private long lastUpdateTime;
     private int progressColor;
 
     public LineProgressView(Context context) {

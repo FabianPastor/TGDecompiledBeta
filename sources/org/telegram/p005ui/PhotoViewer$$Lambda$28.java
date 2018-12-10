@@ -12,6 +12,6 @@ final /* synthetic */ class PhotoViewer$$Lambda$28 implements OnClickListener {
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$switchToEditMode$35$PhotoViewer(view);
+        this.arg$1.lambda$switchToEditMode$34$PhotoViewer(view);
     }
 }

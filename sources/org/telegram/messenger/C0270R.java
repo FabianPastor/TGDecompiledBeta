@@ -391,6 +391,7 @@ public final class CLASSNAMER {
         public static final int ic_storage_gallery = NUM;
         public static final int ic_video = NUM;
         public static final int ic_volume_up_white_24dp = NUM;
+        public static final int icplaceholder = NUM;
         public static final int inline_video_pause = NUM;
         public static final int inline_video_play = NUM;
         public static final int instant_camera = NUM;
@@ -450,11 +451,15 @@ public final class CLASSNAMER {
         public static final int logo_middle = NUM;
         public static final int map_pin = NUM;
         public static final int media_doc_blue = NUM;
+        public static final int media_doc_blue_b = NUM;
         public static final int media_doc_green = NUM;
+        public static final int media_doc_green_b = NUM;
         public static final int media_doc_load = NUM;
         public static final int media_doc_pause = NUM;
         public static final int media_doc_red = NUM;
+        public static final int media_doc_red_b = NUM;
         public static final int media_doc_yellow = NUM;
+        public static final int media_doc_yellow_b = NUM;
         public static final int mentionbutton = NUM;
         public static final int mentionchatslist = NUM;
         public static final int menu_broadcast = NUM;
@@ -572,6 +577,7 @@ public final class CLASSNAMER {
         public static final int photocheck = NUM;
         public static final int photos_arrow = NUM;
         public static final int photos_group = NUM;
+        public static final int photos_header_shadow = NUM;
         public static final int photos_rounded = NUM;
         public static final int phototime = NUM;
         public static final int photoview_placeholder = NUM;
@@ -585,6 +591,7 @@ public final class CLASSNAMER {
         public static final int pl_shuffle = NUM;
         public static final int place_x = NUM;
         public static final int play_big = NUM;
+        public static final int play_mini_video = NUM;
         public static final int player = NUM;
         public static final int plus = NUM;
         public static final int popup_fixed = NUM;
@@ -600,6 +607,7 @@ public final class CLASSNAMER {
         public static final int profile_link = NUM;
         public static final int profile_list = NUM;
         public static final int profile_message = NUM;
+        public static final int profile_newmsg = NUM;
         public static final int profile_phone = NUM;
         public static final int profile_photos = NUM;
         public static final int profile_voice = NUM;
@@ -2196,6 +2204,7 @@ public final class CLASSNAMER {
         public static final int OnlyWhenScreenOn = NUM;
         public static final int Open = NUM;
         public static final int OpenChannel = NUM;
+        public static final int OpenFile = NUM;
         public static final int OpenGroup = NUM;
         public static final int OpenInBrowser = NUM;
         public static final int OpenInExternalApp = NUM;
@@ -2494,6 +2503,7 @@ public final class CLASSNAMER {
         public static final int PermissionXiaomiLockscreen = NUM;
         public static final int Phone = NUM;
         public static final int PhoneCopied = NUM;
+        public static final int PhoneHidden = NUM;
         public static final int PhoneHome = NUM;
         public static final int PhoneMain = NUM;
         public static final int PhoneMobile = NUM;
@@ -2777,6 +2787,7 @@ public final class CLASSNAMER {
         public static final int Sharpen = NUM;
         public static final int Short = NUM;
         public static final int ShortMessageLifetimeForever = NUM;
+        public static final int ShowAllFiles = NUM;
         public static final int ShowAllMedia = NUM;
         public static final int ShowInChat = NUM;
         public static final int ShowNearbyPlaces = NUM;
@@ -2848,6 +2859,7 @@ public final class CLASSNAMER {
         public static final int SystemRoot = NUM;
         public static final int TapHereGifs = NUM;
         public static final int TapToChangePhone = NUM;
+        public static final int TapToDownload = NUM;
         public static final int TelegramContacts_few = NUM;
         public static final int TelegramContacts_many = NUM;
         public static final int TelegramContacts_one = NUM;
@@ -3135,7 +3147,8 @@ public final class CLASSNAMER {
         public static final int formatterDay12H = NUM;
         public static final int formatterDay24H = NUM;
         public static final int formatterMonth = NUM;
-        public static final int formatterMonthYear = NUM;
+        public static final int formatterMonthName = NUM;
+        public static final int formatterMonthYear2 = NUM;
         public static final int formatterStats12H = NUM;
         public static final int formatterStats24H = NUM;
         public static final int formatterWeek = NUM;

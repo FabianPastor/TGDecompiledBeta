@@ -1176,9 +1176,17 @@ public class MessageObject {
         } else if (isMediaEmpty()) {
             this.messageText = message.message;
         } else if (message.media instanceof TL_messageMediaPhoto) {
-            this.messageText = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+            if (message.media.ttl_seconds == 0 || (message instanceof TL_message_secret)) {
+                this.messageText = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+            } else {
+                this.messageText = LocaleController.getString("AttachDestructingPhoto", R.string.AttachDestructingPhoto);
+            }
         } else if (isVideo() || ((message.media instanceof TL_messageMediaDocument) && (message.media.document instanceof TL_documentEmpty) && message.media.ttl_seconds != 0)) {
-            this.messageText = LocaleController.getString("AttachVideo", R.string.AttachVideo);
+            if (message.media.ttl_seconds == 0 || (message instanceof TL_message_secret)) {
+                this.messageText = LocaleController.getString("AttachVideo", R.string.AttachVideo);
+            } else {
+                this.messageText = LocaleController.getString("AttachDestructingVideo", R.string.AttachDestructingVideo);
+            }
         } else if (isVoice()) {
             this.messageText = LocaleController.getString("AttachAudio", R.string.AttachAudio);
         } else if (isRoundVideo()) {
@@ -2310,8 +2318,27 @@ public class MessageObject {
     }
 
     public static boolean canPreviewDocument(Document document) {
-        String mime = (document == null || document.mime_type == null) ? null : document.mime_type.toLowerCase();
-        return mime != null && (mime.equals("image/png") || mime.equals("image/jpg") || mime.equals("image/jpeg"));
+        if (document == null || document.mime_type == null) {
+            return false;
+        }
+        String mime = document.mime_type.toLowerCase();
+        if (document.thumb == null || (document.thumb instanceof TL_photoSizeEmpty) || mime == null) {
+            return false;
+        }
+        if (!mime.equals("image/png") && !mime.equals("image/jpg") && !mime.equals("image/jpeg")) {
+            return false;
+        }
+        for (int a = 0; a < document.attributes.size(); a++) {
+            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+            if (attribute instanceof TL_documentAttributeImageSize) {
+                TL_documentAttributeImageSize size = (TL_documentAttributeImageSize) attribute;
+                if (size.f87w >= 6000 || size.f86h >= 6000) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isRoundVideoDocument(Document document) {
@@ -2995,14 +3022,52 @@ public class MessageObject {
         return hasUrls2;
     }
 
+    public boolean needDrawShareButton() {
+        if (this.eventId != 0) {
+            return false;
+        }
+        if (this.messageOwner.fwd_from != null && !isOutOwner() && this.messageOwner.fwd_from.saved_from_peer != null && getDialogId() == ((long) UserConfig.getInstance(this.currentAccount).getClientUserId())) {
+            return true;
+        }
+        if (this.type == 13) {
+            return false;
+        }
+        if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.channel_id != 0 && !isOutOwner()) {
+            return true;
+        }
+        if (isFromUser()) {
+            if ((this.messageOwner.media instanceof TL_messageMediaEmpty) || this.messageOwner.media == null || ((this.messageOwner.media instanceof TL_messageMediaWebPage) && !(this.messageOwner.media.webpage instanceof TL_webPage))) {
+                return false;
+            }
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.messageOwner.from_id));
+            if (user != null && user.bot) {
+                return true;
+            }
+            if (!isOut()) {
+                if ((this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice)) {
+                    return true;
+                }
+                if (isMegagroup()) {
+                    Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.to_id.channel_id));
+                    if (chat == null || chat.username == null || chat.username.length() <= 0 || (this.messageOwner.media instanceof TL_messageMediaContact) || (this.messageOwner.media instanceof TL_messageMediaGeo)) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        } else if ((this.messageOwner.from_id < 0 || this.messageOwner.post) && this.messageOwner.to_id.channel_id != 0 && ((this.messageOwner.via_bot_id == 0 && this.messageOwner.reply_to_msg_id == 0) || this.type != 13)) {
+            return true;
+        }
+        return false;
+    }
+
     public int getMaxMessageTextWidth(User fromUser) {
-        boolean needShare = this.eventId == 0 && !isOutOwner() && (!(this.messageOwner.fwd_from == null || (this.messageOwner.fwd_from.saved_from_peer == null && this.messageOwner.fwd_from.from_id == 0 && this.messageOwner.fwd_from.channel_id == 0)) || (this.messageOwner.from_id > 0 && (this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice))));
         this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
         int i = this.generatedWithMinSize;
-        float f = (needShare || this.eventId != 0) ? 132.0f : 80.0f;
+        float f = (!needDrawAvatar() || isOutOwner()) ? 80.0f : 132.0f;
         int maxWidth = i - AndroidUtilities.m9dp(f);
-        if ((fromUser != null && fromUser.bot) || ((isMegagroup() || !(this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.channel_id == 0)) && !isOut())) {
-            maxWidth -= AndroidUtilities.m9dp(20.0f);
+        if (needDrawShareButton() && !isOutOwner()) {
+            maxWidth -= AndroidUtilities.m9dp(10.0f);
         }
         if (this.messageOwner.media instanceof TL_messageMediaGame) {
             return maxWidth - AndroidUtilities.m9dp(10.0f);
@@ -3243,7 +3308,7 @@ public class MessageObject {
     }
 
     public boolean needDrawAvatar() {
-        return (!isFromUser() && this.eventId == 0 && (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null)) ? false : true;
+        return (((!isMegagroup() && (this.messageOwner.to_id == null || this.messageOwner.to_id.chat_id == 0)) || !isFromUser()) && this.eventId == 0 && (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null)) ? false : true;
     }
 
     public boolean isFromUser() {
@@ -3962,6 +4027,9 @@ public class MessageObject {
             document = this.messageOwner.media.webpage.document;
         } else {
             document = this.messageOwner.media.document;
+        }
+        if (document == null) {
+            return 0;
         }
         for (int a = 0; a < document.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);

@@ -331,6 +331,9 @@ public class BaseFragment {
     protected void onBecomeFullyVisible() {
     }
 
+    protected void onBecomeFullyHidden() {
+    }
+
     protected AnimatorSet onCustomTransitionAnimation(boolean isOpen, Runnable callback) {
         return null;
     }

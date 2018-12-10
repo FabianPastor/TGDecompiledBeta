@@ -18,6 +18,7 @@ import android.support.annotation.Keep;
 import android.view.View;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.p005ui.Components.AnimatedFileDrawable;
+import org.telegram.p005ui.Components.RecyclableDrawable;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
@@ -221,7 +222,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     FileLocation location = (FileLocation) fileLocation;
                     key = location.volume_id + "_" + location.local_id;
                 } else if (fileLocation instanceof WebFile) {
-                    key = Utilities.MD5(((WebFile) fileLocation).url);
+                    key = "hash" + ((WebFile) fileLocation).url.hashCode();
                 } else {
                     Document location2 = (Document) fileLocation;
                     if (location2.dc_id != 0) {
@@ -231,7 +232,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     }
                 }
             } else if (httpUrl != null) {
-                key = Utilities.MD5(httpUrl);
+                key = "hash" + httpUrl.hashCode();
             }
             if (!(key == null || filter == null)) {
                 key = key + "@" + filter;
@@ -429,6 +430,9 @@ public class ImageReceiver implements NotificationCenterDelegate {
         ImageLoader.getInstance().cancelLoadingForImageReceiver(this, 0);
         for (int a = 0; a < 3; a++) {
             recycleBitmap(null, a);
+        }
+        if (this.staticThumb instanceof RecyclableDrawable) {
+            this.staticThumb.recycle();
         }
         this.staticThumb = bitmap;
         if (this.roundRadius == 0 || !(bitmap instanceof BitmapDrawable)) {
@@ -822,7 +826,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 checkAlphaAnimation(z);
                 return true;
             } else if (this.staticThumb != null) {
-                drawDrawable(canvas, this.staticThumb, 255, null);
+                drawDrawable(canvas, this.staticThumb, (int) (this.overrideAlpha * 255.0f), null);
                 checkAlphaAnimation(animationNotReady);
                 return true;
             } else {
@@ -1052,6 +1056,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
 
     public int getImageHeight() {
         return this.imageH;
+    }
+
+    public float getImageAspectRatio() {
+        return this.orientation % 180 != 0 ? ((float) this.drawRegion.height()) / ((float) this.drawRegion.width()) : ((float) this.drawRegion.width()) / ((float) this.drawRegion.height());
     }
 
     public String getExt() {

@@ -19,8 +19,8 @@ public class MediaActionDrawable extends Drawable {
     public static final int ICON_PLAY = 0;
     private static final int[] arrowMiniPath1 = new int[]{11, 16, 15, 12, 15, 14, 20, 14, 20, 16};
     private static final int[] arrowMiniPath2 = new int[]{11, 16, 15, 20, 15, 18, 20, 18, 20, 16};
-    private static final int[] arrowPath1 = new int[]{7, 16, 13, 11, 13, 14, 25, 14, 25, 16};
-    private static final int[] arrowPath2 = new int[]{7, 16, 13, 21, 13, 18, 25, 18, 25, 16};
+    private static final int[] arrowPath1 = new int[]{7, 16, 14, 9, 14, 13, 24, 13, 24, 16};
+    private static final int[] arrowPath2 = new int[]{7, 16, 14, 23, 14, 19, 24, 19, 24, 16};
     private static final int arrowRotation = -90;
     private static final int[] cancelMiniPath1 = new int[]{12, 13, 12, 13, 13, 12, 20, 19, 19, 20};
     private static final int[] cancelMiniPath2 = new int[]{12, 19, 12, 19, 13, 20, 20, 13, 19, 12};

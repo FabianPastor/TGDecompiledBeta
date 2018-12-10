@@ -1,14 +1,20 @@
 package org.telegram.p005ui;
 
-/* renamed from: org.telegram.ui.SettingsActivity$$Lambda$12 */
-final /* synthetic */ class SettingsActivity$$Lambda$12 implements Runnable {
-    private final SettingsActivity arg$1;
+import android.view.View;
+import android.view.View.OnClickListener;
+import org.telegram.p005ui.ActionBar.BottomSheet.Builder;
 
-    SettingsActivity$$Lambda$12(SettingsActivity settingsActivity) {
+/* renamed from: org.telegram.ui.SettingsActivity$$Lambda$12 */
+final /* synthetic */ class SettingsActivity$$Lambda$12 implements OnClickListener {
+    private final SettingsActivity arg$1;
+    private final Builder arg$2;
+
+    SettingsActivity$$Lambda$12(SettingsActivity settingsActivity, Builder builder) {
         this.arg$1 = settingsActivity;
+        this.arg$2 = builder;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$0$SettingsActivity();
+    public void onClick(View view) {
+        this.arg$1.lambda$null$2$SettingsActivity(this.arg$2, view);
     }
 }

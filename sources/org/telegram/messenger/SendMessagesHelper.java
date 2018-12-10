@@ -1,6 +1,8 @@
 package org.telegram.messenger;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -33,6 +35,8 @@ import com.google.android.exoplayer2.util.MimeTypes;
 import com.googlecode.mp4parser.util.Matrix;
 import com.googlecode.mp4parser.util.Path;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel.MapMode;
@@ -40,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -1598,7 +1603,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (!updates.updates.isEmpty()) {
                 MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
             }
-            StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, sentCount);
+            StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), 1, sentCount);
         } else {
             AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$57(this, error, req));
         }
@@ -3579,7 +3584,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                     if (!file.exists()) {
                         putToDelayedMessages(FileLoader.getAttachFileName(message.location), message);
-                        FileLoader.getInstance(this.currentAccount).loadFile(message.location, message, "jpg", 0, 0);
+                        FileLoader.getInstance(this.currentAccount).loadFile(message.location, message, "jpg", 0, 2, 0);
                         return;
                     }
                 }
@@ -3653,7 +3658,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                 }
                 putToDelayedMessages(FileLoader.getAttachFileName(document), message);
-                FileLoader.getInstance(this.currentAccount).loadFile(document, message, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(document, message, 2, 0);
                 return;
             }
             location = message.obj.messageOwner.attachPath;
@@ -3700,7 +3705,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     return;
                 }
                 putToDelayedMessages(FileLoader.getAttachFileName(document), message);
-                FileLoader.getInstance(this.currentAccount).loadFile(document, message, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(document, message, 2, 0);
             }
         } else if (message.type == 3) {
             location = message.obj.messageOwner.attachPath;
@@ -4064,7 +4069,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 message.unread = value.intValue() < message.f104id;
                 updateMediaPaths(msgObj, message, originalPath, false);
                 if (null == null) {
-                    StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
+                    StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), 1, 1);
                     newMsgObj.send_state = 0;
                     NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.f104id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
                     MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$47(this, newMsgObj, oldId, sentMessages, grouped_id));
@@ -4334,7 +4339,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 LocationController.getInstance(this.currentAccount).addSharingLocation(newMsgObj.dialog_id, newMsgObj.f104id, newMsgObj.media.period, newMsgObj);
             }
             if (!isSentError) {
-                StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
+                StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), 1, 1);
                 newMsgObj.send_state = 0;
                 NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
                 int i2 = NotificationCenter.messageReceivedByServer;
@@ -5070,7 +5075,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    public static void prepareSendingDocument(String path, String originalPath, Uri uri, String mine, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent, MessageObject editingMessageObject) {
+    public static void prepareSendingDocument(String path, String originalPath, Uri uri, String caption, String mine, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent, MessageObject editingMessageObject) {
         if ((path != null && originalPath != null) || uri != null) {
             ArrayList<String> paths = new ArrayList();
             ArrayList<String> originalPaths = new ArrayList();
@@ -5083,7 +5088,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 paths.add(path);
                 originalPaths.add(originalPath);
             }
-            prepareSendingDocuments(paths, originalPaths, uris, mine, dialog_id, reply_to_msg, inputContent, editingMessageObject);
+            prepareSendingDocuments(paths, originalPaths, uris, caption, mine, dialog_id, reply_to_msg, inputContent, editingMessageObject);
         }
     }
 
@@ -5135,27 +5140,27 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         getInstance(currentAccount).sendMessage(documentFinal, null, messageObject.messageOwner.attachPath, dialog_id, reply_to_msg, null, null, null, params, 0, parentFinal);
     }
 
-    public static void prepareSendingDocuments(ArrayList<String> paths, ArrayList<String> originalPaths, ArrayList<Uri> uris, String mime, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent, MessageObject editingMessageObject) {
+    public static void prepareSendingDocuments(ArrayList<String> paths, ArrayList<String> originalPaths, ArrayList<Uri> uris, String caption, String mime, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent, MessageObject editingMessageObject) {
         if (paths != null || originalPaths != null || uris != null) {
             if (paths == null || originalPaths == null || paths.size() == originalPaths.size()) {
-                new Thread(new SendMessagesHelper$$Lambda$16(paths, UserConfig.selectedAccount, originalPaths, mime, dialog_id, reply_to_msg, editingMessageObject, uris, inputContent)).start();
+                new Thread(new SendMessagesHelper$$Lambda$16(paths, UserConfig.selectedAccount, originalPaths, mime, dialog_id, reply_to_msg, caption, editingMessageObject, uris, inputContent)).start();
             }
         }
     }
 
-    static final /* synthetic */ void lambda$prepareSendingDocuments$47$SendMessagesHelper(ArrayList paths, int currentAccount, ArrayList originalPaths, String mime, long dialog_id, MessageObject reply_to_msg, MessageObject editingMessageObject, ArrayList uris, InputContentInfoCompat inputContent) {
+    static final /* synthetic */ void lambda$prepareSendingDocuments$47$SendMessagesHelper(ArrayList paths, int currentAccount, ArrayList originalPaths, String mime, long dialog_id, MessageObject reply_to_msg, String caption, MessageObject editingMessageObject, ArrayList uris, InputContentInfoCompat inputContent) {
         int a;
         boolean error = false;
         if (paths != null) {
             for (a = 0; a < paths.size(); a++) {
-                if (!prepareSendingDocumentInternal(currentAccount, (String) paths.get(a), (String) originalPaths.get(a), null, mime, dialog_id, reply_to_msg, null, null, editingMessageObject)) {
+                if (!prepareSendingDocumentInternal(currentAccount, (String) paths.get(a), (String) originalPaths.get(a), null, mime, dialog_id, reply_to_msg, caption, null, editingMessageObject)) {
                     error = true;
                 }
             }
         }
         if (uris != null) {
             for (a = 0; a < uris.size(); a++) {
-                if (!prepareSendingDocumentInternal(currentAccount, null, null, (Uri) uris.get(a), mime, dialog_id, reply_to_msg, null, null, editingMessageObject)) {
+                if (!prepareSendingDocumentInternal(currentAccount, null, null, (Uri) uris.get(a), mime, dialog_id, reply_to_msg, caption, null, editingMessageObject)) {
                     error = true;
                 }
             }
@@ -5621,7 +5626,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         } else if (object instanceof TL_document) {
             TL_document document = (TL_document) object;
             if (MessageObject.isVideoDocument(document) && !(document.thumb instanceof TL_photoSizeEmpty) && !FileLoader.getPathToAttach(document.thumb, true).exists()) {
-                Bitmap thumb = createVideoThumbnail(path, startTime);
+                Bitmap thumb = createVideoThumbnail(path, startTime, false);
                 if (thumb == null) {
                     thumb = ThumbnailUtils.createVideoThumbnail(path, 1);
                 }
@@ -5636,8 +5641,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    /* JADX WARNING: Missing block: B:271:0x0953, code:
-            if (r89.endsWith(".webp") != false) goto L_0x0955;
+    /* JADX WARNING: Missing block: B:274:0x095a, code:
+            if (r105.endsWith(".webp") != false) goto L_0x095c;
+     */
+    /* JADX WARNING: Missing block: B:347:0x0b37, code:
+            if (r113.size() == 1) goto L_0x0b39;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     static final /* synthetic */ void lambda$prepareSendingMedia$59$SendMessagesHelper(ArrayList media, long dialog_id, int currentAccount, boolean forceDocument, boolean groupPhotos, MessageObject editingMessageObject, MessageObject reply_to_msg, InputContentInfoCompat inputContent) {
@@ -5905,7 +5913,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                     if (document == null) {
                         TL_documentAttributeVideo attributeVideo;
-                        thumb = createVideoThumbnail(info.path, startTime);
+                        thumb = createVideoThumbnail(info.path, startTime, false);
                         if (thumb == null) {
                             thumb = ThumbnailUtils.createVideoThumbnail(info.path, 1);
                         }
@@ -5994,7 +6002,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 boolean isDocument = false;
                 if (forceDocument || ImageLoader.shouldSendImageAsDocument(info.path, info.uri)) {
                     isDocument = true;
-                    extension = FileLoader.getFileExtension(new File(tempPath));
+                    if (tempPath != null) {
+                        extension = FileLoader.getFileExtension(new File(tempPath));
+                    } else {
+                        extension = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
                 } else {
                     if (tempPath != null) {
                         if (!tempPath.endsWith(".gif")) {
@@ -6080,6 +6092,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         photoFinal = photo;
                         parentFinal = parentObject;
                         params = new HashMap();
+                        Bitmap[] bitmapFinal = new Bitmap[1];
+                        String[] keyFinal = new String[1];
                         boolean z = (info.masks == null || info.masks.isEmpty()) ? false : true;
                         photo.has_stickers = z;
                         if (z) {
@@ -6095,6 +6109,69 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             params.put("originalPath", originalPath);
                         }
                         if (groupPhotos) {
+                            try {
+                            } catch (Throwable e22) {
+                                FileLog.m13e(e22);
+                            }
+                        }
+                        PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(photoFinal.sizes, AndroidUtilities.getPhotoSize());
+                        if (currentPhotoObject != null) {
+                            int photoWidth;
+                            int maxPhotoWidth;
+                            if (AndroidUtilities.isTablet()) {
+                                photoWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.7f);
+                                maxPhotoWidth = photoWidth;
+                            } else {
+                                photoWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
+                                maxPhotoWidth = photoWidth;
+                            }
+                            int photoHeight = photoWidth + AndroidUtilities.m9dp(100.0f);
+                            if (photoWidth > AndroidUtilities.getPhotoSize()) {
+                                photoWidth = AndroidUtilities.getPhotoSize();
+                            }
+                            if (photoHeight > AndroidUtilities.getPhotoSize()) {
+                                photoHeight = AndroidUtilities.getPhotoSize();
+                            }
+                            float scale = ((float) currentPhotoObject.f108w) / ((float) photoWidth);
+                            int w = (int) (((float) currentPhotoObject.f108w) / scale);
+                            int h = (int) (((float) currentPhotoObject.f107h) / scale);
+                            if (w == 0) {
+                                w = AndroidUtilities.m9dp(150.0f);
+                            }
+                            if (h == 0) {
+                                h = AndroidUtilities.m9dp(150.0f);
+                            }
+                            if (h > photoHeight) {
+                                h = photoHeight;
+                                w = (int) (((float) w) / (((float) h) / ((float) h)));
+                            } else if (h < AndroidUtilities.m9dp(120.0f)) {
+                                h = AndroidUtilities.m9dp(120.0f);
+                                float hScale = ((float) currentPhotoObject.f107h) / ((float) h);
+                                if (((float) currentPhotoObject.f108w) / hScale < ((float) photoWidth)) {
+                                    w = (int) (((float) currentPhotoObject.f108w) / hScale);
+                                }
+                            }
+                            keyFinal[0] = String.format(Locale.US, "%d_%d@%d_%d", new Object[]{Long.valueOf(currentPhotoObject.location.volume_id), Integer.valueOf(currentPhotoObject.location.local_id), Integer.valueOf((int) (((float) w) / AndroidUtilities.density)), Integer.valueOf((int) (((float) h) / AndroidUtilities.density))});
+                            Options opts = new Options();
+                            opts.inJustDecodeBounds = true;
+                            File file2 = FileLoader.getPathToAttach(currentPhotoObject);
+                            InputStream fileInputStream = new FileInputStream(file2);
+                            BitmapFactory.decodeStream(fileInputStream, null, opts);
+                            fileInputStream.close();
+                            float scaleFactor = Math.max(((float) opts.outWidth) / ((float) w), ((float) opts.outHeight) / ((float) h));
+                            if (scaleFactor < 1.0f) {
+                                scaleFactor = 1.0f;
+                            }
+                            opts.inJustDecodeBounds = false;
+                            opts.inSampleSize = (int) scaleFactor;
+                            opts.inPreferredConfig = Config.RGB_565;
+                            if (VERSION.SDK_INT >= 21) {
+                                fileInputStream = new FileInputStream(file2);
+                                bitmapFinal[0] = BitmapFactory.decodeStream(fileInputStream, null, opts);
+                                fileInputStream.close();
+                            }
+                        }
+                        if (groupPhotos) {
                             photosCount++;
                             params.put("groupId", TtmlNode.ANONYMOUS_REGION_ID + groupId);
                             if (photosCount == 10 || a == count - 1) {
@@ -6102,7 +6179,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 lastGroupId = 0;
                             }
                         }
-                        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$26(editingMessageObject, currentAccount, photoFinal, params, parentFinal, dialog_id, reply_to_msg, info));
+                        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$26(bitmapFinal, keyFinal, editingMessageObject, currentAccount, photoFinal, params, parentFinal, dialog_id, reply_to_msg, info));
                     } else {
                         if (sendAsDocuments == null) {
                             sendAsDocuments = new ArrayList();
@@ -6170,7 +6247,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         getInstance(currentAccount).sendMessage(videoFinal, videoEditedInfo, finalPath, dialog_id, reply_to_msg, info.caption, info.entities, null, params, info.ttl, parentFinal);
     }
 
-    static final /* synthetic */ void lambda$null$57$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_photo photoFinal, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
+    static final /* synthetic */ void lambda$null$57$SendMessagesHelper(Bitmap[] bitmapFinal, String[] keyFinal, MessageObject editingMessageObject, int currentAccount, TL_photo photoFinal, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
+        if (!(bitmapFinal[0] == null || keyFinal[0] == null)) {
+            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapFinal[0]), keyFinal[0]);
+        }
         if (editingMessageObject != null) {
             getInstance(currentAccount).editMessageMedia(editingMessageObject, photoFinal, null, null, null, params, false, parentFinal);
             return;
@@ -6291,7 +6371,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    private static Bitmap createVideoThumbnail(String filePath, long time) {
+    private static Bitmap createVideoThumbnail(String filePath, long time, boolean quality) {
         Bitmap bitmap = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
@@ -6319,8 +6399,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         int max = Math.max(width, height);
-        if (max > 90) {
-            float scale = 90.0f / ((float) max);
+        float size = quality ? (float) Math.min(180, Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) / 4) : 90.0f;
+        if (((float) max) > size) {
+            float scale = size / ((float) max);
             Bitmap scaled = Bitmaps.createScaledBitmap(bitmap, Math.round(((float) width) * scale), Math.round(((float) height) * scale), true);
             if (scaled != bitmap) {
                 bitmap.recycle();
@@ -6566,7 +6647,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
         if (document == null) {
             TL_documentAttributeVideo attributeVideo;
-            thumb = createVideoThumbnail(videoPath, startTime);
+            thumb = createVideoThumbnail(videoPath, startTime, false);
+            Bitmap qualityThumb = isRound ? createVideoThumbnail(videoPath, startTime, true) : null;
             if (thumb == null) {
                 thumb = ThumbnailUtils.createVideoThumbnail(videoPath, 1);
             }
@@ -6580,6 +6662,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 } else {
                     Utilities.blurBitmap(thumb, 3, VERSION.SDK_INT < 21 ? 0 : 1, thumb.getWidth(), thumb.getHeight(), thumb.getRowBytes());
                     thumbKey = String.format(size.location.volume_id + "_" + size.location.local_id + "@%d_%d_b", new Object[]{Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density)), Integer.valueOf((int) (((float) AndroidUtilities.roundMessageSize) / AndroidUtilities.density))});
+                }
+                if (qualityThumb != null) {
+                    thumb = qualityThumb;
                 }
             }
             document = new TL_document();

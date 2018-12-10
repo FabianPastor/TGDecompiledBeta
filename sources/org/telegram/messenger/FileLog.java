@@ -101,109 +101,109 @@ public class FileLog {
     }
 
     /* renamed from: e */
-    public static void m12e(final String message, final Throwable exception) {
+    public static void m12e(String message, Throwable exception) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.e(tag, message, exception);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
-                            FileLog.getInstance().streamWriter.write(exception.toString());
-                            FileLog.getInstance().streamWriter.flush();
-                        } catch (Exception e) {
-                            ThrowableExtension.printStackTrace(e);
-                        }
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$Lambda$0(message, exception));
             }
         }
     }
 
+    static final /* synthetic */ void lambda$e$0$FileLog(String message, Throwable exception) {
+        try {
+            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
+            getInstance().streamWriter.write(exception.toString());
+            getInstance().streamWriter.flush();
+        } catch (Exception e) {
+            ThrowableExtension.printStackTrace(e);
+        }
+    }
+
     /* renamed from: e */
-    public static void m11e(final String message) {
+    public static void m11e(String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.e(tag, message);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
-                            FileLog.getInstance().streamWriter.flush();
-                        } catch (Exception e) {
-                            ThrowableExtension.printStackTrace(e);
-                        }
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$Lambda$1(message));
             }
         }
     }
 
+    static final /* synthetic */ void lambda$e$1$FileLog(String message) {
+        try {
+            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
+            getInstance().streamWriter.flush();
+        } catch (Exception e) {
+            ThrowableExtension.printStackTrace(e);
+        }
+    }
+
     /* renamed from: e */
-    public static void m13e(final Throwable e) {
+    public static void m13e(Throwable e) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             ThrowableExtension.printStackTrace(e);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
-                            StackTraceElement[] stack = e.getStackTrace();
-                            for (Object obj : stack) {
-                                FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + obj + "\n");
-                            }
-                            FileLog.getInstance().streamWriter.flush();
-                        } catch (Exception e) {
-                            ThrowableExtension.printStackTrace(e);
-                        }
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$Lambda$2(e));
             } else {
                 ThrowableExtension.printStackTrace(e);
             }
         }
     }
 
+    static final /* synthetic */ void lambda$e$2$FileLog(Throwable e) {
+        try {
+            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
+            StackTraceElement[] stack = e.getStackTrace();
+            for (Object obj : stack) {
+                getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + obj + "\n");
+            }
+            getInstance().streamWriter.flush();
+        } catch (Exception e1) {
+            ThrowableExtension.printStackTrace(e1);
+        }
+    }
+
     /* renamed from: d */
-    public static void m10d(final String message) {
+    public static void m10d(String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.d(tag, message);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + message + "\n");
-                            FileLog.getInstance().streamWriter.flush();
-                        } catch (Exception e) {
-                            ThrowableExtension.printStackTrace(e);
-                        }
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$Lambda$3(message));
             }
         }
     }
 
+    static final /* synthetic */ void lambda$d$3$FileLog(String message) {
+        try {
+            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + message + "\n");
+            getInstance().streamWriter.flush();
+        } catch (Exception e) {
+            ThrowableExtension.printStackTrace(e);
+        }
+    }
+
     /* renamed from: w */
-    public static void m14w(final String message) {
+    public static void m14w(String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             Log.w(tag, message);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + message + "\n");
-                            FileLog.getInstance().streamWriter.flush();
-                        } catch (Exception e) {
-                            ThrowableExtension.printStackTrace(e);
-                        }
-                    }
-                });
+                getInstance().logQueue.postRunnable(new FileLog$$Lambda$4(message));
             }
+        }
+    }
+
+    static final /* synthetic */ void lambda$w$4$FileLog(String message) {
+        try {
+            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + message + "\n");
+            getInstance().streamWriter.flush();
+        } catch (Exception e) {
+            ThrowableExtension.printStackTrace(e);
         }
     }
 

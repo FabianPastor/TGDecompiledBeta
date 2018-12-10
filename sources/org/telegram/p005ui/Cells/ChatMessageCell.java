@@ -107,10 +107,7 @@ import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonSwitchInline;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonUrl;
 import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
-import org.telegram.tgnet.TLRPC.TL_messageMediaContact;
-import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
-import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
@@ -1489,7 +1486,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     public void downloadAudioIfNeed() {
         if (this.documentAttachType == 3 && this.buttonState == 2) {
-            FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
             this.buttonState = 4;
             this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
         }
@@ -2146,124 +2143,124 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     /* JADX WARNING: Removed duplicated region for block: B:217:0x069f  */
     /* JADX WARNING: Removed duplicated region for block: B:223:0x06bd  */
-    /* JADX WARNING: Removed duplicated region for block: B:753:0x18ae  */
-    /* JADX WARNING: Removed duplicated region for block: B:745:0x1878  */
-    /* JADX WARNING: Removed duplicated region for block: B:754:0x18b1  */
-    /* JADX WARNING: Removed duplicated region for block: B:748:0x1882  */
-    /* JADX WARNING: Removed duplicated region for block: B:751:0x18a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0e24  */
-    /* JADX WARNING: Removed duplicated region for block: B:762:0x18da  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0e49  */
-    /* JADX WARNING: Removed duplicated region for block: B:765:0x18ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:492:0x0e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:766:0x18f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:495:0x0e76  */
-    /* JADX WARNING: Removed duplicated region for block: B:785:0x198e  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0e9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:786:0x19ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0f2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0f55  */
-    /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
+    /* JADX WARNING: Removed duplicated region for block: B:759:0x18b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:751:0x1882  */
+    /* JADX WARNING: Removed duplicated region for block: B:760:0x18bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:754:0x188c  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x18ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0f38  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
-    /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
-    /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
-    /* JADX WARNING: Removed duplicated region for block: B:738:0x185a  */
-    /* JADX WARNING: Removed duplicated region for block: B:458:0x0db0  */
-    /* JADX WARNING: Removed duplicated region for block: B:471:0x0dea  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0e24  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0e49  */
-    /* JADX WARNING: Removed duplicated region for block: B:762:0x18da  */
-    /* JADX WARNING: Removed duplicated region for block: B:492:0x0e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:765:0x18ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:495:0x0e76  */
-    /* JADX WARNING: Removed duplicated region for block: B:766:0x18f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e8c  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0e9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:785:0x198e  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0f2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:786:0x19ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0f55  */
-    /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
-    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39ff }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a16 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a16 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a2b  */
-    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a57  */
-    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d93  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d83  */
-    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d55  */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
+    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
+    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0f38  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
+    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
+    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
+    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
-    /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
-    /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
-    /* JADX WARNING: Removed duplicated region for block: B:458:0x0db0  */
-    /* JADX WARNING: Removed duplicated region for block: B:738:0x185a  */
-    /* JADX WARNING: Removed duplicated region for block: B:469:0x0de6 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:471:0x0dea  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0e24  */
-    /* JADX WARNING: Removed duplicated region for block: B:762:0x18da  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0e49  */
-    /* JADX WARNING: Removed duplicated region for block: B:765:0x18ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:492:0x0e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:766:0x18f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:495:0x0e76  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e8c  */
-    /* JADX WARNING: Removed duplicated region for block: B:785:0x198e  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0e9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:786:0x19ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0f2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0f55  */
-    /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
-    /* JADX WARNING: Removed duplicated region for block: B:539:0x10e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39ff }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a16 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a16 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a2b  */
-    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a57  */
-    /* JADX WARNING: Removed duplicated region for block: B:1743:0x3a70  */
-    /* JADX WARNING: Removed duplicated region for block: B:1804:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d83  */
-    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d93  */
-    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d55  */
-    /* JADX WARNING: Removed duplicated region for block: B:1817:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
+    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
+    /* JADX WARNING: Removed duplicated region for block: B:475:0x0df0 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0f38  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
+    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:545:0x10f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
+    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
+    /* JADX WARNING: Removed duplicated region for block: B:1749:0x3a8e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d3a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
+    /* JADX WARNING: Removed duplicated region for block: B:1823:0x3d82  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
-    /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
-    /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
-    /* JADX WARNING: Removed duplicated region for block: B:738:0x185a  */
-    /* JADX WARNING: Removed duplicated region for block: B:458:0x0db0  */
-    /* JADX WARNING: Removed duplicated region for block: B:469:0x0de6 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:471:0x0dea  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0e24  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0e49  */
-    /* JADX WARNING: Removed duplicated region for block: B:762:0x18da  */
-    /* JADX WARNING: Removed duplicated region for block: B:492:0x0e60  */
-    /* JADX WARNING: Removed duplicated region for block: B:765:0x18ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:495:0x0e76  */
-    /* JADX WARNING: Removed duplicated region for block: B:766:0x18f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e8c  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0e9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:785:0x198e  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0f2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:786:0x19ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0f55  */
-    /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
-    /* JADX WARNING: Removed duplicated region for block: B:539:0x10e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39ff }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a16 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a16 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a2b  */
-    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a57  */
-    /* JADX WARNING: Removed duplicated region for block: B:1743:0x3a70  */
-    /* JADX WARNING: Removed duplicated region for block: B:1804:0x3d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d93  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d83  */
-    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d55  */
-    /* JADX WARNING: Removed duplicated region for block: B:1817:0x3d64  */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
+    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
+    /* JADX WARNING: Removed duplicated region for block: B:475:0x0df0 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0f38  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
+    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:545:0x10f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
+    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
+    /* JADX WARNING: Removed duplicated region for block: B:1749:0x3a8e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d3a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
+    /* JADX WARNING: Removed duplicated region for block: B:1823:0x3d82  */
     /* JADX WARNING: Missing block: B:207:0x0682, code:
             if (r146.equals("article") != false) goto L_0x0684;
      */
@@ -2273,8 +2270,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Missing block: B:319:0x0968, code:
             if ("telegram_album".equals(r152) == false) goto L_0x04ae;
      */
-    /* JADX WARNING: Missing block: B:480:0x0e17, code:
-            if (r156.documentAttachType != 4) goto L_0x18ca;
+    /* JADX WARNING: Missing block: B:486:0x0e21, code:
+            if (r158.documentAttachType != 4) goto L_0x18d4;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
@@ -2552,7 +2549,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     int restLines;
                     boolean authorIsRTL;
                     if (AndroidUtilities.isTablet()) {
-                        if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOut()) {
+                        if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOutOwner()) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m9dp(132.0f);
                         } else {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m9dp(80.0f);
@@ -3063,7 +3060,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.totalHeight += AndroidUtilities.m9dp(2.0f);
                             }
                             restLines = 0;
-                            boolean allowAllLines = site_name.toLowerCase().equals("twitter");
+                            boolean allowAllLines = site_name != null && site_name.toLowerCase().equals("twitter");
                             if (restLinesCount != 3 || this.isSmallImage) {
                                 int i2;
                                 restLines = restLinesCount;
@@ -3826,7 +3823,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         } else {
                             this.infoLayout = StaticLayoutEx.createStaticLayout(messageObject.messageOwner.media.address, Theme.chat_locationAddressPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TruncateAt.END, maxWidth, 1);
                             measureTime(messageObject);
-                            if (this.backgroundWidth - ((int) Math.ceil((double) this.infoLayout.getLineWidth(0))) < AndroidUtilities.m9dp((float) ((messageObject.isOutOwner() ? 20 : 0) + 14)) + this.timeWidth) {
+                            if ((this.backgroundWidth - ((int) Math.ceil((double) this.infoLayout.getLineWidth(0)))) - AndroidUtilities.m9dp(24.0f) < AndroidUtilities.m9dp((float) ((messageObject.isOutOwner() ? 20 : 0) + 20)) + this.timeWidth) {
                                 additionHeight += AndroidUtilities.m9dp(8.0f);
                             }
                         }
@@ -4140,9 +4137,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         photoWidth = w;
                         this.currentCaption = messageObject.caption;
                         if (AndroidUtilities.isTablet()) {
-                            minCaptionWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.6f);
+                            minCaptionWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.65f);
                         } else {
-                            minCaptionWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.6f);
+                            minCaptionWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.65f);
                         }
                         if (messageObject.needDrawBluredPreview() || this.currentCaption == null || photoWidth >= minCaptionWidth) {
                             widthForCaption = photoWidth - AndroidUtilities.m9dp(10.0f);
@@ -4180,7 +4177,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.addedCaptionHeight = this.captionHeight + AndroidUtilities.m9dp(9.0f);
                                 if (this.currentPosition == null || (this.currentPosition.flags & 8) != 0) {
                                     additionHeight = 0 + this.addedCaptionHeight;
-                                    if (((float) (this.captionWidth + AndroidUtilities.m9dp(2.0f))) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
+                                    if (((float) (AndroidUtilities.m9dp(2.0f) + Math.max(this.captionWidth, photoWidth - AndroidUtilities.m9dp(10.0f)))) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
                                         additionHeight += AndroidUtilities.m9dp(14.0f);
                                         this.addedCaptionHeight += AndroidUtilities.m9dp(14.0f);
                                         captionNewLine = 1;
@@ -5103,6 +5100,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     Theme.chat_roundVideoShadow.setAlpha(255);
                     Theme.chat_roundVideoShadow.setBounds(x, y, (AndroidUtilities.roundMessageSize + x) + AndroidUtilities.m9dp(6.0f), (AndroidUtilities.roundMessageSize + y) + AndroidUtilities.m9dp(6.0f));
                     Theme.chat_roundVideoShadow.draw(canvas);
+                    if (!(this.photoImage.hasBitmapImage() && this.photoImage.getCurrentAlpha() == 1.0f)) {
+                        Theme.chat_docBackPaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outBubble : Theme.key_chat_inBubble));
+                        canvas.drawCircle(this.photoImage.getCenterX(), this.photoImage.getCenterY(), (float) (this.photoImage.getImageWidth() / 2), Theme.chat_docBackPaint);
+                    }
                 }
                 imageDrawn = this.photoImage.draw(canvas);
                 boolean drawTimeOld = this.drawTime;
@@ -5192,7 +5193,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     x1 = this.backgroundDrawableLeft + AndroidUtilities.m9dp(8.0f);
                     y1 = this.layoutHeight - AndroidUtilities.m9dp((float) (28 - (this.drawPinnedBottom ? 2 : 0)));
                     this.rect.set((float) x1, (float) y1, (float) ((this.timeWidthAudio + x1) + AndroidUtilities.m9dp(22.0f)), (float) (AndroidUtilities.m9dp(17.0f) + y1));
+                    oldAlpha = Theme.chat_actionBackgroundPaint.getAlpha();
+                    Theme.chat_actionBackgroundPaint.setAlpha((int) (((float) oldAlpha) * this.timeAlpha));
                     canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(4.0f), Theme.chat_actionBackgroundPaint);
+                    Theme.chat_actionBackgroundPaint.setAlpha(oldAlpha);
                     if (playing || !this.currentMessageObject.isContentUnread()) {
                         if (!playing || MediaController.getInstance().isMessagePaused()) {
                             this.roundVideoPlayingDrawable.stop();
@@ -5203,15 +5207,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         this.roundVideoPlayingDrawable.draw(canvas);
                     } else {
                         Theme.chat_docBackPaint.setColor(Theme.getColor(Theme.key_chat_mediaTimeText));
+                        Theme.chat_docBackPaint.setAlpha((int) (255.0f * this.timeAlpha));
                         canvas.drawCircle((float) ((this.timeWidthAudio + x1) + AndroidUtilities.m9dp(12.0f)), (float) (AndroidUtilities.m9dp(8.3f) + y1), (float) AndroidUtilities.m9dp(3.0f), Theme.chat_docBackPaint);
                     }
                     x1 += AndroidUtilities.m9dp(4.0f);
                     y1 += AndroidUtilities.m9dp(1.7f);
                 }
+                Theme.chat_timePaint.setAlpha((int) (255.0f * this.timeAlpha));
                 canvas.save();
                 canvas.translate((float) x1, (float) y1);
                 this.durationLayout.draw(canvas);
                 canvas.restore();
+                Theme.chat_timePaint.setAlpha(255);
             }
         } else if (this.documentAttachType == 5) {
             if (this.currentMessageObject.isOutOwner()) {
@@ -6118,9 +6125,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
             } else if (this.documentAttachType == 4) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, true, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
             }
             this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
             invalidate();
@@ -6139,7 +6146,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (this.buttonState == 0) {
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
                 if (this.miniButtonState == 0) {
-                    FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, true, 0);
+                    FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
                 }
                 if (this.delegate.needPlayMessage(this.currentMessageObject)) {
                     if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
@@ -6184,7 +6191,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.photoImage.setImage(this.currentMessageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.document.size, null, this.currentMessageObject, 0);
             } else if (this.currentMessageObject.isRoundVideo()) {
                 if (this.currentMessageObject.isSecretMedia()) {
-                    FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 1);
+                    FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 1);
                 } else {
                     this.currentMessageObject.gifState = 2.0f;
                     Document document = this.currentMessageObject.getDocument();
@@ -6192,9 +6199,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.photoImage.setImage(document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, document.size, null, this.currentMessageObject, 0);
                 }
             } else if (this.currentMessageObject.type == 9) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.document, this.currentMessageObject, false, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.document, this.currentMessageObject, 0, 0);
             } else if (this.documentAttachType == 4) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, true, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
             } else if (this.currentMessageObject.type != 0 || this.documentAttachType == 0) {
                 this.photoImage.setForceLoading(true);
                 this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, 0, null, this.currentMessageObject, 0);
@@ -6203,7 +6210,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.photoImage.setImage(this.currentMessageObject.messageOwner.media.webpage.document, null, this.currentPhotoObject.location, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.webpage.document.size, null, this.currentMessageObject, 0);
                 this.currentMessageObject.gifState = 2.0f;
             } else if (this.documentAttachType == 1) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.webpage.document, this.currentMessageObject, false, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.webpage.document, this.currentMessageObject, 0, 0);
             }
             this.buttonState = 1;
             this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
@@ -6234,7 +6241,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         } else if (this.buttonState == 2) {
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
                 this.radialProgress.setProgress(0.0f, false);
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
                 this.buttonState = 4;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
                 invalidate();
@@ -6456,46 +6463,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     }
 
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
-        if (this.currentPosition != null && !this.currentPosition.last) {
-            return false;
+        if (this.currentPosition == null || this.currentPosition.last) {
+            return messageObject.needDrawShareButton();
         }
-        if (messageObject.eventId != 0) {
-            return false;
-        }
-        if (messageObject.messageOwner.fwd_from != null && !messageObject.isOutOwner() && messageObject.messageOwner.fwd_from.saved_from_peer != null && messageObject.getDialogId() == ((long) UserConfig.getInstance(this.currentAccount).getClientUserId())) {
-            this.drwaShareGoIcon = true;
-            return true;
-        } else if (messageObject.type == 13) {
-            return false;
-        } else {
-            if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.channel_id != 0 && !messageObject.isOutOwner()) {
-                return true;
-            }
-            if (messageObject.isFromUser()) {
-                if ((messageObject.messageOwner.media instanceof TL_messageMediaEmpty) || messageObject.messageOwner.media == null || ((messageObject.messageOwner.media instanceof TL_messageMediaWebPage) && !(messageObject.messageOwner.media.webpage instanceof TL_webPage))) {
-                    return false;
-                }
-                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.from_id));
-                if (user != null && user.bot) {
-                    return true;
-                }
-                if (!messageObject.isOut()) {
-                    if ((messageObject.messageOwner.media instanceof TL_messageMediaGame) || (messageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
-                        return true;
-                    }
-                    if (messageObject.isMegagroup()) {
-                        Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(messageObject.messageOwner.to_id.channel_id));
-                        if (chat == null || chat.username == null || chat.username.length() <= 0 || (messageObject.messageOwner.media instanceof TL_messageMediaContact) || (messageObject.messageOwner.media instanceof TL_messageMediaGeo)) {
-                            return false;
-                        }
-                        return true;
-                    }
-                }
-            } else if ((messageObject.messageOwner.from_id < 0 || messageObject.messageOwner.post) && messageObject.messageOwner.to_id.channel_id != 0 && ((messageObject.messageOwner.via_bot_id == 0 && messageObject.messageOwner.reply_to_msg_id == 0) || messageObject.type != 13)) {
-                return true;
-            }
-            return false;
-        }
+        return false;
     }
 
     public boolean isInsideBackground(float x, float y) {
@@ -7039,15 +7010,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 drawContent(canvas);
                 if (this.drawShareButton) {
                     if (this.sharePressed) {
-                        if (Theme.isCurrentThemeDefault() || Theme.hasThemeKey(Theme.key_chat_shareBackgroundSelected)) {
+                        if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackgroundSelected)) {
                             Theme.chat_shareDrawable.setColorFilter(Theme.getShareColorFilter(Theme.getColor(Theme.key_chat_shareBackgroundSelected), true));
                         } else {
-                            Theme.chat_shareDrawable.setColorFilter(Theme.colorPressedFilter);
+                            Theme.chat_shareDrawable.setColorFilter(Theme.colorPressedFilter2);
                         }
-                    } else if (Theme.isCurrentThemeDefault() || Theme.hasThemeKey(Theme.key_chat_shareBackground)) {
+                    } else if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackground)) {
                         Theme.chat_shareDrawable.setColorFilter(Theme.getShareColorFilter(Theme.getColor(Theme.key_chat_shareBackground), false));
                     } else {
-                        Theme.chat_shareDrawable.setColorFilter(Theme.colorFilter);
+                        Theme.chat_shareDrawable.setColorFilter(Theme.colorFilter2);
                     }
                     if (this.currentMessageObject.isOutOwner()) {
                         this.shareStartX = (this.currentBackgroundDrawable.getBounds().left - AndroidUtilities.m9dp(8.0f)) - Theme.chat_shareDrawable.getIntrinsicWidth();
@@ -7074,7 +7045,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if ((this.drawTime || !this.mediaBackground) && !this.forceNotDrawTime) {
                     drawTimeLayout(canvas);
                 }
-                if (this.controlsAlpha != 1.0f || this.timeAlpha != 1.0f) {
+                if ((this.controlsAlpha != 1.0f || this.timeAlpha != 1.0f) && this.currentMessageObject.type != 5) {
                     newTime = System.currentTimeMillis();
                     dt = Math.abs(this.lastControlsAlphaChangeTime - newTime);
                     if (dt > 17) {
@@ -7102,6 +7073,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             requestLayout();
         }
+    }
+
+    public void setTimeAlpha(float value) {
+        this.timeAlpha = value;
+    }
+
+    public float getTimeAlpha() {
+        return this.timeAlpha;
     }
 
     public int getBackgroundDrawableLeft() {
@@ -7478,8 +7457,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         BaseCell.setDrawableBounds(Theme.chat_msgOutClockDrawable, (this.layoutWidth - AndroidUtilities.m9dp(18.5f)) - Theme.chat_msgOutClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(8.5f)) - Theme.chat_msgOutClockDrawable.getIntrinsicHeight());
                         Theme.chat_msgOutClockDrawable.draw(canvas);
                     } else if (this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5) {
+                        Theme.chat_msgStickerClockDrawable.setAlpha((int) (255.0f * this.timeAlpha));
                         BaseCell.setDrawableBounds(Theme.chat_msgStickerClockDrawable, (this.layoutWidth - AndroidUtilities.m9dp(22.0f)) - Theme.chat_msgStickerClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgStickerClockDrawable.getIntrinsicHeight());
                         Theme.chat_msgStickerClockDrawable.draw(canvas);
+                        Theme.chat_msgStickerClockDrawable.setAlpha(255);
                     } else {
                         BaseCell.setDrawableBounds(Theme.chat_msgMediaClockDrawable, (this.layoutWidth - AndroidUtilities.m9dp(22.0f)) - Theme.chat_msgMediaClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgMediaClockDrawable.getIntrinsicHeight());
                         Theme.chat_msgMediaClockDrawable.draw(canvas);

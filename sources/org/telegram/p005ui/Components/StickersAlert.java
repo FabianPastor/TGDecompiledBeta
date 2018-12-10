@@ -576,7 +576,6 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.titleTextView.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
         this.titleTextView.setGravity(16);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.titleTextView.setMovementMethod(new LinkMovementMethodMy());
         this.containerView.addView(this.titleTextView, LayoutHelper.createLinear(-1, 50));
         this.emptyView.addView(new RadialProgressView(context), LayoutHelper.createFrame(-2, -2, 17));
         this.shadow[1] = new View(context);
@@ -755,10 +754,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.installDelegate = stickersAlertInstallDelegate;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x007c  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0097  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00cb  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00cb  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0087  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00a2  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateFields() {
         Throwable e;
@@ -782,6 +781,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             }
                             if (stringBuilder2 == null) {
                                 stringBuilder = new SpannableStringBuilder(this.stickerSet.set.title);
+                                this.titleTextView.setMovementMethod(new LinkMovementMethodMy());
                             } else {
                                 stringBuilder = stringBuilder2;
                             }

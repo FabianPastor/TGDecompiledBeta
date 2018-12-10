@@ -370,17 +370,23 @@ public class RadialProgress2 {
                 z = false;
             }
             this.drawMiniProgress = z;
-            if (this.drawMiniProgress && this.miniDrawBitmap == null) {
-                try {
-                    this.miniDrawBitmap = Bitmap.createBitmap(AndroidUtilities.m9dp(48.0f), AndroidUtilities.m9dp(48.0f), Config.ARGB_8888);
-                    this.miniDrawCanvas = new Canvas(this.miniDrawBitmap);
-                } catch (Throwable th) {
-                }
+            if (this.drawMiniProgress) {
+                initMiniIcons();
             }
             if (animated) {
                 invalidateParent();
             } else {
                 this.parent.invalidate();
+            }
+        }
+    }
+
+    public void initMiniIcons() {
+        if (this.miniDrawBitmap == null) {
+            try {
+                this.miniDrawBitmap = Bitmap.createBitmap(AndroidUtilities.m9dp(48.0f), AndroidUtilities.m9dp(48.0f), Config.ARGB_8888);
+                this.miniDrawCanvas = new Canvas(this.miniDrawBitmap);
+            } catch (Throwable th) {
             }
         }
     }

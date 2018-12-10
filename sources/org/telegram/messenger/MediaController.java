@@ -952,7 +952,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         for (int a = 0; a < 3; a++) {
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.fileDidLoad);
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.httpFileDidLoad);
-            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.didReceivedNewMessages);
+            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.didReceiveNewMessages);
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.messagesDeleted);
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.removeAllMessagesFromDialog);
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.musicDidLoad);
@@ -1309,7 +1309,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 }
                 this.currentPlaylistNum += arrayList.size();
             }
-        } else if (id == NotificationCenter.didReceivedNewMessages) {
+        } else if (id == NotificationCenter.didReceiveNewMessages) {
             if (this.voiceMessagesPlaylist != null && !this.voiceMessagesPlaylist.isEmpty()) {
                 if (((Long) args[0]).longValue() == ((MessageObject) this.voiceMessagesPlaylist.get(0)).getDialogId()) {
                     ArrayList<MessageObject> arr = args[1];
@@ -2016,10 +2016,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
             File cacheFile = file != null ? file : FileLoader.getPathToMessage(nextAudio.messageOwner);
             if (cacheFile == null || !cacheFile.exists()) {
-                boolean z = false;
+                int i = 0;
             }
             if (cacheFile != null && cacheFile != file && !cacheFile.exists()) {
-                FileLoader.getInstance(currentAccount).loadFile(nextAudio.getDocument(), nextAudio, false, 0);
+                FileLoader.getInstance(currentAccount).loadFile(nextAudio.getDocument(), nextAudio, 0, 0);
             }
         }
     }
@@ -2040,21 +2040,23 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         nextIndex = currentPlayList.size() - 1;
                     }
                 }
-                MessageObject nextAudio = (MessageObject) currentPlayList.get(nextIndex);
-                if (DownloadController.getInstance(currentAccount).canDownloadMedia(nextAudio)) {
-                    File file = null;
-                    if (!TextUtils.isEmpty(nextAudio.messageOwner.attachPath)) {
-                        file = new File(nextAudio.messageOwner.attachPath);
-                        if (!file.exists()) {
-                            file = null;
+                if (nextIndex >= 0 && nextIndex < currentPlayList.size()) {
+                    MessageObject nextAudio = (MessageObject) currentPlayList.get(nextIndex);
+                    if (DownloadController.getInstance(currentAccount).canDownloadMedia(nextAudio)) {
+                        File file = null;
+                        if (!TextUtils.isEmpty(nextAudio.messageOwner.attachPath)) {
+                            file = new File(nextAudio.messageOwner.attachPath);
+                            if (!file.exists()) {
+                                file = null;
+                            }
                         }
-                    }
-                    File cacheFile = file != null ? file : FileLoader.getPathToMessage(nextAudio.messageOwner);
-                    if (cacheFile == null || !cacheFile.exists()) {
-                        boolean z = false;
-                    }
-                    if (cacheFile != null && cacheFile != file && !cacheFile.exists() && nextAudio.isMusic()) {
-                        FileLoader.getInstance(currentAccount).loadFile(nextAudio.getDocument(), nextAudio, false, 0);
+                        File cacheFile = file != null ? file : FileLoader.getPathToMessage(nextAudio.messageOwner);
+                        if (cacheFile == null || !cacheFile.exists()) {
+                            int i = 0;
+                        }
+                        if (cacheFile != null && cacheFile != file && !cacheFile.exists() && nextAudio.isMusic()) {
+                            FileLoader.getInstance(currentAccount).loadFile(nextAudio.getDocument(), nextAudio, 0, 0);
+                        }
                     }
                 }
             }
@@ -2251,7 +2253,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         if (!(cacheFile == null || cacheFile == file)) {
             exists = cacheFile.exists();
             if (!(exists || canStream)) {
-                FileLoader.getInstance(messageObject.currentAccount).loadFile(messageObject.getDocument(), messageObject, false, 0);
+                FileLoader.getInstance(messageObject.currentAccount).loadFile(messageObject.getDocument(), messageObject, 0, 0);
                 this.downloadingCurrentMessage = true;
                 this.isPaused = false;
                 this.lastProgress = 0;
@@ -2411,7 +2413,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             startRaiseToEarSensors(this.raiseChat);
         }
         startProgressTimer(this.playingMessageObject);
-        NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingDidStarted, messageObject);
+        NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingDidStart, messageObject);
         long duration;
         if (this.videoPlayer != null) {
             try {
@@ -3838,37 +3840,40 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:122:0x03b6} */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x01e9 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x01ee A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x01f3 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x01fb A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x0206  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x020b A:{SYNTHETIC, Splitter: B:75:0x020b} */
-    /* JADX WARNING: Removed duplicated region for block: B:381:0x0993  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0212  */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:122:0x03b6} */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x01e9 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x01ee A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x01f3 A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x01fb A:{Catch:{ Exception -> 0x0923, all -> 0x051d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x0206  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x020b A:{SYNTHETIC, Splitter: B:75:0x020b} */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0212  */
-    /* JADX WARNING: Removed duplicated region for block: B:381:0x0993  */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x051d A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:122:0x03b6} */
-    /* JADX WARNING: Missing block: B:90:0x027e, code:
-            if (r61.equals("nokia") != false) goto L_0x0280;
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x01f4 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x01f9 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01fe A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0206 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0211  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0216 A:{SYNTHETIC, Splitter: B:79:0x0216} */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x099e  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x01f4 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x01f9 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01fe A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0206 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0211  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0216 A:{SYNTHETIC, Splitter: B:79:0x0216} */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:385:0x099e  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
+    /* JADX WARNING: Missing block: B:94:0x0289, code:
+            if (r61.equals("nokia") != false) goto L_0x028b;
      */
-    /* JADX WARNING: Missing block: B:189:0x051d, code:
+    /* JADX WARNING: Missing block: B:193:0x0528, code:
             r6 = th;
      */
-    /* JADX WARNING: Missing block: B:190:0x051e, code:
+    /* JADX WARNING: Missing block: B:194:0x0529, code:
             r49 = r50;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean convertVideo(MessageObject messageObject) {
         Throwable e;
+        if (messageObject == null || messageObject.videoEditedInfo == null) {
+            return false;
+        }
         String videoPath = messageObject.videoEditedInfo.originalPath;
         long startTime = messageObject.videoEditedInfo.startTime;
         long endTime = messageObject.videoEditedInfo.endTime;
@@ -4303,6 +4308,22 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                         }
                                     }
                                 }
+                                extractor2.unselectTrack(videoIndex);
+                                if (outputSurface != null) {
+                                    outputSurface.release();
+                                }
+                                if (inputSurface != null) {
+                                    inputSurface.release();
+                                }
+                                if (decoder != null) {
+                                    decoder.stop();
+                                    decoder.release();
+                                }
+                                if (encoder != null) {
+                                    encoder.stop();
+                                    encoder.release();
+                                }
+                                checkConversionCanceled();
                             } catch (Throwable e3) {
                                 errorWait = true;
                                 FileLog.m13e(e3);
@@ -4333,22 +4354,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             return true;
                         } catch (Throwable th22) {
                         }
-                        extractor2.unselectTrack(videoIndex);
-                        if (outputSurface != null) {
-                            outputSurface.release();
-                        }
-                        if (inputSurface != null) {
-                            inputSurface.release();
-                        }
-                        if (decoder != null) {
-                            decoder.stop();
-                            decoder.release();
-                        }
-                        if (encoder != null) {
-                            encoder.stop();
-                            encoder.release();
-                        }
-                        checkConversionCanceled();
                     }
                 }
                 if (extractor2 != null) {

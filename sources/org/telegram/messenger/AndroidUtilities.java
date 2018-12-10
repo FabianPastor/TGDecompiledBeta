@@ -76,6 +76,7 @@ import android.widget.TextView;
 import com.android.internal.telephony.ITelephony;
 import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory;
 import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -106,13 +107,16 @@ import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
 import org.telegram.p005ui.ActionBar.Theme;
+import org.telegram.p005ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.p005ui.Cells.TextDetailSettingsCell;
 import org.telegram.p005ui.Components.ForegroundDetector;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.PickerBottomLayout;
 import org.telegram.p005ui.Components.TypefaceSpan;
+import org.telegram.p005ui.ThemePreviewActivity;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
 import org.telegram.tgnet.TLRPC.User;
@@ -134,6 +138,8 @@ public class AndroidUtilities {
     public static float density = 1.0f;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
     public static Point displaySize = new Point();
+    private static int[] documentIcons = new int[]{R.drawable.media_doc_blue, R.drawable.media_doc_green, R.drawable.media_doc_red, R.drawable.media_doc_yellow};
+    private static int[] documentMediaIcons = new int[]{R.drawable.media_doc_blue_b, R.drawable.media_doc_green_b, R.drawable.media_doc_red_b, R.drawable.media_doc_yellow_b};
     private static boolean hasCallPermissions;
     public static boolean incorrectDisplaySizeFix;
     public static boolean isInMultiwindow;
@@ -396,9 +402,36 @@ public class AndroidUtilities {
         hasCallPermissions = z;
     }
 
+    public static int getThumbForNameOrMime(String name, String mime, boolean media) {
+        if (name == null || name.length() == 0) {
+            return media ? documentMediaIcons[0] : documentIcons[0];
+        } else {
+            int color = -1;
+            if (name.contains(".doc") || name.contains(".txt") || name.contains(".psd")) {
+                color = 0;
+            } else if (name.contains(".xls") || name.contains(".csv")) {
+                color = 1;
+            } else if (name.contains(".pdf") || name.contains(".ppt") || name.contains(".key")) {
+                color = 2;
+            } else if (name.contains(".zip") || name.contains(".rar") || name.contains(".ai") || name.contains(DefaultHlsExtractorFactory.MP3_FILE_EXTENSION) || name.contains(".mov") || name.contains(".avi")) {
+                color = 3;
+            }
+            if (color == -1) {
+                int idx = name.lastIndexOf(46);
+                String ext = idx == -1 ? TtmlNode.ANONYMOUS_REGION_ID : name.substring(idx + 1);
+                if (ext.length() != 0) {
+                    color = ext.charAt(0) % documentIcons.length;
+                } else {
+                    color = name.charAt(0) % documentIcons.length;
+                }
+            }
+            return media ? documentMediaIcons[color] : documentIcons[color];
+        }
+    }
+
     public static int[] calcDrawableColor(Drawable drawable) {
         int bitmapColor = Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
-        int[] result = new int[2];
+        int[] result = new int[4];
         try {
             if (drawable instanceof BitmapDrawable) {
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
@@ -419,10 +452,12 @@ public class AndroidUtilities {
         }
         double[] hsv = rgbToHsv((bitmapColor >> 16) & 255, (bitmapColor >> 8) & 255, bitmapColor & 255);
         hsv[1] = Math.min(1.0d, (hsv[1] + 0.05d) + (0.1d * (1.0d - hsv[1])));
-        hsv[2] = Math.max(0.0d, hsv[2] * 0.65d);
-        int[] rgb = hsvToRgb(hsv[0], hsv[1], hsv[2]);
+        int[] rgb = hsvToRgb(hsv[0], hsv[1], Math.max(0.0d, hsv[2] * 0.65d));
         result[0] = Color.argb(102, rgb[0], rgb[1], rgb[2]);
         result[1] = Color.argb(136, rgb[0], rgb[1], rgb[2]);
+        rgb = hsvToRgb(hsv[0], hsv[1], Math.max(0.0d, hsv[2] * 0.72d));
+        result[2] = Color.argb(102, rgb[0], rgb[1], rgb[2]);
+        result[3] = Color.argb(136, rgb[0], rgb[1], rgb[2]);
         return result;
     }
 
@@ -875,13 +910,18 @@ public class AndroidUtilities {
         }
     }
 
-    public static void showKeyboard(View view) {
-        if (view != null) {
-            try {
-                ((InputMethodManager) view.getContext().getSystemService("input_method")).showSoftInput(view, 1);
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
+    public static boolean showKeyboard(View view) {
+        boolean z = false;
+        if (view == null) {
+            return z;
+        }
+        try {
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService("input_method");
+            inputManager.viewClicked(view);
+            return inputManager.showSoftInput(view, 1);
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+            return z;
         }
     }
 
@@ -1976,6 +2016,89 @@ public class AndroidUtilities {
         byte[] key_hash = new byte[16];
         System.arraycopy(Utilities.computeSHA1(auth_key), 0, key_hash, 0, 16);
         return key_hash;
+    }
+
+    public static void openDocument(MessageObject message, Activity activity, BaseFragment parentFragment) {
+        Builder builder;
+        if (message != null) {
+            Document document = message.getDocument();
+            if (document != null) {
+                File f = null;
+                String fileName = message.messageOwner.media != null ? FileLoader.getAttachFileName(document) : TtmlNode.ANONYMOUS_REGION_ID;
+                if (!(message.messageOwner.attachPath == null || message.messageOwner.attachPath.length() == 0)) {
+                    f = new File(message.messageOwner.attachPath);
+                }
+                if (f == null || !(f == null || f.exists())) {
+                    f = FileLoader.getPathToMessage(message.messageOwner);
+                }
+                if (f != null && f.exists()) {
+                    if (parentFragment == null || !f.getName().toLowerCase().endsWith("attheme")) {
+                        String realMimeType = null;
+                        try {
+                            Intent intent = new Intent("android.intent.action.VIEW");
+                            intent.setFlags(1);
+                            MimeTypeMap myMime = MimeTypeMap.getSingleton();
+                            int idx = fileName.lastIndexOf(46);
+                            if (idx != -1) {
+                                realMimeType = myMime.getMimeTypeFromExtension(fileName.substring(idx + 1).toLowerCase());
+                                if (realMimeType == null) {
+                                    realMimeType = document.mime_type;
+                                    if (realMimeType == null || realMimeType.length() == 0) {
+                                        realMimeType = null;
+                                    }
+                                }
+                            }
+                            if (VERSION.SDK_INT >= 24) {
+                                intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), realMimeType != null ? realMimeType : "text/plain");
+                            } else {
+                                intent.setDataAndType(Uri.fromFile(f), realMimeType != null ? realMimeType : "text/plain");
+                            }
+                            if (realMimeType != null) {
+                                try {
+                                    activity.startActivityForResult(intent, 500);
+                                    return;
+                                } catch (Exception e) {
+                                    if (VERSION.SDK_INT >= 24) {
+                                        intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "text/plain");
+                                    } else {
+                                        intent.setDataAndType(Uri.fromFile(f), "text/plain");
+                                    }
+                                    activity.startActivityForResult(intent, 500);
+                                    return;
+                                }
+                            }
+                            activity.startActivityForResult(intent, 500);
+                            return;
+                        } catch (Exception e2) {
+                            if (activity != null) {
+                                builder = new Builder((Context) activity);
+                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+                                if (parentFragment != null) {
+                                    parentFragment.showDialog(builder.create());
+                                    return;
+                                } else {
+                                    builder.show();
+                                    return;
+                                }
+                            }
+                            return;
+                        }
+                    }
+                    ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), true);
+                    if (themeInfo != null) {
+                        parentFragment.presentFragment(new ThemePreviewActivity(f, themeInfo));
+                        return;
+                    }
+                    builder = new Builder((Context) activity);
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setMessage(LocaleController.getString("IncorrectTheme", R.string.IncorrectTheme));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    parentFragment.showDialog(builder.create());
+                }
+            }
+        }
     }
 
     public static void openForView(MessageObject message, Activity activity) {

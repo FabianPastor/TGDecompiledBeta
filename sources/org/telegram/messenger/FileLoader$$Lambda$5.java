@@ -13,9 +13,9 @@ final /* synthetic */ class FileLoader$$Lambda$5 implements Runnable {
     private final Object arg$6;
     private final String arg$7;
     private final int arg$8;
-    private final boolean arg$9;
+    private final int arg$9;
 
-    FileLoader$$Lambda$5(FileLoader fileLoader, Document document, SecureDocument secureDocument, WebFile webFile, FileLocation fileLocation, Object obj, String str, int i, boolean z, int i2) {
+    FileLoader$$Lambda$5(FileLoader fileLoader, Document document, SecureDocument secureDocument, WebFile webFile, FileLocation fileLocation, Object obj, String str, int i, int i2, int i3) {
         this.arg$1 = fileLoader;
         this.arg$2 = document;
         this.arg$3 = secureDocument;
@@ -24,8 +24,8 @@ final /* synthetic */ class FileLoader$$Lambda$5 implements Runnable {
         this.arg$6 = obj;
         this.arg$7 = str;
         this.arg$8 = i;
-        this.arg$9 = z;
-        this.arg$10 = i2;
+        this.arg$9 = i2;
+        this.arg$10 = i3;
     }
 
     public void run() {

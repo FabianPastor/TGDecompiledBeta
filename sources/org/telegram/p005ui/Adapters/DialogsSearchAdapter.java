@@ -1225,14 +1225,14 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 GraySectionCell cell2 = holder.itemView;
                 if (isRecentSearchDisplayed()) {
                     if (position < (!DataQuery.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0)) {
-                        cell2.setText(LocaleController.getString("ChatHints", R.string.ChatHints).toUpperCase());
+                        cell2.setText(LocaleController.getString("ChatHints", R.string.ChatHints));
                         return;
                     } else {
-                        cell2.setText(LocaleController.getString("Recent", R.string.Recent).toUpperCase());
+                        cell2.setText(LocaleController.getString("Recent", R.string.Recent));
                         return;
                     }
                 } else if (!this.searchResultHashtags.isEmpty()) {
-                    cell2.setText(LocaleController.getString("Hashtags", R.string.Hashtags).toUpperCase());
+                    cell2.setText(LocaleController.getString("Hashtags", R.string.Hashtags));
                     return;
                 } else if (this.searchAdapterHelper.getGlobalSearch().isEmpty() || position != this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size()) {
                     cell2.setText(LocaleController.getString("SearchMessages", R.string.SearchMessages));

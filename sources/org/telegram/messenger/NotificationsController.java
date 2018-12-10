@@ -125,7 +125,6 @@ public class NotificationsController {
     public static final int TYPE_PRIVATE = 1;
     protected static AudioManager audioManager = ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO));
     public static long globalSecretChatId = -4294967296L;
-    public static long lastNoDataNotificationTime;
     private static NotificationManagerCompat notificationManager;
     private static DispatchQueue notificationsQueue = new DispatchQueue("notificationsQueue");
     private static NotificationManager systemNotificationManager;
@@ -136,7 +135,6 @@ public class NotificationsController {
     private boolean inChatSoundEnabled;
     private int lastBadgeCount = -1;
     private int lastButtonId = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS;
-    private boolean lastNotificationIsNoData;
     private int lastOnlineFromOtherDevice = 0;
     private long lastSoundOutPlay;
     private long lastSoundPlay;
@@ -270,8 +268,6 @@ public class NotificationsController {
         if (!this.delayedPushMessages.isEmpty()) {
             showOrUpdateNotification(true);
             this.delayedPushMessages.clear();
-        } else if (this.lastNotificationIsNoData) {
-            notificationManager.cancel(this.notificationId);
         }
         try {
             if (this.notificationDelayWakelock.isHeld()) {
@@ -662,15 +658,44 @@ public class NotificationsController {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.pushMessagesUpdated, new Object[0]);
     }
 
+    private int addToPopupMessages(ArrayList<MessageObject> popupArrayAdd, MessageObject messageObject, int lower_id, long dialog_id, boolean isChannel, SharedPreferences preferences) {
+        int popup = 0;
+        if (lower_id != 0) {
+            if (preferences.getBoolean("custom_" + dialog_id, false)) {
+                popup = preferences.getInt("popup_" + dialog_id, 0);
+            } else {
+                popup = 0;
+            }
+            if (popup == 0) {
+                if (isChannel) {
+                    popup = preferences.getInt("popupChannel", 0);
+                } else {
+                    popup = preferences.getInt(((int) dialog_id) < 0 ? "popupGroup" : "popupAll", 0);
+                }
+            } else if (popup == 1) {
+                popup = 3;
+            } else if (popup == 2) {
+                popup = 0;
+            }
+        }
+        if (!(popup == 0 || messageObject.messageOwner.to_id.channel_id == 0 || messageObject.isMegagroup())) {
+            popup = 0;
+        }
+        if (popup != 0) {
+            popupArrayAdd.add(0, messageObject);
+        }
+        return popup;
+    }
+
     public void processNewMessages(ArrayList<MessageObject> messageObjects, boolean isLast, boolean isFcm, CountDownLatch countDownLatch) {
         if (!messageObjects.isEmpty()) {
-            notificationsQueue.postRunnable(new NotificationsController$$Lambda$8(this, messageObjects, isFcm, new ArrayList(0), isLast, countDownLatch));
+            notificationsQueue.postRunnable(new NotificationsController$$Lambda$8(this, messageObjects, new ArrayList(0), isFcm, isLast, countDownLatch));
         } else if (countDownLatch != null) {
             countDownLatch.countDown();
         }
     }
 
-    final /* synthetic */ void lambda$processNewMessages$16$NotificationsController(ArrayList messageObjects, boolean isFcm, ArrayList popupArrayAdd, boolean isLast, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$processNewMessages$16$NotificationsController(ArrayList messageObjects, ArrayList popupArrayAdd, boolean isFcm, boolean isLast, CountDownLatch countDownLatch) {
         long dialog_id;
         int notifyOverride;
         boolean added = false;
@@ -679,13 +704,18 @@ public class NotificationsController {
         boolean allowPinned = preferences.getBoolean("PinnedMessages", true);
         int popup = 0;
         for (int a = 0; a < messageObjects.size(); a++) {
+            boolean isChannel;
             MessageObject messageObject = (MessageObject) messageObjects.get(a);
             long mid = (long) messageObject.getId();
             long random_id = messageObject.isFcmMessage() ? messageObject.messageOwner.random_id : 0;
+            dialog_id = messageObject.getDialogId();
+            int lower_id = (int) dialog_id;
             if (messageObject.messageOwner.to_id.channel_id != 0) {
                 mid |= ((long) messageObject.messageOwner.to_id.channel_id) << 32;
+                isChannel = true;
+            } else {
+                isChannel = false;
             }
-            boolean isChannel = messageObject.messageOwner.to_id.channel_id != 0;
             MessageObject oldMessageObject = (MessageObject) this.pushMessagesDict.get(mid);
             if (oldMessageObject == null && messageObject.messageOwner.random_id != 0) {
                 oldMessageObject = (MessageObject) this.fcmRandomMessagesDict.get(messageObject.messageOwner.random_id);
@@ -697,7 +727,6 @@ public class NotificationsController {
                 if (isFcm) {
                     MessagesStorage.getInstance(this.currentAccount).putPushMessage(messageObject);
                 }
-                dialog_id = messageObject.getDialogId();
                 long original_dialog_id = dialog_id;
                 if (dialog_id != this.opened_dialog_id || !ApplicationLoader.isScreenOn) {
                     boolean value;
@@ -710,7 +739,6 @@ public class NotificationsController {
                         this.personal_count++;
                     }
                     added = true;
-                    int lower_id = (int) dialog_id;
                     if (lower_id < 0) {
                     }
                     int index = settingsCache.indexOfKey(dialog_id);
@@ -721,30 +749,9 @@ public class NotificationsController {
                         value = notifyOverride == -1 ? isGlobalNotificationsEnabled(dialog_id) : notifyOverride != 2;
                         settingsCache.put(dialog_id, Boolean.valueOf(value));
                     }
-                    if (lower_id != 0) {
-                        if (preferences.getBoolean("custom_" + dialog_id, false)) {
-                            popup = preferences.getInt("popup_" + dialog_id, 0);
-                        } else {
-                            popup = 0;
-                        }
-                        if (popup == 0) {
-                            if (isChannel) {
-                                popup = preferences.getInt("popupChannel", 0);
-                            } else {
-                                popup = preferences.getInt(((int) dialog_id) < 0 ? "popupGroup" : "popupAll", 0);
-                            }
-                        } else if (popup == 1) {
-                            popup = 3;
-                        } else if (popup == 2) {
-                            popup = 0;
-                        }
-                    }
-                    if (!(popup == 0 || messageObject.messageOwner.to_id.channel_id == 0 || messageObject.isMegagroup())) {
-                        popup = 0;
-                    }
                     if (value) {
-                        if (popup != 0) {
-                            popupArrayAdd.add(0, messageObject);
+                        if (!isFcm) {
+                            popup = addToPopupMessages(popupArrayAdd, messageObject, lower_id, dialog_id, isChannel, preferences);
                         }
                         this.delayedPushMessages.add(messageObject);
                         this.pushMessages.add(0, messageObject);
@@ -773,6 +780,7 @@ public class NotificationsController {
                 int idxOld = this.pushMessages.indexOf(oldMessageObject);
                 if (idxOld >= 0) {
                     this.pushMessages.set(idxOld, messageObject);
+                    popup = addToPopupMessages(popupArrayAdd, messageObject, lower_id, dialog_id, isChannel, preferences);
                 }
             }
         }
@@ -1217,6 +1225,7 @@ public class NotificationsController {
             }
         }
         if (((int) dialog_id) == 0) {
+            userName[0] = null;
             return LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
         }
         preferences = MessagesController.getNotificationsSettings(this.currentAccount);
@@ -1941,7 +1950,6 @@ public class NotificationsController {
 
     private void dismissNotification() {
         try {
-            this.lastNotificationIsNoData = false;
             notificationManager.cancel(this.notificationId);
             this.pushMessages.clear();
             this.pushMessagesDict.clear();
@@ -2551,7 +2559,6 @@ public class NotificationsController {
                 mBuilder.setChannelId(validateChannelId(dialog_id, chatName, vibrationPattern, ledColor, sound, importance, configVibrationPattern, configSound, configImportance));
             }
             showExtraNotifications(mBuilder, notifyAboutLast, detailText);
-            this.lastNotificationIsNoData = false;
             scheduleNotificationRepeat();
         } catch (Throwable e2) {
             FileLog.m13e(e2);
@@ -2765,7 +2772,6 @@ public class NotificationsController {
                 if (message != null) {
                     long uid;
                     User sender;
-                    Uri uri;
                     if (text.length() > 0) {
                         text.append("\n\n");
                     }
@@ -2787,7 +2793,7 @@ public class NotificationsController {
                     Person person = (Person) personCache.get(uid);
                     if (person == null) {
                         Person.Builder personBuilder = new Person.Builder().setName(senderName[0] == null ? TtmlNode.ANONYMOUS_REGION_ID : senderName[0]);
-                        if (VERSION.SDK_INT >= 28) {
+                        if (lowerId != 0 && VERSION.SDK_INT >= 28) {
                             File avatar = null;
                             if (lowerId > 0 || isChannel) {
                                 avatar = avatalFile;
@@ -2814,48 +2820,51 @@ public class NotificationsController {
                         person = personBuilder.build();
                         personCache.put(uid, person);
                     }
-                    if (VERSION.SDK_INT < 28 || ((ActivityManager) ApplicationLoader.applicationContext.getSystemService("activity")).isLowRamDevice()) {
-                        messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, person);
-                    } else if (messageObject.type == 1 || messageObject.isSticker()) {
-                        File attach = FileLoader.getPathToMessage(messageObject.messageOwner);
-                        MessagingStyle.Message message2 = new MessagingStyle.Message(message, ((long) messageObject.messageOwner.date) * 1000, person);
-                        String mimeType = messageObject.isSticker() ? "image/webp" : "image/jpeg";
-                        if (attach.exists()) {
-                            uri = FileProvider.getUriForFile(ApplicationLoader.applicationContext, "org.telegram.messenger.beta.provider", attach);
-                        } else if (FileLoader.getInstance(this.currentAccount).isLoadingFile(attach.getName())) {
-                            uri = new Uri.Builder().scheme("content").authority(NotificationImageProvider.AUTHORITY).appendPath("msg_media_raw").appendPath(this.currentAccount + TtmlNode.ANONYMOUS_REGION_ID).appendPath(attach.getName()).appendQueryParameter("final_path", attach.getAbsolutePath()).build();
-                        } else {
-                            uri = null;
-                        }
-                        if (uri != null) {
-                            message2.setData(mimeType, uri);
-                            messagingStyle.addMessage(message2);
-                            ApplicationLoader.applicationContext.grantUriPermission("com.android.systemui", uri, 1);
-                            AndroidUtilities.runOnUIThread(new NotificationsController$$Lambda$16(uri), 20000);
-                            if (!TextUtils.isEmpty(messageObject.caption)) {
-                                messagingStyle.addMessage(messageObject.caption, ((long) messageObject.messageOwner.date) * 1000, person);
+                    if (lowerId != 0) {
+                        Uri uri;
+                        if (VERSION.SDK_INT < 28 || ((ActivityManager) ApplicationLoader.applicationContext.getSystemService("activity")).isLowRamDevice()) {
+                            messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, person);
+                        } else if (messageObject.type == 1 || messageObject.isSticker()) {
+                            File attach = FileLoader.getPathToMessage(messageObject.messageOwner);
+                            MessagingStyle.Message message2 = new MessagingStyle.Message(message, ((long) messageObject.messageOwner.date) * 1000, person);
+                            String mimeType = messageObject.isSticker() ? "image/webp" : "image/jpeg";
+                            if (attach.exists()) {
+                                uri = FileProvider.getUriForFile(ApplicationLoader.applicationContext, "org.telegram.messenger.beta.provider", attach);
+                            } else if (FileLoader.getInstance(this.currentAccount).isLoadingFile(attach.getName())) {
+                                uri = new Uri.Builder().scheme("content").authority(NotificationImageProvider.AUTHORITY).appendPath("msg_media_raw").appendPath(this.currentAccount + TtmlNode.ANONYMOUS_REGION_ID).appendPath(attach.getName()).appendQueryParameter("final_path", attach.getAbsolutePath()).build();
+                            } else {
+                                uri = null;
+                            }
+                            if (uri != null) {
+                                message2.setData(mimeType, uri);
+                                messagingStyle.addMessage(message2);
+                                ApplicationLoader.applicationContext.grantUriPermission("com.android.systemui", uri, 1);
+                                AndroidUtilities.runOnUIThread(new NotificationsController$$Lambda$16(uri), 20000);
+                                if (!TextUtils.isEmpty(messageObject.caption)) {
+                                    messagingStyle.addMessage(messageObject.caption, ((long) messageObject.messageOwner.date) * 1000, person);
+                                }
+                            } else {
+                                messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, person);
                             }
                         } else {
                             messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, person);
                         }
-                    } else {
-                        messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, person);
-                    }
-                    if (messageObject.isVoice()) {
-                        List<MessagingStyle.Message> messages = messagingStyle.getMessages();
-                        if (!messages.isEmpty()) {
-                            File f = FileLoader.getPathToMessage(messageObject.messageOwner);
-                            if (VERSION.SDK_INT >= 24) {
-                                try {
-                                    uri = FileProvider.getUriForFile(ApplicationLoader.applicationContext, "org.telegram.messenger.beta.provider", f);
-                                } catch (Exception e) {
-                                    uri = null;
+                        if (messageObject.isVoice()) {
+                            List<MessagingStyle.Message> messages = messagingStyle.getMessages();
+                            if (!messages.isEmpty()) {
+                                File f = FileLoader.getPathToMessage(messageObject.messageOwner);
+                                if (VERSION.SDK_INT >= 24) {
+                                    try {
+                                        uri = FileProvider.getUriForFile(ApplicationLoader.applicationContext, "org.telegram.messenger.beta.provider", f);
+                                    } catch (Exception e) {
+                                        uri = null;
+                                    }
+                                } else {
+                                    uri = Uri.fromFile(f);
                                 }
-                            } else {
-                                uri = Uri.fromFile(f);
-                            }
-                            if (uri != null) {
-                                ((MessagingStyle.Message) messages.get(messages.size() - 1)).setData("audio/ogg", uri);
+                                if (uri != null) {
+                                    ((MessagingStyle.Message) messages.get(messages.size() - 1)).setData("audio/ogg", uri);
+                                }
                             }
                         }
                     }

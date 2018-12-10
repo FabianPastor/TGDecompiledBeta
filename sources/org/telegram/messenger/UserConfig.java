@@ -63,16 +63,6 @@ public class UserConfig {
     public TL_help_termsOfService unacceptedTermsOfService;
     public boolean unreadDialogsLoaded = true;
 
-    /* renamed from: org.telegram.messenger.UserConfig$1 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            UserConfig.this.saveConfig(false);
-        }
-    }
-
     public static UserConfig getInstance(int num) {
         Throwable th;
         UserConfig localInstance = Instance[num];
@@ -338,7 +328,7 @@ public class UserConfig {
                         }
                         if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
                             this.pendingAppUpdate = null;
-                            AndroidUtilities.runOnUIThread(new CLASSNAME());
+                            AndroidUtilities.runOnUIThread(new UserConfig$$Lambda$0(this));
                         }
                     }
                 } catch (Throwable e22) {
@@ -384,6 +374,10 @@ public class UserConfig {
             this.configLoaded = true;
             return;
         }
+    }
+
+    final /* synthetic */ void lambda$loadConfig$0$UserConfig() {
+        saveConfig(false);
     }
 
     public void savePassword(byte[] hash, byte[] salted) {

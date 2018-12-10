@@ -124,6 +124,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 args.putLong("dialog_id", this.parentFragment.getDialogId());
             }
             fragment = new ProfileActivity(args);
+            fragment.setUserInfo(this.parentFragment.getCurrentUserInfo());
             fragment.setPlayProfileAnimation(true);
             this.parentFragment.presentFragment(fragment);
         } else if (chat != null) {
@@ -131,7 +132,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             args.putInt("chat_id", chat.f78id);
             fragment = new ProfileActivity(args);
             fragment.setChatInfo(this.parentFragment.getCurrentChatInfo());
-            fragment.setUserInfo(this.parentFragment.getCurrentUserInfo());
             fragment.setPlayProfileAnimation(true);
             this.parentFragment.presentFragment(fragment);
         }

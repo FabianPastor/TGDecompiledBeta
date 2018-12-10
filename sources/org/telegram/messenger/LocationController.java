@@ -64,7 +64,7 @@ public class LocationController implements NotificationCenterDelegate {
 
         public void run() {
             LocationController locationController = LocationController.getInstance(LocationController.this.currentAccount);
-            NotificationCenter.getInstance(LocationController.this.currentAccount).addObserver(locationController, NotificationCenter.didReceivedNewMessages);
+            NotificationCenter.getInstance(LocationController.this.currentAccount).addObserver(locationController, NotificationCenter.didReceiveNewMessages);
             NotificationCenter.getInstance(LocationController.this.currentAccount).addObserver(locationController, NotificationCenter.messagesDeleted);
             NotificationCenter.getInstance(LocationController.this.currentAccount).addObserver(locationController, NotificationCenter.replaceMessagesObjects);
         }
@@ -303,7 +303,7 @@ public class LocationController implements NotificationCenterDelegate {
         int a;
         MessageObject messageObject;
         int b;
-        if (id == NotificationCenter.didReceivedNewMessages) {
+        if (id == NotificationCenter.didReceiveNewMessages) {
             did = ((Long) args[0]).longValue();
             if (isSharingLocation(did)) {
                 messages = (ArrayList) this.locationsCache.get(did);

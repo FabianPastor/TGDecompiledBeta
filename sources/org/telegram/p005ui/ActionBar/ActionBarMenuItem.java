@@ -106,33 +106,33 @@ public class ActionBarMenuItem extends FrameLayout {
             if (ActionBarMenuItem.this.clearButton == null) {
                 return;
             }
-            if (TextUtils.isEmpty(s)) {
-                if (ActionBarMenuItem.this.clearButton.getTag() != null) {
-                    ActionBarMenuItem.this.clearButton.setTag(null);
+            if (!TextUtils.isEmpty(s) || ((ActionBarMenuItem.this.listener != null && ActionBarMenuItem.this.listener.forceShowClear()) || (ActionBarMenuItem.this.searchFieldCaption != null && ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0))) {
+                if (ActionBarMenuItem.this.clearButton.getTag() == null) {
+                    ActionBarMenuItem.this.clearButton.setTag(Integer.valueOf(1));
                     ActionBarMenuItem.this.clearButton.clearAnimation();
+                    ActionBarMenuItem.this.clearButton.setVisibility(0);
                     if (ActionBarMenuItem.this.animateClear) {
-                        ActionBarMenuItem.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new ActionBarMenuItem$4$$Lambda$0(this)).start();
+                        ActionBarMenuItem.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(1.0f).setDuration(180).scaleY(1.0f).scaleX(1.0f).rotation(0.0f).start();
                         return;
                     }
-                    ActionBarMenuItem.this.clearButton.setAlpha(0.0f);
-                    ActionBarMenuItem.this.clearButton.setRotation(45.0f);
-                    ActionBarMenuItem.this.clearButton.setScaleX(0.0f);
-                    ActionBarMenuItem.this.clearButton.setScaleY(0.0f);
-                    ActionBarMenuItem.this.clearButton.setVisibility(4);
+                    ActionBarMenuItem.this.clearButton.setAlpha(1.0f);
+                    ActionBarMenuItem.this.clearButton.setRotation(0.0f);
+                    ActionBarMenuItem.this.clearButton.setScaleX(1.0f);
+                    ActionBarMenuItem.this.clearButton.setScaleY(1.0f);
                     ActionBarMenuItem.this.animateClear = true;
                 }
-            } else if (ActionBarMenuItem.this.clearButton.getTag() == null) {
-                ActionBarMenuItem.this.clearButton.setTag(Integer.valueOf(1));
+            } else if (ActionBarMenuItem.this.clearButton.getTag() != null) {
+                ActionBarMenuItem.this.clearButton.setTag(null);
                 ActionBarMenuItem.this.clearButton.clearAnimation();
-                ActionBarMenuItem.this.clearButton.setVisibility(0);
                 if (ActionBarMenuItem.this.animateClear) {
-                    ActionBarMenuItem.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(1.0f).setDuration(180).scaleY(1.0f).scaleX(1.0f).rotation(0.0f).start();
+                    ActionBarMenuItem.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new ActionBarMenuItem$4$$Lambda$0(this)).start();
                     return;
                 }
-                ActionBarMenuItem.this.clearButton.setAlpha(1.0f);
-                ActionBarMenuItem.this.clearButton.setRotation(0.0f);
-                ActionBarMenuItem.this.clearButton.setScaleX(1.0f);
-                ActionBarMenuItem.this.clearButton.setScaleY(1.0f);
+                ActionBarMenuItem.this.clearButton.setAlpha(0.0f);
+                ActionBarMenuItem.this.clearButton.setRotation(45.0f);
+                ActionBarMenuItem.this.clearButton.setScaleX(0.0f);
+                ActionBarMenuItem.this.clearButton.setScaleY(0.0f);
+                ActionBarMenuItem.this.clearButton.setVisibility(4);
                 ActionBarMenuItem.this.animateClear = true;
             }
         }
@@ -169,6 +169,10 @@ public class ActionBarMenuItem extends FrameLayout {
         }
 
         public void onCaptionCleared() {
+        }
+
+        public boolean forceShowClear() {
+            return false;
         }
     }
 
@@ -487,6 +491,7 @@ public class ActionBarMenuItem extends FrameLayout {
         } else if (this.listener != null && (this.listener == null || !this.listener.canCollapseSearch())) {
             return false;
         } else {
+            this.searchField.setText(TtmlNode.ANONYMOUS_REGION_ID);
             this.searchContainer.setVisibility(8);
             this.searchField.clearFocus();
             setVisibility(0);
@@ -591,8 +596,12 @@ public class ActionBarMenuItem extends FrameLayout {
                         return true;
                     }
 
-                    public boolean dispatchKeyEvent(KeyEvent event) {
-                        return super.dispatchKeyEvent(event);
+                    public boolean onTouchEvent(MotionEvent event) {
+                        if (event.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
+                            clearFocus();
+                            requestFocus();
+                        }
+                        return super.onTouchEvent(event);
                     }
                 };
                 this.searchField.setCursorWidth(1.5f);
@@ -618,7 +627,24 @@ public class ActionBarMenuItem extends FrameLayout {
                     this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 19, 0.0f, 5.5f, 0.0f, 0.0f));
                     this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
                 }
-                this.clearButton = new ImageView(getContext());
+                this.clearButton = new ImageView(getContext()) {
+                    protected void onDetachedFromWindow() {
+                        super.onDetachedFromWindow();
+                        clearAnimation();
+                        if (getTag() == null) {
+                            ActionBarMenuItem.this.clearButton.setVisibility(4);
+                            ActionBarMenuItem.this.clearButton.setAlpha(0.0f);
+                            ActionBarMenuItem.this.clearButton.setRotation(45.0f);
+                            ActionBarMenuItem.this.clearButton.setScaleX(0.0f);
+                            ActionBarMenuItem.this.clearButton.setScaleY(0.0f);
+                            return;
+                        }
+                        ActionBarMenuItem.this.clearButton.setAlpha(1.0f);
+                        ActionBarMenuItem.this.clearButton.setRotation(0.0f);
+                        ActionBarMenuItem.this.clearButton.setScaleX(1.0f);
+                        ActionBarMenuItem.this.clearButton.setScaleY(1.0f);
+                    }
+                };
                 ImageView imageView = this.clearButton;
                 Drawable closeProgressDrawable2 = new CloseProgressDrawable2();
                 this.progressDrawable = closeProgressDrawable2;

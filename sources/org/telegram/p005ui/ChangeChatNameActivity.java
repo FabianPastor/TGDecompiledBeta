@@ -1,5 +1,9 @@
 package org.telegram.p005ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,20 +44,25 @@ import org.telegram.p005ui.Components.EditTextEmoji;
 import org.telegram.p005ui.Components.ImageUpdater;
 import org.telegram.p005ui.Components.ImageUpdater.ImageUpdaterDelegate;
 import org.telegram.p005ui.Components.LayoutHelper;
+import org.telegram.p005ui.Components.RadialProgressView;
 import org.telegram.p005ui.Components.SizeNotifierFrameLayout;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_chatPhoto;
-import org.telegram.tgnet.TLRPC.TL_secureFile;
 
 /* renamed from: org.telegram.ui.ChangeChatNameActivity */
 public class ChangeChatNameActivity extends BaseFragment implements ImageUpdaterDelegate {
     private static final int done_button = 1;
     private FileLocation avatar;
+    private AnimatorSet avatarAnimation;
+    private FileLocation avatarBig;
     private AvatarDrawable avatarDrawable;
+    private ImageView avatarEditor;
     private BackupImageView avatarImage;
+    private View avatarOverlay;
+    private RadialProgressView avatarProgressView;
     private int chatId;
     private boolean createAfterUpload;
     private Chat currentChat;
@@ -65,10 +74,10 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
     private AlertDialog progressDialog;
     private InputFile uploadedAvatar;
 
-    /* renamed from: org.telegram.ui.ChangeChatNameActivity$4 */
+    /* renamed from: org.telegram.ui.ChangeChatNameActivity$6 */
     class CLASSNAME implements OnClickListener {
 
-        /* renamed from: org.telegram.ui.ChangeChatNameActivity$4$1 */
+        /* renamed from: org.telegram.ui.ChangeChatNameActivity$6$1 */
         class CLASSNAME implements DialogInterface.OnClickListener {
             CLASSNAME() {
             }
@@ -124,9 +133,9 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
                     return;
                 }
                 if (ChangeChatNameActivity.this.uploadedAvatar != null) {
-                    MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).changeChatAvatar(ChangeChatNameActivity.this.chatId, ChangeChatNameActivity.this.uploadedAvatar);
+                    MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).changeChatAvatar(ChangeChatNameActivity.this.chatId, ChangeChatNameActivity.this.uploadedAvatar, ChangeChatNameActivity.this.avatar, ChangeChatNameActivity.this.avatarBig);
                 } else if (ChangeChatNameActivity.this.avatar == null && (ChangeChatNameActivity.this.currentChat.photo instanceof TL_chatPhoto)) {
-                    MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).changeChatAvatar(ChangeChatNameActivity.this.chatId, null);
+                    MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).changeChatAvatar(ChangeChatNameActivity.this.chatId, null, null, null);
                 }
                 ChangeChatNameActivity.this.lambda$checkDiscard$70$PassportActivity();
                 if (ChangeChatNameActivity.this.editText.length() != 0) {
@@ -256,13 +265,27 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
         CLASSNAME.addView(linearLayout, LayoutHelper.createFrame(-1, -1.0f));
-        CLASSNAME = new LinearLayout(context);
-        CLASSNAME.setOrientation(1);
-        CLASSNAME.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        linearLayout.addView(CLASSNAME, LayoutHelper.createLinear(-1, -2));
+        LinearLayout linearLayout2 = new LinearLayout(context);
+        linearLayout2.setOrientation(1);
+        linearLayout2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        linearLayout.addView(linearLayout2, LayoutHelper.createLinear(-1, -2));
         FrameLayout frameLayout = new FrameLayout(context);
-        CLASSNAME.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
-        this.avatarImage = new BackupImageView(context);
+        linearLayout2.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
+        this.avatarImage = new BackupImageView(context) {
+            public void invalidate() {
+                if (ChangeChatNameActivity.this.avatarOverlay != null) {
+                    ChangeChatNameActivity.this.avatarOverlay.invalidate();
+                }
+                super.invalidate();
+            }
+
+            public void invalidate(int l, int t, int r, int b) {
+                if (ChangeChatNameActivity.this.avatarOverlay != null) {
+                    ChangeChatNameActivity.this.avatarOverlay.invalidate();
+                }
+                super.invalidate(l, t, r, b);
+            }
+        };
         this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(32.0f));
         this.avatarDrawable.setInfo(5, null, null, false);
         View view = this.avatarImage;
@@ -281,17 +304,15 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
         Paint paint = new Paint(1);
         paint.setColor(NUM);
         final Paint paint2 = paint;
-        ImageView avatarEditor = new ImageView(context) {
+        this.avatarOverlay = new View(context) {
             protected void onDraw(Canvas canvas) {
-                if (ChangeChatNameActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
+                if (ChangeChatNameActivity.this.avatarImage != null && ChangeChatNameActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
                     paint2.setAlpha((int) (85.0f * ChangeChatNameActivity.this.avatarImage.getImageReceiver().getCurrentAlpha()));
                     canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(32.0f), paint2);
                 }
-                super.onDraw(canvas);
             }
         };
-        avatarEditor.setImageResource(R.drawable.menu_camera_av);
-        avatarEditor.setScaleType(ScaleType.CENTER);
+        view = this.avatarOverlay;
         i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
             f = 0.0f;
@@ -303,8 +324,29 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
         } else {
             f2 = 0.0f;
         }
-        frameLayout.addView(avatarEditor, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
-        avatarEditor.setOnClickListener(new ChangeChatNameActivity$$Lambda$1(this));
+        frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
+        this.avatarOverlay.setOnClickListener(new ChangeChatNameActivity$$Lambda$1(this));
+        this.avatarEditor = new ImageView(context) {
+            public void invalidate(int l, int t, int r, int b) {
+                super.invalidate(l, t, r, b);
+                ChangeChatNameActivity.this.avatarOverlay.invalidate();
+            }
+
+            public void invalidate() {
+                super.invalidate();
+                ChangeChatNameActivity.this.avatarOverlay.invalidate();
+            }
+        };
+        this.avatarEditor.setScaleType(ScaleType.CENTER);
+        this.avatarEditor.setImageResource(R.drawable.menu_camera_av);
+        this.avatarEditor.setEnabled(false);
+        this.avatarEditor.setClickable(false);
+        frameLayout.addView(this.avatarEditor, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
+        this.avatarProgressView = new RadialProgressView(context);
+        this.avatarProgressView.setSize(AndroidUtilities.m9dp(30.0f));
+        this.avatarProgressView.setProgressColor(-1);
+        frameLayout.addView(this.avatarProgressView, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
+        showAvatarProgress(false, false);
         this.editText = new EditTextEmoji((Activity) context, CLASSNAME, this);
         this.editText.setHint(LocaleController.getString("GroupName", R.string.GroupName));
         this.editText.setFilters(new InputFilter[]{new LengthFilter(100)});
@@ -352,7 +394,9 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
 
     final /* synthetic */ void lambda$null$1$ChangeChatNameActivity() {
         this.avatar = null;
+        this.avatarBig = null;
         this.uploadedAvatar = null;
+        showAvatarProgress(false, true);
         this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, this.currentChat);
     }
 
@@ -388,25 +432,88 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
         return false;
     }
 
-    public void didUploadedPhoto(InputFile file, PhotoSize photoSize, TL_secureFile secureFile) {
-        AndroidUtilities.runOnUIThread(new ChangeChatNameActivity$$Lambda$2(this, file, photoSize));
+    public void didUploadPhoto(InputFile file, PhotoSize bigSize, PhotoSize smallSize) {
+        AndroidUtilities.runOnUIThread(new ChangeChatNameActivity$$Lambda$2(this, file, smallSize, bigSize));
     }
 
-    final /* synthetic */ void lambda$didUploadedPhoto$3$ChangeChatNameActivity(InputFile file, PhotoSize photoSize) {
-        this.uploadedAvatar = file;
-        this.avatar = photoSize.location;
-        this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, this.currentChat);
-        if (this.createAfterUpload) {
-            this.donePressed = false;
-            try {
-                if (this.progressDialog != null && this.progressDialog.isShowing()) {
-                    this.progressDialog.dismiss();
-                    this.progressDialog = null;
+    final /* synthetic */ void lambda$didUploadPhoto$3$ChangeChatNameActivity(InputFile file, PhotoSize smallSize, PhotoSize bigSize) {
+        if (file != null) {
+            this.uploadedAvatar = file;
+            if (this.createAfterUpload) {
+                try {
+                    if (this.progressDialog != null && this.progressDialog.isShowing()) {
+                        this.progressDialog.dismiss();
+                        this.progressDialog = null;
+                    }
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
                 }
-            } catch (Throwable e) {
-                FileLog.m13e(e);
+                this.donePressed = false;
+                this.doneButton.performClick();
             }
-            this.doneButton.performClick();
+            showAvatarProgress(false, true);
+            return;
+        }
+        this.avatar = smallSize.location;
+        this.avatarBig = bigSize.location;
+        this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, this.currentChat);
+        showAvatarProgress(true, false);
+    }
+
+    private void showAvatarProgress(final boolean show, boolean animated) {
+        if (this.avatarEditor != null) {
+            if (this.avatarAnimation != null) {
+                this.avatarAnimation.cancel();
+                this.avatarAnimation = null;
+            }
+            if (animated) {
+                this.avatarAnimation = new AnimatorSet();
+                AnimatorSet animatorSet;
+                Animator[] animatorArr;
+                if (show) {
+                    this.avatarProgressView.setVisibility(0);
+                    animatorSet = this.avatarAnimation;
+                    animatorArr = new Animator[2];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{0.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{1.0f});
+                    animatorSet.playTogether(animatorArr);
+                } else {
+                    this.avatarEditor.setVisibility(0);
+                    animatorSet = this.avatarAnimation;
+                    animatorArr = new Animator[2];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{1.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{0.0f});
+                    animatorSet.playTogether(animatorArr);
+                }
+                this.avatarAnimation.setDuration(180);
+                this.avatarAnimation.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animation) {
+                        if (ChangeChatNameActivity.this.avatarAnimation != null && ChangeChatNameActivity.this.avatarEditor != null) {
+                            if (show) {
+                                ChangeChatNameActivity.this.avatarEditor.setVisibility(4);
+                            } else {
+                                ChangeChatNameActivity.this.avatarProgressView.setVisibility(4);
+                            }
+                            ChangeChatNameActivity.this.avatarAnimation = null;
+                        }
+                    }
+
+                    public void onAnimationCancel(Animator animation) {
+                        ChangeChatNameActivity.this.avatarAnimation = null;
+                    }
+                });
+                this.avatarAnimation.start();
+            } else if (show) {
+                this.avatarEditor.setAlpha(1.0f);
+                this.avatarEditor.setVisibility(4);
+                this.avatarProgressView.setAlpha(1.0f);
+                this.avatarProgressView.setVisibility(0);
+            } else {
+                this.avatarEditor.setAlpha(1.0f);
+                this.avatarEditor.setVisibility(0);
+                this.avatarProgressView.setAlpha(0.0f);
+                this.avatarProgressView.setVisibility(4);
+            }
         }
     }
 

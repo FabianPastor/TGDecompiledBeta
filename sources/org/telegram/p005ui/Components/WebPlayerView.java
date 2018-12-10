@@ -73,7 +73,6 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.VideoPlayer.VideoPlayerDelegate;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 
@@ -1444,7 +1443,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             httpConnectionStream = httpConnection.getInputStream();
         } catch (Throwable e4) {
             if (e4 instanceof SocketTimeoutException) {
-                if (ConnectionsManager.isNetworkOnline()) {
+                if (ApplicationLoader.isNetworkOnline()) {
                     canRetry = false;
                 }
             } else if (e4 instanceof UnknownHostException) {

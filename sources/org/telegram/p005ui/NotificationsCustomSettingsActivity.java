@@ -973,9 +973,13 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.messageVibrateRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.messagePopupNotificationRow = i;
+            if (this.currentType == 2) {
+                this.messagePopupNotificationRow = -1;
+            } else {
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.messagePopupNotificationRow = i;
+            }
             i = this.rowCount;
             this.rowCount = i + 1;
             this.messageSoundRow = i;

@@ -597,12 +597,43 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         final /* synthetic */ boolean lambda$new$1$EmojiView$ImageViewEmoji(View view) {
             int yOffset = 0;
             String code = (String) view.getTag();
-            if (EmojiData.emojiColoredMap.containsKey(code)) {
+            String color = null;
+            String toCheck = code.replace("\ud83c\udffb", TtmlNode.ANONYMOUS_REGION_ID);
+            if (toCheck != code) {
+                color = "\ud83c\udffb";
+            }
+            if (color == null) {
+                toCheck = code.replace("\ud83c\udffc", TtmlNode.ANONYMOUS_REGION_ID);
+                if (toCheck != code) {
+                    color = "\ud83c\udffc";
+                }
+            }
+            if (color == null) {
+                toCheck = code.replace("\ud83c\udffd", TtmlNode.ANONYMOUS_REGION_ID);
+                if (toCheck != code) {
+                    color = "\ud83c\udffd";
+                }
+            }
+            if (color == null) {
+                toCheck = code.replace("\ud83c\udffe", TtmlNode.ANONYMOUS_REGION_ID);
+                if (toCheck != code) {
+                    color = "\ud83c\udffe";
+                }
+            }
+            if (color == null) {
+                toCheck = code.replace("\ud83c\udfff", TtmlNode.ANONYMOUS_REGION_ID);
+                if (toCheck != code) {
+                    color = "\ud83c\udfff";
+                }
+            }
+            if (EmojiData.emojiColoredMap.containsKey(toCheck)) {
                 int i;
                 this.touched = true;
                 this.touchedX = this.lastX;
                 this.touchedY = this.lastY;
-                String color = (String) Emoji.emojiColor.get(code);
+                if (color == null && EmojiView.this.pager.getCurrentItem() != 0) {
+                    color = (String) Emoji.emojiColor.get(toCheck);
+                }
                 if (color != null) {
                     i = -1;
                     switch (color.hashCode()) {
@@ -674,7 +705,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 if (view.getTop() < 0) {
                     yOffset = view.getTop();
                 }
-                EmojiView.this.pickerView.setEmoji(code, (AndroidUtilities.m9dp(AndroidUtilities.isTablet() ? 30.0f : 22.0f) - xOffset) + ((int) AndroidUtilities.dpf2(0.5f)));
+                EmojiView.this.pickerView.setEmoji(toCheck, (AndroidUtilities.m9dp(AndroidUtilities.isTablet() ? 30.0f : 22.0f) - xOffset) + ((int) AndroidUtilities.dpf2(0.5f)));
                 EmojiView.this.pickerViewPopup.setFocusable(true);
                 EmojiView.this.pickerViewPopup.showAsDropDown(view, xOffset, (((-view.getMeasuredHeight()) - EmojiView.this.popupHeight) + ((view.getMeasuredHeight() - EmojiView.this.emojiSize) / 2)) - yOffset);
                 view.getParent().requestDisallowInterceptTouchEvent(true);
@@ -748,10 +779,13 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             setImageDrawable(Emoji.getEmojiBigDrawable(code));
                             sendEmoji(null);
                             Emoji.saveEmojiColors();
-                        } else if (color != null) {
-                            sendEmoji(EmojiView.addColorToCode(code, color));
                         } else {
-                            sendEmoji(code);
+                            code = code.replace("\ud83c\udffb", TtmlNode.ANONYMOUS_REGION_ID).replace("\ud83c\udffc", TtmlNode.ANONYMOUS_REGION_ID).replace("\ud83c\udffd", TtmlNode.ANONYMOUS_REGION_ID).replace("\ud83c\udffe", TtmlNode.ANONYMOUS_REGION_ID).replace("\ud83c\udfff", TtmlNode.ANONYMOUS_REGION_ID);
+                            if (color != null) {
+                                sendEmoji(EmojiView.addColorToCode(code, color));
+                            } else {
+                                sendEmoji(code);
+                            }
                         }
                     }
                     this.touched = false;

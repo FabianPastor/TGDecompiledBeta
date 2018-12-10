@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
@@ -33,40 +32,6 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     private RadialProgress radialProgress;
     private FrameLayout radialProgressView;
 
-    /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$1 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(DialogInterface dialog, int which) {
-            if (!BlockingUpdateView.checkApkInstallPermissions(UpdateAppAlertDialog.this.getContext())) {
-                return;
-            }
-            if (UpdateAppAlertDialog.this.appUpdate.document instanceof TL_document) {
-                if (!BlockingUpdateView.openApkInstall(UpdateAppAlertDialog.this.parentActivity, UpdateAppAlertDialog.this.appUpdate.document)) {
-                    FileLoader.getInstance(UpdateAppAlertDialog.this.accountNum).loadFile(UpdateAppAlertDialog.this.appUpdate.document, "update", true, 1);
-                    UpdateAppAlertDialog.this.showProgress(true);
-                }
-            } else if (UpdateAppAlertDialog.this.appUpdate.url != null) {
-                Browser.openUrl(UpdateAppAlertDialog.this.getContext(), UpdateAppAlertDialog.this.appUpdate.url);
-                dialog.dismiss();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$2 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(DialogInterface dialog, int which) {
-            if (UpdateAppAlertDialog.this.appUpdate.document instanceof TL_document) {
-                FileLoader.getInstance(UpdateAppAlertDialog.this.accountNum).cancelLoadFile(UpdateAppAlertDialog.this.appUpdate.document);
-            }
-            dialog.dismiss();
-        }
-    }
-
     public UpdateAppAlertDialog(Activity activity, TL_help_appUpdate update, int account) {
         super(activity, 0);
         this.appUpdate = update;
@@ -83,8 +48,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         }
         setDismissDialogByButtons(false);
         setTitle(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
-        setPositiveButton(LocaleController.getString("UpdateNow", R.string.UpdateNow), new CLASSNAME());
-        setNeutralButton(LocaleController.getString("Later", R.string.Later), new CLASSNAME());
+        setPositiveButton(LocaleController.getString("UpdateNow", R.string.UpdateNow), new UpdateAppAlertDialog$$Lambda$0(this));
+        setNeutralButton(LocaleController.getString("Later", R.string.Later), new UpdateAppAlertDialog$$Lambda$1(this));
         this.radialProgressView = new FrameLayout(this.parentActivity) {
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
@@ -109,6 +74,28 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         this.radialProgress.setStrokeWidth(AndroidUtilities.m9dp(2.0f));
         this.radialProgress.setBackground(null, true, false);
         this.radialProgress.setProgressColor(Theme.getColor(Theme.key_dialogButton));
+    }
+
+    final /* synthetic */ void lambda$new$0$UpdateAppAlertDialog(DialogInterface dialog, int which) {
+        if (!BlockingUpdateView.checkApkInstallPermissions(getContext())) {
+            return;
+        }
+        if (this.appUpdate.document instanceof TL_document) {
+            if (!BlockingUpdateView.openApkInstall(this.parentActivity, this.appUpdate.document)) {
+                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 1, 1);
+                showProgress(true);
+            }
+        } else if (this.appUpdate.url != null) {
+            Browser.openUrl(getContext(), this.appUpdate.url);
+            dialog.dismiss();
+        }
+    }
+
+    final /* synthetic */ void lambda$new$1$UpdateAppAlertDialog(DialogInterface dialog, int which) {
+        if (this.appUpdate.document instanceof TL_document) {
+            FileLoader.getInstance(this.accountNum).cancelLoadFile(this.appUpdate.document);
+        }
+        dialog.dismiss();
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {

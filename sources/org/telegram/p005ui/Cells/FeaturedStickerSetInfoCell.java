@@ -132,7 +132,6 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         }
         this.infoTextView.setText(LocaleController.formatPluralString("Stickers", stickerSet.set.count));
         this.isUnread = unread;
-        this.isUnread = true;
         if (this.hasOnClick) {
             this.addButton.setVisibility(0);
             boolean isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSet.set.f109id);

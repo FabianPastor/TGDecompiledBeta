@@ -181,7 +181,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
                 invalidate();
             }
         } else if (this.buttonState == 2) {
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.buttonState = 4;
             invalidate();
         } else if (this.buttonState == 3) {
@@ -219,7 +219,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
 
     public void downloadAudioIfNeed() {
         if (this.buttonState == 2) {
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.buttonState = 3;
             invalidate();
         }

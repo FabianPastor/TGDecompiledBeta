@@ -3,6 +3,7 @@ package org.telegram.p005ui.Cells;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -33,6 +34,10 @@ public class HeaderCell extends FrameLayout {
         this.textView = new TextView(getContext());
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.textView.setLines(1);
+        this.textView.setMaxLines(1);
+        this.textView.setSingleLine(true);
+        this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         if (dialog) {
             this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));

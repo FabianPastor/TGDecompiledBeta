@@ -1,17 +1,17 @@
 package org.telegram.p005ui;
 
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 /* renamed from: org.telegram.ui.PhotoViewer$$Lambda$42 */
-final /* synthetic */ class PhotoViewer$$Lambda$42 implements OnTouchListener {
-    static final OnTouchListener $instance = new PhotoViewer$$Lambda$42();
+final /* synthetic */ class PhotoViewer$$Lambda$42 implements OnClickListener {
+    private final PhotoViewer arg$1;
 
-    private PhotoViewer$$Lambda$42() {
+    PhotoViewer$$Lambda$42(PhotoViewer photoViewer) {
+        this.arg$1 = photoViewer;
     }
 
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        return true;
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$null$26$PhotoViewer(dialogInterface, i);
     }
 }

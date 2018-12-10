@@ -62,7 +62,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
 import org.telegram.messenger.SharedConfig;
@@ -75,7 +74,6 @@ import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.support.widget.DefaultItemAnimator;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.p005ui.ActionBar.ActionBarLayout;
 import org.telegram.p005ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate;
 import org.telegram.p005ui.ActionBar.AlertDialog;
@@ -1005,31 +1003,31 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     /* JADX WARNING: Missing block: B:55:0x01db, code:
             if (org.telegram.messenger.MessagesController.getInstance(r47[0]).checkCanOpenChat(r31, (org.telegram.p005ui.ActionBar.BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)) != false) goto L_0x01dd;
      */
-    /* JADX WARNING: Missing block: B:88:0x02aa, code:
-            if (r68.startsWith("https://") != false) goto L_0x02ac;
+    /* JADX WARNING: Missing block: B:86:0x02a8, code:
+            if (r68.startsWith("https://") != false) goto L_0x02aa;
      */
-    /* JADX WARNING: Missing block: B:108:0x030c, code:
-            if (r70.startsWith("image/") == false) goto L_0x030e;
+    /* JADX WARNING: Missing block: B:105:0x0308, code:
+            if (r70.startsWith("image/") == false) goto L_0x030a;
      */
-    /* JADX WARNING: Missing block: B:110:0x031d, code:
-            if (r71.toString().toLowerCase().endsWith(".jpg") != false) goto L_0x031f;
+    /* JADX WARNING: Missing block: B:107:0x0319, code:
+            if (r71.toString().toLowerCase().endsWith(".jpg") != false) goto L_0x031b;
      */
-    /* JADX WARNING: Missing block: B:112:0x0323, code:
-            if (r76.photoPathsArray != null) goto L_0x032e;
+    /* JADX WARNING: Missing block: B:109:0x031f, code:
+            if (r76.photoPathsArray != null) goto L_0x032a;
      */
-    /* JADX WARNING: Missing block: B:113:0x0325, code:
+    /* JADX WARNING: Missing block: B:110:0x0321, code:
             r76.photoPathsArray = new java.util.ArrayList();
      */
-    /* JADX WARNING: Missing block: B:114:0x032e, code:
+    /* JADX WARNING: Missing block: B:111:0x032a, code:
             r46 = new org.telegram.messenger.SendMessagesHelper.SendingMediaInfo();
             r46.uri = r71;
             r76.photoPathsArray.add(r46);
      */
-    /* JADX WARNING: Missing block: B:218:0x05c6, code:
-            if (r44.equals("telesco.pe") != false) goto L_0x05c8;
+    /* JADX WARNING: Missing block: B:214:0x05c0, code:
+            if (r44.equals("telesco.pe") != false) goto L_0x05c2;
      */
-    /* JADX WARNING: Missing block: B:445:0x0def, code:
-            if (org.telegram.messenger.MessagesController.getInstance(r47[0]).checkCanOpenChat(r31, (org.telegram.p005ui.ActionBar.BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)) != false) goto L_0x0df1;
+    /* JADX WARNING: Missing block: B:441:0x0de9, code:
+            if (org.telegram.messenger.MessagesController.getInstance(r47[0]).checkCanOpenChat(r31, (org.telegram.p005ui.ActionBar.BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)) != false) goto L_0x0deb;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
@@ -1111,14 +1109,14 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                     String subject = intent.getStringExtra("android.intent.extra.SUBJECT");
-                    if (text != null && text.length() != 0) {
+                    if (!TextUtils.isEmpty(text)) {
                         if (!text.startsWith("http://")) {
                         }
-                        if (!(subject == null || subject.length() == 0)) {
+                        if (!TextUtils.isEmpty(subject)) {
                             text = subject + "\n" + text;
                         }
                         this.sendingText = text;
-                    } else if (subject != null && subject.length() > 0) {
+                    } else if (!TextUtils.isEmpty(subject)) {
                         this.sendingText = subject;
                     }
                     parcelable = intent.getParcelableExtra("android.intent.extra.STREAM");
@@ -1912,11 +1910,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 }
                 if (isBot && lastFragment != null && (lastFragment instanceof ChatActivity) && ((ChatActivity) lastFragment).getDialogId() == dialog_id) {
                     ((ChatActivity) lastFragment).setBotUser(botUser);
-                    return;
+                } else {
+                    this.actionBarLayout.presentFragment(new ChatActivity(args));
                 }
-                BaseFragment fragment2 = new ChatActivity(args);
-                NotificationCenter.getInstance(intentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                this.actionBarLayout.presentFragment(fragment2, false, true, true, false);
             }
         }
     }
@@ -2263,23 +2259,38 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (MessagesController.getInstance(account).checkCanOpenChat(args, dialogsFragment)) {
             BaseFragment fragment = new ChatActivity(args);
             if (this.contactsToSend == null || this.contactsToSend.size() != 1) {
-                this.actionBarLayout.presentFragment(fragment, dialogsFragment != null, dialogsFragment == null, true, false);
+                boolean z;
+                ActionBarLayout actionBarLayout = this.actionBarLayout;
+                boolean z2 = dialogsFragment != null;
+                if (dialogsFragment == null) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                actionBarLayout.presentFragment(fragment, z2, z, true, false);
                 if (this.videoPath != null) {
                     fragment.openVideoEditor(this.videoPath, this.sendingText);
                     this.sendingText = null;
                 }
                 if (this.photoPathsArray != null) {
-                    if (this.sendingText != null && this.sendingText.length() <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.photoPathsArray.size() == 1) {
+                    if (this.sendingText != null && this.sendingText.length() <= 1024 && this.photoPathsArray.size() == 1) {
                         ((SendingMediaInfo) this.photoPathsArray.get(0)).caption = this.sendingText;
                         this.sendingText = null;
                     }
                     SendMessagesHelper.prepareSendingMedia(this.photoPathsArray, did, null, null, false, false, null);
                 }
+                if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
+                    String caption = null;
+                    if (this.sendingText != null && this.sendingText.length() <= 1024) {
+                        if ((this.documentsPathsArray != null ? this.documentsPathsArray.size() : 0) + (this.documentsUrisArray != null ? this.documentsUrisArray.size() : 0) == 1) {
+                            caption = this.sendingText;
+                            this.sendingText = null;
+                        }
+                    }
+                    SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, caption, this.documentsMimeType, did, null, null, null);
+                }
                 if (this.sendingText != null) {
                     SendMessagesHelper.prepareSendingText(this.sendingText, did);
-                }
-                if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
-                    SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, did, null, null, null);
                 }
                 if (!(this.contactsToSend == null || this.contactsToSend.isEmpty())) {
                     for (int a = 0; a < this.contactsToSend.size(); a++) {
@@ -2287,22 +2298,22 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     }
                 }
             } else if (this.contactsToSend.size() == 1) {
-                boolean z;
-                boolean z2;
+                boolean z3;
+                boolean z4;
                 PhonebookShareActivity contactFragment = new PhonebookShareActivity(null, this.contactsToSendUri, null, null);
                 contactFragment.setDelegate(new LaunchActivity$$Lambda$17(this, fragment, account, did));
-                ActionBarLayout actionBarLayout = this.actionBarLayout;
+                ActionBarLayout actionBarLayout2 = this.actionBarLayout;
                 if (dialogsFragment != null) {
-                    z = true;
+                    z3 = true;
                 } else {
-                    z = false;
+                    z3 = false;
                 }
                 if (dialogsFragment == null) {
-                    z2 = true;
+                    z4 = true;
                 } else {
-                    z2 = false;
+                    z4 = false;
                 }
-                actionBarLayout.presentFragment(contactFragment, z, z2, true, false);
+                actionBarLayout2.presentFragment(contactFragment, z3, z4, true, false);
             }
             this.photoPathsArray = null;
             this.videoPath = null;
@@ -2545,7 +2556,6 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         MediaController.getInstance().setFeedbackView(this.actionBarLayout, true);
         ApplicationLoader.mainInterfacePaused = false;
         showLanguageAlert(false);
-        NotificationsController.lastNoDataNotificationTime = 0;
         Utilities.stageQueue.postRunnable(LaunchActivity$$Lambda$20.$instance);
         checkFreeDiscSpace();
         MediaController.checkGallery();

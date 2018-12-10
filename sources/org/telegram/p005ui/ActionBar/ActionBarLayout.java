@@ -674,6 +674,7 @@ public class ActionBarLayout extends FrameLayout {
 
     private void presentFragmentInternalRemoveOld(boolean removeLast, BaseFragment fragment) {
         if (fragment != null) {
+            fragment.onBecomeFullyHidden();
             fragment.onPause();
             if (removeLast) {
                 fragment.onFragmentDestroy();

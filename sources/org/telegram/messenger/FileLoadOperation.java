@@ -92,6 +92,7 @@ public class FileLoadOperation {
     private ArrayList<Range> notRequestedBytesRanges;
     private Object parentObject;
     private volatile boolean paused;
+    private int priority;
     private int renameRetryCount;
     private ArrayList<RequestInfo> requestInfos;
     private int requestedBytesCount;
@@ -325,6 +326,14 @@ public class FileLoadOperation {
 
     public boolean isForceRequest() {
         return this.isForceRequest;
+    }
+
+    public void setPriority(int value) {
+        this.priority = value;
+    }
+
+    public int getPriority() {
+        return this.priority;
     }
 
     public void setPaths(int instance, File store, File temp) {
@@ -903,13 +912,13 @@ public class FileLoadOperation {
                 return;
             }
             if (this.currentType == ConnectionsManager.FileTypeAudio) {
-                StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 3, 1);
+                StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ApplicationLoader.getCurrentNetworkType(), 3, 1);
             } else if (this.currentType == ConnectionsManager.FileTypeVideo) {
-                StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 2, 1);
+                StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ApplicationLoader.getCurrentNetworkType(), 2, 1);
             } else if (this.currentType == 16777216) {
-                StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 4, 1);
+                StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ApplicationLoader.getCurrentNetworkType(), 4, 1);
             } else if (this.currentType == ConnectionsManager.FileTypeFile) {
-                StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 5, 1);
+                StatsController.getInstance(this.currentAccount).incrementReceivedItemsCount(ApplicationLoader.getCurrentNetworkType(), 5, 1);
             }
         }
     }

@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -93,6 +94,7 @@ public class ChangePhoneActivity extends BaseFragment {
     private Dialog permissionsDialog;
     private ArrayList<String> permissionsItems = new ArrayList();
     private AlertDialog progressDialog;
+    private int scrollHeight;
     private SlideView[] views = new SlideView[5];
 
     /* renamed from: org.telegram.ui.ChangePhoneActivity$ProgressView */
@@ -167,16 +169,16 @@ public class ChangePhoneActivity extends BaseFragment {
         private TextView titleTextView;
         private boolean waitingForEvent;
 
-        /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$2 */
+        /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$4 */
         class CLASSNAME extends TimerTask {
             CLASSNAME() {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new ChangePhoneActivity$LoginActivitySmsView$2$$Lambda$0(this));
+                AndroidUtilities.runOnUIThread(new ChangePhoneActivity$LoginActivitySmsView$4$$Lambda$0(this));
             }
 
-            final /* synthetic */ void lambda$run$0$ChangePhoneActivity$LoginActivitySmsView$2() {
+            final /* synthetic */ void lambda$run$0$ChangePhoneActivity$LoginActivitySmsView$4() {
                 double currentTime = (double) System.currentTimeMillis();
                 double diff = currentTime - LoginActivitySmsView.this.lastCodeTime;
                 LoginActivitySmsView.this.lastCodeTime = currentTime;
@@ -189,10 +191,10 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         }
 
-        /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$3 */
+        /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 */
         class CLASSNAME extends TimerTask {
 
-            /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$3$1 */
+            /* renamed from: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5$1 */
             class CLASSNAME implements Runnable {
                 CLASSNAME() {
                 }
@@ -236,7 +238,7 @@ public class ChangePhoneActivity extends BaseFragment {
                             TL_auth_resendCode req = new TL_auth_resendCode();
                             req.phone_number = LoginActivitySmsView.this.requestPhone;
                             req.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                            ConnectionsManager.getInstance(ChangePhoneActivity.this.currentAccount).sendRequest(req, new ChangePhoneActivity$LoginActivitySmsView$3$1$$Lambda$0(this), 2);
+                            ConnectionsManager.getInstance(ChangePhoneActivity.this.currentAccount).sendRequest(req, new ChangePhoneActivity$LoginActivitySmsView$5$1$$Lambda$0(this), 2);
                         } else if (LoginActivitySmsView.this.nextType == 3) {
                             AndroidUtilities.setWaitingForSms(false);
                             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
@@ -247,13 +249,13 @@ public class ChangePhoneActivity extends BaseFragment {
                     }
                 }
 
-                final /* synthetic */ void lambda$run$1$ChangePhoneActivity$LoginActivitySmsView$3$1(TLObject response, TL_error error) {
+                final /* synthetic */ void lambda$run$1$ChangePhoneActivity$LoginActivitySmsView$5$1(TLObject response, TL_error error) {
                     if (error != null && error.text != null) {
-                        AndroidUtilities.runOnUIThread(new ChangePhoneActivity$LoginActivitySmsView$3$1$$Lambda$1(this, error));
+                        AndroidUtilities.runOnUIThread(new ChangePhoneActivity$LoginActivitySmsView$5$1$$Lambda$1(this, error));
                     }
                 }
 
-                final /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$3$1(TL_error error) {
+                final /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5$1(TL_error error) {
                     LoginActivitySmsView.this.lastError = error.text;
                 }
             }
@@ -330,16 +332,20 @@ public class ChangePhoneActivity extends BaseFragment {
             }
             this.codeFieldContainer = new LinearLayout(context);
             this.codeFieldContainer.setOrientation(0);
-            addView(this.codeFieldContainer, LayoutHelper.createLinear(-2, 36, 1, 0, 30, 0, 0));
+            addView(this.codeFieldContainer, LayoutHelper.createLinear(-2, 36, 1));
             if (this.currentType == 3) {
                 this.codeFieldContainer.setVisibility(8);
             }
-            this.timeText = new TextView(context);
+            this.timeText = new TextView(context, ChangePhoneActivity.this) {
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), Integer.MIN_VALUE));
+                }
+            };
             this.timeText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.timeText.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
             if (this.currentType == 3) {
                 this.timeText.setTextSize(1, 14.0f);
-                addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 30, 0, 0));
+                addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
                 this.progressView = new ProgressView(context);
                 this.timeText.setGravity(LocaleController.isRTL ? 5 : 3);
                 addView(this.progressView, LayoutHelper.createLinear(-1, 3, 0.0f, 12.0f, 0.0f, 0.0f));
@@ -347,9 +353,13 @@ public class ChangePhoneActivity extends BaseFragment {
                 this.timeText.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, AndroidUtilities.m9dp(10.0f));
                 this.timeText.setTextSize(1, 15.0f);
                 this.timeText.setGravity(49);
-                addView(this.timeText, LayoutHelper.createLinear(-2, -2, 49, 0, 30, 0, 0));
+                addView(this.timeText, LayoutHelper.createLinear(-2, -2, 49));
             }
-            this.problemText = new TextView(context);
+            this.problemText = new TextView(context, ChangePhoneActivity.this) {
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), Integer.MIN_VALUE));
+                }
+            };
             this.problemText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             this.problemText.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
             this.problemText.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, AndroidUtilities.m9dp(10.0f));
@@ -360,7 +370,7 @@ public class ChangePhoneActivity extends BaseFragment {
             } else {
                 this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             }
-            addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49, 0, 40, 0, 0));
+            addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49));
             this.problemText.setOnClickListener(new ChangePhoneActivity$LoginActivitySmsView$$Lambda$0(this));
         }
 
@@ -393,16 +403,15 @@ public class ChangePhoneActivity extends BaseFragment {
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             if (this.currentType != 3 && this.blueImageView != null) {
-                int innerHeight = ((this.blueImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getHeight()) + AndroidUtilities.m9dp(35.0f);
-                int height = MeasureSpec.getSize(heightMeasureSpec);
-                int requiredHeight = AndroidUtilities.m9dp(110.0f);
+                int innerHeight = ((this.blueImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getMeasuredHeight()) + AndroidUtilities.m9dp(35.0f);
+                int requiredHeight = AndroidUtilities.m9dp(80.0f);
                 int maxHeight = AndroidUtilities.m9dp(291.0f);
-                if (height - innerHeight < requiredHeight) {
+                if (ChangePhoneActivity.this.scrollHeight - innerHeight < requiredHeight) {
                     setMeasuredDimension(getMeasuredWidth(), innerHeight + requiredHeight);
-                } else if (height > maxHeight) {
+                } else if (ChangePhoneActivity.this.scrollHeight > maxHeight) {
                     setMeasuredDimension(getMeasuredWidth(), maxHeight);
                 } else {
-                    setMeasuredDimension(getMeasuredWidth(), height);
+                    setMeasuredDimension(getMeasuredWidth(), ChangePhoneActivity.this.scrollHeight);
                 }
             }
         }
@@ -412,7 +421,7 @@ public class ChangePhoneActivity extends BaseFragment {
             if (this.currentType != 3 && this.blueImageView != null) {
                 int h;
                 int bottom = this.confirmTextView.getBottom();
-                int height = (b - t) - bottom;
+                int height = getMeasuredHeight() - bottom;
                 if (this.problemText.getVisibility() == 0) {
                     h = this.problemText.getMeasuredHeight();
                     t = (bottom + height) - h;
@@ -960,9 +969,9 @@ public class ChangePhoneActivity extends BaseFragment {
                                 if (!ok) {
                                     PhoneView.this.ignoreOnTextChange = true;
                                     textToSet = text.substring(1, text.length()) + PhoneView.this.phoneField.getText().toString();
-                                    EditTextBoldCursor access$300 = PhoneView.this.codeField;
+                                    EditTextBoldCursor access$400 = PhoneView.this.codeField;
                                     text = text.substring(0, 1);
-                                    access$300.setText(text);
+                                    access$400.setText(text);
                                 }
                             }
                             String country = (String) PhoneView.this.codesMap.get(text);
@@ -1074,11 +1083,11 @@ public class ChangePhoneActivity extends BaseFragment {
                         }
                         PhoneView.this.phoneField.setText(builder);
                         if (start >= 0) {
-                            HintEditText access$500 = PhoneView.this.phoneField;
+                            HintEditText access$600 = PhoneView.this.phoneField;
                             if (start > PhoneView.this.phoneField.length()) {
                                 start = PhoneView.this.phoneField.length();
                             }
-                            access$500.setSelection(start);
+                            access$600.setSelection(start);
                         }
                         PhoneView.this.phoneField.onTextChange();
                         PhoneView.this.ignoreOnPhoneChange = false;
@@ -1362,9 +1371,21 @@ public class ChangePhoneActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
-        this.fragmentView = new ScrollView(context);
-        ScrollView scrollView = this.fragmentView;
+        ScrollView scrollView = new ScrollView(context) {
+            public boolean requestChildRectangleOnScreen(View child, Rect rectangle, boolean immediate) {
+                if (ChangePhoneActivity.this.currentViewNum == 1 || ChangePhoneActivity.this.currentViewNum == 2 || ChangePhoneActivity.this.currentViewNum == 4) {
+                    rectangle.bottom += AndroidUtilities.m9dp(40.0f);
+                }
+                return super.requestChildRectangleOnScreen(child, rectangle, immediate);
+            }
+
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                ChangePhoneActivity.this.scrollHeight = MeasureSpec.getSize(heightMeasureSpec) - AndroidUtilities.m9dp(30.0f);
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }
+        };
         scrollView.setFillViewport(true);
+        this.fragmentView = scrollView;
         FrameLayout frameLayout = new FrameLayout(context);
         scrollView.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
         this.views[0] = new PhoneView(context);

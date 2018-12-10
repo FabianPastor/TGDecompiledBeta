@@ -797,26 +797,26 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     GraySectionCell sectionCell = holder.itemView;
                     if (position != this.groupStartRow) {
                         if (position == this.group2StartRow) {
-                            sectionCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers).toUpperCase());
+                            sectionCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers));
                             return;
                         }
                         if (position == this.globalStartRow) {
-                            sectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch).toUpperCase());
+                            sectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
                             return;
                         }
                         if (position == this.contactsStartRow) {
-                            sectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts).toUpperCase());
+                            sectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts));
                             return;
                         }
                         return;
                     } else if (ChannelUsersActivity.this.type == 0) {
-                        sectionCell.setText(LocaleController.getString("ChannelRestrictedUsers", R.string.ChannelRestrictedUsers).toUpperCase());
+                        sectionCell.setText(LocaleController.getString("ChannelRestrictedUsers", R.string.ChannelRestrictedUsers));
                         return;
                     } else if (!ChatObject.isChannel(ChannelUsersActivity.this.currentChat) || ChannelUsersActivity.this.currentChat.megagroup) {
-                        sectionCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers).toUpperCase());
+                        sectionCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
                         return;
                     } else {
-                        ChannelUsersActivity.this.actionBar.setTitle(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers));
+                        sectionCell.setText(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers));
                         return;
                     }
                 default:
@@ -1043,8 +1043,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     final /* synthetic */ void lambda$createView$3$ChannelUsersActivity(View view, int position) {
+        boolean listAdapter = this.listView.getAdapter() == this.listViewAdapter;
         Bundle args;
-        if (position == this.addNewRow) {
+        if (listAdapter && position == this.addNewRow) {
             Bundle bundle;
             if (this.type == 0) {
                 bundle = new Bundle();
@@ -1069,9 +1070,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 fragment.setDelegate(new ChannelUsersActivity$$Lambda$13(this));
                 presentFragment(fragment);
             }
-        } else if (position == this.recentActionsRow) {
+        } else if (listAdapter && position == this.recentActionsRow) {
             presentFragment(new ChannelAdminLogActivity(this.currentChat));
-        } else if (position == this.addNew2Row) {
+        } else if (listAdapter && position == this.addNew2Row) {
             presentFragment(new GroupInviteActivity(this.chatId));
         } else {
             ChannelParticipant participant;
@@ -1079,7 +1080,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             TL_channelAdminRights admin_rights = null;
             int user_id = 0;
             boolean canEditAdmin = false;
-            if (this.listView.getAdapter() == this.listViewAdapter) {
+            if (listAdapter) {
                 participant = this.listViewAdapter.getItem(position);
                 if (participant != null) {
                     user_id = participant.user_id;

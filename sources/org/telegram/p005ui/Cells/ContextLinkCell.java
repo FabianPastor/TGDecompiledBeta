@@ -528,9 +528,9 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         } else if (this.buttonState == 2) {
             this.radialProgress.setProgress(0.0f, false);
             if (this.documentAttach != null) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.inlineResult, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.inlineResult, 1, 0);
             } else if (this.inlineResult.content instanceof TL_webDocument) {
-                FileLoader.getInstance(this.currentAccount).loadFile(WebFile.createWithWebDocument(this.inlineResult.content), true, 1);
+                FileLoader.getInstance(this.currentAccount).loadFile(WebFile.createWithWebDocument(this.inlineResult.content), 1, 1);
             }
             this.buttonState = 4;
             this.radialProgress.setIcon(getIconForCurrentState(), true, false, true);

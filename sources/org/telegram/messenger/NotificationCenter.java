@@ -39,8 +39,8 @@ public class NotificationCenter {
     public static final int didCreatedNewDeleteTask;
     public static final int didEndedCall;
     public static final int didReceiveCall;
+    public static final int didReceiveNewMessages;
     public static final int didReceiveSmsCode;
-    public static final int didReceivedNewMessages;
     public static final int didReceivedWebpages;
     public static final int didReceivedWebpagesInUpdates;
     public static final int didRemoveTwoStepPassword;
@@ -76,7 +76,7 @@ public class NotificationCenter {
     public static final int mediaDidLoad;
     public static final int messagePlayingDidReset;
     public static final int messagePlayingDidSeek;
-    public static final int messagePlayingDidStarted;
+    public static final int messagePlayingDidStart;
     public static final int messagePlayingPlayStateChanged;
     public static final int messagePlayingProgressDidChanged;
     public static final int messageReceivedByAck;
@@ -158,7 +158,7 @@ public class NotificationCenter {
         totalEvents = 1;
         int i = totalEvents;
         totalEvents = i + 1;
-        didReceivedNewMessages = i;
+        didReceiveNewMessages = i;
         i = totalEvents;
         totalEvents = i + 1;
         updateInterfaces = i;
@@ -410,7 +410,7 @@ public class NotificationCenter {
         messagePlayingPlayStateChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
-        messagePlayingDidStarted = i;
+        messagePlayingDidStart = i;
         i = totalEvents;
         totalEvents = i + 1;
         messagePlayingDidSeek = i;

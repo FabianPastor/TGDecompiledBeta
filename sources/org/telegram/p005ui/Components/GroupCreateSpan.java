@@ -102,6 +102,7 @@ public class GroupCreateSpan extends View {
         int color = Theme.getColor(Theme.key_avatar_backgroundGroupCreateSpanBlue);
         int back = Theme.getColor(Theme.key_groupcreate_spanBackground);
         int text = Theme.getColor(Theme.key_groupcreate_spanText);
+        int delete = Theme.getColor(Theme.key_groupcreate_spanDelete);
         this.colors[0] = Color.red(back);
         this.colors[1] = Color.red(color);
         this.colors[2] = Color.green(back);
@@ -111,7 +112,7 @@ public class GroupCreateSpan extends View {
         this.colors[6] = Color.alpha(back);
         this.colors[7] = Color.alpha(color);
         textPaint.setColor(text);
-        this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(text, Mode.MULTIPLY));
+        this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(delete, Mode.MULTIPLY));
         backPaint.setColor(back);
         this.avatarDrawable.setColor(AvatarDrawable.getColorForId(5));
     }

@@ -141,7 +141,7 @@ public class SessionCell extends FrameLayout {
                     stringBuilder.append(session.system_version);
                 }
             }
-            if ((session.flags & 2) == 0) {
+            if (!session.official_app) {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }

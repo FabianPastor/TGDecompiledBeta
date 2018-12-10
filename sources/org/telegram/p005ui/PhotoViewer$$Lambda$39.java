@@ -9,6 +9,6 @@ final /* synthetic */ class PhotoViewer$$Lambda$39 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$null$37$PhotoViewer();
+        this.arg$1.lambda$onDraw$46$PhotoViewer();
     }
 }

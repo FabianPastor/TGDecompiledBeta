@@ -132,6 +132,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private boolean askAboutContacts = true;
     private boolean cantSendToChannels;
     private boolean checkPermission = true;
+    private boolean closeSearchFieldOnHide;
     private ChatActivityEnterView commentView;
     private int currentConnectionState;
     private int currentUnreadCount;
@@ -281,9 +282,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 } else {
                     args.putInt("chat_id", -lower_id);
                 }
-                if (DialogsActivity.this.actionBar != null) {
-                    DialogsActivity.this.actionBar.closeSearchField();
-                }
+                DialogsActivity.this.closeSearch();
                 if (AndroidUtilities.isTablet() && DialogsActivity.this.dialogsAdapter != null) {
                     DialogsActivity.this.dialogsAdapter.setOpenedDialogId(DialogsActivity.this.openedDialogId = did);
                     DialogsActivity.this.updateVisibleRows(512);
@@ -299,7 +298,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             } else if (DialogsActivity.this.dialogsAdapter.hasSelectedDialogs()) {
                 DialogsActivity.this.dialogsAdapter.addOrRemoveSelectedDialog(did, null);
                 DialogsActivity.this.updateSelectedCount();
-                DialogsActivity.this.actionBar.closeSearchField();
+                DialogsActivity.this.closeSearch();
             } else {
                 DialogsActivity.this.didSelectResult(did, true, false);
             }
@@ -1447,8 +1446,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
                 if (message_id != 0) {
                     args.putInt("message_id", message_id);
-                } else if (!(isGlobalSearch || this.actionBar == null)) {
-                    this.actionBar.closeSearchField();
+                } else if (!isGlobalSearch) {
+                    closeSearch();
                 }
                 if (AndroidUtilities.isTablet()) {
                     if (this.openedDialogId == dialog_id && adapter != this.dialogsSearchAdapter) {
@@ -1619,6 +1618,23 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         super.onPause();
         if (this.commentView != null) {
             this.commentView.onResume();
+        }
+    }
+
+    protected void onBecomeFullyHidden() {
+        if (this.closeSearchFieldOnHide) {
+            if (this.actionBar != null) {
+                this.actionBar.closeSearchField();
+            }
+            this.closeSearchFieldOnHide = false;
+        }
+    }
+
+    private void closeSearch() {
+        if (!AndroidUtilities.isTablet()) {
+            this.closeSearchFieldOnHide = true;
+        } else if (this.actionBar != null) {
+            this.actionBar.closeSearchField();
         }
     }
 

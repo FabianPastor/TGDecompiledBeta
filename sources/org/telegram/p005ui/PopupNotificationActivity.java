@@ -828,7 +828,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         MessageObject messageObject = (MessageObject) this.popupMessages.get(num);
         View frameLayout;
         TextView messageText;
-        if (messageObject.type == 1 || messageObject.type == 4) {
+        if ((messageObject.type == 1 || messageObject.type == 4) && !messageObject.isSecretMedia()) {
             if (this.imageViews.size() > 0) {
                 view = (ViewGroup) this.imageViews.get(0);
                 this.imageViews.remove(0);
@@ -862,7 +862,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     if (messageObject.type == 1 && !FileLoader.getPathToMessage(messageObject.messageOwner).exists()) {
                         photoExist = false;
                     }
-                    if (photoExist || DownloadController.getInstance(messageObject.currentAccount).canDownloadMedia(messageObject)) {
+                    if (messageObject.needDrawBluredPreview()) {
+                        imageView.setImage(null, "100_100_b2", thumb.location, currentPhotoObject.size, (Object) messageObject);
+                    } else if (photoExist || DownloadController.getInstance(messageObject.currentAccount).canDownloadMedia(messageObject)) {
                         imageView.setImage(currentPhotoObject.location, "100_100", thumb.location, currentPhotoObject.size, (Object) messageObject);
                         photoSet = true;
                     } else if (thumb != null) {

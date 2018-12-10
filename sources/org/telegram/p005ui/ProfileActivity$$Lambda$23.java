@@ -12,6 +12,6 @@ final /* synthetic */ class ProfileActivity$$Lambda$23 implements OnClickListene
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$3$ProfileActivity(dialogInterface, i);
+        this.arg$1.lambda$null$2$ProfileActivity(dialogInterface, i);
     }
 }

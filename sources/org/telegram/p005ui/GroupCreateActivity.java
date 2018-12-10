@@ -613,7 +613,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 }
 
                 final /* synthetic */ void lambda$run$1$GroupCreateActivity$GroupCreateAdapter$2(String query) {
-                    GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, true, false, false, false, 0, false);
+                    GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, true, false, true, false, 0, false);
                     Utilities.searchQueue.postRunnable(new GroupCreateActivity$GroupCreateAdapter$2$$Lambda$1(this, query));
                 }
 
@@ -1170,7 +1170,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate cellDelegate = new GroupCreateActivity$$Lambda$4(this);
-        r10 = new ThemeDescription[37];
+        r10 = new ThemeDescription[38];
         r10[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
         r10[12] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
         r10[13] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
@@ -1196,7 +1196,8 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         r10[33] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_avatar_backgroundGroupCreateSpanBlue);
         r10[34] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_groupcreate_spanBackground);
         r10[35] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_groupcreate_spanText);
-        r10[36] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_avatar_backgroundBlue);
+        r10[36] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_groupcreate_spanDelete);
+        r10[37] = new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, Theme.key_avatar_backgroundBlue);
         return r10;
     }
 

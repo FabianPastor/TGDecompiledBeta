@@ -1,19 +1,20 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.Components.ImageUpdater.ImageUpdaterDelegate;
-import org.telegram.tgnet.TLRPC.InputFile;
-import org.telegram.tgnet.TLRPC.PhotoSize;
-import org.telegram.tgnet.TLRPC.TL_secureFile;
+import android.content.Context;
+import android.view.View;
+import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 
 /* renamed from: org.telegram.ui.SettingsActivity$$Lambda$0 */
-final /* synthetic */ class SettingsActivity$$Lambda$0 implements ImageUpdaterDelegate {
+final /* synthetic */ class SettingsActivity$$Lambda$0 implements OnItemClickListener {
     private final SettingsActivity arg$1;
+    private final Context arg$2;
 
-    SettingsActivity$$Lambda$0(SettingsActivity settingsActivity) {
+    SettingsActivity$$Lambda$0(SettingsActivity settingsActivity, Context context) {
         this.arg$1 = settingsActivity;
+        this.arg$2 = context;
     }
 
-    public void didUploadedPhoto(InputFile inputFile, PhotoSize photoSize, TL_secureFile tL_secureFile) {
-        this.arg$1.lambda$onFragmentCreate$2$SettingsActivity(inputFile, photoSize, tL_secureFile);
+    public void onItemClick(View view, int i) {
+        this.arg$1.lambda$createView$3$SettingsActivity(this.arg$2, view, i);
     }
 }

@@ -1,24 +1,16 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$16 */
-final /* synthetic */ class ProfileActivity$$Lambda$16 implements Runnable {
+final /* synthetic */ class ProfileActivity$$Lambda$16 implements ThemeDescriptionDelegate {
     private final ProfileActivity arg$1;
-    private final TL_error arg$2;
-    private final TLObject arg$3;
-    private final TL_channels_getParticipants arg$4;
 
-    ProfileActivity$$Lambda$16(ProfileActivity profileActivity, TL_error tL_error, TLObject tLObject, TL_channels_getParticipants tL_channels_getParticipants) {
+    ProfileActivity$$Lambda$16(ProfileActivity profileActivity) {
         this.arg$1 = profileActivity;
-        this.arg$2 = tL_error;
-        this.arg$3 = tLObject;
-        this.arg$4 = tL_channels_getParticipants;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$17$ProfileActivity(this.arg$2, this.arg$3, this.arg$4);
+    public void didSetColor() {
+        this.arg$1.lambda$getThemeDescriptions$23$ProfileActivity();
     }
 }

@@ -3,6 +3,8 @@ package org.telegram.p005ui.Components;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
@@ -43,7 +45,6 @@ import org.telegram.p005ui.PhotoViewer;
 import org.telegram.p005ui.PhotoViewer.EmptyPhotoViewerProvider;
 import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.tgnet.TLRPC.PhotoSize;
-import org.telegram.tgnet.TLRPC.TL_secureFile;
 
 /* renamed from: org.telegram.ui.Components.ImageUpdater */
 public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivityDelegate {
@@ -56,12 +57,12 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     private ImageReceiver imageReceiver = new ImageReceiver(null);
     public BaseFragment parentFragment;
     private File picturePath = null;
-    public boolean returnOnly;
+    private PhotoSize smallPhoto;
     public String uploadingImage;
 
     /* renamed from: org.telegram.ui.Components.ImageUpdater$ImageUpdaterDelegate */
     public interface ImageUpdaterDelegate {
-        void didUploadedPhoto(InputFile inputFile, PhotoSize photoSize, TL_secureFile tL_secureFile);
+        void didUploadPhoto(InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2);
     }
 
     /* renamed from: org.telegram.ui.Components.ImageUpdater$2 */
@@ -342,18 +343,24 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     private void processBitmap(Bitmap bitmap) {
         if (bitmap != null) {
             this.bigPhoto = ImageLoader.scaleAndSaveImage(bitmap, 800.0f, 800.0f, 80, false, 320, 320);
-            bitmap.recycle();
-            if (this.bigPhoto == null) {
-                return;
+            this.smallPhoto = ImageLoader.scaleAndSaveImage(bitmap, 150.0f, 150.0f, 80, false, 150, 150);
+            if (this.smallPhoto != null) {
+                try {
+                    Bitmap b = BitmapFactory.decodeFile(FileLoader.getPathToAttach(this.smallPhoto, true).getAbsolutePath());
+                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(b), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50");
+                } catch (Throwable th) {
+                }
             }
-            if (!this.returnOnly) {
+            bitmap.recycle();
+            if (this.bigPhoto != null) {
                 UserConfig.getInstance(this.currentAccount).saveConfig(false);
                 this.uploadingImage = FileLoader.getDirectory(4) + "/" + this.bigPhoto.location.volume_id + "_" + this.bigPhoto.location.local_id + ".jpg";
                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidUpload);
                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailUpload);
                 FileLoader.getInstance(this.currentAccount).uploadFile(this.uploadingImage, false, true, 16777216);
-            } else if (this.delegate != null) {
-                this.delegate.didUploadedPhoto(null, this.bigPhoto, null);
+                if (this.delegate != null) {
+                    this.delegate.didUploadPhoto(null, this.bigPhoto, this.smallPhoto);
+                }
             }
         }
     }
@@ -370,7 +377,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 if (this.delegate != null) {
-                    this.delegate.didUploadedPhoto((InputFile) args[1], this.bigPhoto, null);
+                    this.delegate.didUploadPhoto((InputFile) args[1], this.bigPhoto, this.smallPhoto);
                 }
                 this.uploadingImage = null;
                 if (this.clearAfterUpdate) {

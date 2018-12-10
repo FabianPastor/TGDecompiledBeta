@@ -850,7 +850,7 @@
     <string name="General">General</string>
     <string name="GettingLinkInfo">Getting Link Info...</string>
     <string name="GifCaption">GIF Caption</string>
-    <string name="GlobalSearch">GLOBAL SEARCH</string>
+    <string name="GlobalSearch">Global search</string>
     <string name="GotAQuestion">Got a question\10about Telegram?</string>
     <string name="GpsDisabledAlert">Your GPS seems to be disabled, please enable it to access location-based features.</string>
     <string name="Grain">Grain</string>
@@ -1000,7 +1000,7 @@
     <string name="LinksTitle">Shared Links</string>
     <string name="LiveLocationAlertGroup">Choose for how long people in this chat will see your accurate location.</string>
     <string name="LiveLocationAlertPrivate">Choose for how long %1$s will see your accurate location.</string>
-    <string name="LiveLocations">LIVE LOCATIONS</string>
+    <string name="LiveLocations">Live locations</string>
     <string name="Loading">Loading...</string>
     <string name="LocalAudioCache">Voice/Video messages</string>
     <string name="LocalCache">Other files</string>
@@ -1108,7 +1108,7 @@
     <string name="MuteDisable">Disable</string>
     <string name="MuteFor">Mute for %1$s</string>
     <string name="MuteNotifications">Mute notifications</string>
-    <string name="NearbyPlaces">OR CHOOSE A PLACE</string>
+    <string name="NearbyPlaces">Or choose a place</string>
     <string name="NetworkUsageSince">Network usage since %1$s</string>
     <string name="NeverAllow">Never Allow</string>
     <string name="NeverAllowPlaceholder">Never allow...</string>
@@ -1311,6 +1311,7 @@
     <string name="OnlyWhenScreenOn">Only when screen \"on\"</string>
     <string name="Open">Open</string>
     <string name="OpenChannel">VIEW CHANNEL</string>
+    <string name="OpenFile">OPEN FILE</string>
     <string name="OpenGroup">VIEW GROUP</string>
     <string name="OpenInBrowser">OPEN IN...</string>
     <string name="OpenInExternalApp">Open in...</string>
@@ -1609,6 +1610,7 @@
     <string name="PermissionXiaomiLockscreen">Please allow Telegram to be shown on the lock screen so that calls can work properly.</string>
     <string name="Phone">Phone</string>
     <string name="PhoneCopied">Phone copied to clipboard</string>
+    <string name="PhoneHidden">Hidden</string>
     <string name="PhoneHome">Home</string>
     <string name="PhoneMain">Main</string>
     <string name="PhoneMobile">Mobile</string>
@@ -1781,7 +1783,7 @@
     <string name="SearchImagesInfo">WEB SEARCH</string>
     <string name="SearchImagesTitle">Search web</string>
     <string name="SearchMembers">Search members</string>
-    <string name="SearchMessages">MESSAGES</string>
+    <string name="SearchMessages">Messages</string>
     <string name="SearchStickersHint">Search sticker sets</string>
     <string name="SecondsBold_few">**%1$d** seconds</string>
     <string name="SecondsBold_many">**%1$d** seconds</string>
@@ -1892,9 +1894,10 @@
     <string name="Sharpen">Sharpen</string>
     <string name="Short">Short</string>
     <string name="ShortMessageLifetimeForever">Off</string>
+    <string name="ShowAllFiles">Show all files</string>
     <string name="ShowAllMedia">Show all media</string>
     <string name="ShowInChat">Show in chat</string>
-    <string name="ShowNearbyPlaces">PULL UP TO SEE PLACES NEARBY</string>
+    <string name="ShowNearbyPlaces">Pull up to see places nearby</string>
     <string name="Shuffle">Shuffle</string>
     <string name="SignUp">Sign Up</string>
     <string name="SinglePhotosHelp">Show media as separate messages</string>
@@ -1963,6 +1966,7 @@
     <string name="SystemRoot">System Root</string>
     <string name="TapHereGifs">Tap here to access saved GIFs</string>
     <string name="TapToChangePhone">Tap to edit your phone number</string>
+    <string name="TapToDownload">Tap to download</string>
     <string name="TelegramContacts_few">%1$d contacts on Telegram</string>
     <string name="TelegramContacts_many">%1$d contacts on Telegram</string>
     <string name="TelegramContacts_one">%1$d contact on Telegram</string>
@@ -2250,7 +2254,8 @@
     <string name="formatterDay12H">h:mm a</string>
     <string name="formatterDay24H">HH:mm</string>
     <string name="formatterMonth">MMM dd</string>
-    <string name="formatterMonthYear">MMMM yyyy</string>
+    <string name="formatterMonthName">LLLL</string>
+    <string name="formatterMonthYear2">LLLL yyyy</string>
     <string name="formatterStats12H">MMM dd yyyy, h:mm a</string>
     <string name="formatterStats24H">MMM dd yyyy, HH:mm</string>
     <string name="formatterWeek">EEE</string>

@@ -4,10 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.text.TextUtils;
@@ -25,11 +29,27 @@ public class ApplicationLoader extends Application {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
     private static volatile boolean applicationInited = false;
+    private static ConnectivityManager connectivityManager;
+    public static volatile NetworkInfo currentNetworkInfo;
     public static volatile boolean externalInterfacePaused = true;
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime;
+
+    /* renamed from: org.telegram.messenger.ApplicationLoader$1 */
+    static class CLASSNAME extends BroadcastReceiver {
+        CLASSNAME() {
+        }
+
+        public void onReceive(Context context, Intent intent) {
+            ApplicationLoader.currentNetworkInfo = ApplicationLoader.connectivityManager.getActiveNetworkInfo();
+            for (int a = 0; a < 3; a++) {
+                ConnectionsManager.getInstance(a).checkConnection();
+                FileLoader.getInstance(a).onNetworkChanged(ApplicationLoader.isConnectionSlow());
+            }
+        }
+    }
 
     public static File getFilesDirFixed() {
         File path;
@@ -59,11 +79,18 @@ public class ApplicationLoader extends Application {
                 ThrowableExtension.printStackTrace(e);
             }
             try {
+                connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
+                applicationContext.registerReceiver(new CLASSNAME(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+                Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$0.$instance);
+            } catch (Exception e2) {
+                ThrowableExtension.printStackTrace(e2);
+            }
+            try {
                 IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
                 filter.addAction("android.intent.action.SCREEN_OFF");
                 applicationContext.registerReceiver(new ScreenReceiver(), filter);
-            } catch (Exception e2) {
-                ThrowableExtension.printStackTrace(e2);
+            } catch (Exception e22) {
+                ThrowableExtension.printStackTrace(e22);
             }
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
@@ -105,7 +132,7 @@ public class ApplicationLoader extends Application {
         ConnectionsManager.native_setJava(false);
         ForegroundDetector foregroundDetector = new ForegroundDetector(this);
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread(ApplicationLoader$$Lambda$0.$instance);
+        AndroidUtilities.runOnUIThread(ApplicationLoader$$Lambda$1.$instance);
     }
 
     public static void startPushService() {
@@ -136,7 +163,7 @@ public class ApplicationLoader extends Application {
     }
 
     private void initPlayServices() {
-        AndroidUtilities.runOnUIThread(new ApplicationLoader$$Lambda$1(this), 1000);
+        AndroidUtilities.runOnUIThread(new ApplicationLoader$$Lambda$2(this), 1000);
     }
 
     final /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
@@ -149,7 +176,7 @@ public class ApplicationLoader extends Application {
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.m10d("GCM regId = " + currentPushString);
             }
-            Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$2.$instance);
+            Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$3.$instance);
         } else if (BuildVars.LOGS_ENABLED) {
             FileLog.m10d("No valid Google Play Services APK found.");
         }
@@ -157,7 +184,7 @@ public class ApplicationLoader extends Application {
 
     static final /* synthetic */ void lambda$null$1$ApplicationLoader() {
         try {
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(ApplicationLoader$$Lambda$3.$instance);
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(ApplicationLoader$$Lambda$4.$instance);
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
@@ -176,6 +203,104 @@ public class ApplicationLoader extends Application {
                 return true;
             }
             return false;
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+            return true;
+        }
+    }
+
+    private static void ensureCurrentNetworkGet() {
+        if (currentNetworkInfo == null) {
+            currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        }
+    }
+
+    public static boolean isRoaming() {
+        try {
+            ensureCurrentNetworkGet();
+            if (currentNetworkInfo == null || !currentNetworkInfo.isRoaming()) {
+                return false;
+            }
+            return true;
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+            return false;
+        }
+    }
+
+    public static boolean isConnectedOrConnectingToWiFi() {
+        try {
+            ensureCurrentNetworkGet();
+            if (currentNetworkInfo != null) {
+                State state = currentNetworkInfo.getState();
+                if (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED) {
+                    return true;
+                }
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+        return false;
+    }
+
+    public static boolean isConnectedToWiFi() {
+        try {
+            ensureCurrentNetworkGet();
+            if (currentNetworkInfo != null && currentNetworkInfo.getState() == State.CONNECTED) {
+                return true;
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+        return false;
+    }
+
+    public static int getCurrentNetworkType() {
+        if (isConnectedOrConnectingToWiFi()) {
+            return 1;
+        }
+        if (isRoaming()) {
+            return 2;
+        }
+        return 0;
+    }
+
+    public static boolean isConnectionSlow() {
+        try {
+            ensureCurrentNetworkGet();
+            if (currentNetworkInfo != null && currentNetworkInfo.getType() == 0) {
+                switch (currentNetworkInfo.getSubtype()) {
+                    case 1:
+                    case 2:
+                    case 4:
+                    case 7:
+                    case 11:
+                        return true;
+                }
+            }
+        } catch (Throwable th) {
+        }
+        return false;
+    }
+
+    public static boolean isNetworkOnline() {
+        try {
+            ensureCurrentNetworkGet();
+            if (currentNetworkInfo == null) {
+                return false;
+            }
+            if (currentNetworkInfo.isConnectedOrConnecting() || currentNetworkInfo.isAvailable()) {
+                return true;
+            }
+            NetworkInfo netInfo = connectivityManager.getNetworkInfo(0);
+            if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+                return true;
+            }
+            netInfo = connectivityManager.getNetworkInfo(1);
+            if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
+                return false;
+            }
+            return true;
         } catch (Throwable e) {
             FileLog.m13e(e);
             return true;

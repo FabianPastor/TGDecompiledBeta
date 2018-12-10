@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
-import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
@@ -111,8 +110,8 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         } else {
             this.radialProgress.setImageOverlay(messageObject.getDocument().thumb.location, messageObject);
         }
-        requestLayout();
         updateButtonState(false, false);
+        requestLayout();
     }
 
     public void setChecked(boolean checked, boolean animated) {
@@ -135,6 +134,10 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
 
     public MessageObject getMessage() {
         return this.currentMessageObject;
+    }
+
+    public void initStreamingIcons() {
+        this.radialProgress.initMiniIcons();
     }
 
     private boolean checkAudioMotionEvent(MotionEvent event) {
@@ -197,7 +200,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         if (this.miniButtonState == 0) {
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), true, false, true);
             invalidate();
         } else if (this.miniButtonState == 1) {
@@ -214,7 +217,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
     public void didPressedButton() {
         if (this.buttonState == 0) {
             if (this.miniButtonState == 0) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             }
             if (needPlayMessage(this.currentMessageObject)) {
                 if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
@@ -234,7 +237,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
             }
         } else if (this.buttonState == 2) {
             this.radialProgress.setProgress(0.0f, false);
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.buttonState = 4;
             this.radialProgress.setIcon(getIconForCurrentState(), true, false, true);
             invalidate();
@@ -296,25 +299,24 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
 
     public void updateButtonState(boolean ifSame, boolean animated) {
         String fileName = this.currentMessageObject.getFileName();
-        File cacheFile = null;
-        if (!TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
-            cacheFile = new File(this.currentMessageObject.messageOwner.attachPath);
-            if (!cacheFile.exists()) {
-                cacheFile = null;
-            }
-        }
-        if (cacheFile == null) {
-            cacheFile = FileLoader.getPathToAttach(this.currentMessageObject.getDocument());
-        }
         if (!TextUtils.isEmpty(fileName)) {
-            if (cacheFile.exists() && cacheFile.length() == 0) {
-                cacheFile.delete();
-            }
-            boolean fileExists = cacheFile.exists();
-            if (SharedConfig.streamMedia && this.currentMessageObject.isMusic() && ((int) this.currentMessageObject.getDialogId()) != 0) {
-                this.hasMiniProgress = fileExists ? 1 : 2;
+            boolean fileExists;
+            if (this.currentMessageObject.attachPathExists || this.currentMessageObject.mediaExists) {
                 fileExists = true;
             } else {
+                fileExists = false;
+            }
+            if (SharedConfig.streamMedia && this.currentMessageObject.isMusic() && ((int) this.currentMessageObject.getDialogId()) != 0) {
+                int i;
+                if (fileExists) {
+                    i = 1;
+                } else {
+                    i = 2;
+                }
+                this.hasMiniProgress = i;
+                fileExists = true;
+            } else {
+                this.hasMiniProgress = 0;
                 this.miniButtonState = -1;
             }
             boolean playing;
@@ -362,7 +364,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
                 this.radialProgress.setIcon(getIconForCurrentState(), false, ifSame, animated);
                 invalidate();
             } else {
-                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
                 if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                     this.buttonState = 4;
                     progress = ImageLoader.getInstance().getFileProgress(fileName);

@@ -190,6 +190,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                         Theme.chat_roundVideoShadow.setAlpha((int) (getAlpha() * 255.0f));
                         Theme.chat_roundVideoShadow.setBounds(AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(2.0f), AndroidUtilities.m9dp(125.0f), AndroidUtilities.m9dp(125.0f));
                         Theme.chat_roundVideoShadow.draw(canvas);
+                        Theme.chat_docBackPaint.setColor(Theme.getColor(Theme.key_chat_inBubble));
+                        canvas.drawCircle((float) AndroidUtilities.m9dp(63.0f), (float) AndroidUtilities.m9dp(63.0f), (float) AndroidUtilities.m9dp(59.5f), Theme.chat_docBackPaint);
                     }
                 }
             };

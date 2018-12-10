@@ -427,7 +427,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStart);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.musicDidLoad);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
@@ -1164,7 +1164,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
 
     public void didReceivedNotification(int id, int account, Object... args) {
         MessageObject messageObject;
-        if (id == NotificationCenter.messagePlayingDidStarted || id == NotificationCenter.messagePlayingPlayStateChanged || id == NotificationCenter.messagePlayingDidReset) {
+        if (id == NotificationCenter.messagePlayingDidStart || id == NotificationCenter.messagePlayingPlayStateChanged || id == NotificationCenter.messagePlayingDidReset) {
             boolean z = id == NotificationCenter.messagePlayingDidReset && ((Boolean) args[1]).booleanValue();
             updateTitle(z);
             int count;
@@ -1183,7 +1183,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                         }
                     }
                 }
-            } else if (id == NotificationCenter.messagePlayingDidStarted && ((MessageObject) args[0]).eventId == 0) {
+            } else if (id == NotificationCenter.messagePlayingDidStart && ((MessageObject) args[0]).eventId == 0) {
                 count = this.listView.getChildCount();
                 for (a = 0; a < count; a++) {
                     view = this.listView.getChildAt(a);
@@ -1276,7 +1276,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         super.lambda$new$4$EmbedBottomSheet();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.musicDidLoad);
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);

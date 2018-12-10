@@ -19,7 +19,7 @@ public class GraySectionCell extends FrameLayout {
         int i2 = 5;
         super(context);
         setBackgroundColor(Theme.getColor(Theme.key_graySection));
-        this.textView.setTextSize(1, 13.0f);
+        this.textView.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor(Theme.key_graySectionText));
         TextView textView = this.textView;

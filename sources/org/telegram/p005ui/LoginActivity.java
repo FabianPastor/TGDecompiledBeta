@@ -1,7 +1,6 @@
 package org.telegram.p005ui;
 
 import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -17,6 +16,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -35,11 +35,11 @@ import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
+import android.util.Property;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
-import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -141,6 +141,7 @@ public class LoginActivity extends BaseFragment {
     private Dialog permissionsShowDialog;
     private ArrayList<String> permissionsShowItems;
     private int progressRequestId;
+    private int scrollHeight;
     private boolean syncContacts;
     private SlideView[] views;
 
@@ -1343,16 +1344,16 @@ public class LoginActivity extends BaseFragment {
         private TextView titleTextView;
         private boolean waitingForEvent;
 
-        /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$2 */
+        /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$4 */
         class CLASSNAME extends TimerTask {
             CLASSNAME() {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$2$$Lambda$0(this));
+                AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$4$$Lambda$0(this));
             }
 
-            final /* synthetic */ void lambda$run$0$LoginActivity$LoginActivitySmsView$2() {
+            final /* synthetic */ void lambda$run$0$LoginActivity$LoginActivitySmsView$4() {
                 double currentTime = (double) System.currentTimeMillis();
                 double diff = currentTime - LoginActivitySmsView.this.lastCodeTime;
                 LoginActivitySmsView.this.lastCodeTime = currentTime;
@@ -1365,18 +1366,18 @@ public class LoginActivity extends BaseFragment {
             }
         }
 
-        /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$3 */
+        /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$5 */
         class CLASSNAME extends TimerTask {
             CLASSNAME() {
             }
 
             public void run() {
                 if (LoginActivitySmsView.this.timeTimer != null) {
-                    AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$3$$Lambda$0(this));
+                    AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$5$$Lambda$0(this));
                 }
             }
 
-            final /* synthetic */ void lambda$run$2$LoginActivity$LoginActivitySmsView$3() {
+            final /* synthetic */ void lambda$run$2$LoginActivity$LoginActivitySmsView$5() {
                 double currentTime = (double) System.currentTimeMillis();
                 double diff = currentTime - LoginActivitySmsView.this.lastCurrentTime;
                 LoginActivitySmsView.this.lastCurrentTime = currentTime;
@@ -1416,7 +1417,7 @@ public class LoginActivity extends BaseFragment {
                         TL_auth_resendCode req = new TL_auth_resendCode();
                         req.phone_number = LoginActivitySmsView.this.requestPhone;
                         req.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                        ConnectionsManager.getInstance(LoginActivity.this.currentAccount).sendRequest(req, new LoginActivity$LoginActivitySmsView$3$$Lambda$1(this), 10);
+                        ConnectionsManager.getInstance(LoginActivity.this.currentAccount).sendRequest(req, new LoginActivity$LoginActivitySmsView$5$$Lambda$1(this), 10);
                     } else if (LoginActivitySmsView.this.nextType == 3) {
                         AndroidUtilities.setWaitingForSms(false);
                         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
@@ -1427,13 +1428,13 @@ public class LoginActivity extends BaseFragment {
                 }
             }
 
-            final /* synthetic */ void lambda$null$1$LoginActivity$LoginActivitySmsView$3(TLObject response, TL_error error) {
+            final /* synthetic */ void lambda$null$1$LoginActivity$LoginActivitySmsView$5(TLObject response, TL_error error) {
                 if (error != null && error.text != null) {
-                    AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$3$$Lambda$2(this, error));
+                    AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$5$$Lambda$2(this, error));
                 }
             }
 
-            final /* synthetic */ void lambda$null$0$LoginActivity$LoginActivitySmsView$3(TL_error error) {
+            final /* synthetic */ void lambda$null$0$LoginActivity$LoginActivitySmsView$5(TL_error error) {
                 LoginActivitySmsView.this.lastError = error.text;
             }
         }
@@ -1500,16 +1501,20 @@ public class LoginActivity extends BaseFragment {
             }
             this.codeFieldContainer = new LinearLayout(context);
             this.codeFieldContainer.setOrientation(0);
-            addView(this.codeFieldContainer, LayoutHelper.createLinear(-2, 36, 1, 0, 30, 0, 0));
+            addView(this.codeFieldContainer, LayoutHelper.createLinear(-2, 36, 1));
             if (this.currentType == 3) {
                 this.codeFieldContainer.setVisibility(8);
             }
-            this.timeText = new TextView(context);
+            this.timeText = new TextView(context, LoginActivity.this) {
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), Integer.MIN_VALUE));
+                }
+            };
             this.timeText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.timeText.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
             if (this.currentType == 3) {
                 this.timeText.setTextSize(1, 14.0f);
-                addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 30, 0, 0));
+                addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
                 this.progressView = new ProgressView(context);
                 this.timeText.setGravity(LocaleController.isRTL ? 5 : 3);
                 addView(this.progressView, LayoutHelper.createLinear(-1, 3, 0.0f, 12.0f, 0.0f, 0.0f));
@@ -1517,9 +1522,13 @@ public class LoginActivity extends BaseFragment {
                 this.timeText.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, AndroidUtilities.m9dp(10.0f));
                 this.timeText.setTextSize(1, 15.0f);
                 this.timeText.setGravity(49);
-                addView(this.timeText, LayoutHelper.createLinear(-2, -2, 49, 0, 30, 0, 0));
+                addView(this.timeText, LayoutHelper.createLinear(-2, -2, 49));
             }
-            this.problemText = new TextView(context);
+            this.problemText = new TextView(context, LoginActivity.this) {
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), Integer.MIN_VALUE));
+                }
+            };
             this.problemText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             this.problemText.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
             this.problemText.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, AndroidUtilities.m9dp(10.0f));
@@ -1530,7 +1539,7 @@ public class LoginActivity extends BaseFragment {
             } else {
                 this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             }
-            addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49, 0, 40, 0, 0));
+            addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49));
             this.problemText.setOnClickListener(new LoginActivity$LoginActivitySmsView$$Lambda$0(this));
         }
 
@@ -1562,16 +1571,15 @@ public class LoginActivity extends BaseFragment {
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             if (this.currentType != 3 && this.blueImageView != null) {
-                int innerHeight = ((this.blueImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getHeight()) + AndroidUtilities.m9dp(35.0f);
-                int height = MeasureSpec.getSize(heightMeasureSpec);
-                int requiredHeight = AndroidUtilities.m9dp(110.0f);
+                int innerHeight = ((this.blueImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getMeasuredHeight()) + AndroidUtilities.m9dp(35.0f);
+                int requiredHeight = AndroidUtilities.m9dp(80.0f);
                 int maxHeight = AndroidUtilities.m9dp(291.0f);
-                if (height - innerHeight < requiredHeight) {
+                if (LoginActivity.this.scrollHeight - innerHeight < requiredHeight) {
                     setMeasuredDimension(getMeasuredWidth(), innerHeight + requiredHeight);
-                } else if (height > maxHeight) {
+                } else if (LoginActivity.this.scrollHeight > maxHeight) {
                     setMeasuredDimension(getMeasuredWidth(), maxHeight);
                 } else {
-                    setMeasuredDimension(getMeasuredWidth(), height);
+                    setMeasuredDimension(getMeasuredWidth(), LoginActivity.this.scrollHeight);
                 }
             }
         }
@@ -1581,7 +1589,7 @@ public class LoginActivity extends BaseFragment {
             if (this.currentType != 3 && this.blueImageView != null) {
                 int h;
                 int bottom = this.confirmTextView.getBottom();
-                int height = (b - t) - bottom;
+                int height = getMeasuredHeight() - bottom;
                 if (this.problemText.getVisibility() == 0) {
                     h = this.problemText.getMeasuredHeight();
                     t = (bottom + height) - h;
@@ -2259,9 +2267,9 @@ public class LoginActivity extends BaseFragment {
                                 }
                                 if (!ok) {
                                     textToSet = text.substring(1, text.length()) + PhoneView.this.phoneField.getText().toString();
-                                    EditTextBoldCursor access$1100 = PhoneView.this.codeField;
+                                    EditTextBoldCursor access$1200 = PhoneView.this.codeField;
                                     text = text.substring(0, 1);
-                                    access$1100.setText(text);
+                                    access$1200.setText(text);
                                 }
                             }
                             String country = (String) PhoneView.this.codesMap.get(text);
@@ -2373,11 +2381,11 @@ public class LoginActivity extends BaseFragment {
                         }
                         s.replace(0, s.length(), builder);
                         if (start >= 0) {
-                            HintEditText access$1300 = PhoneView.this.phoneField;
+                            HintEditText access$1400 = PhoneView.this.phoneField;
                             if (start > PhoneView.this.phoneField.length()) {
                                 start = PhoneView.this.phoneField.length();
                             }
-                            access$1300.setSelection(start);
+                            access$1400.setSelection(start);
                         }
                         PhoneView.this.phoneField.onTextChange();
                         PhoneView.this.ignoreOnPhoneChange = false;
@@ -2877,9 +2885,21 @@ public class LoginActivity extends BaseFragment {
         this.doneProgressView.setScaleY(0.1f);
         this.doneProgressView.setVisibility(4);
         this.doneItem.addView(this.doneProgressView, LayoutHelper.createFrame(-1, -1.0f));
-        this.fragmentView = new ScrollView(context);
-        ScrollView scrollView = this.fragmentView;
+        ScrollView scrollView = new ScrollView(context) {
+            public boolean requestChildRectangleOnScreen(View child, Rect rectangle, boolean immediate) {
+                if (LoginActivity.this.currentViewNum == 1 || LoginActivity.this.currentViewNum == 2 || LoginActivity.this.currentViewNum == 4) {
+                    rectangle.bottom += AndroidUtilities.m9dp(40.0f);
+                }
+                return super.requestChildRectangleOnScreen(child, rectangle, immediate);
+            }
+
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                LoginActivity.this.scrollHeight = MeasureSpec.getSize(heightMeasureSpec) - AndroidUtilities.m9dp(30.0f);
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }
+        };
         scrollView.setFillViewport(true);
+        this.fragmentView = scrollView;
         FrameLayout frameLayout = new FrameLayout(context);
         scrollView.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
         this.views[0] = new PhoneView(context);
@@ -3223,7 +3243,7 @@ public class LoginActivity extends BaseFragment {
         if (animated) {
             float f;
             final SlideView outView = this.views[this.currentViewNum];
-            final SlideView newView = this.views[page];
+            SlideView newView = this.views[page];
             this.currentViewNum = page;
             CLASSNAMEActionBar = this.actionBar;
             if (!(newView.needBackButton() || this.newAccount)) {
@@ -3239,42 +3259,24 @@ public class LoginActivity extends BaseFragment {
                 f = (float) AndroidUtilities.displaySize.x;
             }
             newView.setX(f);
-            ViewPropertyAnimator duration = outView.animate().setInterpolator(new AccelerateDecelerateInterpolator()).setListener(new AnimatorListener() {
-                public void onAnimationStart(Animator animator) {
-                }
-
-                @SuppressLint({"NewApi"})
-                public void onAnimationEnd(Animator animator) {
+            newView.setVisibility(0);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
                     outView.setVisibility(8);
                     outView.setX(0.0f);
                 }
-
-                public void onAnimationCancel(Animator animator) {
-                }
-
-                public void onAnimationRepeat(Animator animator) {
-                }
-            }).setDuration(300);
-            if (back) {
-                f = (float) AndroidUtilities.displaySize.x;
-            } else {
-                f = (float) (-AndroidUtilities.displaySize.x);
-            }
-            duration.translationX(f).start();
-            newView.animate().setInterpolator(new AccelerateDecelerateInterpolator()).setListener(new AnimatorListener() {
-                public void onAnimationStart(Animator animator) {
-                    newView.setVisibility(0);
-                }
-
-                public void onAnimationEnd(Animator animator) {
-                }
-
-                public void onAnimationCancel(Animator animator) {
-                }
-
-                public void onAnimationRepeat(Animator animator) {
-                }
-            }).setDuration(300).translationX(0.0f).start();
+            });
+            Animator[] animatorArr = new Animator[2];
+            Property property = View.TRANSLATION_X;
+            float[] fArr = new float[1];
+            fArr[0] = back ? (float) AndroidUtilities.displaySize.x : (float) (-AndroidUtilities.displaySize.x);
+            animatorArr[0] = ObjectAnimator.ofFloat(outView, property, fArr);
+            animatorArr[1] = ObjectAnimator.ofFloat(newView, View.TRANSLATION_X, new float[]{0.0f});
+            animatorSet.playTogether(animatorArr);
+            animatorSet.setDuration(300);
+            animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+            animatorSet.start();
             return;
         }
         CLASSNAMEActionBar = this.actionBar;

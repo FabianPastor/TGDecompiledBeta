@@ -1805,13 +1805,13 @@ public class MessagesStorage {
         SQLiteCursor cursor;
         if (max_id != 0) {
             try {
-                cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d AND id < %d ORDER BY id DESC LIMIT %d", new Object[]{Integer.valueOf(did), Long.valueOf(max_id), Integer.valueOf(count)}), new Object[0]);
+                cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d AND id < %d ORDER BY rowid ASC LIMIT %d", new Object[]{Integer.valueOf(did), Long.valueOf(max_id), Integer.valueOf(count)}), new Object[0]);
             } catch (Throwable e) {
                 FileLog.m13e(e);
                 return;
             }
         }
-        cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d ORDER BY id DESC LIMIT %d", new Object[]{Integer.valueOf(did), Integer.valueOf(count)}), new Object[0]);
+        cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d ORDER BY rowid ASC LIMIT %d", new Object[]{Integer.valueOf(did), Integer.valueOf(count)}), new Object[0]);
         photos_Photos res = new TL_photos_photos();
         while (cursor.next()) {
             NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -2651,19 +2651,19 @@ public class MessagesStorage {
         }
     }
 
-    public void loadUserInfo(User user, CountDownLatch countDownLatch, boolean force) {
+    public void loadUserInfo(User user, boolean force, int classGuid) {
         if (user != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$43(this, user, countDownLatch, force));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$43(this, user, force, classGuid));
         }
     }
 
-    final /* synthetic */ void lambda$loadUserInfo$63$MessagesStorage(User user, CountDownLatch countDownLatch, boolean force) {
+    final /* synthetic */ void lambda$loadUserInfo$63$MessagesStorage(User user, boolean force, int classGuid) {
         TL_userFull info = null;
         MessageObject pinnedMessageObject;
         try {
             SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned FROM user_settings WHERE uid = " + user.f176id, new Object[0]);
             if (cursor.next()) {
-                NativeByteBuffer data = cursor.byteBufferValue(0);
+                AbstractSerializedData data = cursor.byteBufferValue(0);
                 if (data != null) {
                     info = TL_userFull.TLdeserialize(data, data.readInt32(false), false);
                     data.reuse();
@@ -2671,32 +2671,17 @@ public class MessagesStorage {
                 }
             }
             cursor.dispose();
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-            }
             if (info == null || info.pinned_msg_id == 0) {
                 pinnedMessageObject = null;
             } else {
                 pinnedMessageObject = DataQuery.getInstance(this.currentAccount).loadPinnedMessage((long) user.f176id, 0, info.pinned_msg_id, false);
             }
-            MessagesController.getInstance(this.currentAccount).processUserInfo(user, info, true, force, pinnedMessageObject);
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-            }
+            MessagesController.getInstance(this.currentAccount).processUserInfo(user, info, true, force, pinnedMessageObject, classGuid);
         } catch (Throwable e) {
             FileLog.m13e(e);
-            MessagesController.getInstance(this.currentAccount).processUserInfo(user, null, true, force, null);
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-                pinnedMessageObject = null;
-                return;
-            }
             pinnedMessageObject = null;
-        } catch (Throwable th) {
-            MessagesController.getInstance(this.currentAccount).processUserInfo(user, null, true, force, null);
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-            }
+        } finally {
+            MessagesController.getInstance(this.currentAccount).processUserInfo(user, null, true, force, null, classGuid);
         }
     }
 
@@ -3739,6 +3724,7 @@ public class MessagesStorage {
     }
 
     final /* synthetic */ void lambda$getMessages$87$MessagesStorage(int count, int max_id, boolean isChannel, long dialog_id, int load_type, int minDate, int offset_date, int classGuid, int loadIndex) {
+        int currentUserId = UserConfig.getInstance(this.currentAccount).clientUserId;
         TL_messages_messages res = new TL_messages_messages();
         int count_unread = 0;
         int mentions_unread = 0;
@@ -4126,7 +4112,10 @@ public class MessagesStorage {
                         if (!(message.f104id <= 0 || message.send_state == 0 || message.send_state == 3)) {
                             message.send_state = 0;
                         }
-                        message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                        if (dialog_id == ((long) currentUserId)) {
+                            message.out = true;
+                        }
+                        message.readAttachPath(data, currentUserId);
                         data.reuse();
                         MessageObject.setUnreadFlags(message, cursor.intValue(0));
                         message.f104id = cursor.intValue(3);
@@ -4152,7 +4141,7 @@ public class MessagesStorage {
                                 data = cursor.byteBufferValue(6);
                                 if (data != null) {
                                     message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.replyMessage.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                                    message.replyMessage.readAttachPath(data, currentUserId);
                                     data.reuse();
                                     if (message.replyMessage != null) {
                                         if (MessageObject.isMegagroup(message)) {
@@ -4236,7 +4225,7 @@ public class MessagesStorage {
                     data = cursor.byteBufferValue(0);
                     if (data != null) {
                         message = Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                        message.readAttachPath(data, currentUserId);
                         data.reuse();
                         message.f104id = cursor.intValue(1);
                         message.date = cursor.intValue(2);

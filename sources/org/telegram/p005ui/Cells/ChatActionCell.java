@@ -330,6 +330,7 @@ public class ChatActionCell extends BaseCell {
             int cornerIn = AndroidUtilities.m9dp(8.0f);
             int y = AndroidUtilities.m9dp(7.0f);
             int previousLineBottom = 0;
+            int previousLineHeight = 0;
             int a = 0;
             while (a < count) {
                 int dy;
@@ -425,7 +426,7 @@ public class ChatActionCell extends BaseCell {
                     } else if (drawInnerTop == 2) {
                         y -= AndroidUtilities.m9dp(3.0f);
                         height += AndroidUtilities.m9dp(3.0f);
-                        dy = y + AndroidUtilities.m9dp(6.2f);
+                        dy = previousLineHeight;
                         dx = x - cornerIn;
                         if (!(drawInnerBottom == 2 || drawInnerBottom == 3)) {
                             dx -= cornerRest;
@@ -480,6 +481,7 @@ public class ChatActionCell extends BaseCell {
                     Theme.chat_cornerOuter[3].draw(canvas);
                 }
                 y += height;
+                previousLineHeight = y + additionalHeight;
                 a++;
             }
             canvas.save();

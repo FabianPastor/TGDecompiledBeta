@@ -1,5 +1,9 @@
 package org.telegram.p005ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -57,6 +61,7 @@ import org.telegram.p005ui.Components.EditTextEmoji;
 import org.telegram.p005ui.Components.ImageUpdater;
 import org.telegram.p005ui.Components.ImageUpdater.ImageUpdaterDelegate;
 import org.telegram.p005ui.Components.LayoutHelper;
+import org.telegram.p005ui.Components.RadialProgressView;
 import org.telegram.p005ui.Components.SizeNotifierFrameLayout;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -73,7 +78,6 @@ import org.telegram.tgnet.TLRPC.TL_channels_updateUsername;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputChannelEmpty;
 import org.telegram.tgnet.TLRPC.TL_messages_chats;
-import org.telegram.tgnet.TLRPC.TL_secureFile;
 
 /* renamed from: org.telegram.ui.ChannelCreateActivity */
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenterDelegate, ImageUpdaterDelegate {
@@ -82,8 +86,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private TextInfoPrivacyCell adminedInfoCell;
     private LinearLayout adminnedChannelsLayout;
     private FileLocation avatar;
+    private AnimatorSet avatarAnimation;
+    private FileLocation avatarBig;
     private AvatarDrawable avatarDrawable;
+    private ImageView avatarEditor;
     private BackupImageView avatarImage;
+    private View avatarOverlay;
+    private RadialProgressView avatarProgressView;
     private boolean canCreatePublic = true;
     private int chatId;
     private int checkReqId;
@@ -119,7 +128,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private TextInfoPrivacyCell typeInfoCell;
     private InputFile uploadedAvatar;
 
-    /* renamed from: org.telegram.ui.ChannelCreateActivity$4 */
+    /* renamed from: org.telegram.ui.ChannelCreateActivity$6 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
         }
@@ -134,7 +143,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
     }
 
-    /* renamed from: org.telegram.ui.ChannelCreateActivity$5 */
+    /* renamed from: org.telegram.ui.ChannelCreateActivity$7 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
         }
@@ -410,7 +419,21 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             sizeNotifierFrameLayout.addView(this.linearLayout, new LayoutParams(-1, -2));
             FrameLayout frameLayout = new FrameLayout(context);
             this.linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
-            this.avatarImage = new BackupImageView(context);
+            this.avatarImage = new BackupImageView(context) {
+                public void invalidate() {
+                    if (ChannelCreateActivity.this.avatarOverlay != null) {
+                        ChannelCreateActivity.this.avatarOverlay.invalidate();
+                    }
+                    super.invalidate();
+                }
+
+                public void invalidate(int l, int t, int r, int b) {
+                    if (ChannelCreateActivity.this.avatarOverlay != null) {
+                        ChannelCreateActivity.this.avatarOverlay.invalidate();
+                    }
+                    super.invalidate(l, t, r, b);
+                }
+            };
             this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(32.0f));
             this.avatarDrawable.setInfo(5, null, null, false);
             this.avatarImage.setImageDrawable(this.avatarDrawable);
@@ -429,17 +452,15 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
             final Paint paint = new Paint(1);
             paint.setColor(NUM);
-            ImageView avatarEditor = new ImageView(context) {
+            this.avatarOverlay = new View(context) {
                 protected void onDraw(Canvas canvas) {
-                    if (ChannelCreateActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
+                    if (ChannelCreateActivity.this.avatarImage != null && ChannelCreateActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
                         paint.setAlpha((int) (85.0f * ChannelCreateActivity.this.avatarImage.getImageReceiver().getCurrentAlpha()));
                         canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(32.0f), paint);
                     }
-                    super.onDraw(canvas);
                 }
             };
-            avatarEditor.setImageResource(R.drawable.menu_camera_av);
-            avatarEditor.setScaleType(ScaleType.CENTER);
+            view = this.avatarOverlay;
             i = (LocaleController.isRTL ? 5 : 3) | 48;
             if (LocaleController.isRTL) {
                 f = 0.0f;
@@ -451,8 +472,41 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             } else {
                 f2 = 0.0f;
             }
-            frameLayout.addView(avatarEditor, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
-            avatarEditor.setOnClickListener(new ChannelCreateActivity$$Lambda$2(this));
+            frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
+            this.avatarOverlay.setOnClickListener(new ChannelCreateActivity$$Lambda$2(this));
+            this.avatarEditor = new ImageView(context) {
+                public void invalidate(int l, int t, int r, int b) {
+                    super.invalidate(l, t, r, b);
+                    ChannelCreateActivity.this.avatarOverlay.invalidate();
+                }
+
+                public void invalidate() {
+                    super.invalidate();
+                    ChannelCreateActivity.this.avatarOverlay.invalidate();
+                }
+            };
+            this.avatarEditor.setScaleType(ScaleType.CENTER);
+            this.avatarEditor.setImageResource(R.drawable.menu_camera_av);
+            this.avatarEditor.setEnabled(false);
+            this.avatarEditor.setClickable(false);
+            frameLayout.addView(this.avatarEditor, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
+            this.avatarProgressView = new RadialProgressView(context);
+            this.avatarProgressView.setSize(AndroidUtilities.m9dp(30.0f));
+            this.avatarProgressView.setProgressColor(-1);
+            view = this.avatarProgressView;
+            i = (LocaleController.isRTL ? 5 : 3) | 48;
+            if (LocaleController.isRTL) {
+                f = 0.0f;
+            } else {
+                f = 16.0f;
+            }
+            if (LocaleController.isRTL) {
+                f2 = 16.0f;
+            } else {
+                f2 = 0.0f;
+            }
+            frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
+            showAvatarProgress(false, false);
             this.nameTextView = new EditTextEmoji((Activity) context, sizeNotifierFrameLayout, this);
             this.nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
             if (this.nameToSet != null) {
@@ -589,7 +643,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     final /* synthetic */ void lambda$null$3$ChannelCreateActivity() {
         this.avatar = null;
+        this.avatarBig = null;
         this.uploadedAvatar = null;
+        showAvatarProgress(false, true);
         this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, null);
     }
 
@@ -713,25 +769,88 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
     }
 
-    public void didUploadedPhoto(InputFile file, PhotoSize photoSize, TL_secureFile secureFile) {
-        AndroidUtilities.runOnUIThread(new ChannelCreateActivity$$Lambda$8(this, file, photoSize));
+    public void didUploadPhoto(InputFile file, PhotoSize bigSize, PhotoSize smallSize) {
+        AndroidUtilities.runOnUIThread(new ChannelCreateActivity$$Lambda$8(this, file, smallSize, bigSize));
     }
 
-    final /* synthetic */ void lambda$didUploadedPhoto$11$ChannelCreateActivity(InputFile file, PhotoSize photoSize) {
-        this.uploadedAvatar = file;
-        this.avatar = photoSize.location;
-        this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, null);
-        if (this.createAfterUpload) {
-            try {
-                if (this.progressDialog != null && this.progressDialog.isShowing()) {
-                    this.progressDialog.dismiss();
-                    this.progressDialog = null;
+    final /* synthetic */ void lambda$didUploadPhoto$11$ChannelCreateActivity(InputFile file, PhotoSize smallSize, PhotoSize bigSize) {
+        if (file != null) {
+            this.uploadedAvatar = file;
+            if (this.createAfterUpload) {
+                try {
+                    if (this.progressDialog != null && this.progressDialog.isShowing()) {
+                        this.progressDialog.dismiss();
+                        this.progressDialog = null;
+                    }
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
                 }
-            } catch (Throwable e) {
-                FileLog.m13e(e);
+                this.donePressed = false;
+                this.doneButton.performClick();
             }
-            this.donePressed = false;
-            this.doneButton.performClick();
+            showAvatarProgress(false, true);
+            return;
+        }
+        this.avatar = smallSize.location;
+        this.avatarBig = bigSize.location;
+        this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, null);
+        showAvatarProgress(true, false);
+    }
+
+    private void showAvatarProgress(final boolean show, boolean animated) {
+        if (this.avatarEditor != null) {
+            if (this.avatarAnimation != null) {
+                this.avatarAnimation.cancel();
+                this.avatarAnimation = null;
+            }
+            if (animated) {
+                this.avatarAnimation = new AnimatorSet();
+                AnimatorSet animatorSet;
+                Animator[] animatorArr;
+                if (show) {
+                    this.avatarProgressView.setVisibility(0);
+                    animatorSet = this.avatarAnimation;
+                    animatorArr = new Animator[2];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{0.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{1.0f});
+                    animatorSet.playTogether(animatorArr);
+                } else {
+                    this.avatarEditor.setVisibility(0);
+                    animatorSet = this.avatarAnimation;
+                    animatorArr = new Animator[2];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{1.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{0.0f});
+                    animatorSet.playTogether(animatorArr);
+                }
+                this.avatarAnimation.setDuration(180);
+                this.avatarAnimation.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animation) {
+                        if (ChannelCreateActivity.this.avatarAnimation != null && ChannelCreateActivity.this.avatarEditor != null) {
+                            if (show) {
+                                ChannelCreateActivity.this.avatarEditor.setVisibility(4);
+                            } else {
+                                ChannelCreateActivity.this.avatarProgressView.setVisibility(4);
+                            }
+                            ChannelCreateActivity.this.avatarAnimation = null;
+                        }
+                    }
+
+                    public void onAnimationCancel(Animator animation) {
+                        ChannelCreateActivity.this.avatarAnimation = null;
+                    }
+                });
+                this.avatarAnimation.start();
+            } else if (show) {
+                this.avatarEditor.setAlpha(1.0f);
+                this.avatarEditor.setVisibility(4);
+                this.avatarProgressView.setAlpha(1.0f);
+                this.avatarProgressView.setVisibility(0);
+            } else {
+                this.avatarEditor.setAlpha(1.0f);
+                this.avatarEditor.setVisibility(0);
+                this.avatarProgressView.setAlpha(0.0f);
+                this.avatarProgressView.setVisibility(4);
+            }
         }
     }
 
@@ -800,7 +919,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             bundle.putInt("chat_id", chat_id);
             bundle.putBoolean("canCreatePublic", this.canCreatePublic);
             if (this.uploadedAvatar != null) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(chat_id, this.uploadedAvatar);
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(chat_id, this.uploadedAvatar, this.avatar, this.avatarBig);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
         }

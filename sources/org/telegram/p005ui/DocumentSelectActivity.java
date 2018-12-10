@@ -236,7 +236,7 @@ public class DocumentSelectActivity extends BaseFragment {
             switch (viewType) {
                 case 0:
                     view = new GraySectionCell(this.mContext);
-                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", R.string.Recent).toUpperCase());
+                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", R.string.Recent));
                     break;
                 default:
                     view = new SharedDocumentCell(this.mContext);

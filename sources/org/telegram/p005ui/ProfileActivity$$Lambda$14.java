@@ -1,16 +1,20 @@
 package org.telegram.p005ui;
 
-import java.util.Comparator;
+import android.animation.AnimatorSet;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$14 */
-final /* synthetic */ class ProfileActivity$$Lambda$14 implements Comparator {
-    private final ProfileActivity arg$1;
+final /* synthetic */ class ProfileActivity$$Lambda$14 implements Runnable {
+    private final AnimatorSet arg$1;
 
-    ProfileActivity$$Lambda$14(ProfileActivity profileActivity) {
-        this.arg$1 = profileActivity;
+    private ProfileActivity$$Lambda$14(AnimatorSet animatorSet) {
+        this.arg$1 = animatorSet;
     }
 
-    public int compare(Object obj, Object obj2) {
-        return this.arg$1.lambda$updateOnlineCount$21$ProfileActivity((Integer) obj, (Integer) obj2);
+    static Runnable get$Lambda(AnimatorSet animatorSet) {
+        return new ProfileActivity$$Lambda$14(animatorSet);
+    }
+
+    public void run() {
+        this.arg$1.start();
     }
 }

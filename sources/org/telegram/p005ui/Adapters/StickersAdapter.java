@@ -85,7 +85,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             Document document = (Document) this.stickers.get(a);
             if (!FileLoader.getPathToAttach(document.thumb, "webp", true).exists()) {
                 this.stickersToLoad.add(FileLoader.getAttachFileName(document.thumb, "webp"));
-                FileLoader.getInstance(this.currentAccount).loadFile(document.thumb.location, this.stickersParents.get(a), "webp", 0, 1);
+                FileLoader.getInstance(this.currentAccount).loadFile(document.thumb.location, this.stickersParents.get(a), "webp", 0, 1, 1);
             }
         }
         return this.stickersToLoad.isEmpty();
