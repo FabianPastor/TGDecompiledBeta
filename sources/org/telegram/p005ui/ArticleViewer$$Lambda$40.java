@@ -1,22 +1,24 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC.TL_webPage;
+import org.telegram.tgnet.TLRPC.WebPage;
 
 /* renamed from: org.telegram.ui.ArticleViewer$$Lambda$40 */
-final /* synthetic */ class ArticleViewer$$Lambda$40 implements RequestDelegate {
+final /* synthetic */ class ArticleViewer$$Lambda$40 implements Runnable {
     private final ArticleViewer arg$1;
-    private final int arg$2;
-    private final long arg$3;
+    private final WebPage arg$2;
+    private final TL_webPage arg$3;
+    private final MessageObject arg$4;
 
-    ArticleViewer$$Lambda$40(ArticleViewer articleViewer, int i, long j) {
+    ArticleViewer$$Lambda$40(ArticleViewer articleViewer, WebPage webPage, TL_webPage tL_webPage, MessageObject messageObject) {
         this.arg$1 = articleViewer;
-        this.arg$2 = i;
-        this.arg$3 = j;
+        this.arg$2 = webPage;
+        this.arg$3 = tL_webPage;
+        this.arg$4 = messageObject;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$null$10$ArticleViewer(this.arg$2, this.arg$3, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$null$22$ArticleViewer(this.arg$2, this.arg$3, this.arg$4);
     }
 }

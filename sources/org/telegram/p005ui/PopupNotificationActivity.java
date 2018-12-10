@@ -225,9 +225,6 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         public void onStickersExpandedChange() {
         }
 
-        public void onSetTranslationY(int translation) {
-        }
-
         public void onSwitchRecordMode(boolean video) {
         }
 

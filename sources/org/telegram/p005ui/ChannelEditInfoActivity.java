@@ -307,7 +307,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         this.checkTextView.setTextSize(1, 15.0f);
         this.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.checkTextView.setVisibility(8);
-        this.linkContainer.addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 17, 3, 17, 7));
+        this.linkContainer.addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 21, 3, 21, 7));
         this.typeInfoCell = new TextInfoPrivacyCell(context);
         this.typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.linearLayout.addView(this.typeInfoCell, LayoutHelper.createLinear(-1, -2));

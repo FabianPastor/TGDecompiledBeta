@@ -2271,7 +2271,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:232:0x061d A:{Catch:{ Exception -> 0x021a }} */
     /* JADX WARNING: Removed duplicated region for block: B:237:0x0636 A:{Catch:{ Exception -> 0x021a }} */
     /* JADX WARNING: Removed duplicated region for block: B:248:0x0664 A:{Catch:{ Exception -> 0x021a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:750:0x1532 A:{Catch:{ Exception -> 0x0de4 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:753:0x153e A:{Catch:{ Exception -> 0x0de4 }} */
     /* JADX WARNING: Removed duplicated region for block: B:79:0x022f  */
     /* JADX WARNING: Removed duplicated region for block: B:79:0x022f  */
     /* JADX WARNING: Removed duplicated region for block: B:79:0x022f  */
@@ -2355,6 +2355,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 FileLog.m13e(e);
                                 MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
                                 if (newMsgObj != null) {
+                                    newMsgObj.messageOwner.send_state = 2;
                                 }
                                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.f104id));
                                 processSentMessage(newMsg.f104id);
@@ -2764,7 +2765,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     FileLog.m13e(e);
                     MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
                     if (newMsgObj != null) {
-                        newMsgObj.messageOwner.send_state = 2;
                     }
                     NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.f104id));
                     processSentMessage(newMsg.f104id);
@@ -3090,7 +3090,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             if (type == 7 || type == 9) {
                                 InputMedia uploadedMedia;
                                 boolean http = false;
-                                if (originalPath != null) {
+                                if (originalPath == null && path == null && document2.access_hash != 0) {
+                                    uploadedMedia = null;
+                                } else {
                                     if (encryptedChat == null && !TextUtils.isEmpty(originalPath)) {
                                         if (originalPath.startsWith("http") && params != null) {
                                             InputMedia gifExternal = new TL_inputMediaGifExternal();
@@ -3113,8 +3115,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     }
                                     uploadedMedia.mime_type = document2.mime_type;
                                     uploadedMedia.attributes = document2.attributes;
-                                } else {
-                                    uploadedMedia = null;
                                 }
                                 if (document2.access_hash == 0) {
                                     inputMedia = uploadedMedia;

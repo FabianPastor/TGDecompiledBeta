@@ -9,6 +9,6 @@ final /* synthetic */ class ArticleViewer$$Lambda$24 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$onClosed$28$ArticleViewer();
+        this.arg$1.lambda$close$28$ArticleViewer();
     }
 }

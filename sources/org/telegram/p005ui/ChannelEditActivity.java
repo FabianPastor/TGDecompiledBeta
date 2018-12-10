@@ -881,18 +881,34 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     private void updateFields() {
+        String type;
+        int i = 8;
         boolean isPrivate = TextUtils.isEmpty(this.currentChat.username);
         if (this.linkContainer != null) {
+            int i2;
             if (isPrivate) {
                 this.linkTextCell.setText(this.invite != null ? this.invite.link : LocaleController.getString("Loading", R.string.Loading), true);
             } else {
                 this.linkTextCell.setText(String.format("https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/%s", new Object[]{this.currentChat.username}), isPrivate);
             }
             this.linkContainer.setPadding(0, 0, 0, isPrivate ? 0 : AndroidUtilities.m9dp(7.0f));
-            this.revokeCell.setVisibility(isPrivate ? 0 : 8);
+            TextCell textCell = this.revokeCell;
+            if (isPrivate) {
+                i2 = 0;
+            } else {
+                i2 = 8;
+            }
+            textCell.setVisibility(i2);
+        }
+        if (this.historyCell != null) {
+            TextDetailCell textDetailCell = this.historyCell;
+            if (isPrivate) {
+                i = 0;
+            }
+            textDetailCell.setVisibility(i);
         }
         if (this.typeCell != null) {
-            String type = this.currentChat.megagroup ? isPrivate ? LocaleController.getString("TypePrivateGroup", R.string.TypePrivateGroup) : LocaleController.getString("TypePublicGroup", R.string.TypePublicGroup) : isPrivate ? LocaleController.getString("TypePrivate", R.string.TypePrivate) : LocaleController.getString("TypePublic", R.string.TypePublic);
+            type = this.currentChat.megagroup ? isPrivate ? LocaleController.getString("TypePrivateGroup", R.string.TypePrivateGroup) : LocaleController.getString("TypePublicGroup", R.string.TypePublicGroup) : isPrivate ? LocaleController.getString("TypePrivate", R.string.TypePrivate) : LocaleController.getString("TypePublic", R.string.TypePublic);
             if (this.currentChat.megagroup) {
                 this.typeCell.setTextAndValue(LocaleController.getString("GroupType", R.string.GroupType), type, true);
             } else {
@@ -900,7 +916,16 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
             }
         }
         if (this.addMembersCell != null) {
-            this.addMembersCell.setTextAndValue(LocaleController.getString("WhoCanAddMembers", R.string.WhoCanAddMembers), this.democracy ? LocaleController.getString("WhoCanAddMembersAllMembers", R.string.WhoCanAddMembersAllMembers) : LocaleController.getString("WhoCanAddMembersAdmins", R.string.WhoCanAddMembersAdmins), true);
+            boolean z;
+            type = this.democracy ? LocaleController.getString("WhoCanAddMembersAllMembers", R.string.WhoCanAddMembersAllMembers) : LocaleController.getString("WhoCanAddMembersAdmins", R.string.WhoCanAddMembersAdmins);
+            TextDetailCell textDetailCell2 = this.addMembersCell;
+            String string = LocaleController.getString("WhoCanAddMembers", R.string.WhoCanAddMembers);
+            if (this.historyCell == null || this.historyCell.getVisibility() != 0) {
+                z = false;
+            } else {
+                z = true;
+            }
+            textDetailCell2.setTextAndValue(string, type, z);
         }
         if (!(this.info == null || this.historyCell == null)) {
             this.historyCell.setTextAndValue(LocaleController.getString("ChatHistory", R.string.ChatHistory), this.historyHidden ? LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden) : LocaleController.getString("ChatHistoryVisible", R.string.ChatHistoryVisible), false);

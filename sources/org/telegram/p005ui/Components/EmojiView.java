@@ -2714,6 +2714,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     if (index >= this.stickerSets.size()) {
                         index = this.stickerSets.size() - 1;
                     }
+                    this.firstAttach = false;
                     this.stickersLayoutManager.scrollToPositionWithOffset(this.stickersGridAdapter.getPositionForPack(this.stickerSets.get(index)), 0);
                     checkStickersTabY(null, 0);
                     checkScroll();

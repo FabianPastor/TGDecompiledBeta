@@ -160,7 +160,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int buttonX;
     private int buttonY;
     private boolean cancelLoading;
-    private float captionAlpha = 1.0f;
     private int captionHeight;
     private StaticLayout captionLayout;
     private int captionOffsetX;
@@ -288,7 +287,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int nameWidth;
     private float nameX;
     private float nameY;
-    private float namesAlpha = 1.0f;
     private int namesOffset;
     private boolean needNewVisiblePart;
     private boolean needReplyImage;
@@ -2137,7 +2135,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
                 this.scheduledInvalidate = true;
-                this.docTitleLayout = new StaticLayout(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, this.backgroundWidth - AndroidUtilities.m9dp(91.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                int maxWidth = this.backgroundWidth - AndroidUtilities.m9dp(91.0f);
+                this.docTitleLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, (float) maxWidth, TruncateAt.END), Theme.chat_locationTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
         }
     }
@@ -2183,15 +2182,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:513:0x0f55  */
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
-    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3925  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3928 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x393f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x393f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1710:0x3954  */
-    /* JADX WARNING: Removed duplicated region for block: B:1715:0x3980  */
-    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cbc  */
-    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3c7e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3930  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3933 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x394a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x394a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1710:0x395f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1715:0x398b  */
+    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cc7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cb7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
     /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
     /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
@@ -2215,18 +2214,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x10e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3928 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3925  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x393f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x393f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1710:0x3954  */
-    /* JADX WARNING: Removed duplicated region for block: B:1715:0x3980  */
-    /* JADX WARNING: Removed duplicated region for block: B:1718:0x3999  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3933 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3930  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x394a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x394a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1710:0x395f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1715:0x398b  */
+    /* JADX WARNING: Removed duplicated region for block: B:1718:0x39a4  */
     /* JADX WARNING: Removed duplicated region for block: B:1779:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cbc  */
-    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3c7e  */
-    /* JADX WARNING: Removed duplicated region for block: B:1792:0x3c8d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cb7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cc7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1792:0x3CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
     /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
     /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
@@ -2250,18 +2249,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x10e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3925  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3928 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x393f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x393f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1710:0x3954  */
-    /* JADX WARNING: Removed duplicated region for block: B:1715:0x3980  */
-    /* JADX WARNING: Removed duplicated region for block: B:1718:0x3999  */
+    /* JADX WARNING: Removed duplicated region for block: B:1701:0x3930  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x3933 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x394a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x394a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1710:0x395f  */
+    /* JADX WARNING: Removed duplicated region for block: B:1715:0x398b  */
+    /* JADX WARNING: Removed duplicated region for block: B:1718:0x39a4  */
     /* JADX WARNING: Removed duplicated region for block: B:1779:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cbc  */
-    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cac  */
-    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3c7e  */
-    /* JADX WARNING: Removed duplicated region for block: B:1792:0x3c8d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1801:0x3cc7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1800:0x3cb7  */
+    /* JADX WARNING: Removed duplicated region for block: B:1789:0x3CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1792:0x3CLASSNAME  */
     /* JADX WARNING: Missing block: B:207:0x0682, code:
             if (r144.equals("article") != false) goto L_0x0684;
      */
@@ -3753,7 +3752,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
                             this.scheduledInvalidate = true;
                         }
-                        this.docTitleLayout = new StaticLayout(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        this.docTitleLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, (float) maxWidth, TruncateAt.END), Theme.chat_locationTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                         TLObject currentPhoto = null;
                         updateCurrentUserAndChat();
                         Object parentObject = null;
@@ -7157,7 +7156,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 Theme.chat_systemDrawable.setBounds(this.forwardNameX - AndroidUtilities.m9dp(7.0f), this.forwardNameY - AndroidUtilities.m9dp(6.0f), (this.forwardNameX - AndroidUtilities.m9dp(7.0f)) + backWidth, this.forwardNameY + AndroidUtilities.m9dp(38.0f));
                 Theme.chat_systemDrawable.draw(canvas);
             } else {
-                this.forwardNameY = AndroidUtilities.m9dp((float) ((this.drawNameLayout ? 19 : 0) + 10));
+                if (this.drawNameLayout) {
+                    i = 19;
+                } else {
+                    i = 0;
+                }
+                this.forwardNameY = AndroidUtilities.m9dp((float) (i + 10));
                 if (this.currentMessageObject.isOutOwner()) {
                     Theme.chat_forwardNamePaint.setColor(Theme.getColor(Theme.key_chat_outForwardedNameText));
                     this.forwardNameX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(11.0f);
@@ -7173,7 +7177,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         this.forwardNameX = i + AndroidUtilities.m9dp(f2);
                     }
                 }
-                Theme.chat_forwardNamePaint.setAlpha((int) ((this.namesAlpha * 255.0f) * (((float) Theme.chat_forwardNamePaint.getAlpha()) / 255.0f)));
             }
             for (int a = 0; a < 2; a++) {
                 canvas.save();
@@ -7218,9 +7221,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     } else {
                         Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_inReplyMessageText));
                     }
-                    Theme.chat_replyTextPaint.setAlpha((int) ((this.namesAlpha * 255.0f) * (((float) Theme.chat_replyTextPaint.getAlpha()) / 255.0f)));
-                    Theme.chat_replyNamePaint.setAlpha((int) ((this.namesAlpha * 255.0f) * (((float) Theme.chat_replyNamePaint.getAlpha()) / 255.0f)));
-                    Theme.chat_replyLinePaint.setAlpha((int) ((this.namesAlpha * 255.0f) * (((float) Theme.chat_replyLinePaint.getAlpha()) / 255.0f)));
                     if (this.mediaBackground) {
                         this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(12.0f);
                     } else {
@@ -7246,9 +7246,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 canvas.drawRect((float) this.replyStartX, (float) this.replyStartY, (float) (this.replyStartX + AndroidUtilities.m9dp(2.0f)), (float) (this.replyStartY + AndroidUtilities.m9dp(35.0f)), Theme.chat_replyLinePaint);
                 if (this.needReplyImage) {
                     this.replyImageReceiver.setImageCoords(this.replyStartX + AndroidUtilities.m9dp(10.0f), this.replyStartY, AndroidUtilities.m9dp(35.0f), AndroidUtilities.m9dp(35.0f));
-                    this.replyImageReceiver.setAlpha(this.namesAlpha);
                     this.replyImageReceiver.draw(canvas);
-                    this.replyImageReceiver.setAlpha(1.0f);
                 }
                 if (this.replyNameLayout != null) {
                     canvas.save();
@@ -7281,9 +7279,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (!selectionOnly || this.pressedLink != null) {
             canvas.save();
             canvas.translate((float) this.captionX, (float) this.captionY);
-            if (this.captionAlpha < 1.0f) {
-                canvas.saveLayerAlpha(0.0f, 0.0f, (float) this.captionWidth, (float) this.captionHeight, (int) (this.captionAlpha * 255.0f), 31);
-            }
             if (this.pressedLink != null) {
                 for (int b = 0; b < this.urlPath.size(); b++) {
                     canvas.drawPath((Path) this.urlPath.get(b), Theme.chat_urlPaint);
@@ -7295,9 +7290,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 } catch (Throwable e) {
                     FileLog.m13e(e);
                 }
-            }
-            if (this.captionAlpha < 1.0f) {
-                canvas.restore();
             }
             canvas.restore();
         }
@@ -7554,21 +7546,5 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     public int getLayoutHeight() {
         return this.layoutHeight;
-    }
-
-    public int getActualWidth() {
-        return this.backgroundWidth;
-    }
-
-    public void setTimeAlpha(float alpha) {
-        this.timeAlpha = alpha;
-    }
-
-    public void setNamesAlpha(float alpha) {
-        this.namesAlpha = alpha;
-    }
-
-    public void setCaptionAlpha(float alpha) {
-        this.captionAlpha = alpha;
     }
 }

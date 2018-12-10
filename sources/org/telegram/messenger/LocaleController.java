@@ -145,9 +145,13 @@ public class LocaleController {
             }
             if (args.length >= 10) {
                 localeInfo.serverIndex = Utilities.parseInt(args[9]).intValue();
+            } else {
+                localeInfo.serverIndex = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            }
+            if (TextUtils.isEmpty(localeInfo.baseLangCode)) {
                 return localeInfo;
             }
-            localeInfo.serverIndex = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            localeInfo.baseLangCode = localeInfo.baseLangCode.replace("-", "_");
             return localeInfo;
         }
 
@@ -628,6 +632,7 @@ public class LocaleController {
                 existingLocale.pathToFile = locale.pathToFile;
                 existingLocale.version = locale.version;
                 existingLocale.baseVersion = locale.baseVersion;
+                existingLocale.serverIndex = locale.serverIndex;
                 this.remoteLanguages.set(a, existingLocale);
             } else {
                 this.languages.add(locale);
@@ -641,6 +646,7 @@ public class LocaleController {
                 existingLocale.pathToFile = locale.pathToFile;
                 existingLocale.version = locale.version;
                 existingLocale.baseVersion = locale.baseVersion;
+                existingLocale.serverIndex = locale.serverIndex;
                 this.unofficialLanguages.set(a, existingLocale);
             } else {
                 this.languagesDict.put(locale.getKey(), locale);
@@ -2467,7 +2473,11 @@ public class LocaleController {
             localeInfo.nameEnglish = language.name;
             localeInfo.name = language.native_name;
             localeInfo.shortName = language.lang_code.replace('-', '_').toLowerCase();
-            localeInfo.baseLangCode = language.base_lang_code;
+            if (language.base_lang_code != null) {
+                localeInfo.baseLangCode = language.base_lang_code.replace('-', '_').toLowerCase();
+            } else {
+                localeInfo.baseLangCode = TtmlNode.ANONYMOUS_REGION_ID;
+            }
             localeInfo.pluralLangCode = language.plural_code.replace('-', '_').toLowerCase();
             localeInfo.isRtl = language.rtl;
             localeInfo.pathToFile = "remote";
@@ -2484,6 +2494,9 @@ public class LocaleController {
                 existing.pluralLangCode = localeInfo.pluralLangCode;
                 existing.pathToFile = localeInfo.pathToFile;
                 existing.serverIndex = localeInfo.serverIndex;
+                if (!this.remoteLanguages.contains(existing)) {
+                    this.remoteLanguages.add(localeInfo);
+                }
             }
         }
         a = 0;

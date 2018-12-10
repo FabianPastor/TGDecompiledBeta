@@ -372,6 +372,9 @@ public class AlertsCreator {
         int end;
         language.lang_code = language.lang_code.replace('-', '_').toLowerCase();
         language.plural_code = language.plural_code.replace('-', '_').toLowerCase();
+        if (language.base_lang_code != null) {
+            language.base_lang_code = language.base_lang_code.replace('-', '_').toLowerCase();
+        }
         final Builder builder = new Builder((Context) activity);
         if (LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals(language.lang_code)) {
             builder.setTitle(LocaleController.getString("Language", R.string.Language));

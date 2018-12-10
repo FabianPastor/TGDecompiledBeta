@@ -1790,7 +1790,7 @@ public class AndroidUtilities {
     }
 
     public static File generateVideoPath() {
-        return generatePicturePath(false);
+        return generateVideoPath(false);
     }
 
     public static File generateVideoPath(boolean secretChat) {

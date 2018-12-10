@@ -145,15 +145,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private BotKeyboardView botKeyboardView;
     private MessageObject botMessageObject;
     private TL_replyKeyboardMarkup botReplyMarkup;
-    private Property<ChatActivityEnterViewDelegate, Integer> callbackTranslationProperty = new Property<ChatActivityEnterViewDelegate, Integer>(Integer.class, "translationY") {
-        public Integer get(ChatActivityEnterViewDelegate object) {
-            return null;
-        }
-
-        public void set(ChatActivityEnterViewDelegate object, Integer value) {
-            object.onSetTranslationY(value.intValue());
-        }
-    };
     private boolean calledRecordRunnable;
     private Drawable cameraDrawable;
     private boolean canWriteToChannel;
@@ -280,35 +271,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private WakeLock wakeLock;
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$10 */
-    class CLASSNAME implements OnEditorActionListener {
-        boolean ctrlPressed = false;
-
-        CLASSNAME() {
-        }
-
-        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-            boolean z = false;
-            if (i == 4) {
-                ChatActivityEnterView.this.sendMessage();
-                return true;
-            }
-            if (keyEvent != null && i == 0) {
-                if ((this.ctrlPressed || ChatActivityEnterView.this.sendByEnter) && keyEvent.getAction() == 0 && ChatActivityEnterView.this.editingMessageObject == null) {
-                    ChatActivityEnterView.this.sendMessage();
-                    return true;
-                } else if (i == 113 || i == 114) {
-                    if (keyEvent.getAction() == 0) {
-                        z = true;
-                    }
-                    this.ctrlPressed = z;
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$11 */
     class CLASSNAME implements TextWatcher {
         boolean processChange = false;
 
@@ -372,7 +334,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$12 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$11 */
     class CLASSNAME implements OnClickListener {
         private Toast visibleToast;
 
@@ -402,7 +364,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$14 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$13 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -414,7 +376,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$17 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$16 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -434,7 +396,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$18 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$17 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -444,7 +406,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$19 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$18 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -477,7 +439,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$21 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$20 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -500,7 +462,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$22 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$21 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -522,7 +484,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$23 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$22 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -535,7 +497,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$24 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$23 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -554,7 +516,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$27 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$26 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
         }
@@ -602,7 +564,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$5 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$4 */
     class CLASSNAME implements Runnable {
         CLASSNAME() {
         }
@@ -614,7 +576,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$6 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$5 */
     class CLASSNAME implements Runnable {
         CLASSNAME() {
         }
@@ -680,7 +642,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$9 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$8 */
     class CLASSNAME implements OnKeyListener {
         boolean ctrlPressed = false;
 
@@ -720,6 +682,35 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$9 */
+    class CLASSNAME implements OnEditorActionListener {
+        boolean ctrlPressed = false;
+
+        CLASSNAME() {
+        }
+
+        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+            boolean z = false;
+            if (i == 4) {
+                ChatActivityEnterView.this.sendMessage();
+                return true;
+            }
+            if (keyEvent != null && i == 0) {
+                if ((this.ctrlPressed || ChatActivityEnterView.this.sendByEnter) && keyEvent.getAction() == 0 && ChatActivityEnterView.this.editingMessageObject == null) {
+                    ChatActivityEnterView.this.sendMessage();
+                    return true;
+                } else if (i == 113 || i == 114) {
+                    if (keyEvent.getAction() == 0) {
+                        z = true;
+                    }
+                    this.ctrlPressed = z;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate */
     public interface ChatActivityEnterViewDelegate {
         void didPressedAttachButton();
@@ -743,8 +734,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         void onMessageSend(CharSequence charSequence);
 
         void onPreAudioVideoRecord();
-
-        void onSetTranslationY(int i);
 
         void onStickersExpandedChange();
 
@@ -1098,7 +1087,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$13 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$12 */
     class CLASSNAME implements VideoTimelineViewDelegate {
         CLASSNAME() {
         }
@@ -1126,7 +1115,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$25 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$24 */
     class CLASSNAME implements Listener {
         CLASSNAME() {
         }
@@ -1217,13 +1206,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 Builder builder = new Builder(ChatActivityEnterView.this.parentActivity);
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.getString("ClearRecentEmoji", R.string.ClearRecentEmoji));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new ChatActivityEnterView$25$$Lambda$0(this));
+                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new ChatActivityEnterView$24$$Lambda$0(this));
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 ChatActivityEnterView.this.parentFragment.showDialog(builder.create());
             }
         }
 
-        final /* synthetic */ void lambda$onClearEmojiRecent$0$ChatActivityEnterView$25(DialogInterface dialogInterface, int i) {
+        final /* synthetic */ void lambda$onClearEmojiRecent$0$ChatActivityEnterView$24(DialogInterface dialogInterface, int i) {
             ChatActivityEnterView.this.emojiView.clearRecentEmoji();
         }
 
@@ -1271,7 +1260,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$26 */
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$25 */
     class CLASSNAME implements DragListener {
         int initialOffset;
         boolean wasExpanded;
@@ -1386,10 +1375,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
                 InputConnection ic = super.onCreateInputConnection(editorInfo);
                 EditorInfoCompat.setContentMimeTypes(editorInfo, new String[]{"image/gif", "image/*", "image/jpg", "image/png"});
-                return InputConnectionCompat.createWrapper(ic, editorInfo, new ChatActivityEnterView$8$$Lambda$0(this));
+                return InputConnectionCompat.createWrapper(ic, editorInfo, new ChatActivityEnterView$7$$Lambda$0(this));
             }
 
-            final /* synthetic */ boolean lambda$onCreateInputConnection$0$ChatActivityEnterView$8(InputContentInfoCompat inputContentInfo, int flags, Bundle opts) {
+            final /* synthetic */ boolean lambda$onCreateInputConnection$0$ChatActivityEnterView$7(InputContentInfoCompat inputContentInfo, int flags, Bundle opts) {
                 if (BuildCompat.isAtLeastNMR1() && (flags & 1) != 0) {
                     try {
                         inputContentInfo.requestPermission();

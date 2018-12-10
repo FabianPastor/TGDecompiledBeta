@@ -216,6 +216,10 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                     break;
                 default:
                     view = TwoStepVerificationActivity.this.codeFieldCell;
+                    if (view.getParent() != null) {
+                        ((ViewGroup) view.getParent()).removeView(view);
+                        break;
+                    }
                     break;
             }
             return new Holder(view);

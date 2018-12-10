@@ -1084,22 +1084,30 @@ public class NotificationsController {
                     int i;
                     if (controller.showBadgeMessages) {
                         if (controller.showBadgeMuted) {
-                            N = MessagesController.getInstance(a).dialogs.size();
-                            for (i = 0; i < N; i++) {
-                                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(a).dialogs.get(i);
-                                if (dialog.unread_count != 0) {
-                                    count += dialog.unread_count;
+                            try {
+                                N = MessagesController.getInstance(a).dialogs.size();
+                                for (i = 0; i < N; i++) {
+                                    TL_dialog dialog = (TL_dialog) MessagesController.getInstance(a).dialogs.get(i);
+                                    if (dialog.unread_count != 0) {
+                                        count += dialog.unread_count;
+                                    }
                                 }
+                            } catch (Throwable e) {
+                                FileLog.m13e(e);
                             }
                         } else {
                             count += controller.total_unread_count;
                         }
                     } else if (controller.showBadgeMuted) {
-                        N = MessagesController.getInstance(a).dialogs.size();
-                        for (i = 0; i < N; i++) {
-                            if (((TL_dialog) MessagesController.getInstance(a).dialogs.get(i)).unread_count != 0) {
-                                count++;
+                        try {
+                            N = MessagesController.getInstance(a).dialogs.size();
+                            for (i = 0; i < N; i++) {
+                                if (((TL_dialog) MessagesController.getInstance(a).dialogs.get(i)).unread_count != 0) {
+                                    count++;
+                                }
                             }
+                        } catch (Throwable e2) {
+                            FileLog.m13e(e2);
                         }
                     } else {
                         count += controller.pushDialogs.size();

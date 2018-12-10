@@ -954,7 +954,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         if (position == this.privateRow) {
             exceptions = this.exceptionUsers;
             if (!(exceptions == null || exceptions.isEmpty())) {
-                alertText = LocaleController.formatPluralString("Chats", exceptions.size());
+                alertText = LocaleController.formatPluralString("ChatsException", exceptions.size());
             }
         } else if (position == this.groupRow) {
             exceptions = this.exceptionChats;

@@ -418,6 +418,12 @@
     <string name="ChatYourSelfDescription4">Use search to quickly find things</string>
     <string name="ChatYourSelfName">You</string>
     <string name="ChatYourSelfTitle">Your cloud storage</string>
+    <string name="ChatsException_few">%1$d chats</string>
+    <string name="ChatsException_many">%1$d chats</string>
+    <string name="ChatsException_one">%1$d chat</string>
+    <string name="ChatsException_other">%1$d chats</string>
+    <string name="ChatsException_two">%1$d chats</string>
+    <string name="ChatsException_zero">%1$d chats</string>
     <string name="Chats_few">%1$d chats</string>
     <string name="Chats_many">%1$d chats</string>
     <string name="Chats_one">%1$d chat</string>

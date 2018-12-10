@@ -672,6 +672,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     public View createView(Context context) {
+        int scrollTo;
+        int i;
+        int i2;
+        float f;
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_avatar_actionBarSelectorBlue), false);
         this.actionBar.setItemsColor(Theme.getColor(Theme.key_avatar_actionBarIconBlue), false);
@@ -685,6 +689,20 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         ActionBarMenuItem item = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_other);
         item.addSubItem(1, LocaleController.getString("EditName", R.string.EditName));
         item.addSubItem(2, LocaleController.getString("LogOut", R.string.LogOut));
+        int scrollToPosition = 0;
+        Object writeButtonTag = null;
+        if (this.listView != null) {
+            scrollTo = this.layoutManager.findFirstVisibleItemPosition();
+            View topView = this.layoutManager.findViewByPosition(scrollTo);
+            if (topView != null) {
+                scrollToPosition = topView.getTop();
+            } else {
+                scrollTo = -1;
+            }
+            writeButtonTag = this.writeButton.getTag();
+        } else {
+            scrollTo = -1;
+        }
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context) {
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
@@ -740,9 +758,22 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         frameLayout.addView(this.shadowView, LayoutHelper.createFrame(-1, 3.0f));
         this.avatarImage = new BackupImageView(context);
         this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(21.0f));
-        this.avatarImage.setPivotX(0.0f);
+        this.avatarImage.setPivotX(LocaleController.isRTL ? (float) AndroidUtilities.m9dp(42.0f) : 0.0f);
         this.avatarImage.setPivotY(0.0f);
-        frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(42, 42.0f, 51, 64.0f, 0.0f, 0.0f, 0.0f));
+        View view = this.avatarImage;
+        int i3 = (LocaleController.isRTL ? 5 : 3) | 48;
+        if (LocaleController.isRTL) {
+            i = 0;
+        } else {
+            i = 64;
+        }
+        float f2 = (float) i;
+        if (LocaleController.isRTL) {
+            i2 = 64;
+        } else {
+            i2 = 0;
+        }
+        frameLayout.addView(view, LayoutHelper.createFrame(42, 42.0f, i3, f2, 0.0f, (float) i2, 0.0f));
         this.avatarImage.setOnClickListener(new SettingsActivity$$Lambda$2(this));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_profile_title));
@@ -751,11 +782,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setSingleLine(true);
         this.nameTextView.setEllipsize(TruncateAt.END);
-        this.nameTextView.setGravity(3);
+        this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setPivotX(0.0f);
         this.nameTextView.setPivotY(0.0f);
-        frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 118.0f, 0.0f, 48.0f, 0.0f));
+        frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 48.0f : 118.0f, 0.0f, LocaleController.isRTL ? 118.0f : 48.0f, 0.0f));
         this.onlineTextView = new TextView(context);
         this.onlineTextView.setTextColor(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue));
         this.onlineTextView.setTextSize(1, 14.0f);
@@ -763,8 +794,20 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.onlineTextView.setMaxLines(1);
         this.onlineTextView.setSingleLine(true);
         this.onlineTextView.setEllipsize(TruncateAt.END);
-        this.onlineTextView.setGravity(3);
-        frameLayout.addView(this.onlineTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 118.0f, 0.0f, 48.0f, 0.0f));
+        this.onlineTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        view = this.onlineTextView;
+        i3 = (LocaleController.isRTL ? 5 : 3) | 48;
+        if (LocaleController.isRTL) {
+            f2 = 48.0f;
+        } else {
+            f2 = 118.0f;
+        }
+        if (LocaleController.isRTL) {
+            f = 118.0f;
+        } else {
+            f = 48.0f;
+        }
+        frameLayout.addView(view, LayoutHelper.createFrame(-2, -2.0f, i3, f2, 0.0f, f, 0.0f));
         this.writeButton = new ImageView(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m9dp(56.0f), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
@@ -785,8 +828,18 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             this.writeButton.setStateListAnimator(animator);
             this.writeButton.setOutlineProvider(new CLASSNAME());
         }
-        frameLayout.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f));
+        frameLayout.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 16.0f, 0.0f));
         this.writeButton.setOnClickListener(new SettingsActivity$$Lambda$3(this));
+        if (scrollTo != -1) {
+            this.layoutManager.scrollToPositionWithOffset(scrollTo, scrollToPosition);
+            if (writeButtonTag != null) {
+                this.writeButton.setTag(Integer.valueOf(0));
+                this.writeButton.setScaleX(0.2f);
+                this.writeButton.setScaleY(0.2f);
+                this.writeButton.setAlpha(0.0f);
+                this.writeButton.setVisibility(8);
+            }
+        }
         needLayout();
         this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
@@ -1140,14 +1193,20 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             this.avatarImage.setScaleX((42.0f + (18.0f * diff)) / 42.0f);
             this.avatarImage.setScaleY((42.0f + (18.0f * diff)) / 42.0f);
             float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) CLASSNAMEActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
-            this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m9dp(47.0f))) * diff);
             this.avatarImage.setTranslationY((float) Math.ceil((double) avatarY));
-            this.nameTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
             this.nameTextView.setTranslationY((((float) Math.floor((double) avatarY)) - ((float) Math.ceil((double) AndroidUtilities.density))) + ((float) Math.floor((double) ((7.0f * AndroidUtilities.density) * diff))));
-            this.onlineTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
             this.onlineTextView.setTranslationY((((float) Math.floor((double) avatarY)) + ((float) AndroidUtilities.m9dp(22.0f))) + (((float) Math.floor((double) (11.0f * AndroidUtilities.density))) * diff));
             this.nameTextView.setScaleX(1.0f + (0.12f * diff));
             this.nameTextView.setScaleY(1.0f + (0.12f * diff));
+            if (LocaleController.isRTL) {
+                this.avatarImage.setTranslationX(((float) AndroidUtilities.m9dp(47.0f)) * diff);
+                this.nameTextView.setTranslationX((21.0f * AndroidUtilities.density) * diff);
+                this.onlineTextView.setTranslationX((21.0f * AndroidUtilities.density) * diff);
+                return;
+            }
+            this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m9dp(47.0f))) * diff);
+            this.nameTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
+            this.onlineTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
         }
     }
 

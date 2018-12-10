@@ -2,6 +2,7 @@ package org.telegram.p005ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -29,6 +30,7 @@ public class TextDetailCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
+        this.textView.setEllipsize(TruncateAt.END);
         View view = this.textView;
         if (LocaleController.isRTL) {
             i = 5;

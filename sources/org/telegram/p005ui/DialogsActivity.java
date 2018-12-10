@@ -344,9 +344,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         public void onStickersExpandedChange() {
         }
 
-        public void onSetTranslationY(int translation) {
-        }
-
         public void onPreAudioVideoRecord() {
         }
 

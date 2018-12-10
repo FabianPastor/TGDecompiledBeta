@@ -168,7 +168,7 @@ public class AboutLinkCell extends FrameLayout {
         if (this.stringBuilder != null) {
             int maxWidth = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.m9dp(46.0f);
             if (VERSION.SDK_INT >= 24) {
-                this.textLayout = Builder.obtain(this.stringBuilder, 0, this.stringBuilder.length(), Theme.profile_aboutTextPaint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
+                this.textLayout = Builder.obtain(this.stringBuilder, 0, this.stringBuilder.length(), Theme.profile_aboutTextPaint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(LocaleController.isRTL ? Alignment.ALIGN_RIGHT : Alignment.ALIGN_LEFT).build();
             } else {
                 this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }

@@ -1300,6 +1300,12 @@ public final class CLASSNAMER {
         public static final int ChatYourSelfDescription4 = NUM;
         public static final int ChatYourSelfName = NUM;
         public static final int ChatYourSelfTitle = NUM;
+        public static final int ChatsException_few = NUM;
+        public static final int ChatsException_many = NUM;
+        public static final int ChatsException_one = NUM;
+        public static final int ChatsException_other = NUM;
+        public static final int ChatsException_two = NUM;
+        public static final int ChatsException_zero = NUM;
         public static final int Chats_few = NUM;
         public static final int Chats_many = NUM;
         public static final int Chats_one = NUM;

@@ -763,7 +763,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         }
                     } else if (position == ProfileActivity.this.blockedUsersRow) {
                         if (ProfileActivity.this.chatInfo != null) {
-                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.chatInfo.banned_count)}), R.drawable.profile_ban, position != ProfileActivity.this.membersSectionRow + -1);
+                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), String.format("%d", new Object[]{Integer.valueOf(Math.max(ProfileActivity.this.chatInfo.banned_count, ProfileActivity.this.chatInfo.kicked_count))}), R.drawable.profile_ban, position != ProfileActivity.this.membersSectionRow + -1);
                             return;
                         } else {
                             textCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), R.drawable.profile_ban, position != ProfileActivity.this.membersSectionRow + -1);
@@ -1812,14 +1812,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     private void needLayout() {
-        int i;
         FrameLayout.LayoutParams layoutParams;
-        if (this.actionBar.getOccupyStatusBar()) {
-            i = AndroidUtilities.statusBarHeight;
-        } else {
-            i = 0;
-        }
-        int newTop = i + CLASSNAMEActionBar.getCurrentActionBarHeight();
+        int newTop = (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight();
         if (!(this.listView == null || this.openAnimationInProgress)) {
             layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
             if (layoutParams.topMargin != newTop) {
@@ -1830,24 +1824,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if (this.avatarImage != null) {
             float diff = ((float) this.extraHeight) / ((float) AndroidUtilities.m9dp(88.0f));
             this.listView.setTopGlowOffset(this.extraHeight);
-            if (this.actionBar.getOccupyStatusBar()) {
-                i = AndroidUtilities.statusBarHeight;
-            } else {
-                i = 0;
-            }
-            float avatarY = ((((float) i) + ((((float) CLASSNAMEActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
-            this.avatarImage.setScaleX(((18.0f * diff) + 42.0f) / 42.0f);
-            this.avatarImage.setScaleY(((18.0f * diff) + 42.0f) / 42.0f);
+            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) CLASSNAMEActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
+            this.avatarImage.setScaleX((42.0f + (18.0f * diff)) / 42.0f);
+            this.avatarImage.setScaleY((42.0f + (18.0f * diff)) / 42.0f);
             this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m9dp(47.0f))) * diff);
             this.avatarImage.setTranslationY((float) Math.ceil((double) avatarY));
             for (int a = 0; a < 2; a++) {
                 if (this.nameTextView[a] != null) {
-                    this.nameTextView[a].setTranslationX((AndroidUtilities.density * -21.0f) * diff);
+                    this.nameTextView[a].setTranslationX((-21.0f * AndroidUtilities.density) * diff);
                     this.nameTextView[a].setTranslationY((((float) Math.floor((double) avatarY)) + ((float) AndroidUtilities.m9dp(1.3f))) + (((float) AndroidUtilities.m9dp(7.0f)) * diff));
-                    this.onlineTextView[a].setTranslationX((AndroidUtilities.density * -21.0f) * diff);
+                    this.onlineTextView[a].setTranslationX((-21.0f * AndroidUtilities.density) * diff);
                     this.onlineTextView[a].setTranslationY((((float) Math.floor((double) avatarY)) + ((float) AndroidUtilities.m9dp(24.0f))) + (((float) Math.floor((double) (11.0f * AndroidUtilities.density))) * diff));
-                    this.nameTextView[a].setScaleX((0.12f * diff) + 1.0f);
-                    this.nameTextView[a].setScaleY((0.12f * diff) + 1.0f);
+                    float scale = 1.0f + (0.12f * diff);
+                    this.nameTextView[a].setScaleX(scale);
+                    this.nameTextView[a].setScaleY(scale);
                     if (a == 1 && !this.openAnimationInProgress) {
                         int width;
                         if (AndroidUtilities.isTablet()) {
@@ -1855,17 +1845,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else {
                             width = AndroidUtilities.displaySize.x;
                         }
-                        if (this.sendItem == null && this.addItem == null) {
-                            i = 0;
-                        } else {
-                            i = 48;
-                        }
+                        int i = (this.sendItem == null && this.addItem == null) ? 0 : 48;
                         int i2 = i + 40;
                         i = (this.callItem == null && this.editItem == null) ? 0 : 48;
-                        width = (int) (((float) (width - AndroidUtilities.m9dp((((float) (i + i2)) * (1.0f - diff)) + 126.0f))) - this.nameTextView[a].getTranslationX());
+                        int minWidth = width - AndroidUtilities.m9dp((float) ((i + i2) + 126));
+                        i = (this.sendItem == null && this.addItem == null) ? 0 : 48;
+                        int i3 = i + 40;
+                        i = (this.callItem == null && this.editItem == null) ? 0 : 48;
+                        width = (int) (((float) (width - AndroidUtilities.m9dp((((float) (i + i3)) * (1.0f - diff)) + 126.0f))) - this.nameTextView[a].getTranslationX());
                         layoutParams = (FrameLayout.LayoutParams) this.nameTextView[a].getLayoutParams();
-                        if (((float) width) < (this.nameTextView[a].getPaint().measureText(this.nameTextView[a].getText().toString()) * this.nameTextView[a].getScaleX()) + ((float) this.nameTextView[a].getSideDrawablesSize())) {
-                            layoutParams.width = (int) Math.ceil((double) (((float) width) / this.nameTextView[a].getScaleX()));
+                        if (((float) width) < (this.nameTextView[a].getPaint().measureText(this.nameTextView[a].getText().toString()) * scale) + ((float) this.nameTextView[a].getSideDrawablesSize())) {
+                            layoutParams.width = Math.max(minWidth, (int) Math.ceil((double) (((float) width) / (((1.12f - scale) * 7.0f) + scale))));
                         } else {
                             layoutParams.width = -2;
                         }
@@ -2697,7 +2687,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 i2 = this.rowCount;
                 this.rowCount = i2 + 1;
                 this.infoSectionRow = i2;
-                if (!(!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup || this.currentChat.megagroup || this.chatInfo == null || (!this.currentChat.creator && !this.chatInfo.can_view_participants))) {
+                if (ChatObject.isChannel(this.currentChat) && !this.currentChat.megagroup && this.chatInfo != null && (this.currentChat.creator || this.chatInfo.can_view_participants)) {
                     i2 = this.rowCount;
                     this.rowCount = i2 + 1;
                     this.membersHeaderRow = i2;

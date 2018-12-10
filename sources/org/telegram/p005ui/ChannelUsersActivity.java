@@ -911,20 +911,19 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 this.rowCount = i + 1;
                 this.participantsInfoRow = i;
             } else if (this.type == 1) {
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.recentActionsRow = i;
                 if (ChatObject.canAddAdmins(this.currentChat)) {
                     i = this.rowCount;
                     this.rowCount = i + 1;
-                    this.recentActionsRow = i;
-                    i = this.rowCount;
-                    this.rowCount = i + 1;
                     this.addNewRow = i;
-                    i = this.rowCount;
-                    this.rowCount = i + 1;
-                    this.addNewSectionRow = i;
                 } else {
                     this.addNewRow = -1;
-                    this.addNewSectionRow = -1;
                 }
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.addNewSectionRow = i;
                 if (this.participants.isEmpty()) {
                     this.participantsStartRow = -1;
                     this.participantsEndRow = -1;

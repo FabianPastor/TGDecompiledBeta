@@ -3,7 +3,9 @@ package org.telegram.p005ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.animation.IntEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -331,7 +333,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private HashMap<String, Integer> anchors = new HashMap();
     private HashMap<String, Integer> anchorsOffset = new HashMap();
     private int anchorsOffsetMeasuredWidth;
-    private HashMap<String, PageBlock> anchorsParent = new HashMap();
+    private HashMap<String, TL_textAnchor> anchorsParent = new HashMap();
     private float animateToScale;
     private float animateToX;
     private float animateToY;
@@ -363,6 +365,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private ColorCell[] colorCells = new ColorCell[3];
     private FrameLayout containerView;
     private int[] coords = new int[2];
+    private Drawable copyBackgroundDrawable;
     private ArrayList<BlockEmbedCell> createdWebViews = new ArrayList();
     private int currentAccount;
     private AnimatorSet currentActionBarAnimation;
@@ -378,6 +381,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private BitmapHolder currentThumb;
     private View customView;
     private CustomViewCallback customViewCallback;
+    private TextView deleteView;
     private boolean disableShowCheck;
     private boolean discardTap;
     private boolean dontResetZoomOnFirstLayout;
@@ -4339,6 +4343,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
+    /* renamed from: org.telegram.ui.ArticleViewer$ScrollEvaluator */
+    public class ScrollEvaluator extends IntEvaluator {
+        public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+            return super.evaluate(fraction, startValue, endValue);
+        }
+    }
+
     /* renamed from: org.telegram.ui.ArticleViewer$SizeChooseView */
     private class SizeChooseView extends View {
         private int circleSize;
@@ -6499,21 +6510,23 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.popupRect = new Rect();
                 this.popupLayout = new ActionBarPopupWindowLayout(this.parentActivity);
                 this.popupLayout.setPadding(AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(1.0f));
-                this.popupLayout.setBackgroundDrawable(this.parentActivity.getResources().getDrawable(R.drawable.menu_copy));
+                ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
+                Drawable drawable = this.parentActivity.getResources().getDrawable(R.drawable.menu_copy);
+                this.copyBackgroundDrawable = drawable;
+                actionBarPopupWindowLayout.setBackgroundDrawable(drawable);
                 this.popupLayout.setAnimationEnabled(false);
                 this.popupLayout.setOnTouchListener(new ArticleViewer$$Lambda$1(this));
                 this.popupLayout.setDispatchKeyEventListener(new ArticleViewer$$Lambda$2(this));
                 this.popupLayout.setShowedFromBotton(false);
-                TextView deleteView = new TextView(this.parentActivity);
-                deleteView.setTextColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
-                deleteView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
-                deleteView.setGravity(16);
-                deleteView.setPadding(AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f), 0);
-                deleteView.setTextSize(1, 15.0f);
-                deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                deleteView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
-                deleteView.setOnClickListener(new ArticleViewer$$Lambda$3(this));
-                this.popupLayout.addView(deleteView, LayoutHelper.createFrame(-2, 48.0f));
+                this.deleteView = new TextView(this.parentActivity);
+                this.deleteView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
+                this.deleteView.setGravity(16);
+                this.deleteView.setPadding(AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f), 0);
+                this.deleteView.setTextSize(1, 15.0f);
+                this.deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                this.deleteView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
+                this.deleteView.setOnClickListener(new ArticleViewer$$Lambda$3(this));
+                this.popupLayout.addView(this.deleteView, LayoutHelper.createFrame(-2, 48.0f));
                 this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow.setAnimationEnabled(false);
                 this.popupWindow.setAnimationStyle(R.style.PopupAnimation);
@@ -6523,6 +6536,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.popupWindow.setSoftInputMode(0);
                 this.popupWindow.getContentView().setFocusableInTouchMode(true);
                 this.popupWindow.setOnDismissListener(new ArticleViewer$$Lambda$4(this));
+            }
+            if (this.selectedColor == 2) {
+                this.deleteView.setTextColor(getTextColor());
+                if (this.copyBackgroundDrawable != null) {
+                    this.copyBackgroundDrawable.setColorFilter(new PorterDuffColorFilter(-15461356, Mode.MULTIPLY));
+                }
+            } else {
+                this.deleteView.setTextColor(-14606047);
+                if (this.copyBackgroundDrawable != null) {
+                    this.copyBackgroundDrawable.setColorFilter(new PorterDuffColorFilter(-1, Mode.MULTIPLY));
+                }
             }
             this.popupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(1000.0f), Integer.MIN_VALUE));
             this.popupWindow.setFocusable(true);
@@ -6815,10 +6839,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.anchors.put(name, Integer.valueOf(this.blocks.size()));
                 if (textAnchor.text instanceof TL_textPlain) {
                     if (!TextUtils.isEmpty(textAnchor.text.text)) {
-                        this.anchorsParent.put(name, this.blocks.get(this.blocks.size() - 1));
+                        this.anchorsParent.put(name, textAnchor);
                     }
                 } else if (!(textAnchor.text instanceof TL_textEmpty)) {
-                    this.anchorsParent.put(name, this.blocks.get(this.blocks.size() - 1));
+                    this.anchorsParent.put(name, textAnchor);
                 }
                 this.anchorsOffset.put(name, Integer.valueOf(-1));
             }
@@ -7218,7 +7242,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             } else {
                 this.layoutManager.scrollToPositionWithOffset(0, 0);
             }
-            checkScroll(-AndroidUtilities.m9dp(56.0f));
+            checkScrollAnimated();
         }
     }
 
@@ -7239,17 +7263,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (row == null) {
             return false;
         }
-        PageBlock originalBlock = (PageBlock) this.blocks.get(row.intValue());
-        PageBlock block = getLastNonListPageBlock(originalBlock);
+        TL_textAnchor textAnchor = (TL_textAnchor) this.anchorsParent.get(anchor);
         int type;
         ViewHolder holder;
-        if (this.anchorsParent.containsKey(anchor)) {
-            if (originalBlock instanceof TL_pageBlockDetailsChild) {
-                originalBlock = ((TL_pageBlockDetailsChild) block).block;
-            }
-            type = this.adapter.getTypeForBlock(originalBlock);
+        if (textAnchor != null) {
+            TL_pageBlockParagraph paragraph = new TL_pageBlockParagraph();
+            paragraph.text = textAnchor.text;
+            type = this.adapter.getTypeForBlock(paragraph);
             holder = this.adapter.onCreateViewHolder(null, type);
-            this.adapter.bindBlockToHolder(type, holder, originalBlock, 0, 0);
+            this.adapter.bindBlockToHolder(type, holder, paragraph, 0, 0);
             createDividerPaint();
             BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
             builder.setApplyTopPadding(false);
@@ -7266,17 +7288,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             CLASSNAME.setText(LocaleController.getString("InstantViewReference", R.string.InstantViewReference));
             CLASSNAME.setGravity((this.isRtl ? 5 : 3) | 16);
             CLASSNAME.setTextColor(getTextColor());
-            CLASSNAME.setPadding(AndroidUtilities.m9dp(21.0f), 0, AndroidUtilities.m9dp(21.0f), 0);
+            CLASSNAME.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
             linearLayout.addView(CLASSNAME, new LinearLayout.LayoutParams(-1, AndroidUtilities.m9dp(48.0f) + 1));
-            int top = 6;
-            if (holder.itemView instanceof BlockListItemCell) {
-                if (holder.itemView.currentBlock.index != 0) {
-                    top = 6 + 10;
-                }
-            } else if ((holder.itemView instanceof BlockOrderedListItemCell) && holder.itemView.currentBlock.index != 0) {
-                top = 6 + 10;
-            }
-            linearLayout.addView(holder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, (float) top, 0.0f, 0.0f));
+            linearLayout.addView(holder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, 7.0f, 0.0f, 0.0f));
             builder.setCustomView(linearLayout);
             this.linkSheet = builder.create();
             if (this.selectedColor == 0) {
@@ -7290,6 +7304,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             hideActionBar();
             return true;
         }
+        PageBlock originalBlock = (PageBlock) this.blocks.get(row.intValue());
+        PageBlock block = getLastNonListPageBlock(originalBlock);
         if (block instanceof TL_pageBlockDetailsChild) {
             if (openAllParentBlocks((TL_pageBlockDetailsChild) block)) {
                 this.adapter.updateRows();
@@ -8148,7 +8164,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         if (url.toLowerCase().contains(webPageUrl)) {
                             if (TextUtils.isEmpty(anchor)) {
                                 this.layoutManager.scrollToPositionWithOffset(0, 0);
-                                checkScroll(-AndroidUtilities.m9dp(56.0f));
+                                checkScrollAnimated();
                             } else {
                                 scrollToAnchor(anchor);
                             }
@@ -8208,7 +8224,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     final /* synthetic */ void lambda$openWebpageUrl$6$ArticleViewer(String anchor, TL_messages_getWebPage req, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$42(this, response, anchor, req));
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$43(this, response, anchor, req));
     }
 
     final /* synthetic */ void lambda$null$5$ArticleViewer(TLObject response, String anchor, TL_messages_getWebPage req) {
@@ -9067,12 +9083,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             showProgressView(true, true);
             TLObject req = new TL_contacts_resolveUsername();
             req.username = "previews";
-            this.previewsReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$40(this, currentAccount, pageId));
+            this.previewsReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$41(this, currentAccount, pageId));
         }
     }
 
     final /* synthetic */ void lambda$null$10$ArticleViewer(int currentAccount, long pageId, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$41(this, response, currentAccount, pageId));
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$42(this, response, currentAccount, pageId));
     }
 
     final /* synthetic */ void lambda$null$9$ArticleViewer(TLObject response, int currentAccount, long pageId) {
@@ -9225,16 +9241,28 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
     }
 
-    private void checkScroll(int dy) {
+    private void checkScrollAnimated() {
+        if (this.currentHeaderHeight != AndroidUtilities.m9dp(56.0f)) {
+            ValueAnimator va = ValueAnimator.ofObject(new IntEvaluator(), new Object[]{Integer.valueOf(this.currentHeaderHeight), Integer.valueOf(AndroidUtilities.m9dp(56.0f))}).setDuration(180);
+            va.setInterpolator(new DecelerateInterpolator());
+            va.addUpdateListener(new ArticleViewer$$Lambda$18(this));
+            va.start();
+        }
+    }
+
+    final /* synthetic */ void lambda$checkScrollAnimated$21$ArticleViewer(ValueAnimator animation) {
+        setCurrentHeaderHeight(((Integer) animation.getAnimatedValue()).intValue());
+    }
+
+    private void setCurrentHeaderHeight(int newHeight) {
         int maxHeight = AndroidUtilities.m9dp(56.0f);
         int minHeight = Math.max(AndroidUtilities.statusBarHeight, AndroidUtilities.m9dp(24.0f));
-        float heightDiff = (float) (maxHeight - minHeight);
-        int newHeight = this.currentHeaderHeight - dy;
         if (newHeight < minHeight) {
             newHeight = minHeight;
         } else if (newHeight > maxHeight) {
             newHeight = maxHeight;
         }
+        float heightDiff = (float) (maxHeight - minHeight);
         this.currentHeaderHeight = newHeight;
         float scale = 0.8f + ((((float) (this.currentHeaderHeight - minHeight)) / heightDiff) * 0.2f);
         float scale2 = 0.5f + ((((float) (this.currentHeaderHeight - minHeight)) / heightDiff) * 0.5f);
@@ -9253,6 +9281,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.titleTextView.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
         this.headerView.setTranslationY((float) (this.currentHeaderHeight - maxHeight));
         this.listView.setTopGlowOffset(this.currentHeaderHeight);
+    }
+
+    private void checkScroll(int dy) {
+        setCurrentHeaderHeight(this.currentHeaderHeight - dy);
     }
 
     private void openPreviewsChat(User user, long wid) {
@@ -9331,7 +9363,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
             WebPage webPageFinal = webpage;
             int currentAccount = UserConfig.selectedAccount;
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$18(this, webPageFinal, messageObject, currentAccount));
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$19(this, webPageFinal, messageObject, currentAccount));
         }
         this.pagesStack.clear();
         this.collapsed = false;
@@ -9349,7 +9381,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.backButton.setAlpha(0.0f);
         this.settingsButton.setAlpha(0.0f);
         this.layoutManager.scrollToPositionWithOffset(0, 0);
-        checkScroll(-AndroidUtilities.m9dp(56.0f));
+        checkScrollAnimated();
         String anchor = null;
         int index;
         if (messageObject != null) {
@@ -9423,12 +9455,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, 1.0f});
         animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.m9dp(56.0f), 0.0f});
         animatorSet.playTogether(animatorArr);
-        this.animationEndRunnable = new ArticleViewer$$Lambda$19(this);
+        this.animationEndRunnable = new ArticleViewer$$Lambda$20(this);
         animatorSet.setDuration(150);
         animatorSet.setInterpolator(this.interpolator);
         animatorSet.addListener(new CLASSNAME());
         this.transitionAnimationStartTime = System.currentTimeMillis();
-        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$20(this, animatorSet));
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$21(this, animatorSet));
         if (VERSION.SDK_INT >= 18) {
             this.containerView.setLayerType(2, null);
         }
@@ -9436,11 +9468,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         return true;
     }
 
-    final /* synthetic */ void lambda$open$22$ArticleViewer(WebPage webPageFinal, MessageObject messageObject, int currentAccount, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$open$23$ArticleViewer(WebPage webPageFinal, MessageObject messageObject, int currentAccount, TLObject response, TL_error error) {
         if (response instanceof TL_webPage) {
             TL_webPage webPage = (TL_webPage) response;
             if (webPage.cached_page != null) {
-                AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$39(this, webPageFinal, webPage, messageObject));
+                AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$40(this, webPageFinal, webPage, messageObject));
                 LongSparseArray<WebPage> webpages = new LongSparseArray(1);
                 webpages.put(webPage.f182id, webPage);
                 MessagesStorage.getInstance(currentAccount).putWebPages(webpages);
@@ -9448,7 +9480,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$null$21$ArticleViewer(WebPage webPageFinal, TL_webPage webPage, MessageObject messageObject) {
+    final /* synthetic */ void lambda$null$22$ArticleViewer(WebPage webPageFinal, TL_webPage webPage, MessageObject messageObject) {
         if (!this.pagesStack.isEmpty() && this.pagesStack.get(0) == webPageFinal && webPage.cached_page != null) {
             if (messageObject != null) {
                 messageObject.messageOwner.media.webpage = webPage;
@@ -9462,7 +9494,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$open$23$ArticleViewer() {
+    final /* synthetic */ void lambda$open$24$ArticleViewer() {
         if (this.containerView != null && this.windowView != null) {
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(0, null);
@@ -9472,7 +9504,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$open$24$ArticleViewer(AnimatorSet animatorSet) {
+    final /* synthetic */ void lambda$open$25$ArticleViewer(AnimatorSet animatorSet) {
         NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
         NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
         animatorSet.start();
@@ -9619,7 +9651,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             animatorSet.playTogether(animatorArr);
             this.collapsed = true;
             this.animationInProgress = 2;
-            this.animationEndRunnable = new ArticleViewer$$Lambda$21(this);
+            this.animationEndRunnable = new ArticleViewer$$Lambda$22(this);
             animatorSet.setInterpolator(new DecelerateInterpolator());
             animatorSet.setDuration(250);
             animatorSet.addListener(new CLASSNAME());
@@ -9632,7 +9664,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$collapse$25$ArticleViewer() {
+    final /* synthetic */ void lambda$collapse$26$ArticleViewer() {
         if (this.containerView != null) {
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(0, null);
@@ -9661,7 +9693,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             animatorSet.playTogether(r1);
             this.collapsed = false;
             this.animationInProgress = 2;
-            this.animationEndRunnable = new ArticleViewer$$Lambda$22(this);
+            this.animationEndRunnable = new ArticleViewer$$Lambda$23(this);
             animatorSet.setDuration(250);
             animatorSet.setInterpolator(new DecelerateInterpolator());
             animatorSet.addListener(new CLASSNAME());
@@ -9674,7 +9706,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$uncollapse$26$ArticleViewer() {
+    final /* synthetic */ void lambda$uncollapse$27$ArticleViewer() {
         if (this.containerView != null) {
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(0, null);
@@ -9767,7 +9799,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 r2[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{0.0f, (float) AndroidUtilities.m9dp(56.0f)});
                 animatorSet.playTogether(r2);
                 this.animationInProgress = 2;
-                this.animationEndRunnable = new ArticleViewer$$Lambda$23(this);
+                this.animationEndRunnable = new ArticleViewer$$Lambda$24(this);
                 animatorSet.setDuration(150);
                 animatorSet.setInterpolator(this.interpolator);
                 animatorSet.addListener(new CLASSNAME());
@@ -9780,7 +9812,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$close$27$ArticleViewer() {
+    final /* synthetic */ void lambda$close$28$ArticleViewer() {
         if (this.containerView != null) {
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(0, null);
@@ -9804,10 +9836,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         for (int a = 0; a < this.createdWebViews.size(); a++) {
             ((BlockEmbedCell) this.createdWebViews.get(a)).destroyWebView(false);
         }
-        this.containerView.post(new ArticleViewer$$Lambda$24(this));
+        this.containerView.post(new ArticleViewer$$Lambda$25(this));
     }
 
-    final /* synthetic */ void lambda$onClosed$28$ArticleViewer() {
+    final /* synthetic */ void lambda$onClosed$29$ArticleViewer() {
         try {
             if (this.windowView.getParent() != null) {
                 ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
@@ -9823,15 +9855,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
             req.username = channel.username;
             int currentAccount = UserConfig.selectedAccount;
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$25(this, currentAccount, cell));
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$26(this, currentAccount, cell));
         }
     }
 
-    final /* synthetic */ void lambda$loadChannel$30$ArticleViewer(int currentAccount, BlockChannelCell cell, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$38(this, error, response, currentAccount, cell));
+    final /* synthetic */ void lambda$loadChannel$31$ArticleViewer(int currentAccount, BlockChannelCell cell, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$39(this, error, response, currentAccount, cell));
     }
 
-    final /* synthetic */ void lambda$null$29$ArticleViewer(TL_error error, TLObject response, int currentAccount, BlockChannelCell cell) {
+    final /* synthetic */ void lambda$null$30$ArticleViewer(TL_error error, TLObject response, int currentAccount, BlockChannelCell cell) {
         this.loadingChannel = false;
         if (this.parentFragment != null && this.blocks != null && !this.blocks.isEmpty()) {
             if (error == null) {
@@ -9860,12 +9892,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         TL_channels_joinChannel req = new TL_channels_joinChannel();
         req.channel = MessagesController.getInputChannel(channel);
         int currentAccount = UserConfig.selectedAccount;
-        ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$26(this, cell, currentAccount, req, channel));
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, new ArticleViewer$$Lambda$27(this, cell, currentAccount, req, channel));
     }
 
-    final /* synthetic */ void lambda$joinChannel$34$ArticleViewer(BlockChannelCell cell, int currentAccount, TL_channels_joinChannel req, Chat channel, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$joinChannel$35$ArticleViewer(BlockChannelCell cell, int currentAccount, TL_channels_joinChannel req, Chat channel, TLObject response, TL_error error) {
         if (error != null) {
-            AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$35(this, cell, currentAccount, error, req));
+            AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$36(this, cell, currentAccount, error, req));
             return;
         }
         boolean hasJoinMessage = false;
@@ -9881,12 +9913,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (!hasJoinMessage) {
             MessagesController.getInstance(currentAccount).generateJoinMessage(channel.f78id, true);
         }
-        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$36(cell));
-        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$37(currentAccount, channel), 1000);
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$37(cell));
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$38(currentAccount, channel), 1000);
         MessagesStorage.getInstance(currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), null, true, channel.f78id);
     }
 
-    final /* synthetic */ void lambda$null$31$ArticleViewer(BlockChannelCell cell, int currentAccount, TL_error error, TL_channels_joinChannel req) {
+    final /* synthetic */ void lambda$null$32$ArticleViewer(BlockChannelCell cell, int currentAccount, TL_error error, TL_channels_joinChannel req) {
         cell.setState(0, false);
         AlertsCreator.processError(currentAccount, error, this.parentFragment, req, Boolean.valueOf(true));
     }
@@ -9953,7 +9985,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             try {
                 this.visibleDialog = dialog;
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new ArticleViewer$$Lambda$27(this));
+                this.visibleDialog.setOnDismissListener(new ArticleViewer$$Lambda$28(this));
                 dialog.show();
             } catch (Throwable e2) {
                 FileLog.m13e(e2);
@@ -9961,7 +9993,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$showDialog$35$ArticleViewer(DialogInterface dialog1) {
+    final /* synthetic */ void lambda$showDialog$36$ArticleViewer(DialogInterface dialog1) {
         showActionBar(120);
         this.visibleDialog = null;
     }
@@ -10752,19 +10784,19 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         fArr = new float[2];
         r23[5] = ObjectAnimator.ofFloat(this.groupedPhotosListView, "alpha", new float[]{0.0f, 1.0f});
         animatorSet.playTogether(r23);
-        this.photoAnimationEndRunnable = new ArticleViewer$$Lambda$28(this);
+        this.photoAnimationEndRunnable = new ArticleViewer$$Lambda$29(this);
         animatorSet.setDuration(200);
         animatorSet.addListener(new CLASSNAME());
         this.photoTransitionAnimationStartTime = System.currentTimeMillis();
-        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$29(this, animatorSet));
+        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$30(this, animatorSet));
         if (VERSION.SDK_INT >= 18) {
             this.photoContainerView.setLayerType(2, null);
         }
-        this.photoBackgroundDrawable.drawRunnable = new ArticleViewer$$Lambda$30(this, object);
+        this.photoBackgroundDrawable.drawRunnable = new ArticleViewer$$Lambda$31(this, object);
         return true;
     }
 
-    final /* synthetic */ void lambda$openPhoto$36$ArticleViewer() {
+    final /* synthetic */ void lambda$openPhoto$37$ArticleViewer() {
         if (this.photoContainerView != null) {
             if (VERSION.SDK_INT >= 18) {
                 this.photoContainerView.setLayerType(0, null);
@@ -10783,13 +10815,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$openPhoto$37$ArticleViewer(AnimatorSet animatorSet) {
+    final /* synthetic */ void lambda$openPhoto$38$ArticleViewer(AnimatorSet animatorSet) {
         NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
         NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
         animatorSet.start();
     }
 
-    final /* synthetic */ void lambda$openPhoto$38$ArticleViewer(PlaceProviderObject object) {
+    final /* synthetic */ void lambda$openPhoto$39$ArticleViewer(PlaceProviderObject object) {
         this.disableShowCheck = false;
         object.imageReceiver.setVisible(false, true);
     }
@@ -10918,7 +10950,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     animatorArr2[6] = ObjectAnimator.ofFloat(this.groupedPhotosListView, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr2);
                 }
-                this.photoAnimationEndRunnable = new ArticleViewer$$Lambda$31(this, object);
+                this.photoAnimationEndRunnable = new ArticleViewer$$Lambda$32(this, object);
                 animatorSet.setDuration(200);
                 animatorSet.addListener(new CLASSNAME());
                 this.photoTransitionAnimationStartTime = System.currentTimeMillis();
@@ -10942,7 +10974,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$closePhoto$39$ArticleViewer(PlaceProviderObject object) {
+    final /* synthetic */ void lambda$closePhoto$40$ArticleViewer(PlaceProviderObject object) {
         if (VERSION.SDK_INT >= 18) {
             this.photoContainerView.setLayerType(0, null);
         }
@@ -10972,7 +11004,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.centerImage.setImageBitmap((Bitmap) null);
         this.leftImage.setImageBitmap((Bitmap) null);
         this.rightImage.setImageBitmap((Bitmap) null);
-        this.photoContainerView.post(new ArticleViewer$$Lambda$32(this));
+        this.photoContainerView.post(new ArticleViewer$$Lambda$33(this));
         this.disableShowCheck = false;
         if (object != null) {
             object.imageReceiver.setVisible(true, true);
@@ -10980,7 +11012,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.groupedPhotosListView.clear();
     }
 
-    final /* synthetic */ void lambda$onPhotoClosed$40$ArticleViewer() {
+    final /* synthetic */ void lambda$onPhotoClosed$41$ArticleViewer() {
         this.animatingImageView.setImageBitmap(null);
     }
 
@@ -11310,9 +11342,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 if (this.switchImageAfterAnimation != 0) {
                     if (this.switchImageAfterAnimation == 1) {
-                        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$33(this));
-                    } else if (this.switchImageAfterAnimation == 2) {
                         AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$34(this));
+                    } else if (this.switchImageAfterAnimation == 2) {
+                        AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$35(this));
                     }
                     this.switchImageAfterAnimation = 0;
                 }
@@ -11475,11 +11507,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
     }
 
-    final /* synthetic */ void lambda$drawContent$41$ArticleViewer() {
+    final /* synthetic */ void lambda$drawContent$42$ArticleViewer() {
         setImageIndex(this.currentIndex + 1, false);
     }
 
-    final /* synthetic */ void lambda$drawContent$42$ArticleViewer() {
+    final /* synthetic */ void lambda$drawContent$43$ArticleViewer() {
         setImageIndex(this.currentIndex - 1, false);
     }
 
