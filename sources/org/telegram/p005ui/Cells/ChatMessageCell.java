@@ -2185,15 +2185,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:513:0x0f55  */
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
-    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39fc }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a13 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a13 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a28  */
-    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a54  */
-    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d90  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d80  */
-    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d52  */
+    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39ff }} */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a16 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a16 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a2b  */
+    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a57  */
+    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d93  */
+    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d83  */
+    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d55  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
     /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
     /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
@@ -2217,18 +2217,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x10e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39fc }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a13 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a13 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a28  */
-    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a54  */
-    /* JADX WARNING: Removed duplicated region for block: B:1743:0x3a6d  */
-    /* JADX WARNING: Removed duplicated region for block: B:1804:0x3d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d80  */
-    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d90  */
-    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d52  */
-    /* JADX WARNING: Removed duplicated region for block: B:1817:0x3d61  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39ff }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a16 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a16 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a2b  */
+    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a57  */
+    /* JADX WARNING: Removed duplicated region for block: B:1743:0x3a70  */
+    /* JADX WARNING: Removed duplicated region for block: B:1804:0x3d1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d83  */
+    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d93  */
+    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d55  */
+    /* JADX WARNING: Removed duplicated region for block: B:1817:0x3d64  */
     /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
     /* JADX WARNING: Removed duplicated region for block: B:615:0x13e7  */
     /* JADX WARNING: Removed duplicated region for block: B:456:0x0da8  */
@@ -2252,18 +2252,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:843:0x1bd9  */
     /* JADX WARNING: Removed duplicated region for block: B:519:0x0fb3  */
     /* JADX WARNING: Removed duplicated region for block: B:539:0x10e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39fc }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a13 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a13 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a28  */
-    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a54  */
-    /* JADX WARNING: Removed duplicated region for block: B:1743:0x3a6d  */
-    /* JADX WARNING: Removed duplicated region for block: B:1804:0x3d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d90  */
-    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d80  */
-    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d52  */
-    /* JADX WARNING: Removed duplicated region for block: B:1817:0x3d61  */
+    /* JADX WARNING: Removed duplicated region for block: B:1726:0x39fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x1271 A:{Catch:{ Exception -> 0x39ff }} */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x12a7 A:{Catch:{ Exception -> 0x3a16 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x1311 A:{Catch:{ Exception -> 0x3a16 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1735:0x3a2b  */
+    /* JADX WARNING: Removed duplicated region for block: B:1740:0x3a57  */
+    /* JADX WARNING: Removed duplicated region for block: B:1743:0x3a70  */
+    /* JADX WARNING: Removed duplicated region for block: B:1804:0x3d1c  */
+    /* JADX WARNING: Removed duplicated region for block: B:1826:0x3d93  */
+    /* JADX WARNING: Removed duplicated region for block: B:1825:0x3d83  */
+    /* JADX WARNING: Removed duplicated region for block: B:1814:0x3d55  */
+    /* JADX WARNING: Removed duplicated region for block: B:1817:0x3d64  */
     /* JADX WARNING: Missing block: B:207:0x0682, code:
             if (r146.equals("article") != false) goto L_0x0684;
      */
@@ -4180,7 +4180,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.addedCaptionHeight = this.captionHeight + AndroidUtilities.m9dp(9.0f);
                                 if (this.currentPosition == null || (this.currentPosition.flags & 8) != 0) {
                                     additionHeight = 0 + this.addedCaptionHeight;
-                                    if (((float) (AndroidUtilities.m9dp(2.0f) + widthForCaption)) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
+                                    if (((float) (this.captionWidth + AndroidUtilities.m9dp(2.0f))) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
                                         additionHeight += AndroidUtilities.m9dp(14.0f);
                                         this.addedCaptionHeight += AndroidUtilities.m9dp(14.0f);
                                         captionNewLine = 1;
