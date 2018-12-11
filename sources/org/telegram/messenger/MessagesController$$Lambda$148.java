@@ -1,26 +1,18 @@
 package org.telegram.messenger;
 
-import android.os.Bundle;
-import org.telegram.p005ui.ActionBar.AlertDialog;
-import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.tgnet.TLObject;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 
-final /* synthetic */ class MessagesController$$Lambda$148 implements Runnable {
+final /* synthetic */ class MessagesController$$Lambda$148 implements OnCancelListener {
     private final MessagesController arg$1;
-    private final AlertDialog arg$2;
-    private final TLObject arg$3;
-    private final BaseFragment arg$4;
-    private final Bundle arg$5;
+    private final int arg$2;
 
-    MessagesController$$Lambda$148(MessagesController messagesController, AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
+    MessagesController$$Lambda$148(MessagesController messagesController, int i) {
         this.arg$1 = messagesController;
-        this.arg$2 = alertDialog;
-        this.arg$3 = tLObject;
-        this.arg$4 = baseFragment;
-        this.arg$5 = bundle;
+        this.arg$2 = i;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$234$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+    public void onCancel(DialogInterface dialogInterface) {
+        this.arg$1.lambda$null$241$MessagesController(this.arg$2, dialogInterface);
     }
 }

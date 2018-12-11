@@ -21,12 +21,15 @@ public class CheckBoxCell extends FrameLayout {
     private TextView valueTextView;
 
     public CheckBoxCell(Context context, int type) {
+        this(context, type, 17);
+    }
+
+    public CheckBoxCell(Context context, int type, int padding) {
         int i;
         View view;
         int i2;
         boolean z;
-        int i3 = 0;
-        int i4 = 5;
+        int i3 = 5;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(type == 1 ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
@@ -51,7 +54,7 @@ public class CheckBoxCell extends FrameLayout {
             }
             addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 0 : 29), 0.0f, (float) (LocaleController.isRTL ? 29 : 0), 0.0f));
         } else {
-            addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 17 : 46), 0.0f, (float) (LocaleController.isRTL ? 46 : 17), 0.0f));
+            addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? padding : (padding - 17) + 46), 0.0f, (float) (LocaleController.isRTL ? (padding - 17) + 46 : padding), 0.0f));
         }
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(type == 1 ? Theme.key_dialogTextBlue : Theme.key_windowBackgroundWhiteValueText));
@@ -73,7 +76,7 @@ public class CheckBoxCell extends FrameLayout {
         } else {
             i2 = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -1.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -1.0f, i2 | 48, (float) padding, 0.0f, (float) padding, 0.0f));
         if (type == 1) {
             z = true;
         } else {
@@ -83,29 +86,29 @@ public class CheckBoxCell extends FrameLayout {
         if (type == 2) {
             View view2 = this.checkBox;
             if (!LocaleController.isRTL) {
-                i4 = 3;
+                i3 = 3;
             }
-            addView(view2, LayoutHelper.createFrame(18, 18.0f, i4 | 48, 0.0f, 15.0f, 0.0f, 0.0f));
+            addView(view2, LayoutHelper.createFrame(18, 18.0f, i3 | 48, 0.0f, 15.0f, 0.0f, 0.0f));
             return;
         }
         View view3 = this.checkBox;
         if (!LocaleController.isRTL) {
-            i4 = 3;
+            i3 = 3;
         }
-        i4 |= 48;
-        float f = (float) (LocaleController.isRTL ? 0 : 17);
-        if (LocaleController.isRTL) {
-            i3 = 17;
+        i3 |= 48;
+        float f = (float) (LocaleController.isRTL ? 0 : padding);
+        if (!LocaleController.isRTL) {
+            padding = 0;
         }
-        addView(view3, LayoutHelper.createFrame(18, 18.0f, i4, f, 15.0f, (float) i3, 0.0f));
+        addView(view3, LayoutHelper.createFrame(18, 18.0f, i3, f, 16.0f, (float) padding, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f));
-        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m10dp(34.0f);
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f));
+        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m9dp(34.0f);
         this.valueTextView.measure(MeasureSpec.makeMeasureSpec(availableWidth / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec((availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.m10dp(8.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-        this.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(18.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(18.0f), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec((availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.m9dp(8.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(18.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(18.0f), NUM));
     }
 
     public void setTextColor(int color) {
@@ -171,7 +174,7 @@ public class CheckBoxCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

@@ -38,6 +38,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     private Context mContext;
     private ArrayList<Document> stickers;
     private HashMap<String, Document> stickersMap;
+    private ArrayList<Object> stickersParents;
     private ArrayList<String> stickersToLoad = new ArrayList();
     private boolean visible;
 
@@ -51,18 +52,18 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         this.delegate = delegate;
         DataQuery.getInstance(this.currentAccount).checkStickers(0);
         DataQuery.getInstance(this.currentAccount).checkStickers(1);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
     }
 
     public void onDestroy() {
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
         boolean z = false;
-        if ((id == NotificationCenter.FileDidLoaded || id == NotificationCenter.FileDidFailedLoad) && this.stickers != null && !this.stickers.isEmpty() && !this.stickersToLoad.isEmpty() && this.visible) {
+        if ((id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailedLoad) && this.stickers != null && !this.stickers.isEmpty() && !this.stickersToLoad.isEmpty() && this.visible) {
             this.stickersToLoad.remove(args[0]);
             if (this.stickersToLoad.isEmpty()) {
                 StickersAdapterDelegate stickersAdapterDelegate = this.delegate;
@@ -79,12 +80,12 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             return false;
         }
         this.stickersToLoad.clear();
-        int size = Math.min(10, this.stickers.size());
+        int size = Math.min(6, this.stickers.size());
         for (int a = 0; a < size; a++) {
             Document document = (Document) this.stickers.get(a);
             if (!FileLoader.getPathToAttach(document.thumb, "webp", true).exists()) {
                 this.stickersToLoad.add(FileLoader.getAttachFileName(document.thumb, "webp"));
-                FileLoader.getInstance(this.currentAccount).loadFile(document.thumb.location, "webp", 0, 1);
+                FileLoader.getInstance(this.currentAccount).loadFile(document.thumb.location, this.stickersParents.get(a), "webp", 0, 1, 1);
             }
         }
         return this.stickersToLoad.isEmpty();
@@ -104,21 +105,23 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         return false;
     }
 
-    private void addStickerToResult(Document document) {
+    private void addStickerToResult(Document document, Object parent) {
         if (document != null) {
             String key = document.dc_id + "_" + document.var_id;
             if (this.stickersMap == null || !this.stickersMap.containsKey(key)) {
                 if (this.stickers == null) {
                     this.stickers = new ArrayList();
+                    this.stickersParents = new ArrayList();
                     this.stickersMap = new HashMap();
                 }
                 this.stickers.add(document);
+                this.stickersParents.add(parent);
                 this.stickersMap.put(key, document);
             }
         }
     }
 
-    private void addStickersToResult(ArrayList<Document> documents) {
+    private void addStickersToResult(ArrayList<Document> documents, Object parent) {
         if (documents != null && !documents.isEmpty()) {
             int size = documents.size();
             for (int a = 0; a < size; a++) {
@@ -127,9 +130,23 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                 if (this.stickersMap == null || !this.stickersMap.containsKey(key)) {
                     if (this.stickers == null) {
                         this.stickers = new ArrayList();
+                        this.stickersParents = new ArrayList();
                         this.stickersMap = new HashMap();
                     }
                     this.stickers.add(document);
+                    boolean found = false;
+                    int size2 = document.attributes.size();
+                    for (int b = 0; b < size2; b++) {
+                        DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(b);
+                        if (attribute instanceof TL_documentAttributeSticker) {
+                            this.stickersParents.add(attribute.stickerset);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        this.stickersParents.add(parent);
+                    }
                     this.stickersMap.put(key, document);
                 }
             }
@@ -183,6 +200,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                 if (Emoji.isValidEmoji(originalEmoji) || Emoji.isValidEmoji(this.lastSticker)) {
                     Document document;
                     this.stickers = null;
+                    this.stickersParents = null;
                     this.stickersMap = null;
                     this.delayLocalResults = false;
                     final ArrayList<Document> recentStickers = DataQuery.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
@@ -192,7 +210,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                     for (a = 0; a < size; a++) {
                         document = (Document) recentStickers.get(a);
                         if (isValidSticker(document, this.lastSticker)) {
-                            addStickerToResult(document);
+                            addStickerToResult(document, "recent");
                             recentsAdded++;
                             if (recentsAdded >= 5) {
                                 break;
@@ -203,7 +221,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                     for (a = 0; a < size; a++) {
                         document = (Document) favsStickers.get(a);
                         if (isValidSticker(document, this.lastSticker)) {
-                            addStickerToResult(document);
+                            addStickerToResult(document, "fav");
                         }
                     }
                     HashMap<String, ArrayList<Document>> allStickers = DataQuery.getInstance(this.currentAccount).getAllStickers();
@@ -246,10 +264,10 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                                 }
                             });
                         }
-                        addStickersToResult(arrayList);
+                        addStickersToResult(arrayList, null);
                     }
                     if (SharedConfig.suggestStickers == 0) {
-                        searchServerStickers(this.lastSticker);
+                        searchServerStickers(this.lastSticker, originalEmoji);
                     }
                     if (this.stickers != null && !this.stickers.isEmpty()) {
                         if (SharedConfig.suggestStickers != 0 || this.stickers.size() >= 5) {
@@ -289,12 +307,12 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         }
     }
 
-    private void searchServerStickers(String emoji) {
+    private void searchServerStickers(String emoji, String originalEmoji) {
         if (this.lastReqId != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.lastReqId, true);
         }
         TL_messages_getStickers req = new TL_messages_getStickers();
-        req.emoticon = emoji;
+        req.emoticon = originalEmoji;
         req.hash = 0;
         this.lastReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new StickersAdapter$$Lambda$0(this, emoji));
     }
@@ -316,7 +334,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             } else {
                 oldCount = 0;
             }
-            addStickersToResult(res.stickers);
+            addStickersToResult(res.stickers, "sticker_search_" + emoji);
             if (this.stickers != null) {
                 newCount = this.stickers.size();
             } else {
@@ -340,6 +358,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     public void clearStickers() {
         this.lastSticker = null;
         this.stickers = null;
+        this.stickersParents = null;
         this.stickersMap = null;
         this.stickersToLoad.clear();
         notifyDataSetChanged();
@@ -355,6 +374,10 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
 
     public Document getItem(int i) {
         return (this.stickers == null || i < 0 || i >= this.stickers.size()) ? null : (Document) this.stickers.get(i);
+    }
+
+    public Object getItemParent(int i) {
+        return (this.stickersParents == null || i < 0 || i >= this.stickersParents.size()) ? null : this.stickersParents.get(i);
     }
 
     public boolean isEnabled(ViewHolder holder) {
@@ -376,6 +399,6 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         } else if (i == this.stickers.size() - 1) {
             side = 1;
         }
-        ((StickerCell) viewHolder.itemView).setSticker((Document) this.stickers.get(i), side);
+        ((StickerCell) viewHolder.itemView).setSticker((Document) this.stickers.get(i), this.stickersParents.get(i), side);
     }
 }

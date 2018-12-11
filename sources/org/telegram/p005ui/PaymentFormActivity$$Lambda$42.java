@@ -1,16 +1,14 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.CountrySelectActivity.CountrySelectActivityDelegate;
-
 /* renamed from: org.telegram.ui.PaymentFormActivity$$Lambda$42 */
-final /* synthetic */ class PaymentFormActivity$$Lambda$42 implements CountrySelectActivityDelegate {
+final /* synthetic */ class PaymentFormActivity$$Lambda$42 implements Runnable {
     private final PaymentFormActivity arg$1;
 
     PaymentFormActivity$$Lambda$42(PaymentFormActivity paymentFormActivity) {
         this.arg$1 = paymentFormActivity;
     }
 
-    public void didSelectCountry(String str, String str2) {
-        this.arg$1.lambda$null$0$PaymentFormActivity(str, str2);
+    public void run() {
+        this.arg$1.lambda$null$22$PaymentFormActivity();
     }
 }

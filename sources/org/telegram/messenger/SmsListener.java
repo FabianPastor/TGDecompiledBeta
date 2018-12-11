@@ -29,17 +29,16 @@ public class SmsListener extends BroadcastReceiver {
                         wholeString = wholeString + msgs[i].getMessageBody();
                     }
                     if (!outgoing) {
-                        final Matcher matcher = Pattern.compile("[0-9]+").matcher(wholeString);
-                        if (matcher.find() && matcher.group(0).length() >= 3) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReceiveSmsCode, matcher.group(0));
-                                }
-                            });
+                        Matcher matcher = Pattern.compile("[0-9\\-]+").matcher(wholeString);
+                        if (matcher.find()) {
+                            String str = matcher.group(0).replace("-", TtmlNode.ANONYMOUS_REGION_ID);
+                            if (str.length() >= 3) {
+                                AndroidUtilities.runOnUIThread(new SmsListener$$Lambda$0(str));
+                            }
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
         }

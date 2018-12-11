@@ -30,10 +30,8 @@ import org.telegram.p005ui.Components.EmptyTextProgressView;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -66,24 +64,6 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CommonGroupsActivity$2 */
-    class CLASSNAME implements OnItemClickListener {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(View view, int position) {
-            if (position >= 0 && position < CommonGroupsActivity.this.chats.size()) {
-                Chat chat = (Chat) CommonGroupsActivity.this.chats.get(position);
-                Bundle args = new Bundle();
-                args.putInt("chat_id", chat.var_id);
-                if (MessagesController.getInstance(CommonGroupsActivity.this.currentAccount).checkCanOpenChat(args, CommonGroupsActivity.this)) {
-                    NotificationCenter.getInstance(CommonGroupsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                    CommonGroupsActivity.this.presentFragment(new ChatActivity(args), true);
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.CommonGroupsActivity$3 */
     class CLASSNAME extends OnScrollListener {
         CLASSNAME() {
         }
@@ -95,24 +75,6 @@ public class CommonGroupsActivity extends BaseFragment {
                 int totalItemCount = CommonGroupsActivity.this.listViewAdapter.getItemCount();
                 if (!CommonGroupsActivity.this.endReached && !CommonGroupsActivity.this.loading && !CommonGroupsActivity.this.chats.isEmpty() && firstVisibleItem + visibleItemCount >= totalItemCount - 5) {
                     CommonGroupsActivity.this.getChats(((Chat) CommonGroupsActivity.this.chats.get(CommonGroupsActivity.this.chats.size() - 1)).var_id, 100);
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.CommonGroupsActivity$5 */
-    class CLASSNAME implements ThemeDescriptionDelegate {
-        CLASSNAME() {
-        }
-
-        public void didSetColor() {
-            if (CommonGroupsActivity.this.listView != null) {
-                int count = CommonGroupsActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = CommonGroupsActivity.this.listView.getChildAt(a);
-                    if (child instanceof ProfileSearchCell) {
-                        ((ProfileSearchCell) child).update(0);
-                    }
                 }
             }
         }
@@ -155,7 +117,7 @@ public class CommonGroupsActivity extends BaseFragment {
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             return new Holder(view);
@@ -222,7 +184,7 @@ public class CommonGroupsActivity extends BaseFragment {
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new CLASSNAME());
+        this.listView.setOnItemClickListener(new CommonGroupsActivity$$Lambda$0(this));
         this.listView.setOnScrollListener(new CLASSNAME());
         if (this.loading) {
             this.emptyView.showProgress();
@@ -232,7 +194,19 @@ public class CommonGroupsActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    private void getChats(int max_id, final int count) {
+    final /* synthetic */ void lambda$createView$0$CommonGroupsActivity(View view, int position) {
+        if (position >= 0 && position < this.chats.size()) {
+            Chat chat = (Chat) this.chats.get(position);
+            Bundle args = new Bundle();
+            args.putInt("chat_id", chat.var_id);
+            if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(args, this)) {
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                presentFragment(new ChatActivity(args), true);
+            }
+        }
+    }
+
+    private void getChats(int max_id, int count) {
         if (!this.loading) {
             this.loading = true;
             if (!(this.emptyView == null || this.firstLoaded)) {
@@ -246,38 +220,37 @@ public class CommonGroupsActivity extends BaseFragment {
             if (!(req.user_id instanceof TL_inputUserEmpty)) {
                 req.limit = count;
                 req.max_id = max_id;
-                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                    public void run(final TLObject response, final TL_error error) {
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (error == null) {
-                                    boolean z;
-                                    messages_Chats res = response;
-                                    MessagesController.getInstance(CommonGroupsActivity.this.currentAccount).putChats(res.chats, false);
-                                    CommonGroupsActivity commonGroupsActivity = CommonGroupsActivity.this;
-                                    if (res.chats.isEmpty() || res.chats.size() != count) {
-                                        z = true;
-                                    } else {
-                                        z = false;
-                                    }
-                                    commonGroupsActivity.endReached = z;
-                                    CommonGroupsActivity.this.chats.addAll(res.chats);
-                                } else {
-                                    CommonGroupsActivity.this.endReached = true;
-                                }
-                                CommonGroupsActivity.this.loading = false;
-                                CommonGroupsActivity.this.firstLoaded = true;
-                                if (CommonGroupsActivity.this.emptyView != null) {
-                                    CommonGroupsActivity.this.emptyView.showTextView();
-                                }
-                                if (CommonGroupsActivity.this.listViewAdapter != null) {
-                                    CommonGroupsActivity.this.listViewAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        });
-                    }
-                }), this.classGuid);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CommonGroupsActivity$$Lambda$1(this, count)), this.classGuid);
             }
+        }
+    }
+
+    final /* synthetic */ void lambda$getChats$2$CommonGroupsActivity(int count, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new CommonGroupsActivity$$Lambda$3(this, error, response, count));
+    }
+
+    final /* synthetic */ void lambda$null$1$CommonGroupsActivity(TL_error error, TLObject response, int count) {
+        if (error == null) {
+            boolean z;
+            messages_Chats res = (messages_Chats) response;
+            MessagesController.getInstance(this.currentAccount).putChats(res.chats, false);
+            if (res.chats.isEmpty() || res.chats.size() != count) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.endReached = z;
+            this.chats.addAll(res.chats);
+        } else {
+            this.endReached = true;
+        }
+        this.loading = false;
+        this.firstLoaded = true;
+        if (this.emptyView != null) {
+            this.emptyView.showTextView();
+        }
+        if (this.listViewAdapter != null) {
+            this.listViewAdapter.notifyDataSetChanged();
         }
     }
 
@@ -289,7 +262,7 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new CLASSNAME();
+        ThemeDescriptionDelegate cellDelegate = new CommonGroupsActivity$$Lambda$2(this);
         r10 = new ThemeDescription[23];
         r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LoadingCell.class, ProfileSearchCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         r10[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
@@ -306,7 +279,7 @@ public class CommonGroupsActivity extends BaseFragment {
         r10[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
         r10[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
         r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, Theme.key_chats_name);
-        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
+        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         r10[16] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
         r10[17] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
         r10[18] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);
@@ -315,5 +288,17 @@ public class CommonGroupsActivity extends BaseFragment {
         r10[21] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundBlue);
         r10[22] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundPink);
         return r10;
+    }
+
+    final /* synthetic */ void lambda$getThemeDescriptions$3$CommonGroupsActivity() {
+        if (this.listView != null) {
+            int count = this.listView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = this.listView.getChildAt(a);
+                if (child instanceof ProfileSearchCell) {
+                    ((ProfileSearchCell) child).update(0);
+                }
+            }
+        }
     }
 }

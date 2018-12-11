@@ -37,7 +37,7 @@ public class WallpaperCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(102.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(102.0f), NUM));
     }
 
     public void setWallpaper(WallPaper wallpaper, int selectedBackground, Drawable themedWallpaper, boolean themed) {
@@ -75,7 +75,7 @@ public class WallpaperCell extends FrameLayout {
             this.imageView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR | wallpaper.bg_color);
             return;
         }
-        int side = AndroidUtilities.m10dp(100.0f);
+        int side = AndroidUtilities.m9dp(100.0f);
         PhotoSize size = null;
         for (int a = 0; a < wallpaper.sizes.size(); a++) {
             PhotoSize obj = (PhotoSize) wallpaper.sizes.get(a);
@@ -87,7 +87,7 @@ public class WallpaperCell extends FrameLayout {
             }
         }
         if (!(size == null || size.location == null)) {
-            this.imageView.setImage(size.location, "100_100", (Drawable) null);
+            this.imageView.setImage(size.location, "100_100", (Drawable) null, (Object) "wallpaper");
         }
         this.imageView.setBackgroundColor(NUM);
     }

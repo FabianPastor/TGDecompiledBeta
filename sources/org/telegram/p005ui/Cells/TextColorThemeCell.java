@@ -39,12 +39,12 @@ public class TextColorThemeCell extends FrameLayout {
             i = 3;
         }
         textView.setGravity(i | 16);
-        this.textView.setPadding(0, 0, 0, AndroidUtilities.m10dp(3.0f));
+        this.textView.setPadding(0, 0, 0, AndroidUtilities.m9dp(3.0f));
         View view = this.textView;
         if (!LocaleController.isRTL) {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 17 : 53), 0.0f, (float) (LocaleController.isRTL ? 53 : 17), 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 21 : 57), 0.0f, (float) (LocaleController.isRTL ? 57 : 21), 0.0f));
     }
 
     public void setAlpha(float value) {
@@ -57,7 +57,7 @@ public class TextColorThemeCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f), NUM));
     }
 
     public void setTextAndColor(String text, int color) {
@@ -72,7 +72,7 @@ public class TextColorThemeCell extends FrameLayout {
         if (this.currentColor != 0) {
             colorPaint.setColor(this.currentColor);
             colorPaint.setAlpha((int) (255.0f * this.alpha));
-            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.m10dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m10dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m10dp(10.0f), colorPaint);
+            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.m9dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.m9dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.m9dp(10.0f), colorPaint);
         }
     }
 }

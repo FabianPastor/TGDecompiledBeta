@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.ActionBar.BaseFragment;
-
-final /* synthetic */ class MessagesController$$Lambda$143 implements OnClickListener {
+final /* synthetic */ class MessagesController$$Lambda$143 implements Runnable {
     private final MessagesController arg$1;
     private final int arg$2;
-    private final BaseFragment arg$3;
+    private final int arg$3;
 
-    MessagesController$$Lambda$143(MessagesController messagesController, int i, BaseFragment baseFragment) {
+    MessagesController$$Lambda$143(MessagesController messagesController, int i, int i2) {
         this.arg$1 = messagesController;
         this.arg$2 = i;
-        this.arg$3 = baseFragment;
+        this.arg$3 = i2;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$checkCanOpenChat$236$MessagesController(this.arg$2, this.arg$3, dialogInterface, i);
+    public void run() {
+        this.arg$1.lambda$processUpdateArray$235$MessagesController(this.arg$2, this.arg$3);
     }
 }

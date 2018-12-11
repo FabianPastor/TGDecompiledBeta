@@ -73,7 +73,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.Utilities;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.VideoPlayer.VideoPlayerDelegate;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 
@@ -270,7 +269,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         WebPlayerView.this.currentBitmap.recycle();
                         WebPlayerView.this.currentBitmap = null;
                     }
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 if (WebPlayerView.this.currentBitmap != null) {
                     WebPlayerView.this.textureImageView.setVisibility(0);
@@ -339,7 +338,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             return isCancelled() ? null : this.results[0];
         }
@@ -409,7 +408,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             setWillNotDraw(false);
             this.textPaint = new TextPaint(1);
             this.textPaint.setColor(-1);
-            this.textPaint.setTextSize((float) AndroidUtilities.m10dp(12.0f));
+            this.textPaint.setTextSize((float) AndroidUtilities.m9dp(12.0f));
             this.progressPaint = new Paint(1);
             this.progressPaint.setColor(-15095832);
             this.progressInnerPaint = new Paint();
@@ -422,7 +421,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         public void setDuration(int value) {
             if (this.duration != value && value >= 0 && !WebPlayerView.this.isStream) {
                 this.duration = value;
-                this.durationLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.duration / 60), Integer.valueOf(this.duration % 60)}), this.textPaint, AndroidUtilities.m10dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.durationLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.duration / 60), Integer.valueOf(this.duration % 60)}), this.textPaint, AndroidUtilities.m9dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (this.durationLayout.getLineCount() > 0) {
                     this.durationWidth = (int) Math.ceil((double) this.durationLayout.getLineWidth(0));
                 }
@@ -438,7 +437,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         public void setProgress(int value) {
             if (!this.progressPressed && value >= 0 && !WebPlayerView.this.isStream) {
                 this.progress = value;
-                this.progressLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.progress / 60), Integer.valueOf(this.progress % 60)}), this.textPaint, AndroidUtilities.m10dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.progressLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.progress / 60), Integer.valueOf(this.progress % 60)}), this.textPaint, AndroidUtilities.m9dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 invalidate();
             }
         }
@@ -510,13 +509,13 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             int i;
             int progressY;
             if (WebPlayerView.this.inFullscreen) {
-                progressLineX = AndroidUtilities.m10dp(36.0f) + this.durationWidth;
-                progressLineEndX = (getMeasuredWidth() - AndroidUtilities.m10dp(76.0f)) - this.durationWidth;
-                progressY = getMeasuredHeight() - AndroidUtilities.m10dp(28.0f);
+                progressLineX = AndroidUtilities.m9dp(36.0f) + this.durationWidth;
+                progressLineEndX = (getMeasuredWidth() - AndroidUtilities.m9dp(76.0f)) - this.durationWidth;
+                progressY = getMeasuredHeight() - AndroidUtilities.m9dp(28.0f);
             } else {
                 progressLineX = 0;
                 progressLineEndX = getMeasuredWidth();
-                progressY = getMeasuredHeight() - AndroidUtilities.m10dp(12.0f);
+                progressY = getMeasuredHeight() - AndroidUtilities.m9dp(12.0f);
             }
             if (this.duration != 0) {
                 i = (int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration)));
@@ -531,7 +530,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 } else if (this.duration != 0) {
                     x = (int) event.getX();
                     int y = (int) event.getY();
-                    if (x >= progressX - AndroidUtilities.m10dp(10.0f) && x <= AndroidUtilities.m10dp(10.0f) + progressX && y >= progressY - AndroidUtilities.m10dp(10.0f) && y <= AndroidUtilities.m10dp(10.0f) + progressY) {
+                    if (x >= progressX - AndroidUtilities.m9dp(10.0f) && x <= AndroidUtilities.m9dp(10.0f) + progressX && y >= progressY - AndroidUtilities.m9dp(10.0f) && y <= AndroidUtilities.m9dp(10.0f) + progressY) {
                         this.progressPressed = true;
                         this.lastProgressX = x;
                         this.currentProgressX = progressX;
@@ -588,13 +587,13 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 if (!WebPlayerView.this.isInline) {
                     if (this.durationLayout != null) {
                         canvas.save();
-                        canvas.translate((float) ((width - AndroidUtilities.m10dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.m10dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
+                        canvas.translate((float) ((width - AndroidUtilities.m9dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.m9dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
                         this.durationLayout.draw(canvas);
                         canvas.restore();
                     }
                     if (this.progressLayout != null) {
                         canvas.save();
-                        canvas.translate((float) AndroidUtilities.m10dp(18.0f), (float) (height - AndroidUtilities.m10dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
+                        canvas.translate((float) AndroidUtilities.m9dp(18.0f), (float) (height - AndroidUtilities.m9dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
                         this.progressLayout.draw(canvas);
                         canvas.restore();
                     }
@@ -606,23 +605,23 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     int cy;
                     int progressX;
                     if (WebPlayerView.this.isInline) {
-                        progressLineY = height - AndroidUtilities.m10dp(3.0f);
+                        progressLineY = height - AndroidUtilities.m9dp(3.0f);
                         progressLineX = 0;
                         progressLineEndX = width;
-                        cy = height - AndroidUtilities.m10dp(7.0f);
+                        cy = height - AndroidUtilities.m9dp(7.0f);
                     } else if (WebPlayerView.this.inFullscreen) {
-                        progressLineY = height - AndroidUtilities.m10dp(29.0f);
-                        progressLineX = AndroidUtilities.m10dp(36.0f) + this.durationWidth;
-                        progressLineEndX = (width - AndroidUtilities.m10dp(76.0f)) - this.durationWidth;
-                        cy = height - AndroidUtilities.m10dp(28.0f);
+                        progressLineY = height - AndroidUtilities.m9dp(29.0f);
+                        progressLineX = AndroidUtilities.m9dp(36.0f) + this.durationWidth;
+                        progressLineEndX = (width - AndroidUtilities.m9dp(76.0f)) - this.durationWidth;
+                        cy = height - AndroidUtilities.m9dp(28.0f);
                     } else {
-                        progressLineY = height - AndroidUtilities.m10dp(13.0f);
+                        progressLineY = height - AndroidUtilities.m9dp(13.0f);
                         progressLineX = 0;
                         progressLineEndX = width;
-                        cy = height - AndroidUtilities.m10dp(12.0f);
+                        cy = height - AndroidUtilities.m9dp(12.0f);
                     }
                     if (WebPlayerView.this.inFullscreen) {
-                        canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressLineEndX, (float) (AndroidUtilities.m10dp(3.0f) + progressLineY), this.progressInnerPaint);
+                        canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressLineEndX, (float) (AndroidUtilities.m9dp(3.0f) + progressLineY), this.progressInnerPaint);
                     }
                     if (this.progressPressed) {
                         progressX = this.currentProgressX;
@@ -630,11 +629,11 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         progressX = progressLineX + ((int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration))));
                     }
                     if (!(this.bufferedPosition == 0 || this.duration == 0)) {
-                        canvas.drawRect((float) progressLineX, (float) progressLineY, (((float) (progressLineEndX - progressLineX)) * (((float) this.bufferedPosition) / ((float) this.duration))) + ((float) progressLineX), (float) (AndroidUtilities.m10dp(3.0f) + progressLineY), WebPlayerView.this.inFullscreen ? this.progressBufferedPaint : this.progressInnerPaint);
+                        canvas.drawRect((float) progressLineX, (float) progressLineY, (((float) (progressLineEndX - progressLineX)) * (((float) this.bufferedPosition) / ((float) this.duration))) + ((float) progressLineX), (float) (AndroidUtilities.m9dp(3.0f) + progressLineY), WebPlayerView.this.inFullscreen ? this.progressBufferedPaint : this.progressInnerPaint);
                     }
-                    canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.m10dp(3.0f) + progressLineY), this.progressPaint);
+                    canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.m9dp(3.0f) + progressLineY), this.progressPaint);
                     if (!WebPlayerView.this.isInline) {
-                        canvas.drawCircle((float) progressX, (float) cy, (float) AndroidUtilities.m10dp(this.progressPressed ? 7.0f : 5.0f), this.progressPaint);
+                        canvas.drawCircle((float) progressX, (float) cy, (float) AndroidUtilities.m9dp(this.progressPressed ? 7.0f : 5.0f), this.progressPaint);
                     }
                 }
             }
@@ -684,7 +683,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     this.results[3] = "other";
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (isCancelled()) {
                 return null;
@@ -918,7 +917,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 }
             } catch (Throwable e) {
                 this.codeLines.clear();
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             return TextUtils.join(TtmlNode.ANONYMOUS_REGION_ID, this.codeLines);
         }
@@ -962,7 +961,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     this.results[1] = "other";
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (isCancelled()) {
                 return null;
@@ -1019,7 +1018,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 this.results[0] = String.format(Locale.US, "https://usher.ttvnw.net/api/channel/hls/%s.m3u8?%s", new Object[]{this.videoId, params});
                 this.results[1] = "hls";
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             return isCancelled() ? null : this.results[0];
         }
@@ -1080,7 +1079,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 if (isCancelled()) {
                 }
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
         }
 
@@ -1122,7 +1121,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             try {
                 params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, CLASSNAMEC.UTF8_NAME);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (embedCode != null) {
                 matcher = WebPlayerView.stsPattern.matcher(embedCode);
@@ -1155,7 +1154,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 try {
                                     this.result[0] = URLDecoder.decode(args2[1], CLASSNAMEC.UTF8_NAME);
                                 } catch (Throwable e2) {
-                                    FileLog.m14e(e2);
+                                    FileLog.m13e(e2);
                                 }
                             }
                         } else if (args[a].startsWith("url_encoded_fmt_stream_map")) {
@@ -1183,7 +1182,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                         }
                                     }
                                 } catch (Throwable e22) {
-                                    FileLog.m14e(e22);
+                                    FileLog.m13e(e22);
                                 }
                             }
                         } else if (args[a].startsWith("use_cipher_signature")) {
@@ -1197,7 +1196,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 try {
                                     hls = URLDecoder.decode(args2[1], CLASSNAMEC.UTF8_NAME);
                                 } catch (Throwable e222) {
-                                    FileLog.m14e(e222);
+                                    FileLog.m13e(e222);
                                 }
                             }
                         } else if (args[a].startsWith("livestream")) {
@@ -1241,7 +1240,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 jsUrl = (String) value;
                             }
                         } catch (Throwable e2222) {
-                            FileLog.m14e(e2222);
+                            FileLog.m13e(e2222);
                         }
                     }
                     if (jsUrl != null) {
@@ -1286,7 +1285,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                             preferences.edit().putString(playerId, functionCode).putString(playerId + "n", functionName).commit();
                                         }
                                     } catch (Throwable e22222) {
-                                        FileLog.m14e(e22222);
+                                        FileLog.m13e(e22222);
                                     }
                                 }
                             }
@@ -1302,7 +1301,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 this.countDownLatch.await();
                                 encrypted = false;
                             } catch (Throwable e222222) {
-                                FileLog.m14e(e222222);
+                                FileLog.m13e(e222222);
                             }
                         }
                     }
@@ -1322,7 +1321,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             try {
                 WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + functionCodeFinal + "</script>").getBytes(CLASSNAMEC.UTF8_NAME), 0));
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
 
@@ -1339,7 +1338,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         protected void onPostExecute(String[] result) {
             if (result[0] != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("start play youtube video " + result[1] + " " + result[0]);
+                    FileLog.m10d("start play youtube video " + result[1] + " " + result[0]);
                 }
                 WebPlayerView.this.initied = true;
                 WebPlayerView.this.playVideoUrl = result[0];
@@ -1444,7 +1443,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             httpConnectionStream = httpConnection.getInputStream();
         } catch (Throwable e4) {
             if (e4 instanceof SocketTimeoutException) {
-                if (ConnectionsManager.isNetworkOnline()) {
+                if (ApplicationLoader.isNetworkOnline()) {
                     canRetry = false;
                 }
             } else if (e4 instanceof UnknownHostException) {
@@ -1456,7 +1455,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             } else if (e4 instanceof FileNotFoundException) {
                 canRetry = false;
             }
-            FileLog.m14e(e4);
+            FileLog.m13e(e4);
         }
         if (canRetry) {
             if (httpConnection != null) {
@@ -1467,7 +1466,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         }
                     }
                 } catch (Throwable e42) {
-                    FileLog.m14e(e42);
+                    FileLog.m13e(e42);
                 }
             }
             if (httpConnectionStream != null) {
@@ -1503,7 +1502,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             } catch (Exception e6) {
                                 e42 = e6;
                                 result = result2;
-                                FileLog.m14e(e42);
+                                FileLog.m13e(e42);
                                 if (httpConnectionStream != null) {
                                 }
                                 if (done) {
@@ -1522,7 +1521,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 try {
                     httpConnectionStream.close();
                 } catch (Throwable e422) {
-                    FileLog.m14e(e422);
+                    FileLog.m13e(e422);
                 }
             }
         }
@@ -1530,7 +1529,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             return result.toString();
         }
         return null;
-        FileLog.m14e(e422);
+        FileLog.m13e(e422);
         if (httpConnectionStream != null) {
         }
         if (done) {
@@ -1673,7 +1672,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         parent.removeView(this.aspectRatioFrameLayout);
                     }
                     addView(this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
-                    this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight() - AndroidUtilities.m10dp(10.0f), NUM));
+                    this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight() - AndroidUtilities.m9dp(10.0f), NUM));
                 }
                 if (this.currentBitmap != null) {
                     this.currentBitmap.recycle();
@@ -1734,7 +1733,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     this.currentBitmap.recycle();
                     this.currentBitmap = null;
                 }
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (this.currentBitmap != null) {
                 this.textureImageView.setVisibility(0);
@@ -1774,11 +1773,11 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.m10dp(10.0f)), this.backgroundPaint);
+        canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.m9dp(10.0f)), this.backgroundPaint);
     }
 
     public void onError(Exception e) {
-        FileLog.m14e((Throwable) e);
+        FileLog.m13e((Throwable) e);
         onInitFailed();
     }
 
@@ -1837,7 +1836,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int x = ((r - l) - this.aspectRatioFrameLayout.getMeasuredWidth()) / 2;
-        int y = (((b - t) - AndroidUtilities.m10dp(10.0f)) - this.aspectRatioFrameLayout.getMeasuredHeight()) / 2;
+        int y = (((b - t) - AndroidUtilities.m9dp(10.0f)) - this.aspectRatioFrameLayout.getMeasuredHeight()) / 2;
         this.aspectRatioFrameLayout.layout(x, y, this.aspectRatioFrameLayout.getMeasuredWidth() + x, this.aspectRatioFrameLayout.getMeasuredHeight() + y);
         if (this.controlsView.getParent() == this) {
             this.controlsView.layout(0, 0, this.controlsView.getMeasuredWidth(), this.controlsView.getMeasuredHeight());
@@ -1845,17 +1844,17 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         x = ((r - l) - this.progressView.getMeasuredWidth()) / 2;
         y = ((b - t) - this.progressView.getMeasuredHeight()) / 2;
         this.progressView.layout(x, y, this.progressView.getMeasuredWidth() + x, this.progressView.getMeasuredHeight() + y);
-        this.controlsView.imageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.m10dp(10.0f));
+        this.controlsView.imageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.m9dp(10.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height - AndroidUtilities.m10dp(10.0f), NUM));
+        this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height - AndroidUtilities.m9dp(10.0f), NUM));
         if (this.controlsView.getParent() == this) {
             this.controlsView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
         }
-        this.progressView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(44.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(44.0f), NUM));
+        this.progressView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(44.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(44.0f), NUM));
         setMeasuredDimension(width, height);
     }
 
@@ -2071,7 +2070,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         return this.inFullscreen;
     }
 
-    public boolean loadVideo(String url, Photo thumb, String originalUrl, boolean autoplay) {
+    public boolean loadVideo(String url, Photo thumb, Object parentObject, String originalUrl, boolean autoplay) {
         String youtubeId = null;
         String vimeoId = null;
         String coubId = null;
@@ -2102,7 +2101,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             }
                         }
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
                 try {
@@ -2115,7 +2114,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         youtubeId = id;
                     }
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
                 if (youtubeId == null) {
                     try {
@@ -2128,7 +2127,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             vimeoId = id;
                         }
                     } catch (Throwable e22) {
-                        FileLog.m14e(e22);
+                        FileLog.m13e(e22);
                     }
                 }
                 if (vimeoId == null) {
@@ -2142,7 +2141,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             aparatId = id;
                         }
                     } catch (Throwable e222) {
-                        FileLog.m14e(e222);
+                        FileLog.m13e(e222);
                     }
                 }
                 if (aparatId == null) {
@@ -2156,7 +2155,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             twitchClipId = id;
                         }
                     } catch (Throwable e2222) {
-                        FileLog.m14e(e2222);
+                        FileLog.m13e(e2222);
                     }
                 }
                 if (twitchClipId == null) {
@@ -2170,7 +2169,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             twitchStreamId = id;
                         }
                     } catch (Throwable e22222) {
-                        FileLog.m14e(e22222);
+                        FileLog.m13e(e22222);
                     }
                 }
                 if (twitchStreamId == null) {
@@ -2184,7 +2183,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             coubId = id;
                         }
                     } catch (Throwable e222222) {
-                        FileLog.m14e(e222222);
+                        FileLog.m13e(e222222);
                     }
                 }
             }
@@ -2208,7 +2207,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         if (thumb != null) {
             PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(thumb.sizes, 80, true);
             if (photoSize != null) {
-                this.controlsView.imageReceiver.setImage(null, null, thumb != null ? photoSize.location : null, thumb != null ? "80_80_b" : null, 0, null, 1);
+                this.controlsView.imageReceiver.setImage(null, null, thumb != null ? photoSize.location : null, thumb != null ? "80_80_b" : null, 0, null, parentObject, 1);
                 this.drawImage = true;
             }
         } else {

@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.LongSparseArray;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -83,6 +85,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$1 */
     class CLASSNAME implements SearchAdapterHelperDelegate {
+        public SparseArray getExcludeUsers() {
+            return SearchAdapterHelper$SearchAdapterHelperDelegate$$CC.getExcludeUsers(this);
+        }
+
         CLASSNAME() {
         }
 
@@ -116,7 +122,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new HintDialogCell(DialogsSearchAdapter.this.mContext);
-            view.setLayoutParams(new LayoutParams(AndroidUtilities.m10dp(80.0f), AndroidUtilities.m10dp(100.0f)));
+            view.setLayoutParams(new LayoutParams(AndroidUtilities.m9dp(80.0f), AndroidUtilities.m9dp(86.0f)));
             return new Holder(view);
         }
 
@@ -144,7 +150,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             cell.setTag(Integer.valueOf(did));
             String name = TtmlNode.ANONYMOUS_REGION_ID;
             if (user != null) {
-                name = ContactsController.formatName(user.first_name, user.last_name);
+                name = UserObject.getFirstName(user);
             } else if (chat != null) {
                 name = chat.title;
             }
@@ -409,7 +415,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             Collections.sort(arrayList, DialogsSearchAdapter$$Lambda$9.$instance);
             AndroidUtilities.runOnUIThread(new DialogsSearchAdapter$$Lambda$10(this, arrayList, hashMap));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -448,7 +454,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -463,7 +469,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM search_recent WHERE 1").stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -792,7 +798,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
             updateSearchResults(resultArray, resultArrayNames, encUsers, searchId);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -845,7 +851,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     this.searchTimer = null;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (query == null || query.length() == 0) {
                 this.searchAdapterHelper.unloadRecentHashtags();
@@ -890,7 +896,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         DialogsSearchAdapter.this.searchTimer.cancel();
                         DialogsSearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                     DialogsSearchAdapter.this.searchDialogsInternal(query, searchId);
                     AndroidUtilities.runOnUIThread(new DialogsSearchAdapter$2$$Lambda$0(this, query));
@@ -1071,7 +1077,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 break;
         }
         if (viewType == 5) {
-            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.m10dp(100.0f)));
+            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.m9dp(86.0f)));
         } else {
             view.setLayoutParams(new LayoutParams(-1, -2));
         }
@@ -1181,7 +1187,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                     username2 = spannableStringBuilder2;
                                 } catch (Throwable e) {
                                     username2 = un;
-                                    FileLog.m14e(e);
+                                    FileLog.m13e(e);
                                 }
                             }
                         }
@@ -1219,14 +1225,14 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 GraySectionCell cell2 = holder.itemView;
                 if (isRecentSearchDisplayed()) {
                     if (position < (!DataQuery.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0)) {
-                        cell2.setText(LocaleController.getString("ChatHints", CLASSNAMER.string.ChatHints).toUpperCase());
+                        cell2.setText(LocaleController.getString("ChatHints", CLASSNAMER.string.ChatHints));
                         return;
                     } else {
-                        cell2.setText(LocaleController.getString("Recent", CLASSNAMER.string.Recent).toUpperCase());
+                        cell2.setText(LocaleController.getString("Recent", CLASSNAMER.string.Recent));
                         return;
                     }
                 } else if (!this.searchResultHashtags.isEmpty()) {
-                    cell2.setText(LocaleController.getString("Hashtags", CLASSNAMER.string.Hashtags).toUpperCase());
+                    cell2.setText(LocaleController.getString("Hashtags", CLASSNAMER.string.Hashtags));
                     return;
                 } else if (this.searchAdapterHelper.getGlobalSearch().isEmpty() || position != this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size()) {
                     cell2.setText(LocaleController.getString("SearchMessages", CLASSNAMER.string.SearchMessages));

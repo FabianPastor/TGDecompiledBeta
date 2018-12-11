@@ -17,6 +17,6 @@ final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Lambda$4 imp
     }
 
     public void run() {
-        this.arg$1.lambda$null$3$LoginActivity$LoginActivityRecoverView(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$4$LoginActivity$LoginActivityRecoverView(this.arg$2, this.arg$3);
     }
 }

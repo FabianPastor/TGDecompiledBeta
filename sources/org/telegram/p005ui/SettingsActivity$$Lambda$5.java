@@ -4,13 +4,15 @@ import org.telegram.p005ui.ActionBar.AlertDialog;
 
 /* renamed from: org.telegram.ui.SettingsActivity$$Lambda$5 */
 final /* synthetic */ class SettingsActivity$$Lambda$5 implements Runnable {
-    private final AlertDialog arg$1;
+    private final SettingsActivity arg$1;
+    private final AlertDialog arg$2;
 
-    SettingsActivity$$Lambda$5(AlertDialog alertDialog) {
-        this.arg$1 = alertDialog;
+    SettingsActivity$$Lambda$5(SettingsActivity settingsActivity, AlertDialog alertDialog) {
+        this.arg$1 = settingsActivity;
+        this.arg$2 = alertDialog;
     }
 
     public void run() {
-        SettingsActivity.lambda$null$7$SettingsActivity(this.arg$1);
+        this.arg$1.lambda$sendLogs$14$SettingsActivity(this.arg$2);
     }
 }

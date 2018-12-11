@@ -61,7 +61,7 @@ public class FastDateParser implements Serializable, DateParser {
     private static final Strategy WEEK_OF_MONTH_STRATEGY = new NumberStrategy(4);
     private static final Strategy WEEK_OF_YEAR_STRATEGY = new NumberStrategy(3);
     private static final ConcurrentMap<Locale, Strategy>[] caches = new ConcurrentMap[17];
-    private static final Pattern formatPattern = Pattern.compile("D+|E+|F+|G+|H+|K+|M+|S+|W+|Z+|a+|d+|h+|k+|m+|s+|w+|y+|z+|''|'[^']++(''[^']*+)*+'|[^'A-Za-z]++");
+    private static final Pattern formatPattern = Pattern.compile("D+|E+|F+|G+|H+|K+|M+|L+|S+|W+|Z+|a+|d+|h+|k+|m+|s+|w+|y+|z+|''|'[^']++(''[^']*+)*+'|[^'A-Za-z]++");
     private static final long serialVersionUID = 2;
     private final int century;
     private transient String currentFormatField;
@@ -488,6 +488,7 @@ public class FastDateParser implements Serializable, DateParser {
                 return MODULO_HOUR_OF_DAY_STRATEGY;
             case 'K':
                 return HOUR_STRATEGY;
+            case 'L':
             case 'M':
                 return formatField.length() >= 3 ? getLocaleSpecificStrategy(2, definingCalendar) : NUMBER_MONTH_STRATEGY;
             case 'S':

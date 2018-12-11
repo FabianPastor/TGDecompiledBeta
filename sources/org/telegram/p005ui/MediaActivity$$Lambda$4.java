@@ -13,6 +13,6 @@ final /* synthetic */ class MediaActivity$$Lambda$4 implements ThemeDescriptionD
     }
 
     public void didSetColor() {
-        this.arg$1.lambda$getThemeDescriptions$4$MediaActivity(this.arg$2);
+        this.arg$1.lambda$getThemeDescriptions$5$MediaActivity(this.arg$2);
     }
 }

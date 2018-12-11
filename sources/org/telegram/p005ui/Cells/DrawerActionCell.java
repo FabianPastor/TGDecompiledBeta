@@ -26,12 +26,12 @@ public class DrawerActionCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setGravity(19);
-        this.textView.setCompoundDrawablePadding(AndroidUtilities.m10dp(29.0f));
+        this.textView.setCompoundDrawablePadding(AndroidUtilities.m9dp(29.0f));
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 19.0f, 0.0f, 16.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f), NUM));
     }
 
     protected void onAttachedToWindow() {
@@ -48,7 +48,7 @@ public class DrawerActionCell extends FrameLayout {
             }
             this.textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 }

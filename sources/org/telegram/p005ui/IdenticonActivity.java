@@ -125,7 +125,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             try {
                 return super.onTouchEvent(widget, buffer, event);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 return false;
             }
         }
@@ -137,13 +137,13 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
 
     public boolean onFragmentCreate() {
         this.chat_id = getArguments().getInt("chat_id");
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
     }
 
     public View createView(Context context) {
@@ -160,7 +160,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.linearLayout.setWeightSum(100.0f);
         parentFrameLayout.addView(this.linearLayout, LayoutHelper.createFrame(-1, -1.0f));
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setPadding(AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(20.0f), AndroidUtilities.m10dp(20.0f));
+        frameLayout.setPadding(AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(20.0f));
         this.linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -1, 50.0f));
         ImageView identiconView = new ImageView(context);
         identiconView.setScaleType(ScaleType.FIT_XY);
@@ -170,7 +170,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
                 super.onLayout(changed, left, top, right, bottom);
                 if (IdenticonActivity.this.codeTextView != null) {
                     int x = (IdenticonActivity.this.codeTextView.getLeft() + (IdenticonActivity.this.codeTextView.getMeasuredWidth() / 2)) - (IdenticonActivity.this.emojiTextView.getMeasuredWidth() / 2);
-                    int y = (((IdenticonActivity.this.codeTextView.getMeasuredHeight() - IdenticonActivity.this.emojiTextView.getMeasuredHeight()) / 2) + IdenticonActivity.this.linearLayout1.getTop()) - AndroidUtilities.m10dp(16.0f);
+                    int y = (((IdenticonActivity.this.codeTextView.getMeasuredHeight() - IdenticonActivity.this.emojiTextView.getMeasuredHeight()) / 2) + IdenticonActivity.this.linearLayout1.getTop()) - AndroidUtilities.m9dp(16.0f);
                     IdenticonActivity.this.emojiTextView.layout(x, y, IdenticonActivity.this.emojiTextView.getMeasuredWidth() + x, IdenticonActivity.this.emojiTextView.getMeasuredHeight() + y);
                 }
             }
@@ -179,7 +179,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.linearLayout.addView(this.container, LayoutHelper.createLinear(-1, -1, 50.0f));
         this.linearLayout1 = new LinearLayout(context);
         this.linearLayout1.setOrientation(1);
-        this.linearLayout1.setPadding(AndroidUtilities.m10dp(10.0f), 0, AndroidUtilities.m10dp(10.0f), 0);
+        this.linearLayout1.setPadding(AndroidUtilities.m9dp(10.0f), 0, AndroidUtilities.m9dp(10.0f), 0);
         this.container.addView(this.linearLayout1, LayoutHelper.createFrame(-2, -2, 17));
         this.codeTextView = new TextView(context);
         this.codeTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
@@ -258,7 +258,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.emojiDidLoaded && this.emojiTextView != null) {
+        if (id == NotificationCenter.emojiDidLoad && this.emojiTextView != null) {
             this.emojiTextView.invalidate();
         }
     }
@@ -372,7 +372,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
 
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward && this.emojiText != null) {
-            this.emojiTextView.setText(Emoji.replaceEmoji(this.emojiText, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(32.0f), false));
+            this.emojiTextView.setText(Emoji.replaceEmoji(this.emojiText, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(32.0f), false));
         }
     }
 

@@ -25,6 +25,7 @@ public class StickerEmojiCell extends FrameLayout {
     private TextView emojiTextView;
     private BackupImageView imageView;
     private long lastUpdateTime;
+    private Object parentObject;
     private boolean recent;
     private float scale;
     private boolean scaled;
@@ -45,6 +46,10 @@ public class StickerEmojiCell extends FrameLayout {
         return this.sticker;
     }
 
+    public Object getParentObject() {
+        return this.parentObject;
+    }
+
     public boolean isRecent() {
         return this.recent;
     }
@@ -53,13 +58,14 @@ public class StickerEmojiCell extends FrameLayout {
         this.recent = value;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0058  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x005d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setSticker(Document document, boolean showEmoji) {
+    public void setSticker(Document document, Object parent, boolean showEmoji) {
         if (document != null) {
             this.sticker = document;
+            this.parentObject = parent;
             if (document.thumb != null) {
-                this.imageView.setImage(document.thumb.location, null, "webp", null);
+                this.imageView.setImage(document.thumb.location, null, "webp", null, this.parentObject);
             }
             if (showEmoji) {
                 boolean set = false;
@@ -67,11 +73,11 @@ public class StickerEmojiCell extends FrameLayout {
                     DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                     if (attribute instanceof TL_documentAttributeSticker) {
                         if (attribute.alt != null && attribute.alt.length() > 0) {
-                            this.emojiTextView.setText(Emoji.replaceEmoji(attribute.alt, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(16.0f), false));
+                            this.emojiTextView.setText(Emoji.replaceEmoji(attribute.alt, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(16.0f), false));
                             set = true;
                         }
                         if (!set) {
-                            this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.var_id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(16.0f), false));
+                            this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.var_id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(16.0f), false));
                         }
                         this.emojiTextView.setVisibility(0);
                         return;

@@ -45,7 +45,7 @@ public class JoinGroupAlert extends BottomSheet {
         }
 
         public void onClick(View view) {
-            JoinGroupAlert.this.dismiss();
+            JoinGroupAlert.this.lambda$new$4$EmbedBottomSheet();
         }
     }
 
@@ -55,7 +55,7 @@ public class JoinGroupAlert extends BottomSheet {
         }
 
         public void onClick(View v) {
-            JoinGroupAlert.this.dismiss();
+            JoinGroupAlert.this.lambda$new$4$EmbedBottomSheet();
             final TL_messages_importChatInvite req = new TL_messages_importChatInvite();
             req.hash = JoinGroupAlert.this.hash;
             ConnectionsManager.getInstance(JoinGroupAlert.this.currentAccount).sendRequest(req, new RequestDelegate() {
@@ -125,7 +125,7 @@ public class JoinGroupAlert extends BottomSheet {
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new JoinSheetUserCell(this.context);
-            view.setLayoutParams(new LayoutParams(AndroidUtilities.m10dp(100.0f), AndroidUtilities.m10dp(90.0f)));
+            view.setLayoutParams(new LayoutParams(AndroidUtilities.m9dp(100.0f), AndroidUtilities.m9dp(90.0f)));
             return new Holder(view);
         }
 
@@ -181,8 +181,8 @@ public class JoinGroupAlert extends BottomSheet {
             participants_count = invite.participants_count;
         }
         BackupImageView avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(AndroidUtilities.m10dp(35.0f));
-        avatarImageView.setImage(photo, "50_50", avatarDrawable);
+        avatarImageView.setRoundRadius(AndroidUtilities.m9dp(35.0f));
+        avatarImageView.setImage(photo, "50_50", avatarDrawable, (Object) invite);
         linearLayout.addView(avatarImageView, LayoutHelper.createLinear(70, 70, 49, 0, 12, 0, 0));
         View textView = new TextView(context);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -203,7 +203,7 @@ public class JoinGroupAlert extends BottomSheet {
         }
         if (!invite.participants.isEmpty()) {
             RecyclerListView listView = new RecyclerListView(context);
-            listView.setPadding(0, 0, 0, AndroidUtilities.m10dp(8.0f));
+            listView.setPadding(0, 0, 0, AndroidUtilities.m9dp(8.0f));
             listView.setNestedScrollingEnabled(false);
             listView.setClipToPadding(false);
             listView.setLayoutManager(new LinearLayoutManager(getContext(), 0, false));
@@ -218,11 +218,11 @@ public class JoinGroupAlert extends BottomSheet {
         linearLayout.addView(textView, LayoutHelper.createLinear(-1, 3));
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel).toUpperCase());
         pickerBottomLayout.cancelButton.setOnClickListener(new CLASSNAME());
-        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));

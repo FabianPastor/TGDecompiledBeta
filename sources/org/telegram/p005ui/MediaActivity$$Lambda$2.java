@@ -15,6 +15,6 @@ final /* synthetic */ class MediaActivity$$Lambda$2 implements OnItemLongClickLi
     }
 
     public boolean onItemClick(View view, int i) {
-        return this.arg$1.lambda$createView$2$MediaActivity(this.arg$2, view, i);
+        return this.arg$1.lambda$createView$3$MediaActivity(this.arg$2, view, i);
     }
 }

@@ -1,20 +1,20 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
+import java.util.HashMap;
+import org.telegram.p005ui.LocationActivity.LocationActivityDelegate;
+import org.telegram.tgnet.TLRPC.MessageMedia;
 
 /* renamed from: org.telegram.ui.LaunchActivity$$Lambda$37 */
-final /* synthetic */ class LaunchActivity$$Lambda$37 implements Runnable {
-    private final LaunchActivity arg$1;
-    private final TL_help_appUpdate arg$2;
-    private final int arg$3;
+final /* synthetic */ class LaunchActivity$$Lambda$37 implements LocationActivityDelegate {
+    private final HashMap arg$1;
+    private final int arg$2;
 
-    LaunchActivity$$Lambda$37(LaunchActivity launchActivity, TL_help_appUpdate tL_help_appUpdate, int i) {
-        this.arg$1 = launchActivity;
-        this.arg$2 = tL_help_appUpdate;
-        this.arg$3 = i;
+    LaunchActivity$$Lambda$37(HashMap hashMap, int i) {
+        this.arg$1 = hashMap;
+        this.arg$2 = i;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$26$LaunchActivity(this.arg$2, this.arg$3);
+    public void didSelectLocation(MessageMedia messageMedia, int i) {
+        LaunchActivity.lambda$null$36$LaunchActivity(this.arg$1, this.arg$2, messageMedia, i);
     }
 }

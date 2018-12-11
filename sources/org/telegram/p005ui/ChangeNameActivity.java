@@ -118,7 +118,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("EditName", CLASSNAMER.string.EditName));
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, CLASSNAMER.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, CLASSNAMER.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
             user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
@@ -141,7 +141,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.firstNameField.setImeOptions(5);
         this.firstNameField.setHint(LocaleController.getString("FirstName", CLASSNAMER.string.FirstName));
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.firstNameField.setCursorSize(AndroidUtilities.m10dp(20.0f));
+        this.firstNameField.setCursorSize(AndroidUtilities.m9dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.firstNameField.setOnEditorActionListener(new CLASSNAME());
@@ -162,7 +162,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.lastNameField.setImeOptions(6);
         this.lastNameField.setHint(LocaleController.getString("LastName", CLASSNAMER.string.LastName));
         this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.lastNameField.setCursorSize(AndroidUtilities.m10dp(20.0f));
+        this.lastNameField.setCursorSize(AndroidUtilities.m9dp(20.0f));
         this.lastNameField.setCursorWidth(1.5f);
         linearLayout.addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
         this.lastNameField.setOnEditorActionListener(new CLASSNAME());

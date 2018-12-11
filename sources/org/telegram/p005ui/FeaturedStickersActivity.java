@@ -3,7 +3,6 @@ package org.telegram.p005ui;
 import android.content.Context;
 import android.util.LongSparseArray;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import org.telegram.p005ui.Cells.TextInfoPrivacyCell;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.p005ui.Components.StickersAlert;
 import org.telegram.p005ui.Components.StickersAlert.StickersAlertInstallDelegate;
@@ -57,57 +55,9 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         }
     }
 
-    /* renamed from: org.telegram.ui.FeaturedStickersActivity$3 */
-    class CLASSNAME implements OnItemClickListener {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(final View view, int position) {
-            if (position >= FeaturedStickersActivity.this.stickersStartRow && position < FeaturedStickersActivity.this.stickersEndRow && FeaturedStickersActivity.this.getParentActivity() != null) {
-                InputStickerSet inputStickerSet;
-                final StickerSetCovered stickerSet = (StickerSetCovered) DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).getFeaturedStickerSets().get(position);
-                if (stickerSet.set.var_id != 0) {
-                    inputStickerSet = new TL_inputStickerSetID();
-                    inputStickerSet.var_id = stickerSet.set.var_id;
-                } else {
-                    inputStickerSet = new TL_inputStickerSetShortName();
-                    inputStickerSet.short_name = stickerSet.set.short_name;
-                }
-                inputStickerSet.access_hash = stickerSet.set.access_hash;
-                StickersAlert stickersAlert = new StickersAlert(FeaturedStickersActivity.this.getParentActivity(), FeaturedStickersActivity.this, inputStickerSet, null, null);
-                stickersAlert.setInstallDelegate(new StickersAlertInstallDelegate() {
-                    public void onStickerSetInstalled() {
-                        view.setDrawProgress(true);
-                        FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.var_id, stickerSet);
-                    }
-
-                    public void onStickerSetUninstalled() {
-                    }
-                });
-                FeaturedStickersActivity.this.showDialog(stickersAlert);
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.FeaturedStickersActivity$ListAdapter */
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
-
-        /* renamed from: org.telegram.ui.FeaturedStickersActivity$ListAdapter$1 */
-        class CLASSNAME implements OnClickListener {
-            CLASSNAME() {
-            }
-
-            public void onClick(View v) {
-                FeaturedStickerSetCell parent = (FeaturedStickerSetCell) v.getParent();
-                StickerSetCovered pack = parent.getStickerSet();
-                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.var_id) < 0) {
-                    FeaturedStickersActivity.this.installingStickerSets.put(pack.set.var_id, pack);
-                    DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), pack.set, 2, FeaturedStickersActivity.this, false);
-                    parent.setDrawProgress(true);
-                }
-            }
-        }
 
         public ListAdapter(Context context) {
             this.mContext = context;
@@ -156,15 +106,25 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                 case 0:
                     view = new FeaturedStickerSetCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((FeaturedStickerSetCell) view).setAddOnClickListener(new CLASSNAME());
+                    ((FeaturedStickerSetCell) view).setAddOnClickListener(new FeaturedStickersActivity$ListAdapter$$Lambda$0(this));
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
+        }
+
+        final /* synthetic */ void lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(View v) {
+            FeaturedStickerSetCell parent1 = (FeaturedStickerSetCell) v.getParent();
+            StickerSetCovered pack = parent1.getStickerSet();
+            if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.var_id) < 0) {
+                FeaturedStickersActivity.this.installingStickerSets.put(pack.set.var_id, pack);
+                DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), pack.set, 2, FeaturedStickersActivity.this, false);
+                parent1.setDrawProgress(true);
+            }
         }
 
         public int getItemViewType(int i) {
@@ -178,8 +138,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         DataQuery.getInstance(this.currentAccount).checkFeaturedStickers();
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
         ArrayList<Long> arrayList = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
         if (arrayList != null) {
             this.unreadStickers = new ArrayList(arrayList);
@@ -190,8 +150,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoad);
     }
 
     public View createView(Context context) {
@@ -217,17 +177,43 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new CLASSNAME());
+        this.listView.setOnItemClickListener(new FeaturedStickersActivity$$Lambda$0(this));
         return this.fragmentView;
     }
 
+    final /* synthetic */ void lambda$createView$0$FeaturedStickersActivity(final View view, int position) {
+        if (position >= this.stickersStartRow && position < this.stickersEndRow && getParentActivity() != null) {
+            InputStickerSet inputStickerSet;
+            final StickerSetCovered stickerSet = (StickerSetCovered) DataQuery.getInstance(this.currentAccount).getFeaturedStickerSets().get(position);
+            if (stickerSet.set.var_id != 0) {
+                inputStickerSet = new TL_inputStickerSetID();
+                inputStickerSet.var_id = stickerSet.set.var_id;
+            } else {
+                inputStickerSet = new TL_inputStickerSetShortName();
+                inputStickerSet.short_name = stickerSet.set.short_name;
+            }
+            inputStickerSet.access_hash = stickerSet.set.access_hash;
+            StickersAlert stickersAlert = new StickersAlert(getParentActivity(), this, inputStickerSet, null, null);
+            stickersAlert.setInstallDelegate(new StickersAlertInstallDelegate() {
+                public void onStickerSetInstalled() {
+                    view.setDrawProgress(true);
+                    FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.var_id, stickerSet);
+                }
+
+                public void onStickerSetUninstalled() {
+                }
+            });
+            showDialog(stickersAlert);
+        }
+    }
+
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.featuredStickersDidLoaded) {
+        if (id == NotificationCenter.featuredStickersDidLoad) {
             if (this.unreadStickers == null) {
                 this.unreadStickers = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
             }
             updateRows();
-        } else if (id == NotificationCenter.stickersDidLoaded) {
+        } else if (id == NotificationCenter.stickersDidLoad) {
             updateVisibleTrendingSets();
         }
     }

@@ -517,7 +517,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
 
         private int getMaxDragScroll(RecyclerView recyclerView) {
             if (this.mCachedMaxScrollSpeed == -1) {
-                this.mCachedMaxScrollSpeed = AndroidUtilities.m10dp(20.0f);
+                this.mCachedMaxScrollSpeed = AndroidUtilities.m9dp(20.0f);
             }
             return this.mCachedMaxScrollSpeed;
         }
@@ -717,8 +717,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
             this.mRecyclerView = recyclerView;
             if (this.mRecyclerView != null) {
                 Resources resources = recyclerView.getResources();
-                this.mSwipeEscapeVelocity = (float) AndroidUtilities.m10dp(120.0f);
-                this.mMaxSwipeVelocity = (float) AndroidUtilities.m10dp(800.0f);
+                this.mSwipeEscapeVelocity = (float) AndroidUtilities.m9dp(120.0f);
+                this.mMaxSwipeVelocity = (float) AndroidUtilities.m9dp(800.0f);
                 setupCallbacks();
             }
         }

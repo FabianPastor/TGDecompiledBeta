@@ -30,6 +30,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -92,7 +93,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 if (ProfileNotificationsActivity.this.notificationsEnabled && ProfileNotificationsActivity.this.customEnabled) {
                     MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit().putInt("notify2_" + ProfileNotificationsActivity.this.dialog_id, 0).commit();
                 }
-                ProfileNotificationsActivity.this.lambda$checkDiscard$69$PassportActivity();
+                ProfileNotificationsActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
@@ -265,11 +266,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     TextInfoPrivacyCell textCell2 = holder.itemView;
                     if (position == ProfileNotificationsActivity.this.popupInfoRow) {
                         textCell2.setText(LocaleController.getString("ProfilePopupNotificationInfo", CLASSNAMER.string.ProfilePopupNotificationInfo));
-                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, (int) CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ProfileNotificationsActivity.this.ledInfoRow) {
                         textCell2.setText(LocaleController.getString("NotificationsLedInfo", CLASSNAMER.string.NotificationsLedInfo));
-                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ProfileNotificationsActivity.this.priorityInfoRow) {
                         if (ProfileNotificationsActivity.this.priorityRow == -1) {
@@ -277,15 +278,15 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         } else {
                             textCell2.setText(LocaleController.getString("PriorityInfo", CLASSNAMER.string.PriorityInfo));
                         }
-                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, (int) CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ProfileNotificationsActivity.this.customInfoRow) {
                         textCell2.setText(null);
-                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, (int) CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ProfileNotificationsActivity.this.ringtoneInfoRow) {
                         textCell2.setText(LocaleController.getString("VoipRingtoneInfo", CLASSNAMER.string.VoipRingtoneInfo));
-                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, (int) CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -510,10 +511,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         if (value == 0) {
             if (hasOverride) {
                 this.notificationsEnabled = true;
-            } else if (((int) this.dialog_id) < 0) {
-                this.notificationsEnabled = preferences.getBoolean("EnableGroup", true);
             } else {
-                this.notificationsEnabled = preferences.getBoolean("EnableAll", true);
+                this.notificationsEnabled = NotificationsController.getInstance(this.currentAccount).isGlobalNotificationsEnabled(this.dialog_id);
             }
         } else if (value == 1) {
             this.notificationsEnabled = true;
@@ -637,7 +636,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
                             ProfileNotificationsActivity.this.startActivityForResult(intent, 12);
                         } catch (Throwable e) {
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                         }
                     } else if (position == ProfileNotificationsActivity.this.ringtoneRow) {
                         try {
@@ -661,14 +660,14 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
                             ProfileNotificationsActivity.this.startActivityForResult(intent, 13);
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                         }
                     } else if (position == ProfileNotificationsActivity.this.vibrateRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new ProfileNotificationsActivity$3$$Lambda$0(this)));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new ProfileNotificationsActivity$3$$Lambda$0(this)));
                     } else if (position == ProfileNotificationsActivity.this.callsVibrateRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, "calls_vibrate_", new ProfileNotificationsActivity$3$$Lambda$1(this)));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, "calls_vibrate_", new ProfileNotificationsActivity$3$$Lambda$1(this)));
                     } else if (position == ProfileNotificationsActivity.this.priorityRow) {
-                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new ProfileNotificationsActivity$3$$Lambda$2(this)));
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, -1, new ProfileNotificationsActivity$3$$Lambda$2(this)));
                     } else if (position == ProfileNotificationsActivity.this.smartRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
                             final Context context1 = ProfileNotificationsActivity.this.getParentActivity();
@@ -695,7 +694,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                                     View view = new TextView(context1) {
                                         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                                            super.onMeasure(MeasureSpec.makeMeasureSpec(widthMeasureSpec, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(48.0f), NUM));
+                                            super.onMeasure(MeasureSpec.makeMeasureSpec(widthMeasureSpec, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f), NUM));
                                         }
                                     };
                                     TextView textView = (TextView) view;
@@ -716,7 +715,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                     textView.setText(LocaleController.formatString("SmartNotificationsDetail", CLASSNAMER.string.SmartNotificationsDetail, times, minutes));
                                 }
                             });
-                            recyclerListView.setPadding(0, AndroidUtilities.m10dp(12.0f), 0, AndroidUtilities.m10dp(8.0f));
+                            recyclerListView.setPadding(0, AndroidUtilities.m9dp(12.0f), 0, AndroidUtilities.m9dp(8.0f));
                             recyclerListView.setOnItemClickListener(new ProfileNotificationsActivity$3$$Lambda$3(this));
                             Builder builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("SmartNotificationsAlert", CLASSNAMER.string.SmartNotificationsAlert));
@@ -727,7 +726,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                     } else if (position == ProfileNotificationsActivity.this.colorRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
-                            ProfileNotificationsActivity.this.showDialog(AlertsCreator.createColorSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new ProfileNotificationsActivity$3$$Lambda$5(this)));
+                            ProfileNotificationsActivity.this.showDialog(AlertsCreator.createColorSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, -1, new ProfileNotificationsActivity$3$$Lambda$5(this)));
                         }
                     } else if (position == ProfileNotificationsActivity.this.popupEnabledRow) {
                         MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit().putInt("popup_" + ProfileNotificationsActivity.this.dialog_id, 1).commit();

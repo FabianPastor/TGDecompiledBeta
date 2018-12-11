@@ -93,7 +93,7 @@ public class StickerSetCell extends FrameLayout {
             float f2;
             this.progressView = new RadialProgressView(getContext());
             this.progressView.setProgressColor(Theme.getColor(Theme.key_dialogProgressCircle));
-            this.progressView.setSize(AndroidUtilities.m10dp(30.0f));
+            this.progressView.setSize(AndroidUtilities.m9dp(30.0f));
             view = this.progressView;
             if (!LocaleController.isRTL) {
                 i3 = 3;
@@ -136,7 +136,7 @@ public class StickerSetCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(64.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(64.0f), NUM));
     }
 
     public void setText(String title, String subtitle, int icon, boolean divider) {
@@ -145,7 +145,7 @@ public class StickerSetCell extends FrameLayout {
         this.textView.setText(title);
         this.valueTextView.setText(subtitle);
         if (TextUtils.isEmpty(subtitle)) {
-            this.textView.setTranslationY((float) AndroidUtilities.m10dp(10.0f));
+            this.textView.setTranslationY((float) AndroidUtilities.m9dp(10.0f));
         } else {
             this.textView.setTranslationY(0.0f);
         }
@@ -190,7 +190,7 @@ public class StickerSetCell extends FrameLayout {
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", documents.size()));
         Document document = (Document) documents.get(0);
         if (document.thumb != null && document.thumb.location != null) {
-            this.imageView.setImage(document.thumb.location, null, "webp", null);
+            this.imageView.setImage(document.thumb.location, null, "webp", null, (Object) set);
         }
     }
 

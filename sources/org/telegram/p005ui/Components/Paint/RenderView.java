@@ -239,7 +239,7 @@ public class RenderView extends TextureView {
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m12e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    FileLog.m11e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
@@ -249,7 +249,7 @@ public class RenderView extends TextureView {
                 EGLConfig[] configs = new EGLConfig[1];
                 if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12326, 0, 12344}, configs, 1, configsCount)) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        FileLog.m11e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     }
                     finish();
                     return false;
@@ -258,7 +258,7 @@ public class RenderView extends TextureView {
                     this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                     if (this.eglContext == null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            FileLog.m11e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
@@ -266,7 +266,7 @@ public class RenderView extends TextureView {
                         this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surfaceTexture, null);
                         if (this.eglSurface == null || this.eglSurface == EGL10.EGL_NO_SURFACE) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m12e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                                FileLog.m11e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             }
                             finish();
                             return false;
@@ -282,7 +282,7 @@ public class RenderView extends TextureView {
                             return true;
                         } else {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m12e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                                FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             }
                             finish();
                             return false;
@@ -293,14 +293,14 @@ public class RenderView extends TextureView {
                     }
                 } else {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("eglConfig not initialized");
+                        FileLog.m11e("eglConfig not initialized");
                     }
                     finish();
                     return false;
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m12e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                FileLog.m11e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
             }
             finish();
             return false;
@@ -389,7 +389,7 @@ public class RenderView extends TextureView {
                 });
                 countDownLatch.await();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             return object[0];
         }

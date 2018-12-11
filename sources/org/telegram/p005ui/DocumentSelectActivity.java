@@ -103,7 +103,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     DocumentSelectActivity.this.listFiles(DocumentSelectActivity.this.currentDir);
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -216,7 +216,7 @@ public class DocumentSelectActivity extends BaseFragment {
             switch (viewType) {
                 case 0:
                     view = new GraySectionCell(this.mContext);
-                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", CLASSNAMER.string.Recent).toUpperCase());
+                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", CLASSNAMER.string.Recent));
                     break;
                 default:
                     view = new SharedDocumentCell(this.mContext);
@@ -285,7 +285,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 ApplicationLoader.applicationContext.unregisterReceiver(this.receiver);
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         super.onFragmentDestroy();
     }
@@ -319,7 +319,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
         this.selectedMessagesCountTextView.setOnTouchListener(DocumentSelectActivity$$Lambda$0.$instance);
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-        this.actionModeViews.add(actionMode.addItemWithWidth(3, CLASSNAMER.drawable.ic_ab_done, AndroidUtilities.m10dp(54.0f)));
+        this.actionModeViews.add(actionMode.addItemWithWidth(3, CLASSNAMER.drawable.ic_ab_done, AndroidUtilities.m9dp(54.0f)));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
@@ -495,7 +495,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
             Collections.sort(this.recentItems, DocumentSelectActivity$$Lambda$3.$instance);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -650,7 +650,7 @@ public class DocumentSelectActivity extends BaseFragment {
             r7 = move-exception;
      */
     /* JADX WARNING: Missing block: B:51:?, code:
-            org.telegram.messenger.FileLog.m14e(r7);
+            org.telegram.messenger.FileLog.m13e(r7);
      */
     /* JADX WARNING: Missing block: B:73:0x02d5, code:
             r21 = th;
@@ -693,7 +693,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     if (line != null) {
                         if (line.contains("vfat") || line.contains("/mnt")) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11d(line);
+                                FileLog.m10d(line);
                             }
                             StringTokenizer stringTokenizer = new StringTokenizer(line, " ");
                             String unused = stringTokenizer.nextToken();
@@ -726,7 +726,7 @@ public class DocumentSelectActivity extends BaseFragment {
                             bufferedReader2.close();
                             bufferedReader = bufferedReader2;
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                             bufferedReader = bufferedReader2;
                         }
                     }
@@ -739,12 +739,12 @@ public class DocumentSelectActivity extends BaseFragment {
         } catch (Exception e4) {
             e2 = e4;
             try {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
                     } catch (Throwable e22) {
-                        FileLog.m14e(e22);
+                        FileLog.m13e(e22);
                     }
                 }
                 fs = new ListItem(this, null);
@@ -771,7 +771,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     try {
                         bufferedReader.close();
                     } catch (Throwable e222) {
-                        FileLog.m14e(e222);
+                        FileLog.m13e(e222);
                     }
                 }
                 throw th3;
@@ -797,7 +797,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 } catch (Exception e5) {
                     e222 = e5;
                     fs = fs2;
-                    FileLog.m14e(e222);
+                    FileLog.m13e(e222);
                     fs = new ListItem(this, null);
                     fs.title = LocaleController.getString("Gallery", CLASSNAMER.string.Gallery);
                     fs.subtitle = LocaleController.getString("GalleryInfo", CLASSNAMER.string.GalleryInfo);
@@ -811,7 +811,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         } catch (Exception e6) {
             e222 = e6;
-            FileLog.m14e(e222);
+            FileLog.m13e(e222);
             fs = new ListItem(this, null);
             fs.title = LocaleController.getString("Gallery", CLASSNAMER.string.Gallery);
             fs.subtitle = LocaleController.getString("GalleryInfo", CLASSNAMER.string.GalleryInfo);
@@ -842,7 +842,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
             return LocaleController.formatString("FreeOfTotal", CLASSNAMER.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return path;
         }
     }

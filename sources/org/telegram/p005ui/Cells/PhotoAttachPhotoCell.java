@@ -64,7 +64,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         addView(this.checkFrame, LayoutHelper.createFrame(42, 42.0f, 51, 38.0f, 0.0f, 0.0f, 0.0f));
         this.videoInfoContainer = new FrameLayout(context);
         this.videoInfoContainer.setBackgroundResource(CLASSNAMER.drawable.phototime);
-        this.videoInfoContainer.setPadding(AndroidUtilities.m10dp(3.0f), 0, AndroidUtilities.m10dp(3.0f), 0);
+        this.videoInfoContainer.setPadding(AndroidUtilities.m9dp(3.0f), 0, AndroidUtilities.m9dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(80, 16, 83));
         ImageView imageView1 = new ImageView(context);
         imageView1.setImageResource(CLASSNAMER.drawable.ic_video);
@@ -75,7 +75,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
         this.checkBox = new CheckBox(context, CLASSNAMER.drawable.checkbig);
         this.checkBox.setSize(30);
-        this.checkBox.setCheckOffset(AndroidUtilities.m10dp(1.0f));
+        this.checkBox.setCheckOffset(AndroidUtilities.m9dp(1.0f));
         this.checkBox.setDrawBackground(true);
         this.checkBox.setColor(-12793105, -1);
         addView(this.checkBox, LayoutHelper.createFrame(30, 30.0f, 51, 46.0f, 4.0f, 0.0f, 0.0f));
@@ -89,17 +89,17 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i = 0;
         if (this.isVertical) {
-            int makeMeasureSpec = MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(80.0f), NUM);
+            int makeMeasureSpec = MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(80.0f), NUM);
             if (!this.isLast) {
                 i = 6;
             }
-            super.onMeasure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp((float) (i + 80)), NUM));
+            super.onMeasure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp((float) (i + 80)), NUM));
             return;
         }
         if (!this.isLast) {
             i = 6;
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp((float) (i + 80)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(80.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp((float) (i + 80)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(80.0f), NUM));
     }
 
     public PhotoEntry getPhotoEntry() {

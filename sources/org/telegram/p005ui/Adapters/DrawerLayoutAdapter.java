@@ -127,7 +127,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
                 view = new DrawerAddCell(this.mContext);
                 break;
             default:
-                view = new EmptyCell(this.mContext, AndroidUtilities.m10dp(8.0f));
+                view = new EmptyCell(this.mContext, AndroidUtilities.m9dp(8.0f));
                 break;
         }
         view.setLayoutParams(new LayoutParams(-1, -2));

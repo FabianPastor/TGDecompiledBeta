@@ -54,13 +54,13 @@ public class AudioTrackJNI {
                             break;
                         }
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
                 Log.i("tg-voip", "audiotrack thread exits");
             } catch (Exception x) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m13e("error starting AudioTrack", x);
+                    FileLog.m12e("error starting AudioTrack", x);
                 }
             }
         }
@@ -91,7 +91,7 @@ public class AudioTrackJNI {
             }
             size = getBufferSize(bufferSize * 6, 44100);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11d("buffer size: " + size);
+                FileLog.m10d("buffer size: " + size);
             }
             if (channels == 1) {
                 i = 4;
@@ -118,7 +118,7 @@ public class AudioTrackJNI {
             try {
                 this.thread.join();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.thread = null;
         }

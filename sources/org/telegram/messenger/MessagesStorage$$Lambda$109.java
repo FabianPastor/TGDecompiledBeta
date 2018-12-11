@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.messenger.MessagesStorage.IntCallback;
 
 final /* synthetic */ class MessagesStorage$$Lambda$109 implements Runnable {
-    private final MessagesStorage arg$1;
-    private final boolean arg$2;
-    private final ArrayList arg$3;
+    private final IntCallback arg$1;
+    private final int arg$2;
 
-    MessagesStorage$$Lambda$109(MessagesStorage messagesStorage, boolean z, ArrayList arrayList) {
-        this.arg$1 = messagesStorage;
-        this.arg$2 = z;
-        this.arg$3 = arrayList;
+    MessagesStorage$$Lambda$109(IntCallback intCallback, int i) {
+        this.arg$1 = intCallback;
+        this.arg$2 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$50$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$84$MessagesStorage(this.arg$2);
     }
 }

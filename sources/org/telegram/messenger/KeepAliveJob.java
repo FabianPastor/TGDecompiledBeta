@@ -19,7 +19,7 @@ public class KeepAliveJob extends JobIntentService {
             if (!KeepAliveJob.startingJob && KeepAliveJob.countDownLatch == null) {
                 try {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11d("starting keep-alive job");
+                        FileLog.m10d("starting keep-alive job");
                     }
                     synchronized (KeepAliveJob.sync) {
                         KeepAliveJob.startingJob = true;
@@ -59,13 +59,13 @@ public class KeepAliveJob extends JobIntentService {
         synchronized (sync) {
             if (countDownLatch != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("finish keep-alive job");
+                    FileLog.m10d("finish keep-alive job");
                 }
                 countDownLatch.countDown();
             }
             if (startingJob) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("finish queued keep-alive job");
+                    FileLog.m10d("finish queued keep-alive job");
                 }
                 startingJob = false;
             }
@@ -80,7 +80,7 @@ public class KeepAliveJob extends JobIntentService {
             if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x001c;
      */
     /* JADX WARNING: Missing block: B:10:0x0016, code:
-            org.telegram.messenger.FileLog.m11d("started keep-alive job");
+            org.telegram.messenger.FileLog.m10d("started keep-alive job");
      */
     /* JADX WARNING: Missing block: B:11:0x001c, code:
             org.telegram.messenger.Utilities.globalQueue.postRunnable(finishJobByTimeoutRunnable, com.google.android.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
@@ -102,7 +102,7 @@ public class KeepAliveJob extends JobIntentService {
             countDownLatch = null;
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("ended keep-alive job");
+            FileLog.m10d("ended keep-alive job");
         }
     }
 }

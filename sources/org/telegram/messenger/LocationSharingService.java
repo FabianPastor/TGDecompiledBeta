@@ -134,7 +134,7 @@ public class LocationSharingService extends Service implements NotificationCente
         if (this.builder == null) {
             Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
             intent2.setAction("org.tmessages.openlocations");
-            intent2.setFlags(32768);
+            intent2.addCategory("android.intent.category.LAUNCHER");
             PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, 0);
             this.builder = new Builder(ApplicationLoader.applicationContext);
             this.builder.setWhen(System.currentTimeMillis());

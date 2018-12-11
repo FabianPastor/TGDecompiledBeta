@@ -90,7 +90,7 @@ public class NumberTextView extends View {
     }
 
     public void setTextSize(int size) {
-        this.textPaint.setTextSize((float) AndroidUtilities.m10dp((float) size));
+        this.textPaint.setTextSize((float) AndroidUtilities.m9dp((float) size));
         this.oldLetters.clear();
         this.letters.clear();
         setNumber(this.currentNumber, false);
@@ -160,7 +160,7 @@ public class NumberTextView extends View {
                 if (layout != null) {
                     lineWidth = layout.getLineWidth(0);
                 } else {
-                    lineWidth = old.getLineWidth(0) + ((float) AndroidUtilities.m10dp(1.0f));
+                    lineWidth = old.getLineWidth(0) + ((float) AndroidUtilities.m9dp(1.0f));
                 }
                 canvas.translate(lineWidth, 0.0f);
                 a++;

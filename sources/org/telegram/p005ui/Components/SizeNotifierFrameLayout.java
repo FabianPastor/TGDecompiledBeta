@@ -63,14 +63,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void notifyHeightChanged() {
         if (this.delegate != null) {
             this.keyboardHeight = getKeyboardHeight();
-            final boolean isWidthGreater = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y;
-            post(new Runnable() {
-                public void run() {
-                    if (SizeNotifierFrameLayout.this.delegate != null) {
-                        SizeNotifierFrameLayout.this.delegate.onSizeChanged(SizeNotifierFrameLayout.this.keyboardHeight, isWidthGreater);
-                    }
-                }
-            });
+            post(new SizeNotifierFrameLayout$$Lambda$0(this, AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y));
+        }
+    }
+
+    final /* synthetic */ void lambda$notifyHeightChanged$0$SizeNotifierFrameLayout(boolean isWidthGreater) {
+        if (this.delegate != null) {
+            this.delegate.onSizeChanged(this.keyboardHeight, isWidthGreater);
         }
     }
 

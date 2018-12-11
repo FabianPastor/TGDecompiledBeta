@@ -2,18 +2,16 @@ package org.telegram.p005ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import org.telegram.messenger.MessagesController;
 
 /* renamed from: org.telegram.ui.DialogsActivity$$Lambda$7 */
 final /* synthetic */ class DialogsActivity$$Lambda$7 implements OnClickListener {
-    private final DialogsActivity arg$1;
-    private final long arg$2;
+    static final OnClickListener $instance = new DialogsActivity$$Lambda$7();
 
-    DialogsActivity$$Lambda$7(DialogsActivity dialogsActivity, long j) {
-        this.arg$1 = dialogsActivity;
-        this.arg$2 = j;
+    private DialogsActivity$$Lambda$7() {
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$didSelectResult$7$DialogsActivity(this.arg$2, dialogInterface, i);
+        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askedAboutMiuiLockscreen", true).commit();
     }
 }

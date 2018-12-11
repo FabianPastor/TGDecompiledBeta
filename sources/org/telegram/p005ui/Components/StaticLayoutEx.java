@@ -42,7 +42,7 @@ public class StaticLayoutEx {
                 sConstructorArgs = new Object[signature.length];
                 initialized = true;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -57,7 +57,7 @@ public class StaticLayoutEx {
                 CharSequence text = TextUtils.ellipsize(source, paint, (float) ellipsisWidth, TruncateAt.END);
                 return new StaticLayout(text, 0, text.length(), paint, outerWidth, align, spacingMult, spacingAdd, includePad);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 return null;
             }
         }
@@ -77,8 +77,11 @@ public class StaticLayoutEx {
         } else {
             off = layout.getOffsetForHorizontal(maxLines - 1, layout.getLineWidth(maxLines - 1));
         }
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(source.subSequence(0, Math.max(0, off - 1)));
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(source.subSequence(0, Math.max(0, off - 2)));
         stringBuilder.append("\u2026");
+        if (VERSION.SDK_INT >= 23) {
+            return Builder.obtain(stringBuilder, 0, stringBuilder.length(), paint, outerWidth).setAlignment(align).setLineSpacing(spacingAdd, spacingMult).setIncludePad(includePad).setEllipsize(null).setEllipsizedWidth(ellipsisWidth).setBreakStrategy(1).setHyphenationFrequency(0).build();
+        }
         return new StaticLayout(stringBuilder, paint, outerWidth, align, spacingMult, spacingAdd, includePad);
     }
 }

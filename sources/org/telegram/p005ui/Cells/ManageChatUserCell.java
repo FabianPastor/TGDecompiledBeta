@@ -54,7 +54,7 @@ public class ManageChatUserCell extends FrameLayout {
         int i3 = 3;
         super(context);
         this.avatarImageView = new BackupImageView(context);
-        this.avatarImageView.setRoundRadius(AndroidUtilities.m10dp(24.0f));
+        this.avatarImageView.setRoundRadius(AndroidUtilities.m9dp(24.0f));
         addView(this.avatarImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 7), 8.0f, LocaleController.isRTL ? (float) (padding + 7) : 0.0f, 0.0f));
         this.nameTextView = new SimpleTextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -130,7 +130,7 @@ public class ManageChatUserCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(64.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(64.0f), NUM));
     }
 
     public void setStatusColors(int color, int onlineColor) {
@@ -208,7 +208,7 @@ public class ManageChatUserCell extends FrameLayout {
                     this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
                 }
             }
-            this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
+            this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable, this.currentUser);
         }
     }
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.BitmapFactory;
@@ -61,7 +60,7 @@ public class Browser {
                 try {
                     Browser.customTabsClient.warmup(0);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
         }
@@ -123,7 +122,7 @@ public class Browser {
                     customTabsServiceConnection = null;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -175,7 +174,7 @@ public class Browser {
             if (tryTelegraph) {
                 try {
                     if (uri.getHost().toLowerCase().equals("telegra.ph") || uri.toString().toLowerCase().contains("telegram.org/faq")) {
-                        AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context, 1)};
+                        AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context, 3)};
                         TLObject req = new TL_messages_getWebPagePreview();
                         req.message = uri.toString();
                         AndroidUtilities.runOnUIThread(new Browser$$Lambda$1(progressDialog, ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new Browser$$Lambda$0(progressDialog, currentAccount, uri, context, allowCustom))), 1000);
@@ -197,7 +196,7 @@ public class Browser {
                                 for (a = 0; a < list.size(); a++) {
                                     browserPackageNames[a] = ((ResolveInfo) list.get(a)).activityInfo.packageName;
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m11d("default browser name = " + browserPackageNames[a]);
+                                        FileLog.m10d("default browser name = " + browserPackageNames[a]);
                                     }
                                 }
                             }
@@ -230,7 +229,7 @@ public class Browser {
                             }
                             if (BuildVars.LOGS_ENABLED) {
                                 for (a = 0; a < allActivities.size(); a++) {
-                                    FileLog.m11d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
+                                    FileLog.m10d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
                                 }
                             }
                         } catch (Exception e3) {
@@ -252,7 +251,7 @@ public class Browser {
                     }
                 }
             } catch (Throwable e4) {
-                FileLog.m14e(e4);
+                FileLog.m13e(e4);
             }
             try {
                 intent = new Intent("android.intent.action.VIEW", uri);
@@ -263,7 +262,7 @@ public class Browser {
                 intent.putExtra("com.android.browser.application_id", context.getPackageName());
                 context.startActivity(intent);
             } catch (Throwable e42) {
-                FileLog.m14e(e42);
+                FileLog.m13e(e42);
             }
         }
     }
@@ -290,22 +289,10 @@ public class Browser {
     static final /* synthetic */ void lambda$openUrl$3$Browser(AlertDialog[] progressDialog, int reqId) {
         if (progressDialog[0] != null) {
             try {
-                progressDialog[0].setMessage(LocaleController.getString("Loading", CLASSNAMER.string.Loading));
-                progressDialog[0].setCanceledOnTouchOutside(false);
-                progressDialog[0].setCancelable(false);
-                progressDialog[0].setButton(-2, LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), new Browser$$Lambda$2(reqId));
+                progressDialog[0].setOnCancelListener(new Browser$$Lambda$2(reqId));
                 progressDialog[0].show();
             } catch (Exception e) {
             }
-        }
-    }
-
-    static final /* synthetic */ void lambda$null$2$Browser(int reqId, DialogInterface dialog, int which) {
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).cancelRequest(reqId, true);
-        try {
-            dialog.dismiss();
-        } catch (Throwable e) {
-            FileLog.m14e(e);
         }
     }
 

@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC.TL_channels_channelParticipant;
 
 final /* synthetic */ class MessagesController$$Lambda$159 implements Runnable {
     private final MessagesController arg$1;
-    private final int arg$2;
-    private final ArrayList arg$3;
+    private final TL_channels_channelParticipant arg$2;
 
-    MessagesController$$Lambda$159(MessagesController messagesController, int i, ArrayList arrayList) {
+    MessagesController$$Lambda$159(MessagesController messagesController, TL_channels_channelParticipant tL_channels_channelParticipant) {
         this.arg$1 = messagesController;
-        this.arg$2 = i;
-        this.arg$3 = arrayList;
+        this.arg$2 = tL_channels_channelParticipant;
     }
 
     public void run() {
-        this.arg$1.lambda$null$210$MessagesController(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$208$MessagesController(this.arg$2);
     }
 }

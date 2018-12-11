@@ -1,24 +1,23 @@
 package org.telegram.p005ui;
 
-import android.content.SharedPreferences;
-import org.telegram.p005ui.ActionBar.AlertDialog;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.InputFile;
+import org.telegram.tgnet.TLRPC.PhotoSize;
 
 /* renamed from: org.telegram.ui.SettingsActivity$$Lambda$3 */
-final /* synthetic */ class SettingsActivity$$Lambda$3 implements RequestDelegate {
+final /* synthetic */ class SettingsActivity$$Lambda$3 implements Runnable {
     private final SettingsActivity arg$1;
-    private final SharedPreferences arg$2;
-    private final AlertDialog arg$3;
+    private final InputFile arg$2;
+    private final PhotoSize arg$3;
+    private final PhotoSize arg$4;
 
-    SettingsActivity$$Lambda$3(SettingsActivity settingsActivity, SharedPreferences sharedPreferences, AlertDialog alertDialog) {
+    SettingsActivity$$Lambda$3(SettingsActivity settingsActivity, InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2) {
         this.arg$1 = settingsActivity;
-        this.arg$2 = sharedPreferences;
-        this.arg$3 = alertDialog;
+        this.arg$2 = inputFile;
+        this.arg$3 = photoSize;
+        this.arg$4 = photoSize2;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$performAskAQuestion$8$SettingsActivity(this.arg$2, this.arg$3, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$didUploadPhoto$9$SettingsActivity(this.arg$2, this.arg$3, this.arg$4);
     }
 }

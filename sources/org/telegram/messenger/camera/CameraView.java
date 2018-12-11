@@ -86,10 +86,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.textureView = new TextureView(context);
         this.textureView.setSurfaceTextureListener(this);
         addView(this.textureView);
-        this.focusAreaSize = AndroidUtilities.m10dp(96.0f);
+        this.focusAreaSize = AndroidUtilities.m9dp(96.0f);
         this.outerPaint.setColor(-1);
         this.outerPaint.setStyle(Style.STROKE);
-        this.outerPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.outerPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.innerPaint.setColor(ConnectionsManager.DEFAULT_DATACENTER_ID);
     }
 
@@ -315,7 +315,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
-            int baseRad = AndroidUtilities.m10dp(30.0f);
+            int baseRad = AndroidUtilities.m9dp(30.0f);
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastDrawTime;
             if (dt < 0 || dt > 17) {

@@ -37,7 +37,7 @@ public class AdminedChannelCell extends FrameLayout {
     public AdminedChannelCell(Context context, OnClickListener onClickListener) {
         super(context);
         this.avatarImageView = new BackupImageView(context);
-        this.avatarImageView.setRoundRadius(AndroidUtilities.m10dp(24.0f));
+        this.avatarImageView.setRoundRadius(AndroidUtilities.m9dp(24.0f));
         addView(this.avatarImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 12.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         this.nameTextView = new SimpleTextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -70,7 +70,7 @@ public class AdminedChannelCell extends FrameLayout {
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(url + channel.username);
         stringBuilder.setSpan(new URLSpanNoUnderline(TtmlNode.ANONYMOUS_REGION_ID), url.length(), stringBuilder.length(), 33);
         this.statusTextView.setText(stringBuilder);
-        this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
+        this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable, this.currentChannel);
         this.isLast = last;
     }
 
@@ -84,7 +84,7 @@ public class AdminedChannelCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp((float) ((this.isLast ? 12 : 0) + 60)), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp((float) ((this.isLast ? 12 : 0) + 60)), NUM));
     }
 
     public boolean hasOverlappingRendering() {

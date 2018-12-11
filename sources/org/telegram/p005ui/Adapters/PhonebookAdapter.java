@@ -92,11 +92,12 @@ public class PhonebookAdapter extends SectionsAdapter {
                 } else {
                     f2 = 72.0f;
                 }
-                int dp = AndroidUtilities.m10dp(f2);
+                int dp = AndroidUtilities.m9dp(f2);
+                int dp2 = AndroidUtilities.m9dp(8.0f);
                 if (!LocaleController.isRTL) {
                     f = 28.0f;
                 }
-                view.setPadding(dp, 0, AndroidUtilities.m10dp(f), 0);
+                view.setPadding(dp, dp2, AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(8.0f));
                 break;
         }
         return new Holder(view);

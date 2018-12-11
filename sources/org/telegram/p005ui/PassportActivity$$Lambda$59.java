@@ -1,19 +1,20 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import org.telegram.p005ui.CountrySelectActivity.CountrySelectActivityDelegate;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import org.telegram.p005ui.Components.EditTextBoldCursor;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$59 */
-final /* synthetic */ class PassportActivity$$Lambda$59 implements CountrySelectActivityDelegate {
+final /* synthetic */ class PassportActivity$$Lambda$59 implements OnClickListener {
     private final PassportActivity arg$1;
-    private final View arg$2;
+    private final EditTextBoldCursor arg$2;
 
-    PassportActivity$$Lambda$59(PassportActivity passportActivity, View view) {
+    PassportActivity$$Lambda$59(PassportActivity passportActivity, EditTextBoldCursor editTextBoldCursor) {
         this.arg$1 = passportActivity;
-        this.arg$2 = view;
+        this.arg$2 = editTextBoldCursor;
     }
 
-    public void didSelectCountry(String str, String str2) {
-        this.arg$1.lambda$null$45$PassportActivity(this.arg$2, str, str2);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$null$49$PassportActivity(this.arg$2, dialogInterface, i);
     }
 }

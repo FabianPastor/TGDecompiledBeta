@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-
 final /* synthetic */ class NotificationsController$$Lambda$27 implements Runnable {
     private final NotificationsController arg$1;
-    private final ArrayList arg$2;
+    private final int arg$2;
 
-    NotificationsController$$Lambda$27(NotificationsController notificationsController, ArrayList arrayList) {
+    NotificationsController$$Lambda$27(NotificationsController notificationsController, int i) {
         this.arg$1 = notificationsController;
-        this.arg$2 = arrayList;
+        this.arg$2 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$9$NotificationsController(this.arg$2);
+        this.arg$1.lambda$null$15$NotificationsController(this.arg$2);
     }
 }

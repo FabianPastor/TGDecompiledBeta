@@ -474,7 +474,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         public boolean cancelButtonPressed() {
             PhotoPickerActivity.this.delegate.actionButtonPressed(true);
-            PhotoPickerActivity.this.lambda$checkDiscard$69$PassportActivity();
+            PhotoPickerActivity.this.lambda$checkDiscard$70$PassportActivity();
             return true;
         }
 
@@ -533,7 +533,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         public void onItemClick(int id) {
             if (id == -1) {
-                PhotoPickerActivity.this.lambda$checkDiscard$69$PassportActivity();
+                PhotoPickerActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }
@@ -547,7 +547,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
 
         public boolean canCollapseSearch() {
-            PhotoPickerActivity.this.lambda$checkDiscard$69$PassportActivity();
+            PhotoPickerActivity.this.lambda$checkDiscard$70$PassportActivity();
             return false;
         }
 
@@ -567,11 +567,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     ConnectionsManager.getInstance(PhotoPickerActivity.this.currentAccount).cancelRequest(PhotoPickerActivity.this.giphyReqId, true);
                     PhotoPickerActivity.this.giphyReqId = 0;
                 }
-                if (PhotoPickerActivity.this.type == 0) {
-                    PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentPhotos", CLASSNAMER.string.NoRecentPhotos));
-                } else if (PhotoPickerActivity.this.type == 1) {
-                    PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentGIFs", CLASSNAMER.string.NoRecentGIFs));
-                }
+                PhotoPickerActivity.this.emptyView.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 PhotoPickerActivity.this.updateSearchInterface();
             }
         }
@@ -591,11 +587,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 PhotoPickerActivity.this.lastSearchString = editText.getText().toString();
                 if (PhotoPickerActivity.this.lastSearchString.length() == 0) {
                     PhotoPickerActivity.this.lastSearchString = null;
-                    if (PhotoPickerActivity.this.type == 0) {
-                        PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentPhotos", CLASSNAMER.string.NoRecentPhotos));
-                    } else if (PhotoPickerActivity.this.type == 1) {
-                        PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentGIFs", CLASSNAMER.string.NoRecentGIFs));
-                    }
+                    PhotoPickerActivity.this.emptyView.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 } else {
                     PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoResult", CLASSNAMER.string.NoResult));
                 }
@@ -619,13 +611,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             int rowsCOunt = (int) Math.ceil((double) (((float) total) / ((float) spanCount)));
             int row = position / spanCount;
             if (position % spanCount != spanCount - 1) {
-                dp = AndroidUtilities.m10dp(4.0f);
+                dp = AndroidUtilities.m9dp(4.0f);
             } else {
                 dp = 0;
             }
             outRect.right = dp;
             if (row != rowsCOunt - 1) {
-                i = AndroidUtilities.m10dp(4.0f);
+                i = AndroidUtilities.m9dp(4.0f);
             }
             outRect.bottom = i;
         }
@@ -732,7 +724,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         public void onClick(View view) {
             PhotoPickerActivity.this.delegate.actionButtonPressed(true);
-            PhotoPickerActivity.this.lambda$checkDiscard$69$PassportActivity();
+            PhotoPickerActivity.this.lambda$checkDiscard$70$PassportActivity();
         }
     }
 
@@ -944,7 +936,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
     public boolean onFragmentCreate() {
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoad);
         if (this.selectedAlbum == null && this.recentImages.isEmpty()) {
             MessagesStorage.getInstance(this.currentAccount).loadWebRecent(this.type);
             this.loadingRecent = true;
@@ -954,7 +946,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
     public void onFragmentDestroy() {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.recentImagesDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.recentImagesDidLoad);
         if (this.giphyReqId != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.giphyReqId, true);
             this.giphyReqId = 0;
@@ -985,16 +977,16 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
         if (this.selectedAlbum == null) {
             if (this.type == 0) {
-                this.searchItem.getSearchField().setHint(LocaleController.getString("SearchImagesTitle", CLASSNAMER.string.SearchImagesTitle));
+                this.searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", CLASSNAMER.string.SearchImagesTitle));
             } else if (this.type == 1) {
-                this.searchItem.getSearchField().setHint(LocaleController.getString("SearchGifsTitle", CLASSNAMER.string.SearchGifsTitle));
+                this.searchItem.setSearchFieldHint(LocaleController.getString("SearchGifsTitle", CLASSNAMER.string.SearchGifsTitle));
             }
         }
         this.fragmentView = new FrameLayout(context);
         this.frameLayout = (FrameLayout) this.fragmentView;
         this.frameLayout.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
         this.listView = new RecyclerListView(context);
-        this.listView.setPadding(AndroidUtilities.m10dp(4.0f), AndroidUtilities.m10dp(4.0f), AndroidUtilities.m10dp(4.0f), AndroidUtilities.m10dp(4.0f));
+        this.listView.setPadding(AndroidUtilities.m9dp(4.0f), AndroidUtilities.m9dp(4.0f), AndroidUtilities.m9dp(4.0f), AndroidUtilities.m9dp(4.0f));
         this.listView.setClipToPadding(false);
         this.listView.setHorizontalScrollBarEnabled(false);
         this.listView.setVerticalScrollBarEnabled(false);
@@ -1025,10 +1017,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         this.emptyView.setShowAtCenter(true);
         if (this.selectedAlbum != null) {
             this.emptyView.setText(LocaleController.getString("NoPhotos", CLASSNAMER.string.NoPhotos));
-        } else if (this.type == 0) {
-            this.emptyView.setText(LocaleController.getString("NoRecentPhotos", CLASSNAMER.string.NoRecentPhotos));
-        } else if (this.type == 1) {
-            this.emptyView.setText(LocaleController.getString("NoRecentGIFs", CLASSNAMER.string.NoRecentGIFs));
+        } else {
+            this.emptyView.setText(TtmlNode.ANONYMOUS_REGION_ID);
         }
         this.frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, this.singlePhoto ? 0.0f : 48.0f));
         if (this.selectedAlbum == null) {
@@ -1079,8 +1069,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.closeChats) {
-            lambda$null$11$ProfileActivity();
-        } else if (id == NotificationCenter.recentImagesDidLoaded && this.selectedAlbum == null && this.type == ((Integer) args[0]).intValue()) {
+            lambda$null$10$ProfileActivity();
+        } else if (id == NotificationCenter.recentImagesDidLoad && this.selectedAlbum == null && this.type == ((Integer) args[0]).intValue()) {
             this.recentImages = (ArrayList) args[1];
             this.loadingRecent = false;
             updateSearchInterface();
@@ -1107,10 +1097,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             if (!hide || this.hintTextView != null) {
                 if (this.hintTextView == null) {
                     this.hintTextView = new TextView(getParentActivity());
-                    this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m10dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
+                    this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m9dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
                     this.hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
                     this.hintTextView.setTextSize(1, 14.0f);
-                    this.hintTextView.setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(7.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(7.0f));
+                    this.hintTextView.setPadding(AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(7.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(7.0f));
                     this.hintTextView.setGravity(16);
                     this.hintTextView.setAlpha(0.0f);
                     this.frameLayout.addView(this.hintTextView, LayoutHelper.createFrame(-2, -2.0f, 81, 5.0f, 0.0f, 5.0f, 51.0f));
@@ -1422,7 +1412,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                             SearchImage bingImage = new SearchImage();
                                             if (result.photo != null) {
                                                 PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(result.photo.sizes, AndroidUtilities.getPhotoSize());
-                                                PhotoSize size2 = FileLoader.getClosestPhotoSizeWithSize(result.photo.sizes, 80);
+                                                PhotoSize size2 = FileLoader.getClosestPhotoSizeWithSize(result.photo.sizes, 320);
                                                 if (size != null) {
                                                     bingImage.width = size.var_w;
                                                     bingImage.height = size.var_h;
@@ -1495,7 +1485,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (!this.selectedPhotos.isEmpty() && this.delegate != null && !this.sendPressed) {
             this.sendPressed = true;
             this.delegate.actionButtonPressed(false);
-            lambda$checkDiscard$69$PassportActivity();
+            lambda$checkDiscard$70$PassportActivity();
         }
     }
 
@@ -1519,9 +1509,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             }
             this.layoutManager.setSpanCount(columnsCount);
             if (AndroidUtilities.isTablet()) {
-                this.itemWidth = (AndroidUtilities.m10dp(490.0f) - ((columnsCount + 1) * AndroidUtilities.m10dp(4.0f))) / columnsCount;
+                this.itemWidth = (AndroidUtilities.m9dp(490.0f) - ((columnsCount + 1) * AndroidUtilities.m9dp(4.0f))) / columnsCount;
             } else {
-                this.itemWidth = (AndroidUtilities.displaySize.x - ((columnsCount + 1) * AndroidUtilities.m10dp(4.0f))) / columnsCount;
+                this.itemWidth = (AndroidUtilities.displaySize.x - ((columnsCount + 1) * AndroidUtilities.m9dp(4.0f))) / columnsCount;
             }
             this.listAdapter.notifyDataSetChanged();
             this.layoutManager.scrollToPosition(position);

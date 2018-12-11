@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -15,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -25,17 +25,17 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private int currentPosition;
     private LayoutParams defaultTabLayoutParams;
     private ScrollSlidingTabStripDelegate delegate;
-    private int dividerPadding = AndroidUtilities.m10dp(12.0f);
+    private int dividerPadding = AndroidUtilities.m9dp(12.0f);
     private int indicatorColor = -10066330;
     private int indicatorHeight;
     private int lastScrollX = 0;
     private Paint rectPaint;
-    private int scrollOffset = AndroidUtilities.m10dp(52.0f);
+    private int scrollOffset = AndroidUtilities.m9dp(52.0f);
     private int tabCount;
-    private int tabPadding = AndroidUtilities.m10dp(24.0f);
+    private int tabPadding = AndroidUtilities.m9dp(24.0f);
     private LinearLayout tabsContainer;
     private int underlineColor = NUM;
-    private int underlineHeight = AndroidUtilities.m10dp(2.0f);
+    private int underlineHeight = AndroidUtilities.m9dp(2.0f);
 
     /* renamed from: org.telegram.ui.Components.ScrollSlidingTabStrip$ScrollSlidingTabStripDelegate */
     public interface ScrollSlidingTabStripDelegate {
@@ -54,7 +54,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.rectPaint = new Paint();
         this.rectPaint.setAntiAlias(true);
         this.rectPaint.setStyle(Style.FILL);
-        this.defaultTabLayoutParams = new LayoutParams(AndroidUtilities.m10dp(52.0f), -1);
+        this.defaultTabLayoutParams = new LayoutParams(AndroidUtilities.m9dp(52.0f), -1);
     }
 
     public void setDelegate(ScrollSlidingTabStripDelegate scrollSlidingTabStripDelegate) {
@@ -75,7 +75,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
     public TextView addIconTabWithCounter(Drawable drawable) {
         boolean z;
-        final int position = this.tabCount;
+        int position = this.tabCount;
         this.tabCount = position + 1;
         FrameLayout tab = new FrameLayout(getContext());
         tab.setFocusable(true);
@@ -83,11 +83,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         ImageView imageView = new ImageView(getContext());
         imageView.setImageDrawable(drawable);
         imageView.setScaleType(ScaleType.CENTER);
-        tab.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
-            }
-        });
+        tab.setOnClickListener(new ScrollSlidingTabStrip$$Lambda$0(this, position));
         tab.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
         if (position == this.currentPosition) {
             z = true;
@@ -100,26 +96,26 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         textView.setTextSize(1, 12.0f);
         textView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelBadgeText));
         textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m10dp(9.0f), Theme.getColor(Theme.key_chat_emojiPanelBadgeBackground)));
-        textView.setMinWidth(AndroidUtilities.m10dp(18.0f));
-        textView.setPadding(AndroidUtilities.m10dp(5.0f), 0, AndroidUtilities.m10dp(5.0f), AndroidUtilities.m10dp(1.0f));
+        textView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m9dp(9.0f), Theme.getColor(Theme.key_chat_emojiPanelBadgeBackground)));
+        textView.setMinWidth(AndroidUtilities.m9dp(18.0f));
+        textView.setPadding(AndroidUtilities.m9dp(5.0f), 0, AndroidUtilities.m9dp(5.0f), AndroidUtilities.m9dp(1.0f));
         tab.addView(textView, LayoutHelper.createFrame(-2, 18.0f, 51, 26.0f, 6.0f, 0.0f, 0.0f));
         return textView;
     }
 
+    final /* synthetic */ void lambda$addIconTabWithCounter$0$ScrollSlidingTabStrip(int position, View v) {
+        this.delegate.onPageSelected(position);
+    }
+
     public void addIconTab(Drawable drawable) {
         boolean z = true;
-        final int position = this.tabCount;
+        int position = this.tabCount;
         this.tabCount = position + 1;
         ImageView tab = new ImageView(getContext());
         tab.setFocusable(true);
         tab.setImageDrawable(drawable);
         tab.setScaleType(ScaleType.CENTER);
-        tab.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
-            }
-        });
+        tab.setOnClickListener(new ScrollSlidingTabStrip$$Lambda$1(this, position));
         this.tabsContainer.addView(tab);
         if (position != this.currentPosition) {
             z = false;
@@ -127,48 +123,53 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         tab.setSelected(z);
     }
 
+    final /* synthetic */ void lambda$addIconTab$1$ScrollSlidingTabStrip(int position, View v) {
+        this.delegate.onPageSelected(position);
+    }
+
     public void addStickerTab(Chat chat) {
-        final int position = this.tabCount;
+        int position = this.tabCount;
         this.tabCount = position + 1;
         FrameLayout tab = new FrameLayout(getContext());
         tab.setFocusable(true);
-        tab.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
-            }
-        });
+        tab.setOnClickListener(new ScrollSlidingTabStrip$$Lambda$2(this, position));
         this.tabsContainer.addView(tab);
         tab.setSelected(position == this.currentPosition);
         BackupImageView imageView = new BackupImageView(getContext());
-        imageView.setRoundRadius(AndroidUtilities.m10dp(15.0f));
+        imageView.setRoundRadius(AndroidUtilities.m9dp(15.0f));
         TLObject photo = null;
         Drawable avatarDrawable = new AvatarDrawable();
         if (chat.photo != null) {
             photo = chat.photo.photo_small;
         }
-        avatarDrawable.setTextSize(AndroidUtilities.m10dp(14.0f));
+        avatarDrawable.setTextSize(AndroidUtilities.m9dp(14.0f));
         avatarDrawable.setInfo(chat);
-        imageView.setImage(photo, "50_50", avatarDrawable);
+        imageView.setImage(photo, "50_50", avatarDrawable, (Object) chat);
         imageView.setAspectFit(true);
         tab.addView(imageView, LayoutHelper.createFrame(30, 30, 17));
     }
 
-    public void addStickerTab(Document sticker) {
-        final int position = this.tabCount;
+    final /* synthetic */ void lambda$addStickerTab$2$ScrollSlidingTabStrip(int position, View v) {
+        this.delegate.onPageSelected(position);
+    }
+
+    public void addStickerTab(Document sticker, Object parentObject) {
+        int position = this.tabCount;
         this.tabCount = position + 1;
         FrameLayout tab = new FrameLayout(getContext());
         tab.setTag(sticker);
+        tab.setTag(CLASSNAMER.id.parent_tag, parentObject);
         tab.setFocusable(true);
-        tab.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                ScrollSlidingTabStrip.this.delegate.onPageSelected(position);
-            }
-        });
+        tab.setOnClickListener(new ScrollSlidingTabStrip$$Lambda$3(this, position));
         this.tabsContainer.addView(tab);
         tab.setSelected(position == this.currentPosition);
         BackupImageView imageView = new BackupImageView(getContext());
         imageView.setAspectFit(true);
         tab.addView(imageView, LayoutHelper.createFrame(30, 30, 17));
+    }
+
+    final /* synthetic */ void lambda$addStickerTab$3$ScrollSlidingTabStrip(int position, View v) {
+        this.delegate.onPageSelected(position);
     }
 
     public void updateTabStyles() {
@@ -203,21 +204,22 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void setImages() {
-        int tabSize = AndroidUtilities.m10dp(52.0f);
+        int tabSize = AndroidUtilities.m9dp(52.0f);
         int start = getScrollX() / tabSize;
         int end = Math.min(this.tabsContainer.getChildCount(), (((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + start) + 1);
         for (int a = start; a < end; a++) {
             View child = this.tabsContainer.getChildAt(a);
             Document object = child.getTag();
+            Object parentObject = child.getTag(CLASSNAMER.id.parent_tag);
             if (object instanceof Document) {
-                ((BackupImageView) ((FrameLayout) child).getChildAt(0)).setImage(object.thumb.location, null, "webp", null);
+                ((BackupImageView) ((FrameLayout) child).getChildAt(0)).setImage(object.thumb.location, null, "webp", null, parentObject);
             }
         }
     }
 
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        int tabSize = AndroidUtilities.m10dp(52.0f);
+        int tabSize = AndroidUtilities.m9dp(52.0f);
         int oldStart = oldl / tabSize;
         int newStart = l / tabSize;
         int count = ((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + 1;
@@ -228,6 +230,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             View child = this.tabsContainer.getChildAt(a);
             if (child != null) {
                 Document object = child.getTag();
+                Object parentObject = child.getTag(CLASSNAMER.id.parent_tag);
                 if (object instanceof Document) {
                     BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(0);
                     if (a < newStart || a >= newStart + count) {
@@ -235,7 +238,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     } else {
                         Document sticker = object;
                         if (sticker.thumb != null) {
-                            imageView.setImage(sticker.thumb.location, null, "webp", null);
+                            imageView.setImage(sticker.thumb.location, null, "webp", null, parentObject);
                         }
                     }
                 }

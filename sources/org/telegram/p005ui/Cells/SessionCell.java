@@ -41,14 +41,14 @@ public class SessionCell extends FrameLayout {
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
         if (type == 1) {
-            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 11 : 45), 11.0f, (float) (LocaleController.isRTL ? 45 : 11), 0.0f));
+            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 15 : 49), 11.0f, (float) (LocaleController.isRTL ? 49 : 15), 0.0f));
             this.avatarDrawable = new AvatarDrawable();
-            this.avatarDrawable.setTextSize(AndroidUtilities.m10dp(10.0f));
+            this.avatarDrawable.setTextSize(AndroidUtilities.m9dp(10.0f));
             this.imageView = new BackupImageView(context);
-            this.imageView.setRoundRadius(AndroidUtilities.m10dp(10.0f));
-            addView(this.imageView, LayoutHelper.createFrame(20, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 17), 13.0f, (float) (LocaleController.isRTL ? 17 : 0), 0.0f));
+            this.imageView.setRoundRadius(AndroidUtilities.m9dp(10.0f));
+            addView(this.imageView, LayoutHelper.createFrame(20, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 21), 13.0f, (float) (LocaleController.isRTL ? 21 : 0), 0.0f));
         } else {
-            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 11 : 17), 11.0f, (float) (LocaleController.isRTL ? 17 : 11), 0.0f));
+            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 15 : 21), 11.0f, (float) (LocaleController.isRTL ? 21 : 15), 0.0f));
         }
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -77,7 +77,7 @@ public class SessionCell extends FrameLayout {
         this.detailTextView.setSingleLine(true);
         this.detailTextView.setEllipsize(TruncateAt.END);
         this.detailTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.detailTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 36.0f, 17.0f, 0.0f));
+        addView(this.detailTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 36.0f, 21.0f, 0.0f));
         this.detailExTextView = new TextView(context);
         this.detailExTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         this.detailExTextView.setTextSize(1, 14.0f);
@@ -86,11 +86,11 @@ public class SessionCell extends FrameLayout {
         this.detailExTextView.setSingleLine(true);
         this.detailExTextView.setEllipsize(TruncateAt.END);
         this.detailExTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.detailExTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 59.0f, 17.0f, 0.0f));
+        addView(this.detailExTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 59.0f, 21.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(90.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(90.0f), NUM));
     }
 
     public void setSession(TLObject object, boolean divider) {
@@ -122,6 +122,9 @@ public class SessionCell extends FrameLayout {
             this.detailExTextView.setText(stringBuilder);
             stringBuilder = new StringBuilder();
             if (session.device_model.length() != 0) {
+                if (stringBuilder.length() != 0) {
+                    stringBuilder.append(", ");
+                }
                 stringBuilder.append(session.device_model);
             }
             if (!(session.system_version.length() == 0 && session.platform.length() == 0)) {
@@ -138,7 +141,7 @@ public class SessionCell extends FrameLayout {
                     stringBuilder.append(session.system_version);
                 }
             }
-            if ((session.flags & 2) == 0) {
+            if (!session.official_app) {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }
@@ -151,18 +154,18 @@ public class SessionCell extends FrameLayout {
         } else if (object instanceof TL_webAuthorization) {
             String name;
             TL_webAuthorization session2 = (TL_webAuthorization) object;
-            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(session2.bot_id));
+            Object user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(session2.bot_id));
             this.nameTextView.setText(session2.domain);
             if (user != null) {
                 TLObject currentPhoto;
-                this.avatarDrawable.setInfo(user);
+                this.avatarDrawable.setInfo((User) user);
                 name = UserObject.getFirstName(user);
                 if (user.photo != null) {
                     currentPhoto = user.photo.photo_small;
                 } else {
                     currentPhoto = null;
                 }
-                this.imageView.setImage(currentPhoto, "50_50", this.avatarDrawable);
+                this.imageView.setImage(currentPhoto, "50_50", this.avatarDrawable, user);
             } else {
                 name = TtmlNode.ANONYMOUS_REGION_ID;
             }
@@ -203,7 +206,7 @@ public class SessionCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

@@ -44,7 +44,7 @@ public class FireworksEffect {
             switch (this.type) {
                 case 0:
                     FireworksEffect.this.particlePaint.setColor(this.color);
-                    FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.m10dp(1.5f)) * this.scale);
+                    FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.m9dp(1.5f)) * this.scale);
                     FireworksEffect.this.particlePaint.setAlpha((int) (255.0f * this.alpha));
                     canvas.drawPoint(this.var_x, this.var_y, FireworksEffect.this.particlePaint);
                     return;
@@ -55,7 +55,7 @@ public class FireworksEffect {
     }
 
     public FireworksEffect() {
-        this.particlePaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.5f));
+        this.particlePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.5f));
         this.particlePaint.setColor(Theme.getColor(Theme.key_actionBarDefaultTitle) & -1644826);
         this.particlePaint.setStrokeCap(Cap.ROUND);
         this.particlePaint.setStyle(Style.STROKE);
@@ -98,7 +98,7 @@ public class FireworksEffect {
                 int color;
                 int statusBarHeight = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
                 float cx = Utilities.random.nextFloat() * ((float) parent.getMeasuredWidth());
-                float cy = ((float) statusBarHeight) + (Utilities.random.nextFloat() * ((float) ((parent.getMeasuredHeight() - AndroidUtilities.m10dp(20.0f)) - statusBarHeight)));
+                float cy = ((float) statusBarHeight) + (Utilities.random.nextFloat() * ((float) ((parent.getMeasuredHeight() - AndroidUtilities.m9dp(20.0f)) - statusBarHeight)));
                 switch (Utilities.random.nextInt(4)) {
                     case 0:
                         color = -13357350;

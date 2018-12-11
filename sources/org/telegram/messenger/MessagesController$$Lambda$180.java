@@ -1,14 +1,14 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import android.util.LongSparseArray;
 
 final /* synthetic */ class MessagesController$$Lambda$180 implements Runnable {
     private final MessagesController arg$1;
-    private final ArrayList arg$2;
+    private final LongSparseArray arg$2;
 
-    MessagesController$$Lambda$180(MessagesController messagesController, ArrayList arrayList) {
+    MessagesController$$Lambda$180(MessagesController messagesController, LongSparseArray longSparseArray) {
         this.arg$1 = messagesController;
-        this.arg$2 = arrayList;
+        this.arg$2 = longSparseArray;
     }
 
     public void run() {

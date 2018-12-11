@@ -1,17 +1,19 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$25 */
 final /* synthetic */ class PassportActivity$$Lambda$25 implements OnClickListener {
-    private final boolean[] arg$1;
+    private final PassportActivity arg$1;
+    private final boolean[] arg$2;
 
-    PassportActivity$$Lambda$25(boolean[] zArr) {
-        this.arg$1 = zArr;
+    PassportActivity$$Lambda$25(PassportActivity passportActivity, boolean[] zArr) {
+        this.arg$1 = passportActivity;
+        this.arg$2 = zArr;
     }
 
-    public void onClick(View view) {
-        PassportActivity.lambda$createDocumentDeleteAlert$38$PassportActivity(this.arg$1, view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$createDocumentDeleteAlert$38$PassportActivity(this.arg$2, dialogInterface, i);
     }
 }

@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
@@ -17,7 +15,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AbsListView;
@@ -60,7 +57,7 @@ public class StickerPreviewViewer {
     private View currentStickerPreviewCell;
     private StickerPreviewViewerDelegate delegate;
     private boolean isVisible = false;
-    private int keyboardHeight = AndroidUtilities.m10dp(200.0f);
+    private int keyboardHeight = AndroidUtilities.m9dp(200.0f);
     private long lastUpdateTime;
     private Runnable openStickerPreviewRunnable;
     private Activity parentActivity;
@@ -79,32 +76,20 @@ public class StickerPreviewViewer {
 
         void openSet(InputStickerSet inputStickerSet);
 
-        void sendSticker(Document document);
+        void sendSticker(Document document, Object obj);
     }
 
     /* renamed from: org.telegram.ui.StickerPreviewViewer$1 */
     class CLASSNAME implements Runnable {
-
-        /* renamed from: org.telegram.ui.StickerPreviewViewer$1$2 */
-        class CLASSNAME implements OnDismissListener {
-            CLASSNAME() {
-            }
-
-            public void onDismiss(DialogInterface dialog) {
-                StickerPreviewViewer.this.visibleDialog = null;
-                StickerPreviewViewer.this.close();
-            }
-        }
-
         CLASSNAME() {
         }
 
         public void run() {
             if (StickerPreviewViewer.this.parentActivity != null && StickerPreviewViewer.this.currentSet != null) {
-                final boolean inFavs = DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).isStickerInFavorites(StickerPreviewViewer.this.currentSticker);
+                boolean inFavs = DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).isStickerInFavorites(StickerPreviewViewer.this.currentSticker);
                 Builder builder = new Builder(StickerPreviewViewer.this.parentActivity);
                 ArrayList<CharSequence> items = new ArrayList();
-                final ArrayList<Integer> actions = new ArrayList();
+                ArrayList<Integer> actions = new ArrayList();
                 ArrayList<Integer> icons = new ArrayList();
                 if (StickerPreviewViewer.this.delegate != null) {
                     if (StickerPreviewViewer.this.delegate.needSend()) {
@@ -126,52 +111,34 @@ public class StickerPreviewViewer {
                     for (int a = 0; a < icons.size(); a++) {
                         ic[a] = ((Integer) icons.get(a)).intValue();
                     }
-                    builder.setItems((CharSequence[]) items.toArray(new CharSequence[items.size()]), ic, new OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (StickerPreviewViewer.this.parentActivity != null) {
-                                if (((Integer) actions.get(which)).intValue() == 0) {
-                                    if (StickerPreviewViewer.this.delegate != null) {
-                                        StickerPreviewViewer.this.delegate.sendSticker(StickerPreviewViewer.this.currentSticker);
-                                    }
-                                } else if (((Integer) actions.get(which)).intValue() == 1) {
-                                    if (StickerPreviewViewer.this.delegate != null) {
-                                        StickerPreviewViewer.this.delegate.openSet(StickerPreviewViewer.this.currentSet);
-                                    }
-                                } else if (((Integer) actions.get(which)).intValue() == 2) {
-                                    DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).addRecentSticker(2, StickerPreviewViewer.this.currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);
-                                }
-                            }
-                        }
-                    });
+                    builder.setItems((CharSequence[]) items.toArray(new CharSequence[items.size()]), ic, new StickerPreviewViewer$1$$Lambda$0(this, actions, inFavs));
                     StickerPreviewViewer.this.visibleDialog = builder.create();
-                    StickerPreviewViewer.this.visibleDialog.setOnDismissListener(new CLASSNAME());
+                    StickerPreviewViewer.this.visibleDialog.setOnDismissListener(new StickerPreviewViewer$1$$Lambda$1(this));
                     StickerPreviewViewer.this.visibleDialog.show();
                     StickerPreviewViewer.this.containerView.performHapticFeedback(0);
                 }
             }
         }
-    }
 
-    /* renamed from: org.telegram.ui.StickerPreviewViewer$4 */
-    class CLASSNAME implements OnTouchListener {
-        CLASSNAME() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == 1 || event.getAction() == 6 || event.getAction() == 3) {
-                StickerPreviewViewer.this.close();
+        final /* synthetic */ void lambda$run$0$StickerPreviewViewer$1(ArrayList actions, boolean inFavs, DialogInterface dialog, int which) {
+            if (StickerPreviewViewer.this.parentActivity != null) {
+                if (((Integer) actions.get(which)).intValue() == 0) {
+                    if (StickerPreviewViewer.this.delegate != null) {
+                        StickerPreviewViewer.this.delegate.sendSticker(StickerPreviewViewer.this.currentSticker, StickerPreviewViewer.this.currentSet);
+                    }
+                } else if (((Integer) actions.get(which)).intValue() == 1) {
+                    if (StickerPreviewViewer.this.delegate != null) {
+                        StickerPreviewViewer.this.delegate.openSet(StickerPreviewViewer.this.currentSet);
+                    }
+                } else if (((Integer) actions.get(which)).intValue() == 2) {
+                    DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).addRecentSticker(2, StickerPreviewViewer.this.currentSet, StickerPreviewViewer.this.currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);
+                }
             }
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.StickerPreviewViewer$5 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
         }
 
-        public void run() {
-            StickerPreviewViewer.this.centerImage.setImageBitmap((Bitmap) null);
+        final /* synthetic */ void lambda$run$1$StickerPreviewViewer$1(DialogInterface dialog) {
+            StickerPreviewViewer.this.visibleDialog = null;
+            StickerPreviewViewer.this.close();
         }
     }
 
@@ -239,17 +206,7 @@ public class StickerPreviewViewer {
         this.delegate = stickerPreviewViewerDelegate;
         if (this.openStickerPreviewRunnable != null || isVisible()) {
             if (event.getAction() == 1 || event.getAction() == 3 || event.getAction() == 6) {
-                final View view = listView;
-                final Object obj = listener;
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        if (view instanceof AbsListView) {
-                            ((AbsListView) view).setOnItemClickListener((OnItemClickListener) obj);
-                        } else if (view instanceof RecyclerListView) {
-                            ((RecyclerListView) view).setOnItemClickListener((RecyclerListView.OnItemClickListener) obj);
-                        }
-                    }
-                }, 150);
+                AndroidUtilities.runOnUIThread(new StickerPreviewViewer$$Lambda$0(listView, listener), 150);
                 if (this.openStickerPreviewRunnable != null) {
                     AndroidUtilities.cancelRunOnUIThread(this.openStickerPreviewRunnable);
                     this.openStickerPreviewRunnable = null;
@@ -279,31 +236,31 @@ public class StickerPreviewViewer {
                         }
                         int a = 0;
                         while (a < count) {
-                            View view2 = null;
+                            View view = null;
                             if (listView instanceof AbsListView) {
-                                view2 = ((AbsListView) listView).getChildAt(a);
+                                view = ((AbsListView) listView).getChildAt(a);
                             } else if (listView instanceof RecyclerListView) {
-                                view2 = ((RecyclerListView) listView).getChildAt(a);
+                                view = ((RecyclerListView) listView).getChildAt(a);
                             }
-                            if (view2 == null) {
+                            if (view == null) {
                                 return false;
                             }
-                            int top = view2.getTop();
-                            int bottom = view2.getBottom();
-                            int left = view2.getLeft();
-                            int right = view2.getRight();
+                            int top = view.getTop();
+                            int bottom = view.getBottom();
+                            int left = view.getLeft();
+                            int right = view.getRight();
                             if (top > y || bottom < y || left > x || right < x) {
                                 a++;
                             } else {
                                 boolean ok = false;
-                                if (view2 instanceof StickerEmojiCell) {
+                                if (view instanceof StickerEmojiCell) {
                                     ok = true;
-                                } else if (view2 instanceof StickerCell) {
+                                } else if (view instanceof StickerCell) {
                                     ok = true;
-                                } else if (view2 instanceof ContextLinkCell) {
-                                    ok = ((ContextLinkCell) view2).isSticker();
+                                } else if (view instanceof ContextLinkCell) {
+                                    ok = ((ContextLinkCell) view).isSticker();
                                 }
-                                if (ok && view2 != this.currentStickerPreviewCell) {
+                                if (ok && view != this.currentStickerPreviewCell) {
                                     if (this.currentStickerPreviewCell instanceof StickerEmojiCell) {
                                         ((StickerEmojiCell) this.currentStickerPreviewCell).setScaled(false);
                                     } else if (this.currentStickerPreviewCell instanceof StickerCell) {
@@ -311,7 +268,7 @@ public class StickerPreviewViewer {
                                     } else if (this.currentStickerPreviewCell instanceof ContextLinkCell) {
                                         ((ContextLinkCell) this.currentStickerPreviewCell).setScaled(false);
                                     }
-                                    this.currentStickerPreviewCell = view2;
+                                    this.currentStickerPreviewCell = view;
                                     setKeyboardHeight(height);
                                     if (this.currentStickerPreviewCell instanceof StickerEmojiCell) {
                                         open(((StickerEmojiCell) this.currentStickerPreviewCell).getSticker(), ((StickerEmojiCell) this.currentStickerPreviewCell).isRecent());
@@ -333,7 +290,7 @@ public class StickerPreviewViewer {
                     if (event.getAction() != 2) {
                         AndroidUtilities.cancelRunOnUIThread(this.openStickerPreviewRunnable);
                         this.openStickerPreviewRunnable = null;
-                    } else if (Math.hypot((double) (((float) this.startX) - event.getX()), (double) (((float) this.startY) - event.getY())) > ((double) AndroidUtilities.m10dp(10.0f))) {
+                    } else if (Math.hypot((double) (((float) this.startX) - event.getX()), (double) (((float) this.startY) - event.getY())) > ((double) AndroidUtilities.m9dp(10.0f))) {
                         AndroidUtilities.cancelRunOnUIThread(this.openStickerPreviewRunnable);
                         this.openStickerPreviewRunnable = null;
                     }
@@ -341,6 +298,14 @@ public class StickerPreviewViewer {
             }
         }
         return false;
+    }
+
+    static final /* synthetic */ void lambda$onTouch$0$StickerPreviewViewer(View listView, Object listener) {
+        if (listView instanceof AbsListView) {
+            ((AbsListView) listView).setOnItemClickListener((OnItemClickListener) listener);
+        } else if (listView instanceof RecyclerListView) {
+            ((RecyclerListView) listView).setOnItemClickListener((RecyclerListView.OnItemClickListener) listener);
+        }
     }
 
     public boolean onInterceptTouchEvent(MotionEvent event, View listView, int height, StickerPreviewViewerDelegate stickerPreviewViewerDelegate) {
@@ -387,40 +352,38 @@ public class StickerPreviewViewer {
                     this.startX = x;
                     this.startY = y;
                     this.currentStickerPreviewCell = view;
-                    final View view2 = listView;
-                    final int i = height;
-                    this.openStickerPreviewRunnable = new Runnable() {
-                        public void run() {
-                            if (StickerPreviewViewer.this.openStickerPreviewRunnable != null) {
-                                if (view2 instanceof AbsListView) {
-                                    ((AbsListView) view2).setOnItemClickListener(null);
-                                    ((AbsListView) view2).requestDisallowInterceptTouchEvent(true);
-                                } else if (view2 instanceof RecyclerListView) {
-                                    ((RecyclerListView) view2).setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
-                                    ((RecyclerListView) view2).requestDisallowInterceptTouchEvent(true);
-                                }
-                                StickerPreviewViewer.this.openStickerPreviewRunnable = null;
-                                StickerPreviewViewer.this.setParentActivity((Activity) view2.getContext());
-                                StickerPreviewViewer.this.setKeyboardHeight(i);
-                                if (StickerPreviewViewer.this.currentStickerPreviewCell instanceof StickerEmojiCell) {
-                                    StickerPreviewViewer.this.open(((StickerEmojiCell) StickerPreviewViewer.this.currentStickerPreviewCell).getSticker(), ((StickerEmojiCell) StickerPreviewViewer.this.currentStickerPreviewCell).isRecent());
-                                    ((StickerEmojiCell) StickerPreviewViewer.this.currentStickerPreviewCell).setScaled(true);
-                                } else if (StickerPreviewViewer.this.currentStickerPreviewCell instanceof StickerCell) {
-                                    StickerPreviewViewer.this.open(((StickerCell) StickerPreviewViewer.this.currentStickerPreviewCell).getSticker(), false);
-                                    ((StickerCell) StickerPreviewViewer.this.currentStickerPreviewCell).setScaled(true);
-                                } else if (StickerPreviewViewer.this.currentStickerPreviewCell instanceof ContextLinkCell) {
-                                    StickerPreviewViewer.this.open(((ContextLinkCell) StickerPreviewViewer.this.currentStickerPreviewCell).getDocument(), false);
-                                    ((ContextLinkCell) StickerPreviewViewer.this.currentStickerPreviewCell).setScaled(true);
-                                }
-                            }
-                        }
-                    };
+                    this.openStickerPreviewRunnable = new StickerPreviewViewer$$Lambda$1(this, listView, height);
                     AndroidUtilities.runOnUIThread(this.openStickerPreviewRunnable, 200);
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    final /* synthetic */ void lambda$onInterceptTouchEvent$1$StickerPreviewViewer(View listView, int height) {
+        if (this.openStickerPreviewRunnable != null) {
+            if (listView instanceof AbsListView) {
+                ((AbsListView) listView).setOnItemClickListener(null);
+                ((AbsListView) listView).requestDisallowInterceptTouchEvent(true);
+            } else if (listView instanceof RecyclerListView) {
+                ((RecyclerListView) listView).setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
+                ((RecyclerListView) listView).requestDisallowInterceptTouchEvent(true);
+            }
+            this.openStickerPreviewRunnable = null;
+            setParentActivity((Activity) listView.getContext());
+            setKeyboardHeight(height);
+            if (this.currentStickerPreviewCell instanceof StickerEmojiCell) {
+                open(((StickerEmojiCell) this.currentStickerPreviewCell).getSticker(), ((StickerEmojiCell) this.currentStickerPreviewCell).isRecent());
+                ((StickerEmojiCell) this.currentStickerPreviewCell).setScaled(true);
+            } else if (this.currentStickerPreviewCell instanceof StickerCell) {
+                open(((StickerCell) this.currentStickerPreviewCell).getSticker(), false);
+                ((StickerCell) this.currentStickerPreviewCell).setScaled(true);
+            } else if (this.currentStickerPreviewCell instanceof ContextLinkCell) {
+                open(((ContextLinkCell) this.currentStickerPreviewCell).getDocument(), false);
+                ((ContextLinkCell) this.currentStickerPreviewCell).setScaled(true);
+            }
+        }
     }
 
     public void setDelegate(StickerPreviewViewerDelegate stickerPreviewViewerDelegate) {
@@ -441,7 +404,7 @@ public class StickerPreviewViewer {
             this.containerView = new FrameLayoutDrawer(activity);
             this.containerView.setFocusable(false);
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
-            this.containerView.setOnTouchListener(new CLASSNAME());
+            this.containerView.setOnTouchListener(new StickerPreviewViewer$$Lambda$2(this));
             this.windowLayoutParams = new LayoutParams();
             this.windowLayoutParams.height = -1;
             this.windowLayoutParams.format = -3;
@@ -459,6 +422,13 @@ public class StickerPreviewViewer {
         }
     }
 
+    final /* synthetic */ boolean lambda$setParentActivity$2$StickerPreviewViewer(View v, MotionEvent event) {
+        if (event.getAction() == 1 || event.getAction() == 6 || event.getAction() == 3) {
+            close();
+        }
+        return true;
+    }
+
     public void setKeyboardHeight(int height) {
         this.keyboardHeight = height;
     }
@@ -469,7 +439,7 @@ public class StickerPreviewViewer {
             DocumentAttribute attribute;
             if (textPaint == null) {
                 textPaint = new TextPaint(1);
-                textPaint.setTextSize((float) AndroidUtilities.m10dp(24.0f));
+                textPaint.setTextSize((float) AndroidUtilities.m9dp(24.0f));
             }
             InputStickerSet newSet = null;
             for (a = 0; a < sticker.attributes.size(); a++) {
@@ -487,7 +457,7 @@ public class StickerPreviewViewer {
                         this.visibleDialog = null;
                     }
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
                 AndroidUtilities.runOnUIThread(this.showSheetRunnable, 1300);
@@ -495,12 +465,12 @@ public class StickerPreviewViewer {
             this.currentSet = newSet;
             ImageReceiver imageReceiver = this.centerImage;
             FileLocation fileLocation = (sticker == null || sticker.thumb == null) ? null : sticker.thumb.location;
-            imageReceiver.setImage((TLObject) sticker, null, fileLocation, null, "webp", 1);
+            imageReceiver.setImage((TLObject) sticker, null, fileLocation, null, "webp", this.currentSet, 1);
             this.stickerEmojiLayout = null;
             for (a = 0; a < sticker.attributes.size(); a++) {
                 attribute = (DocumentAttribute) sticker.attributes.get(a);
                 if ((attribute instanceof TL_documentAttributeSticker) && !TextUtils.isEmpty(attribute.alt)) {
-                    this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(attribute.alt, textPaint.getFontMetricsInt(), AndroidUtilities.m10dp(24.0f), false), textPaint, AndroidUtilities.m10dp(100.0f), Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(attribute.alt, textPaint.getFontMetricsInt(), AndroidUtilities.m9dp(24.0f), false), textPaint, AndroidUtilities.m9dp(100.0f), Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                     break;
                 }
             }
@@ -513,7 +483,7 @@ public class StickerPreviewViewer {
                         ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
                     }
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
                 ((WindowManager) this.parentActivity.getSystemService("window")).addView(this.windowView, this.windowLayoutParams);
                 this.isVisible = true;
@@ -539,7 +509,7 @@ public class StickerPreviewViewer {
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.currentSticker = null;
             this.currentSet = null;
@@ -559,7 +529,7 @@ public class StickerPreviewViewer {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (this.parentActivity != null && this.windowView != null) {
             try {
@@ -568,7 +538,7 @@ public class StickerPreviewViewer {
                 }
                 this.windowView = null;
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
             Instance = null;
         }
@@ -582,7 +552,7 @@ public class StickerPreviewViewer {
             this.backgroundDrawable.draw(canvas);
             canvas.save();
             int size = (int) (((float) Math.min(this.containerView.getWidth(), this.containerView.getHeight())) / 1.8f);
-            canvas.translate((float) (this.containerView.getWidth() / 2), (float) Math.max((this.stickerEmojiLayout != null ? AndroidUtilities.m10dp(40.0f) : 0) + (AndroidUtilities.statusBarHeight + (size / 2)), (this.containerView.getHeight() - this.keyboardHeight) / 2));
+            canvas.translate((float) (this.containerView.getWidth() / 2), (float) Math.max((this.stickerEmojiLayout != null ? AndroidUtilities.m9dp(40.0f) : 0) + (AndroidUtilities.statusBarHeight + (size / 2)), (this.containerView.getHeight() - this.keyboardHeight) / 2));
             if (this.centerImage.getBitmap() != null) {
                 size = (int) (((float) size) * ((0.8f * this.showProgress) / 0.8f));
                 this.centerImage.setAlpha(this.showProgress);
@@ -590,7 +560,7 @@ public class StickerPreviewViewer {
                 this.centerImage.draw(canvas);
             }
             if (this.stickerEmojiLayout != null) {
-                canvas.translate((float) (-AndroidUtilities.m10dp(50.0f)), (float) (((-this.centerImage.getImageHeight()) / 2) - AndroidUtilities.m10dp(30.0f)));
+                canvas.translate((float) (-AndroidUtilities.m9dp(50.0f)), (float) (((-this.centerImage.getImageHeight()) / 2) - AndroidUtilities.m9dp(30.0f)));
                 this.stickerEmojiLayout.draw(canvas);
             }
             canvas.restore();
@@ -618,16 +588,20 @@ public class StickerPreviewViewer {
                 }
                 if (this.showProgress == 0.0f) {
                     AndroidUtilities.unlockOrientation(this.parentActivity);
-                    AndroidUtilities.runOnUIThread(new CLASSNAME());
+                    AndroidUtilities.runOnUIThread(new StickerPreviewViewer$$Lambda$3(this));
                     try {
                         if (this.windowView.getParent() != null) {
                             ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
                         }
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
             }
         }
+    }
+
+    final /* synthetic */ void lambda$onDraw$3$StickerPreviewViewer() {
+        this.centerImage.setImageBitmap((Bitmap) null);
     }
 }

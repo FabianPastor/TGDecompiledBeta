@@ -47,7 +47,7 @@ public class Input {
                     this.pointsCount = 1;
                     this.clearBuffer = true;
                     return;
-                } else if (location.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.m10dp(5.0f))) {
+                } else if (location.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.m9dp(5.0f))) {
                     if (!this.hasMoved) {
                         this.renderView.onBeganDrawing();
                         this.hasMoved = true;

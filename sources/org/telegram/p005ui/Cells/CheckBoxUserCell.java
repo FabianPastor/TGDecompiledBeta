@@ -36,17 +36,17 @@ public class CheckBoxUserCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 17 : 94), 0.0f, (float) (LocaleController.isRTL ? 94 : 17), 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 21 : 94), 0.0f, (float) (LocaleController.isRTL ? 94 : 21), 0.0f));
         this.avatarDrawable = new AvatarDrawable();
         this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.m10dp(36.0f));
-        addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, (LocaleController.isRTL ? 5 : 3) | 48, 48.0f, 6.0f, 48.0f, 0.0f));
+        this.imageView.setRoundRadius(AndroidUtilities.m9dp(36.0f));
+        addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, (LocaleController.isRTL ? 5 : 3) | 48, 48.0f, 7.0f, 48.0f, 0.0f));
         this.checkBox = new CheckBoxSquare(context, alert);
-        addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 17), 15.0f, (float) (LocaleController.isRTL ? 17 : 0), 0.0f));
+        addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 21), 16.0f, (float) (LocaleController.isRTL ? 21 : 0), 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f), NUM));
     }
 
     public void setTextColor(int color) {
@@ -67,7 +67,7 @@ public class CheckBoxUserCell extends FrameLayout {
         if (!(user == null || user.photo == null)) {
             photo = user.photo.photo_small;
         }
-        this.imageView.setImage(photo, "50_50", this.avatarDrawable);
+        this.imageView.setImage(photo, "50_50", this.avatarDrawable, (Object) user);
         this.needDivider = divider;
         if (!divider) {
             z = true;
@@ -93,7 +93,7 @@ public class CheckBoxUserCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

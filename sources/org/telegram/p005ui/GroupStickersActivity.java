@@ -123,7 +123,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                             GroupStickersActivity.this.info.flags &= -257;
                         }
                         MessagesStorage.getInstance(GroupStickersActivity.this.currentAccount).updateChatInfo(GroupStickersActivity.this.info, false);
-                        NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoaded, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
+                        NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
                         GroupStickersActivity.this.finishFragment();
                         return;
                     }
@@ -325,7 +325,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                                 ((TextInfoPrivacyCell) holder.itemView).setText(stringBuilder);
                                 return;
                             } catch (Throwable e) {
-                                FileLog.m14e(e);
+                                FileLog.m13e(e);
                                 ((TextInfoPrivacyCell) holder.itemView).setText(text);
                                 return;
                             }
@@ -369,14 +369,14 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = GroupStickersActivity.this.nameContainer;
                     break;
                 case 3:
                     view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 4:
                     view = new HeaderCell(this.mContext);
@@ -417,18 +417,18 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         DataQuery.getInstance(this.currentAccount).checkStickers(0);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoad);
         updateRows();
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoad);
     }
 
     public View createView(Context context) {
@@ -436,13 +436,16 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("GroupStickers", CLASSNAMER.string.GroupStickers));
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, CLASSNAMER.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, CLASSNAMER.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
-        this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+        this.progressView.setAlpha(0.0f);
+        this.progressView.setScaleX(0.1f);
+        this.progressView.setScaleY(0.1f);
         this.progressView.setVisibility(4);
+        this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.nameContainer = new LinearLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(42.0f), NUM));
+                super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(42.0f), NUM));
             }
 
             protected void onDraw(Canvas canvas) {
@@ -455,7 +458,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.nameContainer.setWillNotDraw(false);
         this.nameContainer.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         this.nameContainer.setOrientation(0);
-        this.nameContainer.setPadding(AndroidUtilities.m10dp(17.0f), 0, AndroidUtilities.m10dp(14.0f), 0);
+        this.nameContainer.setPadding(AndroidUtilities.m9dp(17.0f), 0, AndroidUtilities.m9dp(14.0f), 0);
         this.editText = new EditText(context);
         this.editText.setText(MessagesController.getInstance(this.currentAccount).linkPrefix + "/addstickers/");
         this.editText.setTextSize(1, 17.0f);
@@ -475,7 +478,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.usernameTextView = new EditTextBoldCursor(context);
         this.usernameTextView.setTextSize(1, 17.0f);
         this.usernameTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.usernameTextView.setCursorSize(AndroidUtilities.m10dp(20.0f));
+        this.usernameTextView.setCursorSize(AndroidUtilities.m9dp(20.0f));
         this.usernameTextView.setCursorWidth(1.5f);
         this.usernameTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -493,7 +496,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.eraseImageView = new ImageView(context);
         this.eraseImageView.setScaleType(ScaleType.CENTER);
         this.eraseImageView.setImageResource(CLASSNAMER.drawable.ic_close_white);
-        this.eraseImageView.setPadding(AndroidUtilities.m10dp(16.0f), 0, 0, 0);
+        this.eraseImageView.setPadding(AndroidUtilities.m9dp(16.0f), 0, 0, 0);
         this.eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
         this.eraseImageView.setVisibility(4);
         this.eraseImageView.setOnClickListener(new CLASSNAME());
@@ -531,11 +534,11 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.stickersDidLoaded) {
+        if (id == NotificationCenter.stickersDidLoad) {
             if (((Integer) args[0]).intValue() == 0) {
                 updateRows();
             }
-        } else if (id == NotificationCenter.chatInfoDidLoaded) {
+        } else if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
             if (chatFull.var_id == this.chatId) {
                 if (this.info == null && chatFull.stickerset != null) {
@@ -544,7 +547,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.info = chatFull;
                 updateRows();
             }
-        } else if (id == NotificationCenter.groupStickersDidLoaded) {
+        } else if (id == NotificationCenter.groupStickersDidLoad) {
             long setId = ((Long) args[0]).longValue();
             if (this.info != null && this.info.stickerset != null && this.info.stickerset.var_id == ((long) id)) {
                 updateRows();

@@ -1,17 +1,18 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import org.telegram.tgnet.TLObject;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$19 */
-final /* synthetic */ class ProfileActivity$$Lambda$19 implements OnClickListener {
+final /* synthetic */ class ProfileActivity$$Lambda$19 implements Runnable {
     private final ProfileActivity arg$1;
+    private final TLObject arg$2;
 
-    ProfileActivity$$Lambda$19(ProfileActivity profileActivity) {
+    ProfileActivity$$Lambda$19(ProfileActivity profileActivity, TLObject tLObject) {
         this.arg$1 = profileActivity;
+        this.arg$2 = tLObject;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$14$ProfileActivity(dialogInterface, i);
+    public void run() {
+        this.arg$1.lambda$null$8$ProfileActivity(this.arg$2);
     }
 }

@@ -12,6 +12,6 @@ final /* synthetic */ class ChannelEditInfoActivity$$Lambda$2 implements OnClick
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$createView$4$ChannelEditInfoActivity(view);
+        this.arg$1.lambda$createView$3$ChannelEditInfoActivity(view);
     }
 }

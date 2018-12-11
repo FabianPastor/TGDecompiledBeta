@@ -1,18 +1,18 @@
 package org.telegram.p005ui;
 
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$68 */
-final /* synthetic */ class PassportActivity$$Lambda$68 implements Runnable {
+final /* synthetic */ class PassportActivity$$Lambda$68 implements RequestDelegate {
     private final PassportActivity arg$1;
-    private final TL_error arg$2;
 
-    PassportActivity$$Lambda$68(PassportActivity passportActivity, TL_error tL_error) {
+    PassportActivity$$Lambda$68(PassportActivity passportActivity) {
         this.arg$1 = passportActivity;
-        this.arg$2 = tL_error;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$14$PassportActivity(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$null$15$PassportActivity(tLObject, tL_error);
     }
 }

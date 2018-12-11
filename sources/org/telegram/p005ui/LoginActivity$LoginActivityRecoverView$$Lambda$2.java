@@ -14,6 +14,6 @@ final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Lambda$2 imp
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$onNextPressed$4$LoginActivity$LoginActivityRecoverView(tLObject, tL_error);
+        this.arg$1.lambda$onNextPressed$5$LoginActivity$LoginActivityRecoverView(tLObject, tL_error);
     }
 }

@@ -1,6 +1,7 @@
 package org.telegram.p005ui.Components;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -143,7 +144,7 @@ public class ClippingImageView extends View {
                 try {
                     canvas.drawBitmap(this.bmp.bitmap, this.matrix, this.paint);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
             canvas.restore();
@@ -200,6 +201,14 @@ public class ClippingImageView extends View {
             }
         }
         invalidate();
+    }
+
+    public Bitmap getBitmap() {
+        return this.bmp != null ? this.bmp.bitmap : null;
+    }
+
+    public int getOrientation() {
+        return this.orientation;
     }
 
     public void setNeedRadius(boolean value) {

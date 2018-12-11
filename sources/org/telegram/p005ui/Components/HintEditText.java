@@ -53,7 +53,7 @@ public class HintEditText extends EditTextBoldCursor {
                 if (this.hintText.charAt(a) == ' ') {
                     f = this.spaceSize;
                 } else {
-                    this.rect.set(((int) offsetX) + AndroidUtilities.m10dp(1.0f), top, ((int) (this.numberSize + offsetX)) - AndroidUtilities.m10dp(1.0f), AndroidUtilities.m10dp(2.0f) + top);
+                    this.rect.set(((int) offsetX) + AndroidUtilities.m9dp(1.0f), top, ((int) (this.numberSize + offsetX)) - AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(2.0f) + top);
                     canvas.drawRect(this.rect, this.paint);
                     f = this.numberSize;
                 }

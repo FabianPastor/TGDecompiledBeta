@@ -17,16 +17,12 @@ import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.EditTextSettingsCell;
-import org.telegram.p005ui.Cells.HeaderCell;
-import org.telegram.p005ui.Cells.ShadowSectionCell;
 import org.telegram.p005ui.Cells.TextCheckCell;
-import org.telegram.p005ui.Cells.TextDetailSettingsCell;
 import org.telegram.p005ui.Cells.TextInfoPrivacyCell;
 import org.telegram.p005ui.Cells.TextSettingsCell;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 
 /* renamed from: org.telegram.ui.QuickRepliesSettingsActivity */
@@ -39,7 +35,6 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     private int reply3Row;
     private int reply4Row;
     private int rowCount;
-    private int sectionHeaderRow;
     private EditTextSettingsCell[] textCells = new EditTextSettingsCell[4];
 
     /* renamed from: org.telegram.ui.QuickRepliesSettingsActivity$1 */
@@ -49,17 +44,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                QuickRepliesSettingsActivity.this.lambda$checkDiscard$69$PassportActivity();
+                QuickRepliesSettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.QuickRepliesSettingsActivity$2 */
-    class CLASSNAME implements OnItemClickListener {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(View view, int position) {
         }
     }
 
@@ -79,18 +65,11 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     TextInfoPrivacyCell cell = holder.itemView;
-                    cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     cell.setText(LocaleController.getString("VoipQuickRepliesExplain", CLASSNAMER.string.VoipQuickRepliesExplain));
                     return;
                 case 1:
                     TextSettingsCell textCell = holder.itemView;
-                    return;
-                case 2:
-                    HeaderCell headerCell = holder.itemView;
-                    if (position == QuickRepliesSettingsActivity.this.sectionHeaderRow) {
-                        headerCell.setText(LocaleController.getString("VoipQuickReplies", CLASSNAMER.string.VoipQuickReplies));
-                        return;
-                    }
                     return;
                 case 4:
                     holder.itemView.setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", CLASSNAMER.string.AllowCustomQuickReply), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getBoolean("quick_reply_allow_custom", true), false);
@@ -137,10 +116,6 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                     view = new TextSettingsCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 2:
-                    view = new HeaderCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
                 case 4:
                     view = new TextCheckCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -165,9 +140,6 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             if (position == QuickRepliesSettingsActivity.this.reply1Row || position == QuickRepliesSettingsActivity.this.reply2Row || position == QuickRepliesSettingsActivity.this.reply3Row || position == QuickRepliesSettingsActivity.this.reply4Row) {
                 return (position - QuickRepliesSettingsActivity.this.reply1Row) + 9;
             }
-            if (position == QuickRepliesSettingsActivity.this.sectionHeaderRow) {
-                return 2;
-            }
             return 1;
         }
     }
@@ -175,7 +147,6 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         this.rowCount = 0;
-        this.sectionHeaderRow = -1;
         int i = this.rowCount;
         this.rowCount = i + 1;
         this.reply1Row = i;
@@ -211,7 +182,6 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new CLASSNAME());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }
@@ -240,22 +210,20 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[15];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextSettingsCell.class, TextDetailSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
-        return themeDescriptionArr;
+        r9 = new ThemeDescription[13];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextSettingsCell.class, EditTextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{EditTextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_HINTTEXTCOLOR, new Class[]{EditTextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        r9[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        return r9;
     }
 }

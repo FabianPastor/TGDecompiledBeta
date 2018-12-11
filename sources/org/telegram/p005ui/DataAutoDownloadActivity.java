@@ -24,7 +24,6 @@ import org.telegram.p005ui.Cells.TextCheckBoxCell;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 
 /* renamed from: org.telegram.ui.DataAutoDownloadActivity */
@@ -114,27 +113,6 @@ public class DataAutoDownloadActivity extends BaseFragment {
         }
     }
 
-    /* renamed from: org.telegram.ui.DataAutoDownloadActivity$2 */
-    class CLASSNAME implements OnItemClickListener {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(View view, int position) {
-            if (view instanceof TextCheckBoxCell) {
-                int mask = DataAutoDownloadActivity.this.getMaskForRow(position);
-                TextCheckBoxCell textCell = (TextCheckBoxCell) view;
-                boolean isChecked = !textCell.isChecked();
-                if (isChecked) {
-                    mask |= DataAutoDownloadActivity.this.currentType;
-                } else {
-                    mask &= DataAutoDownloadActivity.this.currentType ^ -1;
-                }
-                DataAutoDownloadActivity.this.setMaskForRow(position, mask);
-                textCell.setChecked(isChecked);
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.DataAutoDownloadActivity$ListAdapter */
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
@@ -153,10 +131,10 @@ public class DataAutoDownloadActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == DataAutoDownloadActivity.this.mobileSection2Row || position == DataAutoDownloadActivity.this.wifiSection2Row) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     }
                 case 1:
@@ -412,7 +390,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         }
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
-        this.actionBar.createMenu().addItemWithWidth(1, CLASSNAMER.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.actionBar.createMenu().addItemWithWidth(1, CLASSNAMER.drawable.ic_done, AndroidUtilities.m9dp(56.0f));
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -422,9 +400,24 @@ public class DataAutoDownloadActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new CLASSNAME());
+        this.listView.setOnItemClickListener(new DataAutoDownloadActivity$$Lambda$0(this));
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$0$DataAutoDownloadActivity(View view, int position) {
+        if (view instanceof TextCheckBoxCell) {
+            int mask = getMaskForRow(position);
+            TextCheckBoxCell textCell = (TextCheckBoxCell) view;
+            boolean isChecked = !textCell.isChecked();
+            if (isChecked) {
+                mask |= this.currentType;
+            } else {
+                mask &= this.currentType ^ -1;
+            }
+            setMaskForRow(position, mask);
+            textCell.setChecked(isChecked);
+        }
     }
 
     public void onResume() {

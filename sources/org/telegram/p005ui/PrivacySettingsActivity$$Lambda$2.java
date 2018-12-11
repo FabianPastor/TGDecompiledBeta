@@ -13,6 +13,6 @@ final /* synthetic */ class PrivacySettingsActivity$$Lambda$2 implements Request
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$loadPasswordSettings$20$PrivacySettingsActivity(tLObject, tL_error);
+        this.arg$1.lambda$loadPasswordSettings$19$PrivacySettingsActivity(tLObject, tL_error);
     }
 }

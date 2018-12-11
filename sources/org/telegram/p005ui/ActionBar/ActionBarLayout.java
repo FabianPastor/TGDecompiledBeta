@@ -82,12 +82,12 @@ public class ActionBarLayout extends FrameLayout {
     private int startedTrackingPointerId;
     private int startedTrackingX;
     private int startedTrackingY;
-    private String subtitleOverlayText;
     private float themeAnimationValue;
     private ThemeDescriptionDelegate[] themeAnimatorDelegate = new ThemeDescriptionDelegate[2];
     private ThemeDescription[][] themeAnimatorDescriptions = new ThemeDescription[2][];
     private AnimatorSet themeAnimatorSet;
     private String titleOverlayText;
+    private int titleOverlayTextId;
     private boolean transitionAnimationInProgress;
     private boolean transitionAnimationPreviewMode;
     private long transitionAnimationStartTime;
@@ -102,7 +102,7 @@ public class ActionBarLayout extends FrameLayout {
 
         @TargetApi(21)
         public void getOutline(View view, Outline outline) {
-            outline.setRoundRect(0, AndroidUtilities.statusBarHeight, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.m10dp(6.0f));
+            outline.setRoundRect(0, AndroidUtilities.statusBarHeight, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.m9dp(6.0f));
         }
     }
 
@@ -394,9 +394,9 @@ public class ActionBarLayout extends FrameLayout {
             if (view != null) {
                 this.previewBackgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 this.previewBackgroundDrawable.draw(canvas);
-                int x = (getMeasuredWidth() - AndroidUtilities.m10dp(24.0f)) / 2;
-                int y = (int) ((this.containerView.getTranslationY() + ((float) view.getTop())) - ((float) AndroidUtilities.m10dp((float) ((VERSION.SDK_INT < 21 ? 20 : 0) + 12))));
-                Theme.moveUpDrawable.setBounds(x, y, AndroidUtilities.m10dp(24.0f) + x, AndroidUtilities.m10dp(24.0f) + y);
+                int x = (getMeasuredWidth() - AndroidUtilities.m9dp(24.0f)) / 2;
+                int y = (int) ((this.containerView.getTranslationY() + ((float) view.getTop())) - ((float) AndroidUtilities.m9dp((float) ((VERSION.SDK_INT < 21 ? 20 : 0) + 12))));
+                Theme.moveUpDrawable.setBounds(x, y, AndroidUtilities.m9dp(24.0f) + x, AndroidUtilities.m9dp(24.0f) + y);
                 Theme.moveUpDrawable.draw(canvas);
             }
         }
@@ -404,7 +404,7 @@ public class ActionBarLayout extends FrameLayout {
         canvas.restoreToCount(restoreCount);
         if (translationX != 0) {
             if (child == this.containerView) {
-                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.m10dp(20.0f)), 1.0f));
+                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.m9dp(20.0f)), 1.0f));
                 layerShadowDrawable.setBounds(translationX - layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
                 layerShadowDrawable.setAlpha((int) (255.0f * alpha));
                 layerShadowDrawable.draw(canvas);
@@ -491,7 +491,7 @@ public class ActionBarLayout extends FrameLayout {
                 lastFragment.actionBar.setOccupyStatusBar(false);
             }
             this.containerViewBack.addView(lastFragment.actionBar);
-            lastFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
+            lastFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
         }
         this.containerViewBack.addView(fragmentView);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) fragmentView.getLayoutParams();
@@ -674,6 +674,7 @@ public class ActionBarLayout extends FrameLayout {
 
     private void presentFragmentInternalRemoveOld(boolean removeLast, BaseFragment fragment) {
         if (fragment != null) {
+            fragment.onBecomeFullyHidden();
             fragment.onPause();
             if (removeLast) {
                 fragment.onFragmentDestroy();
@@ -744,7 +745,7 @@ public class ActionBarLayout extends FrameLayout {
                             ActionBarLayout.this.containerView.invalidate();
                             ActionBarLayout.this.invalidate();
                         } else {
-                            ActionBarLayout.this.containerView.setTranslationX(((float) AndroidUtilities.m10dp(48.0f)) * (1.0f - interpolated));
+                            ActionBarLayout.this.containerView.setTranslationX(((float) AndroidUtilities.m9dp(48.0f)) * (1.0f - interpolated));
                         }
                     } else {
                         ActionBarLayout.this.containerViewBack.setAlpha(1.0f - interpolated);
@@ -756,7 +757,7 @@ public class ActionBarLayout extends FrameLayout {
                             ActionBarLayout.this.containerView.invalidate();
                             ActionBarLayout.this.invalidate();
                         } else {
-                            ActionBarLayout.this.containerViewBack.setTranslationX(((float) AndroidUtilities.m10dp(48.0f)) * interpolated);
+                            ActionBarLayout.this.containerViewBack.setTranslationX(((float) AndroidUtilities.m9dp(48.0f)) * interpolated);
                         }
                     }
                     if (ActionBarLayout.this.animationProgress < 1.0f) {
@@ -810,17 +811,17 @@ public class ActionBarLayout extends FrameLayout {
                 parent.removeView(fragment.actionBar);
             }
             this.containerViewBack.addView(fragment.actionBar);
-            fragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
+            fragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
         }
         this.containerViewBack.addView(fragmentView);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) fragmentView.getLayoutParams();
         layoutParams.width = -1;
         layoutParams.height = -1;
         if (preview) {
-            int dp = AndroidUtilities.m10dp(8.0f);
+            int dp = AndroidUtilities.m9dp(8.0f);
             layoutParams.leftMargin = dp;
             layoutParams.rightMargin = dp;
-            dp = AndroidUtilities.m10dp(46.0f);
+            dp = AndroidUtilities.m9dp(46.0f);
             layoutParams.bottomMargin = dp;
             layoutParams.topMargin = dp;
             layoutParams.topMargin += AndroidUtilities.statusBarHeight;
@@ -847,7 +848,7 @@ public class ActionBarLayout extends FrameLayout {
             if (VERSION.SDK_INT >= 21) {
                 fragmentView.setOutlineProvider(new CLASSNAME());
                 fragmentView.setClipToOutline(true);
-                fragmentView.setElevation((float) AndroidUtilities.m10dp(4.0f));
+                fragmentView.setElevation((float) AndroidUtilities.m9dp(4.0f));
             }
             if (this.previewBackgroundDrawable == null) {
                 this.previewBackgroundDrawable = new ColorDrawable(Integer.MIN_VALUE);
@@ -1017,7 +1018,7 @@ public class ActionBarLayout extends FrameLayout {
             float nextTranslation = -dy;
             if (nextTranslation > 0.0f) {
                 nextTranslation = 0.0f;
-            } else if (nextTranslation < ((float) (-AndroidUtilities.m10dp(60.0f)))) {
+            } else if (nextTranslation < ((float) (-AndroidUtilities.m9dp(60.0f)))) {
                 this.inPreviewMode = false;
                 nextTranslation = 0.0f;
                 BaseFragment prevFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 2);
@@ -1076,12 +1077,6 @@ public class ActionBarLayout extends FrameLayout {
                 View fragmentView = previousFragment.fragmentView;
                 if (fragmentView == null) {
                     fragmentView = previousFragment.createView(this.parentActivity);
-                } else {
-                    parent = (ViewGroup) fragmentView.getParent();
-                    if (parent != null) {
-                        previousFragment.onRemoveFromParent();
-                        parent.removeView(fragmentView);
-                    }
                 }
                 if (previousFragment.actionBar != null && previousFragment.actionBar.getAddToContainer()) {
                     if (this.removeActionBarExtraHeight) {
@@ -1092,7 +1087,12 @@ public class ActionBarLayout extends FrameLayout {
                         parent.removeView(previousFragment.actionBar);
                     }
                     this.containerView.addView(previousFragment.actionBar);
-                    previousFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
+                    previousFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
+                }
+                parent = (ViewGroup) fragmentView.getParent();
+                if (parent != null) {
+                    previousFragment.onRemoveFromParent();
+                    parent.removeView(fragmentView);
                 }
                 this.containerView.addView(fragmentView);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) fragmentView.getLayoutParams();
@@ -1234,7 +1234,7 @@ public class ActionBarLayout extends FrameLayout {
                     parent.removeView(previousFragment.actionBar);
                 }
                 this.containerView.addView(previousFragment.actionBar);
-                previousFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
+                previousFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
             }
             this.containerView.addView(fragmentView, LayoutHelper.createLinear(-1, -1));
             previousFragment.onResume();
@@ -1488,14 +1488,14 @@ public class ActionBarLayout extends FrameLayout {
         this.removeActionBarExtraHeight = value;
     }
 
-    public void setTitleOverlayText(String title, String subtitle, Runnable action) {
+    public void setTitleOverlayText(String title, int titleId, Runnable action) {
         this.titleOverlayText = title;
-        this.subtitleOverlayText = subtitle;
+        this.titleOverlayTextId = titleId;
         this.overlayAction = action;
         for (int a = 0; a < this.fragmentsStack.size(); a++) {
             BaseFragment fragment = (BaseFragment) this.fragmentsStack.get(a);
             if (fragment.actionBar != null) {
-                fragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, action);
+                fragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, action);
             }
         }
     }

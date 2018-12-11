@@ -19,7 +19,7 @@ public class GraySectionCell extends FrameLayout {
         int i2 = 5;
         super(context);
         setBackgroundColor(Theme.getColor(Theme.key_graySection));
-        this.textView.setTextSize(1, 13.0f);
+        this.textView.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor(Theme.key_graySectionText));
         TextView textView = this.textView;
@@ -37,7 +37,7 @@ public class GraySectionCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(32.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(32.0f), NUM));
     }
 
     public void setText(String text) {

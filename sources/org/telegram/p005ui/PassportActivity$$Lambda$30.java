@@ -12,6 +12,6 @@ final /* synthetic */ class PassportActivity$$Lambda$30 implements OnClickListen
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$createIdentityInterface$44$PassportActivity(view);
+        this.arg$1.lambda$createIdentityInterface$43$PassportActivity(view);
     }
 }

@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.Peer;
@@ -55,21 +54,6 @@ public class DownloadController implements NotificationCenterDelegate {
     public int[] wifiMaxFileSize = new int[7];
 
     /* renamed from: org.telegram.messenger.DownloadController$1 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.FileDidFailedLoad);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.FileDidLoaded);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.FileLoadProgressChanged);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.FileUploadProgressChanged);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.httpFileDidLoaded);
-            NotificationCenter.getInstance(DownloadController.this.currentAccount).addObserver(DownloadController.this, NotificationCenter.httpFileDidFailedLoad);
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.DownloadController$2 */
     class CLASSNAME extends BroadcastReceiver {
         CLASSNAME() {
         }
@@ -82,7 +66,7 @@ public class DownloadController implements NotificationCenterDelegate {
     public interface FileDownloadProgressListener {
         int getObserverTag();
 
-        void onFailedDownload(String str);
+        void onFailedDownload(String str, boolean z);
 
         void onProgressDownload(String str, float f);
 
@@ -158,11 +142,20 @@ public class DownloadController implements NotificationCenterDelegate {
             this.roamingMaxFileSize[a] = preferences.getInt("roamingMaxDownloadSize" + a, sdefault);
         }
         this.globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
-        AndroidUtilities.runOnUIThread(new CLASSNAME());
+        AndroidUtilities.runOnUIThread(new DownloadController$$Lambda$0(this));
         ApplicationLoader.applicationContext.registerReceiver(new CLASSNAME(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             checkAutodownloadSettings();
         }
+    }
+
+    final /* synthetic */ void lambda$new$0$DownloadController() {
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
     }
 
     public static int maskToIndex(int mask) {
@@ -208,9 +201,9 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         int[] masksArray;
         int result = 0;
-        if (ConnectionsManager.isConnectedToWiFi()) {
+        if (ApplicationLoader.isConnectedToWiFi()) {
             masksArray = this.wifiDownloadMask;
-        } else if (ConnectionsManager.isRoaming()) {
+        } else if (ApplicationLoader.isRoaming()) {
             masksArray = this.roamingDownloadMask;
         } else {
             masksArray = this.mobileDataDownloadMask;
@@ -283,7 +276,12 @@ public class DownloadController implements NotificationCenterDelegate {
             this.lastCheckMask = currentMask;
             if ((currentMask & 1) == 0) {
                 for (a = 0; a < this.photoDownloadQueue.size(); a++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((PhotoSize) ((DownloadObject) this.photoDownloadQueue.get(a)).object);
+                    DownloadObject downloadObject = (DownloadObject) this.photoDownloadQueue.get(a);
+                    if (downloadObject.object instanceof PhotoSize) {
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((PhotoSize) downloadObject.object);
+                    } else if (downloadObject.object instanceof Document) {
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) downloadObject.object);
+                    }
                 }
                 this.photoDownloadQueue.clear();
             } else if (this.photoDownloadQueue.isEmpty()) {
@@ -376,7 +374,7 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         int type;
         int index;
-        if (MessageObject.isPhoto(message)) {
+        if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
             type = 1;
         } else if (MessageObject.isVoiceMessage(message)) {
             type = 2;
@@ -409,10 +407,10 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         int mask;
         int maxSize;
-        if (ConnectionsManager.isConnectedToWiFi()) {
+        if (ApplicationLoader.isConnectedToWiFi()) {
             mask = this.wifiDownloadMask[index];
             maxSize = this.wifiMaxFileSize[maskToIndex(type)];
-        } else if (ConnectionsManager.isRoaming()) {
+        } else if (ApplicationLoader.isRoaming()) {
             mask = this.roamingDownloadMask[index];
             maxSize = this.roamingMaxFileSize[maskToIndex(type)];
         } else {
@@ -431,13 +429,13 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         int mask;
         int a;
-        if (ConnectionsManager.isConnectedToWiFi()) {
+        if (ApplicationLoader.isConnectedToWiFi()) {
             mask = 0;
             for (a = 0; a < 4; a++) {
                 mask |= this.wifiDownloadMask[a];
             }
             return mask;
-        } else if (ConnectionsManager.isRoaming()) {
+        } else if (ApplicationLoader.isRoaming()) {
             mask = 0;
             for (a = 0; a < 4; a++) {
                 mask |= this.roamingDownloadMask[a];
@@ -483,7 +481,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     if (downloadObject.object instanceof PhotoSize) {
                         FileLoader.getInstance(this.currentAccount).loadFile((PhotoSize) downloadObject.object, null, downloadObject.secret ? 2 : 0);
                     } else if (downloadObject.object instanceof Document) {
-                        FileLoader.getInstance(this.currentAccount).loadFile((Document) downloadObject.object, false, downloadObject.secret ? 2 : 0);
+                        FileLoader.getInstance(this.currentAccount).loadFile((Document) downloadObject.object, downloadObject.parent, 0, downloadObject.secret ? 2 : 0);
                     } else {
                         added = false;
                     }
@@ -645,25 +643,30 @@ public class DownloadController implements NotificationCenterDelegate {
         int a;
         WeakReference<FileDownloadProgressListener> reference;
         Float progress;
-        if (id == NotificationCenter.FileDidFailedLoad || id == NotificationCenter.httpFileDidFailedLoad) {
-            this.listenerInProgress = true;
+        if (id == NotificationCenter.fileDidFailedLoad || id == NotificationCenter.httpFileDidFailedLoad) {
             fileName = args[0];
+            Integer canceled = args[1];
+            this.listenerInProgress = true;
             arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
             if (arrayList != null) {
                 size = arrayList.size();
                 for (a = 0; a < size; a++) {
                     reference = (WeakReference) arrayList.get(a);
                     if (reference.get() != null) {
-                        ((FileDownloadProgressListener) reference.get()).onFailedDownload(fileName);
-                        this.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
+                        ((FileDownloadProgressListener) reference.get()).onFailedDownload(fileName, canceled.intValue() == 1);
+                        if (canceled.intValue() != 1) {
+                            this.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
+                        }
                     }
                 }
-                this.loadingFileObservers.remove(fileName);
+                if (canceled.intValue() != 1) {
+                    this.loadingFileObservers.remove(fileName);
+                }
             }
             this.listenerInProgress = false;
             processLaterArrays();
-            checkDownloadFinished(fileName, ((Integer) args[1]).intValue());
-        } else if (id == NotificationCenter.FileDidLoaded || id == NotificationCenter.httpFileDidLoaded) {
+            checkDownloadFinished(fileName, canceled.intValue());
+        } else if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
             this.listenerInProgress = true;
             fileName = (String) args[0];
             ArrayList<MessageObject> messageObjects = (ArrayList) this.loadingFileMessagesObservers.get(fileName);
@@ -763,7 +766,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }

@@ -78,9 +78,9 @@ public class RoundVideoPlayingDrawable extends Drawable {
         int x = getBounds().left;
         int y = getBounds().top;
         for (int a = 0; a < 3; a++) {
-            canvas.drawRect((float) (AndroidUtilities.m10dp(2.0f) + x), (float) (AndroidUtilities.m10dp((this.progress1 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.m10dp(4.0f) + x), (float) (AndroidUtilities.m10dp(10.0f) + y), this.paint);
-            canvas.drawRect((float) (AndroidUtilities.m10dp(5.0f) + x), (float) (AndroidUtilities.m10dp((this.progress2 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.m10dp(7.0f) + x), (float) (AndroidUtilities.m10dp(10.0f) + y), this.paint);
-            canvas.drawRect((float) (AndroidUtilities.m10dp(8.0f) + x), (float) (AndroidUtilities.m10dp((this.progress3 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.m10dp(10.0f) + x), (float) (AndroidUtilities.m10dp(10.0f) + y), this.paint);
+            canvas.drawRect((float) (AndroidUtilities.m9dp(2.0f) + x), (float) (AndroidUtilities.m9dp((this.progress1 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.m9dp(4.0f) + x), (float) (AndroidUtilities.m9dp(10.0f) + y), this.paint);
+            canvas.drawRect((float) (AndroidUtilities.m9dp(5.0f) + x), (float) (AndroidUtilities.m9dp((this.progress2 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.m9dp(7.0f) + x), (float) (AndroidUtilities.m9dp(10.0f) + y), this.paint);
+            canvas.drawRect((float) (AndroidUtilities.m9dp(8.0f) + x), (float) (AndroidUtilities.m9dp((this.progress3 * 7.0f) + 2.0f) + y), (float) (AndroidUtilities.m9dp(10.0f) + x), (float) (AndroidUtilities.m9dp(10.0f) + y), this.paint);
         }
         if (this.started) {
             update();
@@ -98,10 +98,10 @@ public class RoundVideoPlayingDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.m10dp(12.0f);
+        return AndroidUtilities.m9dp(12.0f);
     }
 
     public int getIntrinsicHeight() {
-        return AndroidUtilities.m10dp(12.0f);
+        return AndroidUtilities.m9dp(12.0f);
     }
 }

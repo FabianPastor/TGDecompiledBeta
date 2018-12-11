@@ -1,18 +1,14 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.PassportActivity.PhoneConfirmationView;
-
 /* renamed from: org.telegram.ui.PassportActivity$PhoneConfirmationView$$Lambda$8 */
-final /* synthetic */ class PassportActivity$PhoneConfirmationView$$Lambda$8 implements OnClickListener {
-    private final PhoneConfirmationView arg$1;
+final /* synthetic */ class PassportActivity$PhoneConfirmationView$$Lambda$8 implements Runnable {
+    private final PassportActivity arg$1;
 
-    PassportActivity$PhoneConfirmationView$$Lambda$8(PhoneConfirmationView phoneConfirmationView) {
-        this.arg$1 = phoneConfirmationView;
+    PassportActivity$PhoneConfirmationView$$Lambda$8(PassportActivity passportActivity) {
+        this.arg$1 = passportActivity;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$2$PassportActivity$PhoneConfirmationView(dialogInterface, i);
+    public void run() {
+        this.arg$1.lambda$checkDiscard$70$PassportActivity();
     }
 }

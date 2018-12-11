@@ -12,6 +12,6 @@ final /* synthetic */ class SettingsActivity$$Lambda$1 implements OnClickListene
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$createView$3$SettingsActivity(view);
+        this.arg$1.lambda$createView$4$SettingsActivity(view);
     }
 }

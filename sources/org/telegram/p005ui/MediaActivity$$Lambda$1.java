@@ -15,6 +15,6 @@ final /* synthetic */ class MediaActivity$$Lambda$1 implements OnItemClickListen
     }
 
     public void onItemClick(View view, int i) {
-        this.arg$1.lambda$createView$1$MediaActivity(this.arg$2, view, i);
+        this.arg$1.lambda$createView$2$MediaActivity(this.arg$2, view, i);
     }
 }

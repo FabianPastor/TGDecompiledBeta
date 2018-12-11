@@ -100,7 +100,7 @@ public class BaseFragment {
                     onRemoveFromParent();
                     parent.removeView(this.fragmentView);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
             this.fragmentView = null;
@@ -111,7 +111,7 @@ public class BaseFragment {
                 try {
                     parent.removeView(this.actionBar);
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
             }
             this.actionBar = null;
@@ -133,7 +133,7 @@ public class BaseFragment {
                         onRemoveFromParent();
                         parent.removeView(this.fragmentView);
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 }
                 if (!(this.parentLayout == null || this.parentLayout.getContext() == this.fragmentView.getContext())) {
@@ -148,7 +148,7 @@ public class BaseFragment {
                         try {
                             parent.removeView(this.actionBar);
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                         }
                     }
                 }
@@ -234,7 +234,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -299,7 +299,7 @@ public class BaseFragment {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -315,7 +315,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (this.actionBar != null) {
             this.actionBar.onPause();
@@ -329,6 +329,9 @@ public class BaseFragment {
     }
 
     protected void onBecomeFullyVisible() {
+    }
+
+    protected void onBecomeFullyHidden() {
     }
 
     protected AnimatorSet onCustomTransitionAnimation(boolean isOpen, Runnable callback) {
@@ -360,7 +363,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         try {
             this.visibleDialog = dialog;
@@ -369,7 +372,7 @@ public class BaseFragment {
             this.visibleDialog.show();
             return this.visibleDialog;
         } catch (Throwable e2) {
-            FileLog.m14e(e2);
+            FileLog.m13e(e2);
             return dialog2;
         }
     }

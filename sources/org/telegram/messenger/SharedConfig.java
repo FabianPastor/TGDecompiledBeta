@@ -27,7 +27,7 @@ public class SharedConfig {
     public static ProxyInfo currentProxy;
     public static boolean customTabs = true;
     public static boolean directShare = true;
-    public static int fontSize = AndroidUtilities.m10dp(16.0f);
+    public static int fontSize = AndroidUtilities.m9dp(16.0f);
     public static boolean groupPhotosEnabled = true;
     public static boolean hasCameraCache;
     public static boolean inappCamera = true;
@@ -128,7 +128,7 @@ public class SharedConfig {
                 editor.putInt("passportConfigHash", passportConfigHash);
                 editor.commit();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -254,7 +254,7 @@ public class SharedConfig {
                     passportConfigMap.put(key.toUpperCase(), object.getString(key).toUpperCase());
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
         return passportConfigMap;
@@ -281,7 +281,7 @@ public class SharedConfig {
                 saveConfig();
                 return result;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 return result;
             }
         }
@@ -293,7 +293,7 @@ public class SharedConfig {
             System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
             return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
         } catch (Throwable e2) {
-            FileLog.m14e(e2);
+            FileLog.m13e(e2);
             return result;
         }
     }
@@ -559,7 +559,7 @@ public class SharedConfig {
                 new File(videoPath, ".nomedia").createNewFile();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 }

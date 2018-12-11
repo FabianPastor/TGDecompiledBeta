@@ -1,6 +1,7 @@
 package org.telegram.messenger.voip;
 
 import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.NoiseSuppressor;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
 import java.io.File;
@@ -72,6 +73,8 @@ public class VoIPController {
         }
     }
 
+    public static native int getConnectionMaxLayer();
+
     private native void nativeConnect(long j);
 
     private native void nativeDebugCtl(long j, int i, int i2);
@@ -92,6 +95,8 @@ public class VoIPController {
 
     private native long nativeInit();
 
+    private static native boolean nativeNeedRate(long j);
+
     private native void nativeRelease(long j);
 
     private native void nativeRequestCallUpgrade(long j);
@@ -100,7 +105,7 @@ public class VoIPController {
 
     private native void nativeSetAudioOutputGainControlEnabled(long j, boolean z);
 
-    private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str, String str2);
+    private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str, String str2, boolean z4);
 
     private native void nativeSetEchoCancellationStrength(long j, int i);
 
@@ -239,7 +244,7 @@ public class VoIPController {
         if (VERSION.SDK_INT >= 16) {
             try {
                 sysAecAvailable = AcousticEchoCanceler.isAvailable();
-                sysNsAvailable = AcousticEchoCanceler.isAvailable();
+                sysNsAvailable = NoiseSuppressor.isAvailable();
             } catch (Throwable th) {
             }
         }
@@ -247,7 +252,7 @@ public class VoIPController {
         long j = this.nativeInst;
         boolean z = (sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
         boolean z2 = (sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
-        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, getLogFilePath(callID), null);
+        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, getLogFilePath(callID), null, false);
     }
 
     public void debugCtl(int request, int param) {
@@ -344,5 +349,10 @@ public class VoIPController {
     public void setEchoCancellationStrength(int strength) {
         ensureNativeInstance();
         nativeSetEchoCancellationStrength(this.nativeInst, strength);
+    }
+
+    public boolean needRate() {
+        ensureNativeInstance();
+        return nativeNeedRate(this.nativeInst);
     }
 }

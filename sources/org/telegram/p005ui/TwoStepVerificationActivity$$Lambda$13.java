@@ -7,16 +7,12 @@ import org.telegram.tgnet.TLRPC.TL_error;
 /* renamed from: org.telegram.ui.TwoStepVerificationActivity$$Lambda$13 */
 final /* synthetic */ class TwoStepVerificationActivity$$Lambda$13 implements RequestDelegate {
     private final TwoStepVerificationActivity arg$1;
-    private final byte[] arg$2;
-    private final byte[] arg$3;
 
-    TwoStepVerificationActivity$$Lambda$13(TwoStepVerificationActivity twoStepVerificationActivity, byte[] bArr, byte[] bArr2) {
+    TwoStepVerificationActivity$$Lambda$13(TwoStepVerificationActivity twoStepVerificationActivity) {
         this.arg$1 = twoStepVerificationActivity;
-        this.arg$2 = bArr;
-        this.arg$3 = bArr2;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$null$27$TwoStepVerificationActivity(this.arg$2, this.arg$3, tLObject, tL_error);
+        this.arg$1.lambda$processDone$36$TwoStepVerificationActivity(tLObject, tL_error);
     }
 }

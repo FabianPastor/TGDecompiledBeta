@@ -51,7 +51,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         addView(this.checkFrame, LayoutHelper.createFrame(42, 42, 53));
         this.videoInfoContainer = new FrameLayout(context);
         this.videoInfoContainer.setBackgroundResource(CLASSNAMER.drawable.phototime);
-        this.videoInfoContainer.setPadding(AndroidUtilities.m10dp(3.0f), 0, AndroidUtilities.m10dp(3.0f), 0);
+        this.videoInfoContainer.setPadding(AndroidUtilities.m9dp(3.0f), 0, AndroidUtilities.m9dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
         ImageView imageView1 = new ImageView(context);
         imageView1.setImageResource(CLASSNAMER.drawable.ic_video);
@@ -62,7 +62,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
         this.checkBox = new CheckBox(context, CLASSNAMER.drawable.checkbig);
         this.checkBox.setSize(zoom ? 30 : 26);
-        this.checkBox.setCheckOffset(AndroidUtilities.m10dp(1.0f));
+        this.checkBox.setCheckOffset(AndroidUtilities.m9dp(1.0f));
         this.checkBox.setDrawBackground(true);
         this.checkBox.setColor(-10043398, -1);
         addView(this.checkBox, LayoutHelper.createFrame(zoom ? 30 : 26, zoom ? 30.0f : 26.0f, 53, 0.0f, 4.0f, 4.0f, 0.0f));
@@ -108,9 +108,9 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     public void setImage(SearchImage searchImage) {
         Drawable thumb = getResources().getDrawable(CLASSNAMER.drawable.nophotos);
         if (searchImage.thumbPhotoSize != null) {
-            this.photoImage.setImage(searchImage.thumbPhotoSize.location, null, thumb);
+            this.photoImage.setImage(searchImage.thumbPhotoSize.location, null, thumb, (Object) searchImage);
         } else if (searchImage.photoSize != null) {
-            this.photoImage.setImage(searchImage.photoSize.location, "80_80", thumb);
+            this.photoImage.setImage(searchImage.photoSize.location, "80_80", thumb, (Object) searchImage);
         } else if (searchImage.thumbPath != null) {
             this.photoImage.setImage(searchImage.thumbPath, null, thumb);
         } else if (searchImage.thumbUrl != null && searchImage.thumbUrl.length() > 0) {
@@ -118,7 +118,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         } else if (searchImage.document == null || searchImage.document.thumb == null) {
             this.photoImage.setImageDrawable(thumb);
         } else {
-            this.photoImage.setImage(searchImage.document.thumb.location, null, thumb);
+            this.photoImage.setImage(searchImage.document.thumb.location, null, thumb, (Object) searchImage);
         }
     }
 

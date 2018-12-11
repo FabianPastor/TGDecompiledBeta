@@ -162,6 +162,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     String ext = FileLoader.getFileExtension(file);
                     message.media.document.var_id = 0;
                     message.media.document.access_hash = 0;
+                    message.media.document.file_reference = new byte[0];
                     message.media.document.date = message.date;
                     Document document = message.media.document;
                     StringBuilder append = new StringBuilder().append("audio/");
@@ -190,7 +191,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     cursor.close();
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 if (cursor != null) {
                     cursor.close();
                 }

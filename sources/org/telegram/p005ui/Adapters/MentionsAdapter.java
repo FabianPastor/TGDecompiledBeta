@@ -136,6 +136,10 @@ public class MentionsAdapter extends SelectionAdapter {
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
     class CLASSNAME implements SearchAdapterHelperDelegate {
+        public SparseArray getExcludeUsers() {
+            return SearchAdapterHelper$SearchAdapterHelperDelegate$$CC.getExcludeUsers(this);
+        }
+
         CLASSNAME() {
         }
 
@@ -1077,7 +1081,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 break;
             default:
                 View textView = new TextView(this.mContext);
-                textView.setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f));
+                textView.setPadding(AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f));
                 textView.setTextSize(1, 14.0f);
                 textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
                 view = textView;

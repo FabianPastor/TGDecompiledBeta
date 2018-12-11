@@ -1,17 +1,18 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.KeyEvent;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$36 */
-final /* synthetic */ class PassportActivity$$Lambda$36 implements OnClickListener {
+final /* synthetic */ class PassportActivity$$Lambda$36 implements OnEditorActionListener {
     private final PassportActivity arg$1;
 
     PassportActivity$$Lambda$36(PassportActivity passportActivity) {
         this.arg$1 = passportActivity;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$createIdentityInterface$54$PassportActivity(view);
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.arg$1.lambda$createIdentityInterface$54$PassportActivity(textView, i, keyEvent);
     }
 }

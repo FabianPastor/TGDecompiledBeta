@@ -69,12 +69,12 @@ public class SnowflakesEffect {
     }
 
     public SnowflakesEffect() {
-        this.particlePaint.setStrokeWidth((float) AndroidUtilities.m10dp(1.5f));
+        this.particlePaint.setStrokeWidth((float) AndroidUtilities.m9dp(1.5f));
         this.particlePaint.setColor(Theme.getColor(Theme.key_actionBarDefaultTitle) & -1644826);
         this.particlePaint.setStrokeCap(Cap.ROUND);
         this.particlePaint.setStyle(Style.STROKE);
         this.particleThinPaint = new Paint(1);
-        this.particleThinPaint.setStrokeWidth((float) AndroidUtilities.m10dp(0.5f));
+        this.particleThinPaint.setStrokeWidth((float) AndroidUtilities.m9dp(0.5f));
         this.particleThinPaint.setColor(Theme.getColor(Theme.key_actionBarDefaultTitle) & -1644826);
         this.particleThinPaint.setStrokeCap(Cap.ROUND);
         this.particleThinPaint.setStyle(Style.STROKE);
@@ -119,7 +119,7 @@ public class SnowflakesEffect {
                 Particle newParticle;
                 int statusBarHeight = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
                 float cx = Utilities.random.nextFloat() * ((float) parent.getMeasuredWidth());
-                float cy = ((float) statusBarHeight) + (Utilities.random.nextFloat() * ((float) ((parent.getMeasuredHeight() - AndroidUtilities.m10dp(20.0f)) - statusBarHeight)));
+                float cy = ((float) statusBarHeight) + (Utilities.random.nextFloat() * ((float) ((parent.getMeasuredHeight() - AndroidUtilities.m9dp(20.0f)) - statusBarHeight)));
                 int angle = (Utilities.random.nextInt(40) - 20) + 90;
                 float vx = (float) Math.cos(0.017453292519943295d * ((double) angle));
                 float vy = (float) Math.sin(0.017453292519943295d * ((double) angle));

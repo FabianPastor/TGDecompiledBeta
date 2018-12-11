@@ -12,11 +12,11 @@ import org.telegram.messenger.AndroidUtilities;
 
 /* renamed from: org.telegram.ui.Components.PhotoFilterBlurControl */
 public class PhotoFilterBlurControl extends FrameLayout {
-    private static final float BlurInsetProximity = ((float) AndroidUtilities.m10dp(20.0f));
+    private static final float BlurInsetProximity = ((float) AndroidUtilities.m9dp(20.0f));
     private static final float BlurMinimumDifference = 0.02f;
     private static final float BlurMinimumFalloff = 0.1f;
-    private static final float BlurViewCenterInset = ((float) AndroidUtilities.m10dp(30.0f));
-    private static final float BlurViewRadiusInset = ((float) AndroidUtilities.m10dp(30.0f));
+    private static final float BlurViewCenterInset = ((float) AndroidUtilities.m9dp(30.0f));
+    private static final float BlurViewRadiusInset = ((float) AndroidUtilities.m9dp(30.0f));
     private final int GestureStateBegan = 1;
     private final int GestureStateCancelled = 4;
     private final int GestureStateChanged = 2;
@@ -65,7 +65,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
         setWillNotDraw(false);
         this.paint.setColor(-1);
         this.arcPaint.setColor(-1);
-        this.arcPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.arcPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.arcPaint.setStyle(Style.STROKE);
     }
 
@@ -375,9 +375,9 @@ public class PhotoFilterBlurControl extends FrameLayout {
         if (this.type == 0) {
             float f;
             canvas.rotate(this.angle);
-            float space = (float) AndroidUtilities.m10dp(6.0f);
-            float length = (float) AndroidUtilities.m10dp(12.0f);
-            float thickness = (float) AndroidUtilities.m10dp(1.5f);
+            float space = (float) AndroidUtilities.m9dp(6.0f);
+            float length = (float) AndroidUtilities.m9dp(12.0f);
+            float thickness = (float) AndroidUtilities.m9dp(1.5f);
             for (i = 0; i < 30; i++) {
                 canvas2 = canvas;
                 canvas2.drawRect((length + space) * ((float) i), -innerRadius, (((float) i) * (length + space)) + length, thickness - innerRadius, this.paint);
@@ -387,7 +387,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
                 canvas2.drawRect((length + space) * ((float) i), f, length + (((float) i) * (length + space)), thickness + innerRadius, this.paint);
                 canvas.drawRect(((((float) (-i)) * (length + space)) - space) - length, innerRadius, (((float) (-i)) * (length + space)) - space, thickness + innerRadius, this.paint);
             }
-            length = (float) AndroidUtilities.m10dp(6.0f);
+            length = (float) AndroidUtilities.m9dp(6.0f);
             for (i = 0; i < 64; i++) {
                 canvas2 = canvas;
                 canvas2.drawRect((length + space) * ((float) i), -outerRadius, length + (((float) i) * (length + space)), thickness - outerRadius, this.paint);
@@ -409,7 +409,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
                 canvas2.drawArc(this.arcRect, (2.02f + 3.6f) * ((float) i), 3.6f, false, this.arcPaint);
             }
         }
-        canvas.drawCircle(BlurInsetProximity, BlurInsetProximity, (float) AndroidUtilities.m10dp(8.0f), this.paint);
+        canvas.drawCircle(BlurInsetProximity, BlurInsetProximity, (float) AndroidUtilities.m9dp(8.0f), this.paint);
     }
 
     private Point getActualCenterPoint() {

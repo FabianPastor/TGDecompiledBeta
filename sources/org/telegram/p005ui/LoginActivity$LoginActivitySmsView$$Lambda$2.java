@@ -1,18 +1,21 @@
 package org.telegram.p005ui;
 
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import org.telegram.p005ui.LoginActivity.LoginActivitySmsView;
 
 /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$$Lambda$2 */
-final /* synthetic */ class LoginActivity$LoginActivitySmsView$$Lambda$2 implements OnClickListener {
+final /* synthetic */ class LoginActivity$LoginActivitySmsView$$Lambda$2 implements OnKeyListener {
     private final LoginActivitySmsView arg$1;
+    private final int arg$2;
 
-    LoginActivity$LoginActivitySmsView$$Lambda$2(LoginActivitySmsView loginActivitySmsView) {
+    LoginActivity$LoginActivitySmsView$$Lambda$2(LoginActivitySmsView loginActivitySmsView, int i) {
         this.arg$1 = loginActivitySmsView;
+        this.arg$2 = i;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$new$3$LoginActivity$LoginActivitySmsView(view);
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        return this.arg$1.lambda$setParams$3$LoginActivity$LoginActivitySmsView(this.arg$2, view, i, keyEvent);
     }
 }

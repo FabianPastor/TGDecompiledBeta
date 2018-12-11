@@ -16,6 +16,8 @@ import org.telegram.p005ui.ActionBar.Theme;
 
 /* renamed from: org.telegram.ui.Components.RadialProgressView */
 public class RadialProgressView extends View {
+    private static final float risingTime = 500.0f;
+    private static final float rotationTime = 2000.0f;
     private AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     private RectF cicleRect = new RectF();
     private float currentCircleLength;
@@ -26,16 +28,14 @@ public class RadialProgressView extends View {
     private Paint progressPaint = new Paint(1);
     private float radOffset;
     private boolean risingCircleLength;
-    private final float risingTime = 500.0f;
-    private final float rotationTime = 2000.0f;
-    private int size = AndroidUtilities.m10dp(40.0f);
+    private int size = AndroidUtilities.m9dp(40.0f);
     private boolean useSelfAlpha;
 
     public RadialProgressView(Context context) {
         super(context);
         this.progressPaint.setStyle(Style.STROKE);
         this.progressPaint.setStrokeCap(Cap.ROUND);
-        this.progressPaint.setStrokeWidth((float) AndroidUtilities.m10dp(3.0f));
+        this.progressPaint.setStrokeWidth((float) AndroidUtilities.m9dp(3.0f));
         this.progressPaint.setColor(this.progressColor);
     }
 
@@ -63,18 +63,18 @@ public class RadialProgressView extends View {
             dt = 17;
         }
         this.lastUpdateTime = newTime;
-        this.radOffset += ((float) (360 * dt)) / 2000.0f;
+        this.radOffset += ((float) (360 * dt)) / rotationTime;
         this.radOffset -= (float) (((int) (this.radOffset / 360.0f)) * 360);
         this.currentProgressTime += (float) dt;
-        if (this.currentProgressTime >= 500.0f) {
-            this.currentProgressTime = 500.0f;
+        if (this.currentProgressTime >= risingTime) {
+            this.currentProgressTime = risingTime;
         }
         if (this.risingCircleLength) {
-            this.currentCircleLength = (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) + 4.0f;
+            this.currentCircleLength = (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / risingTime)) + 4.0f;
         } else {
-            this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) * 270.0f);
+            this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / risingTime)) * 270.0f);
         }
-        if (this.currentProgressTime == 500.0f) {
+        if (this.currentProgressTime == risingTime) {
             if (this.risingCircleLength) {
                 this.radOffset += 270.0f;
                 this.currentCircleLength = -266.0f;
@@ -88,6 +88,10 @@ public class RadialProgressView extends View {
     public void setSize(int value) {
         this.size = value;
         invalidate();
+    }
+
+    public void setStrokeWidth(float value) {
+        this.progressPaint.setStrokeWidth((float) AndroidUtilities.m9dp(value));
     }
 
     public void setProgressColor(int color) {

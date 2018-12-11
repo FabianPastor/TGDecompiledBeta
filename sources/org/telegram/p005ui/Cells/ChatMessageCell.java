@@ -107,16 +107,13 @@ import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonSwitchInline;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonUrl;
 import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
-import org.telegram.tgnet.TLRPC.TL_messageMediaContact;
-import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
-import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
+import org.telegram.tgnet.TLRPC.TL_page;
 import org.telegram.tgnet.TLRPC.TL_pageBlockCollage;
 import org.telegram.tgnet.TLRPC.TL_pageBlockSlideshow;
-import org.telegram.tgnet.TLRPC.TL_pageFull;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photo;
@@ -440,11 +437,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     public ChatMessageCell(Context context) {
         super(context);
-        this.avatarImage.setRoundRadius(AndroidUtilities.m10dp(21.0f));
+        this.avatarImage.setRoundRadius(AndroidUtilities.m9dp(21.0f));
         this.avatarDrawable = new AvatarDrawable();
         this.replyImageReceiver = new ImageReceiver(this);
         this.locationImageReceiver = new ImageReceiver(this);
-        this.locationImageReceiver.setRoundRadius(AndroidUtilities.m10dp(26.1f));
+        this.locationImageReceiver.setRoundRadius(AndroidUtilities.m9dp(26.1f));
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         this.contactAvatarDrawable = new AvatarDrawable();
         this.photoImage = new ImageReceiver(this);
@@ -490,6 +487,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             linkPath = (LinkPath) this.urlPathCache.get(0);
             this.urlPathCache.remove(0);
         }
+        linkPath.reset();
         if (text) {
             this.urlPathSelection.add(linkPath);
         } else {
@@ -594,7 +592,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         }
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.m14e(e);
+                                    FileLog.m13e(e);
                                 }
                                 invalidate();
                                 return true;
@@ -607,7 +605,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
             }
         }
@@ -649,7 +647,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 path.setCurrentLayout(this.captionLayout, start, 0.0f);
                                 this.captionLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), path);
                             } catch (Throwable e) {
-                                FileLog.m14e(e);
+                                FileLog.m13e(e);
                             }
                             if (!(this.currentMessagesGroup == null || getParent() == null)) {
                                 ((ViewGroup) getParent()).invalidate();
@@ -659,7 +657,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
             } else if (this.pressedLinkType == 3) {
                 this.delegate.didPressedUrl(this.currentMessageObject, this.pressedLink, false);
@@ -682,7 +680,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 return true;
             } else if (this.descriptionLayout != null && y >= this.descriptionY) {
                 try {
-                    x -= (this.unmovedTextX + AndroidUtilities.m10dp(10.0f)) + this.descriptionX;
+                    x -= (this.unmovedTextX + AndroidUtilities.m9dp(10.0f)) + this.descriptionX;
                     int line = this.descriptionLayout.getLineForVertical(y - this.descriptionY);
                     int off = this.descriptionLayout.getOffsetForHorizontal(line, (float) x);
                     float left = this.descriptionLayout.getLineLeft(line);
@@ -704,14 +702,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 path.setCurrentLayout(this.descriptionLayout, start, 0.0f);
                                 this.descriptionLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), path);
                             } catch (Throwable e) {
-                                FileLog.m14e(e);
+                                FileLog.m13e(e);
                             }
                             invalidate();
                             return true;
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.m14e(e2);
+                    FileLog.m13e(e2);
                 }
             }
         } else if (event.getAction() == 1) {
@@ -749,12 +747,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int x = (int) event.getX();
         int y = (int) event.getY();
         if (x >= this.unmovedTextX && x <= this.unmovedTextX + this.backgroundWidth && y >= this.textY + this.currentMessageObject.textHeight) {
-            if (y <= AndroidUtilities.m10dp((float) ((this.drawInstantView ? 46 : 0) + 8)) + (this.linkPreviewHeight + (this.textY + this.currentMessageObject.textHeight))) {
+            if (y <= AndroidUtilities.m9dp((float) ((this.drawInstantView ? 46 : 0) + 8)) + (this.linkPreviewHeight + (this.textY + this.currentMessageObject.textHeight))) {
                 WebPage webPage;
                 if (event.getAction() == 0) {
                     if (this.descriptionLayout != null && y >= this.descriptionY) {
                         try {
-                            int checkX = x - ((this.unmovedTextX + AndroidUtilities.m10dp(10.0f)) + this.descriptionX);
+                            int checkX = x - ((this.unmovedTextX + AndroidUtilities.m9dp(10.0f)) + this.descriptionX);
                             int checkY = y - this.descriptionY;
                             if (checkY <= this.descriptionLayout.getHeight()) {
                                 int line = this.descriptionLayout.getLineForVertical(checkY);
@@ -778,7 +776,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                             path.setCurrentLayout(this.descriptionLayout, start, 0.0f);
                                             this.descriptionLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), path);
                                         } catch (Throwable e) {
-                                            FileLog.m14e(e);
+                                            FileLog.m13e(e);
                                         }
                                         invalidate();
                                         return true;
@@ -786,21 +784,21 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                             }
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                         }
                     }
                     if (this.pressedLink == null) {
-                        int side = AndroidUtilities.m10dp(48.0f);
+                        int side = AndroidUtilities.m9dp(48.0f);
                         boolean area2 = false;
                         if (this.miniButtonState >= 0) {
-                            int offset = AndroidUtilities.m10dp(27.0f);
+                            int offset = AndroidUtilities.m9dp(27.0f);
                             area2 = x >= this.buttonX + offset && x <= (this.buttonX + offset) + side && y >= this.buttonY + offset && y <= (this.buttonY + offset) + side;
                         }
                         if (area2) {
                             this.miniButtonPressed = 1;
                             invalidate();
                             return true;
-                        } else if (this.drawPhotoImage && this.drawImageButton && this.buttonState != -1 && (this.photoImage.isInsideImage((float) x, (float) y) || (x >= this.buttonX && x <= this.buttonX + AndroidUtilities.m10dp(48.0f) && y >= this.buttonY && y <= this.buttonY + AndroidUtilities.m10dp(48.0f)))) {
+                        } else if (this.drawPhotoImage && this.drawImageButton && this.buttonState != -1 && (this.photoImage.isInsideImage((float) x, (float) y) || (x >= this.buttonX && x <= this.buttonX + AndroidUtilities.m9dp(48.0f) && y >= this.buttonY && y <= this.buttonY + AndroidUtilities.m9dp(48.0f)))) {
                             this.buttonPressed = 1;
                             return true;
                         } else if (this.drawInstantView) {
@@ -858,7 +856,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             if (!MediaController.getInstance().isPlayingMessage(this.currentMessageObject) || MediaController.getInstance().isMessagePaused()) {
                                 this.delegate.needPlayMessage(this.currentMessageObject);
                             } else {
-                                MediaController.getInstance().pauseMessage(this.currentMessageObject);
+                                MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject);
                             }
                         } else if (this.documentAttachType != 2 || !this.drawImageButton) {
                             webPage = this.currentMessageObject.messageOwner.media.webpage;
@@ -955,12 +953,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         boolean result = false;
         if (event.getAction() == 0) {
             if (this.currentMessageObject.type == 16) {
-                if (x >= this.otherX && x <= this.otherX + AndroidUtilities.m10dp(235.0f) && y >= this.otherY - AndroidUtilities.m10dp(14.0f) && y <= this.otherY + AndroidUtilities.m10dp(50.0f)) {
+                if (x >= this.otherX && x <= this.otherX + AndroidUtilities.m9dp(235.0f) && y >= this.otherY - AndroidUtilities.m9dp(14.0f) && y <= this.otherY + AndroidUtilities.m9dp(50.0f)) {
                     this.otherPressed = true;
                     result = true;
                     invalidate();
                 }
-            } else if (x >= this.otherX - AndroidUtilities.m10dp(20.0f) && x <= this.otherX + AndroidUtilities.m10dp(20.0f) && y >= this.otherY - AndroidUtilities.m10dp(4.0f) && y <= this.otherY + AndroidUtilities.m10dp(30.0f)) {
+            } else if (x >= this.otherX - AndroidUtilities.m9dp(20.0f) && x <= this.otherX + AndroidUtilities.m9dp(20.0f) && y >= this.otherY - AndroidUtilities.m9dp(4.0f) && y <= this.otherY + AndroidUtilities.m9dp(30.0f)) {
                 this.otherPressed = true;
                 result = true;
                 invalidate();
@@ -984,9 +982,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         boolean result = false;
         if (event.getAction() == 0) {
             boolean area2 = false;
-            int side = AndroidUtilities.m10dp(48.0f);
+            int side = AndroidUtilities.m9dp(48.0f);
             if (this.miniButtonState >= 0) {
-                int offset = AndroidUtilities.m10dp(27.0f);
+                int offset = AndroidUtilities.m9dp(27.0f);
                 if (x < this.buttonX + offset || x > (this.buttonX + offset) + side || y < this.buttonY + offset || y > (this.buttonY + offset) + side) {
                     area2 = false;
                 } else {
@@ -1002,7 +1000,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 invalidate();
                 result = true;
             } else if (this.documentAttachType == 1) {
-                if (x >= this.photoImage.getImageX() && x <= (this.photoImage.getImageX() + this.backgroundWidth) - AndroidUtilities.m10dp(50.0f) && y >= this.photoImage.getImageY() && y <= this.photoImage.getImageY() + this.photoImage.getImageHeight()) {
+                if (x >= this.photoImage.getImageX() && x <= (this.photoImage.getImageX() + this.backgroundWidth) - AndroidUtilities.m9dp(50.0f) && y >= this.photoImage.getImageY() && y <= this.photoImage.getImageY() + this.photoImage.getImageHeight()) {
                     this.imagePressed = true;
                     result = true;
                 }
@@ -1063,7 +1061,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int x = (int) event.getX();
         int y = (int) event.getY();
         if (this.useSeekBarWaweform) {
-            result = this.seekBarWaveform.onTouch(event.getAction(), (event.getX() - ((float) this.seekBarX)) - ((float) AndroidUtilities.m10dp(13.0f)), event.getY() - ((float) this.seekBarY));
+            result = this.seekBarWaveform.onTouch(event.getAction(), (event.getX() - ((float) this.seekBarX)) - ((float) AndroidUtilities.m9dp(13.0f)), event.getY() - ((float) this.seekBarY));
         } else {
             result = this.seekBar.onTouch(event.getAction(), event.getX() - ((float) this.seekBarX), event.getY() - ((float) this.seekBarY));
         }
@@ -1077,18 +1075,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             invalidate();
             return result;
         }
-        int side = AndroidUtilities.m10dp(36.0f);
+        int side = AndroidUtilities.m9dp(36.0f);
         boolean area = false;
         boolean area2 = false;
         if (this.miniButtonState >= 0) {
-            int offset = AndroidUtilities.m10dp(27.0f);
+            int offset = AndroidUtilities.m9dp(27.0f);
             area2 = x >= this.buttonX + offset && x <= (this.buttonX + offset) + side && y >= this.buttonY + offset && y <= (this.buttonY + offset) + side;
         }
         if (!area2) {
             if (this.buttonState == 0 || this.buttonState == 1 || this.buttonState == 2) {
-                if (x >= this.buttonX - AndroidUtilities.m10dp(12.0f) && x <= (this.buttonX - AndroidUtilities.m10dp(12.0f)) + this.backgroundWidth) {
+                if (x >= this.buttonX - AndroidUtilities.m9dp(12.0f) && x <= (this.buttonX - AndroidUtilities.m9dp(12.0f)) + this.backgroundWidth) {
                     if (y >= (this.drawInstantView ? this.buttonY : this.namesOffset + this.mediaOffsetY)) {
-                        if (y <= (this.drawInstantView ? this.buttonY + side : (this.namesOffset + this.mediaOffsetY) + AndroidUtilities.m10dp(82.0f))) {
+                        if (y <= (this.drawInstantView ? this.buttonY + side : (this.namesOffset + this.mediaOffsetY) + AndroidUtilities.m9dp(82.0f))) {
                             area = true;
                         }
                     }
@@ -1154,14 +1152,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (event.getAction() == 0) {
             int addX;
             if (this.currentMessageObject.isOutOwner()) {
-                addX = (getMeasuredWidth() - this.widthForButtons) - AndroidUtilities.m10dp(10.0f);
+                addX = (getMeasuredWidth() - this.widthForButtons) - AndroidUtilities.m9dp(10.0f);
             } else {
-                addX = this.backgroundDrawableLeft + AndroidUtilities.m10dp(this.mediaBackground ? 1.0f : 7.0f);
+                addX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(this.mediaBackground ? 1.0f : 7.0f);
             }
             int a = 0;
             while (a < this.botButtons.size()) {
                 BotButton button = (BotButton) this.botButtons.get(a);
-                int y2 = (button.var_y + this.layoutHeight) - AndroidUtilities.m10dp(2.0f);
+                int y2 = (button.var_y + this.layoutHeight) - AndroidUtilities.m9dp(2.0f);
                 if (x < button.var_x + addX || x > (button.var_x + addX) + button.width || y < y2 || y > button.height + y2) {
                     a++;
                 } else {
@@ -1291,7 +1289,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 } else if (event.getAction() != 2) {
                     return result;
                 } else {
-                    if (x >= ((float) this.forwardNameX) && x <= ((float) (this.forwardNameX + this.forwardedNameWidth)) && y >= ((float) this.forwardNameY) && y <= ((float) (this.forwardNameY + AndroidUtilities.m10dp(32.0f)))) {
+                    if (x >= ((float) this.forwardNameX) && x <= ((float) (this.forwardNameX + this.forwardedNameWidth)) && y >= ((float) this.forwardNameY) && y <= ((float) (this.forwardNameY + AndroidUtilities.m9dp(32.0f)))) {
                         return result;
                     }
                     this.forwardNamePressed = false;
@@ -1313,12 +1311,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     return result;
                 } else {
                     if (!this.drawForwardedName || this.forwardedNameLayout[0] == null) {
-                        if (x >= this.nameX + ((float) this.viaNameWidth) && x <= (this.nameX + ((float) this.viaNameWidth)) + ((float) this.viaWidth) && y >= this.nameY - ((float) AndroidUtilities.m10dp(4.0f)) && y <= this.nameY + ((float) AndroidUtilities.m10dp(20.0f))) {
+                        if (x >= this.nameX + ((float) this.viaNameWidth) && x <= (this.nameX + ((float) this.viaNameWidth)) + ((float) this.viaWidth) && y >= this.nameY - ((float) AndroidUtilities.m9dp(4.0f)) && y <= this.nameY + ((float) AndroidUtilities.m9dp(20.0f))) {
                             return result;
                         }
                         this.forwardBotPressed = false;
                         return result;
-                    } else if (x >= ((float) this.forwardNameX) && x <= ((float) (this.forwardNameX + this.forwardedNameWidth)) && y >= ((float) this.forwardNameY) && y <= ((float) (this.forwardNameY + AndroidUtilities.m10dp(32.0f)))) {
+                    } else if (x >= ((float) this.forwardNameX) && x <= ((float) (this.forwardNameX + this.forwardedNameWidth)) && y >= ((float) this.forwardNameY) && y <= ((float) (this.forwardNameY + AndroidUtilities.m9dp(32.0f)))) {
                         return result;
                     } else {
                         this.forwardBotPressed = false;
@@ -1345,7 +1343,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     } else {
                         replyEnd = this.replyStartX + this.backgroundDrawableRight;
                     }
-                    if (x >= ((float) this.replyStartX) && x <= ((float) replyEnd) && y >= ((float) this.replyStartY) && y <= ((float) (this.replyStartY + AndroidUtilities.m10dp(35.0f)))) {
+                    if (x >= ((float) this.replyStartX) && x <= ((float) replyEnd) && y >= ((float) this.replyStartY) && y <= ((float) (this.replyStartY + AndroidUtilities.m9dp(35.0f)))) {
                         return result;
                     }
                     this.replyPressed = false;
@@ -1362,7 +1360,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                 } else if (event.getAction() == 3) {
                     this.sharePressed = false;
-                } else if (event.getAction() == 2 && (x < ((float) this.shareStartX) || x > ((float) (this.shareStartX + AndroidUtilities.m10dp(40.0f))) || y < ((float) this.shareStartY) || y > ((float) (this.shareStartY + AndroidUtilities.m10dp(32.0f))))) {
+                } else if (event.getAction() == 2 && (x < ((float) this.shareStartX) || x > ((float) (this.shareStartX + AndroidUtilities.m9dp(40.0f))) || y < ((float) this.shareStartY) || y > ((float) (this.shareStartY + AndroidUtilities.m9dp(32.0f))))) {
                     this.sharePressed = false;
                 }
                 invalidate();
@@ -1374,17 +1372,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (this.isAvatarVisible && this.avatarImage.isInsideImage(x, ((float) getTop()) + y)) {
                 this.avatarPressed = true;
                 result = true;
-            } else if (this.drawForwardedName && this.forwardedNameLayout[0] != null && x >= ((float) this.forwardNameX) && x <= ((float) (this.forwardNameX + this.forwardedNameWidth)) && y >= ((float) this.forwardNameY) && y <= ((float) (this.forwardNameY + AndroidUtilities.m10dp(32.0f)))) {
-                if (this.viaWidth == 0 || x < ((float) ((this.forwardNameX + this.viaNameWidth) + AndroidUtilities.m10dp(4.0f)))) {
+            } else if (this.drawForwardedName && this.forwardedNameLayout[0] != null && x >= ((float) this.forwardNameX) && x <= ((float) (this.forwardNameX + this.forwardedNameWidth)) && y >= ((float) this.forwardNameY) && y <= ((float) (this.forwardNameY + AndroidUtilities.m9dp(32.0f)))) {
+                if (this.viaWidth == 0 || x < ((float) ((this.forwardNameX + this.viaNameWidth) + AndroidUtilities.m9dp(4.0f)))) {
                     this.forwardNamePressed = true;
                 } else {
                     this.forwardBotPressed = true;
                 }
                 result = true;
-            } else if (this.drawNameLayout && this.nameLayout != null && this.viaWidth != 0 && x >= this.nameX + ((float) this.viaNameWidth) && x <= (this.nameX + ((float) this.viaNameWidth)) + ((float) this.viaWidth) && y >= this.nameY - ((float) AndroidUtilities.m10dp(4.0f)) && y <= this.nameY + ((float) AndroidUtilities.m10dp(20.0f))) {
+            } else if (this.drawNameLayout && this.nameLayout != null && this.viaWidth != 0 && x >= this.nameX + ((float) this.viaNameWidth) && x <= (this.nameX + ((float) this.viaNameWidth)) + ((float) this.viaWidth) && y >= this.nameY - ((float) AndroidUtilities.m9dp(4.0f)) && y <= this.nameY + ((float) AndroidUtilities.m9dp(20.0f))) {
                 this.forwardBotPressed = true;
                 result = true;
-            } else if (this.drawShareButton && x >= ((float) this.shareStartX) && x <= ((float) (this.shareStartX + AndroidUtilities.m10dp(40.0f))) && y >= ((float) this.shareStartY) && y <= ((float) (this.shareStartY + AndroidUtilities.m10dp(32.0f)))) {
+            } else if (this.drawShareButton && x >= ((float) this.shareStartX) && x <= ((float) (this.shareStartX + AndroidUtilities.m9dp(40.0f))) && y >= ((float) this.shareStartY) && y <= ((float) (this.shareStartY + AndroidUtilities.m9dp(32.0f)))) {
                 this.sharePressed = true;
                 result = true;
                 invalidate();
@@ -1394,7 +1392,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 } else {
                     replyEnd = this.replyStartX + this.backgroundDrawableRight;
                 }
-                if (x >= ((float) this.replyStartX) && x <= ((float) replyEnd) && y >= ((float) this.replyStartY) && y <= ((float) (this.replyStartY + AndroidUtilities.m10dp(35.0f)))) {
+                if (x >= ((float) this.replyStartX) && x <= ((float) replyEnd) && y >= ((float) this.replyStartY) && y <= ((float) (this.replyStartY + AndroidUtilities.m9dp(35.0f)))) {
                     this.replyPressed = true;
                     result = true;
                 }
@@ -1488,7 +1486,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     public void downloadAudioIfNeed() {
         if (this.documentAttachType == 3 && this.buttonState == 2) {
-            FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
             this.buttonState = 4;
             this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
         }
@@ -1574,7 +1572,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 break;
             }
         }
-        return StaticLayoutEx.createStaticLayout(stringBuilder, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(1.0f), false, TruncateAt.END, maxWidth, maxLines);
+        return StaticLayoutEx.createStaticLayout(stringBuilder, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(1.0f), false, TruncateAt.END, maxWidth, maxLines);
     }
 
     private void didClickedImage() {
@@ -1590,7 +1588,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (!MediaController.getInstance().isPlayingMessage(this.currentMessageObject) || MediaController.getInstance().isMessagePaused()) {
                 this.delegate.needPlayMessage(this.currentMessageObject);
             } else {
-                MediaController.getInstance().pauseMessage(this.currentMessageObject);
+                MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject);
             }
         } else if (this.currentMessageObject.type == 8) {
             if (this.buttonState == -1) {
@@ -1660,11 +1658,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             double lon = object.messageOwner.media.geo._long;
             if (object.messageOwner.media instanceof TL_messageMediaGeoLive) {
                 double rad = ((double) NUM) / 3.141592653589793d;
-                url = AndroidUtilities.formapMapUrl(this.currentAccount, ((1.5707963267948966d - (2.0d * Math.atan(Math.exp((((double) (Math.round(((double) NUM) - ((Math.log((1.0d + Math.sin((3.141592653589793d * lat) / 180.0d)) / (1.0d - Math.sin((3.141592653589793d * lat) / 180.0d))) * rad) / 2.0d)) - ((long) (AndroidUtilities.m10dp(10.3f) << 6)))) - ((double) NUM)) / rad)))) * 180.0d) / 3.141592653589793d, lon, (int) (((float) (this.backgroundWidth - AndroidUtilities.m10dp(21.0f))) / AndroidUtilities.density), (int) (((float) AndroidUtilities.m10dp(195.0f)) / AndroidUtilities.density), false, 15);
+                url = AndroidUtilities.formapMapUrl(this.currentAccount, ((1.5707963267948966d - (2.0d * Math.atan(Math.exp((((double) (Math.round(((double) NUM) - ((Math.log((1.0d + Math.sin((3.141592653589793d * lat) / 180.0d)) / (1.0d - Math.sin((3.141592653589793d * lat) / 180.0d))) * rad) / 2.0d)) - ((long) (AndroidUtilities.m9dp(10.3f) << 6)))) - ((double) NUM)) / rad)))) * 180.0d) / 3.141592653589793d, lon, (int) (((float) (this.backgroundWidth - AndroidUtilities.m9dp(21.0f))) / AndroidUtilities.density), (int) (((float) AndroidUtilities.m9dp(195.0f)) / AndroidUtilities.density), false, 15);
             } else if (TextUtils.isEmpty(object.messageOwner.media.title)) {
-                url = AndroidUtilities.formapMapUrl(this.currentAccount, lat, lon, (int) (((float) (this.backgroundWidth - AndroidUtilities.m10dp(12.0f))) / AndroidUtilities.density), (int) (((float) AndroidUtilities.m10dp(195.0f)) / AndroidUtilities.density), true, 15);
+                url = AndroidUtilities.formapMapUrl(this.currentAccount, lat, lon, (int) (((float) (this.backgroundWidth - AndroidUtilities.m9dp(12.0f))) / AndroidUtilities.density), (int) (((float) AndroidUtilities.m9dp(195.0f)) / AndroidUtilities.density), true, 15);
             } else {
-                url = AndroidUtilities.formapMapUrl(this.currentAccount, lat, lon, (int) (((float) (this.backgroundWidth - AndroidUtilities.m10dp(21.0f))) / AndroidUtilities.density), (int) (((float) AndroidUtilities.m10dp(195.0f)) / AndroidUtilities.density), true, 15);
+                url = AndroidUtilities.formapMapUrl(this.currentAccount, lat, lon, (int) (((float) (this.backgroundWidth - AndroidUtilities.m9dp(21.0f))) / AndroidUtilities.density), (int) (((float) AndroidUtilities.m9dp(195.0f)) / AndroidUtilities.density), true, 15);
             }
             if (url.equals(this.currentUrl)) {
                 return false;
@@ -1939,19 +1937,22 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     break;
                 }
             }
-            this.widthBeforeNewTimeLine = (maxWidth - AndroidUtilities.m10dp(94.0f)) - ((int) Math.ceil((double) Theme.chat_audioTimePaint.measureText("00:00")));
-            this.availableTimeWidth = maxWidth - AndroidUtilities.m10dp(18.0f);
+            this.widthBeforeNewTimeLine = (maxWidth - AndroidUtilities.m9dp(94.0f)) - ((int) Math.ceil((double) Theme.chat_audioTimePaint.measureText("00:00")));
+            this.availableTimeWidth = maxWidth - AndroidUtilities.m9dp(18.0f);
             measureTime(messageObject);
-            int minSize = AndroidUtilities.m10dp(174.0f) + this.timeWidth;
+            int minSize = AndroidUtilities.m9dp(174.0f) + this.timeWidth;
             if (!this.hasLinkPreview) {
-                this.backgroundWidth = Math.min(maxWidth, (AndroidUtilities.m10dp(10.0f) * duration) + minSize);
+                this.backgroundWidth = Math.min(maxWidth, (AndroidUtilities.m9dp(10.0f) * duration) + minSize);
             }
             this.seekBarWaveform.setMessageObject(messageObject);
             return 0;
         } else if (MessageObject.isMusicDocument(this.documentAttach)) {
             this.documentAttachType = 5;
-            maxWidth -= AndroidUtilities.m10dp(86.0f);
-            this.songLayout = new StaticLayout(TextUtils.ellipsize(messageObject.getMusicTitle().replace(10, ' '), Theme.chat_audioTitlePaint, (float) (maxWidth - AndroidUtilities.m10dp(12.0f)), TruncateAt.END), Theme.chat_audioTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            maxWidth -= AndroidUtilities.m9dp(86.0f);
+            if (maxWidth < 0) {
+                maxWidth = AndroidUtilities.m9dp(100.0f);
+            }
+            this.songLayout = new StaticLayout(TextUtils.ellipsize(messageObject.getMusicTitle().replace(10, ' '), Theme.chat_audioTitlePaint, (float) (maxWidth - AndroidUtilities.m9dp(12.0f)), TruncateAt.END), Theme.chat_audioTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             if (this.songLayout.getLineCount() > 0) {
                 this.songX = -((int) Math.ceil((double) this.songLayout.getLineLeft(0)));
             }
@@ -1968,8 +1969,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
             }
             int durationWidth = (int) Math.ceil((double) Theme.chat_audioTimePaint.measureText(String.format("%d:%02d / %d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60), Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)})));
-            this.widthBeforeNewTimeLine = (this.backgroundWidth - AndroidUtilities.m10dp(86.0f)) - durationWidth;
-            this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m10dp(28.0f);
+            this.widthBeforeNewTimeLine = (this.backgroundWidth - AndroidUtilities.m9dp(86.0f)) - durationWidth;
+            this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m9dp(28.0f);
             return durationWidth;
         } else if (MessageObject.isVideoDocument(this.documentAttach)) {
             this.documentAttachType = 4;
@@ -1993,7 +1994,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             boolean z = (this.documentAttach.mime_type != null && this.documentAttach.mime_type.toLowerCase().startsWith("image/")) || !(this.documentAttach.thumb == null || (this.documentAttach.thumb instanceof TL_photoSizeEmpty) || (this.documentAttach.thumb.location instanceof TL_fileLocationUnavailable));
             this.drawPhotoImage = z;
             if (!this.drawPhotoImage) {
-                maxWidth += AndroidUtilities.m10dp(30.0f);
+                maxWidth += AndroidUtilities.m9dp(30.0f);
             }
             this.documentAttachType = 1;
             String name = FileLoader.getDocumentFileName(this.documentAttach);
@@ -2014,24 +2015,23 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 width = Math.min(maxWidth, maxLineWidth);
             }
             str = AndroidUtilities.formatFileSize((long) this.documentAttach.size) + " " + FileLoader.getDocumentExtension(this.documentAttach);
-            this.infoWidth = Math.min(maxWidth - AndroidUtilities.m10dp(30.0f), (int) Math.ceil((double) Theme.chat_infoPaint.measureText(str)));
+            this.infoWidth = Math.min(maxWidth - AndroidUtilities.m9dp(30.0f), (int) Math.ceil((double) Theme.chat_infoPaint.measureText(str)));
             CharSequence str2 = TextUtils.ellipsize(str, Theme.chat_infoPaint, (float) this.infoWidth, TruncateAt.END);
             try {
                 if (this.infoWidth < 0) {
-                    this.infoWidth = AndroidUtilities.m10dp(10.0f);
+                    this.infoWidth = AndroidUtilities.m9dp(10.0f);
                 }
                 this.infoLayout = new StaticLayout(str2, Theme.chat_infoPaint, this.infoWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (this.drawPhotoImage) {
                 this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
                 this.photoImage.setNeedsQualityThumb(true);
                 this.photoImage.setShouldGenerateQualityThumb(true);
-                this.photoImage.setParentMessageObject(messageObject);
                 if (this.currentPhotoObject != null) {
                     this.currentPhotoFilter = "86_86_b";
-                    this.photoImage.setImage(null, null, null, null, this.currentPhotoObject.location, this.currentPhotoFilter, 0, null, 1);
+                    this.photoImage.setImage(null, null, null, null, this.currentPhotoObject.location, this.currentPhotoFilter, 0, null, messageObject, 1);
                 } else {
                     this.photoImage.setImageBitmap((BitmapDrawable) null);
                 }
@@ -2042,17 +2042,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     private void calcBackgroundWidth(int maxWidth, int timeMore, int maxChildWidth) {
         if (this.hasLinkPreview || this.hasOldCaptionPreview || this.hasGamePreview || this.hasInvoicePreview || maxWidth - this.currentMessageObject.lastLineWidth < timeMore || this.currentMessageObject.hasRtl) {
-            this.totalHeight += AndroidUtilities.m10dp(14.0f);
+            this.totalHeight += AndroidUtilities.m9dp(14.0f);
             this.hasNewLineForTime = true;
-            this.backgroundWidth = Math.max(maxChildWidth, this.currentMessageObject.lastLineWidth) + AndroidUtilities.m10dp(31.0f);
-            this.backgroundWidth = Math.max(this.backgroundWidth, (this.currentMessageObject.isOutOwner() ? this.timeWidth + AndroidUtilities.m10dp(17.0f) : this.timeWidth) + AndroidUtilities.m10dp(31.0f));
+            this.backgroundWidth = Math.max(maxChildWidth, this.currentMessageObject.lastLineWidth) + AndroidUtilities.m9dp(31.0f);
+            this.backgroundWidth = Math.max(this.backgroundWidth, (this.currentMessageObject.isOutOwner() ? this.timeWidth + AndroidUtilities.m9dp(17.0f) : this.timeWidth) + AndroidUtilities.m9dp(31.0f));
             return;
         }
         int diff = maxChildWidth - this.currentMessageObject.lastLineWidth;
         if (diff < 0 || diff > timeMore) {
-            this.backgroundWidth = Math.max(maxChildWidth, this.currentMessageObject.lastLineWidth + timeMore) + AndroidUtilities.m10dp(31.0f);
+            this.backgroundWidth = Math.max(maxChildWidth, this.currentMessageObject.lastLineWidth + timeMore) + AndroidUtilities.m9dp(31.0f);
         } else {
-            this.backgroundWidth = ((maxChildWidth + timeMore) - diff) + AndroidUtilities.m10dp(31.0f);
+            this.backgroundWidth = ((maxChildWidth + timeMore) - diff) + AndroidUtilities.m9dp(31.0f);
         }
     }
 
@@ -2087,7 +2087,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                         }
                         invalidate();
                         return;
@@ -2135,142 +2135,143 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
                 this.scheduledInvalidate = true;
-                this.docTitleLayout = new StaticLayout(LocaleController.getString("AttachLiveLocation", CLASSNAMER.string.AttachLiveLocation), Theme.chat_locationTitlePaint, this.backgroundWidth - AndroidUtilities.m10dp(91.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                int maxWidth = this.backgroundWidth - AndroidUtilities.m9dp(91.0f);
+                this.docTitleLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("AttachLiveLocation", CLASSNAMER.string.AttachLiveLocation), Theme.chat_locationTitlePaint, (float) maxWidth, TruncateAt.END), Theme.chat_locationTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x06a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x06c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:748:0x18ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:740:0x1875  */
-    /* JADX WARNING: Removed duplicated region for block: B:749:0x18ae  */
-    /* JADX WARNING: Removed duplicated region for block: B:743:0x187f  */
-    /* JADX WARNING: Removed duplicated region for block: B:746:0x18a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0e3c  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x18d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0e61  */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x18ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:492:0x0e78  */
-    /* JADX WARNING: Removed duplicated region for block: B:761:0x18ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:495:0x0e8e  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x198b  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0eb5  */
-    /* JADX WARNING: Removed duplicated region for block: B:781:0x19a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0f6b  */
-    /* JADX WARNING: Removed duplicated region for block: B:838:0x1bcb  */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:615:0x13fd  */
-    /* JADX WARNING: Removed duplicated region for block: B:456:0x0dc0  */
-    /* JADX WARNING: Removed duplicated region for block: B:733:0x1857  */
-    /* JADX WARNING: Removed duplicated region for block: B:458:0x0dc8  */
-    /* JADX WARNING: Removed duplicated region for block: B:471:0x0e02  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0e3c  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0e61  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x18d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:492:0x0e78  */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x18ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:495:0x0e8e  */
-    /* JADX WARNING: Removed duplicated region for block: B:761:0x18ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0ea4  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0eb5  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x198b  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:781:0x19a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0f6b  */
-    /* JADX WARNING: Removed duplicated region for block: B:838:0x1bcb  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0fc9  */
-    /* JADX WARNING: Removed duplicated region for block: B:1699:0x390d  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1287 A:{Catch:{ Exception -> 0x3910 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12bd A:{Catch:{ Exception -> 0x3927 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1327 A:{Catch:{ Exception -> 0x3927 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1708:0x393c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1713:0x3968  */
-    /* JADX WARNING: Removed duplicated region for block: B:1799:0x3ca4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1798:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1787:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:456:0x0dc0  */
-    /* JADX WARNING: Removed duplicated region for block: B:615:0x13fd  */
-    /* JADX WARNING: Removed duplicated region for block: B:458:0x0dc8  */
-    /* JADX WARNING: Removed duplicated region for block: B:733:0x1857  */
-    /* JADX WARNING: Removed duplicated region for block: B:469:0x0dfe A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:471:0x0e02  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0e3c  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x18d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0e61  */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x18ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:492:0x0e78  */
-    /* JADX WARNING: Removed duplicated region for block: B:761:0x18ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:495:0x0e8e  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0ea4  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x198b  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0eb5  */
-    /* JADX WARNING: Removed duplicated region for block: B:781:0x19a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0f6b  */
-    /* JADX WARNING: Removed duplicated region for block: B:838:0x1bcb  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0fc9  */
-    /* JADX WARNING: Removed duplicated region for block: B:539:0x10fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1287 A:{Catch:{ Exception -> 0x3910 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1699:0x390d  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12bd A:{Catch:{ Exception -> 0x3927 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1327 A:{Catch:{ Exception -> 0x3927 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1708:0x393c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1713:0x3968  */
-    /* JADX WARNING: Removed duplicated region for block: B:1716:0x3981  */
-    /* JADX WARNING: Removed duplicated region for block: B:1777:0x3c2d  */
-    /* JADX WARNING: Removed duplicated region for block: B:1798:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1799:0x3ca4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1787:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1790:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:615:0x13fd  */
-    /* JADX WARNING: Removed duplicated region for block: B:456:0x0dc0  */
-    /* JADX WARNING: Removed duplicated region for block: B:733:0x1857  */
-    /* JADX WARNING: Removed duplicated region for block: B:458:0x0dc8  */
-    /* JADX WARNING: Removed duplicated region for block: B:469:0x0dfe A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:471:0x0e02  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0e3c  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0e61  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x18d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:492:0x0e78  */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x18ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:495:0x0e8e  */
-    /* JADX WARNING: Removed duplicated region for block: B:761:0x18ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0ea4  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0eb5  */
-    /* JADX WARNING: Removed duplicated region for block: B:780:0x198b  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:781:0x19a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:513:0x0f6b  */
-    /* JADX WARNING: Removed duplicated region for block: B:838:0x1bcb  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0fc9  */
-    /* JADX WARNING: Removed duplicated region for block: B:539:0x10fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:1699:0x390d  */
-    /* JADX WARNING: Removed duplicated region for block: B:568:0x1287 A:{Catch:{ Exception -> 0x3910 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x12bd A:{Catch:{ Exception -> 0x3927 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x1327 A:{Catch:{ Exception -> 0x3927 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1708:0x393c  */
-    /* JADX WARNING: Removed duplicated region for block: B:1713:0x3968  */
-    /* JADX WARNING: Removed duplicated region for block: B:1716:0x3981  */
-    /* JADX WARNING: Removed duplicated region for block: B:1777:0x3c2d  */
-    /* JADX WARNING: Removed duplicated region for block: B:1799:0x3ca4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1798:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1787:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:1790:0x3CLASSNAME  */
-    /* JADX WARNING: Missing block: B:207:0x068a, code:
-            if (r134.equals("article") != false) goto L_0x068c;
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x069f  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x06bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:759:0x18b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:751:0x1882  */
+    /* JADX WARNING: Removed duplicated region for block: B:760:0x18bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:754:0x188c  */
+    /* JADX WARNING: Removed duplicated region for block: B:757:0x18ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
+    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
+    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
+    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
+    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
+    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
+    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
+    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
+    /* JADX WARNING: Removed duplicated region for block: B:475:0x0df0 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
+    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:545:0x10f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
+    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
+    /* JADX WARNING: Removed duplicated region for block: B:1749:0x3a8e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d3a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
+    /* JADX WARNING: Removed duplicated region for block: B:1823:0x3d82  */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
+    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
+    /* JADX WARNING: Removed duplicated region for block: B:475:0x0df0 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
+    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
+    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
+    /* JADX WARNING: Removed duplicated region for block: B:545:0x10f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
+    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
+    /* JADX WARNING: Removed duplicated region for block: B:1749:0x3a8e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d3a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
+    /* JADX WARNING: Removed duplicated region for block: B:1823:0x3d82  */
+    /* JADX WARNING: Missing block: B:207:0x0682, code:
+            if (r146.equals("article") != false) goto L_0x0684;
      */
-    /* JADX WARNING: Missing block: B:220:0x06bb, code:
-            if (r134.equals("article") != false) goto L_0x06bd;
+    /* JADX WARNING: Missing block: B:220:0x06b3, code:
+            if (r146.equals("article") != false) goto L_0x06b5;
      */
-    /* JADX WARNING: Missing block: B:319:0x0970, code:
-            if ("telegram_album".equals(r140) == false) goto L_0x04b6;
+    /* JADX WARNING: Missing block: B:319:0x0968, code:
+            if ("telegram_album".equals(r152) == false) goto L_0x04ae;
      */
-    /* JADX WARNING: Missing block: B:480:0x0e2f, code:
-            if (r144.documentAttachType != 4) goto L_0x18c7;
+    /* JADX WARNING: Missing block: B:486:0x0e21, code:
+            if (r158.documentAttachType != 4) goto L_0x18d4;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
@@ -2421,8 +2422,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.photoImage.setNeedsQualityThumb(false);
             this.photoImage.setShouldGenerateQualityThumb(false);
             this.photoImage.setAllowDecodeSingleFrame(false);
-            this.photoImage.setParentMessageObject(null);
-            this.photoImage.setRoundRadius(AndroidUtilities.m10dp(3.0f));
+            this.photoImage.setRoundRadius(AndroidUtilities.m9dp(3.0f));
             if (messageChanged) {
                 this.firstVisibleBlockNum = 0;
                 this.lastVisibleBlockNum = 0;
@@ -2436,35 +2436,35 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             float scale;
             String fileName;
             boolean autoDownload;
+            FileLocation fileLocation;
             boolean photoExist;
-            TLObject currentPhoto;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
                     if (this.isChat && !messageObject.isOutOwner() && messageObject.needDrawAvatar()) {
-                        maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m10dp(122.0f);
+                        maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m9dp(122.0f);
                         this.drawName = true;
                     } else {
                         z = (messageObject.messageOwner.to_id.channel_id == 0 || messageObject.isOutOwner()) ? false : true;
                         this.drawName = z;
-                        maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m10dp(80.0f);
+                        maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m9dp(80.0f);
                     }
                 } else if (this.isChat && !messageObject.isOutOwner() && messageObject.needDrawAvatar()) {
-                    maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(122.0f);
+                    maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(122.0f);
                     this.drawName = true;
                 } else {
-                    maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(80.0f);
+                    maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(80.0f);
                     z = (messageObject.messageOwner.to_id.channel_id == 0 || messageObject.isOutOwner()) ? false : true;
                     this.drawName = z;
                 }
                 this.availableTimeWidth = maxWidth;
                 if (messageObject.isRoundVideo()) {
-                    this.availableTimeWidth = (int) (((double) this.availableTimeWidth) - (Math.ceil((double) Theme.chat_audioTimePaint.measureText("00:00")) + ((double) (messageObject.isOutOwner() ? 0 : AndroidUtilities.m10dp(64.0f)))));
+                    this.availableTimeWidth = (int) (((double) this.availableTimeWidth) - (Math.ceil((double) Theme.chat_audioTimePaint.measureText("00:00")) + ((double) (messageObject.isOutOwner() ? 0 : AndroidUtilities.m9dp(64.0f)))));
                 }
                 measureTime(messageObject);
-                int timeMore = this.timeWidth + AndroidUtilities.m10dp(6.0f);
+                int timeMore = this.timeWidth + AndroidUtilities.m9dp(6.0f);
                 if (messageObject.isOutOwner()) {
-                    timeMore += AndroidUtilities.m10dp(20.5f);
+                    timeMore += AndroidUtilities.m9dp(20.5f);
                 }
                 z = (messageObject.messageOwner.media instanceof TL_messageMediaGame) && (messageObject.messageOwner.media.game instanceof TL_game);
                 this.hasGamePreview = z;
@@ -2483,7 +2483,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             if (!siteName.equals("twitter")) {
                             }
                         }
-                        if ((messageObject.messageOwner.media.webpage.cached_page instanceof TL_pageFull) && ((messageObject.messageOwner.media.webpage.photo instanceof TL_photo) || MessageObject.isVideoDocument(messageObject.messageOwner.media.webpage.document))) {
+                        if ((messageObject.messageOwner.media.webpage.cached_page instanceof TL_page) && ((messageObject.messageOwner.media.webpage.photo instanceof TL_photo) || MessageObject.isVideoDocument(messageObject.messageOwner.media.webpage.document))) {
                             this.drawInstantView = false;
                             slideshow = true;
                             ArrayList<PageBlock> blocks = messageObject.messageOwner.media.webpage.cached_page.blocks;
@@ -2513,27 +2513,27 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 this.backgroundWidth = maxWidth;
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview || maxWidth - messageObject.lastLineWidth < timeMore) {
-                    this.backgroundWidth = Math.max(this.backgroundWidth, messageObject.lastLineWidth) + AndroidUtilities.m10dp(31.0f);
-                    this.backgroundWidth = Math.max(this.backgroundWidth, this.timeWidth + AndroidUtilities.m10dp(31.0f));
+                    this.backgroundWidth = Math.max(this.backgroundWidth, messageObject.lastLineWidth) + AndroidUtilities.m9dp(31.0f);
+                    this.backgroundWidth = Math.max(this.backgroundWidth, this.timeWidth + AndroidUtilities.m9dp(31.0f));
                 } else {
                     int diff = this.backgroundWidth - messageObject.lastLineWidth;
                     if (diff < 0 || diff > timeMore) {
-                        this.backgroundWidth = Math.max(this.backgroundWidth, messageObject.lastLineWidth + timeMore) + AndroidUtilities.m10dp(31.0f);
+                        this.backgroundWidth = Math.max(this.backgroundWidth, messageObject.lastLineWidth + timeMore) + AndroidUtilities.m9dp(31.0f);
                     } else {
-                        this.backgroundWidth = ((this.backgroundWidth + timeMore) - diff) + AndroidUtilities.m10dp(31.0f);
+                        this.backgroundWidth = ((this.backgroundWidth + timeMore) - diff) + AndroidUtilities.m9dp(31.0f);
                     }
                 }
-                this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m10dp(31.0f);
+                this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m9dp(31.0f);
                 if (messageObject.isRoundVideo()) {
-                    this.availableTimeWidth = (int) (((double) this.availableTimeWidth) - (Math.ceil((double) Theme.chat_audioTimePaint.measureText("00:00")) + ((double) (messageObject.isOutOwner() ? 0 : AndroidUtilities.m10dp(64.0f)))));
+                    this.availableTimeWidth = (int) (((double) this.availableTimeWidth) - (Math.ceil((double) Theme.chat_audioTimePaint.measureText("00:00")) + ((double) (messageObject.isOutOwner() ? 0 : AndroidUtilities.m9dp(64.0f)))));
                 }
                 setMessageObjectInternal(messageObject);
                 i = messageObject.textWidth;
-                dp = (this.hasGamePreview || this.hasInvoicePreview) ? AndroidUtilities.m10dp(10.0f) : 0;
+                dp = (this.hasGamePreview || this.hasInvoicePreview) ? AndroidUtilities.m9dp(10.0f) : 0;
                 this.backgroundWidth = dp + i;
-                this.totalHeight = (messageObject.textHeight + AndroidUtilities.m10dp(19.5f)) + this.namesOffset;
+                this.totalHeight = (messageObject.textHeight + AndroidUtilities.m9dp(19.5f)) + this.namesOffset;
                 if (this.drawPinnedTop) {
-                    this.namesOffset -= AndroidUtilities.m10dp(1.0f);
+                    this.namesOffset -= AndroidUtilities.m9dp(1.0f);
                 }
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
@@ -2549,18 +2549,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     int restLines;
                     boolean authorIsRTL;
                     if (AndroidUtilities.isTablet()) {
-                        if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOut()) {
-                            linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m10dp(132.0f);
+                        if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOutOwner()) {
+                            linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m9dp(132.0f);
                         } else {
-                            linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m10dp(80.0f);
+                            linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m9dp(80.0f);
                         }
                     } else if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOutOwner()) {
-                        linkPreviewMaxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(132.0f);
+                        linkPreviewMaxWidth = AndroidUtilities.displaySize.x - AndroidUtilities.m9dp(132.0f);
                     } else {
-                        linkPreviewMaxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(80.0f);
+                        linkPreviewMaxWidth = AndroidUtilities.displaySize.x - AndroidUtilities.m9dp(80.0f);
                     }
                     if (this.drawShareButton) {
-                        linkPreviewMaxWidth -= AndroidUtilities.m10dp(20.0f);
+                        linkPreviewMaxWidth -= AndroidUtilities.m9dp(20.0f);
                     }
                     if (this.hasLinkPreview) {
                         TL_webPage webPage2 = (TL_webPage) messageObject.messageOwner.media.webpage;
@@ -2639,7 +2639,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (this.hasInvoicePreview) {
                         additinalWidth = 0;
                     } else {
-                        additinalWidth = AndroidUtilities.m10dp(10.0f);
+                        additinalWidth = AndroidUtilities.m9dp(10.0f);
                     }
                     int restLinesCount2 = 3;
                     int additionalHeight = 0;
@@ -2660,7 +2660,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             maxChildWidth = Math.max(maxChildWidth, width + additinalWidth);
                             maxWebWidth = Math.max(0, width + additinalWidth);
                         } catch (Throwable e2) {
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                         }
                     }
                     boolean titleIsRTL = false;
@@ -2668,16 +2668,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         try {
                             this.titleX = ConnectionsManager.DEFAULT_DATACENTER_ID;
                             if (this.linkPreviewHeight != 0) {
-                                this.linkPreviewHeight += AndroidUtilities.m10dp(2.0f);
-                                this.totalHeight += AndroidUtilities.m10dp(2.0f);
+                                this.linkPreviewHeight += AndroidUtilities.m9dp(2.0f);
+                                this.totalHeight += AndroidUtilities.m9dp(2.0f);
                             }
                             restLines = 0;
                             if (!this.isSmallImage || description == null) {
-                                this.titleLayout = StaticLayoutEx.createStaticLayout(title, Theme.chat_replyNamePaint, linkPreviewMaxWidth2, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth2, 4);
+                                this.titleLayout = StaticLayoutEx.createStaticLayout(title, Theme.chat_replyNamePaint, linkPreviewMaxWidth2, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth2, 4);
                                 restLinesCount = 3;
                             } else {
                                 restLines = 3;
-                                this.titleLayout = ChatMessageCell.generateStaticLayout(title, Theme.chat_replyNamePaint, linkPreviewMaxWidth2, linkPreviewMaxWidth2 - AndroidUtilities.m10dp(52.0f), 3, 4);
+                                this.titleLayout = ChatMessageCell.generateStaticLayout(title, Theme.chat_replyNamePaint, linkPreviewMaxWidth2, linkPreviewMaxWidth2 - AndroidUtilities.m9dp(52.0f), 3, 4);
                                 restLinesCount = 3 - this.titleLayout.getLineCount();
                             }
                             try {
@@ -2700,7 +2700,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         width = (int) Math.ceil((double) this.titleLayout.getLineWidth(a));
                                     }
                                     if (a < restLines || (lineLeft != 0 && this.isSmallImage)) {
-                                        width += AndroidUtilities.m10dp(52.0f);
+                                        width += AndroidUtilities.m9dp(52.0f);
                                     }
                                     maxChildWidth = Math.max(maxChildWidth, width + additinalWidth);
                                     maxWebWidth = Math.max(maxWebWidth, width + additinalWidth);
@@ -2711,7 +2711,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         } catch (Exception e4) {
                             e2 = e4;
                             restLinesCount = 3;
-                            FileLog.m14e(e2);
+                            FileLog.m13e(e2);
                             if (titleIsRTL) {
                             }
                             restLinesCount2 = restLinesCount;
@@ -2740,7 +2740,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (this.hasInvoicePreview) {
                             }
-                            maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m10dp(12.0f) : 0)) + additinalWidth);
+                            maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m9dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject != null) {
                             }
                             if (!smallImage) {
@@ -2761,14 +2761,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (this.hasInvoicePreview) {
                             }
-                            this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.m10dp(6.0f);
-                            this.totalHeight += AndroidUtilities.m10dp(4.0f);
+                            this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.m9dp(6.0f);
+                            this.totalHeight += AndroidUtilities.m9dp(4.0f);
                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                             createInstantViewButton();
                             if (this.currentPosition != null) {
                             }
-                            this.totalHeight += AndroidUtilities.m10dp(14.0f);
-                            linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.m10dp(41.0f);
+                            this.totalHeight += AndroidUtilities.m9dp(14.0f);
+                            linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.m9dp(41.0f);
                             this.hasOldCaptionPreview = true;
                             this.linkPreviewHeight = 0;
                             webPage = this.currentMessageObject.messageOwner.media.webpage;
@@ -2783,22 +2783,22 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.linkPreviewHeight += height;
                                 this.totalHeight += height;
                             } catch (Throwable e22) {
-                                FileLog.m14e(e22);
+                                FileLog.m13e(e22);
                             }
                             try {
                                 this.descriptionX = 0;
                                 if (this.linkPreviewHeight != 0) {
                                 }
-                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
                                 height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
                                 this.linkPreviewHeight += height;
                                 this.totalHeight += height;
                                 while (a < this.descriptionLayout.getLineCount()) {
                                 }
                             } catch (Throwable e222) {
-                                FileLog.m14e(e222);
+                                FileLog.m13e(e222);
                             }
-                            this.totalHeight += AndroidUtilities.m10dp(17.0f);
+                            this.totalHeight += AndroidUtilities.m9dp(17.0f);
                             if (captionNewLine != 0) {
                             }
                             this.botButtons.clear();
@@ -2812,7 +2812,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (this.drawPinnedBottom) {
                             }
-                            this.totalHeight = AndroidUtilities.m10dp(70.0f);
+                            this.totalHeight = AndroidUtilities.m9dp(70.0f);
                             if (!this.drawPhotoImage) {
                             }
                             updateWaveform();
@@ -2824,7 +2824,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             restLinesCount2 = restLinesCount;
                             linkPreviewMaxWidth = linkPreviewMaxWidth2;
                         } else {
-                            linkPreviewMaxWidth = linkPreviewMaxWidth2 - AndroidUtilities.m10dp(48.0f);
+                            linkPreviewMaxWidth = linkPreviewMaxWidth2 - AndroidUtilities.m9dp(48.0f);
                             restLinesCount2 = restLinesCount;
                         }
                     } else {
@@ -2834,11 +2834,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (author == null && title == null) {
                         try {
                             if (this.linkPreviewHeight != 0) {
-                                this.linkPreviewHeight += AndroidUtilities.m10dp(2.0f);
-                                this.totalHeight += AndroidUtilities.m10dp(2.0f);
+                                this.linkPreviewHeight += AndroidUtilities.m9dp(2.0f);
+                                this.totalHeight += AndroidUtilities.m9dp(2.0f);
                             }
                             if (restLinesCount2 != 3 || (this.isSmallImage && description != null)) {
-                                this.authorLayout = ChatMessageCell.generateStaticLayout(author, Theme.chat_replyNamePaint, linkPreviewMaxWidth, linkPreviewMaxWidth - AndroidUtilities.m10dp(52.0f), restLinesCount2, 1);
+                                this.authorLayout = ChatMessageCell.generateStaticLayout(author, Theme.chat_replyNamePaint, linkPreviewMaxWidth, linkPreviewMaxWidth - AndroidUtilities.m9dp(52.0f), restLinesCount2, 1);
                                 restLinesCount = restLinesCount2 - this.authorLayout.getLineCount();
                             } else {
                                 this.authorLayout = new StaticLayout(author, Theme.chat_replyNamePaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -2860,7 +2860,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 maxWebWidth = Math.max(maxWebWidth, width + additinalWidth);
                             } catch (Exception e5) {
                                 e222 = e5;
-                                FileLog.m14e(e222);
+                                FileLog.m13e(e222);
                                 if (description != null) {
                                 }
                                 smallImage = false;
@@ -2881,7 +2881,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 if (this.hasInvoicePreview) {
                                 }
-                                maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m10dp(12.0f) : 0)) + additinalWidth);
+                                maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m9dp(12.0f) : 0)) + additinalWidth);
                                 if (this.currentPhotoObject != null) {
                                 }
                                 if (smallImage) {
@@ -2902,14 +2902,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 if (this.hasInvoicePreview) {
                                 }
-                                this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.m10dp(6.0f);
-                                this.totalHeight += AndroidUtilities.m10dp(4.0f);
+                                this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.m9dp(6.0f);
+                                this.totalHeight += AndroidUtilities.m9dp(4.0f);
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 createInstantViewButton();
                                 if (this.currentPosition != null) {
                                 }
-                                this.totalHeight += AndroidUtilities.m10dp(14.0f);
-                                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.m10dp(41.0f);
+                                this.totalHeight += AndroidUtilities.m9dp(14.0f);
+                                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.m9dp(41.0f);
                                 this.hasOldCaptionPreview = true;
                                 this.linkPreviewHeight = 0;
                                 webPage = this.currentMessageObject.messageOwner.media.webpage;
@@ -2925,13 +2925,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.descriptionX = 0;
                                 if (this.linkPreviewHeight != 0) {
                                 }
-                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
                                 height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
                                 this.linkPreviewHeight += height;
                                 this.totalHeight += height;
                                 while (a < this.descriptionLayout.getLineCount()) {
                                 }
-                                this.totalHeight += AndroidUtilities.m10dp(17.0f);
+                                this.totalHeight += AndroidUtilities.m9dp(17.0f);
                                 if (captionNewLine != 0) {
                                 }
                                 this.botButtons.clear();
@@ -2945,7 +2945,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 if (this.drawPinnedBottom) {
                                 }
-                                this.totalHeight = AndroidUtilities.m10dp(70.0f);
+                                this.totalHeight = AndroidUtilities.m9dp(70.0f);
                                 if (this.drawPhotoImage) {
                                 }
                                 updateWaveform();
@@ -2956,7 +2956,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         } catch (Exception e6) {
                             e222 = e6;
                             restLinesCount = restLinesCount2;
-                            FileLog.m14e(e222);
+                            FileLog.m13e(e222);
                             if (description != null) {
                             }
                             smallImage = false;
@@ -2977,7 +2977,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (this.hasInvoicePreview) {
                             }
-                            maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m10dp(12.0f) : 0)) + additinalWidth);
+                            maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m9dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject != null) {
                             }
                             if (smallImage) {
@@ -2998,14 +2998,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (this.hasInvoicePreview) {
                             }
-                            this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.m10dp(6.0f);
-                            this.totalHeight += AndroidUtilities.m10dp(4.0f);
+                            this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.m9dp(6.0f);
+                            this.totalHeight += AndroidUtilities.m9dp(4.0f);
                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                             createInstantViewButton();
                             if (this.currentPosition != null) {
                             }
-                            this.totalHeight += AndroidUtilities.m10dp(14.0f);
-                            linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.m10dp(41.0f);
+                            this.totalHeight += AndroidUtilities.m9dp(14.0f);
+                            linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.m9dp(41.0f);
                             this.hasOldCaptionPreview = true;
                             this.linkPreviewHeight = 0;
                             webPage = this.currentMessageObject.messageOwner.media.webpage;
@@ -3021,13 +3021,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.descriptionX = 0;
                             if (this.linkPreviewHeight != 0) {
                             }
-                            this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                            this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
                             height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
                             this.linkPreviewHeight += height;
                             this.totalHeight += height;
                             while (a < this.descriptionLayout.getLineCount()) {
                             }
-                            this.totalHeight += AndroidUtilities.m10dp(17.0f);
+                            this.totalHeight += AndroidUtilities.m9dp(17.0f);
                             if (captionNewLine != 0) {
                             }
                             this.botButtons.clear();
@@ -3041,7 +3041,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (this.drawPinnedBottom) {
                             }
-                            this.totalHeight = AndroidUtilities.m10dp(70.0f);
+                            this.totalHeight = AndroidUtilities.m9dp(70.0f);
                             if (this.drawPhotoImage) {
                             }
                             updateWaveform();
@@ -3056,17 +3056,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.descriptionX = 0;
                             this.currentMessageObject.generateLinkDescription();
                             if (this.linkPreviewHeight != 0) {
-                                this.linkPreviewHeight += AndroidUtilities.m10dp(2.0f);
-                                this.totalHeight += AndroidUtilities.m10dp(2.0f);
+                                this.linkPreviewHeight += AndroidUtilities.m9dp(2.0f);
+                                this.totalHeight += AndroidUtilities.m9dp(2.0f);
                             }
                             restLines = 0;
-                            boolean allowAllLines = site_name.toLowerCase().equals("twitter");
+                            boolean allowAllLines = site_name != null && site_name.toLowerCase().equals("twitter");
                             if (restLinesCount != 3 || this.isSmallImage) {
                                 int i2;
                                 restLines = restLinesCount;
                                 CharSequence charSequence = messageObject.linkDescription;
                                 TextPaint textPaint = Theme.chat_replyTextPaint;
-                                int dp2 = linkPreviewMaxWidth - AndroidUtilities.m10dp(52.0f);
+                                int dp2 = linkPreviewMaxWidth - AndroidUtilities.m9dp(52.0f);
                                 if (allowAllLines) {
                                     i2 = 100;
                                 } else {
@@ -3074,7 +3074,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 this.descriptionLayout = ChatMessageCell.generateStaticLayout(charSequence, textPaint, linkPreviewMaxWidth, dp2, restLinesCount, i2);
                             } else {
-                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(messageObject.linkDescription, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, allowAllLines ? 100 : 6);
+                                this.descriptionLayout = StaticLayoutEx.createStaticLayout(messageObject.linkDescription, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, allowAllLines ? 100 : 6);
                             }
                             height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
                             this.linkPreviewHeight += height;
@@ -3105,7 +3105,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     width = Math.min((int) Math.ceil((double) this.descriptionLayout.getLineWidth(a)), textWidth);
                                 }
                                 if (a < restLines || !(restLines == 0 || lineLeft == 0 || !this.isSmallImage)) {
-                                    width += AndroidUtilities.m10dp(52.0f);
+                                    width += AndroidUtilities.m9dp(52.0f);
                                 }
                                 if (maxWebWidth < width + additinalWidth) {
                                     if (titleIsRTL) {
@@ -3119,7 +3119,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 maxChildWidth = Math.max(maxChildWidth, width + additinalWidth);
                             }
                         } catch (Throwable e2222) {
-                            FileLog.m14e(e2222);
+                            FileLog.m13e(e2222);
                         }
                     }
                     if (smallImage && (this.descriptionLayout == null || (this.descriptionLayout != null && this.descriptionLayout.getLineCount() == 1))) {
@@ -3127,7 +3127,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         this.isSmallImage = false;
                     }
                     if (smallImage) {
-                        maxPhotoWidth = AndroidUtilities.m10dp(48.0f);
+                        maxPhotoWidth = AndroidUtilities.m9dp(48.0f);
                     } else {
                         maxPhotoWidth = linkPreviewMaxWidth;
                     }
@@ -3158,7 +3158,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.var_w == 0 || this.currentPhotoObject.var_h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp3 = AndroidUtilities.m10dp(150.0f);
+                                    dp3 = AndroidUtilities.m9dp(150.0f);
                                     photoSize2.var_h = dp3;
                                     photoSize.var_w = dp3;
                                 }
@@ -3167,7 +3167,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.documentAttachType = 2;
                             webDocument2 = webDocument;
                         } else if (MessageObject.isVideoDocument(document)) {
-                            this.currentPhotoObject = document.thumb;
+                            if (photo != null) {
+                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize(), true);
+                            }
+                            if (this.currentPhotoObject == null) {
+                                this.currentPhotoObject = document.thumb;
+                            }
                             if (this.currentPhotoObject != null && (this.currentPhotoObject.var_w == 0 || this.currentPhotoObject.var_h == 0)) {
                                 for (a = 0; a < document.attributes.size(); a++) {
                                     attribute = (DocumentAttribute) document.attributes.get(a);
@@ -3180,7 +3185,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.var_w == 0 || this.currentPhotoObject.var_h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp3 = AndroidUtilities.m10dp(150.0f);
+                                    dp3 = AndroidUtilities.m9dp(150.0f);
                                     photoSize2.var_h = dp3;
                                     photoSize.var_w = dp3;
                                 }
@@ -3201,7 +3206,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.var_w == 0 || this.currentPhotoObject.var_h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp3 = AndroidUtilities.m10dp(150.0f);
+                                    dp3 = AndroidUtilities.m9dp(150.0f);
                                     photoSize2.var_h = dp3;
                                     photoSize.var_w = dp3;
                                 }
@@ -3212,54 +3217,54 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         } else {
                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                             if (!MessageObject.isStickerDocument(document)) {
-                                if (this.backgroundWidth < AndroidUtilities.m10dp(20.0f) + maxWidth) {
-                                    this.backgroundWidth = AndroidUtilities.m10dp(20.0f) + maxWidth;
+                                if (this.backgroundWidth < AndroidUtilities.m9dp(20.0f) + maxWidth) {
+                                    this.backgroundWidth = AndroidUtilities.m9dp(20.0f) + maxWidth;
                                 }
                                 if (MessageObject.isVoiceDocument(document)) {
-                                    createDocumentLayout(this.backgroundWidth - AndroidUtilities.m10dp(10.0f), messageObject);
-                                    this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.m10dp(8.0f)) + this.linkPreviewHeight;
-                                    this.totalHeight += AndroidUtilities.m10dp(44.0f);
-                                    this.linkPreviewHeight += AndroidUtilities.m10dp(44.0f);
-                                    maxWidth -= AndroidUtilities.m10dp(86.0f);
+                                    createDocumentLayout(this.backgroundWidth - AndroidUtilities.m9dp(10.0f), messageObject);
+                                    this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.m9dp(8.0f)) + this.linkPreviewHeight;
+                                    this.totalHeight += AndroidUtilities.m9dp(44.0f);
+                                    this.linkPreviewHeight += AndroidUtilities.m9dp(44.0f);
+                                    maxWidth -= AndroidUtilities.m9dp(86.0f);
                                     if (AndroidUtilities.isTablet()) {
                                         i = AndroidUtilities.getMinTabletSide();
                                         f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 52.0f : 0.0f;
-                                        maxChildWidth = Math.max(maxChildWidth, (Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(220.0f)) - AndroidUtilities.m10dp(30.0f)) + additinalWidth);
+                                        maxChildWidth = Math.max(maxChildWidth, (Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(220.0f)) - AndroidUtilities.m9dp(30.0f)) + additinalWidth);
                                     } else {
                                         i = AndroidUtilities.displaySize.x;
                                         f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 52.0f : 0.0f;
-                                        maxChildWidth = Math.max(maxChildWidth, (Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(220.0f)) - AndroidUtilities.m10dp(30.0f)) + additinalWidth);
+                                        maxChildWidth = Math.max(maxChildWidth, (Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(220.0f)) - AndroidUtilities.m9dp(30.0f)) + additinalWidth);
                                     }
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     webDocument2 = webDocument;
                                 } else if (MessageObject.isMusicDocument(document)) {
-                                    int durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.m10dp(10.0f), messageObject);
-                                    this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.m10dp(8.0f)) + this.linkPreviewHeight;
-                                    this.totalHeight += AndroidUtilities.m10dp(56.0f);
-                                    this.linkPreviewHeight += AndroidUtilities.m10dp(56.0f);
-                                    maxWidth -= AndroidUtilities.m10dp(86.0f);
-                                    maxChildWidth = Math.max(maxChildWidth, (durationWidth + additinalWidth) + AndroidUtilities.m10dp(94.0f));
+                                    int durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.m9dp(10.0f), messageObject);
+                                    this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.m9dp(8.0f)) + this.linkPreviewHeight;
+                                    this.totalHeight += AndroidUtilities.m9dp(56.0f);
+                                    this.linkPreviewHeight += AndroidUtilities.m9dp(56.0f);
+                                    maxWidth -= AndroidUtilities.m9dp(86.0f);
+                                    maxChildWidth = Math.max(maxChildWidth, (durationWidth + additinalWidth) + AndroidUtilities.m9dp(94.0f));
                                     if (this.songLayout != null && this.songLayout.getLineCount() > 0) {
-                                        maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.m10dp(86.0f)));
+                                        maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.m9dp(86.0f)));
                                     }
                                     if (this.performerLayout != null && this.performerLayout.getLineCount() > 0) {
-                                        maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.m10dp(86.0f)));
+                                        maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.m9dp(86.0f)));
                                     }
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     webDocument2 = webDocument;
                                 } else {
-                                    createDocumentLayout(this.backgroundWidth - AndroidUtilities.m10dp(168.0f), messageObject);
+                                    createDocumentLayout(this.backgroundWidth - AndroidUtilities.m9dp(168.0f), messageObject);
                                     this.drawImageButton = true;
                                     if (this.drawPhotoImage) {
-                                        this.totalHeight += AndroidUtilities.m10dp(100.0f);
-                                        this.linkPreviewHeight += AndroidUtilities.m10dp(86.0f);
-                                        this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.m10dp(86.0f), AndroidUtilities.m10dp(86.0f));
+                                        this.totalHeight += AndroidUtilities.m9dp(100.0f);
+                                        this.linkPreviewHeight += AndroidUtilities.m9dp(86.0f);
+                                        this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.m9dp(86.0f), AndroidUtilities.m9dp(86.0f));
                                         webDocument2 = webDocument;
                                     } else {
-                                        this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.m10dp(8.0f)) + this.linkPreviewHeight;
-                                        this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.m10dp(14.0f), AndroidUtilities.m10dp(56.0f), AndroidUtilities.m10dp(56.0f));
-                                        this.totalHeight += AndroidUtilities.m10dp(64.0f);
-                                        this.linkPreviewHeight += AndroidUtilities.m10dp(50.0f);
+                                        this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.m9dp(8.0f)) + this.linkPreviewHeight;
+                                        this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.m9dp(14.0f), AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
+                                        this.totalHeight += AndroidUtilities.m9dp(64.0f);
+                                        this.linkPreviewHeight += AndroidUtilities.m9dp(50.0f);
                                         webDocument2 = webDocument;
                                     }
                                 }
@@ -3322,8 +3327,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 z = true;
                                 this.drawImageButton = z;
                                 if (this.linkPreviewHeight != 0) {
-                                    this.linkPreviewHeight += AndroidUtilities.m10dp(2.0f);
-                                    this.totalHeight += AndroidUtilities.m10dp(2.0f);
+                                    this.linkPreviewHeight += AndroidUtilities.m9dp(2.0f);
+                                    this.totalHeight += AndroidUtilities.m9dp(2.0f);
                                 }
                                 if (this.documentAttachType == 6) {
                                     if (AndroidUtilities.isTablet()) {
@@ -3335,7 +3340,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     maxPhotoWidth = AndroidUtilities.roundMessageSize;
                                     this.photoImage.setAllowDecodeSingleFrame(true);
                                 }
-                                maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m10dp(12.0f) : 0)) + additinalWidth);
+                                maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m9dp(12.0f) : 0)) + additinalWidth);
                                 if (this.currentPhotoObject != null) {
                                     this.currentPhotoObject.size = -1;
                                     if (this.currentPhotoObjectThumb != null) {
@@ -3348,12 +3353,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     height = maxPhotoWidth;
                                     width = maxPhotoWidth;
                                 } else if (this.hasGamePreview || this.hasInvoicePreview) {
-                                    scale = ((float) 640) / ((float) (maxPhotoWidth - AndroidUtilities.m10dp(2.0f)));
+                                    scale = ((float) 640) / ((float) (maxPhotoWidth - AndroidUtilities.m9dp(2.0f)));
                                     width = (int) (((float) 640) / scale);
                                     height = (int) (((float) 360) / scale);
                                 } else {
                                     width = this.currentPhotoObject.var_w;
-                                    scale = ((float) width) / ((float) (maxPhotoWidth - AndroidUtilities.m10dp(2.0f)));
+                                    scale = ((float) width) / ((float) (maxPhotoWidth - AndroidUtilities.m9dp(2.0f)));
                                     width = (int) (((float) width) / scale);
                                     height = (int) (((float) this.currentPhotoObject.var_h) / scale);
                                     if (site_name == null || !(site_name == null || site_name.toLowerCase().equals("instagram") || this.documentAttachType != 0)) {
@@ -3365,27 +3370,26 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     }
                                 }
                                 if (this.isSmallImage) {
-                                    if (AndroidUtilities.m10dp(50.0f) + additionalHeight > this.linkPreviewHeight) {
-                                        this.totalHeight += ((AndroidUtilities.m10dp(50.0f) + additionalHeight) - this.linkPreviewHeight) + AndroidUtilities.m10dp(8.0f);
-                                        this.linkPreviewHeight = AndroidUtilities.m10dp(50.0f) + additionalHeight;
+                                    if (AndroidUtilities.m9dp(50.0f) + additionalHeight > this.linkPreviewHeight) {
+                                        this.totalHeight += ((AndroidUtilities.m9dp(50.0f) + additionalHeight) - this.linkPreviewHeight) + AndroidUtilities.m9dp(8.0f);
+                                        this.linkPreviewHeight = AndroidUtilities.m9dp(50.0f) + additionalHeight;
                                     }
-                                    this.linkPreviewHeight -= AndroidUtilities.m10dp(8.0f);
+                                    this.linkPreviewHeight -= AndroidUtilities.m9dp(8.0f);
                                 } else {
-                                    this.totalHeight += AndroidUtilities.m10dp(12.0f) + height;
+                                    this.totalHeight += AndroidUtilities.m9dp(12.0f) + height;
                                     this.linkPreviewHeight += height;
                                 }
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 if (webDocument2 != null) {
-                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, messageObject, 1);
                                 } else if (this.documentAttachType == 6) {
-                                    this.photoImage.setImage(this.documentAttach, null, this.currentPhotoFilter, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, "b1", this.documentAttach.size, "webp", 1);
+                                    this.photoImage.setImage(this.documentAttach, null, this.currentPhotoFilter, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, "b1", this.documentAttach.size, "webp", messageObject, 1);
                                 } else if (this.documentAttachType == 4) {
                                     this.photoImage.setNeedsQualityThumb(true);
                                     this.photoImage.setShouldGenerateQualityThumb(true);
-                                    this.photoImage.setParentMessageObject(messageObject);
-                                    this.photoImage.setImage(null, null, this.currentPhotoObject.location, this.currentPhotoFilter, 0, null, 0);
+                                    this.photoImage.setImage(null, null, this.currentPhotoObject.location, this.currentPhotoFilter, 0, null, messageObject, 0);
                                 } else if (this.documentAttachType == 2 || this.documentAttachType == 7) {
                                     fileName = FileLoader.getAttachFileName(document);
                                     autoDownload = false;
@@ -3397,9 +3401,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     }
                                     if (messageObject.isSending() || messageObject.isEditing() || !(messageObject.mediaExists || FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName) || autoDownload)) {
                                         this.photoNotSet = true;
-                                        this.photoImage.setImage(null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, 0, null, 0);
+                                        this.photoImage.setImage(null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, 0, null, this.currentMessageObject, 0);
                                     } else {
-                                        FileLocation fileLocation;
                                         this.photoNotSet = false;
                                         ImageReceiver imageReceiver = this.photoImage;
                                         if (this.currentPhotoObject != null) {
@@ -3407,18 +3410,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         } else {
                                             fileLocation = null;
                                         }
-                                        imageReceiver.setImage(document, null, fileLocation, this.currentPhotoFilterThumb, document.size, null, 0);
+                                        imageReceiver.setImage(document, null, fileLocation, this.currentPhotoFilterThumb, document.size, null, this.currentMessageObject, 0);
                                     }
                                 } else {
                                     photoExist = messageObject.mediaExists;
                                     fileName = FileLoader.getAttachFileName(this.currentPhotoObject);
                                     if (this.hasGamePreview || photoExist || DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject) || FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                                         this.photoNotSet = false;
-                                        this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, 0, null, 0);
+                                        this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, 0, null, messageObject, 0);
                                     } else {
                                         this.photoNotSet = true;
                                         if (this.currentPhotoObjectThumb != null) {
-                                            this.photoImage.setImage(null, null, this.currentPhotoObjectThumb.location, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)}), 0, null, 0);
+                                            this.photoImage.setImage(null, null, this.currentPhotoObjectThumb.location, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)}), 0, null, messageObject, 0);
                                         } else {
                                             this.photoImage.setImageBitmap((Drawable) null);
                                         }
@@ -3447,7 +3450,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (this.hasInvoicePreview) {
                             }
-                            maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m10dp(12.0f) : 0)) + additinalWidth);
+                            maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.m9dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject != null) {
                             }
                             if (smallImage) {
@@ -3468,8 +3471,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                         } else {
                             this.photoImage.setImageBitmap((Drawable) null);
-                            this.linkPreviewHeight -= AndroidUtilities.m10dp(6.0f);
-                            this.totalHeight += AndroidUtilities.m10dp(4.0f);
+                            this.linkPreviewHeight -= AndroidUtilities.m9dp(6.0f);
+                            this.totalHeight += AndroidUtilities.m9dp(4.0f);
                         }
                         if (this.hasInvoicePreview) {
                             CharSequence str2;
@@ -3484,21 +3487,21 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                             spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                             this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
-                            this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.m10dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                            this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.m9dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             if (!this.drawPhotoImage) {
-                                this.totalHeight += AndroidUtilities.m10dp(6.0f);
-                                timeWidthTotal = this.timeWidth + AndroidUtilities.m10dp((float) ((messageObject.isOutOwner() ? 20 : 0) + 14));
+                                this.totalHeight += AndroidUtilities.m9dp(6.0f);
+                                timeWidthTotal = this.timeWidth + AndroidUtilities.m9dp((float) ((messageObject.isOutOwner() ? 20 : 0) + 14));
                                 if (this.durationWidth + timeWidthTotal > maxWidth) {
                                     maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
-                                    this.totalHeight += AndroidUtilities.m10dp(12.0f);
+                                    this.totalHeight += AndroidUtilities.m9dp(12.0f);
                                 } else {
                                     maxChildWidth = Math.max(this.durationWidth + timeWidthTotal, maxChildWidth);
                                 }
                             }
                         }
                         if (this.hasGamePreview && messageObject.textHeight != 0) {
-                            this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.m10dp(6.0f);
-                            this.totalHeight += AndroidUtilities.m10dp(4.0f);
+                            this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.m9dp(6.0f);
+                            this.totalHeight += AndroidUtilities.m9dp(4.0f);
                         }
                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                     }
@@ -3515,16 +3518,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (AndroidUtilities.isTablet()) {
                     i = AndroidUtilities.getMinTabletSide();
                     f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                    this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                 } else {
                     i = AndroidUtilities.displaySize.x;
                     f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                    this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                 }
-                this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m10dp(31.0f);
-                maxWidth = getMaxNameWidth() - AndroidUtilities.m10dp(50.0f);
+                this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m9dp(31.0f);
+                maxWidth = getMaxNameWidth() - AndroidUtilities.m9dp(50.0f);
                 if (maxWidth < 0) {
-                    maxWidth = AndroidUtilities.m10dp(10.0f);
+                    maxWidth = AndroidUtilities.m9dp(10.0f);
                 }
                 String time = LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
                 TL_messageActionPhoneCall call = (TL_messageActionPhoneCall) messageObject.messageOwner.action;
@@ -3545,12 +3548,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (call.duration > 0) {
                     time = time + ", " + LocaleController.formatCallDuration(call.duration);
                 }
-                this.titleLayout = new StaticLayout(TextUtils.ellipsize(text, Theme.chat_audioTitlePaint, (float) maxWidth, TruncateAt.END), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.m10dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                this.docTitleLayout = new StaticLayout(TextUtils.ellipsize(time, Theme.chat_contactPhonePaint, (float) maxWidth, TruncateAt.END), Theme.chat_contactPhonePaint, maxWidth + AndroidUtilities.m10dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.titleLayout = new StaticLayout(TextUtils.ellipsize(text, Theme.chat_audioTitlePaint, (float) maxWidth, TruncateAt.END), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.docTitleLayout = new StaticLayout(TextUtils.ellipsize(time, Theme.chat_contactPhonePaint, (float) maxWidth, TruncateAt.END), Theme.chat_contactPhonePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 setMessageObjectInternal(messageObject);
-                this.totalHeight = AndroidUtilities.m10dp(65.0f) + this.namesOffset;
+                this.totalHeight = AndroidUtilities.m9dp(65.0f) + this.namesOffset;
                 if (this.drawPinnedTop) {
-                    this.namesOffset -= AndroidUtilities.m10dp(1.0f);
+                    this.namesOffset -= AndroidUtilities.m9dp(1.0f);
                 }
             } else if (messageObject.type == 12) {
                 Drawable drawable;
@@ -3558,26 +3561,26 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.drawName = false;
                 this.drawForwardedName = true;
                 this.drawPhotoImage = true;
-                this.photoImage.setRoundRadius(AndroidUtilities.m10dp(22.0f));
+                this.photoImage.setRoundRadius(AndroidUtilities.m9dp(22.0f));
                 if (AndroidUtilities.isTablet()) {
                     i = AndroidUtilities.getMinTabletSide();
                     f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                    this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                 } else {
                     i = AndroidUtilities.displaySize.x;
                     f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                    this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                 }
-                this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m10dp(31.0f);
+                this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m9dp(31.0f);
                 User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.media.user_id));
-                maxWidth = getMaxNameWidth() - AndroidUtilities.m10dp(80.0f);
+                maxWidth = getMaxNameWidth() - AndroidUtilities.m9dp(80.0f);
                 if (maxWidth < 0) {
-                    maxWidth = AndroidUtilities.m10dp(10.0f);
+                    maxWidth = AndroidUtilities.m9dp(10.0f);
                 }
-                currentPhoto = null;
+                fileLocation = null;
                 if (user != null) {
                     if (user.photo != null) {
-                        currentPhoto = user.photo.photo_small;
+                        fileLocation = user.photo.photo_small;
                     }
                     this.contactAvatarDrawable.setInfo(user);
                 }
@@ -3588,7 +3591,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 } else {
                     drawable = Theme.chat_contactDrawable[messageObject.isOutOwner() ? 1 : 0];
                 }
-                imageReceiver2.setImage(currentPhoto, str3, drawable, null, 0);
+                imageReceiver2.setImage(fileLocation, str3, drawable, null, messageObject, 0);
                 if (TextUtils.isEmpty(messageObject.vCardData)) {
                     String phone2 = messageObject.messageOwner.media.phone_number;
                     if (TextUtils.isEmpty(phone2)) {
@@ -3608,55 +3611,55 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         currentNameString = TtmlNode.ANONYMOUS_REGION_ID;
                     }
                 }
-                this.titleLayout = new StaticLayout(TextUtils.ellipsize(currentNameString, Theme.chat_contactNamePaint, (float) maxWidth, TruncateAt.END), Theme.chat_contactNamePaint, maxWidth + AndroidUtilities.m10dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                this.docTitleLayout = new StaticLayout(phone, Theme.chat_contactPhonePaint, maxWidth + AndroidUtilities.m10dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(1.0f), false);
+                this.titleLayout = new StaticLayout(TextUtils.ellipsize(currentNameString, Theme.chat_contactNamePaint, (float) maxWidth, TruncateAt.END), Theme.chat_contactNamePaint, maxWidth + AndroidUtilities.m9dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.docTitleLayout = new StaticLayout(phone, Theme.chat_contactPhonePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(1.0f), false);
                 setMessageObjectInternal(messageObject);
                 if (this.drawForwardedName && messageObject.needDrawForwarded() && (this.currentPosition == null || this.currentPosition.minY == (byte) 0)) {
-                    this.namesOffset += AndroidUtilities.m10dp(5.0f);
+                    this.namesOffset += AndroidUtilities.m9dp(5.0f);
                 } else if (this.drawNameLayout && messageObject.messageOwner.reply_to_msg_id == 0) {
-                    this.namesOffset += AndroidUtilities.m10dp(7.0f);
+                    this.namesOffset += AndroidUtilities.m9dp(7.0f);
                 }
-                this.totalHeight = (AndroidUtilities.m10dp(55.0f) + this.namesOffset) + this.docTitleLayout.getHeight();
+                this.totalHeight = (AndroidUtilities.m9dp(55.0f) + this.namesOffset) + this.docTitleLayout.getHeight();
                 if (this.drawPinnedTop) {
-                    this.namesOffset -= AndroidUtilities.m10dp(1.0f);
+                    this.namesOffset -= AndroidUtilities.m9dp(1.0f);
                 }
                 if (this.drawInstantView) {
                     createInstantViewButton();
-                } else if (this.docTitleLayout.getLineCount() > 0 && (this.backgroundWidth - AndroidUtilities.m10dp(110.0f)) - ((int) Math.ceil((double) this.docTitleLayout.getLineWidth(this.docTitleLayout.getLineCount() - 1))) < this.timeWidth) {
-                    this.totalHeight += AndroidUtilities.m10dp(8.0f);
+                } else if (this.docTitleLayout.getLineCount() > 0 && (this.backgroundWidth - AndroidUtilities.m9dp(110.0f)) - ((int) Math.ceil((double) this.docTitleLayout.getLineWidth(this.docTitleLayout.getLineCount() - 1))) < this.timeWidth) {
+                    this.totalHeight += AndroidUtilities.m9dp(8.0f);
                 }
             } else if (messageObject.type == 2) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
                     i = AndroidUtilities.getMinTabletSide();
                     f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                    this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                 } else {
                     i = AndroidUtilities.displaySize.x;
                     f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                    this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                 }
                 createDocumentLayout(this.backgroundWidth, messageObject);
                 setMessageObjectInternal(messageObject);
-                this.totalHeight = AndroidUtilities.m10dp(70.0f) + this.namesOffset;
+                this.totalHeight = AndroidUtilities.m9dp(70.0f) + this.namesOffset;
                 if (this.drawPinnedTop) {
-                    this.namesOffset -= AndroidUtilities.m10dp(1.0f);
+                    this.namesOffset -= AndroidUtilities.m9dp(1.0f);
                 }
             } else if (messageObject.type == 14) {
                 if (AndroidUtilities.isTablet()) {
                     i = AndroidUtilities.getMinTabletSide();
                     f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                    this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                 } else {
                     i = AndroidUtilities.displaySize.x;
                     f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                    this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                 }
                 createDocumentLayout(this.backgroundWidth, messageObject);
                 setMessageObjectInternal(messageObject);
-                this.totalHeight = AndroidUtilities.m10dp(82.0f) + this.namesOffset;
+                this.totalHeight = AndroidUtilities.m9dp(82.0f) + this.namesOffset;
                 if (this.drawPinnedTop) {
-                    this.namesOffset -= AndroidUtilities.m10dp(1.0f);
+                    this.namesOffset -= AndroidUtilities.m9dp(1.0f);
                 }
             } else {
                 z = (messageObject.messageOwner.fwd_from == null || messageObject.type == 13) ? false : true;
@@ -3677,38 +3680,39 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.photoImage.setAllowStartAnimation(messageObject.gifState == 0.0f);
                 }
                 this.photoImage.setForcePreview(messageObject.needDrawBluredPreview());
+                int lineCount;
                 float maxHeight;
                 if (messageObject.type == 9) {
                     if (AndroidUtilities.isTablet()) {
                         i = AndroidUtilities.getMinTabletSide();
                         f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                        this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                        this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                     } else {
                         i = AndroidUtilities.displaySize.x;
                         f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                        this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(270.0f));
+                        this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(270.0f));
                     }
                     if (checkNeedDrawShareButton(messageObject)) {
-                        this.backgroundWidth -= AndroidUtilities.m10dp(20.0f);
+                        this.backgroundWidth -= AndroidUtilities.m9dp(20.0f);
                     }
-                    maxWidth = this.backgroundWidth - AndroidUtilities.m10dp(138.0f);
+                    maxWidth = this.backgroundWidth - AndroidUtilities.m9dp(138.0f);
                     createDocumentLayout(maxWidth, messageObject);
                     if (!TextUtils.isEmpty(messageObject.caption)) {
-                        maxWidth += AndroidUtilities.m10dp(86.0f);
+                        maxWidth += AndroidUtilities.m9dp(86.0f);
                     }
                     if (this.drawPhotoImage) {
-                        photoWidth = AndroidUtilities.m10dp(86.0f);
-                        photoHeight = AndroidUtilities.m10dp(86.0f);
+                        photoWidth = AndroidUtilities.m9dp(86.0f);
+                        photoHeight = AndroidUtilities.m9dp(86.0f);
                     } else {
-                        photoWidth = AndroidUtilities.m10dp(56.0f);
-                        photoHeight = AndroidUtilities.m10dp(56.0f);
-                        maxWidth += AndroidUtilities.m10dp(TextUtils.isEmpty(messageObject.caption) ? 51.0f : 21.0f);
+                        photoWidth = AndroidUtilities.m9dp(56.0f);
+                        photoHeight = AndroidUtilities.m9dp(56.0f);
+                        maxWidth += AndroidUtilities.m9dp(TextUtils.isEmpty(messageObject.caption) ? 51.0f : 21.0f);
                     }
                     this.availableTimeWidth = maxWidth;
                     if (!this.drawPhotoImage && TextUtils.isEmpty(messageObject.caption) && this.infoLayout.getLineCount() > 0) {
                         measureTime(messageObject);
-                        if ((this.backgroundWidth - AndroidUtilities.m10dp(122.0f)) - ((int) Math.ceil((double) this.infoLayout.getLineWidth(0))) < this.timeWidth) {
-                            photoHeight += AndroidUtilities.m10dp(8.0f);
+                        if ((this.backgroundWidth - AndroidUtilities.m9dp(122.0f)) - ((int) Math.ceil((double) this.infoLayout.getLineWidth(0))) < this.timeWidth) {
+                            photoHeight += AndroidUtilities.m9dp(8.0f);
                         }
                     }
                 } else if (messageObject.type == 4) {
@@ -3720,50 +3724,53 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         if (AndroidUtilities.isTablet()) {
                             i = AndroidUtilities.getMinTabletSide();
                             f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                            this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(289.0f));
+                            this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(289.0f));
                         } else {
                             i = AndroidUtilities.displaySize.x;
                             f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                            this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(289.0f));
+                            this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(289.0f));
                         }
                         if (checkNeedDrawShareButton(messageObject)) {
-                            this.backgroundWidth -= AndroidUtilities.m10dp(20.0f);
+                            this.backgroundWidth -= AndroidUtilities.m9dp(20.0f);
                         }
-                        maxWidth = this.backgroundWidth - AndroidUtilities.m10dp(37.0f);
+                        maxWidth = this.backgroundWidth - AndroidUtilities.m9dp(37.0f);
                         this.availableTimeWidth = maxWidth;
-                        maxWidth -= AndroidUtilities.m10dp(54.0f);
-                        photoWidth = this.backgroundWidth - AndroidUtilities.m10dp(21.0f);
-                        photoHeight = AndroidUtilities.m10dp(195.0f);
+                        maxWidth -= AndroidUtilities.m9dp(54.0f);
+                        photoWidth = this.backgroundWidth - AndroidUtilities.m9dp(21.0f);
+                        photoHeight = AndroidUtilities.m9dp(195.0f);
                         double rad = ((double) CLASSNAMEC.ENCODING_PCM_MU_LAW) / 3.141592653589793d;
-                        lat = ((1.5707963267948966d - (2.0d * Math.atan(Math.exp((((double) (Math.round(((double) CLASSNAMEC.ENCODING_PCM_MU_LAW) - ((Math.log((1.0d + Math.sin((3.141592653589793d * lat) / 180.0d)) / (1.0d - Math.sin((3.141592653589793d * lat) / 180.0d))) * rad) / 2.0d)) - ((long) (AndroidUtilities.m10dp(10.3f) << 6)))) - ((double) CLASSNAMEC.ENCODING_PCM_MU_LAW)) / rad)))) * 180.0d) / 3.141592653589793d;
+                        lat = ((1.5707963267948966d - (2.0d * Math.atan(Math.exp((((double) (Math.round(((double) CLASSNAMEC.ENCODING_PCM_MU_LAW) - ((Math.log((1.0d + Math.sin((3.141592653589793d * lat) / 180.0d)) / (1.0d - Math.sin((3.141592653589793d * lat) / 180.0d))) * rad) / 2.0d)) - ((long) (AndroidUtilities.m9dp(10.3f) << 6)))) - ((double) CLASSNAMEC.ENCODING_PCM_MU_LAW)) / rad)))) * 180.0d) / 3.141592653589793d;
                         this.currentUrl = AndroidUtilities.formapMapUrl(this.currentAccount, lat, lon, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) photoHeight) / AndroidUtilities.density), false, 15);
                         this.currentWebFile = WebFile.createWithGeoPoint(lat, lon, point.access_hash, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) photoHeight) / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil((double) AndroidUtilities.density)));
                         z = isCurrentLocationTimeExpired(messageObject);
                         this.locationExpired = z;
                         if (z) {
-                            this.backgroundWidth -= AndroidUtilities.m10dp(9.0f);
+                            this.backgroundWidth -= AndroidUtilities.m9dp(9.0f);
                         } else {
                             this.photoImage.setCrossfadeWithOldImage(true);
                             this.mediaBackground = false;
-                            additionHeight = AndroidUtilities.m10dp(56.0f);
+                            additionHeight = AndroidUtilities.m9dp(56.0f);
                             AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
                             this.scheduledInvalidate = true;
                         }
-                        this.docTitleLayout = new StaticLayout(LocaleController.getString("AttachLiveLocation", CLASSNAMER.string.AttachLiveLocation), Theme.chat_locationTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                        currentPhoto = null;
+                        this.docTitleLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("AttachLiveLocation", CLASSNAMER.string.AttachLiveLocation), Theme.chat_locationTitlePaint, (float) maxWidth, TruncateAt.END), Theme.chat_locationTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        TLObject currentPhoto = null;
                         updateCurrentUserAndChat();
+                        Object parentObject = null;
                         if (this.currentUser != null) {
                             if (this.currentUser.photo != null) {
                                 currentPhoto = this.currentUser.photo.photo_small;
                             }
                             this.contactAvatarDrawable.setInfo(this.currentUser);
+                            parentObject = this.currentUser;
                         } else if (this.currentChat != null) {
                             if (this.currentChat.photo != null) {
                                 currentPhoto = this.currentChat.photo.photo_small;
                             }
                             this.contactAvatarDrawable.setInfo(this.currentChat);
+                            Chat parentObject2 = this.currentChat;
                         }
-                        this.locationImageReceiver.setImage(currentPhoto, "50_50", this.contactAvatarDrawable, null, 0);
+                        this.locationImageReceiver.setImage(currentPhoto, "50_50", this.contactAvatarDrawable, null, parentObject2, 0);
                         if (messageObject.messageOwner.edit_date != 0) {
                             j = (long) messageObject.messageOwner.edit_date;
                         } else {
@@ -3774,50 +3781,50 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         if (AndroidUtilities.isTablet()) {
                             i = AndroidUtilities.getMinTabletSide();
                             f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                            this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(289.0f));
+                            this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(289.0f));
                         } else {
                             i = AndroidUtilities.displaySize.x;
                             f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                            this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(289.0f));
+                            this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(289.0f));
                         }
                         if (checkNeedDrawShareButton(messageObject)) {
-                            this.backgroundWidth -= AndroidUtilities.m10dp(20.0f);
+                            this.backgroundWidth -= AndroidUtilities.m9dp(20.0f);
                         }
-                        this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m10dp(34.0f);
-                        photoWidth = this.backgroundWidth - AndroidUtilities.m10dp(12.0f);
-                        photoHeight = AndroidUtilities.m10dp(195.0f);
+                        this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.m9dp(34.0f);
+                        photoWidth = this.backgroundWidth - AndroidUtilities.m9dp(12.0f);
+                        photoHeight = AndroidUtilities.m9dp(195.0f);
                         this.currentUrl = AndroidUtilities.formapMapUrl(this.currentAccount, lat, lon, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) photoHeight) / AndroidUtilities.density), true, 15);
                         this.currentWebFile = WebFile.createWithGeoPoint(point, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) photoHeight) / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil((double) AndroidUtilities.density)));
                     } else {
                         if (AndroidUtilities.isTablet()) {
                             i = AndroidUtilities.getMinTabletSide();
                             f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                            this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(289.0f));
+                            this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(289.0f));
                         } else {
                             i = AndroidUtilities.displaySize.x;
                             f = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                            this.backgroundWidth = Math.min(i - AndroidUtilities.m10dp(f), AndroidUtilities.m10dp(289.0f));
+                            this.backgroundWidth = Math.min(i - AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(289.0f));
                         }
                         if (checkNeedDrawShareButton(messageObject)) {
-                            this.backgroundWidth -= AndroidUtilities.m10dp(20.0f);
+                            this.backgroundWidth -= AndroidUtilities.m9dp(20.0f);
                         }
-                        maxWidth = this.backgroundWidth - AndroidUtilities.m10dp(34.0f);
+                        maxWidth = this.backgroundWidth - AndroidUtilities.m9dp(34.0f);
                         this.availableTimeWidth = maxWidth;
-                        photoWidth = this.backgroundWidth - AndroidUtilities.m10dp(21.0f);
-                        photoHeight = AndroidUtilities.m10dp(195.0f);
+                        photoWidth = this.backgroundWidth - AndroidUtilities.m9dp(21.0f);
+                        photoHeight = AndroidUtilities.m9dp(195.0f);
                         this.mediaBackground = false;
                         this.currentUrl = AndroidUtilities.formapMapUrl(this.currentAccount, lat, lon, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) photoHeight) / AndroidUtilities.density), true, 15);
                         this.currentWebFile = WebFile.createWithGeoPoint(point, (int) (((float) photoWidth) / AndroidUtilities.density), (int) (((float) photoHeight) / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil((double) AndroidUtilities.density)));
                         this.docTitleLayout = StaticLayoutEx.createStaticLayout(messageObject.messageOwner.media.title, Theme.chat_locationTitlePaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TruncateAt.END, maxWidth, 1);
-                        additionHeight = 0 + AndroidUtilities.m10dp(50.0f);
-                        int lineCount = this.docTitleLayout.getLineCount();
+                        additionHeight = 0 + AndroidUtilities.m9dp(50.0f);
+                        lineCount = this.docTitleLayout.getLineCount();
                         if (TextUtils.isEmpty(messageObject.messageOwner.media.address)) {
                             this.infoLayout = null;
                         } else {
                             this.infoLayout = StaticLayoutEx.createStaticLayout(messageObject.messageOwner.media.address, Theme.chat_locationAddressPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TruncateAt.END, maxWidth, 1);
                             measureTime(messageObject);
-                            if (this.backgroundWidth - ((int) Math.ceil((double) this.infoLayout.getLineWidth(0))) < AndroidUtilities.m10dp((float) ((messageObject.isOutOwner() ? 20 : 0) + 14)) + this.timeWidth) {
-                                additionHeight += AndroidUtilities.m10dp(8.0f);
+                            if ((this.backgroundWidth - ((int) Math.ceil((double) this.infoLayout.getLineWidth(0)))) - AndroidUtilities.m9dp(24.0f) < AndroidUtilities.m9dp((float) ((messageObject.isOutOwner() ? 20 : 0) + 20)) + this.timeWidth) {
+                                additionHeight += AndroidUtilities.m9dp(8.0f);
                             }
                         }
                     }
@@ -3832,14 +3839,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                     if (this.currentMapProvider == -1) {
                         ImageReceiver imageReceiver3 = this.photoImage;
-                        TLObject tLObject = (TLObject) null;
                         Drawable[] drawableArr = Theme.chat_locationDrawable;
                         if (messageObject.isOutOwner()) {
                             dp = 1;
                         } else {
                             dp = 0;
                         }
-                        imageReceiver3.setImage(tLObject, null, drawableArr[dp], null, 0);
+                        imageReceiver3.setImage(null, null, drawableArr[dp], null, messageObject, 0);
                     } else if (this.currentMapProvider != 2) {
                         if (this.currentMapProvider == 3 || this.currentMapProvider == 4) {
                             ImageLoader.getInstance().addTestWebFile(this.currentUrl, this.currentWebFile);
@@ -3849,7 +3855,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.photoImage.setImage(this.currentUrl, null, Theme.chat_locationDrawable[messageObject.isOutOwner() ? 1 : 0], null, 0);
                         }
                     } else if (this.currentWebFile != null) {
-                        this.photoImage.setImage(this.currentWebFile, null, Theme.chat_locationDrawable[messageObject.isOutOwner() ? 1 : 0], null, 0);
+                        this.photoImage.setImage(this.currentWebFile, null, Theme.chat_locationDrawable[messageObject.isOutOwner() ? 1 : 0], null, messageObject, 0);
                     }
                 } else if (messageObject.type == 13) {
                     float maxWidth2;
@@ -3871,7 +3877,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                     if (photoWidth == 0) {
                         photoHeight = (int) maxHeight;
-                        photoWidth = photoHeight + AndroidUtilities.m10dp(100.0f);
+                        photoWidth = photoHeight + AndroidUtilities.m9dp(100.0f);
                     }
                     photoHeight = (int) (((float) photoHeight) * (maxWidth2 / ((float) photoWidth)));
                     photoWidth = (int) maxWidth2;
@@ -3880,13 +3886,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         photoHeight = (int) maxHeight;
                     }
                     this.documentAttachType = 6;
-                    this.availableTimeWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(14.0f);
-                    this.backgroundWidth = AndroidUtilities.m10dp(12.0f) + photoWidth;
+                    this.availableTimeWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(14.0f);
+                    this.backgroundWidth = AndroidUtilities.m9dp(12.0f) + photoWidth;
                     this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                     if (messageObject.attachPathExists) {
-                        this.photoImage.setImage(null, messageObject.messageOwner.attachPath, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(photoHeight)}), null, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, "b1", messageObject.messageOwner.media.document.size, "webp", 1);
+                        this.photoImage.setImage(null, messageObject.messageOwner.attachPath, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(photoHeight)}), null, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, "b1", messageObject.messageOwner.media.document.size, "webp", messageObject, 1);
                     } else if (messageObject.messageOwner.media.document.var_id != 0) {
-                        this.photoImage.setImage(messageObject.messageOwner.media.document, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(photoHeight)}), null, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, "b1", messageObject.messageOwner.media.document.size, "webp", 1);
+                        this.photoImage.setImage(messageObject.messageOwner.media.document, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(photoHeight)}), null, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, "b1", messageObject.messageOwner.media.document.size, "webp", messageObject, 1);
                     }
                 } else {
                     float hScale;
@@ -3903,10 +3909,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         photoWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
                         maxPhotoWidth = photoWidth;
                     }
-                    photoHeight = photoWidth + AndroidUtilities.m10dp(100.0f);
+                    photoHeight = photoWidth + AndroidUtilities.m9dp(100.0f);
                     if (messageObject.type != 5 && checkNeedDrawShareButton(messageObject)) {
-                        maxPhotoWidth -= AndroidUtilities.m10dp(20.0f);
-                        photoWidth -= AndroidUtilities.m10dp(20.0f);
+                        maxPhotoWidth -= AndroidUtilities.m9dp(20.0f);
+                        photoWidth -= AndroidUtilities.m9dp(20.0f);
                     }
                     if (photoWidth > AndroidUtilities.getPhotoSize()) {
                         photoWidth = AndroidUtilities.getPhotoSize();
@@ -3924,13 +3930,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.photoImage.setNeedsQualityThumb(true);
                             this.photoImage.setShouldGenerateQualityThumb(true);
                         }
-                        this.photoImage.setParentMessageObject(messageObject);
                     } else if (messageObject.type == 5) {
                         if (!messageObject.needDrawBluredPreview()) {
                             this.photoImage.setNeedsQualityThumb(true);
                             this.photoImage.setShouldGenerateQualityThumb(true);
                         }
-                        this.photoImage.setParentMessageObject(messageObject);
                     } else if (messageObject.type == 8) {
                         str = AndroidUtilities.formatFileSize((long) messageObject.messageOwner.media.document.size);
                         this.infoWidth = (int) Math.ceil((double) Theme.chat_infoPaint.measureText(str));
@@ -3939,7 +3943,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.photoImage.setNeedsQualityThumb(true);
                             this.photoImage.setShouldGenerateQualityThumb(true);
                         }
-                        this.photoImage.setParentMessageObject(messageObject);
                     }
                     if (this.currentMessagesGroup == null && messageObject.caption != null) {
                         this.mediaBackground = false;
@@ -3955,16 +3958,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         w = (int) (((float) this.currentPhotoObject.var_w) / scale);
                         h = (int) (((float) this.currentPhotoObject.var_h) / scale);
                         if (w == 0) {
-                            w = AndroidUtilities.m10dp(150.0f);
+                            w = AndroidUtilities.m9dp(150.0f);
                         }
                         if (h == 0) {
-                            h = AndroidUtilities.m10dp(150.0f);
+                            h = AndroidUtilities.m9dp(150.0f);
                         }
                         if (h > photoHeight) {
                             h = photoHeight;
                             w = (int) (((float) w) / (((float) h) / ((float) h)));
-                        } else if (h < AndroidUtilities.m10dp(120.0f)) {
-                            h = AndroidUtilities.m10dp(120.0f);
+                        } else if (h < AndroidUtilities.m9dp(120.0f)) {
+                            h = AndroidUtilities.m9dp(120.0f);
                             hScale = ((float) this.currentPhotoObject.var_h) / ((float) h);
                             if (((float) this.currentPhotoObject.var_w) / hScale < ((float) photoWidth)) {
                                 w = (int) (((float) this.currentPhotoObject.var_w) / hScale);
@@ -3986,8 +3989,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (h > photoHeight) {
                                     h = photoHeight;
                                     w = (int) (((float) w) / (((float) h) / ((float) h)));
-                                } else if (h < AndroidUtilities.m10dp(120.0f)) {
-                                    h = AndroidUtilities.m10dp(120.0f);
+                                } else if (h < AndroidUtilities.m9dp(120.0f)) {
+                                    h = AndroidUtilities.m9dp(120.0f);
                                     hScale = ((float) attribute.var_h) / ((float) h);
                                     if (((float) attribute.var_w) / hScale < ((float) photoWidth)) {
                                         w = (int) (((float) attribute.var_w) / hScale);
@@ -3999,11 +4002,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         }
                     }
                     if (w == 0 || h == 0) {
-                        h = AndroidUtilities.m10dp(150.0f);
+                        h = AndroidUtilities.m9dp(150.0f);
                         w = h;
                     }
-                    if (messageObject.type == 3 && w < this.infoWidth + AndroidUtilities.m10dp(40.0f)) {
-                        w = this.infoWidth + AndroidUtilities.m10dp(40.0f);
+                    if (messageObject.type == 3 && w < this.infoWidth + AndroidUtilities.m9dp(40.0f)) {
+                        w = this.infoWidth + AndroidUtilities.m9dp(40.0f);
                     }
                     if (this.currentMessagesGroup != null) {
                         firstLineWidth = 0;
@@ -4015,15 +4018,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             firstLineWidth = (int) (((double) firstLineWidth) + Math.ceil((double) ((((float) (position.var_pw + position.leftSpanOffset)) / 1000.0f) * ((float) dWidth))));
                         }
-                        this.availableTimeWidth = firstLineWidth - AndroidUtilities.m10dp(35.0f);
+                        this.availableTimeWidth = firstLineWidth - AndroidUtilities.m9dp(35.0f);
                     } else {
-                        this.availableTimeWidth = maxPhotoWidth - AndroidUtilities.m10dp(14.0f);
+                        this.availableTimeWidth = maxPhotoWidth - AndroidUtilities.m9dp(14.0f);
                     }
                     if (messageObject.type == 5) {
-                        this.availableTimeWidth = (int) (((double) this.availableTimeWidth) - (Math.ceil((double) Theme.chat_audioTimePaint.measureText("00:00")) + ((double) AndroidUtilities.m10dp(26.0f))));
+                        this.availableTimeWidth = (int) (((double) this.availableTimeWidth) - (Math.ceil((double) Theme.chat_audioTimePaint.measureText("00:00")) + ((double) AndroidUtilities.m9dp(26.0f))));
                     }
                     measureTime(messageObject);
-                    timeWidthTotal = this.timeWidth + AndroidUtilities.m10dp((float) ((messageObject.isOutOwner() ? 20 : 0) + 14));
+                    timeWidthTotal = this.timeWidth + AndroidUtilities.m9dp((float) ((messageObject.isOutOwner() ? 20 : 0) + 14));
                     if (w < timeWidthTotal) {
                         w = timeWidthTotal;
                     }
@@ -4041,6 +4044,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             w = h;
                         }
                     }
+                    boolean fixPhotoWidth = false;
                     if (this.currentMessagesGroup != null) {
                         int currentLineWidth;
                         maxHeight = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.5f;
@@ -4061,27 +4065,27 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             w += firstLineWidth - currentLineWidth;
                         }
-                        w -= AndroidUtilities.m10dp(9.0f);
+                        w -= AndroidUtilities.m9dp(9.0f);
                         if (this.isAvatarVisible) {
-                            w -= AndroidUtilities.m10dp(48.0f);
+                            w -= AndroidUtilities.m9dp(48.0f);
                         }
                         if (this.currentPosition.siblingHeights != null) {
                             h = 0;
                             for (float f2 : this.currentPosition.siblingHeights) {
                                 h += (int) Math.ceil((double) (f2 * maxHeight));
                             }
-                            h += (this.currentPosition.maxY - this.currentPosition.minY) * AndroidUtilities.m10dp(11.0f);
+                            h += (this.currentPosition.maxY - this.currentPosition.minY) * AndroidUtilities.m9dp(11.0f);
                         } else {
                             h = (int) Math.ceil((double) (this.currentPosition.var_ph * maxHeight));
                         }
                         this.backgroundWidth = w;
-                        w -= AndroidUtilities.m10dp(12.0f);
+                        w -= AndroidUtilities.m9dp(12.0f);
                         photoWidth = w;
                         if (!this.currentPosition.edge) {
-                            photoWidth += AndroidUtilities.m10dp(10.0f);
+                            photoWidth += AndroidUtilities.m9dp(10.0f);
                         }
                         photoHeight = h;
-                        widthForCaption = 0 + (photoWidth - AndroidUtilities.m10dp(10.0f));
+                        widthForCaption = 0 + (photoWidth - AndroidUtilities.m9dp(10.0f));
                         if ((this.currentPosition.flags & 8) != 0 || (this.currentMessagesGroup.hasSibling && (this.currentPosition.flags & 4) == 0)) {
                             widthForCaption += getAdditionalWidthForPosition(this.currentPosition);
                             count = this.currentMessagesGroup.messages.size();
@@ -4105,13 +4109,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         }
                                         w += firstLineWidth - currentLineWidth;
                                     }
-                                    w -= AndroidUtilities.m10dp(18.0f);
+                                    w -= AndroidUtilities.m9dp(18.0f);
                                     if (this.isChat && !m.isOutOwner() && m.needDrawAvatar() && (rowPosition == null || rowPosition.edge)) {
-                                        w -= AndroidUtilities.m10dp(48.0f);
+                                        w -= AndroidUtilities.m9dp(48.0f);
                                     }
                                     w += getAdditionalWidthForPosition(rowPosition);
                                     if (!rowPosition.edge) {
-                                        w += AndroidUtilities.m10dp(10.0f);
+                                        w += AndroidUtilities.m9dp(10.0f);
                                     }
                                     widthForCaption += w;
                                     if (rowPosition.minX < this.currentPosition.minX || (this.currentMessagesGroup.hasSibling && rowPosition.minY != rowPosition.maxY)) {
@@ -4128,14 +4132,25 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                         }
                     } else {
-                        photoWidth = w;
+                        int minCaptionWidth;
                         photoHeight = h;
-                        this.backgroundWidth = AndroidUtilities.m10dp(12.0f) + w;
-                        if (!this.mediaBackground) {
-                            this.backgroundWidth += AndroidUtilities.m10dp(9.0f);
-                        }
+                        photoWidth = w;
                         this.currentCaption = messageObject.caption;
-                        widthForCaption = photoWidth - AndroidUtilities.m10dp(10.0f);
+                        if (AndroidUtilities.isTablet()) {
+                            minCaptionWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.65f);
+                        } else {
+                            minCaptionWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.65f);
+                        }
+                        if (messageObject.needDrawBluredPreview() || this.currentCaption == null || photoWidth >= minCaptionWidth) {
+                            widthForCaption = photoWidth - AndroidUtilities.m9dp(10.0f);
+                        } else {
+                            widthForCaption = minCaptionWidth;
+                            fixPhotoWidth = true;
+                        }
+                        this.backgroundWidth = AndroidUtilities.m9dp(12.0f) + photoWidth;
+                        if (!this.mediaBackground) {
+                            this.backgroundWidth += AndroidUtilities.m9dp(9.0f);
+                        }
                     }
                     if (this.currentCaption != null) {
                         try {
@@ -4144,15 +4159,27 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             } else {
                                 this.captionLayout = new StaticLayout(this.currentCaption, Theme.chat_msgTextPaint, widthForCaption, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
-                            if (this.captionLayout.getLineCount() > 0) {
-                                this.captionWidth = widthForCaption;
+                            lineCount = this.captionLayout.getLineCount();
+                            if (lineCount > 0) {
+                                if (fixPhotoWidth) {
+                                    this.captionWidth = 0;
+                                    for (a = 0; a < lineCount; a++) {
+                                        this.captionWidth = (int) Math.max((double) this.captionWidth, Math.ceil((double) this.captionLayout.getLineWidth(a)));
+                                        if (this.captionLayout.getLineLeft(a) != 0.0f) {
+                                            this.captionWidth = widthForCaption;
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    this.captionWidth = widthForCaption;
+                                }
                                 this.captionHeight = this.captionLayout.getHeight();
-                                this.addedCaptionHeight = this.captionHeight + AndroidUtilities.m10dp(9.0f);
+                                this.addedCaptionHeight = this.captionHeight + AndroidUtilities.m9dp(9.0f);
                                 if (this.currentPosition == null || (this.currentPosition.flags & 8) != 0) {
                                     additionHeight = 0 + this.addedCaptionHeight;
-                                    if (((float) (AndroidUtilities.m10dp(2.0f) + widthForCaption)) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
-                                        additionHeight += AndroidUtilities.m10dp(14.0f);
-                                        this.addedCaptionHeight += AndroidUtilities.m10dp(14.0f);
+                                    if (((float) (AndroidUtilities.m9dp(2.0f) + Math.max(this.captionWidth, photoWidth - AndroidUtilities.m9dp(10.0f)))) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
+                                        additionHeight += AndroidUtilities.m9dp(14.0f);
+                                        this.addedCaptionHeight += AndroidUtilities.m9dp(14.0f);
                                         captionNewLine = 1;
                                     }
                                 } else {
@@ -4160,7 +4187,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                             }
                         } catch (Throwable e22222) {
-                            FileLog.m14e(e22222);
+                            FileLog.m13e(e22222);
+                        }
+                    }
+                    if (fixPhotoWidth && photoWidth < this.captionWidth + AndroidUtilities.m9dp(10.0f)) {
+                        photoWidth = this.captionWidth + AndroidUtilities.m9dp(10.0f);
+                        this.backgroundWidth = AndroidUtilities.m9dp(12.0f) + photoWidth;
+                        if (!this.mediaBackground) {
+                            this.backgroundWidth += AndroidUtilities.m9dp(9.0f);
                         }
                     }
                     String format = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf((int) (((float) w) / AndroidUtilities.density)), Integer.valueOf((int) (((float) h) / AndroidUtilities.density))});
@@ -4193,11 +4227,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 photoExist = false;
                             }
                             if (photoExist || DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject) || FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
-                                this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, noSize ? 0 : this.currentPhotoObject.size, null, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                                this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, noSize ? 0 : this.currentPhotoObject.size, null, this.currentMessageObject, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
                             } else {
                                 this.photoNotSet = true;
                                 if (this.currentPhotoObjectThumb != null) {
-                                    this.photoImage.setImage(null, null, this.currentPhotoObjectThumb.location, this.currentPhotoFilterThumb, 0, null, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                                    this.photoImage.setImage(null, null, this.currentPhotoObjectThumb.location, this.currentPhotoFilterThumb, 0, null, this.currentMessageObject, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
                                 } else {
                                     this.photoImage.setImageBitmap((Drawable) null);
                                 }
@@ -4222,7 +4256,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         }
                         if (messageObject.isSending() || messageObject.isEditing() || !(localFile != 0 || FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName) || autoDownload)) {
                             this.photoNotSet = true;
-                            this.photoImage.setImage(null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, 0, null, 0);
+                            this.photoImage.setImage(null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, 0, null, messageObject, 0);
                         } else if (localFile == 1) {
                             String str4;
                             FileLocation fileLocation2;
@@ -4237,48 +4271,48 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             } else {
                                 fileLocation2 = null;
                             }
-                            imageReceiver4.setImage(null, str4, null, null, fileLocation2, this.currentPhotoFilterThumb, 0, null, 0);
+                            imageReceiver4.setImage(null, str4, null, null, fileLocation2, this.currentPhotoFilterThumb, 0, null, messageObject, 0);
                         } else {
-                            this.photoImage.setImage(messageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, messageObject.messageOwner.media.document.size, null, 0);
+                            this.photoImage.setImage(messageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, messageObject.messageOwner.media.document.size, null, messageObject, 0);
                         }
                     } else {
-                        this.photoImage.setImage(null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, 0, null, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                        this.photoImage.setImage(null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, 0, null, messageObject, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
                     }
                 }
                 setMessageObjectInternal(messageObject);
                 if (this.drawForwardedName && messageObject.needDrawForwarded() && (this.currentPosition == null || this.currentPosition.minY == (byte) 0)) {
                     if (messageObject.type != 5) {
-                        this.namesOffset += AndroidUtilities.m10dp(5.0f);
+                        this.namesOffset += AndroidUtilities.m9dp(5.0f);
                     }
                 } else if (this.drawNameLayout && messageObject.messageOwner.reply_to_msg_id == 0) {
-                    this.namesOffset += AndroidUtilities.m10dp(7.0f);
+                    this.namesOffset += AndroidUtilities.m9dp(7.0f);
                 }
-                this.totalHeight = ((AndroidUtilities.m10dp(14.0f) + photoHeight) + this.namesOffset) + additionHeight;
+                this.totalHeight = ((AndroidUtilities.m9dp(14.0f) + photoHeight) + this.namesOffset) + additionHeight;
                 if (this.currentPosition != null && (this.currentPosition.flags & 8) == 0) {
-                    this.totalHeight -= AndroidUtilities.m10dp(3.0f);
+                    this.totalHeight -= AndroidUtilities.m9dp(3.0f);
                 }
                 int additionalTop = 0;
                 if (this.currentPosition != null) {
                     photoWidth += getAdditionalWidthForPosition(this.currentPosition);
                     if ((this.currentPosition.flags & 4) == 0) {
-                        photoHeight += AndroidUtilities.m10dp(4.0f);
-                        additionalTop = 0 - AndroidUtilities.m10dp(4.0f);
+                        photoHeight += AndroidUtilities.m9dp(4.0f);
+                        additionalTop = 0 - AndroidUtilities.m9dp(4.0f);
                     }
                     if ((this.currentPosition.flags & 8) == 0) {
-                        photoHeight += AndroidUtilities.m10dp(4.0f);
+                        photoHeight += AndroidUtilities.m9dp(4.0f);
                     }
                 }
                 if (this.drawPinnedTop) {
-                    this.namesOffset -= AndroidUtilities.m10dp(1.0f);
+                    this.namesOffset -= AndroidUtilities.m9dp(1.0f);
                 }
-                this.photoImage.setImageCoords(0, (AndroidUtilities.m10dp(7.0f) + this.namesOffset) + additionalTop, photoWidth, photoHeight);
+                this.photoImage.setImageCoords(0, (AndroidUtilities.m9dp(7.0f) + this.namesOffset) + additionalTop, photoWidth, photoHeight);
                 invalidate();
             }
             if (this.currentPosition != null && this.captionLayout == null && messageObject.caption != null && messageObject.type != 13) {
                 try {
                     this.currentCaption = messageObject.caption;
-                    width = this.backgroundWidth - AndroidUtilities.m10dp(31.0f);
-                    widthForCaption = width - AndroidUtilities.m10dp(10.0f);
+                    width = this.backgroundWidth - AndroidUtilities.m9dp(31.0f);
+                    widthForCaption = width - AndroidUtilities.m9dp(10.0f);
                     if (VERSION.SDK_INT >= 24) {
                         this.captionLayout = Builder.obtain(messageObject.caption, 0, messageObject.caption.length(), Theme.chat_msgTextPaint, widthForCaption).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
                     } else {
@@ -4286,23 +4320,23 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                     if (this.captionLayout.getLineCount() > 0) {
                         this.captionWidth = widthForCaption;
-                        timeWidthTotal = this.timeWidth + (messageObject.isOutOwner() ? AndroidUtilities.m10dp(20.0f) : 0);
+                        timeWidthTotal = this.timeWidth + (messageObject.isOutOwner() ? AndroidUtilities.m9dp(20.0f) : 0);
                         this.captionHeight = this.captionLayout.getHeight();
-                        this.totalHeight += this.captionHeight + AndroidUtilities.m10dp(9.0f);
-                        if (((float) (width - AndroidUtilities.m10dp(8.0f))) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
-                            this.totalHeight += AndroidUtilities.m10dp(14.0f);
-                            this.captionHeight += AndroidUtilities.m10dp(14.0f);
+                        this.totalHeight += this.captionHeight + AndroidUtilities.m9dp(9.0f);
+                        if (((float) (width - AndroidUtilities.m9dp(8.0f))) - (this.captionLayout.getLineWidth(this.captionLayout.getLineCount() - 1) + this.captionLayout.getLineLeft(this.captionLayout.getLineCount() - 1)) < ((float) timeWidthTotal)) {
+                            this.totalHeight += AndroidUtilities.m9dp(14.0f);
+                            this.captionHeight += AndroidUtilities.m9dp(14.0f);
                             captionNewLine = 2;
                         }
                     }
                 } catch (Throwable e222222) {
-                    FileLog.m14e(e222222);
+                    FileLog.m13e(e222222);
                 }
             } else if (this.widthBeforeNewTimeLine != -1 && this.availableTimeWidth - this.widthBeforeNewTimeLine < this.timeWidth) {
-                this.totalHeight += AndroidUtilities.m10dp(14.0f);
+                this.totalHeight += AndroidUtilities.m9dp(14.0f);
             }
             if (!(this.currentMessageObject.eventId == 0 || this.currentMessageObject.isMediaEmpty() || this.currentMessageObject.messageOwner.media.webpage == null)) {
-                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.m10dp(41.0f);
+                linkPreviewMaxWidth = this.backgroundWidth - AndroidUtilities.m9dp(41.0f);
                 this.hasOldCaptionPreview = true;
                 this.linkPreviewHeight = 0;
                 webPage = this.currentMessageObject.messageOwner.media.webpage;
@@ -4315,9 +4349,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.totalHeight += height;
                 this.descriptionX = 0;
                 if (this.linkPreviewHeight != 0) {
-                    this.totalHeight += AndroidUtilities.m10dp(2.0f);
+                    this.totalHeight += AndroidUtilities.m9dp(2.0f);
                 }
-                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m10dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
+                this.descriptionLayout = StaticLayoutEx.createStaticLayout(webPage.description, Theme.chat_replyTextPaint, linkPreviewMaxWidth, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.m9dp(1.0f), false, TruncateAt.END, linkPreviewMaxWidth, 6);
                 height = this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
                 this.linkPreviewHeight += height;
                 this.totalHeight += height;
@@ -4331,11 +4365,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         }
                     }
                 }
-                this.totalHeight += AndroidUtilities.m10dp(17.0f);
+                this.totalHeight += AndroidUtilities.m9dp(17.0f);
                 if (captionNewLine != 0) {
-                    this.totalHeight -= AndroidUtilities.m10dp(14.0f);
+                    this.totalHeight -= AndroidUtilities.m9dp(14.0f);
                     if (captionNewLine == 2) {
-                        this.captionHeight -= AndroidUtilities.m10dp(14.0f);
+                        this.captionHeight -= AndroidUtilities.m9dp(14.0f);
                     }
                 }
             }
@@ -4351,17 +4385,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             } else {
                 HashMap<String, BotButton> oldByPosition;
                 int rows = messageObject.messageOwner.reply_markup.rows.size();
-                dp = (AndroidUtilities.m10dp(48.0f) * rows) + AndroidUtilities.m10dp(1.0f);
+                dp = (AndroidUtilities.m9dp(48.0f) * rows) + AndroidUtilities.m9dp(1.0f);
                 this.keyboardHeight = dp;
                 this.substractBackgroundHeight = dp;
-                this.widthForButtons = this.backgroundWidth - AndroidUtilities.m10dp(this.mediaBackground ? 0.0f : 9.0f);
+                this.widthForButtons = this.backgroundWidth - AndroidUtilities.m9dp(this.mediaBackground ? 0.0f : 9.0f);
                 if (messageObject.wantedBotKeyboardWidth > this.widthForButtons) {
                     f2 = (this.isChat && messageObject.needDrawAvatar() && !messageObject.isOutOwner()) ? 62.0f : 10.0f;
-                    int maxButtonWidth = -AndroidUtilities.m10dp(f2);
+                    int maxButtonWidth = -AndroidUtilities.m9dp(f2);
                     if (AndroidUtilities.isTablet()) {
                         maxButtonWidth += AndroidUtilities.getMinTabletSide();
                     } else {
-                        maxButtonWidth += Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(5.0f);
+                        maxButtonWidth += Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(5.0f);
                     }
                     this.widthForButtons = Math.max(this.backgroundWidth, Math.min(messageObject.wantedBotKeyboardWidth, maxButtonWidth));
                 }
@@ -4380,7 +4414,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     TL_keyboardButtonRow row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                     int buttonsCount = row.buttons.size();
                     if (buttonsCount != 0) {
-                        int buttonWidth = ((this.widthForButtons - (AndroidUtilities.m10dp(5.0f) * (buttonsCount - 1))) - AndroidUtilities.m10dp(2.0f)) / buttonsCount;
+                        int buttonWidth = ((this.widthForButtons - (AndroidUtilities.m9dp(5.0f) * (buttonsCount - 1))) - AndroidUtilities.m9dp(2.0f)) / buttonsCount;
                         for (int b = 0; b < row.buttons.size(); b++) {
                             BotButton oldButton;
                             CharSequence buttonText;
@@ -4402,16 +4436,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             this.botButtonsByData.put(key, botButton);
                             this.botButtonsByPosition.put(position2, botButton);
-                            botButton.var_x = (AndroidUtilities.m10dp(5.0f) + buttonWidth) * b;
-                            botButton.var_y = (AndroidUtilities.m10dp(48.0f) * a) + AndroidUtilities.m10dp(5.0f);
+                            botButton.var_x = (AndroidUtilities.m9dp(5.0f) + buttonWidth) * b;
+                            botButton.var_y = (AndroidUtilities.m9dp(48.0f) * a) + AndroidUtilities.m9dp(5.0f);
                             botButton.width = buttonWidth;
-                            botButton.height = AndroidUtilities.m10dp(44.0f);
+                            botButton.height = AndroidUtilities.m9dp(44.0f);
                             if (!(botButton.button instanceof TL_keyboardButtonBuy) || (messageObject.messageOwner.media.flags & 4) == 0) {
-                                buttonText = TextUtils.ellipsize(Emoji.replaceEmoji(botButton.button.text, Theme.chat_botButtonPaint.getFontMetricsInt(), AndroidUtilities.m10dp(15.0f), false), Theme.chat_botButtonPaint, (float) (buttonWidth - AndroidUtilities.m10dp(10.0f)), TruncateAt.END);
+                                buttonText = TextUtils.ellipsize(Emoji.replaceEmoji(botButton.button.text, Theme.chat_botButtonPaint.getFontMetricsInt(), AndroidUtilities.m9dp(15.0f), false), Theme.chat_botButtonPaint, (float) (buttonWidth - AndroidUtilities.m9dp(10.0f)), TruncateAt.END);
                             } else {
                                 buttonText = LocaleController.getString("PaymentReceipt", CLASSNAMER.string.PaymentReceipt);
                             }
-                            botButton.title = new StaticLayout(buttonText, Theme.chat_botButtonPaint, buttonWidth - AndroidUtilities.m10dp(10.0f), Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                            botButton.title = new StaticLayout(buttonText, Theme.chat_botButtonPaint, buttonWidth - AndroidUtilities.m9dp(10.0f), Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                             this.botButtons.add(botButton);
                             if (b == row.buttons.size() - 1) {
                                 maxButtonsWidth = Math.max(maxButtonsWidth, botButton.var_x + botButton.width);
@@ -4422,14 +4456,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.widthForButtons = maxButtonsWidth;
             }
             if (!this.drawPinnedBottom && this.drawPinnedTop) {
-                this.totalHeight -= AndroidUtilities.m10dp(2.0f);
+                this.totalHeight -= AndroidUtilities.m9dp(2.0f);
             } else if (this.drawPinnedBottom) {
-                this.totalHeight -= AndroidUtilities.m10dp(1.0f);
+                this.totalHeight -= AndroidUtilities.m9dp(1.0f);
             } else if (this.drawPinnedTop && this.pinnedBottom && this.currentPosition != null && this.currentPosition.siblingHeights == null) {
-                this.totalHeight -= AndroidUtilities.m10dp(1.0f);
+                this.totalHeight -= AndroidUtilities.m9dp(1.0f);
             }
-            if (messageObject.type == 13 && this.totalHeight < AndroidUtilities.m10dp(70.0f)) {
-                this.totalHeight = AndroidUtilities.m10dp(70.0f);
+            if (messageObject.type == 13 && this.totalHeight < AndroidUtilities.m9dp(70.0f)) {
+                this.totalHeight = AndroidUtilities.m9dp(70.0f);
             }
             if (this.drawPhotoImage) {
                 this.photoImage.setImageBitmap((Drawable) null);
@@ -4446,10 +4480,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             return 0;
         }
         if ((position.flags & 2) == 0) {
-            w = 0 + AndroidUtilities.m10dp(4.0f);
+            w = 0 + AndroidUtilities.m9dp(4.0f);
         }
         if ((position.flags & 1) == 0) {
-            return w + AndroidUtilities.m10dp(4.0f);
+            return w + AndroidUtilities.m9dp(4.0f);
         }
         return w;
     }
@@ -4465,7 +4499,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     public void draw(Canvas canvas) {
                         Rect bounds = getBounds();
                         this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
-                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(6.0f), (float) AndroidUtilities.m10dp(6.0f), maskPaint);
+                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(6.0f), (float) AndroidUtilities.m9dp(6.0f), maskPaint);
                     }
 
                     public void setAlpha(int alpha) {
@@ -4490,7 +4524,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         if (this.drawInstantView && this.instantViewLayout == null) {
             String str;
-            this.instantWidth = AndroidUtilities.m10dp(33.0f);
+            this.instantWidth = AndroidUtilities.m9dp(33.0f);
             if (this.drawInstantViewType == 1) {
                 str = LocaleController.getString("OpenChannel", CLASSNAMER.string.OpenChannel);
             } else if (this.drawInstantViewType == 2) {
@@ -4502,18 +4536,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             } else {
                 str = LocaleController.getString("InstantView", CLASSNAMER.string.InstantView);
             }
-            int mWidth = this.backgroundWidth - AndroidUtilities.m10dp(75.0f);
+            int mWidth = this.backgroundWidth - AndroidUtilities.m9dp(75.0f);
             this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-            this.instantWidth = this.backgroundWidth - AndroidUtilities.m10dp(34.0f);
-            this.totalHeight += AndroidUtilities.m10dp(46.0f);
+            this.instantWidth = this.backgroundWidth - AndroidUtilities.m9dp(34.0f);
+            this.totalHeight += AndroidUtilities.m9dp(46.0f);
             if (this.currentMessageObject.type == 12) {
-                this.totalHeight += AndroidUtilities.m10dp(14.0f);
+                this.totalHeight += AndroidUtilities.m9dp(14.0f);
             }
             if (this.instantViewLayout != null && this.instantViewLayout.getLineCount() > 0) {
                 int dp;
                 int ceil = ((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2;
                 if (this.drawInstantViewType == 0) {
-                    dp = AndroidUtilities.m10dp(8.0f);
+                    dp = AndroidUtilities.m9dp(8.0f);
                 } else {
                     dp = 0;
                 }
@@ -4553,8 +4587,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             return AndroidUtilities.displaySize.x;
         }
         int leftWidth = (AndroidUtilities.displaySize.x / 100) * 35;
-        if (leftWidth < AndroidUtilities.m10dp(320.0f)) {
-            leftWidth = AndroidUtilities.m10dp(320.0f);
+        if (leftWidth < AndroidUtilities.m9dp(320.0f)) {
+            leftWidth = AndroidUtilities.m9dp(320.0f);
         }
         return AndroidUtilities.displaySize.x - leftWidth;
     }
@@ -4566,25 +4600,25 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.layoutWidth = getMeasuredWidth();
                 this.layoutHeight = getMeasuredHeight() - this.substractBackgroundHeight;
                 if (this.timeTextWidth < 0) {
-                    this.timeTextWidth = AndroidUtilities.m10dp(10.0f);
+                    this.timeTextWidth = AndroidUtilities.m9dp(10.0f);
                 }
-                this.timeLayout = new StaticLayout(this.currentTimeString, Theme.chat_timePaint, this.timeTextWidth + AndroidUtilities.m10dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.timeLayout = new StaticLayout(this.currentTimeString, Theme.chat_timePaint, this.timeTextWidth + AndroidUtilities.m9dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (this.mediaBackground) {
                     if (this.currentMessageObject.isOutOwner()) {
-                        this.timeX = (this.layoutWidth - this.timeWidth) - AndroidUtilities.m10dp(42.0f);
+                        this.timeX = (this.layoutWidth - this.timeWidth) - AndroidUtilities.m9dp(42.0f);
                     } else {
-                        this.timeX = (this.isAvatarVisible ? AndroidUtilities.m10dp(48.0f) : 0) + ((this.backgroundWidth - AndroidUtilities.m10dp(4.0f)) - this.timeWidth);
+                        this.timeX = (this.isAvatarVisible ? AndroidUtilities.m9dp(48.0f) : 0) + ((this.backgroundWidth - AndroidUtilities.m9dp(4.0f)) - this.timeWidth);
                         if (!(this.currentPosition == null || this.currentPosition.leftSpanOffset == 0)) {
                             this.timeX += (int) Math.ceil((double) ((((float) this.currentPosition.leftSpanOffset) / 1000.0f) * ((float) getGroupPhotosWidth())));
                         }
                     }
                 } else if (this.currentMessageObject.isOutOwner()) {
-                    this.timeX = (this.layoutWidth - this.timeWidth) - AndroidUtilities.m10dp(38.5f);
+                    this.timeX = (this.layoutWidth - this.timeWidth) - AndroidUtilities.m9dp(38.5f);
                 } else {
                     int dp;
-                    int dp2 = (this.backgroundWidth - AndroidUtilities.m10dp(9.0f)) - this.timeWidth;
+                    int dp2 = (this.backgroundWidth - AndroidUtilities.m9dp(9.0f)) - this.timeWidth;
                     if (this.isAvatarVisible) {
-                        dp = AndroidUtilities.m10dp(48.0f);
+                        dp = AndroidUtilities.m9dp(48.0f);
                     } else {
                         dp = 0;
                     }
@@ -4596,12 +4630,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.viewsLayout = null;
                 }
                 if (this.isAvatarVisible) {
-                    this.avatarImage.setImageCoords(AndroidUtilities.m10dp(6.0f), this.avatarImage.getImageY(), AndroidUtilities.m10dp(42.0f), AndroidUtilities.m10dp(42.0f));
+                    this.avatarImage.setImageCoords(AndroidUtilities.m9dp(6.0f), this.avatarImage.getImageY(), AndroidUtilities.m9dp(42.0f), AndroidUtilities.m9dp(42.0f));
                 }
                 this.wasLayout = true;
             }
             if (this.currentMessageObject.type == 0) {
-                this.textY = AndroidUtilities.m10dp(10.0f) + this.namesOffset;
+                this.textY = AndroidUtilities.m9dp(10.0f) + this.namesOffset;
             }
             if (this.currentMessageObject.isRoundVideo()) {
                 updatePlayingMessageProgress();
@@ -4609,118 +4643,118 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             int x;
             if (this.documentAttachType == 3) {
                 if (this.currentMessageObject.isOutOwner()) {
-                    this.seekBarX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(57.0f);
-                    this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(14.0f);
-                    this.timeAudioX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(67.0f);
+                    this.seekBarX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(57.0f);
+                    this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(14.0f);
+                    this.timeAudioX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(67.0f);
                 } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
-                    this.seekBarX = AndroidUtilities.m10dp(114.0f);
-                    this.buttonX = AndroidUtilities.m10dp(71.0f);
-                    this.timeAudioX = AndroidUtilities.m10dp(124.0f);
+                    this.seekBarX = AndroidUtilities.m9dp(114.0f);
+                    this.buttonX = AndroidUtilities.m9dp(71.0f);
+                    this.timeAudioX = AndroidUtilities.m9dp(124.0f);
                 } else {
-                    this.seekBarX = AndroidUtilities.m10dp(66.0f);
-                    this.buttonX = AndroidUtilities.m10dp(23.0f);
-                    this.timeAudioX = AndroidUtilities.m10dp(76.0f);
+                    this.seekBarX = AndroidUtilities.m9dp(66.0f);
+                    this.buttonX = AndroidUtilities.m9dp(23.0f);
+                    this.timeAudioX = AndroidUtilities.m9dp(76.0f);
                 }
                 if (this.hasLinkPreview) {
-                    this.seekBarX += AndroidUtilities.m10dp(10.0f);
-                    this.buttonX += AndroidUtilities.m10dp(10.0f);
-                    this.timeAudioX += AndroidUtilities.m10dp(10.0f);
+                    this.seekBarX += AndroidUtilities.m9dp(10.0f);
+                    this.buttonX += AndroidUtilities.m9dp(10.0f);
+                    this.timeAudioX += AndroidUtilities.m9dp(10.0f);
                 }
-                this.seekBarWaveform.setSize(this.backgroundWidth - AndroidUtilities.m10dp((float) ((this.hasLinkPreview ? 10 : 0) + 92)), AndroidUtilities.m10dp(30.0f));
-                this.seekBar.setSize(this.backgroundWidth - AndroidUtilities.m10dp((float) ((this.hasLinkPreview ? 10 : 0) + 72)), AndroidUtilities.m10dp(30.0f));
-                this.seekBarY = (AndroidUtilities.m10dp(13.0f) + this.namesOffset) + this.mediaOffsetY;
-                this.buttonY = (AndroidUtilities.m10dp(13.0f) + this.namesOffset) + this.mediaOffsetY;
-                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.m10dp(44.0f), this.buttonY + AndroidUtilities.m10dp(44.0f));
+                this.seekBarWaveform.setSize(this.backgroundWidth - AndroidUtilities.m9dp((float) ((this.hasLinkPreview ? 10 : 0) + 92)), AndroidUtilities.m9dp(30.0f));
+                this.seekBar.setSize(this.backgroundWidth - AndroidUtilities.m9dp((float) ((this.hasLinkPreview ? 10 : 0) + 72)), AndroidUtilities.m9dp(30.0f));
+                this.seekBarY = (AndroidUtilities.m9dp(13.0f) + this.namesOffset) + this.mediaOffsetY;
+                this.buttonY = (AndroidUtilities.m9dp(13.0f) + this.namesOffset) + this.mediaOffsetY;
+                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.m9dp(44.0f), this.buttonY + AndroidUtilities.m9dp(44.0f));
                 updatePlayingMessageProgress();
             } else if (this.documentAttachType == 5) {
                 if (this.currentMessageObject.isOutOwner()) {
-                    this.seekBarX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(56.0f);
-                    this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(14.0f);
-                    this.timeAudioX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(67.0f);
+                    this.seekBarX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(56.0f);
+                    this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(14.0f);
+                    this.timeAudioX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(67.0f);
                 } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
-                    this.seekBarX = AndroidUtilities.m10dp(113.0f);
-                    this.buttonX = AndroidUtilities.m10dp(71.0f);
-                    this.timeAudioX = AndroidUtilities.m10dp(124.0f);
+                    this.seekBarX = AndroidUtilities.m9dp(113.0f);
+                    this.buttonX = AndroidUtilities.m9dp(71.0f);
+                    this.timeAudioX = AndroidUtilities.m9dp(124.0f);
                 } else {
-                    this.seekBarX = AndroidUtilities.m10dp(65.0f);
-                    this.buttonX = AndroidUtilities.m10dp(23.0f);
-                    this.timeAudioX = AndroidUtilities.m10dp(76.0f);
+                    this.seekBarX = AndroidUtilities.m9dp(65.0f);
+                    this.buttonX = AndroidUtilities.m9dp(23.0f);
+                    this.timeAudioX = AndroidUtilities.m9dp(76.0f);
                 }
                 if (this.hasLinkPreview) {
-                    this.seekBarX += AndroidUtilities.m10dp(10.0f);
-                    this.buttonX += AndroidUtilities.m10dp(10.0f);
-                    this.timeAudioX += AndroidUtilities.m10dp(10.0f);
+                    this.seekBarX += AndroidUtilities.m9dp(10.0f);
+                    this.buttonX += AndroidUtilities.m9dp(10.0f);
+                    this.timeAudioX += AndroidUtilities.m9dp(10.0f);
                 }
-                this.seekBar.setSize(this.backgroundWidth - AndroidUtilities.m10dp((float) ((this.hasLinkPreview ? 10 : 0) + 65)), AndroidUtilities.m10dp(30.0f));
-                this.seekBarY = (AndroidUtilities.m10dp(29.0f) + this.namesOffset) + this.mediaOffsetY;
-                this.buttonY = (AndroidUtilities.m10dp(13.0f) + this.namesOffset) + this.mediaOffsetY;
-                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.m10dp(44.0f), this.buttonY + AndroidUtilities.m10dp(44.0f));
+                this.seekBar.setSize(this.backgroundWidth - AndroidUtilities.m9dp((float) ((this.hasLinkPreview ? 10 : 0) + 65)), AndroidUtilities.m9dp(30.0f));
+                this.seekBarY = (AndroidUtilities.m9dp(29.0f) + this.namesOffset) + this.mediaOffsetY;
+                this.buttonY = (AndroidUtilities.m9dp(13.0f) + this.namesOffset) + this.mediaOffsetY;
+                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.m9dp(44.0f), this.buttonY + AndroidUtilities.m9dp(44.0f));
                 updatePlayingMessageProgress();
             } else if (this.documentAttachType == 1 && !this.drawPhotoImage) {
                 if (this.currentMessageObject.isOutOwner()) {
-                    this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(14.0f);
+                    this.buttonX = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(14.0f);
                 } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
-                    this.buttonX = AndroidUtilities.m10dp(71.0f);
+                    this.buttonX = AndroidUtilities.m9dp(71.0f);
                 } else {
-                    this.buttonX = AndroidUtilities.m10dp(23.0f);
+                    this.buttonX = AndroidUtilities.m9dp(23.0f);
                 }
                 if (this.hasLinkPreview) {
-                    this.buttonX += AndroidUtilities.m10dp(10.0f);
+                    this.buttonX += AndroidUtilities.m9dp(10.0f);
                 }
-                this.buttonY = (AndroidUtilities.m10dp(13.0f) + this.namesOffset) + this.mediaOffsetY;
-                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.m10dp(44.0f), this.buttonY + AndroidUtilities.m10dp(44.0f));
-                this.photoImage.setImageCoords(this.buttonX - AndroidUtilities.m10dp(10.0f), this.buttonY - AndroidUtilities.m10dp(10.0f), this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
+                this.buttonY = (AndroidUtilities.m9dp(13.0f) + this.namesOffset) + this.mediaOffsetY;
+                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.m9dp(44.0f), this.buttonY + AndroidUtilities.m9dp(44.0f));
+                this.photoImage.setImageCoords(this.buttonX - AndroidUtilities.m9dp(10.0f), this.buttonY - AndroidUtilities.m9dp(10.0f), this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
             } else if (this.currentMessageObject.type == 12) {
                 if (this.currentMessageObject.isOutOwner()) {
-                    x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(14.0f);
+                    x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(14.0f);
                 } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
-                    x = AndroidUtilities.m10dp(72.0f);
+                    x = AndroidUtilities.m9dp(72.0f);
                 } else {
-                    x = AndroidUtilities.m10dp(23.0f);
+                    x = AndroidUtilities.m9dp(23.0f);
                 }
-                this.photoImage.setImageCoords(x, AndroidUtilities.m10dp(13.0f) + this.namesOffset, AndroidUtilities.m10dp(44.0f), AndroidUtilities.m10dp(44.0f));
+                this.photoImage.setImageCoords(x, AndroidUtilities.m9dp(13.0f) + this.namesOffset, AndroidUtilities.m9dp(44.0f), AndroidUtilities.m9dp(44.0f));
             } else {
                 if (this.currentMessageObject.type == 0 && (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview)) {
                     int linkX;
                     if (this.hasGamePreview) {
-                        linkX = this.unmovedTextX - AndroidUtilities.m10dp(10.0f);
+                        linkX = this.unmovedTextX - AndroidUtilities.m9dp(10.0f);
                     } else if (this.hasInvoicePreview) {
-                        linkX = this.unmovedTextX + AndroidUtilities.m10dp(1.0f);
+                        linkX = this.unmovedTextX + AndroidUtilities.m9dp(1.0f);
                     } else {
-                        linkX = this.unmovedTextX + AndroidUtilities.m10dp(1.0f);
+                        linkX = this.unmovedTextX + AndroidUtilities.m9dp(1.0f);
                     }
                     if (this.isSmallImage) {
-                        x = (this.backgroundWidth + linkX) - AndroidUtilities.m10dp(81.0f);
+                        x = (this.backgroundWidth + linkX) - AndroidUtilities.m9dp(81.0f);
                     } else {
-                        x = linkX + (this.hasInvoicePreview ? -AndroidUtilities.m10dp(6.3f) : AndroidUtilities.m10dp(10.0f));
+                        x = linkX + (this.hasInvoicePreview ? -AndroidUtilities.m9dp(6.3f) : AndroidUtilities.m9dp(10.0f));
                     }
                 } else if (!this.currentMessageObject.isOutOwner()) {
                     if (this.isChat && this.isAvatarVisible) {
-                        x = AndroidUtilities.m10dp(63.0f);
+                        x = AndroidUtilities.m9dp(63.0f);
                     } else {
-                        x = AndroidUtilities.m10dp(15.0f);
+                        x = AndroidUtilities.m9dp(15.0f);
                     }
                     if (!(this.currentPosition == null || this.currentPosition.edge)) {
-                        x -= AndroidUtilities.m10dp(10.0f);
+                        x -= AndroidUtilities.m9dp(10.0f);
                     }
                 } else if (this.mediaBackground) {
-                    x = (this.layoutWidth - this.backgroundWidth) - AndroidUtilities.m10dp(3.0f);
+                    x = (this.layoutWidth - this.backgroundWidth) - AndroidUtilities.m9dp(3.0f);
                 } else {
-                    x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(6.0f);
+                    x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(6.0f);
                 }
                 if (this.currentPosition != null) {
                     if ((this.currentPosition.flags & 1) == 0) {
-                        x -= AndroidUtilities.m10dp(4.0f);
+                        x -= AndroidUtilities.m9dp(4.0f);
                     }
                     if (this.currentPosition.leftSpanOffset != 0) {
                         x += (int) Math.ceil((double) ((((float) this.currentPosition.leftSpanOffset) / 1000.0f) * ((float) getGroupPhotosWidth())));
                     }
                 }
                 this.photoImage.setImageCoords(x, this.photoImage.getImageY(), this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
-                this.buttonX = (int) (((float) x) + (((float) (this.photoImage.getImageWidth() - AndroidUtilities.m10dp(48.0f))) / 2.0f));
-                this.buttonY = this.photoImage.getImageY() + ((this.photoImage.getImageHeight() - AndroidUtilities.m10dp(48.0f)) / 2);
-                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.m10dp(48.0f), this.buttonY + AndroidUtilities.m10dp(48.0f));
-                this.deleteProgressRect.set((float) (this.buttonX + AndroidUtilities.m10dp(3.0f)), (float) (this.buttonY + AndroidUtilities.m10dp(3.0f)), (float) (this.buttonX + AndroidUtilities.m10dp(45.0f)), (float) (this.buttonY + AndroidUtilities.m10dp(45.0f)));
+                this.buttonX = (int) (((float) x) + (((float) (this.photoImage.getImageWidth() - AndroidUtilities.m9dp(48.0f))) / 2.0f));
+                this.buttonY = this.photoImage.getImageY() + ((this.photoImage.getImageHeight() - AndroidUtilities.m9dp(48.0f)) / 2);
+                this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.m9dp(48.0f), this.buttonY + AndroidUtilities.m9dp(48.0f));
+                this.deleteProgressRect.set((float) (this.buttonX + AndroidUtilities.m9dp(3.0f)), (float) (this.buttonY + AndroidUtilities.m9dp(3.0f)), (float) (this.buttonX + AndroidUtilities.m9dp(45.0f)), (float) (this.buttonY + AndroidUtilities.m9dp(45.0f)));
             }
         }
     }
@@ -4789,31 +4823,31 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (this.currentMessageObject.type == 0) {
             int b;
             if (this.currentMessageObject.isOutOwner()) {
-                this.textX = this.currentBackgroundDrawable.getBounds().left + AndroidUtilities.m10dp(11.0f);
+                this.textX = this.currentBackgroundDrawable.getBounds().left + AndroidUtilities.m9dp(11.0f);
             } else {
                 i = this.currentBackgroundDrawable.getBounds().left;
                 f = (this.mediaBackground || !this.drawPinnedBottom) ? 17.0f : 11.0f;
-                this.textX = AndroidUtilities.m10dp(f) + i;
+                this.textX = AndroidUtilities.m9dp(f) + i;
             }
             if (this.hasGamePreview) {
-                this.textX += AndroidUtilities.m10dp(11.0f);
-                this.textY = AndroidUtilities.m10dp(14.0f) + this.namesOffset;
+                this.textX += AndroidUtilities.m9dp(11.0f);
+                this.textY = AndroidUtilities.m9dp(14.0f) + this.namesOffset;
                 if (this.siteNameLayout != null) {
                     this.textY += this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
                 }
             } else if (this.hasInvoicePreview) {
-                this.textY = AndroidUtilities.m10dp(14.0f) + this.namesOffset;
+                this.textY = AndroidUtilities.m9dp(14.0f) + this.namesOffset;
                 if (this.siteNameLayout != null) {
                     this.textY += this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
                 }
             } else {
-                this.textY = AndroidUtilities.m10dp(10.0f) + this.namesOffset;
+                this.textY = AndroidUtilities.m9dp(10.0f) + this.namesOffset;
             }
             this.unmovedTextX = this.textX;
             if (!(this.currentMessageObject.textXOffset == 0.0f || this.replyNameLayout == null)) {
-                int diff = (this.backgroundWidth - AndroidUtilities.m10dp(31.0f)) - this.currentMessageObject.textWidth;
+                int diff = (this.backgroundWidth - AndroidUtilities.m9dp(31.0f)) - this.currentMessageObject.textWidth;
                 if (!this.hasNewLineForTime) {
-                    diff -= AndroidUtilities.m10dp((float) ((this.currentMessageObject.isOutOwner() ? 20 : 0) + 4)) + this.timeWidth;
+                    diff -= AndroidUtilities.m9dp((float) ((this.currentMessageObject.isOutOwner() ? 20 : 0) + 4)) + this.timeWidth;
                 }
                 if (diff > 0) {
                     this.textX += diff;
@@ -4843,7 +4877,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         try {
                             block.textLayout.draw(canvas);
                         } catch (Throwable e) {
-                            FileLog.m14e(e);
+                            FileLog.m13e(e);
                         }
                         canvas.restore();
                         a++;
@@ -4853,53 +4887,53 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
                 int size;
                 if (this.hasGamePreview) {
-                    startY = AndroidUtilities.m10dp(14.0f) + this.namesOffset;
-                    linkX = this.unmovedTextX - AndroidUtilities.m10dp(10.0f);
+                    startY = AndroidUtilities.m9dp(14.0f) + this.namesOffset;
+                    linkX = this.unmovedTextX - AndroidUtilities.m9dp(10.0f);
                 } else if (this.hasInvoicePreview) {
-                    startY = AndroidUtilities.m10dp(14.0f) + this.namesOffset;
-                    linkX = this.unmovedTextX + AndroidUtilities.m10dp(1.0f);
+                    startY = AndroidUtilities.m9dp(14.0f) + this.namesOffset;
+                    linkX = this.unmovedTextX + AndroidUtilities.m9dp(1.0f);
                 } else {
-                    startY = (this.textY + this.currentMessageObject.textHeight) + AndroidUtilities.m10dp(8.0f);
-                    linkX = this.unmovedTextX + AndroidUtilities.m10dp(1.0f);
+                    startY = (this.textY + this.currentMessageObject.textHeight) + AndroidUtilities.m9dp(8.0f);
+                    linkX = this.unmovedTextX + AndroidUtilities.m9dp(1.0f);
                 }
                 linkPreviewY = startY;
                 int smallImageStartY = 0;
                 if (!this.hasInvoicePreview) {
                     Theme.chat_replyLinePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outPreviewLine : Theme.key_chat_inPreviewLine));
-                    canvas.drawRect((float) linkX, (float) (linkPreviewY - AndroidUtilities.m10dp(3.0f)), (float) (AndroidUtilities.m10dp(2.0f) + linkX), (float) ((this.linkPreviewHeight + linkPreviewY) + AndroidUtilities.m10dp(3.0f)), Theme.chat_replyLinePaint);
+                    canvas.drawRect((float) linkX, (float) (linkPreviewY - AndroidUtilities.m9dp(3.0f)), (float) (AndroidUtilities.m9dp(2.0f) + linkX), (float) ((this.linkPreviewHeight + linkPreviewY) + AndroidUtilities.m9dp(3.0f)), Theme.chat_replyLinePaint);
                 }
                 if (this.siteNameLayout != null) {
                     Theme.chat_replyNamePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outSiteNameText : Theme.key_chat_inSiteNameText));
                     canvas.save();
                     if (this.siteNameRtl) {
-                        x = (this.backgroundWidth - this.siteNameWidth) - AndroidUtilities.m10dp(32.0f);
+                        x = (this.backgroundWidth - this.siteNameWidth) - AndroidUtilities.m9dp(32.0f);
                     } else if (this.hasInvoicePreview) {
                         x = 0;
                     } else {
-                        x = AndroidUtilities.m10dp(10.0f);
+                        x = AndroidUtilities.m9dp(10.0f);
                     }
-                    canvas.translate((float) (linkX + x), (float) (linkPreviewY - AndroidUtilities.m10dp(3.0f)));
+                    canvas.translate((float) (linkX + x), (float) (linkPreviewY - AndroidUtilities.m9dp(3.0f)));
                     this.siteNameLayout.draw(canvas);
                     canvas.restore();
                     linkPreviewY += this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
                 }
                 if ((this.hasGamePreview || this.hasInvoicePreview) && this.currentMessageObject.textHeight != 0) {
-                    startY += this.currentMessageObject.textHeight + AndroidUtilities.m10dp(4.0f);
-                    linkPreviewY += this.currentMessageObject.textHeight + AndroidUtilities.m10dp(4.0f);
+                    startY += this.currentMessageObject.textHeight + AndroidUtilities.m9dp(4.0f);
+                    linkPreviewY += this.currentMessageObject.textHeight + AndroidUtilities.m9dp(4.0f);
                 }
                 if (this.drawPhotoImage && this.drawInstantView) {
                     if (linkPreviewY != startY) {
-                        linkPreviewY += AndroidUtilities.m10dp(2.0f);
+                        linkPreviewY += AndroidUtilities.m9dp(2.0f);
                     }
-                    this.photoImage.setImageCoords(AndroidUtilities.m10dp(10.0f) + linkX, linkPreviewY, this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
+                    this.photoImage.setImageCoords(AndroidUtilities.m9dp(10.0f) + linkX, linkPreviewY, this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
                     if (this.drawImageButton) {
-                        size = AndroidUtilities.m10dp(48.0f);
+                        size = AndroidUtilities.m9dp(48.0f);
                         this.buttonX = (int) (((float) this.photoImage.getImageX()) + (((float) (this.photoImage.getImageWidth() - size)) / 2.0f));
                         this.buttonY = (int) (((float) this.photoImage.getImageY()) + (((float) (this.photoImage.getImageHeight() - size)) / 2.0f));
                         this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + size, this.buttonY + size);
                     }
                     imageDrawn = this.photoImage.draw(canvas);
-                    linkPreviewY += this.photoImage.getImageHeight() + AndroidUtilities.m10dp(6.0f);
+                    linkPreviewY += this.photoImage.getImageHeight() + AndroidUtilities.m9dp(6.0f);
                 }
                 if (this.currentMessageObject.isOutOwner()) {
                     Theme.chat_replyNamePaint.setColor(Theme.getColor(Theme.key_chat_messageTextOut));
@@ -4910,38 +4944,38 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 if (this.titleLayout != null) {
                     if (linkPreviewY != startY) {
-                        linkPreviewY += AndroidUtilities.m10dp(2.0f);
+                        linkPreviewY += AndroidUtilities.m9dp(2.0f);
                     }
-                    smallImageStartY = linkPreviewY - AndroidUtilities.m10dp(1.0f);
+                    smallImageStartY = linkPreviewY - AndroidUtilities.m9dp(1.0f);
                     canvas.save();
-                    canvas.translate((float) ((AndroidUtilities.m10dp(10.0f) + linkX) + this.titleX), (float) (linkPreviewY - AndroidUtilities.m10dp(3.0f)));
+                    canvas.translate((float) ((AndroidUtilities.m9dp(10.0f) + linkX) + this.titleX), (float) (linkPreviewY - AndroidUtilities.m9dp(3.0f)));
                     this.titleLayout.draw(canvas);
                     canvas.restore();
                     linkPreviewY += this.titleLayout.getLineBottom(this.titleLayout.getLineCount() - 1);
                 }
                 if (this.authorLayout != null) {
                     if (linkPreviewY != startY) {
-                        linkPreviewY += AndroidUtilities.m10dp(2.0f);
+                        linkPreviewY += AndroidUtilities.m9dp(2.0f);
                     }
                     if (smallImageStartY == 0) {
-                        smallImageStartY = linkPreviewY - AndroidUtilities.m10dp(1.0f);
+                        smallImageStartY = linkPreviewY - AndroidUtilities.m9dp(1.0f);
                     }
                     canvas.save();
-                    canvas.translate((float) ((AndroidUtilities.m10dp(10.0f) + linkX) + this.authorX), (float) (linkPreviewY - AndroidUtilities.m10dp(3.0f)));
+                    canvas.translate((float) ((AndroidUtilities.m9dp(10.0f) + linkX) + this.authorX), (float) (linkPreviewY - AndroidUtilities.m9dp(3.0f)));
                     this.authorLayout.draw(canvas);
                     canvas.restore();
                     linkPreviewY += this.authorLayout.getLineBottom(this.authorLayout.getLineCount() - 1);
                 }
                 if (this.descriptionLayout != null) {
                     if (linkPreviewY != startY) {
-                        linkPreviewY += AndroidUtilities.m10dp(2.0f);
+                        linkPreviewY += AndroidUtilities.m9dp(2.0f);
                     }
                     if (smallImageStartY == 0) {
-                        smallImageStartY = linkPreviewY - AndroidUtilities.m10dp(1.0f);
+                        smallImageStartY = linkPreviewY - AndroidUtilities.m9dp(1.0f);
                     }
-                    this.descriptionY = linkPreviewY - AndroidUtilities.m10dp(3.0f);
+                    this.descriptionY = linkPreviewY - AndroidUtilities.m9dp(3.0f);
                     canvas.save();
-                    canvas.translate((float) (((this.hasInvoicePreview ? 0 : AndroidUtilities.m10dp(10.0f)) + linkX) + this.descriptionX), (float) this.descriptionY);
+                    canvas.translate((float) (((this.hasInvoicePreview ? 0 : AndroidUtilities.m9dp(10.0f)) + linkX) + this.descriptionX), (float) this.descriptionY);
                     if (this.pressedLink != null && this.linkBlockNum == -10) {
                         for (b = 0; b < this.urlPath.size(); b++) {
                             canvas.drawPath((Path) this.urlPath.get(b), Theme.chat_urlPaint);
@@ -4953,20 +4987,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 if (this.drawPhotoImage && !this.drawInstantView) {
                     if (linkPreviewY != startY) {
-                        linkPreviewY += AndroidUtilities.m10dp(2.0f);
+                        linkPreviewY += AndroidUtilities.m9dp(2.0f);
                     }
                     if (this.isSmallImage) {
-                        this.photoImage.setImageCoords((this.backgroundWidth + linkX) - AndroidUtilities.m10dp(81.0f), smallImageStartY, this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
+                        this.photoImage.setImageCoords((this.backgroundWidth + linkX) - AndroidUtilities.m9dp(81.0f), smallImageStartY, this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
                     } else {
                         imageReceiver = this.photoImage;
                         if (this.hasInvoicePreview) {
-                            i2 = -AndroidUtilities.m10dp(6.3f);
+                            i2 = -AndroidUtilities.m9dp(6.3f);
                         } else {
-                            i2 = AndroidUtilities.m10dp(10.0f);
+                            i2 = AndroidUtilities.m9dp(10.0f);
                         }
                         imageReceiver.setImageCoords(i2 + linkX, linkPreviewY, this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
                         if (this.drawImageButton) {
-                            size = AndroidUtilities.m10dp(48.0f);
+                            size = AndroidUtilities.m9dp(48.0f);
                             this.buttonX = (int) (((float) this.photoImage.getImageX()) + (((float) (this.photoImage.getImageWidth() - size)) / 2.0f));
                             this.buttonY = (int) (((float) this.photoImage.getImageY()) + (((float) (this.photoImage.getImageHeight() - size)) / 2.0f));
                             this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + size, this.buttonY + size);
@@ -4980,13 +5014,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                 }
                 if (this.photosCountLayout != null && this.photoImage.getVisible()) {
-                    x = ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.m10dp(8.0f)) - this.photosCountWidth;
-                    y = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) - AndroidUtilities.m10dp(19.0f);
-                    this.rect.set((float) (x - AndroidUtilities.m10dp(4.0f)), (float) (y - AndroidUtilities.m10dp(1.5f)), (float) ((this.photosCountWidth + x) + AndroidUtilities.m10dp(4.0f)), (float) (AndroidUtilities.m10dp(14.5f) + y));
+                    x = ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.m9dp(8.0f)) - this.photosCountWidth;
+                    y = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) - AndroidUtilities.m9dp(19.0f);
+                    this.rect.set((float) (x - AndroidUtilities.m9dp(4.0f)), (float) (y - AndroidUtilities.m9dp(1.5f)), (float) ((this.photosCountWidth + x) + AndroidUtilities.m9dp(4.0f)), (float) (AndroidUtilities.m9dp(14.5f) + y));
                     oldAlpha = Theme.chat_timeBackgroundPaint.getAlpha();
                     Theme.chat_timeBackgroundPaint.setAlpha((int) (((float) oldAlpha) * this.controlsAlpha));
                     Theme.chat_durationPaint.setAlpha((int) (255.0f * this.controlsAlpha));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(4.0f), Theme.chat_timeBackgroundPaint);
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(4.0f), Theme.chat_timeBackgroundPaint);
                     Theme.chat_timeBackgroundPaint.setAlpha(oldAlpha);
                     canvas.save();
                     canvas.translate((float) x, (float) y);
@@ -4996,15 +5030,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 if (this.videoInfoLayout != null && (!this.drawPhotoImage || this.photoImage.getVisible())) {
                     if (!this.hasGamePreview && !this.hasInvoicePreview) {
-                        x = ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.m10dp(8.0f)) - this.durationWidth;
-                        y = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) - AndroidUtilities.m10dp(19.0f);
-                        this.rect.set((float) (x - AndroidUtilities.m10dp(4.0f)), (float) (y - AndroidUtilities.m10dp(1.5f)), (float) ((this.durationWidth + x) + AndroidUtilities.m10dp(4.0f)), (float) (AndroidUtilities.m10dp(14.5f) + y));
-                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(4.0f), Theme.chat_timeBackgroundPaint);
+                        x = ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.m9dp(8.0f)) - this.durationWidth;
+                        y = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) - AndroidUtilities.m9dp(19.0f);
+                        this.rect.set((float) (x - AndroidUtilities.m9dp(4.0f)), (float) (y - AndroidUtilities.m9dp(1.5f)), (float) ((this.durationWidth + x) + AndroidUtilities.m9dp(4.0f)), (float) (AndroidUtilities.m9dp(14.5f) + y));
+                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(4.0f), Theme.chat_timeBackgroundPaint);
                     } else if (this.drawPhotoImage) {
-                        x = this.photoImage.getImageX() + AndroidUtilities.m10dp(8.5f);
-                        y = this.photoImage.getImageY() + AndroidUtilities.m10dp(6.0f);
-                        this.rect.set((float) (x - AndroidUtilities.m10dp(4.0f)), (float) (y - AndroidUtilities.m10dp(1.5f)), (float) ((this.durationWidth + x) + AndroidUtilities.m10dp(4.0f)), (float) (AndroidUtilities.m10dp(16.5f) + y));
-                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(4.0f), Theme.chat_timeBackgroundPaint);
+                        x = this.photoImage.getImageX() + AndroidUtilities.m9dp(8.5f);
+                        y = this.photoImage.getImageY() + AndroidUtilities.m9dp(6.0f);
+                        this.rect.set((float) (x - AndroidUtilities.m9dp(4.0f)), (float) (y - AndroidUtilities.m9dp(1.5f)), (float) ((this.durationWidth + x) + AndroidUtilities.m9dp(4.0f)), (float) (AndroidUtilities.m9dp(16.5f) + y));
+                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(4.0f), Theme.chat_timeBackgroundPaint);
                     } else {
                         x = linkX;
                         y = linkPreviewY;
@@ -5025,7 +5059,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 if (this.drawInstantView) {
                     Drawable instantDrawable;
-                    instantY = (this.linkPreviewHeight + startY) + AndroidUtilities.m10dp(10.0f);
+                    instantY = (this.linkPreviewHeight + startY) + AndroidUtilities.m9dp(10.0f);
                     backPaint = Theme.chat_instantViewRectPaint;
                     if (this.currentMessageObject.isOutOwner()) {
                         instantDrawable = Theme.chat_msgOutInstantDrawable;
@@ -5037,18 +5071,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         backPaint.setColor(Theme.getColor(Theme.key_chat_inPreviewInstantText));
                     }
                     if (VERSION.SDK_INT >= 21) {
-                        this.instantViewSelectorDrawable.setBounds(linkX, instantY, this.instantWidth + linkX, AndroidUtilities.m10dp(36.0f) + instantY);
+                        this.instantViewSelectorDrawable.setBounds(linkX, instantY, this.instantWidth + linkX, AndroidUtilities.m9dp(36.0f) + instantY);
                         this.instantViewSelectorDrawable.draw(canvas);
                     }
-                    this.rect.set((float) linkX, (float) instantY, (float) (this.instantWidth + linkX), (float) (AndroidUtilities.m10dp(36.0f) + instantY));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(6.0f), (float) AndroidUtilities.m10dp(6.0f), backPaint);
+                    this.rect.set((float) linkX, (float) instantY, (float) (this.instantWidth + linkX), (float) (AndroidUtilities.m9dp(36.0f) + instantY));
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(6.0f), (float) AndroidUtilities.m9dp(6.0f), backPaint);
                     if (this.drawInstantViewType == 0) {
-                        BaseCell.setDrawableBounds(instantDrawable, ((this.instantTextLeftX + this.instantTextX) + linkX) - AndroidUtilities.m10dp(15.0f), AndroidUtilities.m10dp(11.5f) + instantY, AndroidUtilities.m10dp(9.0f), AndroidUtilities.m10dp(13.0f));
+                        BaseCell.setDrawableBounds(instantDrawable, ((this.instantTextLeftX + this.instantTextX) + linkX) - AndroidUtilities.m9dp(15.0f), AndroidUtilities.m9dp(11.5f) + instantY, AndroidUtilities.m9dp(9.0f), AndroidUtilities.m9dp(13.0f));
                         instantDrawable.draw(canvas);
                     }
                     if (this.instantViewLayout != null) {
                         canvas.save();
-                        canvas.translate((float) (this.instantTextX + linkX), (float) (AndroidUtilities.m10dp(10.5f) + instantY));
+                        canvas.translate((float) (this.instantTextX + linkX), (float) (AndroidUtilities.m9dp(10.5f) + instantY));
                         this.instantViewLayout.draw(canvas);
                         canvas.restore();
                     }
@@ -5061,11 +5095,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.drawTime = true;
             } else {
                 if (this.currentMessageObject.type == 5 && Theme.chat_roundVideoShadow != null) {
-                    x = this.photoImage.getImageX() - AndroidUtilities.m10dp(3.0f);
-                    y = this.photoImage.getImageY() - AndroidUtilities.m10dp(2.0f);
-                    Theme.chat_roundVideoShadow.setAlpha((int) (this.photoImage.getCurrentAlpha() * 255.0f));
-                    Theme.chat_roundVideoShadow.setBounds(x, y, (AndroidUtilities.roundMessageSize + x) + AndroidUtilities.m10dp(6.0f), (AndroidUtilities.roundMessageSize + y) + AndroidUtilities.m10dp(6.0f));
+                    x = this.photoImage.getImageX() - AndroidUtilities.m9dp(3.0f);
+                    y = this.photoImage.getImageY() - AndroidUtilities.m9dp(2.0f);
+                    Theme.chat_roundVideoShadow.setAlpha(255);
+                    Theme.chat_roundVideoShadow.setBounds(x, y, (AndroidUtilities.roundMessageSize + x) + AndroidUtilities.m9dp(6.0f), (AndroidUtilities.roundMessageSize + y) + AndroidUtilities.m9dp(6.0f));
                     Theme.chat_roundVideoShadow.draw(canvas);
+                    if (!(this.photoImage.hasBitmapImage() && this.photoImage.getCurrentAlpha() == 1.0f)) {
+                        Theme.chat_docBackPaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outBubble : Theme.key_chat_inBubble));
+                        canvas.drawCircle(this.photoImage.getCenterX(), this.photoImage.getCenterY(), (float) (this.photoImage.getImageWidth() / 2), Theme.chat_docBackPaint);
+                    }
                 }
                 imageDrawn = this.photoImage.draw(canvas);
                 boolean drawTimeOld = this.drawTime;
@@ -5083,7 +5121,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     ChatMessageCell cell = (ChatMessageCell) child;
                                     if (cell.getCurrentMessagesGroup() == this.currentMessagesGroup) {
                                         GroupedMessagePosition position = cell.getCurrentPosition();
-                                        if (position.last && position.maxY == this.currentPosition.maxY && (cell.timeX - AndroidUtilities.m10dp(4.0f)) + cell.getLeft() < getRight()) {
+                                        if (position.last && position.maxY == this.currentPosition.maxY && (cell.timeX - AndroidUtilities.m9dp(4.0f)) + cell.getLeft() < getRight()) {
                                             cell.groupPhotoInvisible = !this.drawTime;
                                             cell.invalidate();
                                             viewGroup.invalidate();
@@ -5114,7 +5152,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     Theme.chat_deleteProgressPaint.setAlpha((int) (255.0f * this.controlsAlpha));
                     canvas.drawArc(this.deleteProgressRect, -90.0f, -360.0f * progress, true, Theme.chat_deleteProgressPaint);
                     if (progress != 0.0f) {
-                        int offset = AndroidUtilities.m10dp(2.0f);
+                        int offset = AndroidUtilities.m9dp(2.0f);
                         invalidate(((int) this.deleteProgressRect.left) - offset, ((int) this.deleteProgressRect.top) - offset, ((int) this.deleteProgressRect.right) + (offset * 2), ((int) this.deleteProgressRect.bottom) + (offset * 2));
                     }
                 }
@@ -5126,9 +5164,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 oldAlpha = ((BitmapDrawable) Theme.chat_msgMediaMenuDrawable).getPaint().getAlpha();
                 Theme.chat_msgMediaMenuDrawable.setAlpha((int) (((float) oldAlpha) * this.controlsAlpha));
                 drawable = Theme.chat_msgMediaMenuDrawable;
-                i = (this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.m10dp(14.0f);
+                i = (this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.m9dp(14.0f);
                 this.otherX = i;
-                imageY = this.photoImage.getImageY() + AndroidUtilities.m10dp(8.1f);
+                imageY = this.photoImage.getImageY() + AndroidUtilities.m9dp(8.1f);
                 this.otherY = imageY;
                 BaseCell.setDrawableBounds(drawable, i, imageY);
                 Theme.chat_msgMediaMenuDrawable.draw(canvas);
@@ -5143,38 +5181,44 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (this.documentAttachType == 7) {
                     i = this.backgroundDrawableLeft;
                     f = (this.currentMessageObject.isOutOwner() || this.drawPinnedBottom) ? 12.0f : 18.0f;
-                    x1 = i + AndroidUtilities.m10dp(f);
+                    x1 = i + AndroidUtilities.m9dp(f);
                     i = this.layoutHeight;
                     if (this.drawPinnedBottom) {
                         i2 = 2;
                     } else {
                         i2 = 0;
                     }
-                    y1 = (i - AndroidUtilities.m10dp(6.3f - ((float) i2))) - this.timeLayout.getHeight();
+                    y1 = (i - AndroidUtilities.m9dp(6.3f - ((float) i2))) - this.timeLayout.getHeight();
                 } else {
-                    x1 = this.backgroundDrawableLeft + AndroidUtilities.m10dp(8.0f);
-                    y1 = this.layoutHeight - AndroidUtilities.m10dp((float) (28 - (this.drawPinnedBottom ? 2 : 0)));
-                    this.rect.set((float) x1, (float) y1, (float) ((this.timeWidthAudio + x1) + AndroidUtilities.m10dp(22.0f)), (float) (AndroidUtilities.m10dp(17.0f) + y1));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(4.0f), Theme.chat_actionBackgroundPaint);
+                    x1 = this.backgroundDrawableLeft + AndroidUtilities.m9dp(8.0f);
+                    y1 = this.layoutHeight - AndroidUtilities.m9dp((float) (28 - (this.drawPinnedBottom ? 2 : 0)));
+                    this.rect.set((float) x1, (float) y1, (float) ((this.timeWidthAudio + x1) + AndroidUtilities.m9dp(22.0f)), (float) (AndroidUtilities.m9dp(17.0f) + y1));
+                    oldAlpha = Theme.chat_actionBackgroundPaint.getAlpha();
+                    Theme.chat_actionBackgroundPaint.setAlpha((int) (((float) oldAlpha) * this.timeAlpha));
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(4.0f), Theme.chat_actionBackgroundPaint);
+                    Theme.chat_actionBackgroundPaint.setAlpha(oldAlpha);
                     if (playing || !this.currentMessageObject.isContentUnread()) {
                         if (!playing || MediaController.getInstance().isMessagePaused()) {
                             this.roundVideoPlayingDrawable.stop();
                         } else {
                             this.roundVideoPlayingDrawable.start();
                         }
-                        BaseCell.setDrawableBounds(this.roundVideoPlayingDrawable, (this.timeWidthAudio + x1) + AndroidUtilities.m10dp(6.0f), AndroidUtilities.m10dp(2.3f) + y1);
+                        BaseCell.setDrawableBounds(this.roundVideoPlayingDrawable, (this.timeWidthAudio + x1) + AndroidUtilities.m9dp(6.0f), AndroidUtilities.m9dp(2.3f) + y1);
                         this.roundVideoPlayingDrawable.draw(canvas);
                     } else {
                         Theme.chat_docBackPaint.setColor(Theme.getColor(Theme.key_chat_mediaTimeText));
-                        canvas.drawCircle((float) ((this.timeWidthAudio + x1) + AndroidUtilities.m10dp(12.0f)), (float) (AndroidUtilities.m10dp(8.3f) + y1), (float) AndroidUtilities.m10dp(3.0f), Theme.chat_docBackPaint);
+                        Theme.chat_docBackPaint.setAlpha((int) (255.0f * this.timeAlpha));
+                        canvas.drawCircle((float) ((this.timeWidthAudio + x1) + AndroidUtilities.m9dp(12.0f)), (float) (AndroidUtilities.m9dp(8.3f) + y1), (float) AndroidUtilities.m9dp(3.0f), Theme.chat_docBackPaint);
                     }
-                    x1 += AndroidUtilities.m10dp(4.0f);
-                    y1 += AndroidUtilities.m10dp(1.7f);
+                    x1 += AndroidUtilities.m9dp(4.0f);
+                    y1 += AndroidUtilities.m9dp(1.7f);
                 }
+                Theme.chat_timePaint.setAlpha((int) (255.0f * this.timeAlpha));
                 canvas.save();
                 canvas.translate((float) x1, (float) y1);
                 this.durationLayout.draw(canvas);
                 canvas.restore();
+                Theme.chat_timePaint.setAlpha(255);
             }
         } else if (this.documentAttachType == 5) {
             if (this.currentMessageObject.isOutOwner()) {
@@ -5194,7 +5238,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             this.radialProgress.draw(canvas);
             canvas.save();
-            canvas.translate((float) (this.timeAudioX + this.songX), (float) ((AndroidUtilities.m10dp(13.0f) + this.namesOffset) + this.mediaOffsetY));
+            canvas.translate((float) (this.timeAudioX + this.songX), (float) ((AndroidUtilities.m9dp(13.0f) + this.namesOffset) + this.mediaOffsetY));
             this.songLayout.draw(canvas);
             canvas.restore();
             canvas.save();
@@ -5202,18 +5246,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 canvas.translate((float) this.seekBarX, (float) this.seekBarY);
                 this.seekBar.draw(canvas);
             } else {
-                canvas.translate((float) (this.timeAudioX + this.performerX), (float) ((AndroidUtilities.m10dp(35.0f) + this.namesOffset) + this.mediaOffsetY));
+                canvas.translate((float) (this.timeAudioX + this.performerX), (float) ((AndroidUtilities.m9dp(35.0f) + this.namesOffset) + this.mediaOffsetY));
                 this.performerLayout.draw(canvas);
             }
             canvas.restore();
             canvas.save();
-            canvas.translate((float) this.timeAudioX, (float) ((AndroidUtilities.m10dp(57.0f) + this.namesOffset) + this.mediaOffsetY));
+            canvas.translate((float) this.timeAudioX, (float) ((AndroidUtilities.m9dp(57.0f) + this.namesOffset) + this.mediaOffsetY));
             this.durationLayout.draw(canvas);
             canvas.restore();
             menuDrawable = this.currentMessageObject.isOutOwner() ? isDrawSelectedBackground() ? Theme.chat_msgOutMenuSelectedDrawable : Theme.chat_msgOutMenuDrawable : isDrawSelectedBackground() ? Theme.chat_msgInMenuSelectedDrawable : Theme.chat_msgInMenuDrawable;
-            i2 = (this.backgroundWidth + this.buttonX) - AndroidUtilities.m10dp(this.currentMessageObject.type == 0 ? 58.0f : 48.0f);
+            i2 = (this.backgroundWidth + this.buttonX) - AndroidUtilities.m9dp(this.currentMessageObject.type == 0 ? 58.0f : 48.0f);
             this.otherX = i2;
-            i = this.buttonY - AndroidUtilities.m10dp(5.0f);
+            i = this.buttonY - AndroidUtilities.m9dp(5.0f);
             this.otherY = i;
             BaseCell.setDrawableBounds(menuDrawable, i2, i);
             menuDrawable.draw(canvas);
@@ -5232,7 +5276,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.radialProgress.draw(canvas);
             canvas.save();
             if (this.useSeekBarWaweform) {
-                canvas.translate((float) (this.seekBarX + AndroidUtilities.m10dp(13.0f)), (float) this.seekBarY);
+                canvas.translate((float) (this.seekBarX + AndroidUtilities.m9dp(13.0f)), (float) this.seekBarY);
                 this.seekBarWaveform.draw(canvas);
             } else {
                 canvas.translate((float) this.seekBarX, (float) this.seekBarY);
@@ -5240,12 +5284,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             canvas.restore();
             canvas.save();
-            canvas.translate((float) this.timeAudioX, (float) ((AndroidUtilities.m10dp(44.0f) + this.namesOffset) + this.mediaOffsetY));
+            canvas.translate((float) this.timeAudioX, (float) ((AndroidUtilities.m9dp(44.0f) + this.namesOffset) + this.mediaOffsetY));
             this.durationLayout.draw(canvas);
             canvas.restore();
             if (this.currentMessageObject.type != 0 && this.currentMessageObject.isContentUnread()) {
                 Theme.chat_docBackPaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outVoiceSeekbarFill : Theme.key_chat_inVoiceSeekbarFill));
-                canvas.drawCircle((float) ((this.timeAudioX + this.timeWidthAudio) + AndroidUtilities.m10dp(6.0f)), (float) ((AndroidUtilities.m10dp(51.0f) + this.namesOffset) + this.mediaOffsetY), (float) AndroidUtilities.m10dp(3.0f), Theme.chat_docBackPaint);
+                canvas.drawCircle((float) ((this.timeAudioX + this.timeWidthAudio) + AndroidUtilities.m9dp(6.0f)), (float) ((AndroidUtilities.m9dp(51.0f) + this.namesOffset) + this.mediaOffsetY), (float) AndroidUtilities.m9dp(3.0f), Theme.chat_docBackPaint);
             }
         }
         if (this.currentMessageObject.type == 1 || this.documentAttachType == 4) {
@@ -5254,9 +5298,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     oldAlpha = ((BitmapDrawable) Theme.chat_msgMediaMenuDrawable).getPaint().getAlpha();
                     Theme.chat_msgMediaMenuDrawable.setAlpha((int) (((float) oldAlpha) * this.controlsAlpha));
                     drawable = Theme.chat_msgMediaMenuDrawable;
-                    i = (this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.m10dp(14.0f);
+                    i = (this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.m9dp(14.0f);
                     this.otherX = i;
-                    imageY = this.photoImage.getImageY() + AndroidUtilities.m10dp(8.1f);
+                    imageY = this.photoImage.getImageY() + AndroidUtilities.m9dp(8.1f);
                     this.otherY = imageY;
                     BaseCell.setDrawableBounds(drawable, i, imageY);
                     Theme.chat_msgMediaMenuDrawable.draw(canvas);
@@ -5264,15 +5308,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 if (!(this.forceNotDrawTime || this.infoLayout == null || (this.buttonState != 1 && this.buttonState != 0 && this.buttonState != 3 && !this.currentMessageObject.needDrawBluredPreview()))) {
                     Theme.chat_infoPaint.setColor(Theme.getColor(Theme.key_chat_mediaInfoText));
-                    x1 = this.photoImage.getImageX() + AndroidUtilities.m10dp(4.0f);
-                    y1 = this.photoImage.getImageY() + AndroidUtilities.m10dp(4.0f);
-                    this.rect.set((float) x1, (float) y1, (float) ((this.infoWidth + x1) + AndroidUtilities.m10dp(8.0f)), (float) (AndroidUtilities.m10dp(16.5f) + y1));
+                    x1 = this.photoImage.getImageX() + AndroidUtilities.m9dp(4.0f);
+                    y1 = this.photoImage.getImageY() + AndroidUtilities.m9dp(4.0f);
+                    this.rect.set((float) x1, (float) y1, (float) ((this.infoWidth + x1) + AndroidUtilities.m9dp(8.0f)), (float) (AndroidUtilities.m9dp(16.5f) + y1));
                     oldAlpha = Theme.chat_timeBackgroundPaint.getAlpha();
                     Theme.chat_timeBackgroundPaint.setAlpha((int) (((float) oldAlpha) * this.controlsAlpha));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(4.0f), Theme.chat_timeBackgroundPaint);
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(4.0f), Theme.chat_timeBackgroundPaint);
                     Theme.chat_timeBackgroundPaint.setAlpha(oldAlpha);
                     canvas.save();
-                    canvas.translate((float) (this.photoImage.getImageX() + AndroidUtilities.m10dp(8.0f)), (float) (this.photoImage.getImageY() + AndroidUtilities.m10dp(5.5f)));
+                    canvas.translate((float) (this.photoImage.getImageX() + AndroidUtilities.m9dp(8.0f)), (float) (this.photoImage.getImageY() + AndroidUtilities.m9dp(5.5f)));
                     Theme.chat_infoPaint.setAlpha((int) (255.0f * this.controlsAlpha));
                     this.infoLayout.draw(canvas);
                     canvas.restore();
@@ -5289,11 +5333,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     Theme.chat_locationAddressPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_inVenueInfoSelectedText : Theme.key_chat_inVenueInfoText));
                 }
                 if (this.currentMessageObject.messageOwner.media instanceof TL_messageMediaGeoLive) {
-                    int cy = this.photoImage.getImageY2() + AndroidUtilities.m10dp(30.0f);
+                    int cy = this.photoImage.getImageY2() + AndroidUtilities.m9dp(30.0f);
                     if (!this.locationExpired) {
                         this.forceNotDrawTime = true;
                         progress = 1.0f - (((float) Math.abs(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - this.currentMessageObject.messageOwner.date)) / ((float) this.currentMessageObject.messageOwner.media.period));
-                        this.rect.set((float) (this.photoImage.getImageX2() - AndroidUtilities.m10dp(43.0f)), (float) (cy - AndroidUtilities.m10dp(15.0f)), (float) (this.photoImage.getImageX2() - AndroidUtilities.m10dp(13.0f)), (float) (AndroidUtilities.m10dp(15.0f) + cy));
+                        this.rect.set((float) (this.photoImage.getImageX2() - AndroidUtilities.m9dp(43.0f)), (float) (cy - AndroidUtilities.m9dp(15.0f)), (float) (this.photoImage.getImageX2() - AndroidUtilities.m9dp(13.0f)), (float) (AndroidUtilities.m9dp(15.0f) + cy));
                         if (this.currentMessageObject.isOutOwner()) {
                             Theme.chat_radialProgress2Paint.setColor(Theme.getColor(Theme.key_chat_outInstant));
                             Theme.chat_livePaint.setColor(Theme.getColor(Theme.key_chat_outInstant));
@@ -5302,30 +5346,30 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             Theme.chat_livePaint.setColor(Theme.getColor(Theme.key_chat_inInstant));
                         }
                         Theme.chat_radialProgress2Paint.setAlpha(50);
-                        canvas.drawCircle(this.rect.centerX(), this.rect.centerY(), (float) AndroidUtilities.m10dp(15.0f), Theme.chat_radialProgress2Paint);
+                        canvas.drawCircle(this.rect.centerX(), this.rect.centerY(), (float) AndroidUtilities.m9dp(15.0f), Theme.chat_radialProgress2Paint);
                         Theme.chat_radialProgress2Paint.setAlpha(255);
                         canvas.drawArc(this.rect, -90.0f, -360.0f * progress, false, Theme.chat_radialProgress2Paint);
                         String text = LocaleController.formatLocationLeftTime(Math.abs(this.currentMessageObject.messageOwner.media.period - (ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - this.currentMessageObject.messageOwner.date)));
-                        canvas.drawText(text, this.rect.centerX() - (Theme.chat_livePaint.measureText(text) / 2.0f), (float) (AndroidUtilities.m10dp(4.0f) + cy), Theme.chat_livePaint);
+                        canvas.drawText(text, this.rect.centerX() - (Theme.chat_livePaint.measureText(text) / 2.0f), (float) (AndroidUtilities.m9dp(4.0f) + cy), Theme.chat_livePaint);
                         canvas.save();
-                        canvas.translate((float) (this.photoImage.getImageX() + AndroidUtilities.m10dp(10.0f)), (float) (this.photoImage.getImageY2() + AndroidUtilities.m10dp(10.0f)));
+                        canvas.translate((float) (this.photoImage.getImageX() + AndroidUtilities.m9dp(10.0f)), (float) (this.photoImage.getImageY2() + AndroidUtilities.m9dp(10.0f)));
                         this.docTitleLayout.draw(canvas);
-                        canvas.translate(0.0f, (float) AndroidUtilities.m10dp(23.0f));
+                        canvas.translate(0.0f, (float) AndroidUtilities.m9dp(23.0f));
                         this.infoLayout.draw(canvas);
                         canvas.restore();
                     }
-                    int cx = (this.photoImage.getImageX() + (this.photoImage.getImageWidth() / 2)) - AndroidUtilities.m10dp(31.0f);
-                    cy = (this.photoImage.getImageY() + (this.photoImage.getImageHeight() / 2)) - AndroidUtilities.m10dp(38.0f);
+                    int cx = (this.photoImage.getImageX() + (this.photoImage.getImageWidth() / 2)) - AndroidUtilities.m9dp(31.0f);
+                    cy = (this.photoImage.getImageY() + (this.photoImage.getImageHeight() / 2)) - AndroidUtilities.m9dp(38.0f);
                     BaseCell.setDrawableBounds(Theme.chat_msgAvatarLiveLocationDrawable, cx, cy);
                     Theme.chat_msgAvatarLiveLocationDrawable.draw(canvas);
-                    this.locationImageReceiver.setImageCoords(AndroidUtilities.m10dp(5.0f) + cx, AndroidUtilities.m10dp(5.0f) + cy, AndroidUtilities.m10dp(52.0f), AndroidUtilities.m10dp(52.0f));
+                    this.locationImageReceiver.setImageCoords(AndroidUtilities.m9dp(5.0f) + cx, AndroidUtilities.m9dp(5.0f) + cy, AndroidUtilities.m9dp(52.0f), AndroidUtilities.m9dp(52.0f));
                     this.locationImageReceiver.draw(canvas);
                 } else {
                     canvas.save();
-                    canvas.translate((float) (this.photoImage.getImageX() + AndroidUtilities.m10dp(6.0f)), (float) (this.photoImage.getImageY2() + AndroidUtilities.m10dp(8.0f)));
+                    canvas.translate((float) (this.photoImage.getImageX() + AndroidUtilities.m9dp(6.0f)), (float) (this.photoImage.getImageY2() + AndroidUtilities.m9dp(8.0f)));
                     this.docTitleLayout.draw(canvas);
                     if (this.infoLayout != null) {
-                        canvas.translate(0.0f, (float) AndroidUtilities.m10dp(21.0f));
+                        canvas.translate(0.0f, (float) AndroidUtilities.m9dp(21.0f));
                         this.infoLayout.draw(canvas);
                     }
                     canvas.restore();
@@ -5343,22 +5387,22 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             this.forceNotDrawTime = true;
             if (this.currentMessageObject.isOutOwner()) {
-                x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m10dp(16.0f);
+                x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(16.0f);
             } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
-                x = AndroidUtilities.m10dp(74.0f);
+                x = AndroidUtilities.m9dp(74.0f);
             } else {
-                x = AndroidUtilities.m10dp(25.0f);
+                x = AndroidUtilities.m9dp(25.0f);
             }
             this.otherX = x;
             if (this.titleLayout != null) {
                 canvas.save();
-                canvas.translate((float) x, (float) (AndroidUtilities.m10dp(12.0f) + this.namesOffset));
+                canvas.translate((float) x, (float) (AndroidUtilities.m9dp(12.0f) + this.namesOffset));
                 this.titleLayout.draw(canvas);
                 canvas.restore();
             }
             if (this.docTitleLayout != null) {
                 canvas.save();
-                canvas.translate((float) (AndroidUtilities.m10dp(19.0f) + x), (float) (AndroidUtilities.m10dp(37.0f) + this.namesOffset));
+                canvas.translate((float) (AndroidUtilities.m9dp(19.0f) + x), (float) (AndroidUtilities.m9dp(37.0f) + this.namesOffset));
                 this.docTitleLayout.draw(canvas);
                 canvas.restore();
             }
@@ -5374,43 +5418,43 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 phone = (isDrawSelectedBackground() || this.otherPressed) ? Theme.chat_msgInCallSelectedDrawable : Theme.chat_msgInCallDrawable;
             }
-            BaseCell.setDrawableBounds(icon, x - AndroidUtilities.m10dp(3.0f), AndroidUtilities.m10dp(36.0f) + this.namesOffset);
+            BaseCell.setDrawableBounds(icon, x - AndroidUtilities.m9dp(3.0f), AndroidUtilities.m9dp(36.0f) + this.namesOffset);
             icon.draw(canvas);
-            i2 = AndroidUtilities.m10dp(205.0f) + x;
-            i = AndroidUtilities.m10dp(22.0f);
+            i2 = AndroidUtilities.m9dp(205.0f) + x;
+            i = AndroidUtilities.m9dp(22.0f);
             this.otherY = i;
             BaseCell.setDrawableBounds(phone, i2, i);
             phone.draw(canvas);
         } else if (this.currentMessageObject.type == 12) {
             if (this.currentMessageObject.isOutOwner()) {
                 Theme.chat_contactNamePaint.setColor(Theme.getColor(Theme.key_chat_outContactNameText));
-                Theme.chat_contactPhonePaint.setColor(Theme.getColor(isDrawSelectedBackground() ? "chat_outContactPhoneText" : "chat_outContactPhoneText"));
+                Theme.chat_contactPhonePaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_outContactPhoneSelectedText : Theme.key_chat_outContactPhoneText));
             } else {
                 Theme.chat_contactNamePaint.setColor(Theme.getColor(Theme.key_chat_inContactNameText));
                 Theme.chat_contactPhonePaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_inContactPhoneSelectedText : Theme.key_chat_inContactPhoneText));
             }
             if (this.titleLayout != null) {
                 canvas.save();
-                canvas.translate((float) ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) + AndroidUtilities.m10dp(9.0f)), (float) (AndroidUtilities.m10dp(16.0f) + this.namesOffset));
+                canvas.translate((float) ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) + AndroidUtilities.m9dp(9.0f)), (float) (AndroidUtilities.m9dp(16.0f) + this.namesOffset));
                 this.titleLayout.draw(canvas);
                 canvas.restore();
             }
             if (this.docTitleLayout != null) {
                 canvas.save();
-                canvas.translate((float) ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) + AndroidUtilities.m10dp(9.0f)), (float) (AndroidUtilities.m10dp(39.0f) + this.namesOffset));
+                canvas.translate((float) ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) + AndroidUtilities.m9dp(9.0f)), (float) (AndroidUtilities.m9dp(39.0f) + this.namesOffset));
                 this.docTitleLayout.draw(canvas);
                 canvas.restore();
             }
             menuDrawable = this.currentMessageObject.isOutOwner() ? isDrawSelectedBackground() ? Theme.chat_msgOutMenuSelectedDrawable : Theme.chat_msgOutMenuDrawable : isDrawSelectedBackground() ? Theme.chat_msgInMenuSelectedDrawable : Theme.chat_msgInMenuDrawable;
-            i2 = (this.photoImage.getImageX() + this.backgroundWidth) - AndroidUtilities.m10dp(48.0f);
+            i2 = (this.photoImage.getImageX() + this.backgroundWidth) - AndroidUtilities.m9dp(48.0f);
             this.otherX = i2;
-            i = this.photoImage.getImageY() - AndroidUtilities.m10dp(5.0f);
+            i = this.photoImage.getImageY() - AndroidUtilities.m9dp(5.0f);
             this.otherY = i;
             BaseCell.setDrawableBounds(menuDrawable, i2, i);
             menuDrawable.draw(canvas);
             if (this.drawInstantView) {
-                int textX = this.photoImage.getImageX() - AndroidUtilities.m10dp(2.0f);
-                instantY = getMeasuredHeight() - AndroidUtilities.m10dp(64.0f);
+                int textX = this.photoImage.getImageX() - AndroidUtilities.m9dp(2.0f);
+                instantY = getMeasuredHeight() - AndroidUtilities.m9dp(64.0f);
                 backPaint = Theme.chat_instantViewRectPaint;
                 if (this.currentMessageObject.isOutOwner()) {
                     Theme.chat_instantViewPaint.setColor(Theme.getColor(Theme.key_chat_outPreviewInstantText));
@@ -5420,14 +5464,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     backPaint.setColor(Theme.getColor(Theme.key_chat_inPreviewInstantText));
                 }
                 if (VERSION.SDK_INT >= 21) {
-                    this.instantViewSelectorDrawable.setBounds(textX, instantY, this.instantWidth + textX, AndroidUtilities.m10dp(36.0f) + instantY);
+                    this.instantViewSelectorDrawable.setBounds(textX, instantY, this.instantWidth + textX, AndroidUtilities.m9dp(36.0f) + instantY);
                     this.instantViewSelectorDrawable.draw(canvas);
                 }
-                this.instantButtonRect.set((float) textX, (float) instantY, (float) (this.instantWidth + textX), (float) (AndroidUtilities.m10dp(36.0f) + instantY));
-                canvas.drawRoundRect(this.instantButtonRect, (float) AndroidUtilities.m10dp(6.0f), (float) AndroidUtilities.m10dp(6.0f), backPaint);
+                this.instantButtonRect.set((float) textX, (float) instantY, (float) (this.instantWidth + textX), (float) (AndroidUtilities.m9dp(36.0f) + instantY));
+                canvas.drawRoundRect(this.instantButtonRect, (float) AndroidUtilities.m9dp(6.0f), (float) AndroidUtilities.m9dp(6.0f), backPaint);
                 if (this.instantViewLayout != null) {
                     canvas.save();
-                    canvas.translate((float) (this.instantTextX + textX), (float) (AndroidUtilities.m10dp(10.5f) + instantY));
+                    canvas.translate((float) (this.instantTextX + textX), (float) (AndroidUtilities.m9dp(10.5f) + instantY));
                     this.instantViewLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -5435,14 +5479,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         if (this.captionLayout != null) {
             if (this.currentMessageObject.type == 1 || this.documentAttachType == 4 || this.currentMessageObject.type == 8) {
-                this.captionX = (this.photoImage.getImageX() + AndroidUtilities.m10dp(5.0f)) + this.captionOffsetX;
-                this.captionY = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) + AndroidUtilities.m10dp(6.0f);
+                this.captionX = (this.photoImage.getImageX() + AndroidUtilities.m9dp(5.0f)) + this.captionOffsetX;
+                this.captionY = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) + AndroidUtilities.m9dp(6.0f);
             } else if (this.hasOldCaptionPreview) {
-                this.captionX = (AndroidUtilities.m10dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f) + this.backgroundDrawableLeft) + this.captionOffsetX;
-                this.captionY = (((this.totalHeight - this.captionHeight) - AndroidUtilities.m10dp(this.drawPinnedTop ? 9.0f : 10.0f)) - this.linkPreviewHeight) - AndroidUtilities.m10dp(17.0f);
+                this.captionX = (AndroidUtilities.m9dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f) + this.backgroundDrawableLeft) + this.captionOffsetX;
+                this.captionY = (((this.totalHeight - this.captionHeight) - AndroidUtilities.m9dp(this.drawPinnedTop ? 9.0f : 10.0f)) - this.linkPreviewHeight) - AndroidUtilities.m9dp(17.0f);
             } else {
-                this.captionX = (AndroidUtilities.m10dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f) + this.backgroundDrawableLeft) + this.captionOffsetX;
-                this.captionY = (this.totalHeight - this.captionHeight) - AndroidUtilities.m10dp(this.drawPinnedTop ? 9.0f : 10.0f);
+                this.captionX = (AndroidUtilities.m9dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f) + this.backgroundDrawableLeft) + this.captionOffsetX;
+                this.captionY = (this.totalHeight - this.captionHeight) - AndroidUtilities.m9dp(this.drawPinnedTop ? 9.0f : 10.0f);
             }
         }
         if (this.currentPosition == null) {
@@ -5450,25 +5494,25 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         if (this.hasOldCaptionPreview) {
             if (this.currentMessageObject.type == 1 || this.documentAttachType == 4 || this.currentMessageObject.type == 8) {
-                linkX = this.photoImage.getImageX() + AndroidUtilities.m10dp(5.0f);
+                linkX = this.photoImage.getImageX() + AndroidUtilities.m9dp(5.0f);
             } else {
-                linkX = this.backgroundDrawableLeft + AndroidUtilities.m10dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f);
+                linkX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(this.currentMessageObject.isOutOwner() ? 11.0f : 17.0f);
             }
-            startY = ((this.totalHeight - AndroidUtilities.m10dp(this.drawPinnedTop ? 9.0f : 10.0f)) - this.linkPreviewHeight) - AndroidUtilities.m10dp(8.0f);
+            startY = ((this.totalHeight - AndroidUtilities.m9dp(this.drawPinnedTop ? 9.0f : 10.0f)) - this.linkPreviewHeight) - AndroidUtilities.m9dp(8.0f);
             linkPreviewY = startY;
             Theme.chat_replyLinePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outPreviewLine : Theme.key_chat_inPreviewLine));
-            canvas.drawRect((float) linkX, (float) (linkPreviewY - AndroidUtilities.m10dp(3.0f)), (float) (AndroidUtilities.m10dp(2.0f) + linkX), (float) (this.linkPreviewHeight + linkPreviewY), Theme.chat_replyLinePaint);
+            canvas.drawRect((float) linkX, (float) (linkPreviewY - AndroidUtilities.m9dp(3.0f)), (float) (AndroidUtilities.m9dp(2.0f) + linkX), (float) (this.linkPreviewHeight + linkPreviewY), Theme.chat_replyLinePaint);
             if (this.siteNameLayout != null) {
                 Theme.chat_replyNamePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outSiteNameText : Theme.key_chat_inSiteNameText));
                 canvas.save();
                 if (this.siteNameRtl) {
-                    x = (this.backgroundWidth - this.siteNameWidth) - AndroidUtilities.m10dp(32.0f);
+                    x = (this.backgroundWidth - this.siteNameWidth) - AndroidUtilities.m9dp(32.0f);
                 } else if (this.hasInvoicePreview) {
                     x = 0;
                 } else {
-                    x = AndroidUtilities.m10dp(10.0f);
+                    x = AndroidUtilities.m9dp(10.0f);
                 }
-                canvas.translate((float) (linkX + x), (float) (linkPreviewY - AndroidUtilities.m10dp(3.0f)));
+                canvas.translate((float) (linkX + x), (float) (linkPreviewY - AndroidUtilities.m9dp(3.0f)));
                 this.siteNameLayout.draw(canvas);
                 canvas.restore();
                 linkPreviewY += this.siteNameLayout.getLineBottom(this.siteNameLayout.getLineCount() - 1);
@@ -5480,11 +5524,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             if (this.descriptionLayout != null) {
                 if (linkPreviewY != startY) {
-                    linkPreviewY += AndroidUtilities.m10dp(2.0f);
+                    linkPreviewY += AndroidUtilities.m9dp(2.0f);
                 }
-                this.descriptionY = linkPreviewY - AndroidUtilities.m10dp(3.0f);
+                this.descriptionY = linkPreviewY - AndroidUtilities.m9dp(3.0f);
                 canvas.save();
-                canvas.translate((float) ((AndroidUtilities.m10dp(10.0f) + linkX) + this.descriptionX), (float) this.descriptionY);
+                canvas.translate((float) ((AndroidUtilities.m9dp(10.0f) + linkX) + this.descriptionX), (float) this.descriptionY);
                 this.descriptionLayout.draw(canvas);
                 canvas.restore();
             }
@@ -5506,21 +5550,21 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             if (this.drawPhotoImage) {
                 if (this.currentMessageObject.type == 0) {
-                    i2 = (this.photoImage.getImageX() + this.backgroundWidth) - AndroidUtilities.m10dp(56.0f);
+                    i2 = (this.photoImage.getImageX() + this.backgroundWidth) - AndroidUtilities.m9dp(56.0f);
                     this.otherX = i2;
-                    i = this.photoImage.getImageY() + AndroidUtilities.m10dp(1.0f);
+                    i = this.photoImage.getImageY() + AndroidUtilities.m9dp(1.0f);
                     this.otherY = i;
                     BaseCell.setDrawableBounds(menuDrawable, i2, i);
                 } else {
-                    i2 = (this.photoImage.getImageX() + this.backgroundWidth) - AndroidUtilities.m10dp(40.0f);
+                    i2 = (this.photoImage.getImageX() + this.backgroundWidth) - AndroidUtilities.m9dp(40.0f);
                     this.otherX = i2;
-                    i = this.photoImage.getImageY() + AndroidUtilities.m10dp(1.0f);
+                    i = this.photoImage.getImageY() + AndroidUtilities.m9dp(1.0f);
                     this.otherY = i;
                     BaseCell.setDrawableBounds(menuDrawable, i2, i);
                 }
-                x = (this.photoImage.getImageX() + this.photoImage.getImageWidth()) + AndroidUtilities.m10dp(10.0f);
-                titleY = this.photoImage.getImageY() + AndroidUtilities.m10dp(8.0f);
-                subtitleY = (this.photoImage.getImageY() + this.docTitleLayout.getLineBottom(this.docTitleLayout.getLineCount() - 1)) + AndroidUtilities.m10dp(13.0f);
+                x = (this.photoImage.getImageX() + this.photoImage.getImageWidth()) + AndroidUtilities.m9dp(10.0f);
+                titleY = this.photoImage.getImageY() + AndroidUtilities.m9dp(8.0f);
+                subtitleY = (this.photoImage.getImageY() + this.docTitleLayout.getLineBottom(this.docTitleLayout.getLineCount() - 1)) + AndroidUtilities.m9dp(13.0f);
                 if (this.buttonState >= 0 && this.buttonState < 4) {
                     if (imageDrawn) {
                         this.radialProgress.swapBackground(Theme.chat_photoStatesDrawables[this.buttonState][this.buttonPressed]);
@@ -5544,7 +5588,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.radialProgress.setProgressColor(Theme.getColor(Theme.key_chat_mediaProgress));
                 } else {
                     this.rect.set((float) this.photoImage.getImageX(), (float) this.photoImage.getImageY(), (float) (this.photoImage.getImageX() + this.photoImage.getImageWidth()), (float) (this.photoImage.getImageY() + this.photoImage.getImageHeight()));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(3.0f), (float) AndroidUtilities.m10dp(3.0f), Theme.chat_docBackPaint);
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(3.0f), (float) AndroidUtilities.m9dp(3.0f), Theme.chat_docBackPaint);
                     if (this.currentMessageObject.isOutOwner()) {
                         radialProgress = this.radialProgress;
                         if (isDrawSelectedBackground()) {
@@ -5558,14 +5602,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                 }
             } else {
-                i2 = (this.backgroundWidth + this.buttonX) - AndroidUtilities.m10dp(this.currentMessageObject.type == 0 ? 58.0f : 48.0f);
+                i2 = (this.backgroundWidth + this.buttonX) - AndroidUtilities.m9dp(this.currentMessageObject.type == 0 ? 58.0f : 48.0f);
                 this.otherX = i2;
-                i = this.buttonY - AndroidUtilities.m10dp(5.0f);
+                i = this.buttonY - AndroidUtilities.m9dp(5.0f);
                 this.otherY = i;
                 BaseCell.setDrawableBounds(menuDrawable, i2, i);
-                x = this.buttonX + AndroidUtilities.m10dp(53.0f);
-                titleY = this.buttonY + AndroidUtilities.m10dp(4.0f);
-                subtitleY = this.buttonY + AndroidUtilities.m10dp(27.0f);
+                x = this.buttonX + AndroidUtilities.m9dp(53.0f);
+                titleY = this.buttonY + AndroidUtilities.m9dp(4.0f);
+                subtitleY = this.buttonY + AndroidUtilities.m9dp(27.0f);
                 if (this.currentMessageObject.isOutOwner()) {
                     radialProgress = this.radialProgress;
                     if (isDrawSelectedBackground() || this.buttonPressed != 0) {
@@ -5589,7 +5633,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     canvas.restore();
                 }
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
             try {
                 if (this.infoLayout != null) {
@@ -5599,7 +5643,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     canvas.restore();
                 }
             } catch (Throwable e22) {
-                FileLog.m14e(e22);
+                FileLog.m13e(e22);
             }
         }
         if (this.drawImageButton && this.photoImage.getVisible()) {
@@ -5620,35 +5664,35 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (!this.botButtons.isEmpty()) {
             int addX;
             if (this.currentMessageObject.isOutOwner()) {
-                addX = (getMeasuredWidth() - this.widthForButtons) - AndroidUtilities.m10dp(10.0f);
+                addX = (getMeasuredWidth() - this.widthForButtons) - AndroidUtilities.m9dp(10.0f);
             } else {
-                addX = this.backgroundDrawableLeft + AndroidUtilities.m10dp(this.mediaBackground ? 1.0f : 7.0f);
+                addX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(this.mediaBackground ? 1.0f : 7.0f);
             }
             a = 0;
             while (a < this.botButtons.size()) {
                 BotButton button = (BotButton) this.botButtons.get(a);
-                y = (button.var_y + this.layoutHeight) - AndroidUtilities.m10dp(2.0f);
+                y = (button.var_y + this.layoutHeight) - AndroidUtilities.m9dp(2.0f);
                 Theme.chat_systemDrawable.setColorFilter(a == this.pressedBotButton ? Theme.colorPressedFilter : Theme.colorFilter);
                 Theme.chat_systemDrawable.setBounds(button.var_x + addX, y, (button.var_x + addX) + button.width, button.height + y);
                 Theme.chat_systemDrawable.draw(canvas);
                 canvas.save();
-                canvas.translate((float) ((button.var_x + addX) + AndroidUtilities.m10dp(5.0f)), (float) (((AndroidUtilities.m10dp(44.0f) - button.title.getLineBottom(button.title.getLineCount() - 1)) / 2) + y));
+                canvas.translate((float) ((button.var_x + addX) + AndroidUtilities.m9dp(5.0f)), (float) (((AndroidUtilities.m9dp(44.0f) - button.title.getLineBottom(button.title.getLineCount() - 1)) / 2) + y));
                 button.title.draw(canvas);
                 canvas.restore();
                 if (button.button instanceof TL_keyboardButtonUrl) {
-                    BaseCell.setDrawableBounds(Theme.chat_botLinkDrawalbe, (((button.var_x + button.width) - AndroidUtilities.m10dp(3.0f)) - Theme.chat_botLinkDrawalbe.getIntrinsicWidth()) + addX, AndroidUtilities.m10dp(3.0f) + y);
+                    BaseCell.setDrawableBounds(Theme.chat_botLinkDrawalbe, (((button.var_x + button.width) - AndroidUtilities.m9dp(3.0f)) - Theme.chat_botLinkDrawalbe.getIntrinsicWidth()) + addX, AndroidUtilities.m9dp(3.0f) + y);
                     Theme.chat_botLinkDrawalbe.draw(canvas);
                 } else if (button.button instanceof TL_keyboardButtonSwitchInline) {
-                    BaseCell.setDrawableBounds(Theme.chat_botInlineDrawable, (((button.var_x + button.width) - AndroidUtilities.m10dp(3.0f)) - Theme.chat_botInlineDrawable.getIntrinsicWidth()) + addX, AndroidUtilities.m10dp(3.0f) + y);
+                    BaseCell.setDrawableBounds(Theme.chat_botInlineDrawable, (((button.var_x + button.width) - AndroidUtilities.m9dp(3.0f)) - Theme.chat_botInlineDrawable.getIntrinsicWidth()) + addX, AndroidUtilities.m9dp(3.0f) + y);
                     Theme.chat_botInlineDrawable.draw(canvas);
                 } else if ((button.button instanceof TL_keyboardButtonCallback) || (button.button instanceof TL_keyboardButtonRequestGeoLocation) || (button.button instanceof TL_keyboardButtonGame) || (button.button instanceof TL_keyboardButtonBuy)) {
                     boolean drawProgress = (((button.button instanceof TL_keyboardButtonCallback) || (button.button instanceof TL_keyboardButtonGame) || (button.button instanceof TL_keyboardButtonBuy)) && SendMessagesHelper.getInstance(this.currentAccount).isSendingCallback(this.currentMessageObject, button.button)) || ((button.button instanceof TL_keyboardButtonRequestGeoLocation) && SendMessagesHelper.getInstance(this.currentAccount).isSendingCurrentLocation(this.currentMessageObject, button.button));
                     if (drawProgress || !(drawProgress || button.progressAlpha == 0.0f)) {
                         Theme.chat_botProgressPaint.setAlpha(Math.min(255, (int) (button.progressAlpha * 255.0f)));
-                        x = ((button.var_x + button.width) - AndroidUtilities.m10dp(12.0f)) + addX;
-                        this.rect.set((float) x, (float) (AndroidUtilities.m10dp(4.0f) + y), (float) (AndroidUtilities.m10dp(8.0f) + x), (float) (AndroidUtilities.m10dp(12.0f) + y));
+                        x = ((button.var_x + button.width) - AndroidUtilities.m9dp(12.0f)) + addX;
+                        this.rect.set((float) x, (float) (AndroidUtilities.m9dp(4.0f) + y), (float) (AndroidUtilities.m9dp(8.0f) + x), (float) (AndroidUtilities.m9dp(12.0f) + y));
                         canvas.drawArc(this.rect, (float) button.angle, 220.0f, false, Theme.chat_botProgressPaint);
-                        invalidate(((int) this.rect.left) - AndroidUtilities.m10dp(2.0f), ((int) this.rect.top) - AndroidUtilities.m10dp(2.0f), ((int) this.rect.right) + AndroidUtilities.m10dp(2.0f), ((int) this.rect.bottom) + AndroidUtilities.m10dp(2.0f));
+                        invalidate(((int) this.rect.left) - AndroidUtilities.m9dp(2.0f), ((int) this.rect.top) - AndroidUtilities.m9dp(2.0f), ((int) this.rect.right) + AndroidUtilities.m9dp(2.0f), ((int) this.rect.bottom) + AndroidUtilities.m9dp(2.0f));
                         long newTime = System.currentTimeMillis();
                         if (Math.abs(button.lastUpdateTime - System.currentTimeMillis()) < 1000) {
                             long delta = newTime - button.lastUpdateTime;
@@ -5770,16 +5814,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             int maxWidth;
             if (AndroidUtilities.isTablet()) {
                 if (this.isChat && !this.currentMessageObject.isOutOwner() && this.currentMessageObject.needDrawAvatar()) {
-                    maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m10dp(42.0f);
+                    maxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.m9dp(42.0f);
                 } else {
                     maxWidth = AndroidUtilities.getMinTabletSide();
                 }
             } else if (this.isChat && !this.currentMessageObject.isOutOwner() && this.currentMessageObject.needDrawAvatar()) {
-                maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(42.0f);
+                maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(42.0f);
             } else {
                 maxWidth = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
             }
-            return (maxWidth - this.backgroundWidth) - AndroidUtilities.m10dp(57.0f);
+            return (maxWidth - this.backgroundWidth) - AndroidUtilities.m9dp(57.0f);
         } else if (this.currentMessagesGroup != null) {
             int dWidth;
             if (AndroidUtilities.isTablet()) {
@@ -5795,9 +5839,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 firstLineWidth = (int) (((double) firstLineWidth) + Math.ceil((double) ((((float) (position.var_pw + position.leftSpanOffset)) / 1000.0f) * ((float) dWidth))));
             }
-            return firstLineWidth - AndroidUtilities.m10dp((float) ((this.isAvatarVisible ? 48 : 0) + 31));
+            return firstLineWidth - AndroidUtilities.m9dp((float) ((this.isAvatarVisible ? 48 : 0) + 31));
         } else {
-            return this.backgroundWidth - AndroidUtilities.m10dp(this.mediaBackground ? 22.0f : 31.0f);
+            return this.backgroundWidth - AndroidUtilities.m9dp(this.mediaBackground ? 22.0f : 31.0f);
         }
     }
 
@@ -5817,7 +5861,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
                 return;
-            } else if (this.currentMessageObject.attachPathExists) {
+            } else if (this.currentMessageObject.attachPathExists && !TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
                 fileName = this.currentMessageObject.messageOwner.attachPath;
                 fileExists = true;
             } else if (!this.currentMessageObject.isSendError() || this.documentAttachType == 3 || this.documentAttachType == 5) {
@@ -6081,9 +6125,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
             } else if (this.documentAttachType == 4) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
             }
             this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
             invalidate();
@@ -6102,7 +6146,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (this.buttonState == 0) {
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
                 if (this.miniButtonState == 0) {
-                    FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
+                    FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
                 }
                 if (this.delegate.needPlayMessage(this.currentMessageObject)) {
                     if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
@@ -6134,45 +6178,46 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 String str2 = this.currentPhotoFilterThumb;
                 int i2 = this.currentPhotoObject.size;
+                MessageObject messageObject = this.currentMessageObject;
                 if (this.currentMessageObject.shouldEncryptPhotoOrVideo()) {
                     i = 2;
                 } else {
                     i = 0;
                 }
-                imageReceiver.setImage(tLObject, str, fileLocation, str2, i2, null, i);
+                imageReceiver.setImage(tLObject, str, fileLocation, str2, i2, null, messageObject, i);
             } else if (this.currentMessageObject.type == 8) {
                 this.currentMessageObject.gifState = 2.0f;
                 this.photoImage.setForceLoading(true);
-                this.photoImage.setImage(this.currentMessageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.document.size, null, 0);
+                this.photoImage.setImage(this.currentMessageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.document.size, null, this.currentMessageObject, 0);
             } else if (this.currentMessageObject.isRoundVideo()) {
                 if (this.currentMessageObject.isSecretMedia()) {
-                    FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 1);
+                    FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 1);
                 } else {
                     this.currentMessageObject.gifState = 2.0f;
                     Document document = this.currentMessageObject.getDocument();
                     this.photoImage.setForceLoading(true);
-                    this.photoImage.setImage(document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, document.size, null, 0);
+                    this.photoImage.setImage(document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, document.size, null, this.currentMessageObject, 0);
                 }
             } else if (this.currentMessageObject.type == 9) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.document, false, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.document, this.currentMessageObject, 0, 0);
             } else if (this.documentAttachType == 4) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
             } else if (this.currentMessageObject.type != 0 || this.documentAttachType == 0) {
                 this.photoImage.setForceLoading(true);
-                this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, 0, null, 0);
+                this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, 0, null, this.currentMessageObject, 0);
             } else if (this.documentAttachType == 2) {
                 this.photoImage.setForceLoading(true);
-                this.photoImage.setImage(this.currentMessageObject.messageOwner.media.webpage.document, null, this.currentPhotoObject.location, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.webpage.document.size, null, 0);
+                this.photoImage.setImage(this.currentMessageObject.messageOwner.media.webpage.document, null, this.currentPhotoObject.location, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.webpage.document.size, null, this.currentMessageObject, 0);
                 this.currentMessageObject.gifState = 2.0f;
             } else if (this.documentAttachType == 1) {
-                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.webpage.document, false, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.webpage.document, this.currentMessageObject, 0, 0);
             }
             this.buttonState = 1;
             this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
             invalidate();
         } else if (this.buttonState == 1) {
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-                if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
+                if (MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject)) {
                     this.buttonState = 0;
                     this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                     invalidate();
@@ -6196,7 +6241,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         } else if (this.buttonState == 2) {
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
                 this.radialProgress.setProgress(0.0f, false);
-                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
                 this.buttonState = 4;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
                 invalidate();
@@ -6230,7 +6275,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
     }
 
-    public void onFailedDownload(String fileName) {
+    public void onFailedDownload(String fileName, boolean canceled) {
         boolean z;
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
             z = true;
@@ -6379,18 +6424,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if ((messageObject.messageOwner.flags & 1024) != 0) {
             this.currentViewsString = String.format("%s", new Object[]{LocaleController.formatShortNumber(Math.max(1, messageObject.messageOwner.views), null)});
             this.viewsTextWidth = (int) Math.ceil((double) Theme.chat_timePaint.measureText(this.currentViewsString));
-            this.timeWidth += (this.viewsTextWidth + Theme.chat_msgInViewsDrawable.getIntrinsicWidth()) + AndroidUtilities.m10dp(10.0f);
+            this.timeWidth += (this.viewsTextWidth + Theme.chat_msgInViewsDrawable.getIntrinsicWidth()) + AndroidUtilities.m9dp(10.0f);
         }
         if (signString != null) {
             if (this.availableTimeWidth == 0) {
-                this.availableTimeWidth = AndroidUtilities.m10dp(1000.0f);
+                this.availableTimeWidth = AndroidUtilities.m9dp(1000.0f);
             }
             int widthForSign = this.availableTimeWidth - this.timeWidth;
             if (messageObject.isOutOwner()) {
                 if (messageObject.type == 5) {
-                    widthForSign -= AndroidUtilities.m10dp(20.0f);
+                    widthForSign -= AndroidUtilities.m9dp(20.0f);
                 } else {
-                    widthForSign -= AndroidUtilities.m10dp(96.0f);
+                    widthForSign -= AndroidUtilities.m9dp(96.0f);
                 }
             }
             int width = (int) Math.ceil((double) Theme.chat_timePaint.measureText(signString, 0, signString.length()));
@@ -6418,46 +6463,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     }
 
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
-        if (this.currentPosition != null && !this.currentPosition.last) {
-            return false;
+        if (this.currentPosition == null || this.currentPosition.last) {
+            return messageObject.needDrawShareButton();
         }
-        if (messageObject.eventId != 0) {
-            return false;
-        }
-        if (messageObject.messageOwner.fwd_from != null && !messageObject.isOutOwner() && messageObject.messageOwner.fwd_from.saved_from_peer != null && messageObject.getDialogId() == ((long) UserConfig.getInstance(this.currentAccount).getClientUserId())) {
-            this.drwaShareGoIcon = true;
-            return true;
-        } else if (messageObject.type == 13) {
-            return false;
-        } else {
-            if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.channel_id != 0 && !messageObject.isOutOwner()) {
-                return true;
-            }
-            if (messageObject.isFromUser()) {
-                if ((messageObject.messageOwner.media instanceof TL_messageMediaEmpty) || messageObject.messageOwner.media == null || ((messageObject.messageOwner.media instanceof TL_messageMediaWebPage) && !(messageObject.messageOwner.media.webpage instanceof TL_webPage))) {
-                    return false;
-                }
-                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.from_id));
-                if (user != null && user.bot) {
-                    return true;
-                }
-                if (!messageObject.isOut()) {
-                    if ((messageObject.messageOwner.media instanceof TL_messageMediaGame) || (messageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
-                        return true;
-                    }
-                    if (messageObject.isMegagroup()) {
-                        Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(messageObject.messageOwner.to_id.channel_id));
-                        if (chat == null || chat.username == null || chat.username.length() <= 0 || (messageObject.messageOwner.media instanceof TL_messageMediaContact) || (messageObject.messageOwner.media instanceof TL_messageMediaGeo)) {
-                            return false;
-                        }
-                        return true;
-                    }
-                }
-            } else if ((messageObject.messageOwner.from_id < 0 || messageObject.messageOwner.post) && messageObject.messageOwner.to_id.channel_id != 0 && ((messageObject.messageOwner.via_bot_id == 0 && messageObject.messageOwner.reply_to_msg_id == 0) || messageObject.type != 13)) {
-                return true;
-            }
-            return false;
-        }
+        return false;
     }
 
     public boolean isInsideBackground(float x, float y) {
@@ -6511,6 +6520,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         updateCurrentUserAndChat();
         if (this.isAvatarVisible) {
+            Object parentObject = null;
             if (this.currentUser != null) {
                 if (this.currentUser.photo != null) {
                     this.currentPhoto = this.currentUser.photo.photo_small;
@@ -6518,6 +6528,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.currentPhoto = null;
                 }
                 this.avatarDrawable.setInfo(this.currentUser);
+                parentObject = this.currentUser;
             } else if (this.currentChat != null) {
                 if (this.currentChat.photo != null) {
                     this.currentPhoto = this.currentChat.photo.photo_small;
@@ -6525,11 +6536,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.currentPhoto = null;
                 }
                 this.avatarDrawable.setInfo(this.currentChat);
+                parentObject = this.currentChat;
             } else {
                 this.currentPhoto = null;
                 this.avatarDrawable.setInfo(messageObject.messageOwner.from_id, null, null, false);
             }
-            this.avatarImage.setImage(this.currentPhoto, "50_50", this.avatarDrawable, null, 0);
+            this.avatarImage.setImage(this.currentPhoto, "50_50", this.avatarDrawable, null, parentObject, 0);
         }
         measureTime(messageObject);
         this.namesOffset = 0;
@@ -6556,7 +6568,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.drawNameLayout = true;
             this.nameWidth = getMaxNameWidth();
             if (this.nameWidth < 0) {
-                this.nameWidth = AndroidUtilities.m10dp(100.0f);
+                this.nameWidth = AndroidUtilities.m9dp(100.0f);
             }
             if (this.currentUser == null || this.currentMessageObject.isOutOwner() || this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5 || !this.delegate.isChatAdminCell(this.currentUser.var_id)) {
                 adminString = null;
@@ -6580,7 +6592,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 int color;
                 this.viaNameWidth = (int) Math.ceil((double) Theme.chat_namePaint.measureText(nameStringFinal, 0, nameStringFinal.length()));
                 if (this.viaNameWidth != 0) {
-                    this.viaNameWidth += AndroidUtilities.m10dp(4.0f);
+                    this.viaNameWidth += AndroidUtilities.m9dp(4.0f);
                 }
                 if (this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5) {
                     color = Theme.getColor(Theme.key_chat_stickerViaBotNameText);
@@ -6601,24 +6613,24 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 nameStringFinal = TextUtils.ellipsize(nameStringFinal, Theme.chat_namePaint, (float) this.nameWidth, TruncateAt.END);
             }
             try {
-                this.nameLayout = new StaticLayout(nameStringFinal, Theme.chat_namePaint, this.nameWidth + AndroidUtilities.m10dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.nameLayout = new StaticLayout(nameStringFinal, Theme.chat_namePaint, this.nameWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (this.nameLayout == null || this.nameLayout.getLineCount() <= 0) {
                     this.nameWidth = 0;
                 } else {
                     this.nameWidth = (int) Math.ceil((double) this.nameLayout.getLineWidth(0));
                     if (messageObject.type != 13) {
-                        this.namesOffset += AndroidUtilities.m10dp(19.0f);
+                        this.namesOffset += AndroidUtilities.m9dp(19.0f);
                     }
                     this.nameOffsetX = this.nameLayout.getLineLeft(0);
                 }
                 if (adminString != null) {
-                    this.adminLayout = new StaticLayout(adminString, Theme.chat_adminPaint, adminWidth + AndroidUtilities.m10dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    this.nameWidth = (int) (((float) this.nameWidth) + (this.adminLayout.getLineWidth(0) + ((float) AndroidUtilities.m10dp(8.0f))));
+                    this.adminLayout = new StaticLayout(adminString, Theme.chat_adminPaint, adminWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.nameWidth = (int) (((float) this.nameWidth) + (this.adminLayout.getLineWidth(0) + ((float) AndroidUtilities.m9dp(8.0f))));
                 } else {
                     this.adminLayout = null;
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (this.currentNameString.length() == 0) {
                 this.currentNameString = null;
@@ -6673,31 +6685,31 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), idx, name.length() + idx, 33);
                 }
                 try {
-                    this.forwardedNameLayout[1] = new StaticLayout(TextUtils.ellipsize(stringBuilder, Theme.chat_forwardNamePaint, (float) this.forwardedNameWidth, TruncateAt.END), Theme.chat_forwardNamePaint, this.forwardedNameWidth + AndroidUtilities.m10dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    this.forwardedNameLayout[0] = new StaticLayout(TextUtils.ellipsize(AndroidUtilities.replaceTags(LocaleController.getString("ForwardedMessage", CLASSNAMER.string.ForwardedMessage)), Theme.chat_forwardNamePaint, (float) this.forwardedNameWidth, TruncateAt.END), Theme.chat_forwardNamePaint, this.forwardedNameWidth + AndroidUtilities.m10dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.forwardedNameLayout[1] = new StaticLayout(TextUtils.ellipsize(stringBuilder, Theme.chat_forwardNamePaint, (float) this.forwardedNameWidth, TruncateAt.END), Theme.chat_forwardNamePaint, this.forwardedNameWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.forwardedNameLayout[0] = new StaticLayout(TextUtils.ellipsize(AndroidUtilities.replaceTags(LocaleController.getString("ForwardedMessage", CLASSNAMER.string.ForwardedMessage)), Theme.chat_forwardNamePaint, (float) this.forwardedNameWidth, TruncateAt.END), Theme.chat_forwardNamePaint, this.forwardedNameWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     this.forwardedNameWidth = Math.max((int) Math.ceil((double) this.forwardedNameLayout[0].getLineWidth(0)), (int) Math.ceil((double) this.forwardedNameLayout[1].getLineWidth(0)));
                     this.forwardNameOffsetX[0] = this.forwardedNameLayout[0].getLineLeft(0);
                     this.forwardNameOffsetX[1] = this.forwardedNameLayout[1].getLineLeft(0);
                     if (messageObject.type != 5) {
-                        this.namesOffset += AndroidUtilities.m10dp(36.0f);
+                        this.namesOffset += AndroidUtilities.m9dp(36.0f);
                     }
                 } catch (Throwable e3) {
-                    FileLog.m14e(e3);
+                    FileLog.m13e(e3);
                 }
             }
         }
         if (messageObject.hasValidReplyMessageObject() && (this.currentPosition == null || this.currentPosition.minY == (byte) 0)) {
             if (!(messageObject.type == 13 || messageObject.type == 5)) {
-                this.namesOffset += AndroidUtilities.m10dp(42.0f);
+                this.namesOffset += AndroidUtilities.m9dp(42.0f);
                 if (messageObject.type != 0) {
-                    this.namesOffset += AndroidUtilities.m10dp(5.0f);
+                    this.namesOffset += AndroidUtilities.m9dp(5.0f);
                 }
             }
             int maxWidth = getMaxNameWidth();
             if (messageObject.type != 13 && messageObject.type != 5) {
-                maxWidth -= AndroidUtilities.m10dp(10.0f);
+                maxWidth -= AndroidUtilities.m9dp(10.0f);
             } else if (messageObject.type == 5) {
-                maxWidth += AndroidUtilities.m10dp(13.0f);
+                maxWidth += AndroidUtilities.m9dp(13.0f);
             }
             CharSequence stringFinalText = null;
             PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.replyMessageObject.photoThumbs2, 80);
@@ -6709,14 +6721,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.needReplyImage = false;
             } else {
                 if (messageObject.replyMessageObject.isRoundVideo()) {
-                    this.replyImageReceiver.setRoundRadius(AndroidUtilities.m10dp(22.0f));
+                    this.replyImageReceiver.setRoundRadius(AndroidUtilities.m9dp(22.0f));
                 } else {
                     this.replyImageReceiver.setRoundRadius(0);
                 }
                 this.currentReplyPhoto = photoSize.location;
-                this.replyImageReceiver.setImage(photoSize.location, "50_50", null, null, 1);
+                this.replyImageReceiver.setImage(photoSize.location, "50_50", null, null, messageObject.replyMessageObject, 1);
                 this.needReplyImage = true;
-                maxWidth -= AndroidUtilities.m10dp(44.0f);
+                maxWidth -= AndroidUtilities.m9dp(44.0f);
             }
             name = null;
             Chat chat;
@@ -6743,39 +6755,39 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             CharSequence stringFinalName = TextUtils.ellipsize(name.replace(10, ' '), Theme.chat_replyNamePaint, (float) maxWidth, TruncateAt.END);
             if (messageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaGame) {
-                stringFinalText = TextUtils.ellipsize(Emoji.replaceEmoji(messageObject.replyMessageObject.messageOwner.media.game.title, Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(14.0f), false), Theme.chat_replyTextPaint, (float) maxWidth, TruncateAt.END);
+                stringFinalText = TextUtils.ellipsize(Emoji.replaceEmoji(messageObject.replyMessageObject.messageOwner.media.game.title, Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.m9dp(14.0f), false), Theme.chat_replyTextPaint, (float) maxWidth, TruncateAt.END);
             } else if (messageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice) {
-                stringFinalText = TextUtils.ellipsize(Emoji.replaceEmoji(messageObject.replyMessageObject.messageOwner.media.title, Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(14.0f), false), Theme.chat_replyTextPaint, (float) maxWidth, TruncateAt.END);
+                stringFinalText = TextUtils.ellipsize(Emoji.replaceEmoji(messageObject.replyMessageObject.messageOwner.media.title, Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.m9dp(14.0f), false), Theme.chat_replyTextPaint, (float) maxWidth, TruncateAt.END);
             } else if (messageObject.replyMessageObject.messageText != null && messageObject.replyMessageObject.messageText.length() > 0) {
                 String mess = messageObject.replyMessageObject.messageText.toString();
                 if (mess.length() > 150) {
                     mess = mess.substring(0, 150);
                 }
-                stringFinalText = TextUtils.ellipsize(Emoji.replaceEmoji(mess.replace(10, ' '), Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(14.0f), false), Theme.chat_replyTextPaint, (float) maxWidth, TruncateAt.END);
+                stringFinalText = TextUtils.ellipsize(Emoji.replaceEmoji(mess.replace(10, ' '), Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.m9dp(14.0f), false), Theme.chat_replyTextPaint, (float) maxWidth, TruncateAt.END);
             }
             try {
-                this.replyNameWidth = AndroidUtilities.m10dp((float) ((this.needReplyImage ? 44 : 0) + 4));
+                this.replyNameWidth = AndroidUtilities.m9dp((float) ((this.needReplyImage ? 44 : 0) + 4));
                 if (stringFinalName != null) {
-                    this.replyNameLayout = new StaticLayout(stringFinalName, Theme.chat_replyNamePaint, maxWidth + AndroidUtilities.m10dp(6.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.replyNameLayout = new StaticLayout(stringFinalName, Theme.chat_replyNamePaint, maxWidth + AndroidUtilities.m9dp(6.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (this.replyNameLayout.getLineCount() > 0) {
-                        this.replyNameWidth += ((int) Math.ceil((double) this.replyNameLayout.getLineWidth(0))) + AndroidUtilities.m10dp(8.0f);
+                        this.replyNameWidth += ((int) Math.ceil((double) this.replyNameLayout.getLineWidth(0))) + AndroidUtilities.m9dp(8.0f);
                         this.replyNameOffset = this.replyNameLayout.getLineLeft(0);
                     }
                 }
             } catch (Throwable e32) {
-                FileLog.m14e(e32);
+                FileLog.m13e(e32);
             }
             try {
-                this.replyTextWidth = AndroidUtilities.m10dp((float) ((this.needReplyImage ? 44 : 0) + 4));
+                this.replyTextWidth = AndroidUtilities.m9dp((float) ((this.needReplyImage ? 44 : 0) + 4));
                 if (stringFinalText != null) {
-                    this.replyTextLayout = new StaticLayout(stringFinalText, Theme.chat_replyTextPaint, maxWidth + AndroidUtilities.m10dp(6.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.replyTextLayout = new StaticLayout(stringFinalText, Theme.chat_replyTextPaint, maxWidth + AndroidUtilities.m9dp(6.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (this.replyTextLayout.getLineCount() > 0) {
-                        this.replyTextWidth += ((int) Math.ceil((double) this.replyTextLayout.getLineWidth(0))) + AndroidUtilities.m10dp(8.0f);
+                        this.replyTextWidth += ((int) Math.ceil((double) this.replyTextLayout.getLineWidth(0))) + AndroidUtilities.m9dp(8.0f);
                         this.replyTextOffset = this.replyTextLayout.getLineLeft(0);
                     }
                 }
             } catch (Throwable e322) {
-                FileLog.m14e(e322);
+                FileLog.m13e(e322);
             }
         }
         requestLayout();
@@ -6856,45 +6868,45 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         currentBackgroundSelectedDrawable = Theme.chat_msgOutSelectedDrawable;
                         currentBackgroundShadowDrawable = Theme.chat_msgOutShadowDrawable;
                     }
-                    this.backgroundDrawableLeft = (this.layoutWidth - this.backgroundWidth) - (!this.mediaBackground ? 0 : AndroidUtilities.m10dp(9.0f));
+                    this.backgroundDrawableLeft = (this.layoutWidth - this.backgroundWidth) - (!this.mediaBackground ? 0 : AndroidUtilities.m9dp(9.0f));
                     i = this.backgroundWidth;
                     if (this.mediaBackground) {
                         i2 = 0;
                     } else {
-                        i2 = AndroidUtilities.m10dp(3.0f);
+                        i2 = AndroidUtilities.m9dp(3.0f);
                     }
                     this.backgroundDrawableRight = i - i2;
                     if (!(this.currentMessagesGroup == null || this.currentPosition.edge)) {
-                        this.backgroundDrawableRight += AndroidUtilities.m10dp(10.0f);
+                        this.backgroundDrawableRight += AndroidUtilities.m9dp(10.0f);
                     }
                     int backgroundLeft = this.backgroundDrawableLeft;
                     if (!this.mediaBackground && this.drawPinnedBottom) {
-                        this.backgroundDrawableRight -= AndroidUtilities.m10dp(6.0f);
+                        this.backgroundDrawableRight -= AndroidUtilities.m9dp(6.0f);
                     }
                     if (this.currentPosition != null) {
                         if ((this.currentPosition.flags & 2) == 0) {
-                            this.backgroundDrawableRight += AndroidUtilities.m10dp(8.0f);
+                            this.backgroundDrawableRight += AndroidUtilities.m9dp(8.0f);
                         }
                         if ((this.currentPosition.flags & 1) == 0) {
-                            backgroundLeft -= AndroidUtilities.m10dp(8.0f);
-                            this.backgroundDrawableRight += AndroidUtilities.m10dp(8.0f);
+                            backgroundLeft -= AndroidUtilities.m9dp(8.0f);
+                            this.backgroundDrawableRight += AndroidUtilities.m9dp(8.0f);
                         }
                         if ((this.currentPosition.flags & 4) == 0) {
-                            additionalTop = 0 - AndroidUtilities.m10dp(9.0f);
-                            additionalBottom = 0 + AndroidUtilities.m10dp(9.0f);
+                            additionalTop = 0 - AndroidUtilities.m9dp(9.0f);
+                            additionalBottom = 0 + AndroidUtilities.m9dp(9.0f);
                         }
                         if ((this.currentPosition.flags & 8) == 0) {
-                            additionalBottom += AndroidUtilities.m10dp(9.0f);
+                            additionalBottom += AndroidUtilities.m9dp(9.0f);
                         }
                     }
                     if (this.drawPinnedBottom && this.drawPinnedTop) {
                         offsetBottom = 0;
                     } else if (this.drawPinnedBottom) {
-                        offsetBottom = AndroidUtilities.m10dp(1.0f);
+                        offsetBottom = AndroidUtilities.m9dp(1.0f);
                     } else {
-                        offsetBottom = AndroidUtilities.m10dp(2.0f);
+                        offsetBottom = AndroidUtilities.m9dp(2.0f);
                     }
-                    i2 = (this.drawPinnedTop || (this.drawPinnedTop && this.drawPinnedBottom)) ? 0 : AndroidUtilities.m10dp(1.0f);
+                    i2 = (this.drawPinnedTop || (this.drawPinnedTop && this.drawPinnedBottom)) ? 0 : AndroidUtilities.m9dp(1.0f);
                     backgroundTop = additionalTop + i2;
                     BaseCell.setDrawableBounds(this.currentBackgroundDrawable, backgroundLeft, backgroundTop, this.backgroundDrawableRight, (this.layoutHeight - offsetBottom) + additionalBottom);
                     BaseCell.setDrawableBounds(currentBackgroundSelectedDrawable, backgroundLeft, backgroundTop, this.backgroundDrawableRight, (this.layoutHeight - offsetBottom) + additionalBottom);
@@ -6910,51 +6922,51 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         currentBackgroundShadowDrawable = Theme.chat_msgInShadowDrawable;
                     }
                     i2 = (this.isChat && this.isAvatarVisible) ? 48 : 0;
-                    this.backgroundDrawableLeft = AndroidUtilities.m10dp((float) (i2 + (!this.mediaBackground ? 3 : 9)));
+                    this.backgroundDrawableLeft = AndroidUtilities.m9dp((float) (i2 + (!this.mediaBackground ? 3 : 9)));
                     i = this.backgroundWidth;
                     if (this.mediaBackground) {
                         i2 = 0;
                     } else {
-                        i2 = AndroidUtilities.m10dp(3.0f);
+                        i2 = AndroidUtilities.m9dp(3.0f);
                     }
                     this.backgroundDrawableRight = i - i2;
                     if (this.currentMessagesGroup != null) {
                         if (!this.currentPosition.edge) {
-                            this.backgroundDrawableLeft -= AndroidUtilities.m10dp(10.0f);
-                            this.backgroundDrawableRight += AndroidUtilities.m10dp(10.0f);
+                            this.backgroundDrawableLeft -= AndroidUtilities.m9dp(10.0f);
+                            this.backgroundDrawableRight += AndroidUtilities.m9dp(10.0f);
                         }
                         if (this.currentPosition.leftSpanOffset != 0) {
                             this.backgroundDrawableLeft += (int) Math.ceil((double) ((((float) this.currentPosition.leftSpanOffset) / 1000.0f) * ((float) getGroupPhotosWidth())));
                         }
                     }
                     if (!this.mediaBackground && this.drawPinnedBottom) {
-                        this.backgroundDrawableRight -= AndroidUtilities.m10dp(6.0f);
-                        this.backgroundDrawableLeft += AndroidUtilities.m10dp(6.0f);
+                        this.backgroundDrawableRight -= AndroidUtilities.m9dp(6.0f);
+                        this.backgroundDrawableLeft += AndroidUtilities.m9dp(6.0f);
                     }
                     if (this.currentPosition != null) {
                         if ((this.currentPosition.flags & 2) == 0) {
-                            this.backgroundDrawableRight += AndroidUtilities.m10dp(8.0f);
+                            this.backgroundDrawableRight += AndroidUtilities.m9dp(8.0f);
                         }
                         if ((this.currentPosition.flags & 1) == 0) {
-                            this.backgroundDrawableLeft -= AndroidUtilities.m10dp(8.0f);
-                            this.backgroundDrawableRight += AndroidUtilities.m10dp(8.0f);
+                            this.backgroundDrawableLeft -= AndroidUtilities.m9dp(8.0f);
+                            this.backgroundDrawableRight += AndroidUtilities.m9dp(8.0f);
                         }
                         if ((this.currentPosition.flags & 4) == 0) {
-                            additionalTop = 0 - AndroidUtilities.m10dp(9.0f);
-                            additionalBottom = 0 + AndroidUtilities.m10dp(9.0f);
+                            additionalTop = 0 - AndroidUtilities.m9dp(9.0f);
+                            additionalBottom = 0 + AndroidUtilities.m9dp(9.0f);
                         }
                         if ((this.currentPosition.flags & 8) == 0) {
-                            additionalBottom += AndroidUtilities.m10dp(10.0f);
+                            additionalBottom += AndroidUtilities.m9dp(10.0f);
                         }
                     }
                     if (this.drawPinnedBottom && this.drawPinnedTop) {
                         offsetBottom = 0;
                     } else if (this.drawPinnedBottom) {
-                        offsetBottom = AndroidUtilities.m10dp(1.0f);
+                        offsetBottom = AndroidUtilities.m9dp(1.0f);
                     } else {
-                        offsetBottom = AndroidUtilities.m10dp(2.0f);
+                        offsetBottom = AndroidUtilities.m9dp(2.0f);
                     }
-                    i2 = (this.drawPinnedTop || (this.drawPinnedTop && this.drawPinnedBottom)) ? 0 : AndroidUtilities.m10dp(1.0f);
+                    i2 = (this.drawPinnedTop || (this.drawPinnedTop && this.drawPinnedBottom)) ? 0 : AndroidUtilities.m9dp(1.0f);
                     backgroundTop = additionalTop + i2;
                     BaseCell.setDrawableBounds(this.currentBackgroundDrawable, this.backgroundDrawableLeft, backgroundTop, this.backgroundDrawableRight, (this.layoutHeight - offsetBottom) + additionalBottom);
                     BaseCell.setDrawableBounds(currentBackgroundSelectedDrawable, this.backgroundDrawableLeft, backgroundTop, this.backgroundDrawableRight, (this.layoutHeight - offsetBottom) + additionalBottom);
@@ -6997,23 +7009,33 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 drawContent(canvas);
                 if (this.drawShareButton) {
-                    Theme.chat_shareDrawable.setColorFilter(this.sharePressed ? Theme.colorPressedFilter : Theme.colorFilter);
-                    if (this.currentMessageObject.isOutOwner()) {
-                        this.shareStartX = (this.currentBackgroundDrawable.getBounds().left - AndroidUtilities.m10dp(8.0f)) - Theme.chat_shareDrawable.getIntrinsicWidth();
+                    if (this.sharePressed) {
+                        if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackgroundSelected)) {
+                            Theme.chat_shareDrawable.setColorFilter(Theme.getShareColorFilter(Theme.getColor(Theme.key_chat_shareBackgroundSelected), true));
+                        } else {
+                            Theme.chat_shareDrawable.setColorFilter(Theme.colorPressedFilter2);
+                        }
+                    } else if (!Theme.isCustomTheme() || Theme.hasThemeKey(Theme.key_chat_shareBackground)) {
+                        Theme.chat_shareDrawable.setColorFilter(Theme.getShareColorFilter(Theme.getColor(Theme.key_chat_shareBackground), false));
                     } else {
-                        this.shareStartX = this.currentBackgroundDrawable.getBounds().right + AndroidUtilities.m10dp(8.0f);
+                        Theme.chat_shareDrawable.setColorFilter(Theme.colorFilter2);
+                    }
+                    if (this.currentMessageObject.isOutOwner()) {
+                        this.shareStartX = (this.currentBackgroundDrawable.getBounds().left - AndroidUtilities.m9dp(8.0f)) - Theme.chat_shareDrawable.getIntrinsicWidth();
+                    } else {
+                        this.shareStartX = this.currentBackgroundDrawable.getBounds().right + AndroidUtilities.m9dp(8.0f);
                     }
                     Drawable drawable = Theme.chat_shareDrawable;
                     i = this.shareStartX;
-                    int dp = this.layoutHeight - AndroidUtilities.m10dp(41.0f);
+                    int dp = this.layoutHeight - AndroidUtilities.m9dp(41.0f);
                     this.shareStartY = dp;
                     BaseCell.setDrawableBounds(drawable, i, dp);
                     Theme.chat_shareDrawable.draw(canvas);
                     if (this.drwaShareGoIcon) {
-                        BaseCell.setDrawableBounds(Theme.chat_goIconDrawable, this.shareStartX + AndroidUtilities.m10dp(12.0f), this.shareStartY + AndroidUtilities.m10dp(9.0f));
+                        BaseCell.setDrawableBounds(Theme.chat_goIconDrawable, this.shareStartX + AndroidUtilities.m9dp(12.0f), this.shareStartY + AndroidUtilities.m9dp(9.0f));
                         Theme.chat_goIconDrawable.draw(canvas);
                     } else {
-                        BaseCell.setDrawableBounds(Theme.chat_shareIconDrawable, this.shareStartX + AndroidUtilities.m10dp(9.0f), this.shareStartY + AndroidUtilities.m10dp(9.0f));
+                        BaseCell.setDrawableBounds(Theme.chat_shareIconDrawable, this.shareStartX + AndroidUtilities.m9dp(8.0f), this.shareStartY + AndroidUtilities.m9dp(9.0f));
                         Theme.chat_shareIconDrawable.draw(canvas);
                     }
                 }
@@ -7023,7 +7045,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if ((this.drawTime || !this.mediaBackground) && !this.forceNotDrawTime) {
                     drawTimeLayout(canvas);
                 }
-                if (this.controlsAlpha != 1.0f || this.timeAlpha != 1.0f) {
+                if ((this.controlsAlpha != 1.0f || this.timeAlpha != 1.0f) && this.currentMessageObject.type != 5) {
                     newTime = System.currentTimeMillis();
                     dt = Math.abs(this.lastControlsAlphaChangeTime - newTime);
                     if (dt > 17) {
@@ -7053,19 +7075,27 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
     }
 
+    public void setTimeAlpha(float value) {
+        this.timeAlpha = value;
+    }
+
+    public float getTimeAlpha() {
+        return this.timeAlpha;
+    }
+
     public int getBackgroundDrawableLeft() {
         int i = 0;
         if (this.currentMessageObject.isOutOwner()) {
             int i2 = this.layoutWidth - this.backgroundWidth;
             if (this.mediaBackground) {
-                i = AndroidUtilities.m10dp(9.0f);
+                i = AndroidUtilities.m9dp(9.0f);
             }
             return i2 - i;
         }
         if (this.isChat && this.isAvatarVisible) {
             i = 48;
         }
-        return AndroidUtilities.m10dp((float) (i + (!this.mediaBackground ? 3 : 9)));
+        return AndroidUtilities.m9dp((float) (i + (!this.mediaBackground ? 3 : 9)));
     }
 
     public boolean hasNameLayout() {
@@ -7083,21 +7113,21 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5) {
                 Theme.chat_namePaint.setColor(Theme.getColor(Theme.key_chat_stickerNameText));
                 if (this.currentMessageObject.isOutOwner()) {
-                    this.nameX = (float) AndroidUtilities.m10dp(28.0f);
+                    this.nameX = (float) AndroidUtilities.m9dp(28.0f);
                 } else {
-                    this.nameX = (float) ((this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m10dp(22.0f));
+                    this.nameX = (float) ((this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m9dp(22.0f));
                 }
-                this.nameY = (float) (this.layoutHeight - AndroidUtilities.m10dp(38.0f));
+                this.nameY = (float) (this.layoutHeight - AndroidUtilities.m9dp(38.0f));
                 Theme.chat_systemDrawable.setColorFilter(Theme.colorFilter);
-                Theme.chat_systemDrawable.setBounds(((int) this.nameX) - AndroidUtilities.m10dp(12.0f), ((int) this.nameY) - AndroidUtilities.m10dp(5.0f), (((int) this.nameX) + AndroidUtilities.m10dp(12.0f)) + this.nameWidth, ((int) this.nameY) + AndroidUtilities.m10dp(22.0f));
+                Theme.chat_systemDrawable.setBounds(((int) this.nameX) - AndroidUtilities.m9dp(12.0f), ((int) this.nameY) - AndroidUtilities.m9dp(5.0f), (((int) this.nameX) + AndroidUtilities.m9dp(12.0f)) + this.nameWidth, ((int) this.nameY) + AndroidUtilities.m9dp(22.0f));
                 Theme.chat_systemDrawable.draw(canvas);
             } else {
                 if (this.mediaBackground || this.currentMessageObject.isOutOwner()) {
-                    this.nameX = ((float) (this.backgroundDrawableLeft + AndroidUtilities.m10dp(11.0f))) - this.nameOffsetX;
+                    this.nameX = ((float) (this.backgroundDrawableLeft + AndroidUtilities.m9dp(11.0f))) - this.nameOffsetX;
                 } else {
                     int i3 = this.backgroundDrawableLeft;
                     f = (this.mediaBackground || !this.drawPinnedBottom) ? 17.0f : 11.0f;
-                    this.nameX = ((float) (AndroidUtilities.m10dp(f) + i3)) - this.nameOffsetX;
+                    this.nameX = ((float) (AndroidUtilities.m9dp(f) + i3)) - this.nameOffsetX;
                 }
                 if (this.currentUser != null) {
                     Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(this.currentUser.var_id));
@@ -7113,7 +7143,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 } else {
                     f = 10.0f;
                 }
-                this.nameY = (float) AndroidUtilities.m10dp(f);
+                this.nameY = (float) AndroidUtilities.m9dp(f);
             }
             canvas.translate(this.nameX, this.nameY);
             this.nameLayout.draw(canvas);
@@ -7121,7 +7151,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (this.adminLayout != null) {
                 Theme.chat_adminPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_adminSelectedText : Theme.key_chat_adminText));
                 canvas.save();
-                canvas.translate(((float) ((this.backgroundDrawableLeft + this.backgroundDrawableRight) - AndroidUtilities.m10dp(11.0f))) - this.adminLayout.getLineWidth(0), this.nameY + ((float) AndroidUtilities.m10dp(0.5f)));
+                canvas.translate(((float) ((this.backgroundDrawableLeft + this.backgroundDrawableRight) - AndroidUtilities.m9dp(11.0f))) - this.adminLayout.getLineWidth(0), this.nameY + ((float) AndroidUtilities.m9dp(0.5f)));
                 this.adminLayout.draw(canvas);
                 canvas.restore();
             }
@@ -7130,14 +7160,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (this.currentMessageObject.type == 5) {
                 Theme.chat_forwardNamePaint.setColor(Theme.getColor(Theme.key_chat_stickerReplyNameText));
                 if (this.currentMessageObject.isOutOwner()) {
-                    this.forwardNameX = AndroidUtilities.m10dp(23.0f);
+                    this.forwardNameX = AndroidUtilities.m9dp(23.0f);
                 } else {
-                    this.forwardNameX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m10dp(17.0f);
+                    this.forwardNameX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m9dp(17.0f);
                 }
-                this.forwardNameY = AndroidUtilities.m10dp(12.0f);
-                backWidth = this.forwardedNameWidth + AndroidUtilities.m10dp(14.0f);
+                this.forwardNameY = AndroidUtilities.m9dp(12.0f);
+                backWidth = this.forwardedNameWidth + AndroidUtilities.m9dp(14.0f);
                 Theme.chat_systemDrawable.setColorFilter(Theme.colorFilter);
-                Theme.chat_systemDrawable.setBounds(this.forwardNameX - AndroidUtilities.m10dp(7.0f), this.forwardNameY - AndroidUtilities.m10dp(6.0f), (this.forwardNameX - AndroidUtilities.m10dp(7.0f)) + backWidth, this.forwardNameY + AndroidUtilities.m10dp(38.0f));
+                Theme.chat_systemDrawable.setBounds(this.forwardNameX - AndroidUtilities.m9dp(7.0f), this.forwardNameY - AndroidUtilities.m9dp(6.0f), (this.forwardNameX - AndroidUtilities.m9dp(7.0f)) + backWidth, this.forwardNameY + AndroidUtilities.m9dp(38.0f));
                 Theme.chat_systemDrawable.draw(canvas);
             } else {
                 if (this.drawNameLayout) {
@@ -7145,26 +7175,26 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 } else {
                     i = 0;
                 }
-                this.forwardNameY = AndroidUtilities.m10dp((float) (i + 10));
+                this.forwardNameY = AndroidUtilities.m9dp((float) (i + 10));
                 if (this.currentMessageObject.isOutOwner()) {
                     Theme.chat_forwardNamePaint.setColor(Theme.getColor(Theme.key_chat_outForwardedNameText));
-                    this.forwardNameX = this.backgroundDrawableLeft + AndroidUtilities.m10dp(11.0f);
+                    this.forwardNameX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(11.0f);
                 } else {
                     Theme.chat_forwardNamePaint.setColor(Theme.getColor(Theme.key_chat_inForwardedNameText));
                     if (this.mediaBackground) {
-                        this.forwardNameX = this.backgroundDrawableLeft + AndroidUtilities.m10dp(11.0f);
+                        this.forwardNameX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(11.0f);
                     } else {
                         i = this.backgroundDrawableLeft;
                         if (this.mediaBackground || !this.drawPinnedBottom) {
                             f2 = 17.0f;
                         }
-                        this.forwardNameX = i + AndroidUtilities.m10dp(f2);
+                        this.forwardNameX = i + AndroidUtilities.m9dp(f2);
                     }
                 }
             }
             for (int a = 0; a < 2; a++) {
                 canvas.save();
-                canvas.translate(((float) this.forwardNameX) - this.forwardNameOffsetX[a], (float) (this.forwardNameY + (AndroidUtilities.m10dp(16.0f) * a)));
+                canvas.translate(((float) this.forwardNameX) - this.forwardNameOffsetX[a], (float) (this.forwardNameY + (AndroidUtilities.m9dp(16.0f) * a)));
                 this.forwardedNameLayout[a].draw(canvas);
                 canvas.restore();
             }
@@ -7175,16 +7205,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 Theme.chat_replyNamePaint.setColor(Theme.getColor(Theme.key_chat_stickerReplyNameText));
                 Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_stickerReplyMessageText));
                 if (this.currentMessageObject.isOutOwner()) {
-                    this.replyStartX = AndroidUtilities.m10dp(23.0f);
+                    this.replyStartX = AndroidUtilities.m9dp(23.0f);
                 } else if (this.currentMessageObject.type == 5) {
-                    this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m10dp(4.0f);
+                    this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m9dp(4.0f);
                 } else {
-                    this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m10dp(17.0f);
+                    this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m9dp(17.0f);
                 }
-                this.replyStartY = AndroidUtilities.m10dp(12.0f);
-                backWidth = Math.max(this.replyNameWidth, this.replyTextWidth) + AndroidUtilities.m10dp(14.0f);
+                this.replyStartY = AndroidUtilities.m9dp(12.0f);
+                backWidth = Math.max(this.replyNameWidth, this.replyTextWidth) + AndroidUtilities.m9dp(14.0f);
                 Theme.chat_systemDrawable.setColorFilter(Theme.colorFilter);
-                Theme.chat_systemDrawable.setBounds(this.replyStartX - AndroidUtilities.m10dp(7.0f), this.replyStartY - AndroidUtilities.m10dp(6.0f), (this.replyStartX - AndroidUtilities.m10dp(7.0f)) + backWidth, this.replyStartY + AndroidUtilities.m10dp(41.0f));
+                Theme.chat_systemDrawable.setBounds(this.replyStartX - AndroidUtilities.m9dp(7.0f), this.replyStartY - AndroidUtilities.m9dp(6.0f), (this.replyStartX - AndroidUtilities.m9dp(7.0f)) + backWidth, this.replyStartY + AndroidUtilities.m9dp(41.0f));
                 Theme.chat_systemDrawable.draw(canvas);
             } else {
                 int i4;
@@ -7196,7 +7226,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     } else {
                         Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_outReplyMessageText));
                     }
-                    this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m10dp(12.0f);
+                    this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(12.0f);
                 } else {
                     Theme.chat_replyLinePaint.setColor(Theme.getColor(Theme.key_chat_inReplyLine));
                     Theme.chat_replyNamePaint.setColor(Theme.getColor(Theme.key_chat_inReplyNameText));
@@ -7206,11 +7236,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_inReplyMessageText));
                     }
                     if (this.mediaBackground) {
-                        this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m10dp(12.0f);
+                        this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(12.0f);
                     } else {
                         i4 = this.backgroundDrawableLeft;
                         f = (this.mediaBackground || !this.drawPinnedBottom) ? 18.0f : 12.0f;
-                        this.replyStartX = AndroidUtilities.m10dp(f) + i4;
+                        this.replyStartX = AndroidUtilities.m9dp(f) + i4;
                     }
                 }
                 if (!this.drawForwardedName || this.forwardedNameLayout[0] == null) {
@@ -7224,17 +7254,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 } else {
                     i = 20;
                 }
-                this.replyStartY = AndroidUtilities.m10dp((float) (i + i4));
+                this.replyStartY = AndroidUtilities.m9dp((float) (i + i4));
             }
             if (this.currentPosition == null || (this.currentPosition.minY == (byte) 0 && this.currentPosition.minX == (byte) 0)) {
-                canvas.drawRect((float) this.replyStartX, (float) this.replyStartY, (float) (this.replyStartX + AndroidUtilities.m10dp(2.0f)), (float) (this.replyStartY + AndroidUtilities.m10dp(35.0f)), Theme.chat_replyLinePaint);
+                canvas.drawRect((float) this.replyStartX, (float) this.replyStartY, (float) (this.replyStartX + AndroidUtilities.m9dp(2.0f)), (float) (this.replyStartY + AndroidUtilities.m9dp(35.0f)), Theme.chat_replyLinePaint);
                 if (this.needReplyImage) {
-                    this.replyImageReceiver.setImageCoords(this.replyStartX + AndroidUtilities.m10dp(10.0f), this.replyStartY, AndroidUtilities.m10dp(35.0f), AndroidUtilities.m10dp(35.0f));
+                    this.replyImageReceiver.setImageCoords(this.replyStartX + AndroidUtilities.m9dp(10.0f), this.replyStartY, AndroidUtilities.m9dp(35.0f), AndroidUtilities.m9dp(35.0f));
                     this.replyImageReceiver.draw(canvas);
                 }
                 if (this.replyNameLayout != null) {
                     canvas.save();
-                    canvas.translate(((float) AndroidUtilities.m10dp((float) ((this.needReplyImage ? 44 : 0) + 10))) + (((float) this.replyStartX) - this.replyNameOffset), (float) this.replyStartY);
+                    canvas.translate(((float) AndroidUtilities.m9dp((float) ((this.needReplyImage ? 44 : 0) + 10))) + (((float) this.replyStartX) - this.replyNameOffset), (float) this.replyStartY);
                     this.replyNameLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -7244,7 +7274,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (this.needReplyImage) {
                         i2 = 44;
                     }
-                    canvas.translate(f + ((float) AndroidUtilities.m10dp((float) (i2 + 10))), (float) (this.replyStartY + AndroidUtilities.m10dp(19.0f)));
+                    canvas.translate(f + ((float) AndroidUtilities.m9dp((float) (i2 + 10))), (float) (this.replyStartY + AndroidUtilities.m9dp(19.0f)));
                     this.replyTextLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -7272,7 +7302,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 try {
                     this.captionLayout.draw(canvas);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
             canvas.restore();
@@ -7297,7 +7327,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 Theme.chat_timePaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_inTimeSelectedText : Theme.key_chat_inTimeText));
             }
             if (this.drawPinnedBottom) {
-                canvas.translate(0.0f, (float) AndroidUtilities.m10dp(2.0f));
+                canvas.translate(0.0f, (float) AndroidUtilities.m9dp(2.0f));
             }
             int additionalX;
             Drawable viewsDrawable;
@@ -7311,17 +7341,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 int oldAlpha = paint.getAlpha();
                 paint.setAlpha((int) (((float) oldAlpha) * this.timeAlpha));
                 Theme.chat_timePaint.setAlpha((int) (255.0f * this.timeAlpha));
-                int x1 = this.timeX - AndroidUtilities.m10dp(4.0f);
-                int y1 = this.layoutHeight - AndroidUtilities.m10dp(28.0f);
-                this.rect.set((float) x1, (float) y1, (float) (AndroidUtilities.m10dp((float) ((this.currentMessageObject.isOutOwner() ? 20 : 0) + 8)) + (x1 + this.timeWidth)), (float) (AndroidUtilities.m10dp(17.0f) + y1));
-                canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(4.0f), paint);
+                int x1 = this.timeX - AndroidUtilities.m9dp(4.0f);
+                int y1 = this.layoutHeight - AndroidUtilities.m9dp(28.0f);
+                this.rect.set((float) x1, (float) y1, (float) (AndroidUtilities.m9dp((float) ((this.currentMessageObject.isOutOwner() ? 20 : 0) + 8)) + (x1 + this.timeWidth)), (float) (AndroidUtilities.m9dp(17.0f) + y1));
+                canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(4.0f), paint);
                 paint.setAlpha(oldAlpha);
                 additionalX = (int) (-this.timeLayout.getLineLeft(0));
                 if ((this.currentMessageObject.messageOwner.flags & 1024) != 0) {
                     additionalX += (int) (((float) this.timeWidth) - this.timeLayout.getLineWidth(0));
                     if (this.currentMessageObject.isSending() || this.currentMessageObject.isEditing()) {
                         if (!this.currentMessageObject.isOutOwner()) {
-                            BaseCell.setDrawableBounds(Theme.chat_msgMediaClockDrawable, this.timeX + AndroidUtilities.m10dp(11.0f), (this.layoutHeight - AndroidUtilities.m10dp(14.0f)) - Theme.chat_msgMediaClockDrawable.getIntrinsicHeight());
+                            BaseCell.setDrawableBounds(Theme.chat_msgMediaClockDrawable, this.timeX + AndroidUtilities.m9dp(11.0f), (this.layoutHeight - AndroidUtilities.m9dp(14.0f)) - Theme.chat_msgMediaClockDrawable.getIntrinsicHeight());
                             Theme.chat_msgMediaClockDrawable.draw(canvas);
                         }
                     } else if (!this.currentMessageObject.isSendError()) {
@@ -7332,26 +7362,26 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         }
                         oldAlpha = ((BitmapDrawable) viewsDrawable).getPaint().getAlpha();
                         viewsDrawable.setAlpha((int) (this.timeAlpha * ((float) oldAlpha)));
-                        BaseCell.setDrawableBounds(viewsDrawable, this.timeX, (this.layoutHeight - AndroidUtilities.m10dp(10.5f)) - this.timeLayout.getHeight());
+                        BaseCell.setDrawableBounds(viewsDrawable, this.timeX, (this.layoutHeight - AndroidUtilities.m9dp(10.5f)) - this.timeLayout.getHeight());
                         viewsDrawable.draw(canvas);
                         viewsDrawable.setAlpha(oldAlpha);
                         if (this.viewsLayout != null) {
                             canvas.save();
-                            canvas.translate((float) ((this.timeX + viewsDrawable.getIntrinsicWidth()) + AndroidUtilities.m10dp(3.0f)), (float) ((this.layoutHeight - AndroidUtilities.m10dp(12.3f)) - this.timeLayout.getHeight()));
+                            canvas.translate((float) ((this.timeX + viewsDrawable.getIntrinsicWidth()) + AndroidUtilities.m9dp(3.0f)), (float) ((this.layoutHeight - AndroidUtilities.m9dp(12.3f)) - this.timeLayout.getHeight()));
                             this.viewsLayout.draw(canvas);
                             canvas.restore();
                         }
                     } else if (!this.currentMessageObject.isOutOwner()) {
-                        x = this.timeX + AndroidUtilities.m10dp(11.0f);
-                        y = this.layoutHeight - AndroidUtilities.m10dp(27.5f);
-                        this.rect.set((float) x, (float) y, (float) (AndroidUtilities.m10dp(14.0f) + x), (float) (AndroidUtilities.m10dp(14.0f) + y));
-                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(1.0f), (float) AndroidUtilities.m10dp(1.0f), Theme.chat_msgErrorPaint);
-                        BaseCell.setDrawableBounds(Theme.chat_msgErrorDrawable, AndroidUtilities.m10dp(6.0f) + x, AndroidUtilities.m10dp(2.0f) + y);
+                        x = this.timeX + AndroidUtilities.m9dp(11.0f);
+                        y = this.layoutHeight - AndroidUtilities.m9dp(27.5f);
+                        this.rect.set((float) x, (float) y, (float) (AndroidUtilities.m9dp(14.0f) + x), (float) (AndroidUtilities.m9dp(14.0f) + y));
+                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(1.0f), (float) AndroidUtilities.m9dp(1.0f), Theme.chat_msgErrorPaint);
+                        BaseCell.setDrawableBounds(Theme.chat_msgErrorDrawable, AndroidUtilities.m9dp(6.0f) + x, AndroidUtilities.m9dp(2.0f) + y);
                         Theme.chat_msgErrorDrawable.draw(canvas);
                     }
                 }
                 canvas.save();
-                canvas.translate((float) (this.timeX + additionalX), (float) ((this.layoutHeight - AndroidUtilities.m10dp(12.3f)) - this.timeLayout.getHeight()));
+                canvas.translate((float) (this.timeX + additionalX), (float) ((this.layoutHeight - AndroidUtilities.m9dp(12.3f)) - this.timeLayout.getHeight()));
                 this.timeLayout.draw(canvas);
                 canvas.restore();
                 Theme.chat_timePaint.setAlpha(255);
@@ -7362,36 +7392,36 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (this.currentMessageObject.isSending() || this.currentMessageObject.isEditing()) {
                         if (!this.currentMessageObject.isOutOwner()) {
                             Drawable clockDrawable = isDrawSelectedBackground() ? Theme.chat_msgInSelectedClockDrawable : Theme.chat_msgInClockDrawable;
-                            BaseCell.setDrawableBounds(clockDrawable, this.timeX + AndroidUtilities.m10dp(11.0f), (this.layoutHeight - AndroidUtilities.m10dp(8.5f)) - clockDrawable.getIntrinsicHeight());
+                            BaseCell.setDrawableBounds(clockDrawable, this.timeX + AndroidUtilities.m9dp(11.0f), (this.layoutHeight - AndroidUtilities.m9dp(8.5f)) - clockDrawable.getIntrinsicHeight());
                             clockDrawable.draw(canvas);
                         }
                     } else if (!this.currentMessageObject.isSendError()) {
                         if (this.currentMessageObject.isOutOwner()) {
                             viewsDrawable = isDrawSelectedBackground() ? Theme.chat_msgOutViewsSelectedDrawable : Theme.chat_msgOutViewsDrawable;
-                            BaseCell.setDrawableBounds(viewsDrawable, this.timeX, (this.layoutHeight - AndroidUtilities.m10dp(4.5f)) - this.timeLayout.getHeight());
+                            BaseCell.setDrawableBounds(viewsDrawable, this.timeX, (this.layoutHeight - AndroidUtilities.m9dp(4.5f)) - this.timeLayout.getHeight());
                             viewsDrawable.draw(canvas);
                         } else {
                             viewsDrawable = isDrawSelectedBackground() ? Theme.chat_msgInViewsSelectedDrawable : Theme.chat_msgInViewsDrawable;
-                            BaseCell.setDrawableBounds(viewsDrawable, this.timeX, (this.layoutHeight - AndroidUtilities.m10dp(4.5f)) - this.timeLayout.getHeight());
+                            BaseCell.setDrawableBounds(viewsDrawable, this.timeX, (this.layoutHeight - AndroidUtilities.m9dp(4.5f)) - this.timeLayout.getHeight());
                             viewsDrawable.draw(canvas);
                         }
                         if (this.viewsLayout != null) {
                             canvas.save();
-                            canvas.translate((float) ((this.timeX + Theme.chat_msgInViewsDrawable.getIntrinsicWidth()) + AndroidUtilities.m10dp(3.0f)), (float) ((this.layoutHeight - AndroidUtilities.m10dp(6.5f)) - this.timeLayout.getHeight()));
+                            canvas.translate((float) ((this.timeX + Theme.chat_msgInViewsDrawable.getIntrinsicWidth()) + AndroidUtilities.m9dp(3.0f)), (float) ((this.layoutHeight - AndroidUtilities.m9dp(6.5f)) - this.timeLayout.getHeight()));
                             this.viewsLayout.draw(canvas);
                             canvas.restore();
                         }
                     } else if (!this.currentMessageObject.isOutOwner()) {
-                        x = this.timeX + AndroidUtilities.m10dp(11.0f);
-                        y = this.layoutHeight - AndroidUtilities.m10dp(20.5f);
-                        this.rect.set((float) x, (float) y, (float) (AndroidUtilities.m10dp(14.0f) + x), (float) (AndroidUtilities.m10dp(14.0f) + y));
-                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(1.0f), (float) AndroidUtilities.m10dp(1.0f), Theme.chat_msgErrorPaint);
-                        BaseCell.setDrawableBounds(Theme.chat_msgErrorDrawable, AndroidUtilities.m10dp(6.0f) + x, AndroidUtilities.m10dp(2.0f) + y);
+                        x = this.timeX + AndroidUtilities.m9dp(11.0f);
+                        y = this.layoutHeight - AndroidUtilities.m9dp(20.5f);
+                        this.rect.set((float) x, (float) y, (float) (AndroidUtilities.m9dp(14.0f) + x), (float) (AndroidUtilities.m9dp(14.0f) + y));
+                        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(1.0f), (float) AndroidUtilities.m9dp(1.0f), Theme.chat_msgErrorPaint);
+                        BaseCell.setDrawableBounds(Theme.chat_msgErrorDrawable, AndroidUtilities.m9dp(6.0f) + x, AndroidUtilities.m9dp(2.0f) + y);
                         Theme.chat_msgErrorDrawable.draw(canvas);
                     }
                 }
                 canvas.save();
-                canvas.translate((float) (this.timeX + additionalX), (float) ((this.layoutHeight - AndroidUtilities.m10dp(6.5f)) - this.timeLayout.getHeight()));
+                canvas.translate((float) (this.timeX + additionalX), (float) ((this.layoutHeight - AndroidUtilities.m9dp(6.5f)) - this.timeLayout.getHeight()));
                 this.timeLayout.draw(canvas);
                 canvas.restore();
             }
@@ -7424,13 +7454,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 if (drawClock) {
                     if (!this.mediaBackground || this.captionLayout != null) {
-                        BaseCell.setDrawableBounds(Theme.chat_msgOutClockDrawable, (this.layoutWidth - AndroidUtilities.m10dp(18.5f)) - Theme.chat_msgOutClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(8.5f)) - Theme.chat_msgOutClockDrawable.getIntrinsicHeight());
+                        BaseCell.setDrawableBounds(Theme.chat_msgOutClockDrawable, (this.layoutWidth - AndroidUtilities.m9dp(18.5f)) - Theme.chat_msgOutClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(8.5f)) - Theme.chat_msgOutClockDrawable.getIntrinsicHeight());
                         Theme.chat_msgOutClockDrawable.draw(canvas);
                     } else if (this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5) {
-                        BaseCell.setDrawableBounds(Theme.chat_msgStickerClockDrawable, (this.layoutWidth - AndroidUtilities.m10dp(22.0f)) - Theme.chat_msgStickerClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(13.5f)) - Theme.chat_msgStickerClockDrawable.getIntrinsicHeight());
+                        Theme.chat_msgStickerClockDrawable.setAlpha((int) (255.0f * this.timeAlpha));
+                        BaseCell.setDrawableBounds(Theme.chat_msgStickerClockDrawable, (this.layoutWidth - AndroidUtilities.m9dp(22.0f)) - Theme.chat_msgStickerClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgStickerClockDrawable.getIntrinsicHeight());
                         Theme.chat_msgStickerClockDrawable.draw(canvas);
+                        Theme.chat_msgStickerClockDrawable.setAlpha(255);
                     } else {
-                        BaseCell.setDrawableBounds(Theme.chat_msgMediaClockDrawable, (this.layoutWidth - AndroidUtilities.m10dp(22.0f)) - Theme.chat_msgMediaClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(13.5f)) - Theme.chat_msgMediaClockDrawable.getIntrinsicHeight());
+                        BaseCell.setDrawableBounds(Theme.chat_msgMediaClockDrawable, (this.layoutWidth - AndroidUtilities.m9dp(22.0f)) - Theme.chat_msgMediaClockDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgMediaClockDrawable.getIntrinsicHeight());
                         Theme.chat_msgMediaClockDrawable.draw(canvas);
                     }
                 }
@@ -7440,23 +7472,23 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         if (!this.mediaBackground || this.captionLayout != null) {
                             drawable = isDrawSelectedBackground() ? Theme.chat_msgOutCheckSelectedDrawable : Theme.chat_msgOutCheckDrawable;
                             if (drawCheck1) {
-                                BaseCell.setDrawableBounds(drawable, (this.layoutWidth - AndroidUtilities.m10dp(22.5f)) - drawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(8.0f)) - drawable.getIntrinsicHeight());
+                                BaseCell.setDrawableBounds(drawable, (this.layoutWidth - AndroidUtilities.m9dp(22.5f)) - drawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(8.0f)) - drawable.getIntrinsicHeight());
                             } else {
-                                BaseCell.setDrawableBounds(drawable, (this.layoutWidth - AndroidUtilities.m10dp(18.5f)) - drawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(8.0f)) - drawable.getIntrinsicHeight());
+                                BaseCell.setDrawableBounds(drawable, (this.layoutWidth - AndroidUtilities.m9dp(18.5f)) - drawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(8.0f)) - drawable.getIntrinsicHeight());
                             }
                             drawable.draw(canvas);
                         } else if (this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5) {
                             if (drawCheck1) {
-                                BaseCell.setDrawableBounds(Theme.chat_msgStickerCheckDrawable, (this.layoutWidth - AndroidUtilities.m10dp(26.3f)) - Theme.chat_msgStickerCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(13.5f)) - Theme.chat_msgStickerCheckDrawable.getIntrinsicHeight());
+                                BaseCell.setDrawableBounds(Theme.chat_msgStickerCheckDrawable, (this.layoutWidth - AndroidUtilities.m9dp(26.3f)) - Theme.chat_msgStickerCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgStickerCheckDrawable.getIntrinsicHeight());
                             } else {
-                                BaseCell.setDrawableBounds(Theme.chat_msgStickerCheckDrawable, (this.layoutWidth - AndroidUtilities.m10dp(21.5f)) - Theme.chat_msgStickerCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(13.5f)) - Theme.chat_msgStickerCheckDrawable.getIntrinsicHeight());
+                                BaseCell.setDrawableBounds(Theme.chat_msgStickerCheckDrawable, (this.layoutWidth - AndroidUtilities.m9dp(21.5f)) - Theme.chat_msgStickerCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgStickerCheckDrawable.getIntrinsicHeight());
                             }
                             Theme.chat_msgStickerCheckDrawable.draw(canvas);
                         } else {
                             if (drawCheck1) {
-                                BaseCell.setDrawableBounds(Theme.chat_msgMediaCheckDrawable, (this.layoutWidth - AndroidUtilities.m10dp(26.3f)) - Theme.chat_msgMediaCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(13.5f)) - Theme.chat_msgMediaCheckDrawable.getIntrinsicHeight());
+                                BaseCell.setDrawableBounds(Theme.chat_msgMediaCheckDrawable, (this.layoutWidth - AndroidUtilities.m9dp(26.3f)) - Theme.chat_msgMediaCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgMediaCheckDrawable.getIntrinsicHeight());
                             } else {
-                                BaseCell.setDrawableBounds(Theme.chat_msgMediaCheckDrawable, (this.layoutWidth - AndroidUtilities.m10dp(21.5f)) - Theme.chat_msgMediaCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(13.5f)) - Theme.chat_msgMediaCheckDrawable.getIntrinsicHeight());
+                                BaseCell.setDrawableBounds(Theme.chat_msgMediaCheckDrawable, (this.layoutWidth - AndroidUtilities.m9dp(21.5f)) - Theme.chat_msgMediaCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgMediaCheckDrawable.getIntrinsicHeight());
                             }
                             Theme.chat_msgMediaCheckDrawable.setAlpha((int) (255.0f * this.timeAlpha));
                             Theme.chat_msgMediaCheckDrawable.draw(canvas);
@@ -7466,13 +7498,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (drawCheck1) {
                         if (!this.mediaBackground || this.captionLayout != null) {
                             drawable = isDrawSelectedBackground() ? Theme.chat_msgOutHalfCheckSelectedDrawable : Theme.chat_msgOutHalfCheckDrawable;
-                            BaseCell.setDrawableBounds(drawable, (this.layoutWidth - AndroidUtilities.m10dp(18.0f)) - drawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(8.0f)) - drawable.getIntrinsicHeight());
+                            BaseCell.setDrawableBounds(drawable, (this.layoutWidth - AndroidUtilities.m9dp(18.0f)) - drawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(8.0f)) - drawable.getIntrinsicHeight());
                             drawable.draw(canvas);
                         } else if (this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5) {
-                            BaseCell.setDrawableBounds(Theme.chat_msgStickerHalfCheckDrawable, (this.layoutWidth - AndroidUtilities.m10dp(21.5f)) - Theme.chat_msgStickerHalfCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(13.5f)) - Theme.chat_msgStickerHalfCheckDrawable.getIntrinsicHeight());
+                            BaseCell.setDrawableBounds(Theme.chat_msgStickerHalfCheckDrawable, (this.layoutWidth - AndroidUtilities.m9dp(21.5f)) - Theme.chat_msgStickerHalfCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgStickerHalfCheckDrawable.getIntrinsicHeight());
                             Theme.chat_msgStickerHalfCheckDrawable.draw(canvas);
                         } else {
-                            BaseCell.setDrawableBounds(Theme.chat_msgMediaHalfCheckDrawable, (this.layoutWidth - AndroidUtilities.m10dp(21.5f)) - Theme.chat_msgMediaHalfCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(13.5f)) - Theme.chat_msgMediaHalfCheckDrawable.getIntrinsicHeight());
+                            BaseCell.setDrawableBounds(Theme.chat_msgMediaHalfCheckDrawable, (this.layoutWidth - AndroidUtilities.m9dp(21.5f)) - Theme.chat_msgMediaHalfCheckDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(13.5f)) - Theme.chat_msgMediaHalfCheckDrawable.getIntrinsicHeight());
                             Theme.chat_msgMediaHalfCheckDrawable.setAlpha((int) (255.0f * this.timeAlpha));
                             Theme.chat_msgMediaHalfCheckDrawable.draw(canvas);
                             Theme.chat_msgMediaHalfCheckDrawable.setAlpha(255);
@@ -7480,24 +7512,24 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                 } else if (drawCheck1 || drawCheck2) {
                     if (this.mediaBackground && this.captionLayout == null) {
-                        BaseCell.setDrawableBounds(Theme.chat_msgBroadcastMediaDrawable, (this.layoutWidth - AndroidUtilities.m10dp(24.0f)) - Theme.chat_msgBroadcastMediaDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(14.0f)) - Theme.chat_msgBroadcastMediaDrawable.getIntrinsicHeight());
+                        BaseCell.setDrawableBounds(Theme.chat_msgBroadcastMediaDrawable, (this.layoutWidth - AndroidUtilities.m9dp(24.0f)) - Theme.chat_msgBroadcastMediaDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(14.0f)) - Theme.chat_msgBroadcastMediaDrawable.getIntrinsicHeight());
                         Theme.chat_msgBroadcastMediaDrawable.draw(canvas);
                     } else {
-                        BaseCell.setDrawableBounds(Theme.chat_msgBroadcastDrawable, (this.layoutWidth - AndroidUtilities.m10dp(20.5f)) - Theme.chat_msgBroadcastDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m10dp(8.0f)) - Theme.chat_msgBroadcastDrawable.getIntrinsicHeight());
+                        BaseCell.setDrawableBounds(Theme.chat_msgBroadcastDrawable, (this.layoutWidth - AndroidUtilities.m9dp(20.5f)) - Theme.chat_msgBroadcastDrawable.getIntrinsicWidth(), (this.layoutHeight - AndroidUtilities.m9dp(8.0f)) - Theme.chat_msgBroadcastDrawable.getIntrinsicHeight());
                         Theme.chat_msgBroadcastDrawable.draw(canvas);
                     }
                 }
                 if (drawError) {
                     if (this.mediaBackground && this.captionLayout == null) {
-                        x = this.layoutWidth - AndroidUtilities.m10dp(34.5f);
-                        y = this.layoutHeight - AndroidUtilities.m10dp(26.5f);
+                        x = this.layoutWidth - AndroidUtilities.m9dp(34.5f);
+                        y = this.layoutHeight - AndroidUtilities.m9dp(26.5f);
                     } else {
-                        x = this.layoutWidth - AndroidUtilities.m10dp(32.0f);
-                        y = this.layoutHeight - AndroidUtilities.m10dp(21.0f);
+                        x = this.layoutWidth - AndroidUtilities.m9dp(32.0f);
+                        y = this.layoutHeight - AndroidUtilities.m9dp(21.0f);
                     }
-                    this.rect.set((float) x, (float) y, (float) (AndroidUtilities.m10dp(14.0f) + x), (float) (AndroidUtilities.m10dp(14.0f) + y));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(1.0f), (float) AndroidUtilities.m10dp(1.0f), Theme.chat_msgErrorPaint);
-                    BaseCell.setDrawableBounds(Theme.chat_msgErrorDrawable, AndroidUtilities.m10dp(6.0f) + x, AndroidUtilities.m10dp(2.0f) + y);
+                    this.rect.set((float) x, (float) y, (float) (AndroidUtilities.m9dp(14.0f) + x), (float) (AndroidUtilities.m9dp(14.0f) + y));
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(1.0f), (float) AndroidUtilities.m9dp(1.0f), Theme.chat_msgErrorPaint);
+                    BaseCell.setDrawableBounds(Theme.chat_msgErrorDrawable, AndroidUtilities.m9dp(6.0f) + x, AndroidUtilities.m9dp(2.0f) + y);
                     Theme.chat_msgErrorDrawable.draw(canvas);
                 }
             }

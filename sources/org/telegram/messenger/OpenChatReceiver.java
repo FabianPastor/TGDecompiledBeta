@@ -16,10 +16,18 @@ public class OpenChatReceiver extends Activity {
             finish();
             return;
         }
-        Intent intent2 = new Intent(this, LaunchActivity.class);
-        intent2.setAction(intent.getAction());
-        intent2.putExtras(intent);
-        startActivity(intent2);
-        finish();
+        try {
+            int chatId = intent.getIntExtra("chatId", 0);
+            int userId = intent.getIntExtra("userId", 0);
+            int encId = intent.getIntExtra("encId", 0);
+            if (chatId != 0 || userId != 0 || encId != 0) {
+                Intent intent2 = new Intent(this, LaunchActivity.class);
+                intent2.setAction(intent.getAction());
+                intent2.putExtras(intent);
+                startActivity(intent2);
+                finish();
+            }
+        } catch (Throwable th) {
+        }
     }
 }

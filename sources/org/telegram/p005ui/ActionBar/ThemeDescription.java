@@ -33,6 +33,7 @@ import org.telegram.p005ui.Components.CombinedDrawable;
 import org.telegram.p005ui.Components.ContextProgressView;
 import org.telegram.p005ui.Components.EditTextBoldCursor;
 import org.telegram.p005ui.Components.EditTextCaption;
+import org.telegram.p005ui.Components.EditTextEmoji;
 import org.telegram.p005ui.Components.EmptyTextProgressView;
 import org.telegram.p005ui.Components.GroupCreateCheckBox;
 import org.telegram.p005ui.Components.GroupCreateSpan;
@@ -43,7 +44,6 @@ import org.telegram.p005ui.Components.RadialProgressView;
 import org.telegram.p005ui.Components.RadioButton;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.SeekBarView;
-import org.telegram.p005ui.Components.Switch;
 import org.telegram.p005ui.Components.TypefaceSpan;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -110,6 +110,9 @@ public class ThemeDescription {
         this.changeFlags = flags;
         this.listClasses = classes;
         this.delegate = themeDescriptionDelegate;
+        if (this.viewToInvalidate instanceof EditTextEmoji) {
+            this.viewToInvalidate = ((EditTextEmoji) this.viewToInvalidate).getEditText();
+        }
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, Paint paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
@@ -123,6 +126,9 @@ public class ThemeDescription {
         this.changeFlags = flags;
         this.listClasses = classes;
         this.delegate = themeDescriptionDelegate;
+        if (this.viewToInvalidate instanceof EditTextEmoji) {
+            this.viewToInvalidate = ((EditTextEmoji) this.viewToInvalidate).getEditText();
+        }
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
@@ -137,6 +143,9 @@ public class ThemeDescription {
         this.delegate = themeDescriptionDelegate;
         this.cachedFields = new HashMap();
         this.notFoundCachedFields = new HashMap();
+        if (this.viewToInvalidate instanceof EditTextEmoji) {
+            this.viewToInvalidate = ((EditTextEmoji) this.viewToInvalidate).getEditText();
+        }
     }
 
     public ThemeDescriptionDelegate setDelegateDisabled() {
@@ -404,7 +413,7 @@ public class ThemeDescription {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:218:0x05a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x059c  */
     /* JADX WARNING: Removed duplicated region for block: B:22:0x0088  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void processViewColor(View child, int color) {
@@ -442,9 +451,7 @@ public class ThemeDescription {
                                         }
                                         if ((this.changeFlags & FLAG_BACKGROUND) == 0 || !(obj instanceof View)) {
                                             try {
-                                                if (obj instanceof Switch) {
-                                                    ((Switch) obj).checkColorFilters();
-                                                } else if (obj instanceof EditTextCaption) {
+                                                if (obj instanceof EditTextCaption) {
                                                     if ((this.changeFlags & FLAG_HINTTEXTCOLOR) != 0) {
                                                         ((EditTextCaption) obj).setHintColor(color);
                                                         ((EditTextCaption) obj).setHintTextColor(color);
@@ -555,7 +562,7 @@ public class ThemeDescription {
                                                     }
                                                 }
                                             } catch (Throwable e) {
-                                                FileLog.m14e(e);
+                                                FileLog.m13e(e);
                                                 this.notFoundCachedFields.put(key, Boolean.valueOf(true));
                                             }
                                         } else {

@@ -1,16 +1,17 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.CountrySelectActivity.CountrySelectActivityDelegate;
+import org.telegram.messenger.MrzRecognizer.Result;
+import org.telegram.p005ui.MrzCameraActivity.MrzCameraActivityDelegate;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$61 */
-final /* synthetic */ class PassportActivity$$Lambda$61 implements CountrySelectActivityDelegate {
+final /* synthetic */ class PassportActivity$$Lambda$61 implements MrzCameraActivityDelegate {
     private final PassportActivity arg$1;
 
     PassportActivity$$Lambda$61(PassportActivity passportActivity) {
         this.arg$1 = passportActivity;
     }
 
-    public void didSelectCountry(String str, String str2) {
-        this.arg$1.lambda$null$33$PassportActivity(str, str2);
+    public void didFindMrzInfo(Result result) {
+        this.arg$1.lambda$null$44$PassportActivity(result);
     }
 }

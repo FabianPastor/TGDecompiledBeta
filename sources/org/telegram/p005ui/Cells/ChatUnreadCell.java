@@ -27,10 +27,10 @@ public class ChatUnreadCell extends FrameLayout {
         this.imageView = new ImageView(context);
         this.imageView.setImageResource(CLASSNAMER.drawable.ic_ab_new);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_unreadMessagesStartArrowIcon), Mode.MULTIPLY));
-        this.imageView.setPadding(0, AndroidUtilities.m10dp(2.0f), 0, 0);
+        this.imageView.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, 0);
         this.backgroundLayout.addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 21, 0.0f, 0.0f, 10.0f, 0.0f));
         this.textView = new TextView(context);
-        this.textView.setPadding(0, 0, 0, AndroidUtilities.m10dp(1.0f));
+        this.textView.setPadding(0, 0, 0, AndroidUtilities.m9dp(1.0f));
         this.textView.setTextSize(1, 14.0f);
         this.textView.setTextColor(Theme.getColor(Theme.key_chat_unreadMessagesStartText));
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -54,6 +54,6 @@ public class ChatUnreadCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(40.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(40.0f), NUM));
     }
 }

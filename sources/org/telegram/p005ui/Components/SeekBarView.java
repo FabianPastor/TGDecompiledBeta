@@ -33,8 +33,8 @@ public class SeekBarView extends FrameLayout {
         this.innerPaint1.setColor(Theme.getColor(Theme.key_player_progressBackground));
         this.outerPaint1 = new Paint(1);
         this.outerPaint1.setColor(Theme.getColor(Theme.key_player_progress));
-        this.thumbWidth = AndroidUtilities.m10dp(24.0f);
-        this.thumbHeight = AndroidUtilities.m10dp(24.0f);
+        this.thumbWidth = AndroidUtilities.m9dp(24.0f);
+        this.thumbHeight = AndroidUtilities.m9dp(24.0f);
     }
 
     public void setColors(int inner, int outer) {
@@ -145,11 +145,11 @@ public class SeekBarView extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         int y = (getMeasuredHeight() - this.thumbHeight) / 2;
-        canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m10dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(1.0f)), this.innerPaint1);
+        canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m9dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(1.0f)), this.innerPaint1);
         if (this.bufferedProgress > 0.0f) {
-            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m10dp(1.0f)), (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))) + ((float) (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(1.0f)), this.innerPaint1);
+            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m9dp(1.0f)), (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))) + ((float) (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(1.0f)), this.innerPaint1);
         }
-        canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m10dp(1.0f)), (float) ((this.thumbWidth / 2) + this.thumbX), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(1.0f)), this.outerPaint1);
-        canvas.drawCircle((float) (this.thumbX + (this.thumbWidth / 2)), (float) ((this.thumbHeight / 2) + y), (float) AndroidUtilities.m10dp(this.pressed ? 8.0f : 6.0f), this.outerPaint1);
+        canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m9dp(1.0f)), (float) ((this.thumbWidth / 2) + this.thumbX), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(1.0f)), this.outerPaint1);
+        canvas.drawCircle((float) (this.thumbX + (this.thumbWidth / 2)), (float) ((this.thumbHeight / 2) + y), (float) AndroidUtilities.m9dp(this.pressed ? 8.0f : 6.0f), this.outerPaint1);
     }
 }

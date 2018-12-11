@@ -14,7 +14,7 @@ public class LetterSectionCell extends FrameLayout {
 
     public LetterSectionCell(Context context) {
         super(context);
-        setLayoutParams(new LayoutParams(AndroidUtilities.m10dp(54.0f), AndroidUtilities.m10dp(64.0f)));
+        setLayoutParams(new LayoutParams(AndroidUtilities.m9dp(54.0f), AndroidUtilities.m9dp(64.0f)));
         this.textView.setTextSize(1, 22.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
@@ -27,6 +27,6 @@ public class LetterSectionCell extends FrameLayout {
     }
 
     public void setCellHeight(int height) {
-        setLayoutParams(new LayoutParams(AndroidUtilities.m10dp(54.0f), height));
+        setLayoutParams(new LayoutParams(AndroidUtilities.m9dp(54.0f), height));
     }
 }

@@ -1,18 +1,22 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.os.Bundle;
 import org.telegram.p005ui.LoginActivity.LoginActivitySmsView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.LoginActivity$LoginActivitySmsView$$Lambda$1 */
-final /* synthetic */ class LoginActivity$LoginActivitySmsView$$Lambda$1 implements OnClickListener {
+final /* synthetic */ class LoginActivity$LoginActivitySmsView$$Lambda$1 implements RequestDelegate {
     private final LoginActivitySmsView arg$1;
+    private final Bundle arg$2;
 
-    LoginActivity$LoginActivitySmsView$$Lambda$1(LoginActivitySmsView loginActivitySmsView) {
+    LoginActivity$LoginActivitySmsView$$Lambda$1(LoginActivitySmsView loginActivitySmsView, Bundle bundle) {
         this.arg$1 = loginActivitySmsView;
+        this.arg$2 = bundle;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$new$1$LoginActivity$LoginActivitySmsView(view);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$resendCode$2$LoginActivity$LoginActivitySmsView(this.arg$2, tLObject, tL_error);
     }
 }

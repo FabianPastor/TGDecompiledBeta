@@ -104,8 +104,8 @@ public class PhotoPickerSearchCell extends LinearLayout {
         addView(searchButton);
         LayoutParams layoutParams = (LayoutParams) searchButton.getLayoutParams();
         layoutParams.weight = 0.5f;
-        layoutParams.topMargin = AndroidUtilities.m10dp(4.0f);
-        layoutParams.height = AndroidUtilities.m10dp(48.0f);
+        layoutParams.topMargin = AndroidUtilities.m9dp(4.0f);
+        layoutParams.height = AndroidUtilities.m9dp(48.0f);
         layoutParams.width = 0;
         searchButton.setLayoutParams(layoutParams);
         searchButton.setOnClickListener(new CLASSNAME());
@@ -113,9 +113,9 @@ public class PhotoPickerSearchCell extends LinearLayout {
         frameLayout.setBackgroundColor(0);
         addView(frameLayout);
         layoutParams = (LayoutParams) frameLayout.getLayoutParams();
-        layoutParams.topMargin = AndroidUtilities.m10dp(4.0f);
-        layoutParams.height = AndroidUtilities.m10dp(48.0f);
-        layoutParams.width = AndroidUtilities.m10dp(4.0f);
+        layoutParams.topMargin = AndroidUtilities.m9dp(4.0f);
+        layoutParams.height = AndroidUtilities.m9dp(48.0f);
+        layoutParams.width = AndroidUtilities.m9dp(4.0f);
         frameLayout.setLayoutParams(layoutParams);
         searchButton = new SearchButton(context);
         searchButton.textView1.setText(LocaleController.getString("SearchGifs", CLASSNAMER.string.SearchGifs));
@@ -124,8 +124,8 @@ public class PhotoPickerSearchCell extends LinearLayout {
         addView(searchButton);
         layoutParams = (LayoutParams) searchButton.getLayoutParams();
         layoutParams.weight = 0.5f;
-        layoutParams.topMargin = AndroidUtilities.m10dp(4.0f);
-        layoutParams.height = AndroidUtilities.m10dp(48.0f);
+        layoutParams.topMargin = AndroidUtilities.m9dp(4.0f);
+        layoutParams.height = AndroidUtilities.m9dp(48.0f);
         layoutParams.width = 0;
         searchButton.setLayoutParams(layoutParams);
         if (allowGifs) {
@@ -140,6 +140,6 @@ public class PhotoPickerSearchCell extends LinearLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(52.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(52.0f), NUM));
     }
 }

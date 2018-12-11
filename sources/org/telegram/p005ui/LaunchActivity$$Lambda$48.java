@@ -1,20 +1,24 @@
 package org.telegram.p005ui;
 
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.p005ui.LocationActivity.LocationActivityDelegate;
-import org.telegram.tgnet.TLRPC.MessageMedia;
+import java.util.ArrayList;
+import org.telegram.p005ui.DialogsActivity.DialogsActivityDelegate;
+import org.telegram.tgnet.TLRPC.TL_contacts_resolvedPeer;
 
 /* renamed from: org.telegram.ui.LaunchActivity$$Lambda$48 */
-final /* synthetic */ class LaunchActivity$$Lambda$48 implements LocationActivityDelegate {
-    private final int[] arg$1;
-    private final long arg$2;
+final /* synthetic */ class LaunchActivity$$Lambda$48 implements DialogsActivityDelegate {
+    private final LaunchActivity arg$1;
+    private final String arg$2;
+    private final int arg$3;
+    private final TL_contacts_resolvedPeer arg$4;
 
-    LaunchActivity$$Lambda$48(int[] iArr, long j) {
-        this.arg$1 = iArr;
-        this.arg$2 = j;
+    LaunchActivity$$Lambda$48(LaunchActivity launchActivity, String str, int i, TL_contacts_resolvedPeer tL_contacts_resolvedPeer) {
+        this.arg$1 = launchActivity;
+        this.arg$2 = str;
+        this.arg$3 = i;
+        this.arg$4 = tL_contacts_resolvedPeer;
     }
 
-    public void didSelectLocation(MessageMedia messageMedia, int i) {
-        SendMessagesHelper.getInstance(this.arg$1[0]).sendMessage(messageMedia, this.arg$2, null, null, null);
+    public void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+        this.arg$1.lambda$null$9$LaunchActivity(this.arg$2, this.arg$3, this.arg$4, dialogsActivity, arrayList, charSequence, z);
     }
 }

@@ -44,6 +44,8 @@ public class Utilities {
 
     public static native boolean loadWebpImage(Bitmap bitmap, ByteBuffer byteBuffer, int i, Options options, boolean z);
 
+    public static native int needInvert(Object obj, int i, int i2, int i3, int i4);
+
     private static native int pbkdf2(byte[] bArr, byte[] bArr2, byte[] bArr3, int i);
 
     public static native int pinBitmap(Bitmap bitmap);
@@ -60,7 +62,7 @@ public class Utilities {
             sUrandomIn.close();
             random.setSeed(buffer);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -84,7 +86,7 @@ public class Utilities {
             }
             return val;
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return val;
         }
     }
@@ -101,7 +103,7 @@ public class Utilities {
             }
             return val;
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return val;
         }
     }
@@ -203,7 +205,7 @@ public class Utilities {
             md.update(convertme, offset, len);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return new byte[20];
         }
     }
@@ -219,7 +221,7 @@ public class Utilities {
             byte[] digest = md.digest();
             return digest;
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return new byte[20];
         } finally {
             convertme.limit(oldl);
@@ -245,7 +247,7 @@ public class Utilities {
             md.update(convertme, offset, len);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return new byte[32];
         }
     }
@@ -258,7 +260,7 @@ public class Utilities {
             }
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return new byte[32];
         }
     }
@@ -269,7 +271,7 @@ public class Utilities {
             md.update(convertme, 0, convertme.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return new byte[64];
         }
     }
@@ -281,7 +283,7 @@ public class Utilities {
             md.update(convertme2, 0, convertme2.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return new byte[64];
         }
     }
@@ -300,7 +302,7 @@ public class Utilities {
             md.update(convertme3, 0, convertme3.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return new byte[64];
         }
     }
@@ -317,7 +319,7 @@ public class Utilities {
             byte[] digest = md.digest();
             return digest;
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return new byte[32];
         } finally {
             b2.limit(oldl);
@@ -341,7 +343,7 @@ public class Utilities {
             }
             return sb.toString();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return null;
         }
     }

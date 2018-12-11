@@ -14,20 +14,20 @@ public class TelegramConnectionService extends ConnectionService {
     public void onCreate() {
         super.onCreate();
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m15w("ConnectionService created");
+            FileLog.m14w("ConnectionService created");
         }
     }
 
     public void onDestroy() {
         super.onDestroy();
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m15w("ConnectionService destroyed");
+            FileLog.m14w("ConnectionService destroyed");
         }
     }
 
     public Connection onCreateIncomingConnection(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("onCreateIncomingConnection ");
+            FileLog.m10d("onCreateIncomingConnection ");
         }
         Bundle extras = request.getExtras();
         if (extras.getInt("call_type") == 1) {
@@ -44,7 +44,7 @@ public class TelegramConnectionService extends ConnectionService {
 
     public void onCreateIncomingConnectionFailed(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m12e("onCreateIncomingConnectionFailed ");
+            FileLog.m11e("onCreateIncomingConnectionFailed ");
         }
         if (VoIPBaseService.getSharedInstance() != null) {
             VoIPBaseService.getSharedInstance().callFailedFromConnectionService();
@@ -53,7 +53,7 @@ public class TelegramConnectionService extends ConnectionService {
 
     public void onCreateOutgoingConnectionFailed(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m12e("onCreateOutgoingConnectionFailed ");
+            FileLog.m11e("onCreateOutgoingConnectionFailed ");
         }
         if (VoIPBaseService.getSharedInstance() != null) {
             VoIPBaseService.getSharedInstance().callFailedFromConnectionService();
@@ -62,7 +62,7 @@ public class TelegramConnectionService extends ConnectionService {
 
     public Connection onCreateOutgoingConnection(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m11d("onCreateOutgoingConnection ");
+            FileLog.m10d("onCreateOutgoingConnection ");
         }
         Bundle extras = request.getExtras();
         if (extras.getInt("call_type") == 1) {

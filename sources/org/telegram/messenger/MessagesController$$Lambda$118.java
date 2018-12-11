@@ -1,17 +1,22 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class MessagesController$$Lambda$118 implements Runnable {
-    private final MessagesController arg$1;
-    private final boolean arg$2;
-    private final int arg$3;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.Chat;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-    MessagesController$$Lambda$118(MessagesController messagesController, boolean z, int i) {
+final /* synthetic */ class MessagesController$$Lambda$118 implements RequestDelegate {
+    private final MessagesController arg$1;
+    private final long arg$2;
+    private final Chat arg$3;
+
+    MessagesController$$Lambda$118(MessagesController messagesController, long j, Chat chat) {
         this.arg$1 = messagesController;
-        this.arg$2 = z;
-        this.arg$3 = i;
+        this.arg$2 = j;
+        this.arg$3 = chat;
     }
 
-    public void run() {
-        this.arg$1.lambda$startShortPoll$178$MessagesController(this.arg$2, this.arg$3);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$loadUnknownChannel$178$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

@@ -15,8 +15,8 @@ public class VideoSeekBarView extends View {
     private boolean pressed = false;
     private float progress = 0.0f;
     private int thumbDX = 0;
-    private int thumbHeight = AndroidUtilities.m10dp(12.0f);
-    private int thumbWidth = AndroidUtilities.m10dp(12.0f);
+    private int thumbHeight = AndroidUtilities.m9dp(12.0f);
+    private int thumbWidth = AndroidUtilities.m9dp(12.0f);
 
     /* renamed from: org.telegram.ui.Components.VideoSeekBarView$SeekBarDelegate */
     public interface SeekBarDelegate {
@@ -92,7 +92,7 @@ public class VideoSeekBarView extends View {
     protected void onDraw(Canvas canvas) {
         int y = (getMeasuredHeight() - this.thumbHeight) / 2;
         int thumbX = (int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress);
-        canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m10dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m10dp(1.0f)), this.paint);
+        canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.m9dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.m9dp(1.0f)), this.paint);
         canvas.drawCircle((float) ((this.thumbWidth / 2) + thumbX), (float) ((this.thumbHeight / 2) + y), (float) (this.thumbWidth / 2), this.paint2);
     }
 }

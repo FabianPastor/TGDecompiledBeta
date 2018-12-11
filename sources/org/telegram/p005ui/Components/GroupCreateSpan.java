@@ -58,9 +58,9 @@ public class GroupCreateSpan extends View {
         this.colors = new int[8];
         this.currentContact = contact;
         this.deleteDrawable = getResources().getDrawable(CLASSNAMER.drawable.delete);
-        textPaint.setTextSize((float) AndroidUtilities.m10dp(14.0f));
+        textPaint.setTextSize((float) AndroidUtilities.m9dp(14.0f));
         this.avatarDrawable = new AvatarDrawable();
-        this.avatarDrawable.setTextSize(AndroidUtilities.m10dp(12.0f));
+        this.avatarDrawable.setTextSize(AndroidUtilities.m9dp(12.0f));
         if (user != null) {
             this.avatarDrawable.setInfo(user);
             this.uid = user.var_id;
@@ -70,13 +70,13 @@ public class GroupCreateSpan extends View {
             this.key = contact.key;
         }
         this.imageReceiver = new ImageReceiver();
-        this.imageReceiver.setRoundRadius(AndroidUtilities.m10dp(16.0f));
+        this.imageReceiver.setRoundRadius(AndroidUtilities.m9dp(16.0f));
         this.imageReceiver.setParentView(this);
-        this.imageReceiver.setImageCoords(0, 0, AndroidUtilities.m10dp(32.0f), AndroidUtilities.m10dp(32.0f));
+        this.imageReceiver.setImageCoords(0, 0, AndroidUtilities.m9dp(32.0f), AndroidUtilities.m9dp(32.0f));
         if (AndroidUtilities.isTablet()) {
-            maxNameWidth = AndroidUtilities.m10dp(366.0f) / 2;
+            maxNameWidth = AndroidUtilities.m9dp(366.0f) / 2;
         } else {
-            maxNameWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m10dp(164.0f)) / 2;
+            maxNameWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(164.0f)) / 2;
         }
         if (user != null) {
             firstName = UserObject.getFirstName(user);
@@ -94,7 +94,7 @@ public class GroupCreateSpan extends View {
         if (!(user == null || user.photo == null)) {
             photo = user.photo.photo_small;
         }
-        this.imageReceiver.setImage(photo, null, "50_50", this.avatarDrawable, null, null, 0, null, 1);
+        this.imageReceiver.setImage(photo, null, "50_50", this.avatarDrawable, null, null, 0, null, user, 1);
         updateColors();
     }
 
@@ -102,6 +102,7 @@ public class GroupCreateSpan extends View {
         int color = Theme.getColor(Theme.key_avatar_backgroundGroupCreateSpanBlue);
         int back = Theme.getColor(Theme.key_groupcreate_spanBackground);
         int text = Theme.getColor(Theme.key_groupcreate_spanText);
+        int delete = Theme.getColor(Theme.key_groupcreate_spanDelete);
         this.colors[0] = Color.red(back);
         this.colors[1] = Color.red(color);
         this.colors[2] = Color.green(back);
@@ -111,7 +112,7 @@ public class GroupCreateSpan extends View {
         this.colors[6] = Color.alpha(back);
         this.colors[7] = Color.alpha(color);
         textPaint.setColor(text);
-        this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(text, Mode.MULTIPLY));
+        this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(delete, Mode.MULTIPLY));
         backPaint.setColor(back);
         this.avatarDrawable.setColor(AvatarDrawable.getColorForId(5));
     }
@@ -149,7 +150,7 @@ public class GroupCreateSpan extends View {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(AndroidUtilities.m10dp(57.0f) + this.textWidth, AndroidUtilities.m10dp(32.0f));
+        setMeasuredDimension(AndroidUtilities.m9dp(57.0f) + this.textWidth, AndroidUtilities.m9dp(32.0f));
     }
 
     protected void onDraw(Canvas canvas) {
@@ -172,24 +173,24 @@ public class GroupCreateSpan extends View {
             invalidate();
         }
         canvas.save();
-        this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.m10dp(32.0f));
+        this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.m9dp(32.0f));
         backPaint.setColor(Color.argb(this.colors[6] + ((int) (((float) (this.colors[7] - this.colors[6])) * this.progress)), this.colors[0] + ((int) (((float) (this.colors[1] - this.colors[0])) * this.progress)), this.colors[2] + ((int) (((float) (this.colors[3] - this.colors[2])) * this.progress)), this.colors[4] + ((int) (((float) (this.colors[5] - this.colors[4])) * this.progress))));
-        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(16.0f), (float) AndroidUtilities.m10dp(16.0f), backPaint);
+        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(16.0f), (float) AndroidUtilities.m9dp(16.0f), backPaint);
         this.imageReceiver.draw(canvas);
         if (this.progress != 0.0f) {
             int color = this.avatarDrawable.getColor();
             float alpha = ((float) Color.alpha(color)) / 255.0f;
             backPaint.setColor(color);
             backPaint.setAlpha((int) ((255.0f * this.progress) * alpha));
-            canvas.drawCircle((float) AndroidUtilities.m10dp(16.0f), (float) AndroidUtilities.m10dp(16.0f), (float) AndroidUtilities.m10dp(16.0f), backPaint);
+            canvas.drawCircle((float) AndroidUtilities.m9dp(16.0f), (float) AndroidUtilities.m9dp(16.0f), (float) AndroidUtilities.m9dp(16.0f), backPaint);
             canvas.save();
-            canvas.rotate(45.0f * (1.0f - this.progress), (float) AndroidUtilities.m10dp(16.0f), (float) AndroidUtilities.m10dp(16.0f));
-            this.deleteDrawable.setBounds(AndroidUtilities.m10dp(11.0f), AndroidUtilities.m10dp(11.0f), AndroidUtilities.m10dp(21.0f), AndroidUtilities.m10dp(21.0f));
+            canvas.rotate(45.0f * (1.0f - this.progress), (float) AndroidUtilities.m9dp(16.0f), (float) AndroidUtilities.m9dp(16.0f));
+            this.deleteDrawable.setBounds(AndroidUtilities.m9dp(11.0f), AndroidUtilities.m9dp(11.0f), AndroidUtilities.m9dp(21.0f), AndroidUtilities.m9dp(21.0f));
             this.deleteDrawable.setAlpha((int) (255.0f * this.progress));
             this.deleteDrawable.draw(canvas);
             canvas.restore();
         }
-        canvas.translate(this.textX + ((float) AndroidUtilities.m10dp(41.0f)), (float) AndroidUtilities.m10dp(8.0f));
+        canvas.translate(this.textX + ((float) AndroidUtilities.m9dp(41.0f)), (float) AndroidUtilities.m9dp(8.0f));
         this.nameLayout.draw(canvas);
         canvas.restore();
     }

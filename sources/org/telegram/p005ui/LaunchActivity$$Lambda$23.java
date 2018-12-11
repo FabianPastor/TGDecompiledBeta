@@ -3,23 +3,20 @@ package org.telegram.p005ui;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import java.util.HashMap;
-import org.telegram.messenger.ContactsController;
 
 /* renamed from: org.telegram.ui.LaunchActivity$$Lambda$23 */
 final /* synthetic */ class LaunchActivity$$Lambda$23 implements OnClickListener {
-    private final int arg$1;
+    private final LaunchActivity arg$1;
     private final HashMap arg$2;
-    private final boolean arg$3;
-    private final boolean arg$4;
+    private final int arg$3;
 
-    LaunchActivity$$Lambda$23(int i, HashMap hashMap, boolean z, boolean z2) {
-        this.arg$1 = i;
+    LaunchActivity$$Lambda$23(LaunchActivity launchActivity, HashMap hashMap, int i) {
+        this.arg$1 = launchActivity;
         this.arg$2 = hashMap;
-        this.arg$3 = z;
-        this.arg$4 = z2;
+        this.arg$3 = i;
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        ContactsController.getInstance(this.arg$1).syncPhoneBookByAlert(this.arg$2, this.arg$3, this.arg$4, false);
+        this.arg$1.lambda$didReceivedNotification$37$LaunchActivity(this.arg$2, this.arg$3, dialogInterface, i);
     }
 }

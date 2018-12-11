@@ -37,7 +37,7 @@ public class TextCheckBoxCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 64.0f : 17.0f, 0.0f, LocaleController.isRTL ? 17.0f : 64.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 66.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 66.0f, 0.0f));
         this.checkBox = new CheckBoxSquare(context, false);
         this.checkBox.setDuplicateParentStateEnabled(false);
         this.checkBox.setFocusable(false);
@@ -47,7 +47,7 @@ public class TextCheckBoxCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i2 = 5;
         }
-        addView(view, LayoutHelper.createFrame(18, 18.0f, i2 | 16, 19.0f, 0.0f, 19.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(18, 18.0f, i2 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     public void invalidate() {
@@ -56,7 +56,7 @@ public class TextCheckBoxCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f), NUM));
     }
 
     public void setTextAndCheck(String text, boolean checked, boolean divider) {
@@ -80,7 +80,7 @@ public class TextCheckBoxCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

@@ -380,7 +380,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                             child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
                         }
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                 } else if (this.drawerLayout != child) {
                     child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
@@ -472,7 +472,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             if (this.shadowLeft == null) {
                 return result;
             }
-            float alpha = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.m10dp(20.0f)), 1.0f));
+            float alpha = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.m9dp(20.0f)), 1.0f));
             if (alpha == 0.0f) {
                 return result;
             }

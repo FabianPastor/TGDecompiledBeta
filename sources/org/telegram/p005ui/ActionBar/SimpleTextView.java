@@ -19,12 +19,13 @@ import org.telegram.messenger.AndroidUtilities;
 
 /* renamed from: org.telegram.ui.ActionBar.SimpleTextView */
 public class SimpleTextView extends View implements Callback {
-    private int drawablePadding = AndroidUtilities.m10dp(4.0f);
+    private int drawablePadding = AndroidUtilities.m9dp(4.0f);
     private int gravity = 51;
     private Layout layout;
     private Drawable leftDrawable;
     private int leftDrawableTopPadding;
     private int offsetX;
+    private int offsetY;
     private Drawable rightDrawable;
     private int rightDrawableTopPadding;
     private SpannableStringBuilder spannableStringBuilder;
@@ -54,7 +55,7 @@ public class SimpleTextView extends View implements Callback {
     }
 
     public void setTextSize(int size) {
-        int newSize = AndroidUtilities.m10dp((float) size);
+        int newSize = AndroidUtilities.m9dp((float) size);
         if (((float) newSize) != this.textPaint.getTextSize()) {
             this.textPaint.setTextSize((float) newSize);
             if (!recreateLayoutMaybe()) {
@@ -90,12 +91,17 @@ public class SimpleTextView extends View implements Callback {
         if (this.layout.getLineCount() > 0) {
             this.textWidth = (int) Math.ceil((double) this.layout.getLineWidth(0));
             this.textHeight = this.layout.getLineBottom(0);
+            if ((this.gravity & 112) == 16) {
+                this.offsetY = (getMeasuredHeight() - this.textHeight) / 2;
+            } else {
+                this.offsetY = 0;
+            }
             if ((this.gravity & 7) == 3) {
                 this.offsetX = -((int) this.layout.getLineLeft(0));
             } else if (this.layout.getLineLeft(0) == 0.0f) {
                 this.offsetX = width - this.textWidth;
             } else {
-                this.offsetX = -AndroidUtilities.m10dp(8.0f);
+                this.offsetX = -AndroidUtilities.m9dp(8.0f);
             }
             this.offsetX += getPaddingLeft();
         }
@@ -111,7 +117,7 @@ public class SimpleTextView extends View implements Callback {
                     width = (width - this.rightDrawable.getIntrinsicWidth()) - this.drawablePadding;
                 }
                 CharSequence string = TextUtils.ellipsize(this.text, this.textPaint, (float) width, TruncateAt.END);
-                this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.m10dp(8.0f) + width, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.m9dp(8.0f) + width, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 calcOffset(width);
             } catch (Exception e) {
             }
@@ -218,7 +224,7 @@ public class SimpleTextView extends View implements Callback {
     }
 
     private boolean recreateLayoutMaybe() {
-        if (this.wasLayout) {
+        if (this.wasLayout && getMeasuredHeight() != 0) {
             return createLayout(getMeasuredWidth());
         }
         requestLayout();
@@ -272,12 +278,12 @@ public class SimpleTextView extends View implements Callback {
             this.rightDrawable.draw(canvas);
         }
         if (this.layout != null) {
-            if (this.offsetX + textOffsetX != 0) {
+            if (!(this.offsetX + textOffsetX == 0 && this.offsetY == 0)) {
                 canvas.save();
-                canvas.translate((float) (this.offsetX + textOffsetX), 0.0f);
+                canvas.translate((float) (this.offsetX + textOffsetX), (float) this.offsetY);
             }
             this.layout.draw(canvas);
-            if (this.offsetX + textOffsetX != 0) {
+            if (this.offsetX + textOffsetX != 0 || this.offsetY != 0) {
                 canvas.restore();
             }
         }

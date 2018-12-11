@@ -18,6 +18,6 @@ final /* synthetic */ class LaunchActivity$$Lambda$34 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$null$44$LaunchActivity(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$null$48$LaunchActivity(this.arg$2, this.arg$3, this.arg$4);
     }
 }

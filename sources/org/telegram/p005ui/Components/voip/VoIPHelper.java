@@ -140,7 +140,7 @@ public class VoIPHelper {
             try {
                 activity.startService(intent);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -204,7 +204,7 @@ public class VoIPHelper {
         final File log = VoIPHelper.getLogFile(callID);
         View linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
-        int pad = AndroidUtilities.m10dp(16.0f);
+        int pad = AndroidUtilities.m9dp(16.0f);
         linearLayout.setPadding(pad, pad, pad, 0);
         linearLayout = new TextView(context);
         linearLayout.setTextSize(2, 16.0f);
@@ -220,7 +220,7 @@ public class VoIPHelper {
         linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         linearLayout.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
         linearLayout.setBackgroundDrawable(Theme.createEditTextDrawable(context, true));
-        linearLayout.setPadding(0, AndroidUtilities.m10dp(4.0f), 0, AndroidUtilities.m10dp(4.0f));
+        linearLayout.setPadding(0, AndroidUtilities.m9dp(4.0f), 0, AndroidUtilities.m9dp(4.0f));
         linearLayout.setTextSize(18.0f);
         linearLayout.setVisibility(8);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
@@ -248,7 +248,7 @@ public class VoIPHelper {
         linearLayout.setTextSize(2, 14.0f);
         linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
         linearLayout.setText(LocaleController.getString("CallReportLogsExplain", CLASSNAMER.string.CallReportLogsExplain));
-        linearLayout.setPadding(AndroidUtilities.m10dp(8.0f), 0, AndroidUtilities.m10dp(8.0f), 0);
+        linearLayout.setPadding(AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f), 0);
         linearLayout.setOnClickListener(CLASSNAME);
         linearLayout.addView(linearLayout);
         linearLayout.setVisibility(8);
@@ -280,10 +280,10 @@ public class VoIPHelper {
                     public void run(TLObject response, TL_error error) {
                         if (response instanceof TL_updates) {
                             MessagesController.getInstance(currentAccount).processUpdates((TL_updates) response, false);
-                            if (includeLogs[0] && log.exists() && req.rating < 4) {
-                                SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, "text/plain", 4244000, null, null, null);
-                                Toast.makeText(context2, LocaleController.getString("CallReportSent", CLASSNAMER.string.CallReportSent), 1).show();
-                            }
+                        }
+                        if (includeLogs[0] && log.exists() && req.rating < 4) {
+                            SendMessagesHelper.prepareSendingDocument(log.getAbsolutePath(), log.getAbsolutePath(), null, null, "text/plain", 4244000, null, null, null);
+                            Toast.makeText(context2, LocaleController.getString("CallReportSent", CLASSNAMER.string.CallReportSent), 1).show();
                         }
                     }
                 });
@@ -358,24 +358,16 @@ public class VoIPHelper {
     private static File getLogFile(long callID) {
         if (BuildVars.DEBUG_VERSION) {
             File debugLogsDir = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), "logs");
-            for (String log : debugLogsDir.list()) {
-                if (log.endsWith("voip" + callID + ".txt")) {
-                    return new File(debugLogsDir, log);
+            String[] logs = debugLogsDir.list();
+            if (logs != null) {
+                for (String log : logs) {
+                    if (log.endsWith("voip" + callID + ".txt")) {
+                        return new File(debugLogsDir, log);
+                    }
                 }
             }
         }
         return new File(VoIPHelper.getLogsDir(), callID + ".log");
-    }
-
-    public static void upgradeP2pSetting(int account) {
-        SharedPreferences prefs = MessagesController.getMainSettings(account);
-        if (prefs.contains("calls_p2p")) {
-            Editor e = prefs.edit();
-            if (!prefs.getBoolean("calls_p2p", true)) {
-                e.putInt("calls_p2p_new", 2);
-            }
-            e.remove("calls_p2p").commit();
-        }
     }
 
     public static void showCallDebugSettings(Context context) {

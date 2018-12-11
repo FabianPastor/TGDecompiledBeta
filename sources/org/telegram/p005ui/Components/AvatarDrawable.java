@@ -18,7 +18,6 @@ import org.telegram.tgnet.TLRPC.User;
 public class AvatarDrawable extends Drawable {
     private int color;
     private boolean drawBrodcast;
-    private boolean drawPhoto;
     private boolean isProfile;
     private TextPaint namePaint;
     private int savedMessages;
@@ -32,7 +31,7 @@ public class AvatarDrawable extends Drawable {
         this.stringBuilder = new StringBuilder(5);
         this.namePaint = new TextPaint(1);
         this.namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.namePaint.setTextSize((float) AndroidUtilities.m10dp(18.0f));
+        this.namePaint.setTextSize((float) AndroidUtilities.m9dp(18.0f));
     }
 
     public AvatarDrawable(User user) {
@@ -72,23 +71,23 @@ public class AvatarDrawable extends Drawable {
     }
 
     public static int getButtonColorForId(int id) {
-        return Theme.getColor(Theme.keys_avatar_actionBarSelector[AvatarDrawable.getColorIndex(id)]);
+        return Theme.getColor(Theme.key_avatar_actionBarSelectorBlue);
     }
 
     public static int getIconColorForId(int id) {
-        return Theme.getColor(Theme.keys_avatar_actionBarIcon[AvatarDrawable.getColorIndex(id)]);
+        return Theme.getColor(Theme.key_avatar_actionBarIconBlue);
     }
 
     public static int getProfileColorForId(int id) {
-        return Theme.getColor(Theme.keys_avatar_backgroundInProfile[AvatarDrawable.getColorIndex(id)]);
+        return Theme.getColor(Theme.keys_avatar_background[AvatarDrawable.getColorIndex(id)]);
     }
 
     public static int getProfileTextColorForId(int id) {
-        return Theme.getColor(Theme.keys_avatar_subtitleInProfile[AvatarDrawable.getColorIndex(id)]);
+        return Theme.getColor(Theme.key_avatar_subtitleInProfileBlue);
     }
 
     public static int getProfileBackColorForId(int id) {
-        return Theme.getColor(Theme.keys_avatar_backgroundActionBar[AvatarDrawable.getColorIndex(id)]);
+        return Theme.getColor(Theme.key_avatar_backgroundActionBarBlue);
     }
 
     public static int getNameColorForId(int id) {
@@ -175,7 +174,7 @@ public class AvatarDrawable extends Drawable {
         }
         if (this.stringBuilder.length() > 0) {
             try {
-                this.textLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), this.namePaint, AndroidUtilities.m10dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.textLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), this.namePaint, AndroidUtilities.m9dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (this.textLayout.getLineCount() > 0) {
                     this.textLeft = this.textLayout.getLineLeft(0);
                     this.textWidth = this.textLayout.getLineWidth(0);
@@ -184,15 +183,11 @@ public class AvatarDrawable extends Drawable {
                 }
                 return;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 return;
             }
         }
         this.textLayout = null;
-    }
-
-    public void setDrawPhoto(boolean value) {
-        this.drawPhoto = value;
     }
 
     public void draw(Canvas canvas) {
@@ -225,11 +220,6 @@ public class AvatarDrawable extends Drawable {
             } else if (this.textLayout != null) {
                 canvas.translate(((((float) size) - this.textWidth) / 2.0f) - this.textLeft, (((float) size) - this.textHeight) / 2.0f);
                 this.textLayout.draw(canvas);
-            } else if (this.drawPhoto && Theme.avatar_photoDrawable != null) {
-                x = (size - Theme.avatar_photoDrawable.getIntrinsicWidth()) / 2;
-                y = (size - Theme.avatar_photoDrawable.getIntrinsicHeight()) / 2;
-                Theme.avatar_photoDrawable.setBounds(x, y, Theme.avatar_photoDrawable.getIntrinsicWidth() + x, Theme.avatar_photoDrawable.getIntrinsicHeight() + y);
-                Theme.avatar_photoDrawable.draw(canvas);
             }
             canvas.restore();
         }

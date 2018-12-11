@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
@@ -16,6 +17,7 @@ import org.telegram.p005ui.ActionBar.Theme;
 public class LetterDrawable extends Drawable {
     private static TextPaint namePaint;
     public static Paint paint = new Paint();
+    private RectF rect = new RectF();
     private StringBuilder stringBuilder = new StringBuilder(5);
     private float textHeight;
     private StaticLayout textLayout;
@@ -24,11 +26,11 @@ public class LetterDrawable extends Drawable {
 
     public LetterDrawable() {
         if (namePaint == null) {
-            paint.setColor(Theme.getColor(Theme.key_sharedMedia_linkPlaceholder));
             namePaint = new TextPaint(1);
-            namePaint.setColor(Theme.getColor(Theme.key_sharedMedia_linkPlaceholderText));
         }
-        namePaint.setTextSize((float) AndroidUtilities.m10dp(28.0f));
+        namePaint.setTextSize((float) AndroidUtilities.m9dp(28.0f));
+        paint.setColor(Theme.getColor(Theme.key_sharedMedia_linkPlaceholder));
+        namePaint.setColor(Theme.getColor(Theme.key_sharedMedia_linkPlaceholderText));
     }
 
     public void setBackgroundColor(int value) {
@@ -46,7 +48,7 @@ public class LetterDrawable extends Drawable {
         }
         if (this.stringBuilder.length() > 0) {
             try {
-                this.textLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), namePaint, AndroidUtilities.m10dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.textLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), namePaint, AndroidUtilities.m9dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (this.textLayout.getLineCount() > 0) {
                     this.textLeft = this.textLayout.getLineLeft(0);
                     this.textWidth = this.textLayout.getLineWidth(0);
@@ -55,7 +57,7 @@ public class LetterDrawable extends Drawable {
                 }
                 return;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 return;
             }
         }
@@ -65,10 +67,11 @@ public class LetterDrawable extends Drawable {
     public void draw(Canvas canvas) {
         Rect bounds = getBounds();
         if (bounds != null) {
-            int size = bounds.width();
+            this.rect.set((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom);
+            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(4.0f), paint);
             canvas.save();
-            canvas.drawRect((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom, paint);
             if (this.textLayout != null) {
+                int size = bounds.width();
                 canvas.translate((((float) bounds.left) + ((((float) size) - this.textWidth) / 2.0f)) - this.textLeft, ((float) bounds.top) + ((((float) size) - this.textHeight) / 2.0f));
                 this.textLayout.draw(canvas);
             }

@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
@@ -33,40 +32,6 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     private RadialProgress radialProgress;
     private FrameLayout radialProgressView;
 
-    /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$1 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(DialogInterface dialog, int which) {
-            if (!BlockingUpdateView.checkApkInstallPermissions(UpdateAppAlertDialog.this.getContext())) {
-                return;
-            }
-            if (UpdateAppAlertDialog.this.appUpdate.document instanceof TL_document) {
-                if (!BlockingUpdateView.openApkInstall(UpdateAppAlertDialog.this.parentActivity, UpdateAppAlertDialog.this.appUpdate.document)) {
-                    FileLoader.getInstance(UpdateAppAlertDialog.this.accountNum).loadFile(UpdateAppAlertDialog.this.appUpdate.document, true, 1);
-                    UpdateAppAlertDialog.this.showProgress(true);
-                }
-            } else if (UpdateAppAlertDialog.this.appUpdate.url != null) {
-                Browser.openUrl(UpdateAppAlertDialog.this.getContext(), UpdateAppAlertDialog.this.appUpdate.url);
-                dialog.dismiss();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.UpdateAppAlertDialog$2 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(DialogInterface dialog, int which) {
-            if (UpdateAppAlertDialog.this.appUpdate.document instanceof TL_document) {
-                FileLoader.getInstance(UpdateAppAlertDialog.this.accountNum).cancelLoadFile(UpdateAppAlertDialog.this.appUpdate.document);
-            }
-            dialog.dismiss();
-        }
-    }
-
     public UpdateAppAlertDialog(Activity activity, TL_help_appUpdate update, int account) {
         super(activity, 0);
         this.appUpdate = update;
@@ -83,16 +48,16 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         }
         setDismissDialogByButtons(false);
         setTitle(LocaleController.getString("UpdateTelegram", CLASSNAMER.string.UpdateTelegram));
-        setPositiveButton(LocaleController.getString("UpdateNow", CLASSNAMER.string.UpdateNow), new CLASSNAME());
-        setNeutralButton(LocaleController.getString("Later", CLASSNAMER.string.Later), new CLASSNAME());
+        setPositiveButton(LocaleController.getString("UpdateNow", CLASSNAMER.string.UpdateNow), new UpdateAppAlertDialog$$Lambda$0(this));
+        setNeutralButton(LocaleController.getString("Later", CLASSNAMER.string.Later), new UpdateAppAlertDialog$$Lambda$1(this));
         this.radialProgressView = new FrameLayout(this.parentActivity) {
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
                 int width = right - left;
                 int height = bottom - top;
-                int w = AndroidUtilities.m10dp(24.0f);
+                int w = AndroidUtilities.m9dp(24.0f);
                 int l = (width - w) / 2;
-                int t = ((height - w) / 2) + AndroidUtilities.m10dp(2.0f);
+                int t = ((height - w) / 2) + AndroidUtilities.m9dp(2.0f);
                 UpdateAppAlertDialog.this.radialProgress.setProgressRect(l, t, l + w, t + w);
             }
 
@@ -106,20 +71,42 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         this.radialProgressView.setScaleY(0.1f);
         this.radialProgressView.setVisibility(4);
         this.radialProgress = new RadialProgress(this.radialProgressView);
-        this.radialProgress.setStrokeWidth(AndroidUtilities.m10dp(2.0f));
+        this.radialProgress.setStrokeWidth(AndroidUtilities.m9dp(2.0f));
         this.radialProgress.setBackground(null, true, false);
         this.radialProgress.setProgressColor(Theme.getColor(Theme.key_dialogButton));
     }
 
+    final /* synthetic */ void lambda$new$0$UpdateAppAlertDialog(DialogInterface dialog, int which) {
+        if (!BlockingUpdateView.checkApkInstallPermissions(getContext())) {
+            return;
+        }
+        if (this.appUpdate.document instanceof TL_document) {
+            if (!BlockingUpdateView.openApkInstall(this.parentActivity, this.appUpdate.document)) {
+                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 1, 1);
+                showProgress(true);
+            }
+        } else if (this.appUpdate.url != null) {
+            Browser.openUrl(getContext(), this.appUpdate.url);
+            dialog.dismiss();
+        }
+    }
+
+    final /* synthetic */ void lambda$new$1$UpdateAppAlertDialog(DialogInterface dialog, int which) {
+        if (this.appUpdate.document instanceof TL_document) {
+            FileLoader.getInstance(this.accountNum).cancelLoadFile(this.appUpdate.document);
+        }
+        dialog.dismiss();
+    }
+
     public void didReceivedNotification(int id, int account, Object... args) {
         String location;
-        if (id == NotificationCenter.FileDidLoaded) {
+        if (id == NotificationCenter.fileDidLoad) {
             location = args[0];
             if (this.fileName != null && this.fileName.equals(location)) {
                 showProgress(false);
                 BlockingUpdateView.openApkInstall(this.parentActivity, this.appUpdate.document);
             }
-        } else if (id == NotificationCenter.FileDidFailedLoad) {
+        } else if (id == NotificationCenter.fileDidFailedLoad) {
             location = (String) args[0];
             if (this.fileName != null && this.fileName.equals(location)) {
                 showProgress(false);
@@ -134,16 +121,16 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
         this.buttonsLayout.addView(this.radialProgressView, LayoutHelper.createFrame(36, 36.0f));
     }
 
     public void dismiss() {
         super.dismiss();
-        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
     }
 

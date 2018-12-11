@@ -132,11 +132,11 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 default:
                     View frameLayout = new FrameLayout(this.context) {
                         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(48.0f) + 1, NUM));
+                            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f) + 1, NUM));
                         }
 
                         protected void onDraw(Canvas canvas) {
-                            canvas.drawLine(0.0f, (float) AndroidUtilities.m10dp(40.0f), (float) getMeasuredWidth(), (float) AndroidUtilities.m10dp(40.0f), Theme.dividerPaint);
+                            canvas.drawLine(0.0f, (float) AndroidUtilities.m9dp(40.0f), (float) getMeasuredWidth(), (float) AndroidUtilities.m9dp(40.0f), Theme.dividerPaint);
                         }
                     };
                     frameLayout.setWillNotDraw(false);
@@ -144,7 +144,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                     SharingLocationsAlert.this.textView.setTextColor(Theme.getColor(Theme.key_dialogIcon));
                     SharingLocationsAlert.this.textView.setTextSize(1, 14.0f);
                     SharingLocationsAlert.this.textView.setGravity(17);
-                    SharingLocationsAlert.this.textView.setPadding(0, 0, 0, AndroidUtilities.m10dp(8.0f));
+                    SharingLocationsAlert.this.textView.setPadding(0, 0, 0, AndroidUtilities.m9dp(8.0f));
                     frameLayout.addView(SharingLocationsAlert.this.textView, LayoutHelper.createFrame(-1, 40.0f));
                     view = frameLayout;
                     break;
@@ -195,9 +195,9 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                     height -= AndroidUtilities.statusBarHeight;
                 }
                 int measuredWidth = getMeasuredWidth();
-                int contentSize = ((AndroidUtilities.m10dp(56.0f) + AndroidUtilities.m10dp(56.0f)) + 1) + (LocationController.getLocationsCount() * AndroidUtilities.m10dp(54.0f));
+                int contentSize = ((AndroidUtilities.m9dp(56.0f) + AndroidUtilities.m9dp(56.0f)) + 1) + (LocationController.getLocationsCount() * AndroidUtilities.m9dp(54.0f));
                 if (contentSize < (height / 5) * 3) {
-                    padding = AndroidUtilities.m10dp(8.0f);
+                    padding = AndroidUtilities.m9dp(8.0f);
                 } else {
                     padding = (height / 5) * 2;
                     if (contentSize < height) {
@@ -206,7 +206,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 }
                 if (SharingLocationsAlert.this.listView.getPaddingTop() != padding) {
                     SharingLocationsAlert.this.ignoreLayout = true;
-                    SharingLocationsAlert.this.listView.setPadding(0, padding, 0, AndroidUtilities.m10dp(8.0f));
+                    SharingLocationsAlert.this.listView.setPadding(0, padding, 0, AndroidUtilities.m9dp(8.0f));
                     SharingLocationsAlert.this.ignoreLayout = false;
                 }
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(contentSize, height), NUM));
@@ -263,13 +263,13 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.containerView.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", CLASSNAMER.string.StopAllLocationSharings));
         pickerBottomLayout.cancelButton.setOnClickListener(new CLASSNAME());
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", CLASSNAMER.string.Close).toUpperCase());
-        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
+        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
         pickerBottomLayout.doneButton.setOnClickListener(new CLASSNAME());
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         this.adapter.notifyDataSetChanged();
@@ -293,7 +293,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         }
         View child = this.listView.getChildAt(0);
         Holder holder = (Holder) this.listView.findContainingViewHolder(child);
-        int top = child.getTop() - AndroidUtilities.m10dp(8.0f);
+        int top = child.getTop() - AndroidUtilities.m9dp(8.0f);
         if (top > 0 && holder != null && holder.getAdapterPosition() == 0) {
             newOffset = top;
         }
@@ -328,7 +328,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     public void dismiss() {
-        super.dismiss();
+        super.lambda$new$4$EmbedBottomSheet();
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
     }
 }

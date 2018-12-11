@@ -107,14 +107,14 @@ public class ActionBarPopupWindow extends PopupWindow {
         public ActionBarPopupWindowLayout(Context context) {
             super(context);
             this.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground), Mode.MULTIPLY));
-            setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(8.0f));
+            setPadding(AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(8.0f));
             setWillNotDraw(false);
             try {
                 this.scrollView = new ScrollView(context);
                 this.scrollView.setVerticalScrollBarEnabled(false);
                 addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.linearLayout = new LinearLayout(context);
             this.linearLayout.setOrientation(1);
@@ -159,7 +159,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 for (a = 0; a < count; a++) {
                     visibleCount += getItemAt(a).getVisibility() == 0 ? 1 : 0;
                 }
-                int height = getMeasuredHeight() - AndroidUtilities.m10dp(16.0f);
+                int height = getMeasuredHeight() - AndroidUtilities.m9dp(16.0f);
                 View child;
                 Integer position;
                 if (this.showedFromBotton) {
@@ -167,7 +167,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                         child = getItemAt(a);
                         if (child.getVisibility() == 0) {
                             position = (Integer) this.positions.get(child);
-                            if (position != null && ((float) (height - ((position.intValue() * AndroidUtilities.m10dp(48.0f)) + AndroidUtilities.m10dp(32.0f)))) > ((float) height) * value) {
+                            if (position != null && ((float) (height - ((position.intValue() * AndroidUtilities.m9dp(48.0f)) + AndroidUtilities.m9dp(32.0f)))) > ((float) height) * value) {
                                 break;
                             }
                             this.lastStartedChild = a - 1;
@@ -179,7 +179,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                         child = getItemAt(a);
                         if (child.getVisibility() == 0) {
                             position = (Integer) this.positions.get(child);
-                            if (position != null && ((float) (((position.intValue() + 1) * AndroidUtilities.m10dp(48.0f)) - AndroidUtilities.m10dp(24.0f))) > ((float) height) * value) {
+                            if (position != null && ((float) (((position.intValue() + 1) * AndroidUtilities.m9dp(48.0f)) - AndroidUtilities.m9dp(24.0f))) > ((float) height) * value) {
                                 break;
                             }
                             this.lastStartedChild = a + 1;
@@ -202,7 +202,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 animatorArr[0] = ObjectAnimator.ofFloat(child, "alpha", new float[]{0.0f, 1.0f});
                 String str = "translationY";
                 float[] fArr = new float[2];
-                fArr[0] = (float) AndroidUtilities.m10dp(this.showedFromBotton ? 6.0f : -6.0f);
+                fArr[0] = (float) AndroidUtilities.m9dp(this.showedFromBotton ? 6.0f : -6.0f);
                 fArr[1] = 0.0f;
                 animatorArr[1] = ObjectAnimator.ofFloat(child, str, fArr);
                 animatorSet.playTogether(animatorArr);
@@ -358,7 +358,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             super.showAsDropDown(anchor, xoff, yoff);
             registerListener(anchor);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -424,7 +424,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             Animator[] animatorArr = new Animator[2];
             String str = "translationY";
             float[] fArr = new float[1];
-            fArr[0] = (float) AndroidUtilities.m10dp(content.showedFromBotton ? 5.0f : -5.0f);
+            fArr[0] = (float) AndroidUtilities.m9dp(content.showedFromBotton ? 5.0f : -5.0f);
             animatorArr[0] = ObjectAnimator.ofFloat(content, str, fArr);
             animatorArr[1] = ObjectAnimator.ofFloat(content, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);

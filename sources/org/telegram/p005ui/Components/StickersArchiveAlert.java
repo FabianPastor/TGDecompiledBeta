@@ -71,7 +71,7 @@ public class StickersArchiveAlert extends Builder {
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new ArchivedStickerSetCell(this.context, false);
-            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.m10dp(82.0f)));
+            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.m9dp(82.0f)));
             return new Holder(view);
         }
 
@@ -98,7 +98,7 @@ public class StickersArchiveAlert extends Builder {
         TextView textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(1, 16.0f);
-        textView.setPadding(AndroidUtilities.m10dp(23.0f), AndroidUtilities.m10dp(10.0f), AndroidUtilities.m10dp(23.0f), 0);
+        textView.setPadding(AndroidUtilities.m9dp(23.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(23.0f), 0);
         if (set.set.masks) {
             textView.setText(LocaleController.getString("ArchivedMasksAlertInfo", CLASSNAMER.string.ArchivedMasksAlertInfo));
         } else {
@@ -109,7 +109,7 @@ public class StickersArchiveAlert extends Builder {
         listView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
         listView.setAdapter(new ListAdapter(context));
         listView.setVerticalScrollBarEnabled(false);
-        listView.setPadding(AndroidUtilities.m10dp(10.0f), 0, AndroidUtilities.m10dp(10.0f), 0);
+        listView.setPadding(AndroidUtilities.m9dp(10.0f), 0, AndroidUtilities.m9dp(10.0f), 0);
         listView.setGlowColor(-657673);
         container.addView(listView, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
         setNegativeButton(LocaleController.getString("Close", CLASSNAMER.string.Close), new CLASSNAME());

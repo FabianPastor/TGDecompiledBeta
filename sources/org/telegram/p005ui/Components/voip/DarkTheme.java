@@ -13,7 +13,6 @@ import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.p005ui.ActionBar.Theme;
-import org.telegram.tgnet.TLRPC;
 
 /* renamed from: org.telegram.ui.Components.voip.DarkTheme */
 public class DarkTheme {
@@ -57,7 +56,7 @@ public class DarkTheme {
                     break;
                 }
             case -1992639563:
-                if (key.equals(Theme.key_avatar_actionBarSelectorViolet)) {
+                if (key.equals("avatar_actionBarSelectorViolet")) {
                     obj = 195;
                     break;
                 }
@@ -112,7 +111,7 @@ public class DarkTheme {
                     break;
                 }
             case -1878988531:
-                if (key.equals(Theme.key_avatar_actionBarSelectorGreen)) {
+                if (key.equals("avatar_actionBarSelectorGreen")) {
                     obj = 108;
                     break;
                 }
@@ -307,7 +306,7 @@ public class DarkTheme {
                     break;
                 }
             case -1074293766:
-                if (key.equals(Theme.key_avatar_backgroundActionBarGreen)) {
+                if (key.equals("avatar_backgroundActionBarGreen")) {
                     obj = 143;
                     break;
                 }
@@ -472,7 +471,7 @@ public class DarkTheme {
                     break;
                 }
             case -493564645:
-                if (key.equals(Theme.key_avatar_actionBarSelectorRed)) {
+                if (key.equals("avatar_actionBarSelectorRed")) {
                     obj = 32;
                     break;
                 }
@@ -722,12 +721,12 @@ public class DarkTheme {
                     break;
                 }
             case 429722217:
-                if (key.equals(Theme.key_avatar_subtitleInProfileCyan)) {
+                if (key.equals("avatar_subtitleInProfileCyan")) {
                     obj = 63;
                     break;
                 }
             case 430094524:
-                if (key.equals(Theme.key_avatar_subtitleInProfilePink)) {
+                if (key.equals("avatar_subtitleInProfilePink")) {
                     obj = null;
                     break;
                 }
@@ -737,7 +736,7 @@ public class DarkTheme {
                     break;
                 }
             case 439976061:
-                if (key.equals(Theme.key_avatar_subtitleInProfileGreen)) {
+                if (key.equals("avatar_subtitleInProfileGreen")) {
                     obj = 228;
                     break;
                 }
@@ -892,7 +891,7 @@ public class DarkTheme {
                     break;
                 }
             case 983278580:
-                if (key.equals(Theme.key_avatar_subtitleInProfileOrange)) {
+                if (key.equals("avatar_subtitleInProfileOrange")) {
                     obj = 261;
                     break;
                 }
@@ -902,7 +901,7 @@ public class DarkTheme {
                     break;
                 }
             case 1008947016:
-                if (key.equals(Theme.key_avatar_backgroundActionBarRed)) {
+                if (key.equals("avatar_backgroundActionBarRed")) {
                     obj = 231;
                     break;
                 }
@@ -947,7 +946,7 @@ public class DarkTheme {
                     break;
                 }
             case 1175786053:
-                if (key.equals(Theme.key_avatar_subtitleInProfileViolet)) {
+                if (key.equals("avatar_subtitleInProfileViolet")) {
                     obj = 181;
                     break;
                 }
@@ -977,12 +976,12 @@ public class DarkTheme {
                     break;
                 }
             case 1212158796:
-                if (key.equals(Theme.key_avatar_backgroundActionBarCyan)) {
+                if (key.equals("avatar_backgroundActionBarCyan")) {
                     obj = 249;
                     break;
                 }
             case 1212531103:
-                if (key.equals(Theme.key_avatar_backgroundActionBarPink)) {
+                if (key.equals("avatar_backgroundActionBarPink")) {
                     obj = 178;
                     break;
                 }
@@ -1012,7 +1011,7 @@ public class DarkTheme {
                     break;
                 }
             case 1285554199:
-                if (key.equals(Theme.key_avatar_backgroundActionBarOrange)) {
+                if (key.equals("avatar_backgroundActionBarOrange")) {
                     obj = 233;
                     break;
                 }
@@ -1072,7 +1071,7 @@ public class DarkTheme {
                     break;
                 }
             case 1450167170:
-                if (key.equals("chat_outContactPhoneText")) {
+                if (key.equals(Theme.key_chat_outContactPhoneText)) {
                     obj = 117;
                     break;
                 }
@@ -1082,7 +1081,7 @@ public class DarkTheme {
                     break;
                 }
             case 1478061672:
-                if (key.equals(Theme.key_avatar_backgroundActionBarViolet)) {
+                if (key.equals("avatar_backgroundActionBarViolet")) {
                     obj = 73;
                     break;
                 }
@@ -1167,12 +1166,12 @@ public class DarkTheme {
                     break;
                 }
             case 1676443787:
-                if (key.equals(Theme.key_avatar_subtitleInProfileRed)) {
+                if (key.equals("avatar_subtitleInProfileRed")) {
                     obj = 80;
                     break;
                 }
             case 1682961989:
-                if (key.equals(Theme.key_switchThumbChecked)) {
+                if (key.equals("switchThumbChecked")) {
                     obj = 106;
                     break;
                 }
@@ -1222,12 +1221,12 @@ public class DarkTheme {
                     break;
                 }
             case 1878937561:
-                if (key.equals(Theme.key_avatar_actionBarSelectorCyan)) {
+                if (key.equals("avatar_actionBarSelectorCyan")) {
                     obj = 157;
                     break;
                 }
             case 1879309868:
-                if (key.equals(Theme.key_avatar_actionBarSelectorPink)) {
+                if (key.equals("avatar_actionBarSelectorPink")) {
                     obj = 221;
                     break;
                 }
@@ -1302,12 +1301,12 @@ public class DarkTheme {
                     break;
                 }
             case 2109820260:
-                if (key.equals(Theme.key_avatar_actionBarSelectorOrange)) {
+                if (key.equals("avatar_actionBarSelectorOrange")) {
                     obj = 235;
                     break;
                 }
             case 2118871810:
-                if (key.equals(Theme.key_switchThumb)) {
+                if (key.equals("switchThumb")) {
                     obj = 35;
                     break;
                 }
@@ -1488,7 +1487,7 @@ public class DarkTheme {
                 return -2236963;
             case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*73*/:
                 return -14605274;
-            case VoIPService.CALL_MAX_LAYER /*74*/:
+            case 74:
                 return -11167525;
             case 75:
                 return -7105645;
@@ -1508,7 +1507,7 @@ public class DarkTheme {
                 return -11234874;
             case 84:
                 return -11099173;
-            case TLRPC.LAYER /*85*/:
+            case 85:
                 return -14183202;
             case 86:
                 return -10132123;
@@ -1516,7 +1515,7 @@ public class DarkTheme {
                 return -9408400;
             case 88:
                 return -81911774;
-            case TsExtractor.TS_STREAM_TYPE_DVBSUBS /*89*/:
+            case 89:
                 return -1;
             case 90:
                 return -1;
@@ -1855,7 +1854,7 @@ public class DarkTheme {
             case 260:
                 return -13948117;
             default:
-                FileLog.m15w("returning color for key " + key + " from current theme");
+                FileLog.m14w("returning color for key " + key + " from current theme");
                 return Theme.getColor(key);
         }
     }

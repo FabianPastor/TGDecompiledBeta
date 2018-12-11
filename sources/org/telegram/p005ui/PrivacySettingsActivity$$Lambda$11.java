@@ -1,7 +1,7 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 /* renamed from: org.telegram.ui.PrivacySettingsActivity$$Lambda$11 */
 final /* synthetic */ class PrivacySettingsActivity$$Lambda$11 implements OnClickListener {
@@ -11,7 +11,7 @@ final /* synthetic */ class PrivacySettingsActivity$$Lambda$11 implements OnClic
         this.arg$1 = privacySettingsActivity;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$null$17$PrivacySettingsActivity(view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$null$15$PrivacySettingsActivity(dialogInterface, i);
     }
 }

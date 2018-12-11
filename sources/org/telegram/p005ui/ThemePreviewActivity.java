@@ -18,7 +18,6 @@ import android.support.p000v4.view.ViewPager.OnPageChangeListener;
 import android.text.style.CharacterStyle;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.EditText;
@@ -119,7 +118,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
         @SuppressLint({"NewApi"})
         public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m10dp(56.0f), AndroidUtilities.m10dp(56.0f));
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
         }
     }
 
@@ -170,31 +169,6 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             if (observer != null) {
                 super.unregisterDataSetObserver(observer);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ThemePreviewActivity$8 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            Theme.applyPreviousTheme();
-            ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
-            ThemePreviewActivity.this.lambda$checkDiscard$69$PassportActivity();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ThemePreviewActivity$9 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            ThemePreviewActivity.this.applied = true;
-            ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
-            Theme.applyThemeFile(ThemePreviewActivity.this.themeFile, ThemePreviewActivity.this.applyingTheme.name, false);
-            ThemePreviewActivity.this.lambda$checkDiscard$69$PassportActivity();
         }
     }
 
@@ -468,6 +442,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             messageMedia.flags |= 3;
             message.media.document = new TL_document();
             message.media.document.mime_type = MimeTypes.AUDIO_MP4;
+            message.media.document.file_reference = new byte[0];
             message.media.document.thumb = new TL_photoSizeEmpty();
             message.media.document.thumb.type = "s";
             TL_documentAttributeAudio audio = new TL_documentAttributeAudio();
@@ -506,6 +481,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             messageMedia.flags |= 3;
             message.media.document = new TL_document();
             message.media.document.mime_type = "audio/ogg";
+            message.media.document.file_reference = new byte[0];
             message.media.document.thumb = new TL_photoSizeEmpty();
             message.media.document.thumb.type = "s";
             audio = new TL_documentAttributeAudio();
@@ -533,6 +509,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             messageMedia = message.media;
             messageMedia.flags |= 3;
             message.media.photo = new TL_photo();
+            message.media.photo.file_reference = new byte[0];
             message.media.photo.has_stickers = false;
             message.media.photo.var_id = 1;
             message.media.photo.access_hash = 0;
@@ -634,7 +611,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         float f2;
         float f3;
         this.page1 = new FrameLayout(context);
-        this.actionBar.createMenu().addItem(0, (int) CLASSNAMER.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME()).getSearchField().setHint(LocaleController.getString("Search", CLASSNAMER.string.Search));
+        this.actionBar.createMenu().addItem(0, (int) CLASSNAMER.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME()).setSearchFieldHint(LocaleController.getString("Search", CLASSNAMER.string.Search));
         this.actionBar.setBackButtonDrawable(new MenuDrawable());
         this.actionBar.setAddToContainer(false);
         this.actionBar.setTitle(LocaleController.getString("ThemePreview", CLASSNAMER.string.ThemePreview));
@@ -671,12 +648,12 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.page1.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.floatingButton = new ImageView(context);
         this.floatingButton.setScaleType(ScaleType.CENTER);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m10dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m9dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(CLASSNAMER.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
-            combinedDrawable.setIconSize(AndroidUtilities.m10dp(56.0f), AndroidUtilities.m10dp(56.0f));
+            combinedDrawable.setIconSize(AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
             drawable = combinedDrawable;
         }
         this.floatingButton.setBackgroundDrawable(drawable);
@@ -684,8 +661,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.floatingButton.setImageResource(CLASSNAMER.drawable.floating_pencil);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
-            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m10dp(2.0f), (float) AndroidUtilities.m10dp(4.0f)}).setDuration(200));
-            animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(2.0f)}).setDuration(200));
+            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(4.0f)}).setDuration(200));
+            animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(2.0f)}).setDuration(200));
             this.floatingButton.setStateListAnimator(animator);
             this.floatingButton.setOutlineProvider(new CLASSNAME());
         }
@@ -748,7 +725,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.listView2.setVerticalScrollBarEnabled(true);
         this.listView2.setItemAnimator(null);
         this.listView2.setLayoutAnimation(null);
-        this.listView2.setPadding(0, AndroidUtilities.m10dp(4.0f), 0, AndroidUtilities.m10dp(4.0f));
+        this.listView2.setPadding(0, AndroidUtilities.m9dp(4.0f), 0, AndroidUtilities.m9dp(4.0f));
         this.listView2.setClipToPadding(false);
         this.listView2.setLayoutManager(new LinearLayoutManager(context, 1, true));
         this.listView2.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
@@ -777,7 +754,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                 int a = 0;
                 while (a < 2) {
                     this.paint.setColor(a == selected ? -6710887 : -3355444);
-                    canvas.drawCircle((float) AndroidUtilities.m10dp((float) ((a * 15) + 3)), (float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(3.0f), this.paint);
+                    canvas.drawCircle((float) AndroidUtilities.m9dp((float) ((a * 15) + 3)), (float) AndroidUtilities.m9dp(4.0f), (float) AndroidUtilities.m9dp(3.0f), this.paint);
                     a++;
                 }
             }
@@ -788,31 +765,44 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         cancelButton.setTextColor(-15095832);
         cancelButton.setGravity(17);
         cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-        cancelButton.setPadding(AndroidUtilities.m10dp(29.0f), 0, AndroidUtilities.m10dp(29.0f), 0);
+        cancelButton.setPadding(AndroidUtilities.m9dp(29.0f), 0, AndroidUtilities.m9dp(29.0f), 0);
         cancelButton.setText(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel).toUpperCase());
         cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(cancelButton, LayoutHelper.createFrame(-2, -1, 51));
-        cancelButton.setOnClickListener(new CLASSNAME());
+        cancelButton.setOnClickListener(new ThemePreviewActivity$$Lambda$0(this));
         TextView doneButton = new TextView(context);
         doneButton.setTextSize(1, 14.0f);
         doneButton.setTextColor(-15095832);
         doneButton.setGravity(17);
         doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-        doneButton.setPadding(AndroidUtilities.m10dp(29.0f), 0, AndroidUtilities.m10dp(29.0f), 0);
+        doneButton.setPadding(AndroidUtilities.m9dp(29.0f), 0, AndroidUtilities.m9dp(29.0f), 0);
         doneButton.setText(LocaleController.getString("ApplyTheme", CLASSNAMER.string.ApplyTheme).toUpperCase());
         doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(doneButton, LayoutHelper.createFrame(-2, -1, 53));
-        doneButton.setOnClickListener(new CLASSNAME());
+        doneButton.setOnClickListener(new ThemePreviewActivity$$Lambda$1(this));
         return this.fragmentView;
     }
 
+    final /* synthetic */ void lambda$createView$0$ThemePreviewActivity(View v) {
+        Theme.applyPreviousTheme();
+        this.parentLayout.rebuildAllFragmentViews(false, false);
+        lambda$checkDiscard$70$PassportActivity();
+    }
+
+    final /* synthetic */ void lambda$createView$1$ThemePreviewActivity(View v) {
+        this.applied = true;
+        this.parentLayout.rebuildAllFragmentViews(false, false);
+        Theme.applyThemeFile(this.themeFile, this.applyingTheme.name, false);
+        lambda$checkDiscard$70$PassportActivity();
+    }
+
     public boolean onFragmentCreate() {
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
         super.onFragmentDestroy();
     }
 
@@ -833,7 +823,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.emojiDidLoaded && this.listView != null) {
+        if (id == NotificationCenter.emojiDidLoad && this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {
                 View child = this.listView.getChildAt(a);

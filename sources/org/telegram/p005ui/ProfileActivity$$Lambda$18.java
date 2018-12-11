@@ -1,24 +1,18 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.p005ui.ChannelRightsEditActivity.ChannelRightsEditActivityDelegate;
+import org.telegram.tgnet.TLRPC.TL_channelAdminRights;
+import org.telegram.tgnet.TLRPC.TL_channelBannedRights;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$18 */
-final /* synthetic */ class ProfileActivity$$Lambda$18 implements Runnable {
+final /* synthetic */ class ProfileActivity$$Lambda$18 implements ChannelRightsEditActivityDelegate {
     private final ProfileActivity arg$1;
-    private final TL_error arg$2;
-    private final TLObject arg$3;
-    private final TL_channels_getParticipants arg$4;
 
-    ProfileActivity$$Lambda$18(ProfileActivity profileActivity, TL_error tL_error, TLObject tLObject, TL_channels_getParticipants tL_channels_getParticipants) {
+    ProfileActivity$$Lambda$18(ProfileActivity profileActivity) {
         this.arg$1 = profileActivity;
-        this.arg$2 = tL_error;
-        this.arg$3 = tLObject;
-        this.arg$4 = tL_channels_getParticipants;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$20$ProfileActivity(this.arg$2, this.arg$3, this.arg$4);
+    public void didSetRights(int i, TL_channelAdminRights tL_channelAdminRights, TL_channelBannedRights tL_channelBannedRights) {
+        this.arg$1.lambda$null$10$ProfileActivity(i, tL_channelAdminRights, tL_channelBannedRights);
     }
 }

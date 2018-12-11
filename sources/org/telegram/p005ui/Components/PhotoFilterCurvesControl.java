@@ -51,16 +51,16 @@ public class PhotoFilterCurvesControl extends View {
         setWillNotDraw(false);
         this.curveValue = value;
         this.paint.setColor(-NUM);
-        this.paint.setStrokeWidth((float) AndroidUtilities.m10dp(1.0f));
+        this.paint.setStrokeWidth((float) AndroidUtilities.m9dp(1.0f));
         this.paint.setStyle(Style.STROKE);
         this.paintDash.setColor(-NUM);
-        this.paintDash.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paintDash.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.paintDash.setStyle(Style.STROKE);
         this.paintCurve.setColor(-1);
-        this.paintCurve.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
+        this.paintCurve.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.paintCurve.setStyle(Style.STROKE);
         this.textPaint.setColor(-4210753);
-        this.textPaint.setTextSize((float) AndroidUtilities.m10dp(13.0f));
+        this.textPaint.setTextSize((float) AndroidUtilities.m9dp(13.0f));
     }
 
     public void setDelegate(PhotoFilterCurvesControlDelegate photoFilterCurvesControlDelegate) {
@@ -241,7 +241,7 @@ public class PhotoFilterCurvesControl extends View {
                     str = TtmlNode.ANONYMOUS_REGION_ID;
                     break;
             }
-            canvas.drawText(str, (this.actualArea.var_x + ((segmentWidth - this.textPaint.measureText(str)) / 2.0f)) + (((float) a) * segmentWidth), (this.actualArea.var_y + this.actualArea.height) - ((float) AndroidUtilities.m10dp(4.0f)), this.textPaint);
+            canvas.drawText(str, (this.actualArea.var_x + ((segmentWidth - this.textPaint.measureText(str)) / 2.0f)) + (((float) a) * segmentWidth), (this.actualArea.var_y + this.actualArea.height) - ((float) AndroidUtilities.m9dp(4.0f)), this.textPaint);
         }
         float[] points = curvesValue.interpolateCurve();
         invalidate();

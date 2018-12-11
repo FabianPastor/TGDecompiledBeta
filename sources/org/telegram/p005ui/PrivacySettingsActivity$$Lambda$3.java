@@ -9,6 +9,6 @@ final /* synthetic */ class PrivacySettingsActivity$$Lambda$3 implements Runnabl
     }
 
     public void run() {
-        this.arg$1.lambda$null$19$PrivacySettingsActivity();
+        this.arg$1.lambda$null$18$PrivacySettingsActivity();
     }
 }

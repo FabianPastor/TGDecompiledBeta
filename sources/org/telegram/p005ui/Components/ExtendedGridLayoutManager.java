@@ -30,7 +30,7 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         this.itemsToRow.clear();
         this.rowsCount = 0;
         this.firstRowMax = 0;
-        int preferredRowSize = AndroidUtilities.m10dp(100.0f);
+        int preferredRowSize = AndroidUtilities.m9dp(100.0f);
         int itemsCount = getFlowItemCount();
         int spanCount = getSpanCount();
         int spanLeft = spanCount;

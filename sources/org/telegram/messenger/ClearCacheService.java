@@ -12,31 +12,31 @@ public class ClearCacheService extends IntentService {
 
     protected void onHandleIntent(Intent intent) {
         ApplicationLoader.postInitApplication();
-        final int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
+        int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
         if (keepMedia != 2) {
-            Utilities.globalQueue.postRunnable(new Runnable() {
-                public void run() {
-                    int days;
-                    if (keepMedia == 0) {
-                        days = 7;
-                    } else if (keepMedia == 1) {
-                        days = 30;
-                    } else {
-                        days = 3;
-                    }
-                    long currentTime = (System.currentTimeMillis() / 1000) - ((long) (86400 * days));
-                    SparseArray<File> paths = ImageLoader.getInstance().createMediaPaths();
-                    for (int a = 0; a < paths.size(); a++) {
-                        if (paths.keyAt(a) != 4) {
-                            try {
-                                Utilities.clearDir(((File) paths.valueAt(a)).getAbsolutePath(), 0, currentTime);
-                            } catch (Throwable e) {
-                                FileLog.m14e(e);
-                            }
-                        }
-                    }
+            Utilities.globalQueue.postRunnable(new ClearCacheService$$Lambda$0(keepMedia));
+        }
+    }
+
+    static final /* synthetic */ void lambda$onHandleIntent$0$ClearCacheService(int keepMedia) {
+        int days;
+        if (keepMedia == 0) {
+            days = 7;
+        } else if (keepMedia == 1) {
+            days = 30;
+        } else {
+            days = 3;
+        }
+        long currentTime = (System.currentTimeMillis() / 1000) - ((long) (86400 * days));
+        SparseArray<File> paths = ImageLoader.getInstance().createMediaPaths();
+        for (int a = 0; a < paths.size(); a++) {
+            if (paths.keyAt(a) != 4) {
+                try {
+                    Utilities.clearDir(((File) paths.valueAt(a)).getAbsolutePath(), 0, currentTime);
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
                 }
-            });
+            }
         }
     }
 }

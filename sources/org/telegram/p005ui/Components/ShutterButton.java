@@ -107,12 +107,12 @@ public class ShutterButton extends View {
     protected void onDraw(Canvas canvas) {
         int cx = getMeasuredWidth() / 2;
         int cy = getMeasuredHeight() / 2;
-        this.shadowDrawable.setBounds(cx - AndroidUtilities.m10dp(36.0f), cy - AndroidUtilities.m10dp(36.0f), AndroidUtilities.m10dp(36.0f) + cx, AndroidUtilities.m10dp(36.0f) + cy);
+        this.shadowDrawable.setBounds(cx - AndroidUtilities.m9dp(36.0f), cy - AndroidUtilities.m9dp(36.0f), AndroidUtilities.m9dp(36.0f) + cx, AndroidUtilities.m9dp(36.0f) + cy);
         this.shadowDrawable.draw(canvas);
         if (this.pressed || getScaleX() != 1.0f) {
             float scale = (getScaleX() - 1.0f) / 0.06f;
             this.whitePaint.setAlpha((int) (255.0f * scale));
-            canvas.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.m10dp(26.0f), this.whitePaint);
+            canvas.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.m9dp(26.0f), this.whitePaint);
             if (this.state == State.RECORDING) {
                 if (this.redProgress != 1.0f) {
                     long dt = Math.abs(System.currentTimeMillis() - this.lastUpdateTime);
@@ -126,9 +126,9 @@ public class ShutterButton extends View {
                     this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / 120.0f);
                     invalidate();
                 }
-                canvas.drawCircle((float) cx, (float) cy, (((float) AndroidUtilities.m10dp(26.0f)) * scale) * this.redProgress, this.redPaint);
+                canvas.drawCircle((float) cx, (float) cy, (((float) AndroidUtilities.m9dp(26.0f)) * scale) * this.redProgress, this.redPaint);
             } else if (this.redProgress != 0.0f) {
-                canvas.drawCircle((float) cx, (float) cy, ((float) AndroidUtilities.m10dp(26.0f)) * scale, this.redPaint);
+                canvas.drawCircle((float) cx, (float) cy, ((float) AndroidUtilities.m9dp(26.0f)) * scale, this.redPaint);
             }
         } else if (this.redProgress != 0.0f) {
             this.redProgress = 0.0f;
@@ -136,7 +136,7 @@ public class ShutterButton extends View {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(AndroidUtilities.m10dp(84.0f), AndroidUtilities.m10dp(84.0f));
+        setMeasuredDimension(AndroidUtilities.m9dp(84.0f), AndroidUtilities.m9dp(84.0f));
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {

@@ -62,13 +62,13 @@ public class BotKeyboardView extends LinearLayout {
         if (this.isFullSize && this.botButtons != null && this.botButtons.rows.size() != 0) {
             int max;
             if (this.isFullSize) {
-                max = (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.m10dp(30.0f)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.m10dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
+                max = (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.m9dp(30.0f)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.m9dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
             } else {
                 max = 42;
             }
             this.buttonHeight = max;
             int count = this.container.getChildCount();
-            int newHeight = AndroidUtilities.m10dp((float) this.buttonHeight);
+            int newHeight = AndroidUtilities.m9dp((float) this.buttonHeight);
             for (int a = 0; a < count; a++) {
                 View v = this.container.getChildAt(a);
                 LayoutParams layoutParams = (LayoutParams) v.getLayoutParams();
@@ -97,7 +97,7 @@ public class BotKeyboardView extends LinearLayout {
         this.scrollView.scrollTo(0, 0);
         if (buttons != null && this.botButtons.rows.size() != 0) {
             this.isFullSize = !buttons.resize;
-            this.buttonHeight = !this.isFullSize ? 42 : (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.m10dp(30.0f)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.m10dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
+            this.buttonHeight = !this.isFullSize ? 42 : (int) Math.max(42.0f, ((float) (((this.panelHeight - AndroidUtilities.m9dp(30.0f)) - ((this.botButtons.rows.size() - 1) * AndroidUtilities.m9dp(10.0f))) / this.botButtons.rows.size())) / AndroidUtilities.density);
             int a = 0;
             while (a < buttons.rows.size()) {
                 float f;
@@ -122,9 +122,9 @@ public class BotKeyboardView extends LinearLayout {
                     textView.setTextColor(Theme.getColor(Theme.key_chat_botKeyboardButtonText));
                     textView.setTextSize(1, 16.0f);
                     textView.setGravity(17);
-                    textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.m10dp(4.0f), Theme.getColor(Theme.key_chat_botKeyboardButtonBackground), Theme.getColor(Theme.key_chat_botKeyboardButtonBackgroundPressed)));
-                    textView.setPadding(AndroidUtilities.m10dp(4.0f), 0, AndroidUtilities.m10dp(4.0f), 0);
-                    textView.setText(Emoji.replaceEmoji(button.text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(16.0f), false));
+                    textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.m9dp(4.0f), Theme.getColor(Theme.key_chat_botKeyboardButtonBackground), Theme.getColor(Theme.key_chat_botKeyboardButtonBackgroundPressed)));
+                    textView.setPadding(AndroidUtilities.m9dp(4.0f), 0, AndroidUtilities.m9dp(4.0f), 0);
+                    textView.setText(Emoji.replaceEmoji(button.text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(16.0f), false));
                     layout.addView(textView, LayoutHelper.createLinear(0, -1, weight, 0, 0, b != row.buttons.size() + -1 ? 10 : 0, 0));
                     textView.setOnClickListener(new CLASSNAME());
                     this.buttonViews.add(textView);
@@ -136,6 +136,6 @@ public class BotKeyboardView extends LinearLayout {
     }
 
     public int getKeyboardHeight() {
-        return this.isFullSize ? this.panelHeight : ((this.botButtons.rows.size() * AndroidUtilities.m10dp((float) this.buttonHeight)) + AndroidUtilities.m10dp(30.0f)) + ((this.botButtons.rows.size() - 1) * AndroidUtilities.m10dp(10.0f));
+        return this.isFullSize ? this.panelHeight : ((this.botButtons.rows.size() * AndroidUtilities.m9dp((float) this.buttonHeight)) + AndroidUtilities.m9dp(30.0f)) + ((this.botButtons.rows.size() - 1) * AndroidUtilities.m9dp(10.0f));
     }
 }

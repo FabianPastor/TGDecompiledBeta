@@ -165,7 +165,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             return new Holder(view);
@@ -236,7 +236,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (query == null) {
                 this.searchResult.clear();
@@ -251,7 +251,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         SearchAdapter.this.searchTimer.cancel();
                         SearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.m14e(e);
+                        FileLog.m13e(e);
                     }
                     SearchAdapter.this.processSearch(query);
                 }
@@ -335,6 +335,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
 
         public TLObject getItem(int i) {
+            if (i < 0 || i >= this.searchResult.size()) {
+                return null;
+            }
             return (TLObject) this.searchResult.get(i);
         }
 
@@ -420,7 +423,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
         fetchUsers();
         return true;
     }
@@ -439,7 +442,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoaded);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
     }
 
     public View createView(Context context) {
@@ -452,7 +455,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.searchListViewAdapter = new SearchAdapter(context);
         this.searchItem = this.actionBar.createMenu().addItem(0, (int) CLASSNAMER.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME());
-        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", CLASSNAMER.string.Search));
+        this.searchItem.setSearchFieldHint(LocaleController.getString("Search", CLASSNAMER.string.Search));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
@@ -551,7 +554,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.chatInfoDidLoaded) {
+        if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
             boolean byChannelUsers = ((Boolean) args[2]).booleanValue();
             if (chatFull.var_id == this.chatId && !byChannelUsers) {
@@ -596,7 +599,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteGrayText);
         themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, cellDelegate, Theme.key_windowBackgroundWhiteBlueText);
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
         themeDescriptionArr[15] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed);
         themeDescriptionArr[16] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundOrange);
         themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundViolet);

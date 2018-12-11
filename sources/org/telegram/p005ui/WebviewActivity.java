@@ -80,7 +80,7 @@ public class WebviewActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                WebviewActivity.this.lambda$checkDiscard$69$PassportActivity();
+                WebviewActivity.this.lambda$checkDiscard$70$PassportActivity();
             } else if (id == 1) {
                 WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
                 WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
@@ -121,7 +121,7 @@ public class WebviewActivity extends BaseFragment {
                 intent.putExtra("com.android.browser.application_id", ApplicationLoader.applicationContext.getPackageName());
                 ApplicationLoader.applicationContext.startActivity(intent);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             return true;
         }
@@ -158,41 +158,40 @@ public class WebviewActivity extends BaseFragment {
         }
 
         @JavascriptInterface
-        public void postEvent(final String eventName, String eventData) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    if (WebviewActivity.this.getParentActivity() != null) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11d(eventName);
-                        }
-                        String str = eventName;
-                        boolean z = true;
-                        switch (str.hashCode()) {
-                            case -1788360622:
-                                if (str.equals("share_game")) {
-                                    z = false;
-                                    break;
-                                }
-                                break;
-                            case 406539826:
-                                if (str.equals("share_score")) {
-                                    z = true;
-                                    break;
-                                }
-                                break;
-                        }
-                        switch (z) {
-                            case false:
-                                WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
-                                break;
-                            case true:
-                                WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = true;
-                                break;
-                        }
-                        WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
-                    }
+        public void postEvent(String eventName, String eventData) {
+            AndroidUtilities.runOnUIThread(new WebviewActivity$TelegramWebviewProxy$$Lambda$0(this, eventName));
+        }
+
+        final /* synthetic */ void lambda$postEvent$0$WebviewActivity$TelegramWebviewProxy(String eventName) {
+            if (WebviewActivity.this.getParentActivity() != null) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m10d(eventName);
                 }
-            });
+                boolean z = true;
+                switch (eventName.hashCode()) {
+                    case -1788360622:
+                        if (eventName.equals("share_game")) {
+                            z = false;
+                            break;
+                        }
+                        break;
+                    case 406539826:
+                        if (eventName.equals("share_score")) {
+                            z = true;
+                            break;
+                        }
+                        break;
+                }
+                switch (z) {
+                    case false:
+                        WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
+                        break;
+                    case true:
+                        WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = true;
+                        break;
+                }
+                WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
+            }
         }
     }
 
@@ -219,7 +218,7 @@ public class WebviewActivity extends BaseFragment {
             this.webView.destroy();
             this.webView = null;
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -232,10 +231,13 @@ public class WebviewActivity extends BaseFragment {
         this.actionBar.setSubtitle("@" + this.currentBot);
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         ActionBarMenu menu = this.actionBar.createMenu();
-        this.progressItem = menu.addItemWithWidth(1, CLASSNAMER.drawable.share, AndroidUtilities.m10dp(54.0f));
+        this.progressItem = menu.addItemWithWidth(1, CLASSNAMER.drawable.share, AndroidUtilities.m9dp(54.0f));
         this.progressView = new ContextProgressView(context, 1);
+        this.progressView.setAlpha(0.0f);
+        this.progressView.setScaleX(0.1f);
+        this.progressView.setScaleY(0.1f);
+        this.progressView.setVisibility(4);
         this.progressItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
-        this.progressItem.getImageView().setVisibility(4);
         menu.addItem(0, (int) CLASSNAMER.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", CLASSNAMER.string.OpenInExternalApp));
         this.webView = new WebView(context);
         this.webView.getSettings().setJavaScriptEnabled(true);
@@ -310,7 +312,7 @@ public class WebviewActivity extends BaseFragment {
             Browser.openUrl((Context) parentActivity, url, false);
             serializedData.cleanup();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 

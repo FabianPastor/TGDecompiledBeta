@@ -66,7 +66,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 this.searchTimer.cancel();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         this.searchTimer = new Timer();
         this.searchTimer.schedule(new TimerTask() {
@@ -75,7 +75,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                     BaseLocationAdapter.this.searchTimer.cancel();
                     BaseLocationAdapter.this.searchTimer = null;
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 AndroidUtilities.runOnUIThread(new BaseLocationAdapter$1$$Lambda$0(this, query, coordinate));
             }

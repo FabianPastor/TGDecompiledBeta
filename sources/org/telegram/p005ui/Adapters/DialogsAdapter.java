@@ -200,12 +200,12 @@ public class DialogsAdapter extends SelectionAdapter {
             case 3:
                 View frameLayout = new FrameLayout(this.mContext) {
                     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(12.0f), NUM));
+                        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(12.0f), NUM));
                     }
                 };
                 frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
                 View v = new View(this.mContext);
-                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 frameLayout.addView(v, LayoutHelper.createFrame(-1, -1.0f));
                 view = frameLayout;
                 break;
@@ -225,7 +225,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 break;
             default:
                 view = new ShadowSectionCell(this.mContext);
-                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 combinedDrawable.setFullsize(true);
                 view.setBackgroundDrawable(combinedDrawable);
                 break;
@@ -244,18 +244,26 @@ public class DialogsAdapter extends SelectionAdapter {
         int i2 = 1;
         switch (holder.getItemViewType()) {
             case 0:
+                boolean z;
                 DialogCell cell = holder.itemView;
                 TL_dialog dialog = (TL_dialog) getItem(i);
+                TL_dialog nextDialog = (TL_dialog) getItem(i + 1);
                 if (this.hasHints) {
                     i -= MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
                 }
                 cell.useSeparator = i != getItemCount() + -1;
+                if (!dialog.pinned || nextDialog == null || nextDialog.pinned) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                cell.fullSeparator = z;
                 if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
-                    boolean z;
+                    boolean z2;
                     if (dialog.var_id != this.openedDialogId) {
-                        z = false;
+                        z2 = false;
                     }
-                    cell.setDialogSelected(z);
+                    cell.setDialogSelected(z2);
                 }
                 if (this.selectedDialogs != null) {
                     cell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialog.var_id)), false);

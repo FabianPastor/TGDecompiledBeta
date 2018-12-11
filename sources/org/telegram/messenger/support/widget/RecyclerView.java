@@ -6846,7 +6846,7 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
             throw new IllegalArgumentException("Trying to set fast scroller without both required drawables." + exceptionLabel());
         }
         Resources resources = getContext().getResources();
-        FastScroller fastScroller = new FastScroller(this, verticalThumbDrawable, verticalTrackDrawable, horizontalThumbDrawable, horizontalTrackDrawable, AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(50.0f), 0);
+        FastScroller fastScroller = new FastScroller(this, verticalThumbDrawable, verticalTrackDrawable, horizontalThumbDrawable, horizontalTrackDrawable, AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(50.0f), 0);
     }
 
     public void setNestedScrollingEnabled(boolean enabled) {

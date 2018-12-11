@@ -1,17 +1,16 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 
 /* renamed from: org.telegram.ui.ChannelEditInfoActivity$$Lambda$8 */
-final /* synthetic */ class ChannelEditInfoActivity$$Lambda$8 implements OnClickListener {
+final /* synthetic */ class ChannelEditInfoActivity$$Lambda$8 implements ThemeDescriptionDelegate {
     private final ChannelEditInfoActivity arg$1;
 
     ChannelEditInfoActivity$$Lambda$8(ChannelEditInfoActivity channelEditInfoActivity) {
         this.arg$1 = channelEditInfoActivity;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$createView$10$ChannelEditInfoActivity(view);
+    public void didSetColor() {
+        this.arg$1.lambda$getThemeDescriptions$17$ChannelEditInfoActivity();
     }
 }

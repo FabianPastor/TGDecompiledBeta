@@ -30,7 +30,7 @@ public class GroupCreateDividerItemDecoration extends ItemDecoration {
             View child = parent.getChildAt(i);
             int position = parent.getChildAdapterPosition(child);
             int top = child.getBottom();
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m10dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.m10dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.m9dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
         }
     }
 

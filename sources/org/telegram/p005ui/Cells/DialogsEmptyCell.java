@@ -56,8 +56,8 @@ public class DialogsEmptyCell extends LinearLayout {
         this.emptyTextView2.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         this.emptyTextView2.setTextSize(1, 15.0f);
         this.emptyTextView2.setGravity(17);
-        this.emptyTextView2.setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(6.0f), AndroidUtilities.m10dp(8.0f), 0);
-        this.emptyTextView2.setLineSpacing((float) AndroidUtilities.m10dp(2.0f), 1.0f);
+        this.emptyTextView2.setPadding(AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(6.0f), AndroidUtilities.m9dp(8.0f), 0);
+        this.emptyTextView2.setLineSpacing((float) AndroidUtilities.m9dp(2.0f), 1.0f);
         addView(this.emptyTextView2, LayoutHelper.createLinear(-2, -2, 0.0f, 0.0f, 0.0f, 20.0f));
     }
 
@@ -86,7 +86,7 @@ public class DialogsEmptyCell extends LinearLayout {
         if (this.currentType == 0) {
             ArrayList<RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
             if (!arrayList.isEmpty()) {
-                totalHeight -= (((AndroidUtilities.m10dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.m10dp(50.0f);
+                totalHeight -= (((AndroidUtilities.m9dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.m9dp(50.0f);
             }
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(totalHeight, NUM));
             return;

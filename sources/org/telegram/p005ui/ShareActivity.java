@@ -3,7 +3,6 @@ package org.telegram.p005ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -25,19 +24,6 @@ import org.telegram.tgnet.TLRPC.Message;
 /* renamed from: org.telegram.ui.ShareActivity */
 public class ShareActivity extends Activity {
     private Dialog visibleDialog;
-
-    /* renamed from: org.telegram.ui.ShareActivity$1 */
-    class CLASSNAME implements OnDismissListener {
-        CLASSNAME() {
-        }
-
-        public void onDismiss(DialogInterface dialog) {
-            if (!ShareActivity.this.isFinishing()) {
-                ShareActivity.this.finish();
-            }
-            ShareActivity.this.visibleDialog = null;
-        }
-    }
 
     protected void onCreate(Bundle savedInstanceState) {
         ApplicationLoader.postInitApplication();
@@ -76,16 +62,23 @@ public class ShareActivity extends Activity {
             try {
                 this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, null, false, link, false);
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new CLASSNAME());
+                this.visibleDialog.setOnDismissListener(new ShareActivity$$Lambda$0(this));
                 this.visibleDialog.show();
                 return;
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
                 finish();
                 return;
             }
         }
         finish();
+    }
+
+    final /* synthetic */ void lambda$onCreate$0$ShareActivity(DialogInterface dialog) {
+        if (!isFinishing()) {
+            finish();
+        }
+        this.visibleDialog = null;
     }
 
     public void onPause() {
@@ -96,7 +89,7 @@ public class ShareActivity extends Activity {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 }

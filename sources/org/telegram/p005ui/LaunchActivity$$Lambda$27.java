@@ -1,21 +1,14 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
-import org.telegram.messenger.LocaleController.LocaleInfo;
-import org.telegram.p005ui.Cells.LanguageCell;
-
 /* renamed from: org.telegram.ui.LaunchActivity$$Lambda$27 */
-final /* synthetic */ class LaunchActivity$$Lambda$27 implements OnClickListener {
-    private final LocaleInfo[] arg$1;
-    private final LanguageCell[] arg$2;
+final /* synthetic */ class LaunchActivity$$Lambda$27 implements Runnable {
+    private final LaunchActivity arg$1;
 
-    LaunchActivity$$Lambda$27(LocaleInfo[] localeInfoArr, LanguageCell[] languageCellArr) {
-        this.arg$1 = localeInfoArr;
-        this.arg$2 = languageCellArr;
+    LaunchActivity$$Lambda$27(LaunchActivity launchActivity) {
+        this.arg$1 = launchActivity;
     }
 
-    public void onClick(View view) {
-        LaunchActivity.lambda$showLanguageAlertInternal$41$LaunchActivity(this.arg$1, this.arg$2, view);
+    public void run() {
+        this.arg$1.lambda$checkFreeDiscSpace$42$LaunchActivity();
     }
 }

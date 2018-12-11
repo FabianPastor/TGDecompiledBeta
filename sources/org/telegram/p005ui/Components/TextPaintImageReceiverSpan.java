@@ -1,6 +1,7 @@
 package org.telegram.p005ui.Components;
 
 import android.graphics.Canvas;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetricsInt;
 import android.text.style.ReplacementSpan;
@@ -9,49 +10,63 @@ import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.tgnet.TLRPC.Document;
-import org.telegram.tgnet.TLRPC.FileLocation;
 
 /* renamed from: org.telegram.ui.Components.TextPaintImageReceiverSpan */
 public class TextPaintImageReceiverSpan extends ReplacementSpan {
-    public static final int ALIGN_BASELINE = 1;
-    public static final int ALIGN_BOTTOM = 0;
+    private boolean alignTop;
     private int height;
     private ImageReceiver imageReceiver;
-    protected final int mVerticalAlignment = 1;
     private int width;
 
-    public TextPaintImageReceiverSpan(View parentView, Document document, int w, int h) {
-        FileLocation fileLocation;
-        String filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(w), Integer.valueOf(h)});
-        this.width = AndroidUtilities.m10dp((float) w);
-        this.height = AndroidUtilities.m10dp((float) h);
+    public TextPaintImageReceiverSpan(View parentView, Document document, Object parentObject, int w, int h, boolean top, boolean invert) {
+        String filter = String.format(Locale.US, "%d_%d_i", new Object[]{Integer.valueOf(w), Integer.valueOf(h)});
+        this.width = w;
+        this.height = h;
         this.imageReceiver = new ImageReceiver(parentView);
-        ImageReceiver imageReceiver = this.imageReceiver;
-        if (document.thumb != null) {
-            fileLocation = document.thumb.location;
-        } else {
-            fileLocation = null;
+        this.imageReceiver.setInvalidateAll(true);
+        if (invert) {
+            this.imageReceiver.setDelegate(TextPaintImageReceiverSpan$$Lambda$0.$instance);
         }
-        imageReceiver.setImage(document, filter, fileLocation, filter, -1, null, 1);
+        this.imageReceiver.setImage(document, filter, document.thumb != null ? document.thumb.location : null, filter, -1, null, parentObject, 1);
+        this.alignTop = top;
+    }
+
+    static final /* synthetic */ void lambda$new$0$TextPaintImageReceiverSpan(ImageReceiver imageReceiver, boolean set, boolean thumb) {
+        if (imageReceiver.canInvertBitmap()) {
+            imageReceiver.setColorFilter(new ColorMatrixColorFilter(new float[]{-1.0f, 0.0f, 0.0f, 0.0f, 255.0f, 0.0f, -1.0f, 0.0f, 0.0f, 255.0f, 0.0f, 0.0f, -1.0f, 0.0f, 255.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
+        }
     }
 
     public int getSize(Paint paint, CharSequence text, int start, int end, FontMetricsInt fm) {
         if (fm != null) {
-            fm.ascent = -this.height;
-            fm.descent = 0;
-            fm.top = fm.ascent;
-            fm.bottom = 0;
+            int i;
+            if (this.alignTop) {
+                int h = (fm.descent - fm.ascent) - AndroidUtilities.m9dp(4.0f);
+                i = this.height - h;
+                fm.descent = i;
+                fm.bottom = i;
+                i = 0 - h;
+                fm.ascent = i;
+                fm.top = i;
+            } else {
+                i = ((-this.height) / 2) - AndroidUtilities.m9dp(4.0f);
+                fm.ascent = i;
+                fm.top = i;
+                i = (this.height - (this.height / 2)) - AndroidUtilities.m9dp(4.0f);
+                fm.descent = i;
+                fm.bottom = i;
+            }
         }
         return this.width;
     }
 
     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
         canvas.save();
-        int transY = bottom - this.height;
-        if (this.mVerticalAlignment == 1) {
-            transY -= paint.getFontMetricsInt().descent;
+        if (this.alignTop) {
+            this.imageReceiver.setImageCoords((int) x, top - 1, this.width, this.height);
+        } else {
+            this.imageReceiver.setImageCoords((int) x, ((((bottom - AndroidUtilities.m9dp(4.0f)) - top) - this.height) / 2) + top, this.width, this.height);
         }
-        this.imageReceiver.setImageCoords((int) x, transY, this.width, this.height);
         this.imageReceiver.draw(canvas);
         canvas.restore();
     }

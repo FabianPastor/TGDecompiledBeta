@@ -8,6 +8,6 @@ final /* synthetic */ class LaunchActivity$$Lambda$19 implements Runnable {
     }
 
     public void run() {
-        LaunchActivity.lambda$onResume$31$LaunchActivity();
+        LaunchActivity.lambda$onPause$32$LaunchActivity();
     }
 }

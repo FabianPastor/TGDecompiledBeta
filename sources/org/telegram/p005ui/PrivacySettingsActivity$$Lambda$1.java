@@ -12,6 +12,6 @@ final /* synthetic */ class PrivacySettingsActivity$$Lambda$1 implements OnItemC
     }
 
     public void onItemClick(View view, int i) {
-        this.arg$1.lambda$createView$18$PrivacySettingsActivity(view, i);
+        this.arg$1.lambda$createView$17$PrivacySettingsActivity(view, i);
     }
 }

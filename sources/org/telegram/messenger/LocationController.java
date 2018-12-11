@@ -64,7 +64,7 @@ public class LocationController implements NotificationCenterDelegate {
 
         public void run() {
             LocationController locationController = LocationController.getInstance(LocationController.this.currentAccount);
-            NotificationCenter.getInstance(LocationController.this.currentAccount).addObserver(locationController, NotificationCenter.didReceivedNewMessages);
+            NotificationCenter.getInstance(LocationController.this.currentAccount).addObserver(locationController, NotificationCenter.didReceiveNewMessages);
             NotificationCenter.getInstance(LocationController.this.currentAccount).addObserver(locationController, NotificationCenter.messagesDeleted);
             NotificationCenter.getInstance(LocationController.this.currentAccount).addObserver(locationController, NotificationCenter.replaceMessagesObjects);
         }
@@ -130,7 +130,7 @@ public class LocationController implements NotificationCenterDelegate {
                     MessagesStorage.getInstance(LocationController.this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
                 }
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             if (!result.isEmpty()) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -303,7 +303,7 @@ public class LocationController implements NotificationCenterDelegate {
         int a;
         MessageObject messageObject;
         int b;
-        if (id == NotificationCenter.didReceivedNewMessages) {
+        if (id == NotificationCenter.didReceiveNewMessages) {
             did = ((Long) args[0]).longValue();
             if (isSharingLocation(did)) {
                 messages = (ArrayList) this.locationsCache.get(did);
@@ -571,7 +571,7 @@ public class LocationController implements NotificationCenterDelegate {
                         data.reuse();
                     }
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
         });
@@ -625,7 +625,7 @@ public class LocationController implements NotificationCenterDelegate {
         try {
             ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, LocationSharingService.class));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -658,17 +658,17 @@ public class LocationController implements NotificationCenterDelegate {
             try {
                 this.locationManager.requestLocationUpdates("gps", 1, 0.0f, this.gpsLocationListener);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             try {
                 this.locationManager.requestLocationUpdates("network", 1, 0.0f, this.networkLocationListener);
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
             }
             try {
                 this.locationManager.requestLocationUpdates("passive", 1, 0.0f, this.passiveLocationListener);
             } catch (Throwable e22) {
-                FileLog.m14e(e22);
+                FileLog.m13e(e22);
             }
             if (this.lastKnownLocation == null) {
                 try {
@@ -677,7 +677,7 @@ public class LocationController implements NotificationCenterDelegate {
                         this.lastKnownLocation = this.locationManager.getLastKnownLocation("network");
                     }
                 } catch (Throwable e222) {
-                    FileLog.m14e(e222);
+                    FileLog.m13e(e222);
                 }
             }
         }

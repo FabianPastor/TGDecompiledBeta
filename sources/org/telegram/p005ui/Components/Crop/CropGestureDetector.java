@@ -19,7 +19,7 @@ public class CropGestureDetector {
     float mLastTouchY;
     private CropGestureListener mListener;
     final float mMinimumVelocity;
-    final float mTouchSlop = ((float) AndroidUtilities.m10dp(1.0f));
+    final float mTouchSlop = ((float) AndroidUtilities.m9dp(1.0f));
     private VelocityTracker mVelocityTracker;
     private boolean started;
 

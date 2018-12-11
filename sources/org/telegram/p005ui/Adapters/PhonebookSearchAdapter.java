@@ -40,7 +40,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                 this.searchTimer.cancel();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         if (query == null) {
             this.searchResult.clear();
@@ -55,7 +55,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                     PhonebookSearchAdapter.this.searchTimer.cancel();
                     PhonebookSearchAdapter.this.searchTimer = null;
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 PhonebookSearchAdapter.this.processSearch(query);
             }

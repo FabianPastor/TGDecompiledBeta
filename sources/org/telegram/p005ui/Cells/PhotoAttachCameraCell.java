@@ -28,7 +28,7 @@ public class PhotoAttachCameraCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(86.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(80.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(86.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(80.0f), NUM));
     }
 
     public ImageView getImageView() {

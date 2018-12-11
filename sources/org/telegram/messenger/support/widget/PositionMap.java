@@ -107,7 +107,7 @@ class PositionMap<E> implements Cloneable {
     }
 
     /* renamed from: gc */
-    private void m19gc() {
+    private void m20gc() {
         int n = this.mSize;
         int o = 0;
         int[] keys = this.mKeys;
@@ -136,7 +136,7 @@ class PositionMap<E> implements Cloneable {
         i ^= -1;
         if (i >= this.mSize || this.mValues[i] != DELETED) {
             if (this.mGarbage && this.mSize >= this.mKeys.length) {
-                m19gc();
+                m20gc();
                 i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key) ^ -1;
             }
             if (this.mSize >= this.mKeys.length) {
@@ -163,42 +163,42 @@ class PositionMap<E> implements Cloneable {
 
     public int size() {
         if (this.mGarbage) {
-            m19gc();
+            m20gc();
         }
         return this.mSize;
     }
 
     public int keyAt(int index) {
         if (this.mGarbage) {
-            m19gc();
+            m20gc();
         }
         return this.mKeys[index];
     }
 
     public E valueAt(int index) {
         if (this.mGarbage) {
-            m19gc();
+            m20gc();
         }
         return this.mValues[index];
     }
 
     public void setValueAt(int index, E value) {
         if (this.mGarbage) {
-            m19gc();
+            m20gc();
         }
         this.mValues[index] = value;
     }
 
     public int indexOfKey(int key) {
         if (this.mGarbage) {
-            m19gc();
+            m20gc();
         }
         return ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
     }
 
     public int indexOfValue(E value) {
         if (this.mGarbage) {
-            m19gc();
+            m20gc();
         }
         for (int i = 0; i < this.mSize; i++) {
             if (this.mValues[i] == value) {
@@ -221,7 +221,7 @@ class PositionMap<E> implements Cloneable {
     public void append(int key, E value) {
         if (this.mSize == 0 || key > this.mKeys[this.mSize - 1]) {
             if (this.mGarbage && this.mSize >= this.mKeys.length) {
-                m19gc();
+                m20gc();
             }
             int pos = this.mSize;
             if (pos >= this.mKeys.length) {

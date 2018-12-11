@@ -13,6 +13,6 @@ final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$Lambda$4 im
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$new$7$LoginActivity$LoginActivityRegisterView(view);
+        this.arg$1.lambda$new$6$LoginActivity$LoginActivityRegisterView(view);
     }
 }

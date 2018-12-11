@@ -6,25 +6,24 @@ import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.p005ui.ActionBar.Theme;
+import org.telegram.p005ui.Components.EditTextBoldCursor;
 import org.telegram.p005ui.Components.LayoutHelper;
 
 /* renamed from: org.telegram.ui.Cells.EditTextSettingsCell */
 public class EditTextSettingsCell extends FrameLayout {
     private boolean needDivider;
-    private EditText textView;
+    private EditTextBoldCursor textView;
 
     public EditTextSettingsCell(Context context) {
         int i = 3;
         super(context);
-        this.textView = new EditText(context);
+        this.textView = new EditTextBoldCursor(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.textView.setTextSize(1, 16.0f);
@@ -40,18 +39,24 @@ public class EditTextSettingsCell extends FrameLayout {
         if (LocaleController.isRTL) {
             i = 5;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m10dp(48.0f));
-        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m10dp(34.0f);
-        int i = availableWidth / 2;
-        this.textView.measure(MeasureSpec.makeMeasureSpec(availableWidth, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f));
+        this.textView.measure(MeasureSpec.makeMeasureSpec(((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m9dp(34.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
-    public TextView getTextView() {
+    public EditTextBoldCursor getTextView() {
         return this.textView;
+    }
+
+    public String getText() {
+        return this.textView.getText().toString();
+    }
+
+    public int length() {
+        return this.textView.length();
     }
 
     public void setTextColor(int color) {
@@ -77,7 +82,7 @@ public class EditTextSettingsCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

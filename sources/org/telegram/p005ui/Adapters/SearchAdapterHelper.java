@@ -54,6 +54,8 @@ public class SearchAdapterHelper {
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$SearchAdapterHelperDelegate */
     public interface SearchAdapterHelperDelegate {
+        SparseArray<User> getExcludeUsers();
+
         void onDataSetChanged();
 
         void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
@@ -271,6 +273,7 @@ public class SearchAdapterHelper {
             if (this.localSearchResults != null) {
                 mergeResults(this.localSearchResults);
             }
+            mergeExcluteResults();
             this.delegate.onDataSetChanged();
         }
         this.reqId = 0;
@@ -304,7 +307,7 @@ public class SearchAdapterHelper {
             Collections.sort(arrayList, SearchAdapterHelper$$Lambda$6.$instance);
             AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$7(this, arrayList, hashMap));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -337,6 +340,23 @@ public class SearchAdapterHelper {
                         this.globalSearch.remove(c);
                         this.localServerSearch.remove(c);
                         this.globalSearchMap.remove(-c.var_id);
+                    }
+                }
+            }
+        }
+    }
+
+    public void mergeExcluteResults() {
+        if (this.delegate != null) {
+            SparseArray<User> ignoreUsers = this.delegate.getExcludeUsers();
+            if (ignoreUsers != null) {
+                int size = ignoreUsers.size();
+                for (int a = 0; a < size; a++) {
+                    User u = (User) this.globalSearchMap.get(ignoreUsers.keyAt(a));
+                    if (u != null) {
+                        this.globalSearch.remove(u);
+                        this.localServerSearch.remove(u);
+                        this.globalSearchMap.remove(u.var_id);
                     }
                 }
             }
@@ -407,7 +427,7 @@ public class SearchAdapterHelper {
                 MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 
@@ -453,7 +473,7 @@ public class SearchAdapterHelper {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
     }
 

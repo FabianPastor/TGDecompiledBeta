@@ -57,7 +57,7 @@ public class CallSwipeView extends View {
         public void onAnimationEnd(Animator animation) {
             if (System.currentTimeMillis() - this.startTime < animation.getDuration() / 4) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m15w("Not repeating animation because previous loop was too fast");
+                    FileLog.m14w("Not repeating animation because previous loop was too fast");
                 }
             } else if (!CallSwipeView.this.canceled && CallSwipeView.this.animatingArrows) {
                 CallSwipeView.this.post(this.restarter);
@@ -108,7 +108,7 @@ public class CallSwipeView extends View {
         this.arrowsPaint = new Paint(1);
         this.arrowsPaint.setColor(-1);
         this.arrowsPaint.setStyle(Style.STROKE);
-        this.arrowsPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.5f));
+        this.arrowsPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.5f));
         this.pullBgPaint = new Paint(1);
         ArrayList<Animator> anims = new ArrayList();
         for (int i = 0; i < this.arrowAlphas.length; i++) {
@@ -225,16 +225,16 @@ public class CallSwipeView extends View {
         }
         canvas.save();
         if (this.dragFromRight) {
-            canvas.translate((float) ((getWidth() - getHeight()) - AndroidUtilities.m10dp(18.0f)), (float) (getHeight() / 2));
+            canvas.translate((float) ((getWidth() - getHeight()) - AndroidUtilities.m9dp(18.0f)), (float) (getHeight() / 2));
         } else {
-            canvas.translate((float) (getHeight() + AndroidUtilities.m10dp(12.0f)), (float) (getHeight() / 2));
+            canvas.translate((float) (getHeight() + AndroidUtilities.m9dp(12.0f)), (float) (getHeight() / 2));
         }
         float offsetX = Math.abs(this.viewToDrag.getTranslationX());
         for (int i = 0; i < 3; i++) {
             float f;
             float masterAlpha = 1.0f;
-            if (offsetX > ((float) AndroidUtilities.m10dp((float) (i * 16)))) {
-                masterAlpha = 1.0f - Math.min(1.0f, Math.max(0.0f, (offsetX - ((float) (AndroidUtilities.m10dp(16.0f) * i))) / ((float) AndroidUtilities.m10dp(16.0f))));
+            if (offsetX > ((float) AndroidUtilities.m9dp((float) (i * 16)))) {
+                masterAlpha = 1.0f - Math.min(1.0f, Math.max(0.0f, (offsetX - ((float) (AndroidUtilities.m9dp(16.0f) * i))) / ((float) AndroidUtilities.m9dp(16.0f))));
             }
             this.arrowsPaint.setAlpha(Math.round(((float) this.arrowAlphas[i]) * masterAlpha));
             canvas.drawPath(this.arrow, this.arrowsPaint);
@@ -243,7 +243,7 @@ public class CallSwipeView extends View {
             } else {
                 f = 16.0f;
             }
-            canvas.translate((float) AndroidUtilities.m10dp(f), 0.0f);
+            canvas.translate((float) AndroidUtilities.m9dp(f), 0.0f);
         }
         canvas.restore();
         invalidate();
@@ -251,7 +251,7 @@ public class CallSwipeView extends View {
 
     private void updateArrowPath() {
         this.arrow.reset();
-        int size = AndroidUtilities.m10dp(6.0f);
+        int size = AndroidUtilities.m9dp(6.0f);
         if (this.dragFromRight) {
             this.arrow.moveTo((float) size, (float) (-size));
             this.arrow.lineTo(0.0f, 0.0f);

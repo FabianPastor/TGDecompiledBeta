@@ -72,7 +72,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
 
         @TargetApi(21)
         public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m10dp(120.0f), AndroidUtilities.m10dp(120.0f));
+            outline.setOval(0, 0, AndroidUtilities.m9dp(120.0f), AndroidUtilities.m9dp(120.0f));
         }
     }
 
@@ -174,7 +174,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                                 if (MediaController.getInstance().isMessagePaused()) {
                                     MediaController.getInstance().playMessage(messageObject);
                                 } else {
-                                    MediaController.getInstance().pauseMessage(messageObject);
+                                    MediaController.getInstance().lambda$startAudioAgain$6$MediaController(messageObject);
                                 }
                             }
                         }
@@ -188,14 +188,16 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                 protected void onDraw(Canvas canvas) {
                     if (Theme.chat_roundVideoShadow != null) {
                         Theme.chat_roundVideoShadow.setAlpha((int) (getAlpha() * 255.0f));
-                        Theme.chat_roundVideoShadow.setBounds(AndroidUtilities.m10dp(1.0f), AndroidUtilities.m10dp(2.0f), AndroidUtilities.m10dp(125.0f), AndroidUtilities.m10dp(125.0f));
+                        Theme.chat_roundVideoShadow.setBounds(AndroidUtilities.m9dp(1.0f), AndroidUtilities.m9dp(2.0f), AndroidUtilities.m9dp(125.0f), AndroidUtilities.m9dp(125.0f));
                         Theme.chat_roundVideoShadow.draw(canvas);
+                        Theme.chat_docBackPaint.setColor(Theme.getColor(Theme.key_chat_inBubble));
+                        canvas.drawCircle((float) AndroidUtilities.m9dp(63.0f), (float) AndroidUtilities.m9dp(63.0f), (float) AndroidUtilities.m9dp(59.5f), Theme.chat_docBackPaint);
                     }
                 }
             };
             this.windowView.setWillNotDraw(false);
-            this.videoWidth = AndroidUtilities.m10dp(126.0f);
-            this.videoHeight = AndroidUtilities.m10dp(126.0f);
+            this.videoWidth = AndroidUtilities.m9dp(126.0f);
+            this.videoHeight = AndroidUtilities.m9dp(126.0f);
             if (VERSION.SDK_INT >= 21) {
                 this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
                     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
@@ -282,7 +284,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
                 runShowHideAnimation(true);
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
         }
     }
@@ -296,11 +298,11 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             total = (AndroidUtilities.displaySize.y - sideSize) - CLASSNAMEActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
-            result = AndroidUtilities.m10dp(10.0f);
+            result = AndroidUtilities.m9dp(10.0f);
         } else if (side == 1) {
-            result = total - AndroidUtilities.m10dp(10.0f);
+            result = total - AndroidUtilities.m9dp(10.0f);
         } else {
-            result = Math.round(((float) (total - AndroidUtilities.m10dp(20.0f))) * p) + AndroidUtilities.m10dp(10.0f);
+            result = Math.round(((float) (total - AndroidUtilities.m9dp(20.0f))) * p) + AndroidUtilities.m9dp(10.0f);
         }
         if (isX) {
             return result;
@@ -469,7 +471,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         int endY = PipRoundVideoView.getSideCoord(false, 1, 0.0f, this.videoHeight);
         ArrayList<Animator> animators = null;
         Editor editor = this.preferences.edit();
-        int maxDiff = AndroidUtilities.m10dp(20.0f);
+        int maxDiff = AndroidUtilities.m9dp(20.0f);
         boolean slideOut = false;
         if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.videoWidth) / 4)) {
             if (null == null) {

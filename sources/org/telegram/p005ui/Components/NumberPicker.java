@@ -83,11 +83,6 @@ public class NumberPicker extends LinearLayout {
     private VelocityTracker mVelocityTracker;
     private boolean mWrapSelectorWheel;
 
-    /* renamed from: org.telegram.ui.Components.NumberPicker$Formatter */
-    public interface Formatter {
-        String format(int i);
-    }
-
     /* renamed from: org.telegram.ui.Components.NumberPicker$OnScrollListener */
     public interface OnScrollListener {
         public static final int SCROLL_STATE_FLING = 2;
@@ -95,6 +90,11 @@ public class NumberPicker extends LinearLayout {
         public static final int SCROLL_STATE_TOUCH_SCROLL = 1;
 
         void onScrollStateChange(NumberPicker numberPicker, int i);
+    }
+
+    /* renamed from: org.telegram.ui.Components.NumberPicker$Formatter */
+    public interface Formatter {
+        String format(int i);
     }
 
     /* renamed from: org.telegram.ui.Components.NumberPicker$OnValueChangeListener */

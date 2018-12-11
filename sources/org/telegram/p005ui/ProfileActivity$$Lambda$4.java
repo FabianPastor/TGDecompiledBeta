@@ -1,18 +1,17 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.ProfileActivity$$Lambda$4 */
-final /* synthetic */ class ProfileActivity$$Lambda$4 implements RequestDelegate {
+final /* synthetic */ class ProfileActivity$$Lambda$4 implements OnClickListener {
     private final ProfileActivity arg$1;
 
     ProfileActivity$$Lambda$4(ProfileActivity profileActivity) {
         this.arg$1 = profileActivity;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$createView$10$ProfileActivity(tLObject, tL_error);
+    public void onClick(View view) {
+        this.arg$1.lambda$createView$11$ProfileActivity(view);
     }
 }

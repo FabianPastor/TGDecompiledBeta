@@ -135,19 +135,19 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int itemWidth;
         if (AndroidUtilities.isTablet()) {
-            itemWidth = (AndroidUtilities.m10dp(490.0f) - ((this.albumsCount + 1) * AndroidUtilities.m10dp(4.0f))) / this.albumsCount;
+            itemWidth = (AndroidUtilities.m9dp(490.0f) - ((this.albumsCount + 1) * AndroidUtilities.m9dp(4.0f))) / this.albumsCount;
         } else {
-            itemWidth = (AndroidUtilities.displaySize.x - ((this.albumsCount + 1) * AndroidUtilities.m10dp(4.0f))) / this.albumsCount;
+            itemWidth = (AndroidUtilities.displaySize.x - ((this.albumsCount + 1) * AndroidUtilities.m9dp(4.0f))) / this.albumsCount;
         }
         for (int a = 0; a < this.albumsCount; a++) {
             LayoutParams layoutParams = (LayoutParams) this.albumViews[a].getLayoutParams();
-            layoutParams.topMargin = AndroidUtilities.m10dp(4.0f);
-            layoutParams.leftMargin = (AndroidUtilities.m10dp(4.0f) + itemWidth) * a;
+            layoutParams.topMargin = AndroidUtilities.m9dp(4.0f);
+            layoutParams.leftMargin = (AndroidUtilities.m9dp(4.0f) + itemWidth) * a;
             layoutParams.width = itemWidth;
             layoutParams.height = itemWidth;
             layoutParams.gravity = 51;
             this.albumViews[a].setLayoutParams(layoutParams);
         }
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(4.0f) + itemWidth, NUM));
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(4.0f) + itemWidth, NUM));
     }
 }

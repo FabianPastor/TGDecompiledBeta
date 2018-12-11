@@ -1,17 +1,17 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.PrivacySettingsActivity$$Lambda$12 */
-final /* synthetic */ class PrivacySettingsActivity$$Lambda$12 implements OnClickListener {
-    private final PrivacySettingsActivity arg$1;
+final /* synthetic */ class PrivacySettingsActivity$$Lambda$12 implements RequestDelegate {
+    static final RequestDelegate $instance = new PrivacySettingsActivity$$Lambda$12();
 
-    PrivacySettingsActivity$$Lambda$12(PrivacySettingsActivity privacySettingsActivity) {
-        this.arg$1 = privacySettingsActivity;
+    private PrivacySettingsActivity$$Lambda$12() {
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$16$PrivacySettingsActivity(dialogInterface, i);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        PrivacySettingsActivity.lambda$null$14$PrivacySettingsActivity(tLObject, tL_error);
     }
 }

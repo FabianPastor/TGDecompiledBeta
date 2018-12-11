@@ -1,14 +1,16 @@
 package org.telegram.p005ui;
 
+import org.telegram.p005ui.ActionBar.AlertDialog;
+
 /* renamed from: org.telegram.ui.SettingsActivity$$Lambda$8 */
 final /* synthetic */ class SettingsActivity$$Lambda$8 implements Runnable {
-    private final SettingsActivity arg$1;
+    private final AlertDialog arg$1;
 
-    SettingsActivity$$Lambda$8(SettingsActivity settingsActivity) {
-        this.arg$1 = settingsActivity;
+    SettingsActivity$$Lambda$8(AlertDialog alertDialog) {
+        this.arg$1 = alertDialog;
     }
 
     public void run() {
-        this.arg$1.lambda$null$0$SettingsActivity();
+        SettingsActivity.lambda$null$11$SettingsActivity(this.arg$1);
     }
 }

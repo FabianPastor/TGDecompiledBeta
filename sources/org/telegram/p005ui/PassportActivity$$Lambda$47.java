@@ -1,20 +1,22 @@
 package org.telegram.p005ui;
 
-import org.telegram.messenger.SecureDocument;
+import java.util.ArrayList;
 
 /* renamed from: org.telegram.ui.PassportActivity$$Lambda$47 */
 final /* synthetic */ class PassportActivity$$Lambda$47 implements Runnable {
     private final PassportActivity arg$1;
-    private final SecureDocument arg$2;
+    private final ArrayList arg$2;
     private final int arg$3;
+    private final boolean arg$4;
 
-    PassportActivity$$Lambda$47(PassportActivity passportActivity, SecureDocument secureDocument, int i) {
+    PassportActivity$$Lambda$47(PassportActivity passportActivity, ArrayList arrayList, int i, boolean z) {
         this.arg$1 = passportActivity;
-        this.arg$2 = secureDocument;
+        this.arg$2 = arrayList;
         this.arg$3 = i;
+        this.arg$4 = z;
     }
 
     public void run() {
-        this.arg$1.lambda$null$70$PassportActivity(this.arg$2, this.arg$3);
+        this.arg$1.lambda$processSelectedFiles$73$PassportActivity(this.arg$2, this.arg$3, this.arg$4);
     }
 }

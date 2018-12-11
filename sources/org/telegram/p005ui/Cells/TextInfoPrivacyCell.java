@@ -16,35 +16,29 @@ import org.telegram.p005ui.Components.LayoutHelper;
 
 /* renamed from: org.telegram.ui.Cells.TextInfoPrivacyCell */
 public class TextInfoPrivacyCell extends FrameLayout {
-    private String linkTextColorKey = Theme.key_windowBackgroundWhiteLinkText;
+    private String linkTextColorKey;
     private TextView textView;
 
     public TextInfoPrivacyCell(Context context) {
-        int i;
-        int i2 = 5;
-        super(context);
-        this.textView = new TextView(context);
-        this.textView.setTextSize(1, 14.0f);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        textView.setGravity(i);
-        this.textView.setPadding(0, AndroidUtilities.m10dp(10.0f), 0, AndroidUtilities.m10dp(17.0f));
-        this.textView.setMovementMethod(LinkMovementMethod.getInstance());
-        View view = this.textView;
-        if (!LocaleController.isRTL) {
-            i2 = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        this(context, 21);
     }
 
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
+    public TextInfoPrivacyCell(Context context, int padding) {
+        int i = 5;
+        super(context);
+        this.linkTextColorKey = Theme.key_windowBackgroundWhiteLinkText;
+        this.textView = new TextView(context);
+        this.textView.setTextSize(1, 14.0f);
+        this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.textView.setPadding(0, AndroidUtilities.m9dp(10.0f), 0, AndroidUtilities.m9dp(17.0f));
+        this.textView.setMovementMethod(LinkMovementMethod.getInstance());
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
         this.textView.setLinkTextColor(Theme.getColor(this.linkTextColorKey));
+        View view = this.textView;
+        if (!LocaleController.isRTL) {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -2.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
     }
 
     public void setLinkTextColorKey(String key) {
@@ -57,9 +51,9 @@ public class TextInfoPrivacyCell extends FrameLayout {
 
     public void setText(CharSequence text) {
         if (text == null) {
-            this.textView.setPadding(0, AndroidUtilities.m10dp(2.0f), 0, 0);
+            this.textView.setPadding(0, AndroidUtilities.m9dp(2.0f), 0, 0);
         } else {
-            this.textView.setPadding(0, AndroidUtilities.m10dp(10.0f), 0, AndroidUtilities.m10dp(17.0f));
+            this.textView.setPadding(0, AndroidUtilities.m9dp(10.0f), 0, AndroidUtilities.m9dp(17.0f));
         }
         this.textView.setText(text);
     }

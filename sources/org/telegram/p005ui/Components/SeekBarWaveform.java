@@ -124,7 +124,7 @@ public class SeekBarWaveform {
 
     public void draw(Canvas canvas) {
         if (this.waveformBytes != null && this.width != 0) {
-            float totalBarsCount = (float) (this.width / AndroidUtilities.m10dp(3.0f));
+            float totalBarsCount = (float) (this.width / AndroidUtilities.m9dp(3.0f));
             if (totalBarsCount > 0.1f) {
                 int samplesCount = (this.waveformBytes.length * 8) / 5;
                 float samplesPerBar = ((float) samplesCount) / totalBarsCount;
@@ -134,7 +134,7 @@ public class SeekBarWaveform {
                 int i = (this.messageObject == null || this.messageObject.isOutOwner() || !this.messageObject.isContentUnread()) ? this.selected ? this.selectedColor : this.innerColor : this.outerColor;
                 paint.setColor(i);
                 paintOuter.setColor(this.outerColor);
-                int y = (this.height - AndroidUtilities.m10dp(14.0f)) / 2;
+                int y = (this.height - AndroidUtilities.m9dp(14.0f)) / 2;
                 int barNum = 0;
                 for (int a = 0; a < samplesCount; a++) {
                     if (a == nextBarNum) {
@@ -155,14 +155,14 @@ public class SeekBarWaveform {
                             value = (byte) ((this.waveformBytes[byteNum + 1] & ((2 << (nextByteRest - 1)) - 1)) | ((byte) (value << nextByteRest)));
                         }
                         for (int b = 0; b < drawBarCount; b++) {
-                            int x = barNum * AndroidUtilities.m10dp(3.0f);
-                            if (x >= this.thumbX || AndroidUtilities.m10dp(2.0f) + x >= this.thumbX) {
-                                canvas.drawRect((float) x, (float) (AndroidUtilities.m10dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) (AndroidUtilities.m10dp(2.0f) + x), (float) (AndroidUtilities.m10dp(14.0f) + y), paintInner);
+                            int x = barNum * AndroidUtilities.m9dp(3.0f);
+                            if (x >= this.thumbX || AndroidUtilities.m9dp(2.0f) + x >= this.thumbX) {
+                                canvas.drawRect((float) x, (float) (AndroidUtilities.m9dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) (AndroidUtilities.m9dp(2.0f) + x), (float) (AndroidUtilities.m9dp(14.0f) + y), paintInner);
                                 if (x < this.thumbX) {
-                                    canvas.drawRect((float) x, (float) (AndroidUtilities.m10dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) this.thumbX, (float) (AndroidUtilities.m10dp(14.0f) + y), paintOuter);
+                                    canvas.drawRect((float) x, (float) (AndroidUtilities.m9dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) this.thumbX, (float) (AndroidUtilities.m9dp(14.0f) + y), paintOuter);
                                 }
                             } else {
-                                canvas.drawRect((float) x, (float) (AndroidUtilities.m10dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) (AndroidUtilities.m10dp(2.0f) + x), (float) (AndroidUtilities.m10dp(14.0f) + y), paintOuter);
+                                canvas.drawRect((float) x, (float) (AndroidUtilities.m9dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) (AndroidUtilities.m9dp(2.0f) + x), (float) (AndroidUtilities.m9dp(14.0f) + y), paintOuter);
                             }
                             barNum++;
                         }

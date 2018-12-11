@@ -1,21 +1,21 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 final /* synthetic */ class MessagesStorage$$Lambda$70 implements Runnable {
     private final MessagesStorage arg$1;
-    private final ArrayList arg$2;
-    private final ArrayList arg$3;
-    private final boolean arg$4;
+    private final long arg$2;
+    private final boolean[] arg$3;
+    private final CountDownLatch arg$4;
 
-    MessagesStorage$$Lambda$70(MessagesStorage messagesStorage, ArrayList arrayList, ArrayList arrayList2, boolean z) {
+    MessagesStorage$$Lambda$70(MessagesStorage messagesStorage, long j, boolean[] zArr, CountDownLatch countDownLatch) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = arrayList;
-        this.arg$3 = arrayList2;
-        this.arg$4 = z;
+        this.arg$2 = j;
+        this.arg$3 = zArr;
+        this.arg$4 = countDownLatch;
     }
 
     public void run() {
-        this.arg$1.lambda$putUsersAndChats$94$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$isDialogHasMessages$95$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

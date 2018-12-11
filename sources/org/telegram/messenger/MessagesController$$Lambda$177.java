@@ -1,29 +1,19 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.updates_ChannelDifference;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class MessagesController$$Lambda$177 implements Runnable {
     private final MessagesController arg$1;
-    private final updates_ChannelDifference arg$2;
+    private final TL_error arg$2;
     private final int arg$3;
-    private final Chat arg$4;
-    private final SparseArray arg$5;
-    private final int arg$6;
-    private final long arg$7;
 
-    MessagesController$$Lambda$177(MessagesController messagesController, updates_ChannelDifference updates_channeldifference, int i, Chat chat, SparseArray sparseArray, int i2, long j) {
+    MessagesController$$Lambda$177(MessagesController messagesController, TL_error tL_error, int i) {
         this.arg$1 = messagesController;
-        this.arg$2 = updates_channeldifference;
+        this.arg$2 = tL_error;
         this.arg$3 = i;
-        this.arg$4 = chat;
-        this.arg$5 = sparseArray;
-        this.arg$6 = i2;
-        this.arg$7 = j;
     }
 
     public void run() {
-        this.arg$1.lambda$null$184$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
+        this.arg$1.lambda$null$187$MessagesController(this.arg$2, this.arg$3);
     }
 }

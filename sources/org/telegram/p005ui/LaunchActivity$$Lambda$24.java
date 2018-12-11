@@ -20,6 +20,6 @@ final /* synthetic */ class LaunchActivity$$Lambda$24 implements OnClickListener
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        ContactsController.getInstance(this.arg$1).syncPhoneBookByAlert(this.arg$2, this.arg$3, this.arg$4, true);
+        ContactsController.getInstance(this.arg$1).syncPhoneBookByAlert(this.arg$2, this.arg$3, this.arg$4, false);
     }
 }

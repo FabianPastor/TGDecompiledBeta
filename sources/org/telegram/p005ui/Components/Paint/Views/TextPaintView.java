@@ -56,8 +56,8 @@ public class TextPaintView extends EntityView {
         }
 
         protected int pointInsideHandle(float x, float y) {
-            float radius = (float) AndroidUtilities.m10dp(19.5f);
-            float inset = radius + ((float) AndroidUtilities.m10dp(1.0f));
+            float radius = (float) AndroidUtilities.m9dp(19.5f);
+            float inset = radius + ((float) AndroidUtilities.m9dp(1.0f));
             float width = ((float) getWidth()) - (inset * 2.0f);
             float height = ((float) getHeight()) - (inset * 2.0f);
             float middle = inset + (height / 2.0f);
@@ -76,11 +76,11 @@ public class TextPaintView extends EntityView {
         protected void onDraw(Canvas canvas) {
             int i;
             super.onDraw(canvas);
-            float space = (float) AndroidUtilities.m10dp(3.0f);
-            float length = (float) AndroidUtilities.m10dp(3.0f);
-            float thickness = (float) AndroidUtilities.m10dp(1.0f);
-            float radius = (float) AndroidUtilities.m10dp(4.5f);
-            float inset = (radius + thickness) + ((float) AndroidUtilities.m10dp(15.0f));
+            float space = (float) AndroidUtilities.m9dp(3.0f);
+            float length = (float) AndroidUtilities.m9dp(3.0f);
+            float thickness = (float) AndroidUtilities.m9dp(1.0f);
+            float radius = (float) AndroidUtilities.m9dp(4.5f);
+            float inset = (radius + thickness) + ((float) AndroidUtilities.m9dp(15.0f));
             float width = ((float) getWidth()) - (2.0f * inset);
             float height = ((float) getHeight()) - (2.0f * inset);
             int xCount = (int) Math.floor((double) (width / (space + length)));
@@ -109,7 +109,7 @@ public class TextPaintView extends EntityView {
         this.baseFontSize = fontSize;
         this.editText = new EditTextOutline(context);
         this.editText.setBackgroundColor(0);
-        this.editText.setPadding(AndroidUtilities.m10dp(7.0f), AndroidUtilities.m10dp(7.0f), AndroidUtilities.m10dp(7.0f), AndroidUtilities.m10dp(7.0f));
+        this.editText.setPadding(AndroidUtilities.m9dp(7.0f), AndroidUtilities.m9dp(7.0f), AndroidUtilities.m9dp(7.0f), AndroidUtilities.m9dp(7.0f));
         this.editText.setClickable(false);
         this.editText.setEnabled(false);
         this.editText.setTextSize(0, (float) this.baseFontSize);
@@ -200,8 +200,8 @@ public class TextPaintView extends EntityView {
 
     protected Rect getSelectionBounds() {
         float scale = ((ViewGroup) getParent()).getScaleX();
-        float width = (((float) getWidth()) * getScale()) + (((float) AndroidUtilities.m10dp(46.0f)) / scale);
-        float height = (((float) getHeight()) * getScale()) + (((float) AndroidUtilities.m10dp(20.0f)) / scale);
+        float width = (((float) getWidth()) * getScale()) + (((float) AndroidUtilities.m9dp(46.0f)) / scale);
+        float height = (((float) getHeight()) * getScale()) + (((float) AndroidUtilities.m9dp(20.0f)) / scale);
         return new Rect((this.position.var_x - (width / 2.0f)) * scale, (this.position.var_y - (height / 2.0f)) * scale, width * scale, height * scale);
     }
 

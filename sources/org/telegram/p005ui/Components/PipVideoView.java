@@ -271,14 +271,14 @@ public class PipVideoView {
         protected void onDraw(Canvas canvas) {
             int width = getMeasuredWidth();
             int height = getMeasuredHeight();
-            int progressLineY = height - AndroidUtilities.m10dp(3.0f);
-            int cy = height - AndroidUtilities.m10dp(7.0f);
+            int progressLineY = height - AndroidUtilities.m9dp(3.0f);
+            int cy = height - AndroidUtilities.m9dp(7.0f);
             int progressX = 0 + ((int) (((float) (width - 0)) * this.progress));
             if (this.bufferedPosition != 0.0f) {
                 Canvas canvas2 = canvas;
-                canvas2.drawRect((float) null, (float) progressLineY, (((float) (width - 0)) * this.bufferedPosition) + ((float) null), (float) (AndroidUtilities.m10dp(3.0f) + progressLineY), this.progressInnerPaint);
+                canvas2.drawRect((float) null, (float) progressLineY, (((float) (width - 0)) * this.bufferedPosition) + ((float) null), (float) (AndroidUtilities.m9dp(3.0f) + progressLineY), this.progressInnerPaint);
             }
-            canvas.drawRect((float) null, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.m10dp(3.0f) + progressLineY), this.progressPaint);
+            canvas.drawRect((float) null, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.m9dp(3.0f) + progressLineY), this.progressPaint);
         }
     }
 
@@ -366,10 +366,10 @@ public class PipVideoView {
             }
         };
         if (aspectRatio > 1.0f) {
-            this.videoWidth = AndroidUtilities.m10dp(192.0f);
+            this.videoWidth = AndroidUtilities.m9dp(192.0f);
             this.videoHeight = (int) (((float) this.videoWidth) / aspectRatio);
         } else {
-            this.videoHeight = AndroidUtilities.m10dp(192.0f);
+            this.videoHeight = AndroidUtilities.m9dp(192.0f);
             this.videoWidth = (int) (((float) this.videoHeight) * aspectRatio);
         }
         AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
@@ -415,7 +415,7 @@ public class PipVideoView {
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             return textureView;
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return null;
         }
     }
@@ -455,11 +455,11 @@ public class PipVideoView {
             total = (AndroidUtilities.displaySize.y - sideSize) - CLASSNAMEActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
-            result = AndroidUtilities.m10dp(10.0f);
+            result = AndroidUtilities.m9dp(10.0f);
         } else if (side == 1) {
-            result = total - AndroidUtilities.m10dp(10.0f);
+            result = total - AndroidUtilities.m9dp(10.0f);
         } else {
-            result = Math.round(((float) (total - AndroidUtilities.m10dp(20.0f))) * p) + AndroidUtilities.m10dp(10.0f);
+            result = Math.round(((float) (total - AndroidUtilities.m9dp(20.0f))) * p) + AndroidUtilities.m9dp(10.0f);
         }
         if (isX) {
             return result;
@@ -494,7 +494,7 @@ public class PipVideoView {
         int endY = PipVideoView.getSideCoord(false, 1, 0.0f, this.videoHeight);
         ArrayList<Animator> animators = null;
         Editor editor = this.preferences.edit();
-        int maxDiff = AndroidUtilities.m10dp(20.0f);
+        int maxDiff = AndroidUtilities.m9dp(20.0f);
         boolean slideOut = false;
         if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.videoWidth) / 4)) {
             if (null == null) {
@@ -572,10 +572,10 @@ public class PipVideoView {
         float px = preferences.getFloat("px", 0.0f);
         float py = preferences.getFloat("py", 0.0f);
         if (aspectRatio > 1.0f) {
-            videoWidth = AndroidUtilities.m10dp(192.0f);
+            videoWidth = AndroidUtilities.m9dp(192.0f);
             videoHeight = (int) (((float) videoWidth) / aspectRatio);
         } else {
-            videoHeight = AndroidUtilities.m10dp(192.0f);
+            videoHeight = AndroidUtilities.m9dp(192.0f);
             videoWidth = (int) (((float) videoHeight) * aspectRatio);
         }
         return new Rect((float) PipVideoView.getSideCoord(true, sidex, px, videoWidth), (float) PipVideoView.getSideCoord(false, sidey, py, videoHeight), (float) videoWidth, (float) videoHeight);

@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.User;
 
 final /* synthetic */ class MessagesController$$Lambda$240 implements Runnable {
     private final MessagesController arg$1;
-    private final TL_error arg$2;
-    private final int arg$3;
+    private final User arg$2;
 
-    MessagesController$$Lambda$240(MessagesController messagesController, TL_error tL_error, int i) {
+    MessagesController$$Lambda$240(MessagesController messagesController, User user) {
         this.arg$1 = messagesController;
-        this.arg$2 = tL_error;
-        this.arg$3 = i;
+        this.arg$2 = user;
     }
 
     public void run() {
-        this.arg$1.lambda$null$14$MessagesController(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$17$MessagesController(this.arg$2);
     }
 }

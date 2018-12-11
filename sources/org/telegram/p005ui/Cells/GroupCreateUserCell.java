@@ -42,7 +42,7 @@ public class GroupCreateUserCell extends FrameLayout {
         int i3 = 5;
         super(context);
         this.avatarImageView = new BackupImageView(context);
-        this.avatarImageView.setRoundRadius(AndroidUtilities.m10dp(24.0f));
+        this.avatarImageView.setRoundRadius(AndroidUtilities.m9dp(24.0f));
         addView(this.avatarImageView, LayoutHelper.createFrame(50, 50.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 11.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
         this.nameTextView = new SimpleTextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -105,7 +105,7 @@ public class GroupCreateUserCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(72.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(72.0f), NUM));
     }
 
     public void recycle() {
@@ -172,7 +172,7 @@ public class GroupCreateUserCell extends FrameLayout {
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
                 this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
             }
-            this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
+            this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable, this.currentUser);
         }
     }
 

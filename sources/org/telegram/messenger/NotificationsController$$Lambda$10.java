@@ -7,14 +7,16 @@ final /* synthetic */ class NotificationsController$$Lambda$10 implements Runnab
     private final NotificationsController arg$1;
     private final ArrayList arg$2;
     private final LongSparseArray arg$3;
+    private final ArrayList arg$4;
 
-    NotificationsController$$Lambda$10(NotificationsController notificationsController, ArrayList arrayList, LongSparseArray longSparseArray) {
+    NotificationsController$$Lambda$10(NotificationsController notificationsController, ArrayList arrayList, LongSparseArray longSparseArray, ArrayList arrayList2) {
         this.arg$1 = notificationsController;
         this.arg$2 = arrayList;
         this.arg$3 = longSparseArray;
+        this.arg$4 = arrayList2;
     }
 
     public void run() {
-        this.arg$1.lambda$processLoadedUnreadMessages$21$NotificationsController(this.arg$2, this.arg$3);
+        this.arg$1.lambda$processLoadedUnreadMessages$21$NotificationsController(this.arg$2, this.arg$3, this.arg$4);
     }
 }

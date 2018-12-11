@@ -11,6 +11,6 @@ final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Lambda$3 imp
     }
 
     public void run() {
-        this.arg$1.lambda$onShow$5$LoginActivity$LoginActivityRecoverView();
+        this.arg$1.lambda$onShow$6$LoginActivity$LoginActivityRecoverView();
     }
 }

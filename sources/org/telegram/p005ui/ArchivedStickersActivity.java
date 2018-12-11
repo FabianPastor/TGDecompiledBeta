@@ -3,8 +3,6 @@ package org.telegram.p005ui;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -30,12 +28,11 @@ import org.telegram.p005ui.Components.EmptyTextProgressView;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.p005ui.Components.StickersAlert;
 import org.telegram.p005ui.Components.StickersAlert.StickersAlertInstallDelegate;
+import org.telegram.p005ui.Components.Switch;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
@@ -74,38 +71,6 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         }
     }
 
-    /* renamed from: org.telegram.ui.ArchivedStickersActivity$2 */
-    class CLASSNAME implements OnItemClickListener {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(final View view, int position) {
-            if (position >= ArchivedStickersActivity.this.stickersStartRow && position < ArchivedStickersActivity.this.stickersEndRow && ArchivedStickersActivity.this.getParentActivity() != null) {
-                InputStickerSet inputStickerSet;
-                StickerSetCovered stickerSet = (StickerSetCovered) ArchivedStickersActivity.this.sets.get(position);
-                if (stickerSet.set.var_id != 0) {
-                    inputStickerSet = new TL_inputStickerSetID();
-                    inputStickerSet.var_id = stickerSet.set.var_id;
-                } else {
-                    inputStickerSet = new TL_inputStickerSetShortName();
-                    inputStickerSet.short_name = stickerSet.set.short_name;
-                }
-                inputStickerSet.access_hash = stickerSet.set.access_hash;
-                StickersAlert stickersAlert = new StickersAlert(ArchivedStickersActivity.this.getParentActivity(), ArchivedStickersActivity.this, inputStickerSet, null, null);
-                stickersAlert.setInstallDelegate(new StickersAlertInstallDelegate() {
-                    public void onStickerSetInstalled() {
-                        view.setChecked(true);
-                    }
-
-                    public void onStickerSetUninstalled() {
-                        view.setChecked(false);
-                    }
-                });
-                ArchivedStickersActivity.this.showDialog(stickersAlert);
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$3 */
     class CLASSNAME extends OnScrollListener {
         CLASSNAME() {
@@ -118,53 +83,9 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         }
     }
 
-    /* renamed from: org.telegram.ui.ArchivedStickersActivity$4 */
-    class CLASSNAME implements RequestDelegate {
-        CLASSNAME() {
-        }
-
-        public void run(final TLObject response, final TL_error error) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    if (error == null) {
-                        boolean z;
-                        TL_messages_archivedStickers res = response;
-                        ArchivedStickersActivity.this.sets.addAll(res.sets);
-                        ArchivedStickersActivity archivedStickersActivity = ArchivedStickersActivity.this;
-                        if (res.sets.size() != 15) {
-                            z = true;
-                        } else {
-                            z = false;
-                        }
-                        archivedStickersActivity.endReached = z;
-                        ArchivedStickersActivity.this.loadingStickers = false;
-                        ArchivedStickersActivity.this.firstLoaded = true;
-                        if (ArchivedStickersActivity.this.emptyView != null) {
-                            ArchivedStickersActivity.this.emptyView.showTextView();
-                        }
-                        ArchivedStickersActivity.this.updateRows();
-                    }
-                }
-            });
-        }
-    }
-
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$ListAdapter */
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
-
-        /* renamed from: org.telegram.ui.ArchivedStickersActivity$ListAdapter$1 */
-        class CLASSNAME implements OnCheckedChangeListener {
-            CLASSNAME() {
-            }
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int num = ((Integer) ((ArchivedStickerSetCell) buttonView.getParent()).getTag()).intValue();
-                if (num < ArchivedStickersActivity.this.sets.size()) {
-                    DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(num)).set, !isChecked ? 1 : 2, ArchivedStickersActivity.this, false);
-                }
-            }
-        }
 
         public ListAdapter(Context context) {
             this.mContext = context;
@@ -194,19 +115,26 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 case 0:
                     view = new ArchivedStickerSetCell(this.mContext, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ArchivedStickerSetCell) view).setOnCheckClick(new CLASSNAME());
+                    ((ArchivedStickerSetCell) view).setOnCheckClick(new ArchivedStickersActivity$ListAdapter$$Lambda$0(this));
                     break;
                 case 1:
                     view = new LoadingCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
+        }
+
+        final /* synthetic */ void lambda$onCreateViewHolder$0$ArchivedStickersActivity$ListAdapter(Switch buttonView, boolean isChecked) {
+            int num = ((Integer) ((ArchivedStickerSetCell) buttonView.getParent()).getTag()).intValue();
+            if (num < ArchivedStickersActivity.this.sets.size()) {
+                DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(num)).set, !isChecked ? 1 : 2, ArchivedStickersActivity.this, false);
+            }
         }
 
         public int getItemViewType(int i) {
@@ -274,9 +202,35 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         recyclerListView.setLayoutManager(linearLayoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new CLASSNAME());
+        this.listView.setOnItemClickListener(new ArchivedStickersActivity$$Lambda$0(this));
         this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$0$ArchivedStickersActivity(final View view, int position) {
+        if (position >= this.stickersStartRow && position < this.stickersEndRow && getParentActivity() != null) {
+            InputStickerSet inputStickerSet;
+            StickerSetCovered stickerSet = (StickerSetCovered) this.sets.get(position);
+            if (stickerSet.set.var_id != 0) {
+                inputStickerSet = new TL_inputStickerSetID();
+                inputStickerSet.var_id = stickerSet.set.var_id;
+            } else {
+                inputStickerSet = new TL_inputStickerSetShortName();
+                inputStickerSet.short_name = stickerSet.set.short_name;
+            }
+            inputStickerSet.access_hash = stickerSet.set.access_hash;
+            StickersAlert stickersAlert = new StickersAlert(getParentActivity(), this, inputStickerSet, null, null);
+            stickersAlert.setInstallDelegate(new StickersAlertInstallDelegate() {
+                public void onStickerSetInstalled() {
+                    view.setChecked(true);
+                }
+
+                public void onStickerSetUninstalled() {
+                    view.setChecked(false);
+                }
+            });
+            showDialog(stickersAlert);
+        }
     }
 
     private void updateRows() {
@@ -321,7 +275,31 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             req.offset_id = this.sets.isEmpty() ? 0 : ((StickerSetCovered) this.sets.get(this.sets.size() - 1)).set.var_id;
             req.limit = 15;
             req.masks = this.currentType == 1;
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME()), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ArchivedStickersActivity$$Lambda$1(this)), this.classGuid);
+        }
+    }
+
+    final /* synthetic */ void lambda$getStickers$2$ArchivedStickersActivity(TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new ArchivedStickersActivity$$Lambda$2(this, error, response));
+    }
+
+    final /* synthetic */ void lambda$null$1$ArchivedStickersActivity(TL_error error, TLObject response) {
+        if (error == null) {
+            boolean z;
+            TL_messages_archivedStickers res = (TL_messages_archivedStickers) response;
+            this.sets.addAll(res.sets);
+            if (res.sets.size() != 15) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.endReached = z;
+            this.loadingStickers = false;
+            this.firstLoaded = true;
+            if (this.emptyView != null) {
+                this.emptyView.showTextView();
+            }
+            updateRows();
         }
     }
 
@@ -346,26 +324,24 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[19];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ArchivedStickerSetCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LoadingCell.class, TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[4] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        themeDescriptionArr[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
-        themeDescriptionArr[11] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumb);
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack);
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumbChecked);
-        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked);
-        return themeDescriptionArr;
+        r9 = new ThemeDescription[17];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ArchivedStickerSetCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LoadingCell.class, TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r9[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        r9[11] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
+        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
+        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[14] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        r9[15] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack);
+        r9[16] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked);
+        return r9;
     }
 }

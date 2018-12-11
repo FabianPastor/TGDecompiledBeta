@@ -15,6 +15,8 @@ final /* synthetic */ class LaunchActivity$$Lambda$9 implements RequestDelegate 
     private final String[] arg$13;
     private final HashMap arg$14;
     private final String arg$15;
+    private final String arg$16;
+    private final String arg$17;
     private final AlertDialog arg$2;
     private final int arg$3;
     private final String arg$4;
@@ -24,7 +26,7 @@ final /* synthetic */ class LaunchActivity$$Lambda$9 implements RequestDelegate 
     private final String arg$8;
     private final String arg$9;
 
-    LaunchActivity$$Lambda$9(LaunchActivity launchActivity, AlertDialog alertDialog, int i, String str, String str2, String str3, String str4, String str5, String str6, boolean z, Integer num, String str7, String[] strArr, HashMap hashMap, String str8) {
+    LaunchActivity$$Lambda$9(LaunchActivity launchActivity, AlertDialog alertDialog, int i, String str, String str2, String str3, String str4, String str5, String str6, boolean z, Integer num, String str7, String[] strArr, HashMap hashMap, String str8, String str9, String str10) {
         this.arg$1 = launchActivity;
         this.arg$2 = alertDialog;
         this.arg$3 = i;
@@ -40,9 +42,11 @@ final /* synthetic */ class LaunchActivity$$Lambda$9 implements RequestDelegate 
         this.arg$13 = strArr;
         this.arg$14 = hashMap;
         this.arg$15 = str8;
+        this.arg$16 = str9;
+        this.arg$17 = str10;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$runLinkRequest$15$LaunchActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, this.arg$10, this.arg$11, this.arg$12, this.arg$13, this.arg$14, this.arg$15, tLObject, tL_error);
+        this.arg$1.lambda$runLinkRequest$15$LaunchActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, this.arg$10, this.arg$11, this.arg$12, this.arg$13, this.arg$14, this.arg$15, this.arg$16, this.arg$17, tLObject, tL_error);
     }
 }

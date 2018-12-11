@@ -1,22 +1,18 @@
 package org.telegram.p005ui;
 
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.TwoStepVerificationActivity$$Lambda$14 */
-final /* synthetic */ class TwoStepVerificationActivity$$Lambda$14 implements Runnable {
+final /* synthetic */ class TwoStepVerificationActivity$$Lambda$14 implements RequestDelegate {
     private final TwoStepVerificationActivity arg$1;
-    private final byte[] arg$2;
-    private final TLObject arg$3;
-    private final byte[] arg$4;
 
-    TwoStepVerificationActivity$$Lambda$14(TwoStepVerificationActivity twoStepVerificationActivity, byte[] bArr, TLObject tLObject, byte[] bArr2) {
+    TwoStepVerificationActivity$$Lambda$14(TwoStepVerificationActivity twoStepVerificationActivity) {
         this.arg$1 = twoStepVerificationActivity;
-        this.arg$2 = bArr;
-        this.arg$3 = tLObject;
-        this.arg$4 = bArr2;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$23$TwoStepVerificationActivity(this.arg$2, this.arg$3, this.arg$4);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$sendEmailConfirm$39$TwoStepVerificationActivity(tLObject, tL_error);
     }
 }

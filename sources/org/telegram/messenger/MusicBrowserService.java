@@ -13,8 +13,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
-import android.media.MediaDescription;
-import android.media.MediaMetadata.Builder;
+import android.media.MediaDescription.Builder;
+import android.media.MediaMetadata;
 import android.media.browse.MediaBrowser.MediaItem;
 import android.media.session.MediaSession;
 import android.media.session.MediaSession.Callback;
@@ -61,7 +61,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     private SparseArray<Chat> chats = new SparseArray();
     private boolean chatsLoaded;
     private int currentAccount = UserConfig.selectedAccount;
-    private DelayedStopHandler delayedStopHandler = new DelayedStopHandler(this, null);
+    private DelayedStopHandler delayedStopHandler = new DelayedStopHandler();
     private ArrayList<Integer> dialogs = new ArrayList();
     private int lastSelectedDialog;
     private boolean loadingChats;
@@ -74,10 +74,6 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
 
     private static class DelayedStopHandler extends Handler {
         private final WeakReference<MusicBrowserService> mWeakReference;
-
-        /* synthetic */ DelayedStopHandler(MusicBrowserService x0, CLASSNAME x1) {
-            this(x0);
-        }
 
         private DelayedStopHandler(MusicBrowserService service) {
             this.mWeakReference = new WeakReference(service);
@@ -97,10 +93,6 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
 
     private final class MediaSessionCallback extends Callback {
         private MediaSessionCallback() {
-        }
-
-        /* synthetic */ MediaSessionCallback(MusicBrowserService x0, CLASSNAME x1) {
-            this();
         }
 
         public void onPlay() {
@@ -155,7 +147,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                         MusicBrowserService.this.handlePlayRequest();
                     }
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
             }
         }
@@ -204,7 +196,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         this.lastSelectedDialog = MessagesController.getNotificationsSettings(this.currentAccount).getInt("auto_lastSelectedDialog", 0);
         this.mediaSession = new MediaSession(this, "MusicService");
         setSessionToken(this.mediaSession.getSessionToken());
-        this.mediaSession.setCallback(new MediaSessionCallback(this, null));
+        this.mediaSession.setCallback(new MediaSessionCallback());
         this.mediaSession.setFlags(3);
         Context context = getApplicationContext();
         this.mediaSession.setSessionActivity(PendingIntent.getActivity(context, 99, new Intent(context, LaunchActivity.class), NUM));
@@ -215,7 +207,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         this.mediaSession.setExtras(extras);
         updatePlaybackState(null);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStart);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
     }
 
@@ -236,7 +228,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         return new BrowserRoot(MEDIA_ID_ROOT, null);
     }
 
-    public void onLoadChildren(final String parentMediaId, final Result<List<MediaItem>> result) {
+    public void onLoadChildren(String parentMediaId, Result<List<MediaItem>> result) {
         if (this.chatsLoaded) {
             loadChildrenImpl(parentMediaId, result);
             return;
@@ -244,137 +236,130 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         result.detach();
         if (!this.loadingChats) {
             this.loadingChats = true;
-            final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
-            messagesStorage.getStorageQueue().postRunnable(new Runnable() {
-
-                /* renamed from: org.telegram.messenger.MusicBrowserService$1$1 */
-                class CLASSNAME implements Runnable {
-                    CLASSNAME() {
-                    }
-
-                    public void run() {
-                        MusicBrowserService.this.chatsLoaded = true;
-                        MusicBrowserService.this.loadingChats = false;
-                        MusicBrowserService.this.loadChildrenImpl(parentMediaId, result);
-                        if (MusicBrowserService.this.lastSelectedDialog == 0 && !MusicBrowserService.this.dialogs.isEmpty()) {
-                            MusicBrowserService.this.lastSelectedDialog = ((Integer) MusicBrowserService.this.dialogs.get(0)).intValue();
-                        }
-                        if (MusicBrowserService.this.lastSelectedDialog != 0) {
-                            ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(MusicBrowserService.this.lastSelectedDialog);
-                            ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(MusicBrowserService.this.lastSelectedDialog);
-                            if (!(arrayList == null || arrayList.isEmpty())) {
-                                MusicBrowserService.this.mediaSession.setQueue(arrayList1);
-                                if (MusicBrowserService.this.lastSelectedDialog > 0) {
-                                    User user = (User) MusicBrowserService.this.users.get(MusicBrowserService.this.lastSelectedDialog);
-                                    if (user != null) {
-                                        MusicBrowserService.this.mediaSession.setQueueTitle(ContactsController.formatName(user.first_name, user.last_name));
-                                    } else {
-                                        MusicBrowserService.this.mediaSession.setQueueTitle("DELETED USER");
-                                    }
-                                } else {
-                                    Chat chat = (Chat) MusicBrowserService.this.chats.get(-MusicBrowserService.this.lastSelectedDialog);
-                                    if (chat != null) {
-                                        MusicBrowserService.this.mediaSession.setQueueTitle(chat.title);
-                                    } else {
-                                        MusicBrowserService.this.mediaSession.setQueueTitle("DELETED CHAT");
-                                    }
-                                }
-                                MessageObject messageObject = (MessageObject) arrayList.get(0);
-                                Builder builder = new Builder();
-                                builder.putLong("android.media.metadata.DURATION", (long) (messageObject.getDuration() * 1000));
-                                builder.putString("android.media.metadata.ARTIST", messageObject.getMusicAuthor());
-                                builder.putString("android.media.metadata.TITLE", messageObject.getMusicTitle());
-                                MusicBrowserService.this.mediaSession.setMetadata(builder.build());
-                            }
-                        }
-                        MusicBrowserService.this.updatePlaybackState(null);
-                    }
-                }
-
-                public void run() {
-                    try {
-                        ArrayList<Integer> usersToLoad = new ArrayList();
-                        ArrayList<Integer> chatsToLoad = new ArrayList();
-                        SQLiteCursor cursor = messagesStorage.getDatabase().queryFinalized(String.format(Locale.US, "SELECT DISTINCT uid FROM media_v2 WHERE uid != 0 AND mid > 0 AND type = %d", new Object[]{Integer.valueOf(4)}), new Object[0]);
-                        while (cursor.next()) {
-                            int lower_part = (int) cursor.longValue(0);
-                            if (lower_part != 0) {
-                                MusicBrowserService.this.dialogs.add(Integer.valueOf(lower_part));
-                                if (lower_part > 0) {
-                                    usersToLoad.add(Integer.valueOf(lower_part));
-                                } else {
-                                    chatsToLoad.add(Integer.valueOf(-lower_part));
-                                }
-                            }
-                        }
-                        cursor.dispose();
-                        if (!MusicBrowserService.this.dialogs.isEmpty()) {
-                            int a;
-                            String ids = TextUtils.join(",", MusicBrowserService.this.dialogs);
-                            cursor = messagesStorage.getDatabase().queryFinalized(String.format(Locale.US, "SELECT uid, data, mid FROM media_v2 WHERE uid IN (%s) AND mid > 0 AND type = %d ORDER BY date DESC, mid DESC", new Object[]{ids, Integer.valueOf(4)}), new Object[0]);
-                            while (cursor.next()) {
-                                NativeByteBuffer data = cursor.byteBufferValue(1);
-                                if (data != null) {
-                                    TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data, UserConfig.getInstance(MusicBrowserService.this.currentAccount).clientUserId);
-                                    data.reuse();
-                                    if (MessageObject.isMusicMessage(message)) {
-                                        int did = cursor.intValue(0);
-                                        message.var_id = cursor.intValue(2);
-                                        message.dialog_id = (long) did;
-                                        ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(did);
-                                        ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(did);
-                                        if (arrayList == null) {
-                                            arrayList = new ArrayList();
-                                            MusicBrowserService.this.musicObjects.put(did, arrayList);
-                                            arrayList1 = new ArrayList();
-                                            MusicBrowserService.this.musicQueues.put(did, arrayList1);
-                                        }
-                                        MessageObject messageObject = new MessageObject(MusicBrowserService.this.currentAccount, message, false);
-                                        arrayList.add(0, messageObject);
-                                        MediaDescription.Builder builder = new MediaDescription.Builder().setMediaId(did + "_" + arrayList.size());
-                                        builder.setTitle(messageObject.getMusicTitle());
-                                        builder.setSubtitle(messageObject.getMusicAuthor());
-                                        arrayList1.add(0, new QueueItem(builder.build(), (long) arrayList1.size()));
-                                    }
-                                }
-                            }
-                            cursor.dispose();
-                            if (!usersToLoad.isEmpty()) {
-                                ArrayList<User> usersArrayList = new ArrayList();
-                                messagesStorage.getUsersInternal(TextUtils.join(",", usersToLoad), usersArrayList);
-                                for (a = 0; a < usersArrayList.size(); a++) {
-                                    User user = (User) usersArrayList.get(a);
-                                    MusicBrowserService.this.users.put(user.var_id, user);
-                                }
-                            }
-                            if (!chatsToLoad.isEmpty()) {
-                                ArrayList<Chat> chatsArrayList = new ArrayList();
-                                messagesStorage.getChatsInternal(TextUtils.join(",", chatsToLoad), chatsArrayList);
-                                for (a = 0; a < chatsArrayList.size(); a++) {
-                                    Chat chat = (Chat) chatsArrayList.get(a);
-                                    MusicBrowserService.this.chats.put(chat.var_id, chat);
-                                }
-                            }
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m14e(e);
-                    }
-                    AndroidUtilities.runOnUIThread(new CLASSNAME());
-                }
-            });
+            MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
+            messagesStorage.getStorageQueue().postRunnable(new MusicBrowserService$$Lambda$0(this, messagesStorage, parentMediaId, result));
         }
+    }
+
+    final /* synthetic */ void lambda$onLoadChildren$1$MusicBrowserService(MessagesStorage messagesStorage, String parentMediaId, Result result) {
+        try {
+            ArrayList<Integer> usersToLoad = new ArrayList();
+            ArrayList<Integer> chatsToLoad = new ArrayList();
+            SQLiteCursor cursor = messagesStorage.getDatabase().queryFinalized(String.format(Locale.US, "SELECT DISTINCT uid FROM media_v2 WHERE uid != 0 AND mid > 0 AND type = %d", new Object[]{Integer.valueOf(4)}), new Object[0]);
+            while (cursor.next()) {
+                int lower_part = (int) cursor.longValue(0);
+                if (lower_part != 0) {
+                    this.dialogs.add(Integer.valueOf(lower_part));
+                    if (lower_part > 0) {
+                        usersToLoad.add(Integer.valueOf(lower_part));
+                    } else {
+                        chatsToLoad.add(Integer.valueOf(-lower_part));
+                    }
+                }
+            }
+            cursor.dispose();
+            if (!this.dialogs.isEmpty()) {
+                int a;
+                String ids = TextUtils.join(",", this.dialogs);
+                cursor = messagesStorage.getDatabase().queryFinalized(String.format(Locale.US, "SELECT uid, data, mid FROM media_v2 WHERE uid IN (%s) AND mid > 0 AND type = %d ORDER BY date DESC, mid DESC", new Object[]{ids, Integer.valueOf(4)}), new Object[0]);
+                while (cursor.next()) {
+                    NativeByteBuffer data = cursor.byteBufferValue(1);
+                    if (data != null) {
+                        TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                        message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
+                        data.reuse();
+                        if (MessageObject.isMusicMessage(message)) {
+                            int did = cursor.intValue(0);
+                            message.var_id = cursor.intValue(2);
+                            message.dialog_id = (long) did;
+                            ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(did);
+                            ArrayList<QueueItem> arrayList1 = (ArrayList) this.musicQueues.get(did);
+                            if (arrayList == null) {
+                                arrayList = new ArrayList();
+                                this.musicObjects.put(did, arrayList);
+                                arrayList1 = new ArrayList();
+                                this.musicQueues.put(did, arrayList1);
+                            }
+                            MessageObject messageObject = new MessageObject(this.currentAccount, message, false);
+                            arrayList.add(0, messageObject);
+                            Builder builder = new Builder().setMediaId(did + "_" + arrayList.size());
+                            builder.setTitle(messageObject.getMusicTitle());
+                            builder.setSubtitle(messageObject.getMusicAuthor());
+                            arrayList1.add(0, new QueueItem(builder.build(), (long) arrayList1.size()));
+                        }
+                    }
+                }
+                cursor.dispose();
+                if (!usersToLoad.isEmpty()) {
+                    ArrayList<User> usersArrayList = new ArrayList();
+                    messagesStorage.getUsersInternal(TextUtils.join(",", usersToLoad), usersArrayList);
+                    for (a = 0; a < usersArrayList.size(); a++) {
+                        User user = (User) usersArrayList.get(a);
+                        this.users.put(user.var_id, user);
+                    }
+                }
+                if (!chatsToLoad.isEmpty()) {
+                    ArrayList<Chat> chatsArrayList = new ArrayList();
+                    messagesStorage.getChatsInternal(TextUtils.join(",", chatsToLoad), chatsArrayList);
+                    for (a = 0; a < chatsArrayList.size(); a++) {
+                        Chat chat = (Chat) chatsArrayList.get(a);
+                        this.chats.put(chat.var_id, chat);
+                    }
+                }
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+        AndroidUtilities.runOnUIThread(new MusicBrowserService$$Lambda$1(this, parentMediaId, result));
+    }
+
+    final /* synthetic */ void lambda$null$0$MusicBrowserService(String parentMediaId, Result result) {
+        this.chatsLoaded = true;
+        this.loadingChats = false;
+        loadChildrenImpl(parentMediaId, result);
+        if (this.lastSelectedDialog == 0 && !this.dialogs.isEmpty()) {
+            this.lastSelectedDialog = ((Integer) this.dialogs.get(0)).intValue();
+        }
+        if (this.lastSelectedDialog != 0) {
+            ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(this.lastSelectedDialog);
+            ArrayList<QueueItem> arrayList1 = (ArrayList) this.musicQueues.get(this.lastSelectedDialog);
+            if (!(arrayList == null || arrayList.isEmpty())) {
+                this.mediaSession.setQueue(arrayList1);
+                if (this.lastSelectedDialog > 0) {
+                    User user = (User) this.users.get(this.lastSelectedDialog);
+                    if (user != null) {
+                        this.mediaSession.setQueueTitle(ContactsController.formatName(user.first_name, user.last_name));
+                    } else {
+                        this.mediaSession.setQueueTitle("DELETED USER");
+                    }
+                } else {
+                    Chat chat = (Chat) this.chats.get(-this.lastSelectedDialog);
+                    if (chat != null) {
+                        this.mediaSession.setQueueTitle(chat.title);
+                    } else {
+                        this.mediaSession.setQueueTitle("DELETED CHAT");
+                    }
+                }
+                MessageObject messageObject = (MessageObject) arrayList.get(0);
+                MediaMetadata.Builder builder = new MediaMetadata.Builder();
+                builder.putLong("android.media.metadata.DURATION", (long) (messageObject.getDuration() * 1000));
+                builder.putString("android.media.metadata.ARTIST", messageObject.getMusicAuthor());
+                builder.putString("android.media.metadata.TITLE", messageObject.getMusicTitle());
+                this.mediaSession.setMetadata(builder.build());
+            }
+        }
+        updatePlaybackState(null);
     }
 
     private void loadChildrenImpl(String parentMediaId, Result<List<MediaItem>> result) {
         List<MediaItem> mediaItems = new ArrayList();
         int a;
         int did;
-        MediaDescription.Builder builder;
+        Builder builder;
         if (MEDIA_ID_ROOT.equals(parentMediaId)) {
             for (a = 0; a < this.dialogs.size(); a++) {
                 did = ((Integer) this.dialogs.get(a)).intValue();
-                builder = new MediaDescription.Builder().setMediaId("__CHAT_" + did);
+                builder = new Builder().setMediaId("__CHAT_" + did);
                 FileLocation avatar = null;
                 if (did > 0) {
                     User user = (User) this.users.get(did);
@@ -415,13 +400,13 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 try {
                     did = Integer.parseInt(parentMediaId.replace("__CHAT_", TtmlNode.ANONYMOUS_REGION_ID));
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(did);
                 if (arrayList != null) {
                     for (a = 0; a < arrayList.size(); a++) {
                         MessageObject messageObject = (MessageObject) arrayList.get(a);
-                        builder = new MediaDescription.Builder().setMediaId(did + "_" + a);
+                        builder = new Builder().setMediaId(did + "_" + a);
                         builder.setTitle(messageObject.getMusicTitle());
                         builder.setSubtitle(messageObject.getMusicAuthor());
                         mediaItems.add(new MediaItem(builder.build(), 2));
@@ -452,7 +437,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 return result;
             }
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
         }
         return null;
     }
@@ -496,7 +481,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         stopSelf();
         this.serviceStarted = false;
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
     }
 
@@ -506,7 +491,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             try {
                 startService(new Intent(getApplicationContext(), MusicBrowserService.class));
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             }
             this.serviceStarted = true;
         }
@@ -515,7 +500,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         }
         MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         if (messageObject != null) {
-            Builder builder = new Builder();
+            MediaMetadata.Builder builder = new MediaMetadata.Builder();
             builder.putLong("android.media.metadata.DURATION", (long) (messageObject.getDuration() * 1000));
             builder.putString("android.media.metadata.ARTIST", messageObject.getMusicAuthor());
             builder.putString("android.media.metadata.TITLE", messageObject.getMusicTitle());
@@ -531,7 +516,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     private void handlePauseRequest() {
-        MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
+        MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
         this.delayedStopHandler.removeCallbacksAndMessages(null);
         this.delayedStopHandler.sendEmptyMessageDelayed(0, 30000);
     }

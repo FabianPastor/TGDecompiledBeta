@@ -201,7 +201,7 @@ public class ContactsAdapter extends SectionsAdapter {
                 break;
             case 2:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("Contacts", CLASSNAMER.string.Contacts).toUpperCase());
+                ((GraySectionCell) view).setText(LocaleController.getString("Contacts", CLASSNAMER.string.Contacts));
                 break;
             default:
                 float f2;
@@ -211,11 +211,12 @@ public class ContactsAdapter extends SectionsAdapter {
                 } else {
                     f2 = 72.0f;
                 }
-                int dp = AndroidUtilities.m10dp(f2);
+                int dp = AndroidUtilities.m9dp(f2);
+                int dp2 = AndroidUtilities.m9dp(8.0f);
                 if (!LocaleController.isRTL) {
                     f = 28.0f;
                 }
-                view.setPadding(dp, 0, AndroidUtilities.m10dp(f), 0);
+                view.setPadding(dp, dp2, AndroidUtilities.m9dp(f), AndroidUtilities.m9dp(8.0f));
                 break;
         }
         return new Holder(view);
@@ -248,29 +249,29 @@ public class ContactsAdapter extends SectionsAdapter {
                 if (section != 0) {
                     Contact contact = (Contact) ContactsController.getInstance(this.currentAccount).phoneBookContacts.get(position);
                     if (contact.first_name != null && contact.last_name != null) {
-                        textCell.setText(contact.first_name + " " + contact.last_name);
+                        textCell.setText(contact.first_name + " " + contact.last_name, false);
                         return;
                     } else if (contact.first_name == null || contact.last_name != null) {
-                        textCell.setText(contact.last_name);
+                        textCell.setText(contact.last_name, false);
                         return;
                     } else {
-                        textCell.setText(contact.first_name);
+                        textCell.setText(contact.first_name, false);
                         return;
                     }
                 } else if (this.needPhonebook) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", CLASSNAMER.string.InviteFriends), CLASSNAMER.drawable.menu_invite);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", CLASSNAMER.string.InviteFriends), CLASSNAMER.drawable.menu_invite, false);
                     return;
                 } else if (this.isAdmin) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", CLASSNAMER.string.InviteToGroupByLink), CLASSNAMER.drawable.menu_invite);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", CLASSNAMER.string.InviteToGroupByLink), CLASSNAMER.drawable.menu_invite, false);
                     return;
                 } else if (position == 0) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", CLASSNAMER.string.NewGroup), CLASSNAMER.drawable.menu_newgroup);
+                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", CLASSNAMER.string.NewGroup), CLASSNAMER.drawable.menu_newgroup, false);
                     return;
                 } else if (position == 1) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", CLASSNAMER.string.NewSecretChat), CLASSNAMER.drawable.menu_secret);
+                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", CLASSNAMER.string.NewSecretChat), CLASSNAMER.drawable.menu_secret, false);
                     return;
                 } else if (position == 2) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", CLASSNAMER.string.NewChannel), CLASSNAMER.drawable.menu_broadcast);
+                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", CLASSNAMER.string.NewChannel), CLASSNAMER.drawable.menu_broadcast, false);
                     return;
                 } else {
                     return;

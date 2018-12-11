@@ -4,7 +4,7 @@ import org.telegram.tgnet.TLObject;
 
 final /* synthetic */ class ImageLoader$$Lambda$4 implements Runnable {
     private final ImageLoader arg$1;
-    private final MessageObject arg$10;
+    private final Object arg$10;
     private final TLObject arg$11;
     private final boolean arg$12;
     private final int arg$13;
@@ -20,7 +20,7 @@ final /* synthetic */ class ImageLoader$$Lambda$4 implements Runnable {
     private final String arg$8;
     private final boolean arg$9;
 
-    ImageLoader$$Lambda$4(ImageLoader imageLoader, int i, String str, String str2, int i2, ImageReceiver imageReceiver, String str3, String str4, boolean z, MessageObject messageObject, TLObject tLObject, boolean z2, int i3, int i4, String str5, int i5) {
+    ImageLoader$$Lambda$4(ImageLoader imageLoader, int i, String str, String str2, int i2, ImageReceiver imageReceiver, String str3, String str4, boolean z, Object obj, TLObject tLObject, boolean z2, int i3, int i4, String str5, int i5) {
         this.arg$1 = imageLoader;
         this.arg$2 = i;
         this.arg$3 = str;
@@ -30,7 +30,7 @@ final /* synthetic */ class ImageLoader$$Lambda$4 implements Runnable {
         this.arg$7 = str3;
         this.arg$8 = str4;
         this.arg$9 = z;
-        this.arg$10 = messageObject;
+        this.arg$10 = obj;
         this.arg$11 = tLObject;
         this.arg$12 = z2;
         this.arg$13 = i3;

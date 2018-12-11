@@ -163,9 +163,9 @@ public class CameraSession {
             try {
                 params = camera.getParameters();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
                 return;
             }
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
@@ -204,11 +204,11 @@ public class CameraSession {
             this.diffOrientation = this.currentOrientation - displayOrientation;
             if (params != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
+                    FileLog.m10d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
                 }
                 params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
+                    FileLog.m10d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
                 }
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
@@ -267,9 +267,9 @@ public class CameraSession {
             try {
                 params = camera.getParameters();
             } catch (Throwable e) {
-                FileLog.m14e(e);
+                FileLog.m13e(e);
             } catch (Throwable e2) {
-                FileLog.m14e(e2);
+                FileLog.m13e(e2);
                 return;
             }
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
@@ -357,7 +357,7 @@ public class CameraSession {
                 try {
                     parameters = camera.getParameters();
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 if (parameters != null) {
                     parameters.setFocusMode("auto");
@@ -373,12 +373,12 @@ public class CameraSession {
                         camera.setParameters(parameters);
                         camera.autoFocus(this.autoFocusCallback);
                     } catch (Throwable e2) {
-                        FileLog.m14e(e2);
+                        FileLog.m13e(e2);
                     }
                 }
             }
         } catch (Throwable e22) {
-            FileLog.m14e(e22);
+            FileLog.m13e(e22);
         }
     }
 
@@ -455,7 +455,7 @@ public class CameraSession {
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
             return getDisplayOrientation(info, true);
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             return 0;
         }
     }

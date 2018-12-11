@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,44 +44,6 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         }
     }
 
-    /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$2 */
-    class CLASSNAME implements OnTouchListener {
-        CLASSNAME() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$3 */
-    class CLASSNAME implements OnClickListener {
-
-        /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$3$1 */
-        class CLASSNAME implements DialogInterface.OnClickListener {
-            CLASSNAME() {
-            }
-
-            public void onClick(DialogInterface dialogInterface, int i) {
-                ChangePhoneHelpActivity.this.presentFragment(new ChangePhoneActivity(), true);
-            }
-        }
-
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            if (ChangePhoneHelpActivity.this.getParentActivity() != null) {
-                Builder builder = new Builder(ChangePhoneHelpActivity.this.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
-                builder.setMessage(LocaleController.getString("PhoneNumberAlert", CLASSNAMER.string.PhoneNumberAlert));
-                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new CLASSNAME());
-                builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
-                ChangePhoneHelpActivity.this.showDialog(builder.create());
-            }
-        }
-    }
-
     public View createView(Context context) {
         String value;
         this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
@@ -98,7 +57,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         this.actionBar.setTitle(value);
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.fragmentView = new RelativeLayout(context);
-        this.fragmentView.setOnTouchListener(new CLASSNAME());
+        this.fragmentView.setOnTouchListener(ChangePhoneHelpActivity$$Lambda$0.$instance);
         RelativeLayout relativeLayout = this.fragmentView;
         ScrollView scrollView = new ScrollView(context);
         relativeLayout.addView(scrollView);
@@ -109,7 +68,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         scrollView.setLayoutParams(layoutParams3);
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
-        linearLayout.setPadding(0, AndroidUtilities.m10dp(20.0f), 0, AndroidUtilities.m10dp(20.0f));
+        linearLayout.setPadding(0, AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f));
         scrollView.addView(linearLayout);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
         layoutParams.width = -1;
@@ -126,7 +85,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         try {
             this.textView1.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", CLASSNAMER.string.PhoneNumberHelp)));
         } catch (Throwable e) {
-            FileLog.m14e(e);
+            FileLog.m13e(e);
             this.textView1.setText(LocaleController.getString("PhoneNumberHelp", CLASSNAMER.string.PhoneNumberHelp));
         }
         linearLayout.addView(this.textView1, LayoutHelper.createLinear(-2, -2, 1, 20, 56, 20, 0));
@@ -136,10 +95,25 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         this.textView2.setTextColor(Theme.getColor(Theme.key_changephoneinfo_changeText));
         this.textView2.setText(LocaleController.getString("PhoneNumberChange", CLASSNAMER.string.PhoneNumberChange));
         this.textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.textView2.setPadding(0, AndroidUtilities.m10dp(10.0f), 0, AndroidUtilities.m10dp(10.0f));
+        this.textView2.setPadding(0, AndroidUtilities.m9dp(10.0f), 0, AndroidUtilities.m9dp(10.0f));
         linearLayout.addView(this.textView2, LayoutHelper.createLinear(-2, -2, 1, 20, 46, 20, 0));
-        this.textView2.setOnClickListener(new CLASSNAME());
+        this.textView2.setOnClickListener(new ChangePhoneHelpActivity$$Lambda$1(this));
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$2$ChangePhoneHelpActivity(View v) {
+        if (getParentActivity() != null) {
+            Builder builder = new Builder(getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+            builder.setMessage(LocaleController.getString("PhoneNumberAlert", CLASSNAMER.string.PhoneNumberAlert));
+            builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new ChangePhoneHelpActivity$$Lambda$2(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
+            showDialog(builder.create());
+        }
+    }
+
+    final /* synthetic */ void lambda$null$1$ChangePhoneHelpActivity(DialogInterface dialogInterface, int i) {
+        presentFragment(new ChangePhoneActivity(), true);
     }
 
     public ThemeDescription[] getThemeDescriptions() {

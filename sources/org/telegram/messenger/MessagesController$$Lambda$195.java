@@ -1,17 +1,18 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.Updates;
+import android.content.Context;
+import org.telegram.p005ui.ActionBar.AlertDialog;
 
 final /* synthetic */ class MessagesController$$Lambda$195 implements Runnable {
-    private final MessagesController arg$1;
-    private final Updates arg$2;
+    private final Context arg$1;
+    private final AlertDialog arg$2;
 
-    MessagesController$$Lambda$195(MessagesController messagesController, Updates updates) {
-        this.arg$1 = messagesController;
-        this.arg$2 = updates;
+    MessagesController$$Lambda$195(Context context, AlertDialog alertDialog) {
+        this.arg$1 = context;
+        this.arg$2 = alertDialog;
     }
 
     public void run() {
-        this.arg$1.lambda$null$138$MessagesController(this.arg$2);
+        MessagesController.lambda$null$142$MessagesController(this.arg$1, this.arg$2);
     }
 }

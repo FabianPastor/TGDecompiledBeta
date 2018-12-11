@@ -450,7 +450,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 try {
                     VoIPActivity.this.startService(intent);
                 } catch (Throwable e) {
-                    FileLog.m14e(e);
+                    FileLog.m13e(e);
                 }
                 VoIPActivity.this.hideRetry();
                 VoIPActivity.this.endBtn.postDelayed(new CLASSNAME(), 100);
@@ -675,7 +675,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         private RectF rect;
 
         private SignalBarsDrawable() {
-            this.barHeights = new int[]{AndroidUtilities.m10dp(3.0f), AndroidUtilities.m10dp(6.0f), AndroidUtilities.m10dp(9.0f), AndroidUtilities.m10dp(12.0f)};
+            this.barHeights = new int[]{AndroidUtilities.m9dp(3.0f), AndroidUtilities.m9dp(6.0f), AndroidUtilities.m9dp(9.0f), AndroidUtilities.m9dp(12.0f)};
             this.paint = new Paint(1);
             this.rect = new RectF();
             this.offsetStart = 6;
@@ -688,12 +688,12 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         public void draw(Canvas canvas) {
             if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
                 this.paint.setColor(-1);
-                int x = getBounds().left + AndroidUtilities.m10dp(LocaleController.isRTL ? 0.0f : (float) this.offsetStart);
+                int x = getBounds().left + AndroidUtilities.m9dp(LocaleController.isRTL ? 0.0f : (float) this.offsetStart);
                 int y = getBounds().top;
                 for (int i = 0; i < 4; i++) {
                     this.paint.setAlpha(i + 1 <= VoIPActivity.this.signalBarsCount ? 242 : 102);
-                    this.rect.set((float) (AndroidUtilities.m10dp((float) (i * 4)) + x), (float) ((getIntrinsicHeight() + y) - this.barHeights[i]), (float) (((AndroidUtilities.m10dp(4.0f) * i) + x) + AndroidUtilities.m10dp(3.0f)), (float) (getIntrinsicHeight() + y));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m10dp(0.3f), (float) AndroidUtilities.m10dp(0.3f), this.paint);
+                    this.rect.set((float) (AndroidUtilities.m9dp((float) (i * 4)) + x), (float) ((getIntrinsicHeight() + y) - this.barHeights[i]), (float) (((AndroidUtilities.m9dp(4.0f) * i) + x) + AndroidUtilities.m9dp(3.0f)), (float) (getIntrinsicHeight() + y));
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(0.3f), (float) AndroidUtilities.m9dp(0.3f), this.paint);
                 }
             }
         }
@@ -705,11 +705,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
 
         public int getIntrinsicWidth() {
-            return AndroidUtilities.m10dp((float) (this.offsetStart + 15));
+            return AndroidUtilities.m9dp((float) (this.offsetStart + 15));
         }
 
         public int getIntrinsicHeight() {
-            return AndroidUtilities.m10dp(12.0f);
+            return AndroidUtilities.m9dp(12.0f);
         }
 
         public int getOpacity() {
@@ -766,7 +766,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         this.user = VoIPService.getSharedInstance().getUser();
         if (this.user.photo != null) {
             this.photoView.getImageReceiver().setDelegate(new CLASSNAME());
-            this.photoView.setImage(this.user.photo.photo_big, null, new ColorDrawable(Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
+            this.photoView.setImage(this.user.photo.photo_big, null, new ColorDrawable(Theme.ACTION_BAR_VIDEO_EDIT_COLOR), this.user);
             this.photoView.setLayerType(2, null);
         } else {
             this.photoView.setVisibility(8);
@@ -788,7 +788,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         this.declineSwipe.setListener(new CLASSNAME());
         this.cancelBtn.setOnClickListener(new CLASSNAME());
         getWindow().getDecorView().setKeepScreenOn(true);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.closeInCallActivity);
         this.hintTextView.setText(LocaleController.formatString("CallEmojiKeyTooltip", CLASSNAMER.string.CallEmojiKeyTooltip, this.user.first_name));
         this.emojiExpandedText.setText(LocaleController.formatString("CallEmojiKeyTooltip", CLASSNAMER.string.CallEmojiKeyTooltip, this.user.first_name));
@@ -823,10 +823,10 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 super.onDraw(canvas);
                 this.paint.setColor(NUM);
                 canvas.drawRect(0.0f, 0.0f, (float) getWidth(), (float) getHeight(), this.paint);
-                this.topGradient.setBounds(0, 0, getWidth(), AndroidUtilities.m10dp(170.0f));
+                this.topGradient.setBounds(0, 0, getWidth(), AndroidUtilities.m9dp(170.0f));
                 this.topGradient.setAlpha(128);
                 this.topGradient.draw(canvas);
-                this.bottomGradient.setBounds(0, getHeight() - AndroidUtilities.m10dp(220.0f), getWidth(), getHeight());
+                this.bottomGradient.setBounds(0, getHeight() - AndroidUtilities.m9dp(220.0f), getWidth(), getHeight());
                 this.bottomGradient.setAlpha(178);
                 this.bottomGradient.draw(canvas);
             }
@@ -846,7 +846,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         branding.setText(LocaleController.getString("VoipInCallBranding", CLASSNAMER.string.VoipInCallBranding));
         Drawable logo = getResources().getDrawable(CLASSNAMER.drawable.notification).mutate();
         logo.setAlpha(204);
-        logo.setBounds(0, 0, AndroidUtilities.m10dp(15.0f), AndroidUtilities.m10dp(15.0f));
+        logo.setBounds(0, 0, AndroidUtilities.m9dp(15.0f), AndroidUtilities.m9dp(15.0f));
         this.signalBarsDrawable = new SignalBarsDrawable(this, null);
         this.signalBarsDrawable.setBounds(0, 0, this.signalBarsDrawable.getIntrinsicWidth(), this.signalBarsDrawable.getIntrinsicHeight());
         if (LocaleController.isRTL) {
@@ -860,7 +860,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         branding.setCompoundDrawables(drawable, null, logo, null);
         branding.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         branding.setGravity(LocaleController.isRTL ? 5 : 3);
-        branding.setCompoundDrawablePadding(AndroidUtilities.m10dp(5.0f));
+        branding.setCompoundDrawablePadding(AndroidUtilities.m9dp(5.0f));
         branding.setTextSize(1, 14.0f);
         CLASSNAME.addView(branding, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 18.0f, 18.0f, 18.0f, 0.0f));
         this.brandingText = branding;
@@ -870,7 +870,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         CLASSNAME.setTextSize(1, 40.0f);
         CLASSNAME.setEllipsize(TruncateAt.END);
         CLASSNAME.setGravity(LocaleController.isRTL ? 5 : 3);
-        CLASSNAME.setShadowLayer((float) AndroidUtilities.m10dp(3.0f), 0.0f, (float) AndroidUtilities.m10dp(0.6666667f), NUM);
+        CLASSNAME.setShadowLayer((float) AndroidUtilities.m9dp(3.0f), 0.0f, (float) AndroidUtilities.m9dp(0.6666667f), NUM);
         CLASSNAME.setTypeface(Typeface.create("sans-serif-light", 0));
         this.nameText = CLASSNAME;
         CLASSNAME.addView(CLASSNAME, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 43.0f, 18.0f, 0.0f));
@@ -879,7 +879,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         CLASSNAME.setSingleLine();
         CLASSNAME.setEllipsize(TruncateAt.END);
         CLASSNAME.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        CLASSNAME.setShadowLayer((float) AndroidUtilities.m10dp(3.0f), 0.0f, (float) AndroidUtilities.m10dp(0.6666667f), NUM);
+        CLASSNAME.setShadowLayer((float) AndroidUtilities.m9dp(3.0f), 0.0f, (float) AndroidUtilities.m9dp(0.6666667f), NUM);
         CLASSNAME.setTextSize(1, 15.0f);
         CLASSNAME.setGravity(LocaleController.isRTL ? 5 : 3);
         this.stateText = CLASSNAME;
@@ -890,7 +890,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         CLASSNAME.setSingleLine();
         CLASSNAME.setEllipsize(TruncateAt.END);
         CLASSNAME.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        CLASSNAME.setShadowLayer((float) AndroidUtilities.m10dp(3.0f), 0.0f, (float) AndroidUtilities.m10dp(0.6666667f), NUM);
+        CLASSNAME.setShadowLayer((float) AndroidUtilities.m9dp(3.0f), 0.0f, (float) AndroidUtilities.m9dp(0.6666667f), NUM);
         CLASSNAME.setTextSize(1, 15.0f);
         CLASSNAME.setGravity(LocaleController.isRTL ? 5 : 3);
         CLASSNAME.setVisibility(8);
@@ -904,7 +904,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         accountName.setTextColor(-NUM);
         accountName.setSingleLine();
         accountName.setEllipsize(TruncateAt.END);
-        accountName.setShadowLayer((float) AndroidUtilities.m10dp(3.0f), 0.0f, (float) AndroidUtilities.m10dp(0.6666667f), NUM);
+        accountName.setShadowLayer((float) AndroidUtilities.m9dp(3.0f), 0.0f, (float) AndroidUtilities.m9dp(0.6666667f), NUM);
         accountName.setTextSize(1, 15.0f);
         accountName.setGravity(LocaleController.isRTL ? 5 : 3);
         this.accountNameText = accountName;
@@ -958,8 +958,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         acceptBtn.setImageResource(CLASSNAMER.drawable.ic_call_end_white_36dp);
         acceptBtn.setScaleType(ScaleType.MATRIX);
         Matrix matrix = new Matrix();
-        matrix.setTranslate((float) AndroidUtilities.m10dp(17.0f), (float) AndroidUtilities.m10dp(17.0f));
-        matrix.postRotate(-135.0f, (float) AndroidUtilities.m10dp(35.0f), (float) AndroidUtilities.m10dp(35.0f));
+        matrix.setTranslate((float) AndroidUtilities.m9dp(17.0f), (float) AndroidUtilities.m9dp(17.0f));
+        matrix.postRotate(-135.0f, (float) AndroidUtilities.m9dp(35.0f), (float) AndroidUtilities.m9dp(35.0f));
         acceptBtn.setImageMatrix(matrix);
         this.acceptBtn = acceptBtn;
         CLASSNAME.addView(acceptBtn, LayoutHelper.createFrame(78, 78.0f, 83, 20.0f, 0.0f, 0.0f, 68.0f));
@@ -1001,7 +1001,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         this.emojiWrap.setClipToPadding(false);
         this.emojiWrap.setPivotX(0.0f);
         this.emojiWrap.setPivotY(0.0f);
-        this.emojiWrap.setPadding(AndroidUtilities.m10dp(14.0f), AndroidUtilities.m10dp(10.0f), AndroidUtilities.m10dp(14.0f), AndroidUtilities.m10dp(10.0f));
+        this.emojiWrap.setPadding(AndroidUtilities.m9dp(14.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(14.0f), AndroidUtilities.m9dp(10.0f));
         int i = 0;
         while (i < 4) {
             CLASSNAME = new ImageView(this);
@@ -1020,12 +1020,12 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         this.emojiExpandedText.setAlpha(0.0f);
         CLASSNAME.addView(this.emojiExpandedText, LayoutHelper.createFrame(-1, -2.0f, 17, 10.0f, 32.0f, 10.0f, 0.0f));
         this.hintTextView = new CorrectlyMeasuringTextView(this);
-        this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m10dp(3.0f), -NUM));
+        this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m9dp(3.0f), -NUM));
         this.hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
         this.hintTextView.setTextSize(1, 14.0f);
-        this.hintTextView.setPadding(AndroidUtilities.m10dp(10.0f), AndroidUtilities.m10dp(10.0f), AndroidUtilities.m10dp(10.0f), AndroidUtilities.m10dp(10.0f));
+        this.hintTextView.setPadding(AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(10.0f));
         this.hintTextView.setGravity(17);
-        this.hintTextView.setMaxWidth(AndroidUtilities.m10dp(300.0f));
+        this.hintTextView.setMaxWidth(AndroidUtilities.m9dp(300.0f));
         this.hintTextView.setAlpha(0.0f);
         CLASSNAME.addView(this.hintTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 0.0f, 42.0f, 10.0f, 0.0f));
         int ellMaxAlpha = this.stateText.getPaint().getAlpha();
@@ -1055,7 +1055,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     protected void onDestroy() {
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.closeInCallActivity);
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().unregisterStateListener(this);
@@ -1121,7 +1121,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             for (int i = 0; i < 4; i++) {
                 Drawable drawable = Emoji.getEmojiDrawable(emoji[i]);
                 if (drawable != null) {
-                    drawable.setBounds(0, 0, AndroidUtilities.m10dp(22.0f), AndroidUtilities.m10dp(22.0f));
+                    drawable.setBounds(0, 0, AndroidUtilities.m9dp(22.0f), AndroidUtilities.m9dp(22.0f));
                     this.keyEmojiViews[i].setImageDrawable(drawable);
                 }
             }
@@ -1154,7 +1154,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             final LinearLayout debugOverlay = new LinearLayout(this);
             debugOverlay.setOrientation(1);
             debugOverlay.setBackgroundColor(-NUM);
-            int pad = AndroidUtilities.m10dp(16.0f);
+            int pad = AndroidUtilities.m9dp(16.0f);
             debugOverlay.setPadding(pad, pad * 2, pad, pad * 2);
             TextView title = new TextView(this);
             title.setTextColor(-1);
@@ -1167,7 +1167,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             final TextView debugText = new TextView(this);
             debugText.setTypeface(Typeface.MONOSPACE);
             debugText.setTextSize(1, 11.0f);
-            debugText.setMaxWidth(AndroidUtilities.m10dp(350.0f));
+            debugText.setMaxWidth(AndroidUtilities.m9dp(350.0f));
             debugText.setTextColor(-1);
             debugText.setText(getFormattedDebugString());
             scroll.addView(debugText);
@@ -1289,7 +1289,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             colorAnim.setEvaluator(new ArgbEvaluator());
         }
         r2 = new Animator[4];
-        r2[1] = ObjectAnimator.ofFloat(this.endBtn, "translationX", new float[]{0.0f, (float) (((this.content.getWidth() / 2) - AndroidUtilities.m10dp(52.0f)) - (this.endBtn.getWidth() / 2))});
+        r2[1] = ObjectAnimator.ofFloat(this.endBtn, "translationX", new float[]{0.0f, (float) (((this.content.getWidth() / 2) - AndroidUtilities.m9dp(52.0f)) - (this.endBtn.getWidth() / 2))});
         r2[2] = colorAnim;
         r2[3] = ObjectAnimator.ofFloat(this.endBtnIcon, "rotation", new float[]{0.0f, -135.0f});
         set.playTogether(r2);
@@ -1569,7 +1569,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.emojiDidLoaded) {
+        if (id == NotificationCenter.emojiDidLoad) {
             for (ImageView iv : this.keyEmojiViews) {
                 iv.invalidate();
             }
@@ -1612,7 +1612,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 this.emojiExpandedText.getLocationInWindow(loc2);
                 Rect rect = new Rect();
                 getWindow().getDecorView().getGlobalVisibleRect(rect);
-                int offsetY = ((loc2[1] - (loc[1] + this.emojiWrap.getHeight())) - AndroidUtilities.m10dp(32.0f)) - this.emojiWrap.getHeight();
+                int offsetY = ((loc2[1] - (loc[1] + this.emojiWrap.getHeight())) - AndroidUtilities.m9dp(32.0f)) - this.emojiWrap.getHeight();
                 int firstOffsetX = ((rect.width() / 2) - (Math.round(((float) this.emojiWrap.getWidth()) * 2.5f) / 2)) - loc[0];
                 set = new AnimatorSet();
                 animatorArr = new Animator[7];
@@ -1719,7 +1719,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         final BottomSheet bottomSheet2 = bottomSheet;
         OnClickListener listener = new OnClickListener() {
             public void onClick(final View v) {
-                bottomSheet2.dismiss();
+                bottomSheet2.lambda$new$4$EmbedBottomSheet();
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable() {
                         public void run() {
@@ -1748,9 +1748,9 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         field.setTextColor(-1);
         field.setHintTextColor(DarkTheme.getColor(Theme.key_chat_messagePanelHint));
         field.setBackgroundDrawable(null);
-        field.setPadding(AndroidUtilities.m10dp(16.0f), AndroidUtilities.m10dp(11.0f), AndroidUtilities.m10dp(16.0f), AndroidUtilities.m10dp(12.0f));
+        field.setPadding(AndroidUtilities.m9dp(16.0f), AndroidUtilities.m9dp(11.0f), AndroidUtilities.m9dp(16.0f), AndroidUtilities.m9dp(12.0f));
         field.setHint(LocaleController.getString("QuickReplyCustom", CLASSNAMER.string.QuickReplyCustom));
-        field.setMinHeight(AndroidUtilities.m10dp(48.0f));
+        field.setMinHeight(AndroidUtilities.m9dp(48.0f));
         field.setGravity(80);
         field.setMaxLines(4);
         field.setSingleLine(false);
@@ -1782,7 +1782,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
 
             public void onClick(View v) {
                 if (field.length() != 0) {
-                    bottomSheet2.dismiss();
+                    bottomSheet2.lambda$new$4$EmbedBottomSheet();
                     if (VoIPService.getSharedInstance() != null) {
                         VoIPService.getSharedInstance().declineIncomingCall(4, new CLASSNAME());
                     }

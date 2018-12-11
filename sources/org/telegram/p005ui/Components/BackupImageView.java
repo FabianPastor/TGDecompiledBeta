@@ -40,46 +40,46 @@ public class BackupImageView extends View {
     }
 
     public void setImage(SecureDocument path, String filter) {
-        setImage(path, null, filter, null, null, null, null, null, 0);
+        setImage(path, null, filter, null, null, null, null, null, 0, null);
     }
 
-    public void setImage(TLObject path, String filter, String ext, Drawable thumb) {
-        setImage(path, null, filter, thumb, null, null, null, ext, 0);
+    public void setImage(TLObject path, String filter, String ext, Drawable thumb, Object parentObject) {
+        setImage(path, null, filter, thumb, null, null, null, ext, 0, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, Drawable thumb) {
-        setImage(path, null, filter, thumb, null, null, null, null, 0);
+    public void setImage(TLObject path, String filter, Drawable thumb, Object parentObject) {
+        setImage(path, null, filter, thumb, null, null, null, null, 0, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, Bitmap thumb) {
-        setImage(path, null, filter, null, thumb, null, null, null, 0);
+    public void setImage(TLObject path, String filter, Bitmap thumb, Object parentObject) {
+        setImage(path, null, filter, null, thumb, null, null, null, 0, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, Drawable thumb, int size) {
-        setImage(path, null, filter, thumb, null, null, null, null, size);
+    public void setImage(TLObject path, String filter, Drawable thumb, int size, Object parentObject) {
+        setImage(path, null, filter, thumb, null, null, null, null, size, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, Bitmap thumb, int size) {
-        setImage(path, null, filter, null, thumb, null, null, null, size);
+    public void setImage(TLObject path, String filter, Bitmap thumb, int size, Object parentObject) {
+        setImage(path, null, filter, null, thumb, null, null, null, size, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, FileLocation thumb, int size) {
-        setImage(path, null, filter, null, null, thumb, null, null, size);
+    public void setImage(TLObject path, String filter, FileLocation thumb, int size, Object parentObject) {
+        setImage(path, null, filter, null, null, thumb, null, null, size, parentObject);
     }
 
     public void setImage(String path, String filter, Drawable thumb) {
-        setImage(null, path, filter, thumb, null, null, null, null, 0);
+        setImage(null, path, filter, thumb, null, null, null, null, 0, null);
     }
 
     public void setOrientation(int angle, boolean center) {
         this.imageReceiver.setOrientation(angle, center);
     }
 
-    public void setImage(TLObject path, String httpUrl, String filter, Drawable thumb, Bitmap thumbBitmap, FileLocation thumbLocation, String thumbFilter, String ext, int size) {
+    public void setImage(TLObject path, String httpUrl, String filter, Drawable thumb, Bitmap thumbBitmap, FileLocation thumbLocation, String thumbFilter, String ext, int size, Object parentObject) {
         if (thumbBitmap != null) {
-            thumb = new BitmapDrawable(null, thumbBitmap);
+            Drawable bitmapDrawable = new BitmapDrawable(null, thumbBitmap);
         }
-        this.imageReceiver.setImage(path, httpUrl, filter, thumb, thumbLocation, thumbFilter, size, ext, 0);
+        this.imageReceiver.setImage(path, httpUrl, filter, thumb, thumbLocation, thumbFilter, size, ext, parentObject, 0);
     }
 
     public void setImageBitmap(Bitmap bitmap) {

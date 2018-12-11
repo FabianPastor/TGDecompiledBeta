@@ -5,6 +5,7 @@ import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.text.DateFormatSymbols;
 import java.text.FieldPosition;
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class FastDatePrinter implements Serializable, DatePrinter {
     public static final int MEDIUM = 2;
     public static final int SHORT = 3;
     private static final ConcurrentMap<TimeZoneDisplayKey, String> cTimeZoneDisplayCache = new ConcurrentHashMap(7);
+    private static Method getShortStandAloneMonths = null;
+    private static Method getStandAloneMonthsMethod = null;
+    private static boolean gotMethods = false;
     private static final long serialVersionUID = 1;
     private final Locale mLocale;
     private transient int mMaxLengthEstimate;
@@ -437,14 +441,44 @@ public class FastDatePrinter implements Serializable, DatePrinter {
     }
 
     protected List<Rule> parsePattern() {
-        DateFormatSymbols symbols = new DateFormatSymbols(this.mLocale);
+        String[] standaloneMonths;
+        String[] shortStandaloneMonths;
+        if (!gotMethods) {
+            try {
+                getStandAloneMonthsMethod = DateFormatSymbols.class.getDeclaredMethod("getStandAloneMonths", new Class[0]);
+                getStandAloneMonthsMethod.setAccessible(true);
+                getShortStandAloneMonths = DateFormatSymbols.class.getDeclaredMethod("getShortStandAloneMonths", new Class[0]);
+                getShortStandAloneMonths.setAccessible(true);
+            } catch (Throwable th) {
+            }
+            gotMethods = true;
+        }
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(this.mLocale);
         List<Rule> rules = new ArrayList();
-        String[] ERAs = symbols.getEras();
-        String[] months = symbols.getMonths();
-        String[] shortMonths = symbols.getShortMonths();
-        String[] weekdays = symbols.getWeekdays();
-        String[] shortWeekdays = symbols.getShortWeekdays();
-        String[] AmPmStrings = symbols.getAmPmStrings();
+        String[] ERAs = dateFormatSymbols.getEras();
+        String[] months = dateFormatSymbols.getMonths();
+        if (getStandAloneMonthsMethod != null) {
+            try {
+                standaloneMonths = (String[]) getStandAloneMonthsMethod.invoke(dateFormatSymbols, new Object[0]);
+            } catch (Throwable th2) {
+                standaloneMonths = months;
+            }
+        } else {
+            standaloneMonths = months;
+        }
+        String[] shortMonths = dateFormatSymbols.getShortMonths();
+        if (getShortStandAloneMonths != null) {
+            try {
+                shortStandaloneMonths = (String[]) getShortStandAloneMonths.invoke(dateFormatSymbols, new Object[0]);
+            } catch (Throwable th3) {
+                shortStandaloneMonths = shortMonths;
+            }
+        } else {
+            shortStandaloneMonths = shortMonths;
+        }
+        String[] weekdays = dateFormatSymbols.getWeekdays();
+        String[] shortWeekdays = dateFormatSymbols.getShortWeekdays();
+        String[] AmPmStrings = dateFormatSymbols.getAmPmStrings();
         int length = this.mPattern.length();
         int[] indexRef = new int[1];
         int i = 0;
@@ -489,6 +523,21 @@ public class FastDatePrinter implements Serializable, DatePrinter {
                     break;
                 case 'K':
                     rule = selectNumberRule(10, tokenLen);
+                    break;
+                case 'L':
+                    if (tokenLen < 4) {
+                        if (tokenLen != 3) {
+                            if (tokenLen != 2) {
+                                rule = UnpaddedMonthField.INSTANCE;
+                                break;
+                            }
+                            rule = TwoDigitMonthField.INSTANCE;
+                            break;
+                        }
+                        rule = new TextField(2, shortStandaloneMonths);
+                        break;
+                    }
+                    rule = new TextField(2, standaloneMonths);
                     break;
                 case 'M':
                     if (tokenLen < 4) {

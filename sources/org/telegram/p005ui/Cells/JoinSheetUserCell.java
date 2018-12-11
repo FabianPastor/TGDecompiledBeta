@@ -13,7 +13,6 @@ import org.telegram.p005ui.Components.AvatarDrawable;
 import org.telegram.p005ui.Components.BackupImageView;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
 
 /* renamed from: org.telegram.ui.Cells.JoinSheetUserCell */
@@ -26,7 +25,7 @@ public class JoinSheetUserCell extends FrameLayout {
     public JoinSheetUserCell(Context context) {
         super(context);
         this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.m10dp(27.0f));
+        this.imageView.setRoundRadius(AndroidUtilities.m9dp(27.0f));
         addView(this.imageView, LayoutHelper.createFrame(54, 54.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -40,7 +39,7 @@ public class JoinSheetUserCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(90.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(90.0f), NUM));
     }
 
     public void setUser(User user) {
@@ -50,12 +49,12 @@ public class JoinSheetUserCell extends FrameLayout {
         if (!(user == null || user.photo == null)) {
             photo = user.photo.photo_small;
         }
-        this.imageView.setImage(photo, "50_50", this.avatarDrawable);
+        this.imageView.setImage(photo, "50_50", this.avatarDrawable, (Object) user);
     }
 
     public void setCount(int count) {
         this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
         this.avatarDrawable.setInfo(0, null, null, false, "+" + LocaleController.formatShortNumber(count, this.result));
-        this.imageView.setImage((FileLocation) null, "50_50", this.avatarDrawable);
+        this.imageView.setImage(null, "50_50", this.avatarDrawable, null);
     }
 }

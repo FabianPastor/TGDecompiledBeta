@@ -25,20 +25,20 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private float currentPositionOffset = 0.0f;
     private LayoutParams defaultTabLayoutParams;
     public OnPageChangeListener delegatePageListener;
-    private int dividerPadding = AndroidUtilities.m10dp(12.0f);
+    private int dividerPadding = AndroidUtilities.m9dp(12.0f);
     private int indicatorColor = -10066330;
-    private int indicatorHeight = AndroidUtilities.m10dp(8.0f);
+    private int indicatorHeight = AndroidUtilities.m9dp(8.0f);
     private int lastScrollX = 0;
     private final PageListener pageListener = new PageListener(this, null);
     private ViewPager pager;
     private Paint rectPaint;
-    private int scrollOffset = AndroidUtilities.m10dp(52.0f);
+    private int scrollOffset = AndroidUtilities.m9dp(52.0f);
     private boolean shouldExpand = false;
     private int tabCount;
-    private int tabPadding = AndroidUtilities.m10dp(24.0f);
+    private int tabPadding = AndroidUtilities.m9dp(24.0f);
     private LinearLayout tabsContainer;
     private int underlineColor = NUM;
-    private int underlineHeight = AndroidUtilities.m10dp(2.0f);
+    private int underlineHeight = AndroidUtilities.m9dp(2.0f);
 
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$IconTabProvider */
     public interface IconTabProvider {

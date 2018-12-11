@@ -26,12 +26,12 @@ public class StickerSetGroupInfoCell extends LinearLayout {
         infoTextView.setText(LocaleController.getString("GroupStickersInfo", CLASSNAMER.string.GroupStickersInfo));
         addView(infoTextView, LayoutHelper.createLinear(-1, -2, 51, 17, 4, 17, 0));
         this.addButton = new TextView(context);
-        this.addButton.setPadding(AndroidUtilities.m10dp(17.0f), 0, AndroidUtilities.m10dp(17.0f), 0);
+        this.addButton.setPadding(AndroidUtilities.m9dp(17.0f), 0, AndroidUtilities.m9dp(17.0f), 0);
         this.addButton.setGravity(17);
         this.addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.m10dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
+        this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.m9dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         this.addButton.setText(LocaleController.getString("ChooseStickerSet", CLASSNAMER.string.ChooseStickerSet).toUpperCase());
         addView(this.addButton, LayoutHelper.createLinear(-2, 28, 51, 17, 10, 14, 8));
     }
@@ -41,7 +41,7 @@ public class StickerSetGroupInfoCell extends LinearLayout {
         if (this.isLast) {
             View parent = (View) getParent();
             if (parent != null) {
-                int height = ((parent.getMeasuredHeight() - parent.getPaddingBottom()) - parent.getPaddingTop()) - AndroidUtilities.m10dp(24.0f);
+                int height = ((parent.getMeasuredHeight() - parent.getPaddingBottom()) - parent.getPaddingTop()) - AndroidUtilities.m9dp(24.0f);
                 if (getMeasuredHeight() < height) {
                     setMeasuredDimension(getMeasuredWidth(), height);
                 }

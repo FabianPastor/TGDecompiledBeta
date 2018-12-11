@@ -12,6 +12,6 @@ final /* synthetic */ class PassportActivity$$Lambda$45 implements OnClickListen
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$checkDiscard$69$PassportActivity(dialogInterface, i);
+        this.arg$1.lambda$onRequestPermissionsResultFragment$69$PassportActivity(dialogInterface, i);
     }
 }
