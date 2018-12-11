@@ -988,7 +988,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 }
             }
         } else if (id == NotificationCenter.chatDidCreated) {
-            removeSelfFromStack();
+            lambda$null$11$ProfileActivity();
         }
     }
 

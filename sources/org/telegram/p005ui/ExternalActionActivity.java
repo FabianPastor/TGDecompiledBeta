@@ -292,22 +292,19 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.setCancelable(false);
                 int bot_id = intent.getIntExtra("bot_id", 0);
-                String _payload = intent.getStringExtra("nonce");
-                if (TextUtils.isEmpty(_payload)) {
-                    _payload = intent.getStringExtra("payload");
-                }
-                String payload = _payload;
+                String nonce = intent.getStringExtra("nonce");
+                String payload = intent.getStringExtra("payload");
                 TL_account_getAuthorizationForm req = new TL_account_getAuthorizationForm();
                 req.bot_id = bot_id;
                 req.scope = intent.getStringExtra("scope");
                 req.public_key = intent.getStringExtra("public_key");
                 int[] requestId = new int[]{0};
-                if (bot_id == 0 || TextUtils.isEmpty(payload) || TextUtils.isEmpty(req.scope) || TextUtils.isEmpty(req.public_key)) {
+                if (bot_id == 0 || ((TextUtils.isEmpty(payload) && TextUtils.isEmpty(nonce)) || TextUtils.isEmpty(req.scope) || TextUtils.isEmpty(req.public_key))) {
                     finish();
                     return false;
                 }
                 progressDialog.show();
-                requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(req, new ExternalActionActivity$$Lambda$5(this, requestId, intentAccount, progressDialog, req, payload), 10);
+                requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(req, new ExternalActionActivity$$Lambda$5(this, requestId, intentAccount, progressDialog, req, payload, nonce), 10);
             } else {
                 if (AndroidUtilities.isTablet()) {
                     if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
@@ -349,20 +346,20 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         finish();
     }
 
-    final /* synthetic */ void lambda$handleIntent$9$ExternalActionActivity(int[] requestId, int intentAccount, AlertDialog progressDialog, TL_account_getAuthorizationForm req, String payload, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$handleIntent$9$ExternalActionActivity(int[] requestId, int intentAccount, AlertDialog progressDialog, TL_account_getAuthorizationForm req, String payload, String nonce, TLObject response, TL_error error) {
         TL_account_authorizationForm authorizationForm = (TL_account_authorizationForm) response;
         if (authorizationForm != null) {
-            requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(new TL_account_getPassword(), new ExternalActionActivity$$Lambda$6(this, progressDialog, intentAccount, authorizationForm, req, payload));
+            requestId[0] = ConnectionsManager.getInstance(intentAccount).sendRequest(new TL_account_getPassword(), new ExternalActionActivity$$Lambda$6(this, progressDialog, intentAccount, authorizationForm, req, payload, nonce));
             return;
         }
         AndroidUtilities.runOnUIThread(new ExternalActionActivity$$Lambda$7(this, progressDialog, error));
     }
 
-    final /* synthetic */ void lambda$null$6$ExternalActionActivity(AlertDialog progressDialog, int intentAccount, TL_account_authorizationForm authorizationForm, TL_account_getAuthorizationForm req, String payload, TLObject response1, TL_error error1) {
-        AndroidUtilities.runOnUIThread(new ExternalActionActivity$$Lambda$9(this, progressDialog, response1, intentAccount, authorizationForm, req, payload));
+    final /* synthetic */ void lambda$null$6$ExternalActionActivity(AlertDialog progressDialog, int intentAccount, TL_account_authorizationForm authorizationForm, TL_account_getAuthorizationForm req, String payload, String nonce, TLObject response1, TL_error error1) {
+        AndroidUtilities.runOnUIThread(new ExternalActionActivity$$Lambda$9(this, progressDialog, response1, intentAccount, authorizationForm, req, payload, nonce));
     }
 
-    final /* synthetic */ void lambda$null$5$ExternalActionActivity(AlertDialog progressDialog, TLObject response1, int intentAccount, TL_account_authorizationForm authorizationForm, TL_account_getAuthorizationForm req, String payload) {
+    final /* synthetic */ void lambda$null$5$ExternalActionActivity(AlertDialog progressDialog, TLObject response1, int intentAccount, TL_account_authorizationForm authorizationForm, TL_account_getAuthorizationForm req, String payload, String nonce) {
         try {
             progressDialog.dismiss();
         } catch (Throwable e) {
@@ -371,7 +368,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         if (response1 != null) {
             TL_account_password accountPassword = (TL_account_password) response1;
             MessagesController.getInstance(intentAccount).putUsers(authorizationForm.users, false);
-            PassportActivity fragment = new PassportActivity(5, req.bot_id, req.scope, req.public_key, payload, null, authorizationForm, accountPassword);
+            PassportActivity fragment = new PassportActivity(5, req.bot_id, req.scope, req.public_key, payload, nonce, null, authorizationForm, accountPassword);
             fragment.setNeedActivityResult(true);
             if (AndroidUtilities.isTablet()) {
                 this.layersActionBarLayout.addFragmentToStack(fragment);

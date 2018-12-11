@@ -297,7 +297,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 EmbedBottomSheet.this.animationInProgress = true;
                 EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
                 int[] access$3900 = EmbedBottomSheet.this.position;
-                access$3900[0] = access$3900[0] - EmbedBottomSheet.this.access$1100();
+                access$3900[0] = access$3900[0] - EmbedBottomSheet.this.access$4700();
                 access$3900 = EmbedBottomSheet.this.position;
                 access$3900[1] = (int) (((float) access$3900[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
                 TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
@@ -395,7 +395,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     EmbedBottomSheet.this.animationInProgress = true;
                     EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
                     int[] access$3900 = EmbedBottomSheet.this.position;
-                    access$3900[0] = access$3900[0] - EmbedBottomSheet.this.access$1100();
+                    access$3900[0] = access$3900[0] - EmbedBottomSheet.this.access$4700();
                     access$3900 = EmbedBottomSheet.this.position;
                     access$3900[1] = (int) (((float) access$3900[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
                     TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
@@ -1029,7 +1029,7 @@ public class EmbedBottomSheet extends BottomSheet {
     public void updateTextureViewPosition() {
         this.videoView.getAspectRatioView().getLocationInWindow(this.position);
         int[] iArr = this.position;
-        iArr[0] = iArr[0] - access$1100();
+        iArr[0] = iArr[0] - access$4700();
         if (!(this.videoView.isInline() || this.animationInProgress)) {
             TextureView textureView = this.videoView.getTextureView();
             textureView.setTranslationX((float) this.position[0]);
