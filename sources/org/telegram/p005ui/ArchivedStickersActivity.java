@@ -66,7 +66,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ArchivedStickersActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ArchivedStickersActivity.this.finishFragment();
             }
         }
     }

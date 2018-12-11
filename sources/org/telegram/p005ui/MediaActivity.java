@@ -174,112 +174,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private boolean tabsAnimationInProgress;
     private SharedDocumentsAdapter voiceAdapter;
 
-    /* renamed from: org.telegram.ui.MediaActivity$MediaPage */
-    private class MediaPage extends FrameLayout {
-        private ImageView emptyImageView;
-        private TextView emptyTextView;
-        private LinearLayout emptyView;
-        private LinearLayoutManager layoutManager;
-        private RecyclerListView listView;
-        private RadialProgressView progressBar;
-        private LinearLayout progressView;
-        private int selectedType;
-
-        public MediaPage(Context context) {
-            super(context);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.MediaActivity$SharedMediaData */
-    private class SharedMediaData {
-        private boolean[] endReached;
-        private boolean loading;
-        private int[] max_id;
-        private ArrayList<MessageObject> messages;
-        private SparseArray<MessageObject>[] messagesDict;
-        private HashMap<String, ArrayList<MessageObject>> sectionArrays;
-        private ArrayList<String> sections;
-        private int totalCount;
-
-        private SharedMediaData() {
-            this.messages = new ArrayList();
-            this.messagesDict = new SparseArray[]{new SparseArray(), new SparseArray()};
-            this.sections = new ArrayList();
-            this.sectionArrays = new HashMap();
-            this.endReached = new boolean[]{false, true};
-            this.max_id = new int[]{0, 0};
-        }
-
-        /* synthetic */ SharedMediaData(MediaActivity x0, CLASSNAME x1) {
-            this();
-        }
-
-        public boolean addMessage(MessageObject messageObject, boolean isNew, boolean enc) {
-            int loadIndex;
-            if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
-                loadIndex = 0;
-            } else {
-                loadIndex = 1;
-            }
-            if (this.messagesDict[loadIndex].indexOfKey(messageObject.getId()) >= 0) {
-                return false;
-            }
-            ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
-            if (messageObjects == null) {
-                messageObjects = new ArrayList();
-                this.sectionArrays.put(messageObject.monthKey, messageObjects);
-                if (isNew) {
-                    this.sections.add(0, messageObject.monthKey);
-                } else {
-                    this.sections.add(messageObject.monthKey);
-                }
-            }
-            if (isNew) {
-                messageObjects.add(0, messageObject);
-                this.messages.add(0, messageObject);
-            } else {
-                messageObjects.add(messageObject);
-                this.messages.add(messageObject);
-            }
-            this.messagesDict[loadIndex].put(messageObject.getId(), messageObject);
-            if (enc) {
-                this.max_id[loadIndex] = Math.max(messageObject.getId(), this.max_id[loadIndex]);
-            } else if (messageObject.getId() > 0) {
-                this.max_id[loadIndex] = Math.min(messageObject.getId(), this.max_id[loadIndex]);
-            }
-            return true;
-        }
-
-        public boolean deleteMessage(int mid, int loadIndex) {
-            MessageObject messageObject = (MessageObject) this.messagesDict[loadIndex].get(mid);
-            if (messageObject == null) {
-                return false;
-            }
-            ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
-            if (messageObjects == null) {
-                return false;
-            }
-            messageObjects.remove(messageObject);
-            this.messages.remove(messageObject);
-            this.messagesDict[loadIndex].remove(messageObject.getId());
-            if (messageObjects.isEmpty()) {
-                this.sectionArrays.remove(messageObject.monthKey);
-                this.sections.remove(messageObject.monthKey);
-            }
-            this.totalCount--;
-            return true;
-        }
-
-        public void replaceMid(int oldMid, int newMid) {
-            MessageObject obj = (MessageObject) this.messagesDict[0].get(oldMid);
-            if (obj != null) {
-                this.messagesDict[0].remove(oldMid);
-                this.messagesDict[0].put(newMid, obj);
-                obj.messageOwner.var_id = newMid;
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.MediaActivity$14 */
     class CLASSNAME implements SharedLinkCellDelegate {
         CLASSNAME() {
@@ -315,6 +209,58 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
+    /* renamed from: org.telegram.ui.MediaActivity$2 */
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
+        }
+
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            if (messageObject == null || (MediaActivity.this.mediaPages[0].selectedType != 0 && MediaActivity.this.mediaPages[0].selectedType != 1)) {
+                return null;
+            }
+            int count = MediaActivity.this.mediaPages[0].listView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View view = MediaActivity.this.mediaPages[0].listView.getChildAt(a);
+                BackupImageView imageView = null;
+                if (view instanceof SharedPhotoVideoCell) {
+                    SharedPhotoVideoCell cell = (SharedPhotoVideoCell) view;
+                    for (int i = 0; i < 6; i++) {
+                        MessageObject message = cell.getMessageObject(i);
+                        if (message == null) {
+                            break;
+                        }
+                        if (message.getId() == messageObject.getId()) {
+                            imageView = cell.getImageView(i);
+                        }
+                    }
+                } else if (view instanceof SharedDocumentCell) {
+                    SharedDocumentCell cell2 = (SharedDocumentCell) view;
+                    if (cell2.getMessage().getId() == messageObject.getId()) {
+                        imageView = cell2.getImageView();
+                    }
+                }
+                if (imageView != null) {
+                    int[] coords = new int[2];
+                    imageView.getLocationInWindow(coords);
+                    PlaceProviderObject object = new PlaceProviderObject();
+                    object.viewX = coords[0];
+                    object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+                    object.parentView = MediaActivity.this.mediaPages[0].listView;
+                    object.imageReceiver = imageView.getImageReceiver();
+                    object.thumb = object.imageReceiver.getBitmapSafe();
+                    object.parentView.getLocationInWindow(coords);
+                    object.clipTopAddition = (int) (((float) MediaActivity.this.actionBar.getHeight()) + MediaActivity.this.actionBar.getTranslationY());
+                    if (MediaActivity.this.fragmentContextView == null || MediaActivity.this.fragmentContextView.getVisibility() != 0) {
+                        return object;
+                    }
+                    object.clipTopAddition += AndroidUtilities.m9dp(36.0f);
+                    return object;
+                }
+            }
+            return null;
+        }
+    }
+
     /* renamed from: org.telegram.ui.MediaActivity$4 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -333,7 +279,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     MediaActivity.this.updateRowsSelection();
                     return;
                 }
-                MediaActivity.this.lambda$checkDiscard$70$PassportActivity();
+                MediaActivity.this.finishFragment();
             } else if (id == 4) {
                 if (MediaActivity.this.getParentActivity() != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MediaActivity.this.getParentActivity());
@@ -514,7 +460,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     }
                     SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(fmessages, did);
                 }
-                fragment1.lambda$checkDiscard$70$PassportActivity();
+                fragment1.finishFragment();
                 return;
             }
             did = ((Long) dids.get(0)).longValue();
@@ -634,55 +580,19 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    /* renamed from: org.telegram.ui.MediaActivity$2 */
-    class CLASSNAME extends EmptyPhotoViewerProvider {
-        CLASSNAME() {
-        }
+    /* renamed from: org.telegram.ui.MediaActivity$MediaPage */
+    private class MediaPage extends FrameLayout {
+        private ImageView emptyImageView;
+        private TextView emptyTextView;
+        private LinearLayout emptyView;
+        private LinearLayoutManager layoutManager;
+        private RecyclerListView listView;
+        private RadialProgressView progressBar;
+        private LinearLayout progressView;
+        private int selectedType;
 
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-            if (messageObject == null || (MediaActivity.this.mediaPages[0].selectedType != 0 && MediaActivity.this.mediaPages[0].selectedType != 1)) {
-                return null;
-            }
-            int count = MediaActivity.this.mediaPages[0].listView.getChildCount();
-            for (int a = 0; a < count; a++) {
-                View view = MediaActivity.this.mediaPages[0].listView.getChildAt(a);
-                BackupImageView imageView = null;
-                if (view instanceof SharedPhotoVideoCell) {
-                    SharedPhotoVideoCell cell = (SharedPhotoVideoCell) view;
-                    for (int i = 0; i < 6; i++) {
-                        MessageObject message = cell.getMessageObject(i);
-                        if (message == null) {
-                            break;
-                        }
-                        if (message.getId() == messageObject.getId()) {
-                            imageView = cell.getImageView(i);
-                        }
-                    }
-                } else if (view instanceof SharedDocumentCell) {
-                    SharedDocumentCell cell2 = (SharedDocumentCell) view;
-                    if (cell2.getMessage().getId() == messageObject.getId()) {
-                        imageView = cell2.getImageView();
-                    }
-                }
-                if (imageView != null) {
-                    int[] coords = new int[2];
-                    imageView.getLocationInWindow(coords);
-                    PlaceProviderObject object = new PlaceProviderObject();
-                    object.viewX = coords[0];
-                    object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
-                    object.parentView = MediaActivity.this.mediaPages[0].listView;
-                    object.imageReceiver = imageView.getImageReceiver();
-                    object.thumb = object.imageReceiver.getBitmapSafe();
-                    object.parentView.getLocationInWindow(coords);
-                    object.clipTopAddition = (int) (((float) MediaActivity.this.actionBar.getHeight()) + MediaActivity.this.actionBar.getTranslationY());
-                    if (MediaActivity.this.fragmentContextView == null || MediaActivity.this.fragmentContextView.getVisibility() != 0) {
-                        return object;
-                    }
-                    object.clipTopAddition += AndroidUtilities.m9dp(36.0f);
-                    return object;
-                }
-            }
-            return null;
+        public MediaPage(Context context) {
+            super(context);
         }
     }
 
@@ -1348,6 +1258,96 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
+    /* renamed from: org.telegram.ui.MediaActivity$SharedMediaData */
+    private class SharedMediaData {
+        private boolean[] endReached;
+        private boolean loading;
+        private int[] max_id;
+        private ArrayList<MessageObject> messages;
+        private SparseArray<MessageObject>[] messagesDict;
+        private HashMap<String, ArrayList<MessageObject>> sectionArrays;
+        private ArrayList<String> sections;
+        private int totalCount;
+
+        private SharedMediaData() {
+            this.messages = new ArrayList();
+            this.messagesDict = new SparseArray[]{new SparseArray(), new SparseArray()};
+            this.sections = new ArrayList();
+            this.sectionArrays = new HashMap();
+            this.endReached = new boolean[]{false, true};
+            this.max_id = new int[]{0, 0};
+        }
+
+        /* synthetic */ SharedMediaData(MediaActivity x0, CLASSNAME x1) {
+            this();
+        }
+
+        public boolean addMessage(MessageObject messageObject, boolean isNew, boolean enc) {
+            int loadIndex;
+            if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
+                loadIndex = 0;
+            } else {
+                loadIndex = 1;
+            }
+            if (this.messagesDict[loadIndex].indexOfKey(messageObject.getId()) >= 0) {
+                return false;
+            }
+            ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
+            if (messageObjects == null) {
+                messageObjects = new ArrayList();
+                this.sectionArrays.put(messageObject.monthKey, messageObjects);
+                if (isNew) {
+                    this.sections.add(0, messageObject.monthKey);
+                } else {
+                    this.sections.add(messageObject.monthKey);
+                }
+            }
+            if (isNew) {
+                messageObjects.add(0, messageObject);
+                this.messages.add(0, messageObject);
+            } else {
+                messageObjects.add(messageObject);
+                this.messages.add(messageObject);
+            }
+            this.messagesDict[loadIndex].put(messageObject.getId(), messageObject);
+            if (enc) {
+                this.max_id[loadIndex] = Math.max(messageObject.getId(), this.max_id[loadIndex]);
+            } else if (messageObject.getId() > 0) {
+                this.max_id[loadIndex] = Math.min(messageObject.getId(), this.max_id[loadIndex]);
+            }
+            return true;
+        }
+
+        public boolean deleteMessage(int mid, int loadIndex) {
+            MessageObject messageObject = (MessageObject) this.messagesDict[loadIndex].get(mid);
+            if (messageObject == null) {
+                return false;
+            }
+            ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
+            if (messageObjects == null) {
+                return false;
+            }
+            messageObjects.remove(messageObject);
+            this.messages.remove(messageObject);
+            this.messagesDict[loadIndex].remove(messageObject.getId());
+            if (messageObjects.isEmpty()) {
+                this.sectionArrays.remove(messageObject.monthKey);
+                this.sections.remove(messageObject.monthKey);
+            }
+            this.totalCount--;
+            return true;
+        }
+
+        public void replaceMid(int oldMid, int newMid) {
+            MessageObject obj = (MessageObject) this.messagesDict[0].get(oldMid);
+            if (obj != null) {
+                this.messagesDict[0].remove(oldMid);
+                this.messagesDict[0].put(newMid, obj);
+                obj.messageOwner.var_id = newMid;
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter */
     private class SharedPhotoVideoAdapter extends SectionsAdapter {
         private Context mContext;
@@ -1788,10 +1788,16 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 MediaActivity.this.fragmentContextView.setTranslationY(((float) top) + MediaActivity.this.actionBar.getTranslationY());
                 int actionBarHeight = MediaActivity.this.actionBar.getMeasuredHeight();
                 for (int a = 0; a < MediaActivity.this.mediaPages.length; a++) {
-                    MediaActivity.this.mediaPages[a].listView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, AndroidUtilities.m9dp(4.0f));
-                    MediaActivity.this.mediaPages[a].emptyView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
-                    MediaActivity.this.mediaPages[a].progressView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
-                    MediaActivity.this.mediaPages[a].listView.checkSection();
+                    if (MediaActivity.this.mediaPages[a].emptyView != null) {
+                        MediaActivity.this.mediaPages[a].emptyView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
+                    }
+                    if (MediaActivity.this.mediaPages[a].progressView != null) {
+                        MediaActivity.this.mediaPages[a].progressView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
+                    }
+                    if (MediaActivity.this.mediaPages[a].listView != null) {
+                        MediaActivity.this.mediaPages[a].listView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, AndroidUtilities.m9dp(4.0f));
+                        MediaActivity.this.mediaPages[a].listView.checkSection();
+                    }
                 }
             }
 
@@ -2033,20 +2039,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 protected void onLayout(boolean changed, int l, int t, int r, int b) {
                     super.onLayout(changed, l, t, r, b);
                     MediaActivity.this.updateSections(this, true);
-                }
-
-                protected void dispatchDraw(Canvas canvas) {
-                    super.dispatchDraw(canvas);
-                    if (getAdapter() == MediaActivity.this.photoVideoAdapter) {
-                        int count = getChildCount();
-                        for (int a = 0; a < count; a++) {
-                            View view = getChildAt(a);
-                            if ((view instanceof SharedMediaSectionCell) && view.getAlpha() != 0.0f) {
-                                MediaActivity.this.pinnedHeaderShadowDrawable.setBounds(0, view.getBottom(), getWidth(), view.getBottom() + MediaActivity.this.pinnedHeaderShadowDrawable.getIntrinsicHeight());
-                                MediaActivity.this.pinnedHeaderShadowDrawable.draw(canvas);
-                            }
-                        }
-                    }
                 }
             };
             this.mediaPages[a].listView.setClipToPadding(false);

@@ -81,21 +81,6 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     private int shareDetailRow;
     private int shareSectionRow;
 
-    /* renamed from: org.telegram.ui.PrivacyControlActivity$LinkMovementMethodMy */
-    private static class LinkMovementMethodMy extends LinkMovementMethod {
-        private LinkMovementMethodMy() {
-        }
-
-        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-            try {
-                return super.onTouchEvent(widget, buffer, event);
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-                return false;
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.PrivacyControlActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -128,6 +113,21 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         final /* synthetic */ void lambda$onItemClick$0$PrivacyControlActivity$1(SharedPreferences preferences, DialogInterface dialogInterface, int i) {
             PrivacyControlActivity.this.applyCurrentPrivacySettings();
             preferences.edit().putBoolean("privacyAlertShowed", true).commit();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PrivacyControlActivity$LinkMovementMethodMy */
+    private static class LinkMovementMethodMy extends LinkMovementMethod {
+        private LinkMovementMethodMy() {
+        }
+
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            try {
+                return super.onTouchEvent(widget, buffer, event);
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+                return false;
+            }
         }
     }
 

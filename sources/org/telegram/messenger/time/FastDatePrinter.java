@@ -40,40 +40,6 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         int estimateLength();
     }
 
-    private static class TimeZoneDisplayKey {
-        private final Locale mLocale;
-        private final int mStyle;
-        private final TimeZone mTimeZone;
-
-        TimeZoneDisplayKey(TimeZone timeZone, boolean daylight, int style, Locale locale) {
-            this.mTimeZone = timeZone;
-            if (daylight) {
-                this.mStyle = Integer.MIN_VALUE | style;
-            } else {
-                this.mStyle = style;
-            }
-            this.mLocale = locale;
-        }
-
-        public int hashCode() {
-            return (((this.mStyle * 31) + this.mLocale.hashCode()) * 31) + this.mTimeZone.hashCode();
-        }
-
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof TimeZoneDisplayKey)) {
-                return false;
-            }
-            TimeZoneDisplayKey other = (TimeZoneDisplayKey) obj;
-            if (this.mTimeZone.equals(other.mTimeZone) && this.mStyle == other.mStyle && this.mLocale.equals(other.mLocale)) {
-                return true;
-            }
-            return false;
-        }
-    }
-
     private static class CharacterLiteral implements Rule {
         private final char mValue;
 
@@ -92,6 +58,60 @@ public class FastDatePrinter implements Serializable, DatePrinter {
 
     private interface NumberRule extends Rule {
         void appendTo(StringBuffer stringBuffer, int i);
+    }
+
+    private static class PaddedNumberField implements NumberRule {
+        private final int mField;
+        private final int mSize;
+
+        PaddedNumberField(int field, int size) {
+            if (size < 3) {
+                throw new IllegalArgumentException();
+            }
+            this.mField = field;
+            this.mSize = size;
+        }
+
+        public int estimateLength() {
+            return 4;
+        }
+
+        public void appendTo(StringBuffer buffer, Calendar calendar) {
+            appendTo(buffer, calendar.get(this.mField));
+        }
+
+        public final void appendTo(StringBuffer buffer, int value) {
+            int i;
+            if (value < 100) {
+                i = this.mSize;
+                while (true) {
+                    i--;
+                    if (i >= 2) {
+                        buffer.append('0');
+                    } else {
+                        buffer.append((char) ((value / 10) + 48));
+                        buffer.append((char) ((value % 10) + 48));
+                        return;
+                    }
+                }
+            }
+            int digits;
+            if (value < 1000) {
+                digits = 3;
+            } else {
+                digits = Integer.toString(value).length();
+            }
+            i = this.mSize;
+            while (true) {
+                i--;
+                if (i >= digits) {
+                    buffer.append('0');
+                } else {
+                    buffer.append(Integer.toString(value));
+                    return;
+                }
+            }
+        }
     }
 
     private static class StringLiteral implements Rule {
@@ -136,6 +156,40 @@ public class FastDatePrinter implements Serializable, DatePrinter {
 
         public void appendTo(StringBuffer buffer, Calendar calendar) {
             buffer.append(this.mValues[calendar.get(this.mField)]);
+        }
+    }
+
+    private static class TimeZoneDisplayKey {
+        private final Locale mLocale;
+        private final int mStyle;
+        private final TimeZone mTimeZone;
+
+        TimeZoneDisplayKey(TimeZone timeZone, boolean daylight, int style, Locale locale) {
+            this.mTimeZone = timeZone;
+            if (daylight) {
+                this.mStyle = Integer.MIN_VALUE | style;
+            } else {
+                this.mStyle = style;
+            }
+            this.mLocale = locale;
+        }
+
+        public int hashCode() {
+            return (((this.mStyle * 31) + this.mLocale.hashCode()) * 31) + this.mTimeZone.hashCode();
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof TimeZoneDisplayKey)) {
+                return false;
+            }
+            TimeZoneDisplayKey other = (TimeZoneDisplayKey) obj;
+            if (this.mTimeZone.equals(other.mTimeZone) && this.mStyle == other.mStyle && this.mLocale.equals(other.mLocale)) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -196,60 +250,6 @@ public class FastDatePrinter implements Serializable, DatePrinter {
             int minutes = (offset / 60000) - (hours * 60);
             buffer.append((char) ((minutes / 10) + 48));
             buffer.append((char) ((minutes % 10) + 48));
-        }
-    }
-
-    private static class PaddedNumberField implements NumberRule {
-        private final int mField;
-        private final int mSize;
-
-        PaddedNumberField(int field, int size) {
-            if (size < 3) {
-                throw new IllegalArgumentException();
-            }
-            this.mField = field;
-            this.mSize = size;
-        }
-
-        public int estimateLength() {
-            return 4;
-        }
-
-        public void appendTo(StringBuffer buffer, Calendar calendar) {
-            appendTo(buffer, calendar.get(this.mField));
-        }
-
-        public final void appendTo(StringBuffer buffer, int value) {
-            int i;
-            if (value < 100) {
-                i = this.mSize;
-                while (true) {
-                    i--;
-                    if (i >= 2) {
-                        buffer.append('0');
-                    } else {
-                        buffer.append((char) ((value / 10) + 48));
-                        buffer.append((char) ((value % 10) + 48));
-                        return;
-                    }
-                }
-            }
-            int digits;
-            if (value < 1000) {
-                digits = 3;
-            } else {
-                digits = Integer.toString(value).length();
-            }
-            i = this.mSize;
-            while (true) {
-                i--;
-                if (i >= digits) {
-                    buffer.append('0');
-                } else {
-                    buffer.append(Integer.toString(value));
-                    return;
-                }
-            }
         }
     }
 

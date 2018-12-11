@@ -105,7 +105,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ContactsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ContactsActivity.this.finishFragment();
             } else if (id == 1) {
                 ContactsActivity.this.presentFragment(new NewContactActivity());
             }
@@ -439,7 +439,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 this.delegate = null;
             }
             if (this.needFinishFragment) {
-                lambda$checkDiscard$70$PassportActivity();
+                finishFragment();
             }
         } else if (getParentActivity() != null) {
             if (user.bot && user.bot_nochats && !this.addingToChannel) {
@@ -648,7 +648,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 presentFragment(new ChatActivity(args2), true);
             }
         } else if (id == NotificationCenter.closeChats && !this.creatingChat) {
-            lambda$null$10$ProfileActivity();
+            removeSelfFromStack();
         }
     }
 

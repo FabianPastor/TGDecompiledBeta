@@ -168,15 +168,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$PhotoViewerCaptionEnterViewDelegate */
-    public interface PhotoViewerCaptionEnterViewDelegate {
-        void onCaptionEnter();
-
-        void onTextChanged(CharSequence charSequence);
-
-        void onWindowSizeChanged(int i);
-    }
-
     /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$5 */
     class CLASSNAME implements Listener {
         CLASSNAME() {
@@ -250,6 +241,15 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         public boolean isExpanded() {
             return false;
         }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoViewerCaptionEnterView$PhotoViewerCaptionEnterViewDelegate */
+    public interface PhotoViewerCaptionEnterViewDelegate {
+        void onCaptionEnter();
+
+        void onTextChanged(CharSequence charSequence);
+
+        void onWindowSizeChanged(int i);
     }
 
     public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto parent, View window) {

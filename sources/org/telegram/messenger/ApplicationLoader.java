@@ -36,6 +36,7 @@ public class ApplicationLoader extends Application {
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime;
+    public static volatile boolean unableGetCurrentNetwork;
 
     /* renamed from: org.telegram.messenger.ApplicationLoader$1 */
     static class CLASSNAME extends BroadcastReceiver {
@@ -211,7 +212,12 @@ public class ApplicationLoader extends Application {
 
     private static void ensureCurrentNetworkGet() {
         if (currentNetworkInfo == null) {
-            currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            try {
+                currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                unableGetCurrentNetwork = false;
+            } catch (Throwable th) {
+                unableGetCurrentNetwork = true;
+            }
         }
     }
 
@@ -286,7 +292,7 @@ public class ApplicationLoader extends Application {
     public static boolean isNetworkOnline() {
         try {
             ensureCurrentNetworkGet();
-            if (currentNetworkInfo == null) {
+            if (!unableGetCurrentNetwork && currentNetworkInfo == null) {
                 return false;
             }
             if (currentNetworkInfo.isConnectedOrConnecting() || currentNetworkInfo.isAvailable()) {

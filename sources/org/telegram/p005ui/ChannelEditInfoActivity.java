@@ -94,6 +94,35 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     private TextInfoPrivacyCell typeInfoCell;
     private EditTextBoldCursor usernameTextView;
 
+    /* renamed from: org.telegram.ui.ChannelEditInfoActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ChannelEditInfoActivity.this.finishFragment();
+            } else if (id != 1) {
+            } else {
+                if (ChannelEditInfoActivity.this.isPrivate || (((ChannelEditInfoActivity.this.currentChat.username != null || ChannelEditInfoActivity.this.usernameTextView.length() == 0) && (ChannelEditInfoActivity.this.currentChat.username == null || ChannelEditInfoActivity.this.currentChat.username.equalsIgnoreCase(ChannelEditInfoActivity.this.usernameTextView.getText().toString()))) || ChannelEditInfoActivity.this.usernameTextView.length() == 0 || ChannelEditInfoActivity.this.lastNameAvailable)) {
+                    String oldUserName = ChannelEditInfoActivity.this.currentChat.username != null ? ChannelEditInfoActivity.this.currentChat.username : TtmlNode.ANONYMOUS_REGION_ID;
+                    String newUserName = ChannelEditInfoActivity.this.isPrivate ? TtmlNode.ANONYMOUS_REGION_ID : ChannelEditInfoActivity.this.usernameTextView.getText().toString();
+                    if (!oldUserName.equals(newUserName)) {
+                        MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).updateChannelUserName(ChannelEditInfoActivity.this.chatId, newUserName);
+                        ChannelEditInfoActivity.this.currentChat.username = newUserName;
+                    }
+                    ChannelEditInfoActivity.this.finishFragment();
+                    return;
+                }
+                Vibrator v = (Vibrator) ChannelEditInfoActivity.this.getParentActivity().getSystemService("vibrator");
+                if (v != null) {
+                    v.vibrate(200);
+                }
+                AndroidUtilities.shakeView(ChannelEditInfoActivity.this.checkTextView, 2.0f, 0);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ChannelEditInfoActivity$2 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
@@ -107,35 +136,6 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
         }
 
         public void afterTextChanged(Editable editable) {
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChannelEditInfoActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ChannelEditInfoActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id != 1) {
-            } else {
-                if (ChannelEditInfoActivity.this.isPrivate || (((ChannelEditInfoActivity.this.currentChat.username != null || ChannelEditInfoActivity.this.usernameTextView.length() == 0) && (ChannelEditInfoActivity.this.currentChat.username == null || ChannelEditInfoActivity.this.currentChat.username.equalsIgnoreCase(ChannelEditInfoActivity.this.usernameTextView.getText().toString()))) || ChannelEditInfoActivity.this.usernameTextView.length() == 0 || ChannelEditInfoActivity.this.lastNameAvailable)) {
-                    String oldUserName = ChannelEditInfoActivity.this.currentChat.username != null ? ChannelEditInfoActivity.this.currentChat.username : TtmlNode.ANONYMOUS_REGION_ID;
-                    String newUserName = ChannelEditInfoActivity.this.isPrivate ? TtmlNode.ANONYMOUS_REGION_ID : ChannelEditInfoActivity.this.usernameTextView.getText().toString();
-                    if (!oldUserName.equals(newUserName)) {
-                        MessagesController.getInstance(ChannelEditInfoActivity.this.currentAccount).updateChannelUserName(ChannelEditInfoActivity.this.chatId, newUserName);
-                        ChannelEditInfoActivity.this.currentChat.username = newUserName;
-                    }
-                    ChannelEditInfoActivity.this.lambda$checkDiscard$70$PassportActivity();
-                    return;
-                }
-                Vibrator v = (Vibrator) ChannelEditInfoActivity.this.getParentActivity().getSystemService("vibrator");
-                if (v != null) {
-                    v.vibrate(200);
-                }
-                AndroidUtilities.shakeView(ChannelEditInfoActivity.this.checkTextView, 2.0f, 0);
-            }
         }
     }
 

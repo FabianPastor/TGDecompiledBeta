@@ -17,11 +17,6 @@ public class PhotoCropView extends FrameLayout {
     private boolean showOnSetBitmap;
     private CropRotationWheel wheelView;
 
-    /* renamed from: org.telegram.ui.Components.PhotoCropView$PhotoCropViewDelegate */
-    public interface PhotoCropViewDelegate {
-        void onChange(boolean z);
-    }
-
     /* renamed from: org.telegram.ui.Components.PhotoCropView$1 */
     class CLASSNAME implements CropViewListener {
         CLASSNAME() {
@@ -63,9 +58,13 @@ public class PhotoCropView extends FrameLayout {
         }
 
         public void rotate90Pressed() {
-            PhotoCropView.this.wheelView.reset();
-            PhotoCropView.this.cropView.rotate90Degrees();
+            PhotoCropView.this.rotate();
         }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoCropView$PhotoCropViewDelegate */
+    public interface PhotoCropViewDelegate {
+        void onChange(boolean z);
     }
 
     public PhotoCropView(Context context) {
@@ -76,6 +75,13 @@ public class PhotoCropView extends FrameLayout {
         this.wheelView = new CropRotationWheel(getContext());
         this.wheelView.setListener(new CLASSNAME());
         addView(this.wheelView, LayoutHelper.createFrame(-1, -2.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
+    }
+
+    public void rotate() {
+        if (this.wheelView != null) {
+            this.wheelView.reset();
+        }
+        this.cropView.rotate90Degrees();
     }
 
     public void setBitmap(Bitmap bitmap, int rotation, boolean freeform, boolean update) {

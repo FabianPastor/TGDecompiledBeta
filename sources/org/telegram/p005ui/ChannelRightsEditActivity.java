@@ -77,11 +77,6 @@ public class ChannelRightsEditActivity extends BaseFragment {
     private int untilDateRow;
     private int viewMessagesRow;
 
-    /* renamed from: org.telegram.ui.ChannelRightsEditActivity$ChannelRightsEditActivityDelegate */
-    public interface ChannelRightsEditActivityDelegate {
-        void didSetRights(int i, TL_channelAdminRights tL_channelAdminRights, TL_channelBannedRights tL_channelBannedRights);
-    }
-
     /* renamed from: org.telegram.ui.ChannelRightsEditActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -89,7 +84,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChannelRightsEditActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChannelRightsEditActivity.this.finishFragment();
             } else if (id == 1) {
                 if (ChannelRightsEditActivity.this.currentType == 0) {
                     TL_channelAdminRights access$200;
@@ -128,9 +123,14 @@ public class ChannelRightsEditActivity extends BaseFragment {
                         ChannelRightsEditActivity.this.delegate.didSetRights(rights, ChannelRightsEditActivity.this.adminRights, ChannelRightsEditActivity.this.bannedRights);
                     }
                 }
-                ChannelRightsEditActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChannelRightsEditActivity.this.finishFragment();
             }
         }
+    }
+
+    /* renamed from: org.telegram.ui.ChannelRightsEditActivity$ChannelRightsEditActivityDelegate */
+    public interface ChannelRightsEditActivityDelegate {
+        void didSetRights(int i, TL_channelAdminRights tL_channelAdminRights, TL_channelBannedRights tL_channelBannedRights);
     }
 
     /* renamed from: org.telegram.ui.ChannelRightsEditActivity$ListAdapter */
@@ -600,7 +600,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
             if (this.delegate != null) {
                 this.delegate.didSetRights(0, this.adminRights, this.bannedRights);
             }
-            lambda$checkDiscard$70$PassportActivity();
+            finishFragment();
         } else if (position == this.untilDateRow) {
             if (getParentActivity() != null) {
                 Calendar calendar = Calendar.getInstance();

@@ -115,50 +115,16 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private TextView titleTextView;
     private Pattern urlPattern;
 
-    /* renamed from: org.telegram.ui.Components.StickersAlert$8 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            StickersAlert.this.stickerPreviewLayout.setVisibility(8);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.StickersAlert$LinkMovementMethodMy */
-    private static class LinkMovementMethodMy extends LinkMovementMethod {
-        private LinkMovementMethodMy() {
-        }
-
-        /* synthetic */ LinkMovementMethodMy(CLASSNAME x0) {
-            this();
-        }
-
-        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-            try {
-                boolean result = super.onTouchEvent(widget, buffer, event);
-                if (event.getAction() != 1 && event.getAction() != 3) {
-                    return result;
-                }
-                Selection.removeSelection(buffer);
-                return result;
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-                return false;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.StickersAlert$StickersAlertDelegate */
-    public interface StickersAlertDelegate {
-        void onStickerSelected(Document document, Object obj);
-    }
-
     /* renamed from: org.telegram.ui.Components.StickersAlert$StickersAlertInstallDelegate */
     public interface StickersAlertInstallDelegate {
         void onStickerSetInstalled();
 
         void onStickerSetUninstalled();
+    }
+
+    /* renamed from: org.telegram.ui.Components.StickersAlert$StickersAlertDelegate */
+    public interface StickersAlertDelegate {
+        void onStickerSelected(Document document, Object obj);
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$3 */
@@ -194,6 +160,16 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             StickersAlert.this.updateLayout();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.StickersAlert$8 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            StickersAlert.this.stickerPreviewLayout.setVisibility(8);
         }
     }
 
@@ -318,6 +294,30 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 this.totalItems = i;
             }
             super.notifyDataSetChanged();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.StickersAlert$LinkMovementMethodMy */
+    private static class LinkMovementMethodMy extends LinkMovementMethod {
+        private LinkMovementMethodMy() {
+        }
+
+        /* synthetic */ LinkMovementMethodMy(CLASSNAME x0) {
+            this();
+        }
+
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            try {
+                boolean result = super.onTouchEvent(widget, buffer, event);
+                if (event.getAction() != 1 && event.getAction() != 3) {
+                    return result;
+                }
+                Selection.removeSelection(buffer);
+                return result;
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+                return false;
+            }
         }
     }
 

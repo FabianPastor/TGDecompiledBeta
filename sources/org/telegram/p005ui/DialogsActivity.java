@@ -169,89 +169,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private FrameLayout unreadFloatingButtonContainer;
     private TextView unreadFloatingButtonCounter;
 
-    /* renamed from: org.telegram.ui.DialogsActivity$12 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            DialogsActivity.this.unreadFloatingButtonContainer.setVisibility(4);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DialogsActivity$13 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            DialogsActivity.this.commentView.setVisibility(8);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DialogsActivity$14 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            DialogsActivity.this.commentView.setTag(Integer.valueOf(2));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DialogsActivity$15 */
-    class CLASSNAME implements OnGlobalLayoutListener {
-        CLASSNAME() {
-        }
-
-        public void onGlobalLayout() {
-            float f = 0.0f;
-            DialogsActivity.this.floatingButton.setTranslationY(DialogsActivity.this.floatingHidden ? (float) AndroidUtilities.m9dp(100.0f) : 0.0f);
-            FrameLayout access$1000 = DialogsActivity.this.unreadFloatingButtonContainer;
-            if (DialogsActivity.this.floatingHidden) {
-                f = (float) AndroidUtilities.m9dp(74.0f);
-            }
-            access$1000.setTranslationY(f);
-            DialogsActivity.this.floatingButton.setClickable(!DialogsActivity.this.floatingHidden);
-            if (DialogsActivity.this.floatingButton != null) {
-                DialogsActivity.this.floatingButton.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DialogsActivity$6 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DialogsActivity$7 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DialogsActivity$8 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setEmpty();
-        }
-    }
-
     /* renamed from: org.telegram.ui.DialogsActivity$DialogsActivityDelegate */
     public interface DialogsActivityDelegate {
         void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList<Long> arrayList, CharSequence charSequence, boolean z);
@@ -386,6 +303,56 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
+    /* renamed from: org.telegram.ui.DialogsActivity$12 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            DialogsActivity.this.unreadFloatingButtonContainer.setVisibility(4);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DialogsActivity$13 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            DialogsActivity.this.commentView.setVisibility(8);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DialogsActivity$14 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            DialogsActivity.this.commentView.setTag(Integer.valueOf(2));
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DialogsActivity$15 */
+    class CLASSNAME implements OnGlobalLayoutListener {
+        CLASSNAME() {
+        }
+
+        public void onGlobalLayout() {
+            float f = 0.0f;
+            DialogsActivity.this.floatingButton.setTranslationY(DialogsActivity.this.floatingHidden ? (float) AndroidUtilities.m9dp(100.0f) : 0.0f);
+            FrameLayout access$1000 = DialogsActivity.this.unreadFloatingButtonContainer;
+            if (DialogsActivity.this.floatingHidden) {
+                f = (float) AndroidUtilities.m9dp(74.0f);
+            }
+            access$1000.setTranslationY(f);
+            DialogsActivity.this.floatingButton.setClickable(!DialogsActivity.this.floatingHidden);
+            if (DialogsActivity.this.floatingButton != null) {
+                DialogsActivity.this.floatingButton.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.DialogsActivity$1 */
     class CLASSNAME extends ActionBarMenuItemSearchListener {
         CLASSNAME() {
@@ -422,7 +389,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             if (DialogsActivity.this.searchString == null) {
                 return true;
             }
-            DialogsActivity.this.lambda$checkDiscard$70$PassportActivity();
+            DialogsActivity.this.finishFragment();
             return false;
         }
 
@@ -482,7 +449,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             boolean z = true;
             if (id == -1) {
                 if (DialogsActivity.this.onlySelect) {
-                    DialogsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    DialogsActivity.this.finishFragment();
                 } else if (DialogsActivity.this.parentLayout != null) {
                     DialogsActivity.this.parentLayout.getDrawerLayoutContainer().openDrawer(false);
                 }
@@ -811,6 +778,39 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
         public void onMove(float dx, float dy) {
             DialogsActivity.this.movePreviewFragment(dy);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DialogsActivity$6 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DialogsActivity$7 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DialogsActivity$8 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setEmpty();
         }
     }
 
@@ -2129,7 +2129,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.delegate = null;
                 return;
             }
-            lambda$checkDiscard$70$PassportActivity();
+            finishFragment();
         } else if (getParentActivity() != null) {
             builder = new Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));

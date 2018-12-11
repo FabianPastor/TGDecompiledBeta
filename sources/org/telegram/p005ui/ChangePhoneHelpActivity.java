@@ -39,7 +39,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChangePhoneHelpActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChangePhoneHelpActivity.this.finishFragment();
             }
         }
     }

@@ -43,6 +43,18 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     private TextView recognizedMrzView;
     private TextView titleTextView;
 
+    /* renamed from: org.telegram.ui.MrzCameraActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                MrzCameraActivity.this.finishFragment();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.MrzCameraActivity$3 */
     class CLASSNAME implements OnTouchListener {
         CLASSNAME() {
@@ -50,6 +62,23 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
 
         public boolean onTouch(View v, MotionEvent event) {
             return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.MrzCameraActivity$4 */
+    class CLASSNAME implements CameraViewDelegate {
+        CLASSNAME() {
+        }
+
+        public void onCameraCreated(Camera camera) {
+            Parameters params = camera.getParameters();
+            float evStep = params.getExposureCompensationStep();
+            params.setExposureCompensation(((float) params.getMaxExposureCompensation()) * evStep <= 2.0f ? params.getMaxExposureCompensation() : Math.round(2.0f / evStep));
+            camera.setParameters(params);
+        }
+
+        public void onCameraInit() {
+            MrzCameraActivity.this.startRecognizing();
         }
     }
 
@@ -69,35 +98,6 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     /* renamed from: org.telegram.ui.MrzCameraActivity$MrzCameraActivityDelegate */
     public interface MrzCameraActivityDelegate {
         void didFindMrzInfo(Result result);
-    }
-
-    /* renamed from: org.telegram.ui.MrzCameraActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                MrzCameraActivity.this.lambda$checkDiscard$70$PassportActivity();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.MrzCameraActivity$4 */
-    class CLASSNAME implements CameraViewDelegate {
-        CLASSNAME() {
-        }
-
-        public void onCameraCreated(Camera camera) {
-            Parameters params = camera.getParameters();
-            float evStep = params.getExposureCompensationStep();
-            params.setExposureCompensation(((float) params.getMaxExposureCompensation()) * evStep <= 2.0f ? params.getMaxExposureCompensation() : Math.round(2.0f / evStep));
-            camera.setParameters(params);
-        }
-
-        public void onCameraInit() {
-            MrzCameraActivity.this.startRecognizing();
-        }
     }
 
     public void onFragmentDestroy() {
@@ -211,7 +211,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                                     }
 
                                     public void run() {
-                                        MrzCameraActivity.this.lambda$checkDiscard$70$PassportActivity();
+                                        MrzCameraActivity.this.finishFragment();
                                     }
                                 }
 

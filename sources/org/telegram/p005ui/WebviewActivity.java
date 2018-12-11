@@ -73,6 +73,23 @@ public class WebviewActivity extends BaseFragment {
         }
     }
 
+    /* renamed from: org.telegram.ui.WebviewActivity$2 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                WebviewActivity.this.lambda$checkDiscard$70$PassportActivity();
+            } else if (id == 1) {
+                WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
+                WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
+            } else if (id == 2) {
+                WebviewActivity.openGameInBrowser(WebviewActivity.this.currentUrl, WebviewActivity.this.currentMessageObject, WebviewActivity.this.getParentActivity(), WebviewActivity.this.short_param, WebviewActivity.this.currentBot);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.WebviewActivity$3 */
     class CLASSNAME extends WebViewClient {
 
@@ -174,23 +191,6 @@ public class WebviewActivity extends BaseFragment {
                         break;
                 }
                 WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.WebviewActivity$2 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                WebviewActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1) {
-                WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
-                WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
-            } else if (id == 2) {
-                WebviewActivity.openGameInBrowser(WebviewActivity.this.currentUrl, WebviewActivity.this.currentMessageObject, WebviewActivity.this.getParentActivity(), WebviewActivity.this.short_param, WebviewActivity.this.currentBot);
             }
         }
     }

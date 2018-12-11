@@ -10,7 +10,6 @@ import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -29,34 +28,9 @@ public class CropRotationWheel extends FrameLayout {
     private TextView degreesLabel;
     private float prevX;
     protected float rotation;
-    private ImageView rotation90Button;
     private RotationWheelListener rotationListener;
     private RectF tempRect = new RectF(0.0f, 0.0f, 0.0f, 0.0f);
     private Paint whitePaint = new Paint();
-
-    /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$1 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            if (CropRotationWheel.this.rotationListener != null) {
-                CropRotationWheel.this.rotationListener.aspectRatioPressed();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$2 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            if (CropRotationWheel.this.rotationListener != null) {
-                CropRotationWheel.this.rotationListener.rotate90Pressed();
-            }
-        }
-    }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$RotationWheelListener */
     public interface RotationWheelListener {
@@ -86,19 +60,31 @@ public class CropRotationWheel extends FrameLayout {
         this.aspectRatioButton.setImageResource(R.drawable.tool_cropfix);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.aspectRatioButton.setScaleType(ScaleType.CENTER);
-        this.aspectRatioButton.setOnClickListener(new CLASSNAME());
+        this.aspectRatioButton.setOnClickListener(new CropRotationWheel$$Lambda$0(this));
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
-        this.rotation90Button = new ImageView(context);
-        this.rotation90Button.setImageResource(R.drawable.tool_rotate);
-        this.rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-        this.rotation90Button.setScaleType(ScaleType.CENTER);
-        this.rotation90Button.setOnClickListener(new CLASSNAME());
-        addView(this.rotation90Button, LayoutHelper.createFrame(70, 64, 21));
+        ImageView rotation90Button = new ImageView(context);
+        rotation90Button.setImageResource(R.drawable.tool_rotate);
+        rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        rotation90Button.setScaleType(ScaleType.CENTER);
+        rotation90Button.setOnClickListener(new CropRotationWheel$$Lambda$1(this));
+        addView(rotation90Button, LayoutHelper.createFrame(70, 64, 21));
         this.degreesLabel = new TextView(context);
         this.degreesLabel.setTextColor(-1);
         addView(this.degreesLabel, LayoutHelper.createFrame(-2, -2, 49));
         setWillNotDraw(false);
         setRotation(0.0f, false);
+    }
+
+    final /* synthetic */ void lambda$new$0$CropRotationWheel(View v) {
+        if (this.rotationListener != null) {
+            this.rotationListener.aspectRatioPressed();
+        }
+    }
+
+    final /* synthetic */ void lambda$new$1$CropRotationWheel(View v) {
+        if (this.rotationListener != null) {
+            this.rotationListener.rotate90Pressed();
+        }
     }
 
     public void setFreeform(boolean freeform) {

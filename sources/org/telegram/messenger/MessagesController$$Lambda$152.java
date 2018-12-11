@@ -1,14 +1,14 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.TL_updateChannel;
+import org.telegram.tgnet.TLRPC.User;
 
 final /* synthetic */ class MessagesController$$Lambda$152 implements Runnable {
     private final MessagesController arg$1;
-    private final TL_updateChannel arg$2;
+    private final User arg$2;
 
-    MessagesController$$Lambda$152(MessagesController messagesController, TL_updateChannel tL_updateChannel) {
+    MessagesController$$Lambda$152(MessagesController messagesController, User user) {
         this.arg$1 = messagesController;
-        this.arg$2 = tL_updateChannel;
+        this.arg$2 = user;
     }
 
     public void run() {

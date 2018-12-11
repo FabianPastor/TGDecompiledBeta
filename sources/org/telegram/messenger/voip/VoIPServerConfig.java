@@ -1,30 +1,19 @@
 package org.telegram.messenger.voip;
 
-import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class VoIPServerConfig {
-    private static JSONObject config;
+    private static JSONObject config = new JSONObject();
 
-    private static native void nativeSetConfig(String[] strArr, String[] strArr2);
+    private static native void nativeSetConfig(String str);
 
     public static void setConfig(String json) {
         try {
-            JSONObject obj = new JSONObject(json);
-            config = obj;
-            String[] keys = new String[obj.length()];
-            String[] values = new String[obj.length()];
-            Iterator<String> itrtr = obj.keys();
-            int i = 0;
-            while (itrtr.hasNext()) {
-                keys[i] = (String) itrtr.next();
-                values[i] = obj.getString(keys[i]);
-                i++;
-            }
-            nativeSetConfig(keys, values);
+            config = new JSONObject(json);
+            nativeSetConfig(json);
         } catch (JSONException x) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m12e("Error parsing VoIP config", x);

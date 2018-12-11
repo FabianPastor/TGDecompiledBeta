@@ -85,30 +85,6 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     private int scrollHeight;
     private SlideView[] views = new SlideView[5];
 
-    /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$ProgressView */
-    private class ProgressView extends View {
-        private Paint paint = new Paint();
-        private Paint paint2 = new Paint();
-        private float progress;
-
-        public ProgressView(Context context) {
-            super(context);
-            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
-            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
-        }
-
-        public void setProgress(float value) {
-            this.progress = value;
-            invalidate();
-        }
-
-        protected void onDraw(Canvas canvas) {
-            int start = (int) (((float) getMeasuredWidth()) * this.progress);
-            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
-            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-        }
-    }
-
     /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -118,7 +94,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (id == 1) {
                 CancelAccountDeletionActivity.this.views[CancelAccountDeletionActivity.this.currentViewNum].onNextPressed();
             } else if (id == -1) {
-                CancelAccountDeletionActivity.this.lambda$checkDiscard$70$PassportActivity();
+                CancelAccountDeletionActivity.this.finishFragment();
             }
         }
     }
@@ -165,7 +141,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             }
 
             /* renamed from: lambda$run$0$CancelAccountDeletionActivity$LoginActivitySmsView$4 */
-            final /* synthetic */ void mo9686xbdCLASSNAMEd14() {
+            final /* synthetic */ void mo14123xbdCLASSNAMEd14() {
                 double currentTime = (double) System.currentTimeMillis();
                 double diff = currentTime - LoginActivitySmsView.this.lastCodeTime;
                 LoginActivitySmsView.this.lastCodeTime = currentTime;
@@ -237,14 +213,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
 
                 /* renamed from: lambda$run$1$CancelAccountDeletionActivity$LoginActivitySmsView$5$1 */
-                final /* synthetic */ void mo9690x56e58341(TLObject response, TL_error error) {
+                final /* synthetic */ void mo14127x56e58341(TLObject response, TL_error error) {
                     if (error != null && error.text != null) {
                         AndroidUtilities.runOnUIThread(new CancelAccountDeletionActivity$LoginActivitySmsView$5$1$$Lambda$1(this, error));
                     }
                 }
 
                 /* renamed from: lambda$null$0$CancelAccountDeletionActivity$LoginActivitySmsView$5$1 */
-                final /* synthetic */ void mo9689x9cc5d90c(TL_error error) {
+                final /* synthetic */ void mo14126x9cc5d90c(TL_error error) {
                     LoginActivitySmsView.this.lastError = error.text;
                 }
             }
@@ -441,7 +417,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$resendCode$3$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ void mo15926x5var_a36a(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
+        final /* synthetic */ void mo14146x5var_a36a(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$7(this, error, params, response, req));
         }
 
@@ -460,7 +436,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
         final /* synthetic */ void lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView(DialogInterface dialog1, int which) {
             onBackPressed(true);
-            CancelAccountDeletionActivity.this.lambda$checkDiscard$70$PassportActivity();
+            CancelAccountDeletionActivity.this.finishFragment();
         }
 
         public String getHeaderName() {
@@ -615,7 +591,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$setParams$4$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ boolean mo15927x631f1var_(int num, View v, int keyCode, KeyEvent event) {
+        final /* synthetic */ boolean mo14147x631f1var_(int num, View v, int keyCode, KeyEvent event) {
             if (keyCode != 67 || this.codeField[num].length() != 0 || num <= 0) {
                 return false;
             }
@@ -626,7 +602,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$setParams$5$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ boolean mo15928x90f7b9c2(TextView textView, int i, KeyEvent keyEvent) {
+        final /* synthetic */ boolean mo14148x90f7b9c2(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
                 return false;
             }
@@ -713,7 +689,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$onNextPressed$7$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ void mo15924x417aab38(TL_account_confirmPhone req, TLObject response, TL_error error) {
+        final /* synthetic */ void mo14144x417aab38(TL_account_confirmPhone req, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$6(this, error, req));
         }
 
@@ -772,7 +748,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$onShow$8$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ void mo15925x84fafCLASSNAME() {
+        final /* synthetic */ void mo14145x84fafCLASSNAME() {
             if (this.codeField != null) {
                 int a = this.codeField.length - 1;
                 while (a >= 0) {
@@ -885,6 +861,30 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
     }
 
+    /* renamed from: org.telegram.ui.CancelAccountDeletionActivity$ProgressView */
+    private class ProgressView extends View {
+        private Paint paint = new Paint();
+        private Paint paint2 = new Paint();
+        private float progress;
+
+        public ProgressView(Context context) {
+            super(context);
+            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
+            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int start = (int) (((float) getMeasuredWidth()) * this.progress);
+            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
+            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        }
+    }
+
     public CancelAccountDeletionActivity(Bundle args) {
         super(args);
         this.hash = args.getString("hash");
@@ -966,7 +966,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[this.permissionsItems.size()]), 6);
         }
         if (dialog == this.errorDialog) {
-            lambda$checkDiscard$70$PassportActivity();
+            finishFragment();
         }
     }
 

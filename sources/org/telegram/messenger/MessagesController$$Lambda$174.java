@@ -1,17 +1,20 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.updates_ChannelDifference;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC.updates_Difference;
 
 final /* synthetic */ class MessagesController$$Lambda$174 implements Runnable {
     private final MessagesController arg$1;
-    private final updates_ChannelDifference arg$2;
+    private final ArrayList arg$2;
+    private final updates_Difference arg$3;
 
-    MessagesController$$Lambda$174(MessagesController messagesController, updates_ChannelDifference updates_channeldifference) {
+    MessagesController$$Lambda$174(MessagesController messagesController, ArrayList arrayList, updates_Difference updates_difference) {
         this.arg$1 = messagesController;
-        this.arg$2 = updates_channeldifference;
+        this.arg$2 = arrayList;
+        this.arg$3 = updates_difference;
     }
 
     public void run() {
-        this.arg$1.lambda$null$180$MessagesController(this.arg$2);
+        this.arg$1.lambda$null$193$MessagesController(this.arg$2, this.arg$3);
     }
 }

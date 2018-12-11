@@ -143,30 +143,6 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     private TextView titleTextView;
     private int topBeforeSwitch;
 
-    /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$5 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (animation.equals(AudioPlayerAlert.this.animatorSet)) {
-                if (AudioPlayerAlert.this.isInFullMode) {
-                    if (AudioPlayerAlert.this.hasOptions) {
-                        AudioPlayerAlert.this.menuItem.setVisibility(0);
-                    }
-                    AudioPlayerAlert.this.searchItem.setVisibility(4);
-                } else {
-                    AudioPlayerAlert.this.listView.setScrollEnabled(true);
-                    if (AudioPlayerAlert.this.hasOptions) {
-                        AudioPlayerAlert.this.menuItem.setVisibility(4);
-                    }
-                    AudioPlayerAlert.this.searchItem.setVisibility(0);
-                }
-                AudioPlayerAlert.this.animatorSet = null;
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$2 */
     class CLASSNAME extends ActionBarMenuItemSearchListener {
         CLASSNAME() {
@@ -218,6 +194,30 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 AudioPlayerAlert.this.dismiss();
             } else {
                 AudioPlayerAlert.this.onSubItemClick(id);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.AudioPlayerAlert$5 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (animation.equals(AudioPlayerAlert.this.animatorSet)) {
+                if (AudioPlayerAlert.this.isInFullMode) {
+                    if (AudioPlayerAlert.this.hasOptions) {
+                        AudioPlayerAlert.this.menuItem.setVisibility(0);
+                    }
+                    AudioPlayerAlert.this.searchItem.setVisibility(4);
+                } else {
+                    AudioPlayerAlert.this.listView.setScrollEnabled(true);
+                    if (AudioPlayerAlert.this.hasOptions) {
+                        AudioPlayerAlert.this.menuItem.setVisibility(4);
+                    }
+                    AudioPlayerAlert.this.searchItem.setVisibility(0);
+                }
+                AudioPlayerAlert.this.animatorSet = null;
             }
         }
     }
@@ -1096,7 +1096,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 }
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(fmessages, did);
             }
-            fragment1.lambda$checkDiscard$70$PassportActivity();
+            fragment1.finishFragment();
             return;
         }
         did = ((Long) dids.get(0)).longValue();
@@ -1116,7 +1116,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         if (this.parentActivity.presentFragment(chatActivity, true, false)) {
             chatActivity.showFieldPanelForForward(true, fmessages);
         } else {
-            fragment1.lambda$checkDiscard$70$PassportActivity();
+            fragment1.finishFragment();
         }
     }
 

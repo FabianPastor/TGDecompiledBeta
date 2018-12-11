@@ -270,6 +270,45 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private boolean waitingForKeyboardOpen;
     private WakeLock wakeLock;
 
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate */
+    public interface ChatActivityEnterViewDelegate {
+        void didPressedAttachButton();
+
+        void needChangeVideoPreviewState(int i, float f);
+
+        void needSendTyping();
+
+        void needShowMediaBanHint();
+
+        void needStartRecordAudio(int i);
+
+        void needStartRecordVideo(int i);
+
+        void onAttachButtonHidden();
+
+        void onAttachButtonShow();
+
+        void onMessageEditEnd(boolean z);
+
+        void onMessageSend(CharSequence charSequence);
+
+        void onPreAudioVideoRecord();
+
+        void onStickersExpandedChange();
+
+        void onStickersTab(boolean z);
+
+        void onSwitchRecordMode(boolean z);
+
+        void onTextChanged(CharSequence charSequence, boolean z);
+
+        void onTextSelectionChanged(int i, int i2);
+
+        void onTextSpansChanged(CharSequence charSequence);
+
+        void onWindowSizeChanged(int i);
+    }
+
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$10 */
     class CLASSNAME implements TextWatcher {
         boolean processChange = false;
@@ -361,6 +400,34 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.visibleToast.show();
             }
             ChatActivityEnterView.this.updateFieldHint();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$12 */
+    class CLASSNAME implements VideoTimelineViewDelegate {
+        CLASSNAME() {
+        }
+
+        public void onLeftProgressChanged(float progress) {
+            if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
+                ChatActivityEnterView.this.videoToSendMessageObject.startTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
+                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
+            }
+        }
+
+        public void onRightProgressChanged(float progress) {
+            if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
+                ChatActivityEnterView.this.videoToSendMessageObject.endTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
+                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
+            }
+        }
+
+        public void didStartDragging() {
+            ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(1, 0.0f);
+        }
+
+        public void didStopDragging() {
+            ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(0, 0.0f);
         }
     }
 
@@ -513,6 +580,218 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 ChatActivityEnterView.this.recordCircle.setSendButtonInvisible();
                 ChatActivityEnterView.this.runningAnimationAudio = null;
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$24 */
+    class CLASSNAME implements Listener {
+        CLASSNAME() {
+        }
+
+        public boolean onBackspace() {
+            if (ChatActivityEnterView.this.messageEditText.length() == 0) {
+                return false;
+            }
+            ChatActivityEnterView.this.messageEditText.dispatchKeyEvent(new KeyEvent(0, 67));
+            return true;
+        }
+
+        public void onEmojiSelected(String symbol) {
+            int i = ChatActivityEnterView.this.messageEditText.getSelectionEnd();
+            if (i < 0) {
+                i = 0;
+            }
+            try {
+                ChatActivityEnterView.this.innerTextChange = 2;
+                CharSequence localCharSequence = Emoji.replaceEmoji(symbol, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(20.0f), false);
+                ChatActivityEnterView.this.messageEditText.setText(ChatActivityEnterView.this.messageEditText.getText().insert(i, localCharSequence));
+                int j = i + localCharSequence.length();
+                ChatActivityEnterView.this.messageEditText.setSelection(j, j);
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            } finally {
+                ChatActivityEnterView.this.innerTextChange = 0;
+            }
+        }
+
+        public void onStickerSelected(Document sticker, Object parent) {
+            if (ChatActivityEnterView.this.stickersExpanded) {
+                if (ChatActivityEnterView.this.searchingStickers) {
+                    ChatActivityEnterView.this.searchingStickers = false;
+                    ChatActivityEnterView.this.emojiView.closeSearch(true, MessageObject.getStickerSetId(sticker));
+                    ChatActivityEnterView.this.emojiView.hideSearchKeyboard();
+                }
+                ChatActivityEnterView.this.setStickersExpanded(false, true, false);
+            }
+            ChatActivityEnterView.this.onStickerSelected(sticker, parent);
+            DataQuery.getInstance(ChatActivityEnterView.this.currentAccount).addRecentSticker(0, parent, sticker, (int) (System.currentTimeMillis() / 1000), false);
+            if (((int) ChatActivityEnterView.this.dialog_id) == 0) {
+                MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).saveGif(parent, sticker);
+            }
+        }
+
+        public void onStickersSettingsClick() {
+            if (ChatActivityEnterView.this.parentFragment != null) {
+                ChatActivityEnterView.this.parentFragment.presentFragment(new StickersActivity(0));
+            }
+        }
+
+        public void onGifSelected(Document gif, Object parent) {
+            if (ChatActivityEnterView.this.stickersExpanded) {
+                ChatActivityEnterView.this.setStickersExpanded(false, true, false);
+            }
+            SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendSticker(gif, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, parent);
+            DataQuery.getInstance(ChatActivityEnterView.this.currentAccount).addRecentGif(gif, (int) (System.currentTimeMillis() / 1000));
+            if (((int) ChatActivityEnterView.this.dialog_id) == 0) {
+                MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).saveGif(parent, gif);
+            }
+            if (ChatActivityEnterView.this.delegate != null) {
+                ChatActivityEnterView.this.delegate.onMessageSend(null);
+            }
+        }
+
+        public void onGifTab(boolean opened) {
+            ChatActivityEnterView.this.post(ChatActivityEnterView.this.updateExpandabilityRunnable);
+            if (!AndroidUtilities.usingHardwareInput) {
+                if (opened) {
+                    if (ChatActivityEnterView.this.messageEditText.length() == 0) {
+                        ChatActivityEnterView.this.messageEditText.setText("@gif ");
+                        ChatActivityEnterView.this.messageEditText.setSelection(ChatActivityEnterView.this.messageEditText.length());
+                    }
+                } else if (ChatActivityEnterView.this.messageEditText.getText().toString().equals("@gif ")) {
+                    ChatActivityEnterView.this.messageEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
+                }
+            }
+        }
+
+        public void onStickersTab(boolean opened) {
+            ChatActivityEnterView.this.delegate.onStickersTab(opened);
+            ChatActivityEnterView.this.post(ChatActivityEnterView.this.updateExpandabilityRunnable);
+        }
+
+        public void onClearEmojiRecent() {
+            if (ChatActivityEnterView.this.parentFragment != null && ChatActivityEnterView.this.parentActivity != null) {
+                Builder builder = new Builder(ChatActivityEnterView.this.parentActivity);
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setMessage(LocaleController.getString("ClearRecentEmoji", R.string.ClearRecentEmoji));
+                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new ChatActivityEnterView$24$$Lambda$0(this));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                ChatActivityEnterView.this.parentFragment.showDialog(builder.create());
+            }
+        }
+
+        final /* synthetic */ void lambda$onClearEmojiRecent$0$ChatActivityEnterView$24(DialogInterface dialogInterface, int i) {
+            ChatActivityEnterView.this.emojiView.clearRecentEmoji();
+        }
+
+        public void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet) {
+            if (ChatActivityEnterView.this.parentFragment != null && ChatActivityEnterView.this.parentActivity != null) {
+                if (stickerSet != null) {
+                    inputStickerSet = new TL_inputStickerSetID();
+                    inputStickerSet.access_hash = stickerSet.access_hash;
+                    inputStickerSet.var_id = stickerSet.var_id;
+                }
+                ChatActivityEnterView.this.parentFragment.showDialog(new StickersAlert(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment, inputStickerSet, null, ChatActivityEnterView.this));
+            }
+        }
+
+        public void onStickerSetAdd(StickerSetCovered stickerSet) {
+            DataQuery.getInstance(ChatActivityEnterView.this.currentAccount).removeStickersSet(ChatActivityEnterView.this.parentActivity, stickerSet.set, 2, ChatActivityEnterView.this.parentFragment, false);
+        }
+
+        public void onStickerSetRemove(StickerSetCovered stickerSet) {
+            DataQuery.getInstance(ChatActivityEnterView.this.currentAccount).removeStickersSet(ChatActivityEnterView.this.parentActivity, stickerSet.set, 0, ChatActivityEnterView.this.parentFragment, false);
+        }
+
+        public void onStickersGroupClick(int chatId) {
+            if (ChatActivityEnterView.this.parentFragment != null) {
+                if (AndroidUtilities.isTablet()) {
+                    ChatActivityEnterView.this.hidePopup(false);
+                }
+                GroupStickersActivity fragment = new GroupStickersActivity(chatId);
+                fragment.setInfo(ChatActivityEnterView.this.info);
+                ChatActivityEnterView.this.parentFragment.presentFragment(fragment);
+            }
+        }
+
+        public void onSearchOpenClose(boolean open) {
+            ChatActivityEnterView.this.searchingStickers = open;
+            ChatActivityEnterView.this.setStickersExpanded(open, false, false);
+        }
+
+        public boolean isSearchOpened() {
+            return ChatActivityEnterView.this.searchingStickers;
+        }
+
+        public boolean isExpanded() {
+            return ChatActivityEnterView.this.stickersExpanded;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$25 */
+    class CLASSNAME implements DragListener {
+        int initialOffset;
+        boolean wasExpanded;
+
+        CLASSNAME() {
+        }
+
+        public void onDragStart() {
+            if (allowDragging()) {
+                if (ChatActivityEnterView.this.stickersExpansionAnim != null) {
+                    ChatActivityEnterView.this.stickersExpansionAnim.cancel();
+                }
+                ChatActivityEnterView.this.stickersDragging = true;
+                this.wasExpanded = ChatActivityEnterView.this.stickersExpanded;
+                ChatActivityEnterView.this.stickersExpanded = true;
+                ChatActivityEnterView.this.stickersExpandedHeight = (((ChatActivityEnterView.this.sizeNotifierLayout.getHeight() - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - CLASSNAMEActionBar.getCurrentActionBarHeight()) - ChatActivityEnterView.this.getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
+                ChatActivityEnterView.this.emojiView.getLayoutParams().height = ChatActivityEnterView.this.stickersExpandedHeight;
+                ChatActivityEnterView.this.emojiView.setLayerType(2, null);
+                ChatActivityEnterView.this.sizeNotifierLayout.requestLayout();
+                ChatActivityEnterView.this.sizeNotifierLayout.setForeground(new ScrimDrawable());
+                this.initialOffset = (int) ChatActivityEnterView.this.getTranslationY();
+                if (ChatActivityEnterView.this.delegate != null) {
+                    ChatActivityEnterView.this.delegate.onStickersExpandedChange();
+                }
+            }
+        }
+
+        public void onDragEnd(float velocity) {
+            boolean z = false;
+            if (allowDragging()) {
+                ChatActivityEnterView.this.stickersDragging = false;
+                if ((!this.wasExpanded || velocity < ((float) AndroidUtilities.m9dp(200.0f))) && ((this.wasExpanded || velocity > ((float) AndroidUtilities.m9dp(-200.0f))) && ((!this.wasExpanded || ChatActivityEnterView.this.stickersExpansionProgress > 0.6f) && (this.wasExpanded || ChatActivityEnterView.this.stickersExpansionProgress < 0.4f)))) {
+                    ChatActivityEnterView.this.setStickersExpanded(this.wasExpanded, true, true);
+                    return;
+                }
+                ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
+                if (!this.wasExpanded) {
+                    z = true;
+                }
+                chatActivityEnterView.setStickersExpanded(z, true, true);
+            }
+        }
+
+        public void onDragCancel() {
+            if (ChatActivityEnterView.this.stickersTabOpen) {
+                ChatActivityEnterView.this.stickersDragging = false;
+                ChatActivityEnterView.this.setStickersExpanded(this.wasExpanded, true, false);
+            }
+        }
+
+        public void onDrag(int offset) {
+            if (allowDragging()) {
+                int origHeight = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight;
+                offset = Math.max(Math.min(offset + this.initialOffset, 0), -(ChatActivityEnterView.this.stickersExpandedHeight - origHeight));
+                ChatActivityEnterView.this.emojiView.setTranslationY((float) offset);
+                ChatActivityEnterView.this.setTranslationY((float) offset);
+                ChatActivityEnterView.this.stickersExpansionProgress = ((float) offset) / ((float) (-(ChatActivityEnterView.this.stickersExpandedHeight - origHeight)));
+                ChatActivityEnterView.this.sizeNotifierLayout.invalidate();
+            }
+        }
+
+        private boolean allowDragging() {
+            return ChatActivityEnterView.this.stickersTabOpen && ((ChatActivityEnterView.this.stickersExpanded || ChatActivityEnterView.this.messageEditText.length() <= 0) && ChatActivityEnterView.this.emojiView.areThereAnyStickers());
         }
     }
 
@@ -709,45 +988,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             return false;
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate */
-    public interface ChatActivityEnterViewDelegate {
-        void didPressedAttachButton();
-
-        void needChangeVideoPreviewState(int i, float f);
-
-        void needSendTyping();
-
-        void needShowMediaBanHint();
-
-        void needStartRecordAudio(int i);
-
-        void needStartRecordVideo(int i);
-
-        void onAttachButtonHidden();
-
-        void onAttachButtonShow();
-
-        void onMessageEditEnd(boolean z);
-
-        void onMessageSend(CharSequence charSequence);
-
-        void onPreAudioVideoRecord();
-
-        void onStickersExpandedChange();
-
-        void onStickersTab(boolean z);
-
-        void onSwitchRecordMode(boolean z);
-
-        void onTextChanged(CharSequence charSequence, boolean z);
-
-        void onTextSelectionChanged(int i, int i2);
-
-        void onTextSpansChanged(CharSequence charSequence);
-
-        void onWindowSizeChanged(int i);
     }
 
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$RecordCircle */
@@ -1086,246 +1326,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             super.onDraw(canvas);
             ChatActivityEnterView.this.seekBarWaveform.setColors(Theme.getColor(Theme.key_chat_recordedVoiceProgress), Theme.getColor(Theme.key_chat_recordedVoiceProgressInner), Theme.getColor(Theme.key_chat_recordedVoiceProgress));
             ChatActivityEnterView.this.seekBarWaveform.draw(canvas);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$12 */
-    class CLASSNAME implements VideoTimelineViewDelegate {
-        CLASSNAME() {
-        }
-
-        public void onLeftProgressChanged(float progress) {
-            if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
-                ChatActivityEnterView.this.videoToSendMessageObject.startTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
-                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
-            }
-        }
-
-        public void onRightProgressChanged(float progress) {
-            if (ChatActivityEnterView.this.videoToSendMessageObject != null) {
-                ChatActivityEnterView.this.videoToSendMessageObject.endTime = (long) (((float) ChatActivityEnterView.this.videoToSendMessageObject.estimatedDuration) * progress);
-                ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(2, progress);
-            }
-        }
-
-        public void didStartDragging() {
-            ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(1, 0.0f);
-        }
-
-        public void didStopDragging() {
-            ChatActivityEnterView.this.delegate.needChangeVideoPreviewState(0, 0.0f);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$24 */
-    class CLASSNAME implements Listener {
-        CLASSNAME() {
-        }
-
-        public boolean onBackspace() {
-            if (ChatActivityEnterView.this.messageEditText.length() == 0) {
-                return false;
-            }
-            ChatActivityEnterView.this.messageEditText.dispatchKeyEvent(new KeyEvent(0, 67));
-            return true;
-        }
-
-        public void onEmojiSelected(String symbol) {
-            int i = ChatActivityEnterView.this.messageEditText.getSelectionEnd();
-            if (i < 0) {
-                i = 0;
-            }
-            try {
-                ChatActivityEnterView.this.innerTextChange = 2;
-                CharSequence localCharSequence = Emoji.replaceEmoji(symbol, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(20.0f), false);
-                ChatActivityEnterView.this.messageEditText.setText(ChatActivityEnterView.this.messageEditText.getText().insert(i, localCharSequence));
-                int j = i + localCharSequence.length();
-                ChatActivityEnterView.this.messageEditText.setSelection(j, j);
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            } finally {
-                ChatActivityEnterView.this.innerTextChange = 0;
-            }
-        }
-
-        public void onStickerSelected(Document sticker, Object parent) {
-            if (ChatActivityEnterView.this.stickersExpanded) {
-                if (ChatActivityEnterView.this.searchingStickers) {
-                    ChatActivityEnterView.this.searchingStickers = false;
-                    ChatActivityEnterView.this.emojiView.closeSearch(true, MessageObject.getStickerSetId(sticker));
-                    ChatActivityEnterView.this.emojiView.hideSearchKeyboard();
-                }
-                ChatActivityEnterView.this.setStickersExpanded(false, true, false);
-            }
-            ChatActivityEnterView.this.onStickerSelected(sticker, parent);
-            DataQuery.getInstance(ChatActivityEnterView.this.currentAccount).addRecentSticker(0, parent, sticker, (int) (System.currentTimeMillis() / 1000), false);
-            if (((int) ChatActivityEnterView.this.dialog_id) == 0) {
-                MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).saveGif(parent, sticker);
-            }
-        }
-
-        public void onStickersSettingsClick() {
-            if (ChatActivityEnterView.this.parentFragment != null) {
-                ChatActivityEnterView.this.parentFragment.presentFragment(new StickersActivity(0));
-            }
-        }
-
-        public void onGifSelected(Document gif, Object parent) {
-            if (ChatActivityEnterView.this.stickersExpanded) {
-                ChatActivityEnterView.this.setStickersExpanded(false, true, false);
-            }
-            SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendSticker(gif, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, parent);
-            DataQuery.getInstance(ChatActivityEnterView.this.currentAccount).addRecentGif(gif, (int) (System.currentTimeMillis() / 1000));
-            if (((int) ChatActivityEnterView.this.dialog_id) == 0) {
-                MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).saveGif(parent, gif);
-            }
-            if (ChatActivityEnterView.this.delegate != null) {
-                ChatActivityEnterView.this.delegate.onMessageSend(null);
-            }
-        }
-
-        public void onGifTab(boolean opened) {
-            ChatActivityEnterView.this.post(ChatActivityEnterView.this.updateExpandabilityRunnable);
-            if (!AndroidUtilities.usingHardwareInput) {
-                if (opened) {
-                    if (ChatActivityEnterView.this.messageEditText.length() == 0) {
-                        ChatActivityEnterView.this.messageEditText.setText("@gif ");
-                        ChatActivityEnterView.this.messageEditText.setSelection(ChatActivityEnterView.this.messageEditText.length());
-                    }
-                } else if (ChatActivityEnterView.this.messageEditText.getText().toString().equals("@gif ")) {
-                    ChatActivityEnterView.this.messageEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
-                }
-            }
-        }
-
-        public void onStickersTab(boolean opened) {
-            ChatActivityEnterView.this.delegate.onStickersTab(opened);
-            ChatActivityEnterView.this.post(ChatActivityEnterView.this.updateExpandabilityRunnable);
-        }
-
-        public void onClearEmojiRecent() {
-            if (ChatActivityEnterView.this.parentFragment != null && ChatActivityEnterView.this.parentActivity != null) {
-                Builder builder = new Builder(ChatActivityEnterView.this.parentActivity);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ClearRecentEmoji", R.string.ClearRecentEmoji));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new ChatActivityEnterView$24$$Lambda$0(this));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                ChatActivityEnterView.this.parentFragment.showDialog(builder.create());
-            }
-        }
-
-        final /* synthetic */ void lambda$onClearEmojiRecent$0$ChatActivityEnterView$24(DialogInterface dialogInterface, int i) {
-            ChatActivityEnterView.this.emojiView.clearRecentEmoji();
-        }
-
-        public void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet) {
-            if (ChatActivityEnterView.this.parentFragment != null && ChatActivityEnterView.this.parentActivity != null) {
-                if (stickerSet != null) {
-                    inputStickerSet = new TL_inputStickerSetID();
-                    inputStickerSet.access_hash = stickerSet.access_hash;
-                    inputStickerSet.var_id = stickerSet.var_id;
-                }
-                ChatActivityEnterView.this.parentFragment.showDialog(new StickersAlert(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment, inputStickerSet, null, ChatActivityEnterView.this));
-            }
-        }
-
-        public void onStickerSetAdd(StickerSetCovered stickerSet) {
-            DataQuery.getInstance(ChatActivityEnterView.this.currentAccount).removeStickersSet(ChatActivityEnterView.this.parentActivity, stickerSet.set, 2, ChatActivityEnterView.this.parentFragment, false);
-        }
-
-        public void onStickerSetRemove(StickerSetCovered stickerSet) {
-            DataQuery.getInstance(ChatActivityEnterView.this.currentAccount).removeStickersSet(ChatActivityEnterView.this.parentActivity, stickerSet.set, 0, ChatActivityEnterView.this.parentFragment, false);
-        }
-
-        public void onStickersGroupClick(int chatId) {
-            if (ChatActivityEnterView.this.parentFragment != null) {
-                if (AndroidUtilities.isTablet()) {
-                    ChatActivityEnterView.this.hidePopup(false);
-                }
-                GroupStickersActivity fragment = new GroupStickersActivity(chatId);
-                fragment.setInfo(ChatActivityEnterView.this.info);
-                ChatActivityEnterView.this.parentFragment.presentFragment(fragment);
-            }
-        }
-
-        public void onSearchOpenClose(boolean open) {
-            ChatActivityEnterView.this.searchingStickers = open;
-            ChatActivityEnterView.this.setStickersExpanded(open, false, false);
-        }
-
-        public boolean isSearchOpened() {
-            return ChatActivityEnterView.this.searchingStickers;
-        }
-
-        public boolean isExpanded() {
-            return ChatActivityEnterView.this.stickersExpanded;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$25 */
-    class CLASSNAME implements DragListener {
-        int initialOffset;
-        boolean wasExpanded;
-
-        CLASSNAME() {
-        }
-
-        public void onDragStart() {
-            if (allowDragging()) {
-                if (ChatActivityEnterView.this.stickersExpansionAnim != null) {
-                    ChatActivityEnterView.this.stickersExpansionAnim.cancel();
-                }
-                ChatActivityEnterView.this.stickersDragging = true;
-                this.wasExpanded = ChatActivityEnterView.this.stickersExpanded;
-                ChatActivityEnterView.this.stickersExpanded = true;
-                ChatActivityEnterView.this.stickersExpandedHeight = (((ChatActivityEnterView.this.sizeNotifierLayout.getHeight() - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - CLASSNAMEActionBar.getCurrentActionBarHeight()) - ChatActivityEnterView.this.getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
-                ChatActivityEnterView.this.emojiView.getLayoutParams().height = ChatActivityEnterView.this.stickersExpandedHeight;
-                ChatActivityEnterView.this.emojiView.setLayerType(2, null);
-                ChatActivityEnterView.this.sizeNotifierLayout.requestLayout();
-                ChatActivityEnterView.this.sizeNotifierLayout.setForeground(new ScrimDrawable());
-                this.initialOffset = (int) ChatActivityEnterView.this.getTranslationY();
-                if (ChatActivityEnterView.this.delegate != null) {
-                    ChatActivityEnterView.this.delegate.onStickersExpandedChange();
-                }
-            }
-        }
-
-        public void onDragEnd(float velocity) {
-            boolean z = false;
-            if (allowDragging()) {
-                ChatActivityEnterView.this.stickersDragging = false;
-                if ((!this.wasExpanded || velocity < ((float) AndroidUtilities.m9dp(200.0f))) && ((this.wasExpanded || velocity > ((float) AndroidUtilities.m9dp(-200.0f))) && ((!this.wasExpanded || ChatActivityEnterView.this.stickersExpansionProgress > 0.6f) && (this.wasExpanded || ChatActivityEnterView.this.stickersExpansionProgress < 0.4f)))) {
-                    ChatActivityEnterView.this.setStickersExpanded(this.wasExpanded, true, true);
-                    return;
-                }
-                ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
-                if (!this.wasExpanded) {
-                    z = true;
-                }
-                chatActivityEnterView.setStickersExpanded(z, true, true);
-            }
-        }
-
-        public void onDragCancel() {
-            if (ChatActivityEnterView.this.stickersTabOpen) {
-                ChatActivityEnterView.this.stickersDragging = false;
-                ChatActivityEnterView.this.setStickersExpanded(this.wasExpanded, true, false);
-            }
-        }
-
-        public void onDrag(int offset) {
-            if (allowDragging()) {
-                int origHeight = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight;
-                offset = Math.max(Math.min(offset + this.initialOffset, 0), -(ChatActivityEnterView.this.stickersExpandedHeight - origHeight));
-                ChatActivityEnterView.this.emojiView.setTranslationY((float) offset);
-                ChatActivityEnterView.this.setTranslationY((float) offset);
-                ChatActivityEnterView.this.stickersExpansionProgress = ((float) offset) / ((float) (-(ChatActivityEnterView.this.stickersExpandedHeight - origHeight)));
-                ChatActivityEnterView.this.sizeNotifierLayout.invalidate();
-            }
-        }
-
-        private boolean allowDragging() {
-            return ChatActivityEnterView.this.stickersTabOpen && ((ChatActivityEnterView.this.stickersExpanded || ChatActivityEnterView.this.messageEditText.length() <= 0) && ChatActivityEnterView.this.emojiView.areThereAnyStickers());
         }
     }
 
@@ -3399,7 +3399,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
         if (user == null) {
-            fragment1.lambda$checkDiscard$70$PassportActivity();
+            fragment1.finishFragment();
             return;
         }
         long did = ((Long) dids.get(0)).longValue();
@@ -3415,10 +3415,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(args1, fragment1)) {
                     if (!this.parentFragment.presentFragment(new ChatActivity(args1), true)) {
-                        fragment1.lambda$checkDiscard$70$PassportActivity();
+                        fragment1.finishFragment();
                         return;
                     } else if (!AndroidUtilities.isTablet()) {
-                        this.parentFragment.lambda$null$10$ProfileActivity();
+                        this.parentFragment.removeSelfFromStack();
                         return;
                     } else {
                         return;
@@ -3426,10 +3426,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 return;
             }
-            fragment1.lambda$checkDiscard$70$PassportActivity();
+            fragment1.finishFragment();
             return;
         }
-        fragment1.lambda$checkDiscard$70$PassportActivity();
+        fragment1.finishFragment();
     }
 
     public boolean isPopupView(View view) {

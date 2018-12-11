@@ -155,38 +155,6 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private boolean userLocationMoved = false;
     private boolean wasResults;
 
-    /* renamed from: org.telegram.ui.LocationActivity$4 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.LocationActivity$9 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.LocationActivity$LiveLocation */
-    public class LiveLocation {
-        public Chat chat;
-        /* renamed from: id */
-        public int var_id;
-        public Marker marker;
-        public Message object;
-        public User user;
-    }
-
     /* renamed from: org.telegram.ui.LocationActivity$LocationActivityDelegate */
     public interface LocationActivityDelegate {
         void didSelectLocation(MessageMedia messageMedia, int i);
@@ -199,7 +167,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
         public void onItemClick(int id) {
             if (id == -1) {
-                LocationActivity.this.lambda$checkDiscard$70$PassportActivity();
+                LocationActivity.this.finishFragment();
             } else if (id == 2) {
                 if (LocationActivity.this.googleMap != null) {
                     LocationActivity.this.googleMap.setMapType(1);
@@ -263,6 +231,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* renamed from: org.telegram.ui.LocationActivity$4 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
+        }
+    }
+
     /* renamed from: org.telegram.ui.LocationActivity$6 */
     class CLASSNAME extends OnScrollListener {
         CLASSNAME() {
@@ -298,6 +277,27 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 AndroidUtilities.hideKeyboard(LocationActivity.this.getParentActivity().getCurrentFocus());
             }
         }
+    }
+
+    /* renamed from: org.telegram.ui.LocationActivity$9 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
+        }
+    }
+
+    /* renamed from: org.telegram.ui.LocationActivity$LiveLocation */
+    public class LiveLocation {
+        public Chat chat;
+        /* renamed from: id */
+        public int var_id;
+        public Marker marker;
+        public Message object;
+        public User user;
     }
 
     public LocationActivity(int liveLocation) {
@@ -599,20 +599,20 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     location.geo._long = AndroidUtilities.fixLocationCoord(this.userLocation.getLongitude());
                     this.delegate.didSelectLocation(location, this.liveLocationType);
                 }
-                lambda$checkDiscard$70$PassportActivity();
+                finishFragment();
             } else if ((position != 2 || this.liveLocationType != 1) && ((position != 1 || this.liveLocationType != 2) && (position != 3 || this.liveLocationType != 3))) {
                 Object object = this.adapter.getItem(position);
                 if (object instanceof TL_messageMediaVenue) {
                     if (!(object == null || this.delegate == null)) {
                         this.delegate.didSelectLocation((TL_messageMediaVenue) object, this.liveLocationType);
                     }
-                    lambda$checkDiscard$70$PassportActivity();
+                    finishFragment();
                 } else if (object instanceof LiveLocation) {
                     this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(((LiveLocation) object).marker.getPosition(), this.googleMap.getMaxZoomLevel() - 4.0f));
                 }
             } else if (LocationController.getInstance(this.currentAccount).isSharingLocation(this.dialogId)) {
                 LocationController.getInstance(this.currentAccount).removeSharingLocation(this.dialogId);
-                lambda$checkDiscard$70$PassportActivity();
+                finishFragment();
             } else if (this.delegate != null && getParentActivity() != null && this.myLocation != null) {
                 User user = null;
                 if (((int) this.dialogId) > 0) {
@@ -632,7 +632,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         location.geo._long = AndroidUtilities.fixLocationCoord(this.myLocation.getLongitude());
         location.period = param;
         this.delegate.didSelectLocation(location, this.liveLocationType);
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
     final /* synthetic */ void lambda$createView$2$LocationActivity(ArrayList places) {
@@ -677,7 +677,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (!(object == null || this.delegate == null)) {
             this.delegate.didSelectLocation(object, this.liveLocationType);
         }
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
     final /* synthetic */ void lambda$createView$7$LocationActivity(View v) {

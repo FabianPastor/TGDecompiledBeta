@@ -29,49 +29,6 @@ public class AsyncListUtil<T> {
     final int[] mTmpRangeExtended = new int[2];
     final ViewCallback mViewCallback;
 
-    public static abstract class DataCallback<T> {
-        public abstract void fillData(T[] tArr, int i, int i2);
-
-        public abstract int refreshData();
-
-        public void recycleData(T[] tArr, int itemCount) {
-        }
-
-        public int getMaxCachedTiles() {
-            return 10;
-        }
-    }
-
-    public static abstract class ViewCallback {
-        public static final int HINT_SCROLL_ASC = 2;
-        public static final int HINT_SCROLL_DESC = 1;
-        public static final int HINT_SCROLL_NONE = 0;
-
-        public abstract void getItemRangeInto(int[] iArr);
-
-        public abstract void onDataRefresh();
-
-        public abstract void onItemLoaded(int i);
-
-        public void extendRangeInto(int[] range, int[] outRange, int scrollHint) {
-            int i;
-            int fullRange = (range[1] - range[0]) + 1;
-            int halfRange = fullRange / 2;
-            int i2 = range[0];
-            if (scrollHint == 1) {
-                i = fullRange;
-            } else {
-                i = halfRange;
-            }
-            outRange[0] = i2 - i;
-            i = range[1];
-            if (scrollHint != 2) {
-                fullRange = halfRange;
-            }
-            outRange[1] = i + fullRange;
-        }
-    }
-
     /* renamed from: org.telegram.messenger.support.util.AsyncListUtil$1 */
     class CLASSNAME implements MainThreadCallback<T> {
         CLASSNAME() {
@@ -250,6 +207,49 @@ public class AsyncListUtil<T> {
 
         private void log(String s, Object... args) {
             Log.d(AsyncListUtil.TAG, "[BKGR] " + String.format(s, args));
+        }
+    }
+
+    public static abstract class DataCallback<T> {
+        public abstract void fillData(T[] tArr, int i, int i2);
+
+        public abstract int refreshData();
+
+        public void recycleData(T[] tArr, int itemCount) {
+        }
+
+        public int getMaxCachedTiles() {
+            return 10;
+        }
+    }
+
+    public static abstract class ViewCallback {
+        public static final int HINT_SCROLL_ASC = 2;
+        public static final int HINT_SCROLL_DESC = 1;
+        public static final int HINT_SCROLL_NONE = 0;
+
+        public abstract void getItemRangeInto(int[] iArr);
+
+        public abstract void onDataRefresh();
+
+        public abstract void onItemLoaded(int i);
+
+        public void extendRangeInto(int[] range, int[] outRange, int scrollHint) {
+            int i;
+            int fullRange = (range[1] - range[0]) + 1;
+            int halfRange = fullRange / 2;
+            int i2 = range[0];
+            if (scrollHint == 1) {
+                i = fullRange;
+            } else {
+                i = halfRange;
+            }
+            outRange[0] = i2 - i;
+            i = range[1];
+            if (scrollHint != 2) {
+                fullRange = halfRange;
+            }
+            outRange[1] = i + fullRange;
         }
     }
 

@@ -70,6 +70,15 @@ public class StickerPreviewViewer {
     private LayoutParams windowLayoutParams;
     private FrameLayout windowView;
 
+    /* renamed from: org.telegram.ui.StickerPreviewViewer$StickerPreviewViewerDelegate */
+    public interface StickerPreviewViewerDelegate {
+        boolean needSend();
+
+        void openSet(InputStickerSet inputStickerSet);
+
+        void sendSticker(Document document, Object obj);
+    }
+
     /* renamed from: org.telegram.ui.StickerPreviewViewer$1 */
     class CLASSNAME implements Runnable {
         CLASSNAME() {
@@ -143,15 +152,6 @@ public class StickerPreviewViewer {
         protected void onDraw(Canvas canvas) {
             StickerPreviewViewer.this.onDraw(canvas);
         }
-    }
-
-    /* renamed from: org.telegram.ui.StickerPreviewViewer$StickerPreviewViewerDelegate */
-    public interface StickerPreviewViewerDelegate {
-        boolean needSend();
-
-        void openSet(InputStickerSet inputStickerSet);
-
-        void sendSticker(Document document, Object obj);
     }
 
     public static StickerPreviewViewer getInstance() {

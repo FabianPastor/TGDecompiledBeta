@@ -1,14 +1,17 @@
 package org.telegram.p005ui;
 
+import android.view.View;
+import android.view.View.OnClickListener;
+
 /* renamed from: org.telegram.ui.PhotoViewer$$Lambda$32 */
-final /* synthetic */ class PhotoViewer$$Lambda$32 implements Runnable {
+final /* synthetic */ class PhotoViewer$$Lambda$32 implements OnClickListener {
     private final PhotoViewer arg$1;
 
     PhotoViewer$$Lambda$32(PhotoViewer photoViewer) {
         this.arg$1 = photoViewer;
     }
 
-    public void run() {
-        this.arg$1.lambda$closePhoto$40$PhotoViewer();
+    public void onClick(View view) {
+        this.arg$1.lambda$switchToEditMode$40$PhotoViewer(view);
     }
 }

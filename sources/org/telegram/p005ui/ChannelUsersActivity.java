@@ -134,7 +134,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChannelUsersActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChannelUsersActivity.this.finishFragment();
             }
         }
     }
@@ -1158,7 +1158,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 presentFragment(fragment2);
             } else {
                 MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(user_id)), null);
-                lambda$checkDiscard$70$PassportActivity();
+                finishFragment();
             }
         }
     }
@@ -1177,7 +1177,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 p.banned_rights = rightsBanned;
             }
         }
-        lambda$null$10$ProfileActivity();
+        removeSelfFromStack();
     }
 
     final /* synthetic */ void lambda$null$2$ChannelUsersActivity(ChannelParticipant participant, int rights, TL_channelAdminRights rightsAdmin, TL_channelBannedRights rightsBanned) {

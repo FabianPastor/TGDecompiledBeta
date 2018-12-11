@@ -97,30 +97,6 @@ public class ChangePhoneActivity extends BaseFragment {
     private int scrollHeight;
     private SlideView[] views = new SlideView[5];
 
-    /* renamed from: org.telegram.ui.ChangePhoneActivity$ProgressView */
-    private class ProgressView extends View {
-        private Paint paint = new Paint();
-        private Paint paint2 = new Paint();
-        private float progress;
-
-        public ProgressView(Context context) {
-            super(context);
-            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
-            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
-        }
-
-        public void setProgress(float value) {
-            this.progress = value;
-            invalidate();
-        }
-
-        protected void onDraw(Canvas canvas) {
-            int start = (int) (((float) getMeasuredWidth()) * this.progress);
-            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
-            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-        }
-    }
-
     /* renamed from: org.telegram.ui.ChangePhoneActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -130,7 +106,7 @@ public class ChangePhoneActivity extends BaseFragment {
             if (id == 1) {
                 ChangePhoneActivity.this.views[ChangePhoneActivity.this.currentViewNum].onNextPressed();
             } else if (id == -1) {
-                ChangePhoneActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChangePhoneActivity.this.finishFragment();
             }
         }
     }
@@ -472,7 +448,7 @@ public class ChangePhoneActivity extends BaseFragment {
 
         final /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialog1, int which) {
             onBackPressed(true);
-            ChangePhoneActivity.this.lambda$checkDiscard$70$PassportActivity();
+            ChangePhoneActivity.this.finishFragment();
         }
 
         public String getHeaderName() {
@@ -756,7 +732,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 users.add(user);
                 MessagesStorage.getInstance(ChangePhoneActivity.this.currentAccount).putUsersAndChats(users, null, true, true);
                 MessagesController.getInstance(ChangePhoneActivity.this.currentAccount).putUser(user, false);
-                ChangePhoneActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChangePhoneActivity.this.finishFragment();
                 NotificationCenter.getInstance(ChangePhoneActivity.this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                 return;
             }
@@ -1345,6 +1321,30 @@ public class ChangePhoneActivity extends BaseFragment {
 
         public String getHeaderName() {
             return LocaleController.getString("ChangePhoneNewNumber", R.string.ChangePhoneNewNumber);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ChangePhoneActivity$ProgressView */
+    private class ProgressView extends View {
+        private Paint paint = new Paint();
+        private Paint paint2 = new Paint();
+        private float progress;
+
+        public ProgressView(Context context) {
+            super(context);
+            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
+            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int start = (int) (((float) getMeasuredWidth()) * this.progress);
+            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
+            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
         }
     }
 

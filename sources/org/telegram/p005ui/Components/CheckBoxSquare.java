@@ -17,16 +17,22 @@ public class CheckBoxSquare extends View {
     private static final float progressBounceDiff = 0.2f;
     private boolean attachedToWindow;
     private ObjectAnimator checkAnimator;
-    private Bitmap drawBitmap = Bitmap.createBitmap(AndroidUtilities.m9dp(18.0f), AndroidUtilities.m9dp(18.0f), Config.ARGB_4444);
-    private Canvas drawCanvas = new Canvas(this.drawBitmap);
+    private Bitmap drawBitmap;
+    private Canvas drawCanvas;
     private boolean isAlert;
     private boolean isChecked;
     private boolean isDisabled;
     private float progress;
-    private RectF rectF = new RectF();
+    private RectF rectF;
 
     public CheckBoxSquare(Context context, boolean alert) {
         super(context);
+        if (Theme.checkboxSquare_backgroundPaint == null) {
+            Theme.createCommonResources(context);
+        }
+        this.rectF = new RectF();
+        this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.m9dp(18.0f), AndroidUtilities.m9dp(18.0f), Config.ARGB_4444);
+        this.drawCanvas = new Canvas(this.drawBitmap);
         this.isAlert = alert;
     }
 

@@ -33,6 +33,11 @@ public class Switch extends View {
     private String trackCheckedColorKey = Theme.key_switch2TrackChecked;
     private String trackColorKey = Theme.key_switch2Track;
 
+    /* renamed from: org.telegram.ui.Components.Switch$OnCheckedChangeListener */
+    public interface OnCheckedChangeListener {
+        void onCheckedChanged(Switch switchR, boolean z);
+    }
+
     /* renamed from: org.telegram.ui.Components.Switch$1 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
@@ -51,11 +56,6 @@ public class Switch extends View {
         public void onAnimationEnd(Animator animation) {
             Switch.this.iconAnimator = null;
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.Switch$OnCheckedChangeListener */
-    public interface OnCheckedChangeListener {
-        void onCheckedChanged(Switch switchR, boolean z);
     }
 
     public Switch(Context context) {

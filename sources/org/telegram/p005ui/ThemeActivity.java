@@ -100,6 +100,18 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private int themeStartRow;
     private boolean updatingLocation;
 
+    /* renamed from: org.telegram.ui.ThemeActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ThemeActivity.this.lambda$checkDiscard$70$PassportActivity();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ThemeActivity$GpsLocationListener */
     private class GpsLocationListener implements LocationListener {
         private GpsLocationListener() {
@@ -123,18 +135,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
 
         public void onProviderDisabled(String provider) {
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ThemeActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ThemeActivity.this.lambda$checkDiscard$70$PassportActivity();
-            }
         }
     }
 

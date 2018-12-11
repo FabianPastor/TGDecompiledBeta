@@ -236,6 +236,62 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
     }
 
+    /* renamed from: org.telegram.ui.ChannelAdminLogActivity$1 */
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
+        }
+
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            int count = ChannelAdminLogActivity.this.chatListView.getChildCount();
+            for (int a = 0; a < count; a++) {
+                ImageReceiver imageReceiver = null;
+                View view = ChannelAdminLogActivity.this.chatListView.getChildAt(a);
+                MessageObject message;
+                if (view instanceof ChatMessageCell) {
+                    if (messageObject != null) {
+                        ChatMessageCell cell = (ChatMessageCell) view;
+                        message = cell.getMessageObject();
+                        if (message != null && message.getId() == messageObject.getId()) {
+                            imageReceiver = cell.getPhotoImage();
+                        }
+                    }
+                } else if (view instanceof ChatActionCell) {
+                    ChatActionCell cell2 = (ChatActionCell) view;
+                    message = cell2.getMessageObject();
+                    if (message != null) {
+                        if (messageObject != null) {
+                            if (message.getId() == messageObject.getId()) {
+                                imageReceiver = cell2.getPhotoImage();
+                            }
+                        } else if (fileLocation != null && message.photoThumbs != null) {
+                            for (int b = 0; b < message.photoThumbs.size(); b++) {
+                                PhotoSize photoSize = (PhotoSize) message.photoThumbs.get(b);
+                                if (photoSize.location.volume_id == fileLocation.volume_id && photoSize.location.local_id == fileLocation.local_id) {
+                                    imageReceiver = cell2.getPhotoImage();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (imageReceiver != null) {
+                    int[] coords = new int[2];
+                    view.getLocationInWindow(coords);
+                    PlaceProviderObject object = new PlaceProviderObject();
+                    object.viewX = coords[0];
+                    object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+                    object.parentView = ChannelAdminLogActivity.this.chatListView;
+                    object.imageReceiver = imageReceiver;
+                    object.thumb = imageReceiver.getBitmapSafe();
+                    object.radius = imageReceiver.getRoundRadius();
+                    object.isEvent = true;
+                    return object;
+                }
+            }
+            return null;
+        }
+    }
+
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$2 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -243,7 +299,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChannelAdminLogActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChannelAdminLogActivity.this.finishFragment();
             }
         }
     }
@@ -449,7 +505,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             /* renamed from: lambda$didPressedUrl$0$ChannelAdminLogActivity$ChatActivityAdapter$1 */
-            final /* synthetic */ void mo16126xd3354c8f(String urlFinal, DialogInterface dialog, int which) {
+            final /* synthetic */ void mo15101xd3354c8f(String urlFinal, DialogInterface dialog, int which) {
                 if (which == 0) {
                     Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), urlFinal, true);
                 } else if (which == 1) {
@@ -674,7 +730,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: lambda$onCreateViewHolder$0$ChannelAdminLogActivity$ChatActivityAdapter */
-        final /* synthetic */ void mo16127xd4cdd41c(String url) {
+        final /* synthetic */ void mo15103xd4cdd41c(String url) {
             if (url.startsWith("@")) {
                 MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).openByUserName(url.substring(1), ChannelAdminLogActivity.this, 0);
             } else if (url.startsWith("#")) {
@@ -849,62 +905,6 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             } catch (Throwable e) {
                 FileLog.m13e(e);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChannelAdminLogActivity$1 */
-    class CLASSNAME extends EmptyPhotoViewerProvider {
-        CLASSNAME() {
-        }
-
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-            int count = ChannelAdminLogActivity.this.chatListView.getChildCount();
-            for (int a = 0; a < count; a++) {
-                ImageReceiver imageReceiver = null;
-                View view = ChannelAdminLogActivity.this.chatListView.getChildAt(a);
-                MessageObject message;
-                if (view instanceof ChatMessageCell) {
-                    if (messageObject != null) {
-                        ChatMessageCell cell = (ChatMessageCell) view;
-                        message = cell.getMessageObject();
-                        if (message != null && message.getId() == messageObject.getId()) {
-                            imageReceiver = cell.getPhotoImage();
-                        }
-                    }
-                } else if (view instanceof ChatActionCell) {
-                    ChatActionCell cell2 = (ChatActionCell) view;
-                    message = cell2.getMessageObject();
-                    if (message != null) {
-                        if (messageObject != null) {
-                            if (message.getId() == messageObject.getId()) {
-                                imageReceiver = cell2.getPhotoImage();
-                            }
-                        } else if (fileLocation != null && message.photoThumbs != null) {
-                            for (int b = 0; b < message.photoThumbs.size(); b++) {
-                                PhotoSize photoSize = (PhotoSize) message.photoThumbs.get(b);
-                                if (photoSize.location.volume_id == fileLocation.volume_id && photoSize.location.local_id == fileLocation.local_id) {
-                                    imageReceiver = cell2.getPhotoImage();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (imageReceiver != null) {
-                    int[] coords = new int[2];
-                    view.getLocationInWindow(coords);
-                    PlaceProviderObject object = new PlaceProviderObject();
-                    object.viewX = coords[0];
-                    object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
-                    object.parentView = ChannelAdminLogActivity.this.chatListView;
-                    object.imageReceiver = imageReceiver;
-                    object.thumb = imageReceiver.getBitmapSafe();
-                    object.radius = imageReceiver.getRoundRadius();
-                    object.isEvent = true;
-                    return object;
-                }
-            }
-            return null;
         }
     }
 

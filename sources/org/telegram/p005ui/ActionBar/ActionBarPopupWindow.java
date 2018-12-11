@@ -39,6 +39,11 @@ public class ActionBarPopupWindow extends PopupWindow {
     private ViewTreeObserver mViewTreeObserver;
     private AnimatorSet windowAnimatorSet;
 
+    /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$OnDispatchKeyEventListener */
+    public interface OnDispatchKeyEventListener {
+        void onDispatchKeyEvent(KeyEvent keyEvent);
+    }
+
     /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$1 */
     class CLASSNAME implements AnimatorListener {
         CLASSNAME() {
@@ -260,11 +265,6 @@ public class ActionBarPopupWindow extends PopupWindow {
                 this.scrollView.scrollTo(0, 0);
             }
         }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.ActionBarPopupWindow$OnDispatchKeyEventListener */
-    public interface OnDispatchKeyEventListener {
-        void onDispatchKeyEvent(KeyEvent keyEvent);
     }
 
     static {

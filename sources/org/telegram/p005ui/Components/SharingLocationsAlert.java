@@ -48,29 +48,6 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     private TextView textView;
     private Pattern urlPattern;
 
-    /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$5 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View view) {
-            for (int a = 0; a < 3; a++) {
-                LocationController.getInstance(a).removeAllLocationSharings();
-            }
-            SharingLocationsAlert.this.dismiss();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$6 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View view) {
-            SharingLocationsAlert.this.dismiss();
-        }
-    }
-
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$SharingLocationsAlertDelegate */
     public interface SharingLocationsAlertDelegate {
         void didSelectLocation(SharingLocationInfo sharingLocationInfo);
@@ -97,6 +74,29 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 SharingLocationsAlert.this.delegate.didSelectLocation(SharingLocationsAlert.this.getLocation(position));
                 SharingLocationsAlert.this.dismiss();
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$5 */
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
+        }
+
+        public void onClick(View view) {
+            for (int a = 0; a < 3; a++) {
+                LocationController.getInstance(a).removeAllLocationSharings();
+            }
+            SharingLocationsAlert.this.dismiss();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$6 */
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
+        }
+
+        public void onClick(View view) {
+            SharingLocationsAlert.this.dismiss();
         }
     }
 

@@ -136,21 +136,6 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     private TextDetailCell typeCell;
     private InputFile uploadedAvatar;
 
-    /* renamed from: org.telegram.ui.ChannelEditActivity$6 */
-    class CLASSNAME implements TextWatcher {
-        CLASSNAME() {
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-        }
-    }
-
     /* renamed from: org.telegram.ui.ChannelEditActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -158,7 +143,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChannelEditActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChannelEditActivity.this.finishFragment();
             } else if (id == 1 && !ChannelEditActivity.this.donePressed) {
                 if (ChannelEditActivity.this.nameTextView.length() == 0) {
                     Vibrator v = (Vibrator) ChannelEditActivity.this.getParentActivity().getSystemService("vibrator");
@@ -199,7 +184,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                 } else if (ChannelEditActivity.this.avatar == null && (ChannelEditActivity.this.currentChat.photo instanceof TL_chatPhoto)) {
                     MessagesController.getInstance(ChannelEditActivity.this.currentAccount).changeChatAvatar(ChannelEditActivity.this.chatId, null, null, null);
                 }
-                ChannelEditActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChannelEditActivity.this.finishFragment();
             }
         }
 
@@ -207,6 +192,21 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
             ChannelEditActivity.this.createAfterUpload = false;
             ChannelEditActivity.this.progressDialog = null;
             ChannelEditActivity.this.donePressed = false;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ChannelEditActivity$6 */
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        public void afterTextChanged(Editable editable) {
         }
     }
 
@@ -846,7 +846,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
         }
         MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId())), this.info, true);
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {

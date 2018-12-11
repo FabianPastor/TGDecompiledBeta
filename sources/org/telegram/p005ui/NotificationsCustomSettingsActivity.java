@@ -86,18 +86,6 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     private boolean searchWas;
     private boolean searching;
 
-    /* renamed from: org.telegram.ui.NotificationsCustomSettingsActivity$4 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animator) {
-            if (animator.equals(NotificationsCustomSettingsActivity.this.animatorSet)) {
-                NotificationsCustomSettingsActivity.this.animatorSet = null;
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.NotificationsCustomSettingsActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -105,7 +93,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                NotificationsCustomSettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                NotificationsCustomSettingsActivity.this.finishFragment();
             }
         }
     }
@@ -163,6 +151,18 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.NotificationsCustomSettingsActivity$4 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animator) {
+            if (animator.equals(NotificationsCustomSettingsActivity.this.animatorSet)) {
+                NotificationsCustomSettingsActivity.this.animatorSet = null;
+            }
         }
     }
 
@@ -501,7 +501,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$processSearch$1$NotificationsCustomSettingsActivity$SearchAdapter */
-        final /* synthetic */ void mo17320x19ea3dd1(String query) {
+        final /* synthetic */ void mo18831x19ea3dd1(String query) {
             Utilities.searchQueue.postRunnable(new NotificationsCustomSettingsActivity$SearchAdapter$$Lambda$2(this, query, new ArrayList(NotificationsCustomSettingsActivity.this.exceptions)));
         }
 
@@ -612,7 +612,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$updateSearchResults$2$NotificationsCustomSettingsActivity$SearchAdapter */
-        final /* synthetic */ void mo17321x264e3040(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo18832x264e3040(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
@@ -1118,7 +1118,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: lambda$getThemeDescriptions$7$NotificationsCustomSettingsActivity */
-    final /* synthetic */ void mo17312xvar_() {
+    final /* synthetic */ void mo18835xvar_() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

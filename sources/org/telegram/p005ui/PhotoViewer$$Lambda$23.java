@@ -1,7 +1,7 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 /* renamed from: org.telegram.ui.PhotoViewer$$Lambda$23 */
 final /* synthetic */ class PhotoViewer$$Lambda$23 implements OnClickListener {
@@ -11,7 +11,7 @@ final /* synthetic */ class PhotoViewer$$Lambda$23 implements OnClickListener {
         this.arg$1 = photoViewer;
     }
 
-    public void onClick(View view) {
-        this.arg$1.lambda$createCaptionTextView$29$PhotoViewer(view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$checkInlinePermissions$29$PhotoViewer(dialogInterface, i);
     }
 }

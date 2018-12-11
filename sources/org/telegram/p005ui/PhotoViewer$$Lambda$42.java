@@ -12,6 +12,6 @@ final /* synthetic */ class PhotoViewer$$Lambda$42 implements OnClickListener {
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$26$PhotoViewer(dialogInterface, i);
+        this.arg$1.lambda$null$36$PhotoViewer(dialogInterface, i);
     }
 }

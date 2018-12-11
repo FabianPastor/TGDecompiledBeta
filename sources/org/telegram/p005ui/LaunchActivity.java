@@ -175,6 +175,24 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private String videoPath;
     private AlertDialog visibleDialog;
 
+    /* renamed from: org.telegram.ui.LaunchActivity$3 */
+    class CLASSNAME implements TermsOfServiceViewDelegate {
+        CLASSNAME() {
+        }
+
+        public void onAcceptTerms(int account) {
+            UserConfig.getInstance(account).unacceptedTermsOfService = null;
+            UserConfig.getInstance(account).saveConfig(false);
+            LaunchActivity.this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
+            LaunchActivity.this.termsOfServiceView.setVisibility(8);
+        }
+
+        public void onDeclineTerms(int account) {
+            LaunchActivity.this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
+            LaunchActivity.this.termsOfServiceView.setVisibility(8);
+        }
+    }
+
     /* renamed from: org.telegram.ui.LaunchActivity$4 */
     class CLASSNAME implements OnDismissListener {
         CLASSNAME() {
@@ -222,24 +240,6 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 }
                 LaunchActivity.this.lockRunnable = null;
             }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.LaunchActivity$3 */
-    class CLASSNAME implements TermsOfServiceViewDelegate {
-        CLASSNAME() {
-        }
-
-        public void onAcceptTerms(int account) {
-            UserConfig.getInstance(account).unacceptedTermsOfService = null;
-            UserConfig.getInstance(account).saveConfig(false);
-            LaunchActivity.this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
-            LaunchActivity.this.termsOfServiceView.setVisibility(8);
-        }
-
-        public void onDeclineTerms(int account) {
-            LaunchActivity.this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
-            LaunchActivity.this.termsOfServiceView.setVisibility(8);
         }
     }
 

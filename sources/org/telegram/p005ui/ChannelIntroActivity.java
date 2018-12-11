@@ -26,6 +26,18 @@ public class ChannelIntroActivity extends BaseFragment {
     private ImageView imageView;
     private TextView whatIsChannelText;
 
+    /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ChannelIntroActivity.this.finishFragment();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ChannelIntroActivity$3 */
     class CLASSNAME implements OnTouchListener {
         CLASSNAME() {
@@ -45,18 +57,6 @@ public class ChannelIntroActivity extends BaseFragment {
             Bundle args = new Bundle();
             args.putInt("step", 0);
             ChannelIntroActivity.this.presentFragment(new ChannelCreateActivity(args), true);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChannelIntroActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ChannelIntroActivity.this.lambda$checkDiscard$70$PassportActivity();
-            }
         }
     }
 

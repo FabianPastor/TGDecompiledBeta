@@ -124,6 +124,20 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
     }
 
+    /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                GroupCreateActivity.this.finishFragment();
+            } else if (id == 1) {
+                GroupCreateActivity.this.onDonePressed();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.GroupCreateActivity$5 */
     class CLASSNAME implements Callback {
         CLASSNAME() {
@@ -194,6 +208,18 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
     }
 
+    /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
+        }
+
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            if (newState == 1) {
+                AndroidUtilities.hideKeyboard(GroupCreateActivity.this.editText);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.GroupCreateActivity$9 */
     class CLASSNAME extends ViewOutlineProvider {
         CLASSNAME() {
@@ -208,204 +234,6 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateActivityDelegate */
     public interface GroupCreateActivityDelegate {
         void didSelectUsers(ArrayList<Integer> arrayList);
-    }
-
-    /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer */
-    private class SpansContainer extends ViewGroup {
-        private View addingSpan;
-        private boolean animationStarted;
-        private ArrayList<Animator> animators = new ArrayList();
-        private AnimatorSet currentAnimation;
-        private View removingSpan;
-
-        /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
-        class CLASSNAME extends AnimatorListenerAdapter {
-            CLASSNAME() {
-            }
-
-            public void onAnimationEnd(Animator animator) {
-                SpansContainer.this.addingSpan = null;
-                SpansContainer.this.currentAnimation = null;
-                SpansContainer.this.animationStarted = false;
-                GroupCreateActivity.this.editText.setAllowDrawCursor(true);
-            }
-        }
-
-        public SpansContainer(Context context) {
-            super(context);
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int minWidth;
-            int count = getChildCount();
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            int maxWidth = width - AndroidUtilities.m9dp(32.0f);
-            int currentLineWidth = 0;
-            int y = AndroidUtilities.m9dp(12.0f);
-            int allCurrentLineWidth = 0;
-            int allY = AndroidUtilities.m9dp(12.0f);
-            for (int a = 0; a < count; a++) {
-                View child = getChildAt(a);
-                if (child instanceof GroupCreateSpan) {
-                    child.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(32.0f), NUM));
-                    if (child != this.removingSpan && child.getMeasuredWidth() + currentLineWidth > maxWidth) {
-                        y += child.getMeasuredHeight() + AndroidUtilities.m9dp(12.0f);
-                        currentLineWidth = 0;
-                    }
-                    if (child.getMeasuredWidth() + allCurrentLineWidth > maxWidth) {
-                        allY += child.getMeasuredHeight() + AndroidUtilities.m9dp(12.0f);
-                        allCurrentLineWidth = 0;
-                    }
-                    int x = AndroidUtilities.m9dp(16.0f) + currentLineWidth;
-                    if (!this.animationStarted) {
-                        if (child == this.removingSpan) {
-                            child.setTranslationX((float) (AndroidUtilities.m9dp(16.0f) + allCurrentLineWidth));
-                            child.setTranslationY((float) allY);
-                        } else if (this.removingSpan != null) {
-                            if (child.getTranslationX() != ((float) x)) {
-                                this.animators.add(ObjectAnimator.ofFloat(child, "translationX", new float[]{(float) x}));
-                            }
-                            if (child.getTranslationY() != ((float) y)) {
-                                this.animators.add(ObjectAnimator.ofFloat(child, "translationY", new float[]{(float) y}));
-                            }
-                        } else {
-                            child.setTranslationX((float) x);
-                            child.setTranslationY((float) y);
-                        }
-                    }
-                    if (child != this.removingSpan) {
-                        currentLineWidth += child.getMeasuredWidth() + AndroidUtilities.m9dp(9.0f);
-                    }
-                    allCurrentLineWidth += child.getMeasuredWidth() + AndroidUtilities.m9dp(9.0f);
-                }
-            }
-            if (AndroidUtilities.isTablet()) {
-                minWidth = AndroidUtilities.m9dp(366.0f) / 3;
-            } else {
-                minWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(164.0f)) / 3;
-            }
-            if (maxWidth - currentLineWidth < minWidth) {
-                currentLineWidth = 0;
-                y += AndroidUtilities.m9dp(44.0f);
-            }
-            if (maxWidth - allCurrentLineWidth < minWidth) {
-                allY += AndroidUtilities.m9dp(44.0f);
-            }
-            GroupCreateActivity.this.editText.measure(MeasureSpec.makeMeasureSpec(maxWidth - currentLineWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(32.0f), NUM));
-            if (!this.animationStarted) {
-                int currentHeight = allY + AndroidUtilities.m9dp(44.0f);
-                int fieldX = currentLineWidth + AndroidUtilities.m9dp(16.0f);
-                GroupCreateActivity.this.fieldY = y;
-                if (this.currentAnimation != null) {
-                    if (GroupCreateActivity.this.containerHeight != y + AndroidUtilities.m9dp(44.0f)) {
-                        this.animators.add(ObjectAnimator.ofInt(GroupCreateActivity.this, "containerHeight", new int[]{resultHeight}));
-                    }
-                    if (GroupCreateActivity.this.editText.getTranslationX() != ((float) fieldX)) {
-                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationX", new float[]{(float) fieldX}));
-                    }
-                    if (GroupCreateActivity.this.editText.getTranslationY() != ((float) GroupCreateActivity.this.fieldY)) {
-                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationY", new float[]{(float) GroupCreateActivity.this.fieldY}));
-                    }
-                    GroupCreateActivity.this.editText.setAllowDrawCursor(false);
-                    this.currentAnimation.playTogether(this.animators);
-                    this.currentAnimation.start();
-                    this.animationStarted = true;
-                } else {
-                    GroupCreateActivity.this.containerHeight = currentHeight;
-                    GroupCreateActivity.this.editText.setTranslationX((float) fieldX);
-                    GroupCreateActivity.this.editText.setTranslationY((float) GroupCreateActivity.this.fieldY);
-                }
-            } else if (!(this.currentAnimation == null || GroupCreateActivity.this.ignoreScrollEvent || this.removingSpan != null)) {
-                GroupCreateActivity.this.editText.bringPointIntoView(GroupCreateActivity.this.editText.getSelectionStart());
-            }
-            setMeasuredDimension(width, GroupCreateActivity.this.containerHeight);
-        }
-
-        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            int count = getChildCount();
-            for (int a = 0; a < count; a++) {
-                View child = getChildAt(a);
-                child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
-            }
-        }
-
-        public void addSpan(GroupCreateSpan span) {
-            GroupCreateActivity.this.allSpans.add(span);
-            GroupCreateActivity.this.selectedContacts.put(span.getUid(), span);
-            GroupCreateActivity.this.editText.setHintVisible(false);
-            if (this.currentAnimation != null) {
-                this.currentAnimation.setupEndValues();
-                this.currentAnimation.cancel();
-            }
-            this.animationStarted = false;
-            this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new CLASSNAME());
-            this.currentAnimation.setDuration(150);
-            this.addingSpan = span;
-            this.animators.clear();
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleX", new float[]{0.01f, 1.0f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleY", new float[]{0.01f, 1.0f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "alpha", new float[]{0.0f, 1.0f}));
-            addView(span);
-        }
-
-        public void removeSpan(final GroupCreateSpan span) {
-            GroupCreateActivity.this.ignoreScrollEvent = true;
-            GroupCreateActivity.this.selectedContacts.remove(span.getUid());
-            GroupCreateActivity.this.allSpans.remove(span);
-            span.setOnClickListener(null);
-            if (this.currentAnimation != null) {
-                this.currentAnimation.setupEndValues();
-                this.currentAnimation.cancel();
-            }
-            this.animationStarted = false;
-            this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    SpansContainer.this.removeView(span);
-                    SpansContainer.this.removingSpan = null;
-                    SpansContainer.this.currentAnimation = null;
-                    SpansContainer.this.animationStarted = false;
-                    GroupCreateActivity.this.editText.setAllowDrawCursor(true);
-                    if (GroupCreateActivity.this.allSpans.isEmpty()) {
-                        GroupCreateActivity.this.editText.setHintVisible(true);
-                    }
-                }
-            });
-            this.currentAnimation.setDuration(150);
-            this.removingSpan = span;
-            this.animators.clear();
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleX", new float[]{1.0f, 0.01f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleY", new float[]{1.0f, 0.01f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "alpha", new float[]{1.0f, 0.0f}));
-            requestLayout();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.GroupCreateActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                GroupCreateActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1) {
-                GroupCreateActivity.this.onDonePressed();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.GroupCreateActivity$8 */
-    class CLASSNAME extends OnScrollListener {
-        CLASSNAME() {
-        }
-
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            if (newState == 1) {
-                AndroidUtilities.hideKeyboard(GroupCreateActivity.this.editText);
-            }
-        }
     }
 
     /* renamed from: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter */
@@ -673,10 +501,182 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
 
         /* renamed from: lambda$updateSearchResults$0$GroupCreateActivity$GroupCreateAdapter */
-        final /* synthetic */ void mo17074x38var_e(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo18295x38var_e(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer */
+    private class SpansContainer extends ViewGroup {
+        private View addingSpan;
+        private boolean animationStarted;
+        private ArrayList<Animator> animators = new ArrayList();
+        private AnimatorSet currentAnimation;
+        private View removingSpan;
+
+        /* renamed from: org.telegram.ui.GroupCreateActivity$SpansContainer$1 */
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
+            }
+
+            public void onAnimationEnd(Animator animator) {
+                SpansContainer.this.addingSpan = null;
+                SpansContainer.this.currentAnimation = null;
+                SpansContainer.this.animationStarted = false;
+                GroupCreateActivity.this.editText.setAllowDrawCursor(true);
+            }
+        }
+
+        public SpansContainer(Context context) {
+            super(context);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int minWidth;
+            int count = getChildCount();
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int maxWidth = width - AndroidUtilities.m9dp(32.0f);
+            int currentLineWidth = 0;
+            int y = AndroidUtilities.m9dp(12.0f);
+            int allCurrentLineWidth = 0;
+            int allY = AndroidUtilities.m9dp(12.0f);
+            for (int a = 0; a < count; a++) {
+                View child = getChildAt(a);
+                if (child instanceof GroupCreateSpan) {
+                    child.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(32.0f), NUM));
+                    if (child != this.removingSpan && child.getMeasuredWidth() + currentLineWidth > maxWidth) {
+                        y += child.getMeasuredHeight() + AndroidUtilities.m9dp(12.0f);
+                        currentLineWidth = 0;
+                    }
+                    if (child.getMeasuredWidth() + allCurrentLineWidth > maxWidth) {
+                        allY += child.getMeasuredHeight() + AndroidUtilities.m9dp(12.0f);
+                        allCurrentLineWidth = 0;
+                    }
+                    int x = AndroidUtilities.m9dp(16.0f) + currentLineWidth;
+                    if (!this.animationStarted) {
+                        if (child == this.removingSpan) {
+                            child.setTranslationX((float) (AndroidUtilities.m9dp(16.0f) + allCurrentLineWidth));
+                            child.setTranslationY((float) allY);
+                        } else if (this.removingSpan != null) {
+                            if (child.getTranslationX() != ((float) x)) {
+                                this.animators.add(ObjectAnimator.ofFloat(child, "translationX", new float[]{(float) x}));
+                            }
+                            if (child.getTranslationY() != ((float) y)) {
+                                this.animators.add(ObjectAnimator.ofFloat(child, "translationY", new float[]{(float) y}));
+                            }
+                        } else {
+                            child.setTranslationX((float) x);
+                            child.setTranslationY((float) y);
+                        }
+                    }
+                    if (child != this.removingSpan) {
+                        currentLineWidth += child.getMeasuredWidth() + AndroidUtilities.m9dp(9.0f);
+                    }
+                    allCurrentLineWidth += child.getMeasuredWidth() + AndroidUtilities.m9dp(9.0f);
+                }
+            }
+            if (AndroidUtilities.isTablet()) {
+                minWidth = AndroidUtilities.m9dp(366.0f) / 3;
+            } else {
+                minWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.m9dp(164.0f)) / 3;
+            }
+            if (maxWidth - currentLineWidth < minWidth) {
+                currentLineWidth = 0;
+                y += AndroidUtilities.m9dp(44.0f);
+            }
+            if (maxWidth - allCurrentLineWidth < minWidth) {
+                allY += AndroidUtilities.m9dp(44.0f);
+            }
+            GroupCreateActivity.this.editText.measure(MeasureSpec.makeMeasureSpec(maxWidth - currentLineWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(32.0f), NUM));
+            if (!this.animationStarted) {
+                int currentHeight = allY + AndroidUtilities.m9dp(44.0f);
+                int fieldX = currentLineWidth + AndroidUtilities.m9dp(16.0f);
+                GroupCreateActivity.this.fieldY = y;
+                if (this.currentAnimation != null) {
+                    if (GroupCreateActivity.this.containerHeight != y + AndroidUtilities.m9dp(44.0f)) {
+                        this.animators.add(ObjectAnimator.ofInt(GroupCreateActivity.this, "containerHeight", new int[]{resultHeight}));
+                    }
+                    if (GroupCreateActivity.this.editText.getTranslationX() != ((float) fieldX)) {
+                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationX", new float[]{(float) fieldX}));
+                    }
+                    if (GroupCreateActivity.this.editText.getTranslationY() != ((float) GroupCreateActivity.this.fieldY)) {
+                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationY", new float[]{(float) GroupCreateActivity.this.fieldY}));
+                    }
+                    GroupCreateActivity.this.editText.setAllowDrawCursor(false);
+                    this.currentAnimation.playTogether(this.animators);
+                    this.currentAnimation.start();
+                    this.animationStarted = true;
+                } else {
+                    GroupCreateActivity.this.containerHeight = currentHeight;
+                    GroupCreateActivity.this.editText.setTranslationX((float) fieldX);
+                    GroupCreateActivity.this.editText.setTranslationY((float) GroupCreateActivity.this.fieldY);
+                }
+            } else if (!(this.currentAnimation == null || GroupCreateActivity.this.ignoreScrollEvent || this.removingSpan != null)) {
+                GroupCreateActivity.this.editText.bringPointIntoView(GroupCreateActivity.this.editText.getSelectionStart());
+            }
+            setMeasuredDimension(width, GroupCreateActivity.this.containerHeight);
+        }
+
+        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            int count = getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = getChildAt(a);
+                child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
+            }
+        }
+
+        public void addSpan(GroupCreateSpan span) {
+            GroupCreateActivity.this.allSpans.add(span);
+            GroupCreateActivity.this.selectedContacts.put(span.getUid(), span);
+            GroupCreateActivity.this.editText.setHintVisible(false);
+            if (this.currentAnimation != null) {
+                this.currentAnimation.setupEndValues();
+                this.currentAnimation.cancel();
+            }
+            this.animationStarted = false;
+            this.currentAnimation = new AnimatorSet();
+            this.currentAnimation.addListener(new CLASSNAME());
+            this.currentAnimation.setDuration(150);
+            this.addingSpan = span;
+            this.animators.clear();
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleX", new float[]{0.01f, 1.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleY", new float[]{0.01f, 1.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "alpha", new float[]{0.0f, 1.0f}));
+            addView(span);
+        }
+
+        public void removeSpan(final GroupCreateSpan span) {
+            GroupCreateActivity.this.ignoreScrollEvent = true;
+            GroupCreateActivity.this.selectedContacts.remove(span.getUid());
+            GroupCreateActivity.this.allSpans.remove(span);
+            span.setOnClickListener(null);
+            if (this.currentAnimation != null) {
+                this.currentAnimation.setupEndValues();
+                this.currentAnimation.cancel();
+            }
+            this.animationStarted = false;
+            this.currentAnimation = new AnimatorSet();
+            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    SpansContainer.this.removeView(span);
+                    SpansContainer.this.removingSpan = null;
+                    SpansContainer.this.currentAnimation = null;
+                    SpansContainer.this.animationStarted = false;
+                    GroupCreateActivity.this.editText.setAllowDrawCursor(true);
+                    if (GroupCreateActivity.this.allSpans.isEmpty()) {
+                        GroupCreateActivity.this.editText.setHintVisible(true);
+                    }
+                }
+            });
+            this.currentAnimation.setDuration(150);
+            this.removingSpan = span;
+            this.animators.clear();
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleX", new float[]{1.0f, 0.01f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleY", new float[]{1.0f, 0.01f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "alpha", new float[]{1.0f, 0.0f}));
+            requestLayout();
         }
     }
 
@@ -815,6 +815,10 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     GroupCreateActivity.this.currentDeletingSpan.cancelDeleteAnimation();
                     GroupCreateActivity.this.currentDeletingSpan = null;
                 }
+                if (event.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
+                    clearFocus();
+                    requestFocus();
+                }
                 return super.onTouchEvent(event);
             }
         };
@@ -923,6 +927,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     }
 
     final /* synthetic */ void lambda$createView$0$GroupCreateActivity(View v) {
+        this.editText.clearFocus();
         this.editText.requestFocus();
         AndroidUtilities.showKeyboard(this.editText);
     }
@@ -1014,7 +1019,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 }
             }
         } else if (id == NotificationCenter.chatDidCreated) {
-            lambda$null$10$ProfileActivity();
+            removeSelfFromStack();
         }
     }
 
@@ -1076,7 +1081,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 if (this.delegate != null) {
                     this.delegate.didSelectUsers(result2);
                 }
-                lambda$checkDiscard$70$PassportActivity();
+                finishFragment();
             } else {
                 Bundle args = new Bundle();
                 args.putIntegerArrayList("result", result2);

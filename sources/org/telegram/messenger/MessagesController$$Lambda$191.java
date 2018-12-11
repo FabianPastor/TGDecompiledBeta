@@ -8,6 +8,6 @@ final /* synthetic */ class MessagesController$$Lambda$191 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$null$148$MessagesController();
+        this.arg$1.lambda$null$150$MessagesController();
     }
 }

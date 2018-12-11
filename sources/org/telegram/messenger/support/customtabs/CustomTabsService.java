@@ -25,10 +25,6 @@ public abstract class CustomTabsService extends Service {
     private Stub mBinder = new CLASSNAME();
     private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Result {
-    }
-
     /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsService$1 */
     class CLASSNAME extends Stub {
         CLASSNAME() {
@@ -76,6 +72,10 @@ public abstract class CustomTabsService extends Service {
         public int postMessage(ICustomTabsCallback callback, String message, Bundle extras) {
             return CustomTabsService.this.postMessage(new CustomTabsSessionToken(callback), message, extras);
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Result {
     }
 
     protected abstract Bundle extraCommand(String str, Bundle bundle);

@@ -1,17 +1,17 @@
 package org.telegram.p005ui;
 
-import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.PhotoViewer$$Lambda$16 */
-final /* synthetic */ class PhotoViewer$$Lambda$16 implements ImageReceiverDelegate {
+final /* synthetic */ class PhotoViewer$$Lambda$16 implements OnClickListener {
     private final PhotoViewer arg$1;
 
     PhotoViewer$$Lambda$16(PhotoViewer photoViewer) {
         this.arg$1 = photoViewer;
     }
 
-    public void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2) {
-        this.arg$1.lambda$setParentActivity$21$PhotoViewer(imageReceiver, z, z2);
+    public void onClick(View view) {
+        this.arg$1.lambda$setParentActivity$21$PhotoViewer(view);
     }
 }

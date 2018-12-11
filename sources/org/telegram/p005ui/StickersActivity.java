@@ -82,48 +82,6 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* renamed from: org.telegram.ui.StickersActivity$TouchHelperCallback */
-    public class TouchHelperCallback extends Callback {
-        public boolean isLongPressDragEnabled() {
-            return true;
-        }
-
-        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
-            if (viewHolder.getItemViewType() != 0) {
-                return Callback.makeMovementFlags(0, 0);
-            }
-            return Callback.makeMovementFlags(3, 0);
-        }
-
-        public boolean onMove(RecyclerView recyclerView, ViewHolder source, ViewHolder target) {
-            if (source.getItemViewType() != target.getItemViewType()) {
-                return false;
-            }
-            StickersActivity.this.listAdapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
-            return true;
-        }
-
-        public void onChildDraw(Canvas c, RecyclerView recyclerView, ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-        }
-
-        public void onSelectedChanged(ViewHolder viewHolder, int actionState) {
-            if (actionState != 0) {
-                StickersActivity.this.listView.cancelClickRunnables(false);
-                viewHolder.itemView.setPressed(true);
-            }
-            super.onSelectedChanged(viewHolder, actionState);
-        }
-
-        public void onSwiped(ViewHolder viewHolder, int direction) {
-        }
-
-        public void clearView(RecyclerView recyclerView, ViewHolder viewHolder) {
-            super.clearView(recyclerView, viewHolder);
-            viewHolder.itemView.setPressed(false);
-        }
-    }
-
     /* renamed from: org.telegram.ui.StickersActivity$ListAdapter */
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
@@ -355,6 +313,48 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             arrayList.set(fromIndex - StickersActivity.this.stickersStartRow, arrayList.get(toIndex - StickersActivity.this.stickersStartRow));
             arrayList.set(toIndex - StickersActivity.this.stickersStartRow, from);
             notifyItemMoved(fromIndex, toIndex);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.StickersActivity$TouchHelperCallback */
+    public class TouchHelperCallback extends Callback {
+        public boolean isLongPressDragEnabled() {
+            return true;
+        }
+
+        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() != 0) {
+                return Callback.makeMovementFlags(0, 0);
+            }
+            return Callback.makeMovementFlags(3, 0);
+        }
+
+        public boolean onMove(RecyclerView recyclerView, ViewHolder source, ViewHolder target) {
+            if (source.getItemViewType() != target.getItemViewType()) {
+                return false;
+            }
+            StickersActivity.this.listAdapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        public void onChildDraw(Canvas c, RecyclerView recyclerView, ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+
+        public void onSelectedChanged(ViewHolder viewHolder, int actionState) {
+            if (actionState != 0) {
+                StickersActivity.this.listView.cancelClickRunnables(false);
+                viewHolder.itemView.setPressed(true);
+            }
+            super.onSelectedChanged(viewHolder, actionState);
+        }
+
+        public void onSwiped(ViewHolder viewHolder, int direction) {
+        }
+
+        public void clearView(RecyclerView recyclerView, ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            viewHolder.itemView.setPressed(false);
         }
     }
 

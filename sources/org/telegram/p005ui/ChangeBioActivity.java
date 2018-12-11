@@ -45,6 +45,20 @@ public class ChangeBioActivity extends BaseFragment {
     private EditTextBoldCursor firstNameField;
     private TextView helpTextView;
 
+    /* renamed from: org.telegram.ui.ChangeBioActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ChangeBioActivity.this.finishFragment();
+            } else if (id == 1) {
+                ChangeBioActivity.this.saveName();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ChangeBioActivity$3 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
@@ -58,20 +72,6 @@ public class ChangeBioActivity extends BaseFragment {
 
         public void afterTextChanged(Editable s) {
             ChangeBioActivity.this.checkTextView.setText(String.format("%d", new Object[]{Integer.valueOf(70 - ChangeBioActivity.this.firstNameField.length())}));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChangeBioActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ChangeBioActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1) {
-                ChangeBioActivity.this.saveName();
-            }
         }
     }
 
@@ -168,7 +168,7 @@ public class ChangeBioActivity extends BaseFragment {
             }
             String newName = this.firstNameField.getText().toString().replace("\n", TtmlNode.ANONYMOUS_REGION_ID);
             if (currentName.equals(newName)) {
-                lambda$checkDiscard$70$PassportActivity();
+                finishFragment();
                 return;
             }
             AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
@@ -198,7 +198,7 @@ public class ChangeBioActivity extends BaseFragment {
         }
         userFull.about = newName;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(user.var_id), userFull, null);
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
     final /* synthetic */ void lambda$null$3$ChangeBioActivity(AlertDialog progressDialog, TL_error error, TL_account_updateProfile req) {

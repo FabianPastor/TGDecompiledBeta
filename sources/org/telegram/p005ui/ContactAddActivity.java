@@ -52,13 +52,13 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ContactAddActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ContactAddActivity.this.finishFragment();
             } else if (id == 1 && ContactAddActivity.this.firstNameField.getText().length() != 0) {
                 User user = MessagesController.getInstance(ContactAddActivity.this.currentAccount).getUser(Integer.valueOf(ContactAddActivity.this.user_id));
                 user.first_name = ContactAddActivity.this.firstNameField.getText().toString();
                 user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
                 ContactsController.getInstance(ContactAddActivity.this.currentAccount).addContact(user);
-                ContactAddActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ContactAddActivity.this.finishFragment();
                 MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit().putInt("spam3_" + ContactAddActivity.this.user_id, 1).commit();
                 NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
                 NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.peerSettingsDidLoad, Long.valueOf((long) ContactAddActivity.this.user_id));

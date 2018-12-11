@@ -85,7 +85,7 @@ public class DataUsageActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                DataUsageActivity.this.lambda$checkDiscard$70$PassportActivity();
+                DataUsageActivity.this.finishFragment();
             }
         }
     }

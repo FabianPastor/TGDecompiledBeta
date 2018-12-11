@@ -83,6 +83,25 @@ public class NumberPicker extends LinearLayout {
     private VelocityTracker mVelocityTracker;
     private boolean mWrapSelectorWheel;
 
+    /* renamed from: org.telegram.ui.Components.NumberPicker$OnScrollListener */
+    public interface OnScrollListener {
+        public static final int SCROLL_STATE_FLING = 2;
+        public static final int SCROLL_STATE_IDLE = 0;
+        public static final int SCROLL_STATE_TOUCH_SCROLL = 1;
+
+        void onScrollStateChange(NumberPicker numberPicker, int i);
+    }
+
+    /* renamed from: org.telegram.ui.Components.NumberPicker$Formatter */
+    public interface Formatter {
+        String format(int i);
+    }
+
+    /* renamed from: org.telegram.ui.Components.NumberPicker$OnValueChangeListener */
+    public interface OnValueChangeListener {
+        void onValueChange(NumberPicker numberPicker, int i, int i2);
+    }
+
     /* renamed from: org.telegram.ui.Components.NumberPicker$ChangeCurrentByOneFromLongPressCommand */
     class ChangeCurrentByOneFromLongPressCommand implements Runnable {
         private boolean mIncrement;
@@ -98,25 +117,6 @@ public class NumberPicker extends LinearLayout {
             NumberPicker.this.changeValueByOne(this.mIncrement);
             NumberPicker.this.postDelayed(this, NumberPicker.this.mLongPressUpdateInterval);
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.NumberPicker$Formatter */
-    public interface Formatter {
-        String format(int i);
-    }
-
-    /* renamed from: org.telegram.ui.Components.NumberPicker$OnScrollListener */
-    public interface OnScrollListener {
-        public static final int SCROLL_STATE_FLING = 2;
-        public static final int SCROLL_STATE_IDLE = 0;
-        public static final int SCROLL_STATE_TOUCH_SCROLL = 1;
-
-        void onScrollStateChange(NumberPicker numberPicker, int i);
-    }
-
-    /* renamed from: org.telegram.ui.Components.NumberPicker$OnValueChangeListener */
-    public interface OnValueChangeListener {
-        void onValueChange(NumberPicker numberPicker, int i, int i2);
     }
 
     /* renamed from: org.telegram.ui.Components.NumberPicker$PressedStateHelper */

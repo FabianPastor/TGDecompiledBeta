@@ -12,6 +12,6 @@ final /* synthetic */ class PhotoViewer$$Lambda$12 implements OnClickListener {
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$setParentActivity$17$PhotoViewer(view);
+        this.arg$1.lambda$setParentActivity$12$PhotoViewer(view);
     }
 }

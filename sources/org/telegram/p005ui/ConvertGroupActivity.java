@@ -45,7 +45,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ConvertGroupActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ConvertGroupActivity.this.finishFragment();
             }
         }
     }
@@ -198,7 +198,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
 
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.closeChats) {
-            lambda$null$10$ProfileActivity();
+            removeSelfFromStack();
         }
     }
 

@@ -160,6 +160,16 @@ public class AndroidUtilities {
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
 
+    /* renamed from: org.telegram.messenger.AndroidUtilities$4 */
+    static class CLASSNAME extends CrashManagerListener {
+        CLASSNAME() {
+        }
+
+        public boolean includeDeviceData() {
+            return true;
+        }
+    }
+
     public static class LinkMovementMethodMy extends LinkMovementMethod {
         public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
             try {
@@ -367,16 +377,6 @@ public class AndroidUtilities {
             } else {
                 return LocaleController.getString("ContactJobTitle", R.string.ContactJobTitle);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.AndroidUtilities$4 */
-    static class CLASSNAME extends CrashManagerListener {
-        CLASSNAME() {
-        }
-
-        public boolean includeDeviceData() {
-            return true;
         }
     }
 
@@ -916,9 +916,7 @@ public class AndroidUtilities {
             return z;
         }
         try {
-            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService("input_method");
-            inputManager.viewClicked(view);
-            return inputManager.showSoftInput(view, 1);
+            return ((InputMethodManager) view.getContext().getSystemService("input_method")).showSoftInput(view, 1);
         } catch (Throwable e) {
             FileLog.m13e(e);
             return z;

@@ -217,21 +217,6 @@ public class LocaleController {
         abstract int quantityForNumber(int i);
     }
 
-    private class TimeZoneChangedReceiver extends BroadcastReceiver {
-        private TimeZoneChangedReceiver() {
-        }
-
-        public void onReceive(Context context, Intent intent) {
-            ApplicationLoader.applicationHandler.post(new LocaleController$TimeZoneChangedReceiver$$Lambda$0(this));
-        }
-
-        final /* synthetic */ void lambda$onReceive$0$LocaleController$TimeZoneChangedReceiver() {
-            if (!LocaleController.this.formatterDayMonth.getTimeZone().equals(TimeZone.getDefault())) {
-                LocaleController.getInstance().recreateFormatters();
-            }
-        }
-    }
-
     public static class PluralRules_Arabic extends PluralRules {
         public int quantityForNumber(int count) {
             int rem100 = count % 100;
@@ -485,6 +470,21 @@ public class LocaleController {
                 return 2;
             }
             return 0;
+        }
+    }
+
+    private class TimeZoneChangedReceiver extends BroadcastReceiver {
+        private TimeZoneChangedReceiver() {
+        }
+
+        public void onReceive(Context context, Intent intent) {
+            ApplicationLoader.applicationHandler.post(new LocaleController$TimeZoneChangedReceiver$$Lambda$0(this));
+        }
+
+        final /* synthetic */ void lambda$onReceive$0$LocaleController$TimeZoneChangedReceiver() {
+            if (!LocaleController.this.formatterDayMonth.getTimeZone().equals(TimeZone.getDefault())) {
+                LocaleController.getInstance().recreateFormatters();
+            }
         }
     }
 
@@ -2334,9 +2334,11 @@ public class LocaleController {
     }
 
     public void saveRemoteLocaleStringsForCurrentLocale(TL_langPackDifference difference, int currentAccount) {
-        String langCode = difference.lang_code.replace('-', '_').toLowerCase();
-        if (langCode.equals(this.currentLocaleInfo.shortName) || langCode.equals(this.currentLocaleInfo.baseLangCode)) {
-            lambda$null$9$LocaleController(this.currentLocaleInfo, difference, currentAccount);
+        if (this.currentLocaleInfo != null) {
+            String langCode = difference.lang_code.replace('-', '_').toLowerCase();
+            if (langCode.equals(this.currentLocaleInfo.shortName) || langCode.equals(this.currentLocaleInfo.baseLangCode)) {
+                lambda$null$9$LocaleController(this.currentLocaleInfo, difference, currentAccount);
+            }
         }
     }
 

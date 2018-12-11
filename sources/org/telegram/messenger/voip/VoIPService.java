@@ -72,13 +72,12 @@ import org.telegram.tgnet.TLRPC.TL_phone_getCallConfig;
 import org.telegram.tgnet.TLRPC.TL_phone_phoneCall;
 import org.telegram.tgnet.TLRPC.TL_phone_receivedCall;
 import org.telegram.tgnet.TLRPC.TL_phone_requestCall;
-import org.telegram.tgnet.TLRPC.TL_phone_saveCallDebug;
 import org.telegram.tgnet.TLRPC.TL_updates;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_DhConfig;
 
 public class VoIPService extends VoIPBaseService {
-    public static final int CALL_MAX_LAYER = 74;
+    public static final int CALL_MAX_LAYER = VoIPController.getConnectionMaxLayer();
     public static final int CALL_MIN_LAYER = 65;
     public static final int STATE_BUSY = 17;
     public static final int STATE_EXCHANGING_KEYS = 12;
@@ -116,6 +115,25 @@ public class VoIPService extends VoIPBaseService {
         public void run() {
             VoIPService.this.timeoutRunnable = null;
             VoIPService.this.declineIncomingCall(3, null);
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.voip.VoIPService$13 */
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
+        }
+
+        public void run(final TLObject response, final TL_error error) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    if (error != null) {
+                        VoIPService.this.callFailed();
+                        return;
+                    }
+                    VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
+                    VoIPService.this.initiateActualEncryptedCall();
+                }
+            });
         }
     }
 
@@ -157,6 +175,22 @@ public class VoIPService extends VoIPBaseService {
                 } else {
                     VoIPService.this.connectingSoundRunnable = null;
                 }
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.messenger.voip.VoIPService$17 */
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
+        }
+
+        public void run(TLObject response, TL_error error) {
+            if (error != null) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m11e("error on phone.discardCall: " + error);
+                }
+            } else if (BuildVars.LOGS_ENABLED) {
+                FileLog.m10d("phone.discardCall " + response);
             }
         }
     }
@@ -233,53 +267,6 @@ public class VoIPService extends VoIPBaseService {
         public void run() {
             if (VoIPService.this.currentState == 10) {
                 VoIPService.this.callEnded();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.voip.VoIPService$13 */
-    class CLASSNAME implements RequestDelegate {
-        CLASSNAME() {
-        }
-
-        public void run(final TLObject response, final TL_error error) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    if (error != null) {
-                        VoIPService.this.callFailed();
-                        return;
-                    }
-                    VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
-                    VoIPService.this.initiateActualEncryptedCall();
-                }
-            });
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.voip.VoIPService$17 */
-    class CLASSNAME implements RequestDelegate {
-        CLASSNAME() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-            if (error != null) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11e("error on phone.discardCall: " + error);
-                }
-            } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("phone.discardCall " + response);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.voip.VoIPService$3 */
-    class CLASSNAME implements RequestDelegate {
-        CLASSNAME() {
-        }
-
-        public void run(TLObject response, TL_error error) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("Sent debug logs, response=" + response);
             }
         }
     }
@@ -365,16 +352,6 @@ public class VoIPService extends VoIPBaseService {
     }
 
     protected void onControllerPreRelease() {
-        if (this.needSendDebugLog) {
-            String debugLog = this.controller.getDebugLog();
-            TL_phone_saveCallDebug req = new TL_phone_saveCallDebug();
-            req.debug = new TL_dataJSON();
-            req.debug.data = debugLog;
-            req.peer = new TL_inputPhoneCall();
-            req.peer.access_hash = this.call.access_hash;
-            req.peer.var_id = this.call.var_id;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
-        }
     }
 
     public static VoIPService getSharedInstance() {
@@ -443,7 +420,7 @@ public class VoIPService extends VoIPBaseService {
                     reqCall.protocol.udp_p2p = true;
                     reqCall.protocol.udp_reflector = true;
                     reqCall.protocol.min_layer = 65;
-                    reqCall.protocol.max_layer = 74;
+                    reqCall.protocol.max_layer = VoIPService.CALL_MAX_LAYER;
                     VoIPService.this.g_a = g_a;
                     reqCall.g_a_hash = Utilities.computeSHA256(g_a, 0, g_a.length);
                     reqCall.random_id = Utilities.random.nextInt();
@@ -715,7 +692,7 @@ public class VoIPService extends VoIPBaseService {
                     req.protocol.udp_reflector = true;
                     tL_phoneCallProtocol.udp_p2p = true;
                     req.protocol.min_layer = 65;
-                    req.protocol.max_layer = 74;
+                    req.protocol.max_layer = VoIPService.CALL_MAX_LAYER;
                     ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new CLASSNAME(), 2);
                     return;
                 }
@@ -878,7 +855,7 @@ public class VoIPService extends VoIPBaseService {
                     } else {
                         callEnded();
                     }
-                    if (call.need_rating || this.forceRating || (this.controller != null && this.controller.needRate())) {
+                    if (call.need_rating || this.forceRating || (this.controller != null && VoIPServerConfig.getBoolean("bad_call_rating", true) && this.controller.needRate())) {
                         startRatingActivity();
                     }
                 } else if ((call instanceof TL_phoneCall) && this.authKey == null) {
@@ -1005,7 +982,7 @@ public class VoIPService extends VoIPBaseService {
             req.peer.var_id = this.call.var_id;
             req.peer.access_hash = this.call.access_hash;
             req.protocol = new TL_phoneCallProtocol();
-            req.protocol.max_layer = 74;
+            req.protocol.max_layer = CALL_MAX_LAYER;
             req.protocol.min_layer = 65;
             TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
             req.protocol.udp_reflector = true;

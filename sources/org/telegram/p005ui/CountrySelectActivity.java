@@ -50,13 +50,6 @@ public class CountrySelectActivity extends BaseFragment {
     private boolean searchWas;
     private boolean searching;
 
-    /* renamed from: org.telegram.ui.CountrySelectActivity$Country */
-    public static class Country {
-        public String code;
-        public String name;
-        public String shortname;
-    }
-
     /* renamed from: org.telegram.ui.CountrySelectActivity$CountrySelectActivityDelegate */
     public interface CountrySelectActivityDelegate {
         void didSelectCountry(String str, String str2);
@@ -69,7 +62,7 @@ public class CountrySelectActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                CountrySelectActivity.this.lambda$checkDiscard$70$PassportActivity();
+                CountrySelectActivity.this.finishFragment();
             }
         }
     }
@@ -119,108 +112,11 @@ public class CountrySelectActivity extends BaseFragment {
         }
     }
 
-    /* renamed from: org.telegram.ui.CountrySelectActivity$CountrySearchAdapter */
-    public class CountrySearchAdapter extends SelectionAdapter {
-        private HashMap<String, ArrayList<Country>> countries;
-        private Context mContext;
-        private ArrayList<Country> searchResult;
-        private Timer searchTimer;
-
-        public CountrySearchAdapter(Context context, HashMap<String, ArrayList<Country>> countries) {
-            this.mContext = context;
-            this.countries = countries;
-        }
-
-        public void search(final String query) {
-            if (query == null) {
-                this.searchResult = null;
-                return;
-            }
-            try {
-                if (this.searchTimer != null) {
-                    this.searchTimer.cancel();
-                }
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
-            this.searchTimer = new Timer();
-            this.searchTimer.schedule(new TimerTask() {
-                public void run() {
-                    try {
-                        CountrySearchAdapter.this.searchTimer.cancel();
-                        CountrySearchAdapter.this.searchTimer = null;
-                    } catch (Throwable e) {
-                        FileLog.m13e(e);
-                    }
-                    CountrySearchAdapter.this.processSearch(query);
-                }
-            }, 100, 300);
-        }
-
-        private void processSearch(String query) {
-            Utilities.searchQueue.postRunnable(new CountrySelectActivity$CountrySearchAdapter$$Lambda$0(this, query));
-        }
-
-        /* renamed from: lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter */
-        final /* synthetic */ void mo16994xa1825eb2(String query) {
-            if (query.trim().toLowerCase().length() == 0) {
-                updateSearchResults(new ArrayList());
-                return;
-            }
-            ArrayList<Country> resultArray = new ArrayList();
-            ArrayList<Country> arr = (ArrayList) this.countries.get(query.substring(0, 1).toUpperCase());
-            if (arr != null) {
-                Iterator it = arr.iterator();
-                while (it.hasNext()) {
-                    Country c = (Country) it.next();
-                    if (c.name.toLowerCase().startsWith(query)) {
-                        resultArray.add(c);
-                    }
-                }
-            }
-            updateSearchResults(resultArray);
-        }
-
-        private void updateSearchResults(ArrayList<Country> arrCounties) {
-            AndroidUtilities.runOnUIThread(new CountrySelectActivity$CountrySearchAdapter$$Lambda$1(this, arrCounties));
-        }
-
-        /* renamed from: lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter */
-        final /* synthetic */ void mo16995xa883bb23(ArrayList arrCounties) {
-            this.searchResult = arrCounties;
-            notifyDataSetChanged();
-        }
-
-        public boolean isEnabled(ViewHolder holder) {
-            return true;
-        }
-
-        public int getItemCount() {
-            if (this.searchResult == null) {
-                return 0;
-            }
-            return this.searchResult.size();
-        }
-
-        public Country getItem(int i) {
-            if (i < 0 || i >= this.searchResult.size()) {
-                return null;
-            }
-            return (Country) this.searchResult.get(i);
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new Holder(new TextSettingsCell(this.mContext));
-        }
-
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            Country c = (Country) this.searchResult.get(position);
-            ((TextSettingsCell) holder.itemView).setTextAndValue(c.name, CountrySelectActivity.this.needPhoneCode ? "+" + c.code : null, position != this.searchResult.size() + -1);
-        }
-
-        public int getItemViewType(int i) {
-            return 0;
-        }
+    /* renamed from: org.telegram.ui.CountrySelectActivity$Country */
+    public static class Country {
+        public String code;
+        public String name;
+        public String shortname;
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$CountryAdapter */
@@ -362,6 +258,110 @@ public class CountrySelectActivity extends BaseFragment {
         }
     }
 
+    /* renamed from: org.telegram.ui.CountrySelectActivity$CountrySearchAdapter */
+    public class CountrySearchAdapter extends SelectionAdapter {
+        private HashMap<String, ArrayList<Country>> countries;
+        private Context mContext;
+        private ArrayList<Country> searchResult;
+        private Timer searchTimer;
+
+        public CountrySearchAdapter(Context context, HashMap<String, ArrayList<Country>> countries) {
+            this.mContext = context;
+            this.countries = countries;
+        }
+
+        public void search(final String query) {
+            if (query == null) {
+                this.searchResult = null;
+                return;
+            }
+            try {
+                if (this.searchTimer != null) {
+                    this.searchTimer.cancel();
+                }
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+            this.searchTimer = new Timer();
+            this.searchTimer.schedule(new TimerTask() {
+                public void run() {
+                    try {
+                        CountrySearchAdapter.this.searchTimer.cancel();
+                        CountrySearchAdapter.this.searchTimer = null;
+                    } catch (Throwable e) {
+                        FileLog.m13e(e);
+                    }
+                    CountrySearchAdapter.this.processSearch(query);
+                }
+            }, 100, 300);
+        }
+
+        private void processSearch(String query) {
+            Utilities.searchQueue.postRunnable(new CountrySelectActivity$CountrySearchAdapter$$Lambda$0(this, query));
+        }
+
+        /* renamed from: lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter */
+        final /* synthetic */ void mo18166xa1825eb2(String query) {
+            if (query.trim().toLowerCase().length() == 0) {
+                updateSearchResults(new ArrayList());
+                return;
+            }
+            ArrayList<Country> resultArray = new ArrayList();
+            ArrayList<Country> arr = (ArrayList) this.countries.get(query.substring(0, 1).toUpperCase());
+            if (arr != null) {
+                Iterator it = arr.iterator();
+                while (it.hasNext()) {
+                    Country c = (Country) it.next();
+                    if (c.name.toLowerCase().startsWith(query)) {
+                        resultArray.add(c);
+                    }
+                }
+            }
+            updateSearchResults(resultArray);
+        }
+
+        private void updateSearchResults(ArrayList<Country> arrCounties) {
+            AndroidUtilities.runOnUIThread(new CountrySelectActivity$CountrySearchAdapter$$Lambda$1(this, arrCounties));
+        }
+
+        /* renamed from: lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter */
+        final /* synthetic */ void mo18167xa883bb23(ArrayList arrCounties) {
+            this.searchResult = arrCounties;
+            notifyDataSetChanged();
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
+        }
+
+        public int getItemCount() {
+            if (this.searchResult == null) {
+                return 0;
+            }
+            return this.searchResult.size();
+        }
+
+        public Country getItem(int i) {
+            if (i < 0 || i >= this.searchResult.size()) {
+                return null;
+            }
+            return (Country) this.searchResult.get(i);
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new Holder(new TextSettingsCell(this.mContext));
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            Country c = (Country) this.searchResult.get(position);
+            ((TextSettingsCell) holder.itemView).setTextAndValue(c.name, CountrySelectActivity.this.needPhoneCode ? "+" + c.code : null, position != this.searchResult.size() + -1);
+        }
+
+        public int getItemViewType(int i) {
+            return 0;
+        }
+    }
+
     public CountrySelectActivity(boolean phoneCode) {
         this.needPhoneCode = phoneCode;
     }
@@ -424,7 +424,7 @@ public class CountrySelectActivity extends BaseFragment {
             }
         }
         if (position >= 0) {
-            lambda$checkDiscard$70$PassportActivity();
+            finishFragment();
             if (country != null && this.delegate != null) {
                 this.delegate.didSelectCountry(country.name, country.shortname);
             }

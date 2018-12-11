@@ -286,6 +286,19 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
     }
 
+    /* renamed from: org.telegram.ui.VoIPActivity$1 */
+    class CLASSNAME implements ImageReceiverDelegate {
+        CLASSNAME() {
+        }
+
+        public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
+            BitmapHolder bmp = imageReceiver.getBitmapSafe();
+            if (bmp != null) {
+                VoIPActivity.this.updateBlurredPhotos(bmp);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.VoIPActivity$20 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
@@ -496,98 +509,6 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
     }
 
-    /* renamed from: org.telegram.ui.VoIPActivity$9 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            VoIPActivity.this.finish();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.VoIPActivity$SignalBarsDrawable */
-    private class SignalBarsDrawable extends Drawable {
-        private int[] barHeights;
-        private int offsetStart;
-        private Paint paint;
-        private RectF rect;
-
-        private SignalBarsDrawable() {
-            this.barHeights = new int[]{AndroidUtilities.m9dp(3.0f), AndroidUtilities.m9dp(6.0f), AndroidUtilities.m9dp(9.0f), AndroidUtilities.m9dp(12.0f)};
-            this.paint = new Paint(1);
-            this.rect = new RectF();
-            this.offsetStart = 6;
-        }
-
-        /* synthetic */ SignalBarsDrawable(VoIPActivity x0, CLASSNAME x1) {
-            this();
-        }
-
-        public void draw(Canvas canvas) {
-            if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
-                this.paint.setColor(-1);
-                int x = getBounds().left + AndroidUtilities.m9dp(LocaleController.isRTL ? 0.0f : (float) this.offsetStart);
-                int y = getBounds().top;
-                for (int i = 0; i < 4; i++) {
-                    this.paint.setAlpha(i + 1 <= VoIPActivity.this.signalBarsCount ? 242 : 102);
-                    this.rect.set((float) (AndroidUtilities.m9dp((float) (i * 4)) + x), (float) ((getIntrinsicHeight() + y) - this.barHeights[i]), (float) (((AndroidUtilities.m9dp(4.0f) * i) + x) + AndroidUtilities.m9dp(3.0f)), (float) (getIntrinsicHeight() + y));
-                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(0.3f), (float) AndroidUtilities.m9dp(0.3f), this.paint);
-                }
-            }
-        }
-
-        public void setAlpha(int alpha) {
-        }
-
-        public void setColorFilter(ColorFilter colorFilter) {
-        }
-
-        public int getIntrinsicWidth() {
-            return AndroidUtilities.m9dp((float) (this.offsetStart + 15));
-        }
-
-        public int getIntrinsicHeight() {
-            return AndroidUtilities.m9dp(12.0f);
-        }
-
-        public int getOpacity() {
-            return -3;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.VoIPActivity$TextAlphaSpan */
-    private class TextAlphaSpan extends CharacterStyle {
-        private int alpha = 0;
-
-        public int getAlpha() {
-            return this.alpha;
-        }
-
-        public void setAlpha(int alpha) {
-            this.alpha = alpha;
-            VoIPActivity.this.stateText.invalidate();
-            VoIPActivity.this.stateText2.invalidate();
-        }
-
-        public void updateDrawState(TextPaint tp) {
-            tp.setAlpha(this.alpha);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.VoIPActivity$1 */
-    class CLASSNAME implements ImageReceiverDelegate {
-        CLASSNAME() {
-        }
-
-        public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
-            BitmapHolder bmp = imageReceiver.getBitmapSafe();
-            if (bmp != null) {
-                VoIPActivity.this.updateBlurredPhotos(bmp);
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.VoIPActivity$7 */
     class CLASSNAME implements Listener {
 
@@ -733,6 +654,85 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             VoIPActivity.this.currentAcceptAnim = set;
             set.start();
             VoIPActivity.this.acceptSwipe.startAnimatingArrows();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.VoIPActivity$9 */
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
+        }
+
+        public void onClick(View v) {
+            VoIPActivity.this.finish();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.VoIPActivity$SignalBarsDrawable */
+    private class SignalBarsDrawable extends Drawable {
+        private int[] barHeights;
+        private int offsetStart;
+        private Paint paint;
+        private RectF rect;
+
+        private SignalBarsDrawable() {
+            this.barHeights = new int[]{AndroidUtilities.m9dp(3.0f), AndroidUtilities.m9dp(6.0f), AndroidUtilities.m9dp(9.0f), AndroidUtilities.m9dp(12.0f)};
+            this.paint = new Paint(1);
+            this.rect = new RectF();
+            this.offsetStart = 6;
+        }
+
+        /* synthetic */ SignalBarsDrawable(VoIPActivity x0, CLASSNAME x1) {
+            this();
+        }
+
+        public void draw(Canvas canvas) {
+            if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
+                this.paint.setColor(-1);
+                int x = getBounds().left + AndroidUtilities.m9dp(LocaleController.isRTL ? 0.0f : (float) this.offsetStart);
+                int y = getBounds().top;
+                for (int i = 0; i < 4; i++) {
+                    this.paint.setAlpha(i + 1 <= VoIPActivity.this.signalBarsCount ? 242 : 102);
+                    this.rect.set((float) (AndroidUtilities.m9dp((float) (i * 4)) + x), (float) ((getIntrinsicHeight() + y) - this.barHeights[i]), (float) (((AndroidUtilities.m9dp(4.0f) * i) + x) + AndroidUtilities.m9dp(3.0f)), (float) (getIntrinsicHeight() + y));
+                    canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(0.3f), (float) AndroidUtilities.m9dp(0.3f), this.paint);
+                }
+            }
+        }
+
+        public void setAlpha(int alpha) {
+        }
+
+        public void setColorFilter(ColorFilter colorFilter) {
+        }
+
+        public int getIntrinsicWidth() {
+            return AndroidUtilities.m9dp((float) (this.offsetStart + 15));
+        }
+
+        public int getIntrinsicHeight() {
+            return AndroidUtilities.m9dp(12.0f);
+        }
+
+        public int getOpacity() {
+            return -3;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.VoIPActivity$TextAlphaSpan */
+    private class TextAlphaSpan extends CharacterStyle {
+        private int alpha = 0;
+
+        public int getAlpha() {
+            return this.alpha;
+        }
+
+        public void setAlpha(int alpha) {
+            this.alpha = alpha;
+            VoIPActivity.this.stateText.invalidate();
+            VoIPActivity.this.stateText2.invalidate();
+        }
+
+        public void updateDrawState(TextPaint tp) {
+            tp.setAlpha(this.alpha);
         }
     }
 

@@ -72,7 +72,7 @@ public class ChatSettingsActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChatSettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChatSettingsActivity.this.finishFragment();
             }
         }
     }

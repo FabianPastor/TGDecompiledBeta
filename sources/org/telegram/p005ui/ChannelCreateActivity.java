@@ -128,37 +128,6 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private TextInfoPrivacyCell typeInfoCell;
     private InputFile uploadedAvatar;
 
-    /* renamed from: org.telegram.ui.ChannelCreateActivity$6 */
-    class CLASSNAME implements TextWatcher {
-        CLASSNAME() {
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChannelCreateActivity$7 */
-    class CLASSNAME implements TextWatcher {
-        CLASSNAME() {
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            ChannelCreateActivity.this.checkUserName(ChannelCreateActivity.this.descriptionTextView.getText().toString());
-        }
-
-        public void afterTextChanged(Editable editable) {
-        }
-    }
-
     /* renamed from: org.telegram.ui.ChannelCreateActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -166,7 +135,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChannelCreateActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChannelCreateActivity.this.finishFragment();
             } else if (id != 1) {
             } else {
                 Vibrator v;
@@ -231,6 +200,37 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         final /* synthetic */ void lambda$onItemClick$1$ChannelCreateActivity$1(int reqId, DialogInterface dialog) {
             ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).cancelRequest(reqId, true);
             ChannelCreateActivity.this.donePressed = false;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ChannelCreateActivity$6 */
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ChannelCreateActivity$7 */
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            ChannelCreateActivity.this.checkUserName(ChannelCreateActivity.this.descriptionTextView.getText().toString());
+        }
+
+        public void afterTextChanged(Editable editable) {
         }
     }
 

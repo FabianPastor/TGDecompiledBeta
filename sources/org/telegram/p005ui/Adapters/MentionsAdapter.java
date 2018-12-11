@@ -117,15 +117,6 @@ public class MentionsAdapter extends SelectionAdapter {
     private String searchingContextQuery;
     private String searchingContextUsername;
 
-    /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate */
-    public interface MentionsAdapterDelegate {
-        void needChangePanelVisibility(boolean z);
-
-        void onContextClick(BotInlineResult botInlineResult);
-
-        void onContextSearch(boolean z);
-    }
-
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
     class CLASSNAME implements LocationProviderDelegate {
         CLASSNAME() {
@@ -161,6 +152,15 @@ public class MentionsAdapter extends SelectionAdapter {
                 MentionsAdapter.this.searchUsernameOrHashtag(MentionsAdapter.this.lastText, MentionsAdapter.this.lastPosition, MentionsAdapter.this.messages, MentionsAdapter.this.lastUsernameOnly);
             }
         }
+    }
+
+    /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate */
+    public interface MentionsAdapterDelegate {
+        void needChangePanelVisibility(boolean z);
+
+        void onContextClick(BotInlineResult botInlineResult);
+
+        void onContextSearch(boolean z);
     }
 
     static /* synthetic */ int access$1604(MentionsAdapter x0) {

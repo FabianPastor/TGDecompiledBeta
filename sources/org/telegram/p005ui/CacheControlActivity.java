@@ -77,7 +77,7 @@ public class CacheControlActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                CacheControlActivity.this.lambda$checkDiscard$70$PassportActivity();
+                CacheControlActivity.this.finishFragment();
             }
         }
     }

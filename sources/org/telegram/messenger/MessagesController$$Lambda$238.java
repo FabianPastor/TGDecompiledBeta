@@ -1,22 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.TL_userFull;
-import org.telegram.tgnet.TLRPC.User;
+import java.util.ArrayList;
 
 final /* synthetic */ class MessagesController$$Lambda$238 implements Runnable {
     private final MessagesController arg$1;
-    private final User arg$2;
-    private final TL_userFull arg$3;
-    private final int arg$4;
+    private final long arg$2;
+    private final ArrayList arg$3;
+    private final ArrayList arg$4;
 
-    MessagesController$$Lambda$238(MessagesController messagesController, User user, TL_userFull tL_userFull, int i) {
+    MessagesController$$Lambda$238(MessagesController messagesController, long j, ArrayList arrayList, ArrayList arrayList2) {
         this.arg$1 = messagesController;
-        this.arg$2 = user;
-        this.arg$3 = tL_userFull;
-        this.arg$4 = i;
+        this.arg$2 = j;
+        this.arg$3 = arrayList;
+        this.arg$4 = arrayList2;
     }
 
     public void run() {
-        this.arg$1.lambda$null$16$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$null$19$MessagesController(this.arg$2, this.arg$3, this.arg$4);
     }
 }

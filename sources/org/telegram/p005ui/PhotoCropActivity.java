@@ -35,6 +35,33 @@ public class PhotoCropActivity extends BaseFragment {
     private boolean sameBitmap = false;
     private PhotoCropView view;
 
+    /* renamed from: org.telegram.ui.PhotoCropActivity$PhotoEditActivityDelegate */
+    public interface PhotoEditActivityDelegate {
+        void didFinishEdit(Bitmap bitmap);
+    }
+
+    /* renamed from: org.telegram.ui.PhotoCropActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                PhotoCropActivity.this.lambda$checkDiscard$70$PassportActivity();
+            } else if (id == 1) {
+                if (!(PhotoCropActivity.this.delegate == null || PhotoCropActivity.this.doneButtonPressed)) {
+                    Bitmap bitmap = PhotoCropActivity.this.view.getBitmap();
+                    if (bitmap == PhotoCropActivity.this.imageToCrop) {
+                        PhotoCropActivity.this.sameBitmap = true;
+                    }
+                    PhotoCropActivity.this.delegate.didFinishEdit(bitmap);
+                    PhotoCropActivity.this.doneButtonPressed = true;
+                }
+                PhotoCropActivity.this.lambda$checkDiscard$70$PassportActivity();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.PhotoCropActivity$PhotoCropView */
     private class PhotoCropView extends FrameLayout {
         int bitmapHeight;
@@ -369,33 +396,6 @@ public class PhotoCropActivity extends BaseFragment {
                 canvas2.drawRect(((this.rectSizeX / 3.0f) * ((float) a)) + this.rectX, ((float) side) + this.rectY, ((this.rectSizeX / 3.0f) * ((float) a)) + (this.rectX + ((float) side)), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
                 canvas2 = canvas;
                 canvas2.drawRect(((float) side) + this.rectX, ((this.rectSizeY / 3.0f) * ((float) a)) + this.rectY, this.rectSizeX + (this.rectX - ((float) side)), ((float) side) + (this.rectY + ((this.rectSizeY / 3.0f) * ((float) a))), this.circlePaint);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoCropActivity$PhotoEditActivityDelegate */
-    public interface PhotoEditActivityDelegate {
-        void didFinishEdit(Bitmap bitmap);
-    }
-
-    /* renamed from: org.telegram.ui.PhotoCropActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                PhotoCropActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1) {
-                if (!(PhotoCropActivity.this.delegate == null || PhotoCropActivity.this.doneButtonPressed)) {
-                    Bitmap bitmap = PhotoCropActivity.this.view.getBitmap();
-                    if (bitmap == PhotoCropActivity.this.imageToCrop) {
-                        PhotoCropActivity.this.sameBitmap = true;
-                    }
-                    PhotoCropActivity.this.delegate.didFinishEdit(bitmap);
-                    PhotoCropActivity.this.doneButtonPressed = true;
-                }
-                PhotoCropActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }

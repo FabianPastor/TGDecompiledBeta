@@ -121,82 +121,6 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private VelocityTracker velocityTracker = null;
     private WakeLock wakeLock = null;
 
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$5 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (PopupNotificationActivity.this.onAnimationEndRunnable != null) {
-                PopupNotificationActivity.this.onAnimationEndRunnable.run();
-                PopupNotificationActivity.this.onAnimationEndRunnable = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$6 */
-    class CLASSNAME implements OnPreDrawListener {
-        CLASSNAME() {
-        }
-
-        public boolean onPreDraw() {
-            if (PopupNotificationActivity.this.avatarContainer != null) {
-                PopupNotificationActivity.this.avatarContainer.getViewTreeObserver().removeOnPreDrawListener(this);
-            }
-            int padding = (CLASSNAMEActionBar.getCurrentActionBarHeight() - AndroidUtilities.m9dp(48.0f)) / 2;
-            PopupNotificationActivity.this.avatarContainer.setPadding(PopupNotificationActivity.this.avatarContainer.getPaddingLeft(), padding, PopupNotificationActivity.this.avatarContainer.getPaddingRight(), padding);
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$7 */
-    class CLASSNAME implements OnPreDrawListener {
-        CLASSNAME() {
-        }
-
-        public boolean onPreDraw() {
-            PopupNotificationActivity.this.messageContainer.getViewTreeObserver().removeOnPreDrawListener(this);
-            if (!(PopupNotificationActivity.this.checkTransitionAnimation() || PopupNotificationActivity.this.startedMoving)) {
-                MarginLayoutParams layoutParams = (MarginLayoutParams) PopupNotificationActivity.this.messageContainer.getLayoutParams();
-                layoutParams.topMargin = CLASSNAMEActionBar.getCurrentActionBarHeight();
-                layoutParams.bottomMargin = AndroidUtilities.m9dp(48.0f);
-                layoutParams.width = -1;
-                layoutParams.height = -1;
-                PopupNotificationActivity.this.messageContainer.setLayoutParams(layoutParams);
-                PopupNotificationActivity.this.applyViewsLayoutParams(0);
-            }
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PopupNotificationActivity$FrameLayoutTouch */
-    private class FrameLayoutTouch extends FrameLayout {
-        public FrameLayoutTouch(Context context) {
-            super(context);
-        }
-
-        public FrameLayoutTouch(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public FrameLayoutTouch(Context context, AttributeSet attrs, int defStyle) {
-            super(context, attrs, defStyle);
-        }
-
-        public boolean onInterceptTouchEvent(MotionEvent ev) {
-            return PopupNotificationActivity.this.checkTransitionAnimation() || ((PopupNotificationActivity) getContext()).onTouchEventMy(ev);
-        }
-
-        public boolean onTouchEvent(MotionEvent ev) {
-            return PopupNotificationActivity.this.checkTransitionAnimation() || ((PopupNotificationActivity) getContext()).onTouchEventMy(ev);
-        }
-
-        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            ((PopupNotificationActivity) getContext()).onTouchEventMy(null);
-            super.requestDisallowInterceptTouchEvent(disallowIntercept);
-        }
-    }
-
     /* renamed from: org.telegram.ui.PopupNotificationActivity$3 */
     class CLASSNAME implements ChatActivityEnterViewDelegate {
         CLASSNAME() {
@@ -282,6 +206,82 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             } else if (id == 2) {
                 PopupNotificationActivity.this.switchToNextMessage();
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$5 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (PopupNotificationActivity.this.onAnimationEndRunnable != null) {
+                PopupNotificationActivity.this.onAnimationEndRunnable.run();
+                PopupNotificationActivity.this.onAnimationEndRunnable = null;
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$6 */
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
+        }
+
+        public boolean onPreDraw() {
+            if (PopupNotificationActivity.this.avatarContainer != null) {
+                PopupNotificationActivity.this.avatarContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+            }
+            int padding = (CLASSNAMEActionBar.getCurrentActionBarHeight() - AndroidUtilities.m9dp(48.0f)) / 2;
+            PopupNotificationActivity.this.avatarContainer.setPadding(PopupNotificationActivity.this.avatarContainer.getPaddingLeft(), padding, PopupNotificationActivity.this.avatarContainer.getPaddingRight(), padding);
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$7 */
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
+        }
+
+        public boolean onPreDraw() {
+            PopupNotificationActivity.this.messageContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+            if (!(PopupNotificationActivity.this.checkTransitionAnimation() || PopupNotificationActivity.this.startedMoving)) {
+                MarginLayoutParams layoutParams = (MarginLayoutParams) PopupNotificationActivity.this.messageContainer.getLayoutParams();
+                layoutParams.topMargin = CLASSNAMEActionBar.getCurrentActionBarHeight();
+                layoutParams.bottomMargin = AndroidUtilities.m9dp(48.0f);
+                layoutParams.width = -1;
+                layoutParams.height = -1;
+                PopupNotificationActivity.this.messageContainer.setLayoutParams(layoutParams);
+                PopupNotificationActivity.this.applyViewsLayoutParams(0);
+            }
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PopupNotificationActivity$FrameLayoutTouch */
+    private class FrameLayoutTouch extends FrameLayout {
+        public FrameLayoutTouch(Context context) {
+            super(context);
+        }
+
+        public FrameLayoutTouch(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public FrameLayoutTouch(Context context, AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+        }
+
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            return PopupNotificationActivity.this.checkTransitionAnimation() || ((PopupNotificationActivity) getContext()).onTouchEventMy(ev);
+        }
+
+        public boolean onTouchEvent(MotionEvent ev) {
+            return PopupNotificationActivity.this.checkTransitionAnimation() || ((PopupNotificationActivity) getContext()).onTouchEventMy(ev);
+        }
+
+        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            ((PopupNotificationActivity) getContext()).onTouchEventMy(null);
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
         }
     }
 

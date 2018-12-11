@@ -58,7 +58,7 @@ public class CommonGroupsActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                CommonGroupsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                CommonGroupsActivity.this.finishFragment();
             }
         }
     }

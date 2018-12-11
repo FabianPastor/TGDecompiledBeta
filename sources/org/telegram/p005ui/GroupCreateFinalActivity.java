@@ -101,17 +101,6 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private ArrayList<Integer> selectedContacts;
     private InputFile uploadedAvatar;
 
-    /* renamed from: org.telegram.ui.GroupCreateFinalActivity$8 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
     /* renamed from: org.telegram.ui.GroupCreateFinalActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -119,7 +108,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         public void onItemClick(int id) {
             if (id == -1) {
-                GroupCreateFinalActivity.this.lambda$checkDiscard$70$PassportActivity();
+                GroupCreateFinalActivity.this.finishFragment();
             }
         }
     }
@@ -133,6 +122,17 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             if (newState == 1) {
                 AndroidUtilities.hideKeyboard(GroupCreateFinalActivity.this.editText);
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.GroupCreateFinalActivity$8 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
         }
     }
 

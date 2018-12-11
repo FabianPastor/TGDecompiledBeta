@@ -89,6 +89,30 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     private TextView titleTextView;
     private int type;
 
+    /* renamed from: org.telegram.ui.PasscodeActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                PasscodeActivity.this.finishFragment();
+            } else if (id == 1) {
+                if (PasscodeActivity.this.passcodeSetStep == 0) {
+                    PasscodeActivity.this.processNext();
+                } else if (PasscodeActivity.this.passcodeSetStep == 1) {
+                    PasscodeActivity.this.processDone();
+                }
+            } else if (id == 2) {
+                PasscodeActivity.this.currentPasswordType = 0;
+                PasscodeActivity.this.updateDropDownTextView();
+            } else if (id == 3) {
+                PasscodeActivity.this.currentPasswordType = 1;
+                PasscodeActivity.this.updateDropDownTextView();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.PasscodeActivity$2 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
@@ -147,30 +171,6 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             PasscodeActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
             PasscodeActivity.this.fixLayoutInternal();
             return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PasscodeActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                PasscodeActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1) {
-                if (PasscodeActivity.this.passcodeSetStep == 0) {
-                    PasscodeActivity.this.processNext();
-                } else if (PasscodeActivity.this.passcodeSetStep == 1) {
-                    PasscodeActivity.this.processDone();
-                }
-            } else if (id == 2) {
-                PasscodeActivity.this.currentPasswordType = 0;
-                PasscodeActivity.this.updateDropDownTextView();
-            } else if (id == 3) {
-                PasscodeActivity.this.currentPasswordType = 1;
-                PasscodeActivity.this.updateDropDownTextView();
-            }
         }
     }
 
@@ -675,7 +675,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 }
                 SharedConfig.passcodeType = this.currentPasswordType;
                 SharedConfig.saveConfig();
-                lambda$checkDiscard$70$PassportActivity();
+                finishFragment();
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
                 this.passwordEditText.clearFocus();
                 AndroidUtilities.hideKeyboard(this.passwordEditText);

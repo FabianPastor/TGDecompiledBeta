@@ -172,50 +172,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private ImageView writeButton;
     private AnimatorSet writeButtonAnimation;
 
-    /* renamed from: org.telegram.ui.SettingsActivity$13 */
-    class CLASSNAME implements OnPreDrawListener {
-        CLASSNAME() {
-        }
-
-        public boolean onPreDraw() {
-            if (SettingsActivity.this.fragmentView != null) {
-                SettingsActivity.this.needLayout();
-                SettingsActivity.this.fragmentView.getViewTreeObserver().removeOnPreDrawListener(this);
-            }
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SettingsActivity$9 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SettingsActivity$LinkMovementMethodMy */
-    private static class LinkMovementMethodMy extends LinkMovementMethod {
-        private LinkMovementMethodMy() {
-        }
-
-        /* synthetic */ LinkMovementMethodMy(CLASSNAME x0) {
-            this();
-        }
-
-        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-            try {
-                return super.onTouchEvent(widget, buffer, event);
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-                return false;
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.SettingsActivity$10 */
     class CLASSNAME extends OnScrollListener {
         CLASSNAME() {
@@ -240,6 +196,60 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SettingsActivity$13 */
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
+        }
+
+        public boolean onPreDraw() {
+            if (SettingsActivity.this.fragmentView != null) {
+                SettingsActivity.this.needLayout();
+                SettingsActivity.this.fragmentView.getViewTreeObserver().removeOnPreDrawListener(this);
+            }
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SettingsActivity$1 */
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
+        }
+
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            PlaceProviderObject object = null;
+            int i = 0;
+            if (fileLocation != null) {
+                User user = MessagesController.getInstance(SettingsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId()));
+                if (!(user == null || user.photo == null || user.photo.photo_big == null)) {
+                    FileLocation photoBig = user.photo.photo_big;
+                    if (photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id) {
+                        int[] coords = new int[2];
+                        SettingsActivity.this.avatarImage.getLocationInWindow(coords);
+                        object = new PlaceProviderObject();
+                        object.viewX = coords[0];
+                        int i2 = coords[1];
+                        if (VERSION.SDK_INT < 21) {
+                            i = AndroidUtilities.statusBarHeight;
+                        }
+                        object.viewY = i2 - i;
+                        object.parentView = SettingsActivity.this.avatarImage;
+                        object.imageReceiver = SettingsActivity.this.avatarImage.getImageReceiver();
+                        object.dialogId = UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId();
+                        object.thumb = object.imageReceiver.getBitmapSafe();
+                        object.size = -1;
+                        object.radius = SettingsActivity.this.avatarImage.getImageReceiver().getRoundRadius();
+                        object.scale = SettingsActivity.this.avatarContainer.getScaleX();
+                    }
+                }
+            }
+            return object;
+        }
+
+        public void willHidePhotoViewer() {
+            SettingsActivity.this.avatarImage.getImageReceiver().setVisible(true, true);
         }
     }
 
@@ -347,43 +357,33 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* renamed from: org.telegram.ui.SettingsActivity$1 */
-    class CLASSNAME extends EmptyPhotoViewerProvider {
+    /* renamed from: org.telegram.ui.SettingsActivity$9 */
+    class CLASSNAME extends ViewOutlineProvider {
         CLASSNAME() {
         }
 
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-            PlaceProviderObject object = null;
-            int i = 0;
-            if (fileLocation != null) {
-                User user = MessagesController.getInstance(SettingsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId()));
-                if (!(user == null || user.photo == null || user.photo.photo_big == null)) {
-                    FileLocation photoBig = user.photo.photo_big;
-                    if (photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id) {
-                        int[] coords = new int[2];
-                        SettingsActivity.this.avatarImage.getLocationInWindow(coords);
-                        object = new PlaceProviderObject();
-                        object.viewX = coords[0];
-                        int i2 = coords[1];
-                        if (VERSION.SDK_INT < 21) {
-                            i = AndroidUtilities.statusBarHeight;
-                        }
-                        object.viewY = i2 - i;
-                        object.parentView = SettingsActivity.this.avatarImage;
-                        object.imageReceiver = SettingsActivity.this.avatarImage.getImageReceiver();
-                        object.dialogId = UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId();
-                        object.thumb = object.imageReceiver.getBitmapSafe();
-                        object.size = -1;
-                        object.radius = SettingsActivity.this.avatarImage.getImageReceiver().getRoundRadius();
-                        object.scale = SettingsActivity.this.avatarContainer.getScaleX();
-                    }
-                }
-            }
-            return object;
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SettingsActivity$LinkMovementMethodMy */
+    private static class LinkMovementMethodMy extends LinkMovementMethod {
+        private LinkMovementMethodMy() {
         }
 
-        public void willHidePhotoViewer() {
-            SettingsActivity.this.avatarImage.getImageReceiver().setVisible(true, true);
+        /* synthetic */ LinkMovementMethodMy(CLASSNAME x0) {
+            this();
+        }
+
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            try {
+                return super.onTouchEvent(widget, buffer, event);
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+                return false;
+            }
         }
     }
 

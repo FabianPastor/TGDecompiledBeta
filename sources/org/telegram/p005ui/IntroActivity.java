@@ -115,6 +115,39 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
     }
 
+    /* renamed from: org.telegram.ui.IntroActivity$2 */
+    class CLASSNAME implements OnPageChangeListener {
+        CLASSNAME() {
+        }
+
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            IntroActivity.this.bottomPages.setPageOffset(position, positionOffset);
+            float width = (float) IntroActivity.this.viewPager.getMeasuredWidth();
+            if (width != 0.0f) {
+                Intro.setScrollOffset((((((float) position) * width) + ((float) positionOffsetPixels)) - (((float) IntroActivity.this.currentViewPagerPage) * width)) / width);
+            }
+        }
+
+        public void onPageSelected(int i) {
+            IntroActivity.this.currentViewPagerPage = i;
+        }
+
+        public void onPageScrollStateChanged(int i) {
+            if (i == 1) {
+                IntroActivity.this.dragging = true;
+                IntroActivity.this.startDragX = IntroActivity.this.viewPager.getCurrentItem() * IntroActivity.this.viewPager.getMeasuredWidth();
+            } else if (i == 0 || i == 2) {
+                if (IntroActivity.this.dragging) {
+                    IntroActivity.this.justEndDragging = true;
+                    IntroActivity.this.dragging = false;
+                }
+                if (IntroActivity.this.lastPage != IntroActivity.this.viewPager.getCurrentItem()) {
+                    IntroActivity.this.lastPage = IntroActivity.this.viewPager.getCurrentItem();
+                }
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.IntroActivity$BottomPagesView */
     private class BottomPagesView extends View {
         private float animatedProgress;
@@ -162,39 +195,6 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 this.rect.set(((float) x) - (((float) AndroidUtilities.m9dp(11.0f)) * (1.0f - this.progress)), 0.0f, (float) (AndroidUtilities.m9dp(5.0f) + x), (float) AndroidUtilities.m9dp(5.0f));
             }
             canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(2.5f), (float) AndroidUtilities.m9dp(2.5f), this.paint);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.IntroActivity$2 */
-    class CLASSNAME implements OnPageChangeListener {
-        CLASSNAME() {
-        }
-
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            IntroActivity.this.bottomPages.setPageOffset(position, positionOffset);
-            float width = (float) IntroActivity.this.viewPager.getMeasuredWidth();
-            if (width != 0.0f) {
-                Intro.setScrollOffset((((((float) position) * width) + ((float) positionOffsetPixels)) - (((float) IntroActivity.this.currentViewPagerPage) * width)) / width);
-            }
-        }
-
-        public void onPageSelected(int i) {
-            IntroActivity.this.currentViewPagerPage = i;
-        }
-
-        public void onPageScrollStateChanged(int i) {
-            if (i == 1) {
-                IntroActivity.this.dragging = true;
-                IntroActivity.this.startDragX = IntroActivity.this.viewPager.getCurrentItem() * IntroActivity.this.viewPager.getMeasuredWidth();
-            } else if (i == 0 || i == 2) {
-                if (IntroActivity.this.dragging) {
-                    IntroActivity.this.justEndDragging = true;
-                    IntroActivity.this.dragging = false;
-                }
-                if (IntroActivity.this.lastPage != IntroActivity.this.viewPager.getCurrentItem()) {
-                    IntroActivity.this.lastPage = IntroActivity.this.viewPager.getCurrentItem();
-                }
-            }
         }
     }
 

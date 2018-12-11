@@ -153,6 +153,111 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     private boolean zoomAnimation;
     private boolean zooming;
 
+    /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
+    class CLASSNAME implements VideoPlayerDelegate {
+        CLASSNAME() {
+        }
+
+        public void onStateChanged(boolean playWhenReady, int playbackState) {
+            if (SecretMediaViewer.this.videoPlayer != null && SecretMediaViewer.this.currentMessageObject != null) {
+                if (playbackState == 4 || playbackState == 1) {
+                    try {
+                        SecretMediaViewer.this.parentActivity.getWindow().clearFlags(128);
+                    } catch (Throwable e) {
+                        FileLog.m13e(e);
+                    }
+                } else {
+                    try {
+                        SecretMediaViewer.this.parentActivity.getWindow().addFlags(128);
+                    } catch (Throwable e2) {
+                        FileLog.m13e(e2);
+                    }
+                }
+                if (playbackState == 3 && SecretMediaViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
+                    SecretMediaViewer.this.aspectRatioFrameLayout.setVisibility(0);
+                }
+                if (!SecretMediaViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
+                    if (SecretMediaViewer.this.isPlaying) {
+                        SecretMediaViewer.this.isPlaying = false;
+                        if (playbackState == 4) {
+                            SecretMediaViewer.this.videoWatchedOneTime = true;
+                            if (SecretMediaViewer.this.closeVideoAfterWatch) {
+                                SecretMediaViewer.this.closePhoto(true, true);
+                                return;
+                            }
+                            SecretMediaViewer.this.videoPlayer.seekTo(0);
+                            SecretMediaViewer.this.videoPlayer.play();
+                        }
+                    }
+                } else if (!SecretMediaViewer.this.isPlaying) {
+                    SecretMediaViewer.this.isPlaying = true;
+                }
+            }
+        }
+
+        public void onError(Exception e) {
+            FileLog.m13e((Throwable) e);
+        }
+
+        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+            if (SecretMediaViewer.this.aspectRatioFrameLayout != null) {
+                if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
+                    int temp = width;
+                    width = height;
+                    height = temp;
+                }
+                SecretMediaViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
+            }
+        }
+
+        public void onRenderedFirstFrame() {
+            if (!SecretMediaViewer.this.textureUploaded) {
+                SecretMediaViewer.this.textureUploaded = true;
+                SecretMediaViewer.this.containerView.invalidate();
+            }
+        }
+
+        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+            return false;
+        }
+
+        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer */
+    private class FrameLayoutDrawer extends FrameLayout {
+        public FrameLayoutDrawer(Context context) {
+            super(context);
+            setWillNotDraw(false);
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            SecretMediaViewer.this.processTouchEvent(event);
+            return true;
+        }
+
+        protected void onDraw(Canvas canvas) {
+            SecretMediaViewer.this.onDraw(canvas);
+        }
+
+        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            return child != SecretMediaViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                SecretMediaViewer.this.closePhoto(true, false);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
@@ -200,27 +305,6 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         public void onAnimationEnd(Animator animation) {
             SecretMediaViewer.this.imageMoveAnimation = null;
             SecretMediaViewer.this.containerView.invalidate();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer */
-    private class FrameLayoutDrawer extends FrameLayout {
-        public FrameLayoutDrawer(Context context) {
-            super(context);
-            setWillNotDraw(false);
-        }
-
-        public boolean onTouchEvent(MotionEvent event) {
-            SecretMediaViewer.this.processTouchEvent(event);
-            return true;
-        }
-
-        protected void onDraw(Canvas canvas) {
-            SecretMediaViewer.this.onDraw(canvas);
-        }
-
-        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-            return child != SecretMediaViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
         }
     }
 
@@ -416,90 +500,6 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 updateParticles(newTime - this.lastAnimationTime);
                 this.lastAnimationTime = newTime;
                 invalidate();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
-    class CLASSNAME implements VideoPlayerDelegate {
-        CLASSNAME() {
-        }
-
-        public void onStateChanged(boolean playWhenReady, int playbackState) {
-            if (SecretMediaViewer.this.videoPlayer != null && SecretMediaViewer.this.currentMessageObject != null) {
-                if (playbackState == 4 || playbackState == 1) {
-                    try {
-                        SecretMediaViewer.this.parentActivity.getWindow().clearFlags(128);
-                    } catch (Throwable e) {
-                        FileLog.m13e(e);
-                    }
-                } else {
-                    try {
-                        SecretMediaViewer.this.parentActivity.getWindow().addFlags(128);
-                    } catch (Throwable e2) {
-                        FileLog.m13e(e2);
-                    }
-                }
-                if (playbackState == 3 && SecretMediaViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
-                    SecretMediaViewer.this.aspectRatioFrameLayout.setVisibility(0);
-                }
-                if (!SecretMediaViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
-                    if (SecretMediaViewer.this.isPlaying) {
-                        SecretMediaViewer.this.isPlaying = false;
-                        if (playbackState == 4) {
-                            SecretMediaViewer.this.videoWatchedOneTime = true;
-                            if (SecretMediaViewer.this.closeVideoAfterWatch) {
-                                SecretMediaViewer.this.closePhoto(true, true);
-                                return;
-                            }
-                            SecretMediaViewer.this.videoPlayer.seekTo(0);
-                            SecretMediaViewer.this.videoPlayer.play();
-                        }
-                    }
-                } else if (!SecretMediaViewer.this.isPlaying) {
-                    SecretMediaViewer.this.isPlaying = true;
-                }
-            }
-        }
-
-        public void onError(Exception e) {
-            FileLog.m13e((Throwable) e);
-        }
-
-        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-            if (SecretMediaViewer.this.aspectRatioFrameLayout != null) {
-                if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
-                    int temp = width;
-                    width = height;
-                    height = temp;
-                }
-                SecretMediaViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
-            }
-        }
-
-        public void onRenderedFirstFrame() {
-            if (!SecretMediaViewer.this.textureUploaded) {
-                SecretMediaViewer.this.textureUploaded = true;
-                SecretMediaViewer.this.containerView.invalidate();
-            }
-        }
-
-        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-            return false;
-        }
-
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-        }
-    }
-
-    /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                SecretMediaViewer.this.closePhoto(true, false);
             }
         }
     }

@@ -58,6 +58,18 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     private TextView textView;
     private int textWidth;
 
+    /* renamed from: org.telegram.ui.IdenticonActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                IdenticonActivity.this.finishFragment();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.IdenticonActivity$2 */
     class CLASSNAME implements OnTouchListener {
         CLASSNAME() {
@@ -115,18 +127,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             } catch (Throwable e) {
                 FileLog.m13e(e);
                 return false;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.IdenticonActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                IdenticonActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }

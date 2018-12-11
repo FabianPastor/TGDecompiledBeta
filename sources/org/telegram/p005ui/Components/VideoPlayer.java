@@ -59,13 +59,6 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
     private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
     private boolean videoPlayerReady;
 
-    /* renamed from: org.telegram.ui.Components.VideoPlayer$RendererBuilder */
-    public interface RendererBuilder {
-        void buildRenderers(VideoPlayer videoPlayer);
-
-        void cancel();
-    }
-
     /* renamed from: org.telegram.ui.Components.VideoPlayer$VideoPlayerDelegate */
     public interface VideoPlayerDelegate {
         void onError(Exception exception);
@@ -119,6 +112,13 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
 
         public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
         }
+    }
+
+    /* renamed from: org.telegram.ui.Components.VideoPlayer$RendererBuilder */
+    public interface RendererBuilder {
+        void buildRenderers(VideoPlayer videoPlayer);
+
+        void cancel();
     }
 
     public VideoPlayer() {

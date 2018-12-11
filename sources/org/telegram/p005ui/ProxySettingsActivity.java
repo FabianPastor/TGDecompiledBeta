@@ -70,6 +70,53 @@ public class ProxySettingsActivity extends BaseFragment {
     private TextSettingsCell shareCell;
     private TypeCell[] typeCell;
 
+    /* renamed from: org.telegram.ui.ProxySettingsActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ProxySettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
+            } else if (id == 1 && ProxySettingsActivity.this.getParentActivity() != null) {
+                boolean enabled;
+                ProxySettingsActivity.this.currentProxyInfo.address = ProxySettingsActivity.this.inputFields[0].getText().toString();
+                ProxySettingsActivity.this.currentProxyInfo.port = Utilities.parseInt(ProxySettingsActivity.this.inputFields[1].getText().toString()).intValue();
+                if (ProxySettingsActivity.this.currentType == 0) {
+                    ProxySettingsActivity.this.currentProxyInfo.secret = TtmlNode.ANONYMOUS_REGION_ID;
+                    ProxySettingsActivity.this.currentProxyInfo.username = ProxySettingsActivity.this.inputFields[2].getText().toString();
+                    ProxySettingsActivity.this.currentProxyInfo.password = ProxySettingsActivity.this.inputFields[3].getText().toString();
+                } else {
+                    ProxySettingsActivity.this.currentProxyInfo.secret = ProxySettingsActivity.this.inputFields[4].getText().toString();
+                    ProxySettingsActivity.this.currentProxyInfo.username = TtmlNode.ANONYMOUS_REGION_ID;
+                    ProxySettingsActivity.this.currentProxyInfo.password = TtmlNode.ANONYMOUS_REGION_ID;
+                }
+                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                Editor editor = preferences.edit();
+                if (ProxySettingsActivity.this.addingNewProxy) {
+                    SharedConfig.addProxy(ProxySettingsActivity.this.currentProxyInfo);
+                    SharedConfig.currentProxy = ProxySettingsActivity.this.currentProxyInfo;
+                    editor.putBoolean("proxy_enabled", true);
+                    enabled = true;
+                } else {
+                    enabled = preferences.getBoolean("proxy_enabled", false);
+                    SharedConfig.saveProxyList();
+                }
+                if (ProxySettingsActivity.this.addingNewProxy || SharedConfig.currentProxy == ProxySettingsActivity.this.currentProxyInfo) {
+                    editor.putString("proxy_ip", ProxySettingsActivity.this.currentProxyInfo.address);
+                    editor.putString("proxy_pass", ProxySettingsActivity.this.currentProxyInfo.password);
+                    editor.putString("proxy_user", ProxySettingsActivity.this.currentProxyInfo.username);
+                    editor.putInt("proxy_port", ProxySettingsActivity.this.currentProxyInfo.port);
+                    editor.putString("proxy_secret", ProxySettingsActivity.this.currentProxyInfo.secret);
+                    ConnectionsManager.setProxySettings(enabled, ProxySettingsActivity.this.currentProxyInfo.address, ProxySettingsActivity.this.currentProxyInfo.port, ProxySettingsActivity.this.currentProxyInfo.username, ProxySettingsActivity.this.currentProxyInfo.password, ProxySettingsActivity.this.currentProxyInfo.secret);
+                }
+                editor.commit();
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
+                ProxySettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ProxySettingsActivity$2 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
@@ -187,53 +234,6 @@ public class ProxySettingsActivity extends BaseFragment {
         protected void onDraw(Canvas canvas) {
             if (this.needDivider) {
                 canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ProxySettingsActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ProxySettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1 && ProxySettingsActivity.this.getParentActivity() != null) {
-                boolean enabled;
-                ProxySettingsActivity.this.currentProxyInfo.address = ProxySettingsActivity.this.inputFields[0].getText().toString();
-                ProxySettingsActivity.this.currentProxyInfo.port = Utilities.parseInt(ProxySettingsActivity.this.inputFields[1].getText().toString()).intValue();
-                if (ProxySettingsActivity.this.currentType == 0) {
-                    ProxySettingsActivity.this.currentProxyInfo.secret = TtmlNode.ANONYMOUS_REGION_ID;
-                    ProxySettingsActivity.this.currentProxyInfo.username = ProxySettingsActivity.this.inputFields[2].getText().toString();
-                    ProxySettingsActivity.this.currentProxyInfo.password = ProxySettingsActivity.this.inputFields[3].getText().toString();
-                } else {
-                    ProxySettingsActivity.this.currentProxyInfo.secret = ProxySettingsActivity.this.inputFields[4].getText().toString();
-                    ProxySettingsActivity.this.currentProxyInfo.username = TtmlNode.ANONYMOUS_REGION_ID;
-                    ProxySettingsActivity.this.currentProxyInfo.password = TtmlNode.ANONYMOUS_REGION_ID;
-                }
-                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                Editor editor = preferences.edit();
-                if (ProxySettingsActivity.this.addingNewProxy) {
-                    SharedConfig.addProxy(ProxySettingsActivity.this.currentProxyInfo);
-                    SharedConfig.currentProxy = ProxySettingsActivity.this.currentProxyInfo;
-                    editor.putBoolean("proxy_enabled", true);
-                    enabled = true;
-                } else {
-                    enabled = preferences.getBoolean("proxy_enabled", false);
-                    SharedConfig.saveProxyList();
-                }
-                if (ProxySettingsActivity.this.addingNewProxy || SharedConfig.currentProxy == ProxySettingsActivity.this.currentProxyInfo) {
-                    editor.putString("proxy_ip", ProxySettingsActivity.this.currentProxyInfo.address);
-                    editor.putString("proxy_pass", ProxySettingsActivity.this.currentProxyInfo.password);
-                    editor.putString("proxy_user", ProxySettingsActivity.this.currentProxyInfo.username);
-                    editor.putInt("proxy_port", ProxySettingsActivity.this.currentProxyInfo.port);
-                    editor.putString("proxy_secret", ProxySettingsActivity.this.currentProxyInfo.secret);
-                    ConnectionsManager.setProxySettings(enabled, ProxySettingsActivity.this.currentProxyInfo.address, ProxySettingsActivity.this.currentProxyInfo.port, ProxySettingsActivity.this.currentProxyInfo.username, ProxySettingsActivity.this.currentProxyInfo.password, ProxySettingsActivity.this.currentProxyInfo.secret);
-                }
-                editor.commit();
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
-                ProxySettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }

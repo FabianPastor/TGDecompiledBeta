@@ -349,6 +349,115 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
+    /* renamed from: org.telegram.messenger.MediaController$4 */
+    class CLASSNAME implements VideoPlayerDelegate {
+        CLASSNAME() {
+        }
+
+        public void onStateChanged(boolean playWhenReady, int playbackState) {
+            if (MediaController.this.videoPlayer != null) {
+                if (playbackState == 4 || playbackState == 1) {
+                    try {
+                        MediaController.this.baseActivity.getWindow().clearFlags(128);
+                    } catch (Throwable e) {
+                        FileLog.m13e(e);
+                    }
+                } else {
+                    try {
+                        MediaController.this.baseActivity.getWindow().addFlags(128);
+                    } catch (Throwable e2) {
+                        FileLog.m13e(e2);
+                    }
+                }
+                if (playbackState == 3) {
+                    MediaController.this.currentAspectRatioFrameLayoutReady = true;
+                    if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentTextureViewContainer.getVisibility() != 0) {
+                        MediaController.this.currentTextureViewContainer.setVisibility(0);
+                    }
+                } else if (MediaController.this.videoPlayer.isPlaying() && playbackState == 4) {
+                    MediaController.this.cleanupPlayer(true, true, true);
+                }
+            }
+        }
+
+        public void onError(Exception e) {
+            FileLog.m13e((Throwable) e);
+        }
+
+        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+            MediaController.this.currentAspectRatioFrameLayoutRotation = unappliedRotationDegrees;
+            if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
+                int temp = width;
+                width = height;
+                height = temp;
+            }
+            MediaController.this.currentAspectRatioFrameLayoutRatio = height == 0 ? MediaController.VOLUME_NORMAL : (((float) width) * pixelWidthHeightRatio) / ((float) height);
+            if (MediaController.this.currentAspectRatioFrameLayout != null) {
+                MediaController.this.currentAspectRatioFrameLayout.setAspectRatio(MediaController.this.currentAspectRatioFrameLayoutRatio, MediaController.this.currentAspectRatioFrameLayoutRotation);
+            }
+        }
+
+        public void onRenderedFirstFrame() {
+            if (MediaController.this.currentAspectRatioFrameLayout != null && !MediaController.this.currentAspectRatioFrameLayout.isDrawingReady()) {
+                MediaController.this.isDrawingWasReady = true;
+                MediaController.this.currentAspectRatioFrameLayout.setDrawingReady(true);
+                if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentTextureViewContainer.getVisibility() != 0) {
+                    MediaController.this.currentTextureViewContainer.setVisibility(0);
+                }
+            }
+        }
+
+        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+            if (MediaController.this.videoPlayer == null) {
+                return false;
+            }
+            if (MediaController.this.pipSwitchingState == 2) {
+                if (MediaController.this.currentAspectRatioFrameLayout != null) {
+                    if (MediaController.this.isDrawingWasReady) {
+                        MediaController.this.currentAspectRatioFrameLayout.setDrawingReady(true);
+                    }
+                    if (MediaController.this.currentAspectRatioFrameLayout.getParent() == null) {
+                        MediaController.this.currentTextureViewContainer.addView(MediaController.this.currentAspectRatioFrameLayout);
+                    }
+                    if (MediaController.this.currentTextureView.getSurfaceTexture() != surfaceTexture) {
+                        MediaController.this.currentTextureView.setSurfaceTexture(surfaceTexture);
+                    }
+                    MediaController.this.videoPlayer.setTextureView(MediaController.this.currentTextureView);
+                }
+                MediaController.this.pipSwitchingState = 0;
+                return true;
+            } else if (MediaController.this.pipSwitchingState != 1) {
+                return false;
+            } else {
+                if (MediaController.this.baseActivity != null) {
+                    if (MediaController.this.pipRoundVideoView == null) {
+                        try {
+                            MediaController.this.pipRoundVideoView = new PipRoundVideoView();
+                            MediaController.this.pipRoundVideoView.show(MediaController.this.baseActivity, new MediaController$4$$Lambda$0(this));
+                        } catch (Exception e) {
+                            MediaController.this.pipRoundVideoView = null;
+                        }
+                    }
+                    if (MediaController.this.pipRoundVideoView != null) {
+                        if (MediaController.this.pipRoundVideoView.getTextureView().getSurfaceTexture() != surfaceTexture) {
+                            MediaController.this.pipRoundVideoView.getTextureView().setSurfaceTexture(surfaceTexture);
+                        }
+                        MediaController.this.videoPlayer.setTextureView(MediaController.this.pipRoundVideoView.getTextureView());
+                    }
+                }
+                MediaController.this.pipSwitchingState = 0;
+                return true;
+            }
+        }
+
+        final /* synthetic */ void lambda$onSurfaceDestroyed$0$MediaController$4() {
+            MediaController.this.cleanupPlayer(true, true);
+        }
+
+        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        }
+    }
+
     public static class AlbumEntry {
         public int bucketId;
         public String bucketName;
@@ -432,7 +541,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
 
         /* renamed from: lambda$scheduleReloadRunnable$0$MediaController$GalleryObserverInternal */
-        final /* synthetic */ void mo6297x623fvar_() {
+        final /* synthetic */ void mo9322x623fvar_() {
             if (PhotoViewer.getInstance().isVisible()) {
                 scheduleReloadRunnable();
                 return;
@@ -668,115 +777,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             } catch (Throwable e) {
                 FileLog.m13e(e);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.MediaController$4 */
-    class CLASSNAME implements VideoPlayerDelegate {
-        CLASSNAME() {
-        }
-
-        public void onStateChanged(boolean playWhenReady, int playbackState) {
-            if (MediaController.this.videoPlayer != null) {
-                if (playbackState == 4 || playbackState == 1) {
-                    try {
-                        MediaController.this.baseActivity.getWindow().clearFlags(128);
-                    } catch (Throwable e) {
-                        FileLog.m13e(e);
-                    }
-                } else {
-                    try {
-                        MediaController.this.baseActivity.getWindow().addFlags(128);
-                    } catch (Throwable e2) {
-                        FileLog.m13e(e2);
-                    }
-                }
-                if (playbackState == 3) {
-                    MediaController.this.currentAspectRatioFrameLayoutReady = true;
-                    if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentTextureViewContainer.getVisibility() != 0) {
-                        MediaController.this.currentTextureViewContainer.setVisibility(0);
-                    }
-                } else if (MediaController.this.videoPlayer.isPlaying() && playbackState == 4) {
-                    MediaController.this.cleanupPlayer(true, true, true);
-                }
-            }
-        }
-
-        public void onError(Exception e) {
-            FileLog.m13e((Throwable) e);
-        }
-
-        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-            MediaController.this.currentAspectRatioFrameLayoutRotation = unappliedRotationDegrees;
-            if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
-                int temp = width;
-                width = height;
-                height = temp;
-            }
-            MediaController.this.currentAspectRatioFrameLayoutRatio = height == 0 ? MediaController.VOLUME_NORMAL : (((float) width) * pixelWidthHeightRatio) / ((float) height);
-            if (MediaController.this.currentAspectRatioFrameLayout != null) {
-                MediaController.this.currentAspectRatioFrameLayout.setAspectRatio(MediaController.this.currentAspectRatioFrameLayoutRatio, MediaController.this.currentAspectRatioFrameLayoutRotation);
-            }
-        }
-
-        public void onRenderedFirstFrame() {
-            if (MediaController.this.currentAspectRatioFrameLayout != null && !MediaController.this.currentAspectRatioFrameLayout.isDrawingReady()) {
-                MediaController.this.isDrawingWasReady = true;
-                MediaController.this.currentAspectRatioFrameLayout.setDrawingReady(true);
-                if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentTextureViewContainer.getVisibility() != 0) {
-                    MediaController.this.currentTextureViewContainer.setVisibility(0);
-                }
-            }
-        }
-
-        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-            if (MediaController.this.videoPlayer == null) {
-                return false;
-            }
-            if (MediaController.this.pipSwitchingState == 2) {
-                if (MediaController.this.currentAspectRatioFrameLayout != null) {
-                    if (MediaController.this.isDrawingWasReady) {
-                        MediaController.this.currentAspectRatioFrameLayout.setDrawingReady(true);
-                    }
-                    if (MediaController.this.currentAspectRatioFrameLayout.getParent() == null) {
-                        MediaController.this.currentTextureViewContainer.addView(MediaController.this.currentAspectRatioFrameLayout);
-                    }
-                    if (MediaController.this.currentTextureView.getSurfaceTexture() != surfaceTexture) {
-                        MediaController.this.currentTextureView.setSurfaceTexture(surfaceTexture);
-                    }
-                    MediaController.this.videoPlayer.setTextureView(MediaController.this.currentTextureView);
-                }
-                MediaController.this.pipSwitchingState = 0;
-                return true;
-            } else if (MediaController.this.pipSwitchingState != 1) {
-                return false;
-            } else {
-                if (MediaController.this.baseActivity != null) {
-                    if (MediaController.this.pipRoundVideoView == null) {
-                        try {
-                            MediaController.this.pipRoundVideoView = new PipRoundVideoView();
-                            MediaController.this.pipRoundVideoView.show(MediaController.this.baseActivity, new MediaController$4$$Lambda$0(this));
-                        } catch (Exception e) {
-                            MediaController.this.pipRoundVideoView = null;
-                        }
-                    }
-                    if (MediaController.this.pipRoundVideoView != null) {
-                        if (MediaController.this.pipRoundVideoView.getTextureView().getSurfaceTexture() != surfaceTexture) {
-                            MediaController.this.pipRoundVideoView.getTextureView().setSurfaceTexture(surfaceTexture);
-                        }
-                        MediaController.this.videoPlayer.setTextureView(MediaController.this.pipRoundVideoView.getTextureView());
-                    }
-                }
-                MediaController.this.pipSwitchingState = 0;
-                return true;
-            }
-        }
-
-        final /* synthetic */ void lambda$onSurfaceDestroyed$0$MediaController$4() {
-            MediaController.this.cleanupPlayer(true, true);
-        }
-
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
         }
     }
 

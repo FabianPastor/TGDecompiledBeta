@@ -83,39 +83,6 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     private Timer searchTimer;
     private int selfUserId;
 
-    /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult */
-    private class DialogSearchResult {
-        public int date;
-        public CharSequence name;
-        public TLObject object;
-
-        private DialogSearchResult() {
-        }
-
-        /* synthetic */ DialogSearchResult(DialogsSearchAdapter x0, CLASSNAME x1) {
-            this();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$DialogsSearchAdapterDelegate */
-    public interface DialogsSearchAdapterDelegate {
-        void didPressedOnSubDialog(long j);
-
-        void needRemoveHint(int i);
-
-        void searchStateChanged(boolean z);
-    }
-
-    /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$RecentSearchObject */
-    protected static class RecentSearchObject {
-        int date;
-        long did;
-        TLObject object;
-
-        protected RecentSearchObject() {
-        }
-    }
-
     /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$1 */
     class CLASSNAME implements SearchAdapterHelperDelegate {
         public SparseArray getExcludeUsers() {
@@ -192,6 +159,39 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
         public int getItemCount() {
             return DataQuery.getInstance(DialogsSearchAdapter.this.currentAccount).hints.size();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult */
+    private class DialogSearchResult {
+        public int date;
+        public CharSequence name;
+        public TLObject object;
+
+        private DialogSearchResult() {
+        }
+
+        /* synthetic */ DialogSearchResult(DialogsSearchAdapter x0, CLASSNAME x1) {
+            this();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$DialogsSearchAdapterDelegate */
+    public interface DialogsSearchAdapterDelegate {
+        void didPressedOnSubDialog(long j);
+
+        void needRemoveHint(int i);
+
+        void searchStateChanged(boolean z);
+    }
+
+    /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$RecentSearchObject */
+    protected static class RecentSearchObject {
+        int date;
+        long did;
+        TLObject object;
+
+        protected RecentSearchObject() {
         }
     }
 

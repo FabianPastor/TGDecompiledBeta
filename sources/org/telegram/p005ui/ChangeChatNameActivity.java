@@ -74,39 +74,6 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
     private AlertDialog progressDialog;
     private InputFile uploadedAvatar;
 
-    /* renamed from: org.telegram.ui.ChangeChatNameActivity$6 */
-    class CLASSNAME implements OnClickListener {
-
-        /* renamed from: org.telegram.ui.ChangeChatNameActivity$6$1 */
-        class CLASSNAME implements DialogInterface.OnClickListener {
-            CLASSNAME() {
-            }
-
-            public void onClick(DialogInterface dialogInterface, int i) {
-                NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
-                if (AndroidUtilities.isTablet()) {
-                    NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) ChangeChatNameActivity.this.chatId)));
-                } else {
-                    NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                }
-                MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).deleteUserFromChat(ChangeChatNameActivity.this.chatId, MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(ChangeChatNameActivity.this.currentAccount).getClientUserId())), null, true);
-                ChangeChatNameActivity.this.lambda$checkDiscard$70$PassportActivity();
-            }
-        }
-
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            Builder builder = new Builder(ChangeChatNameActivity.this.getParentActivity());
-            builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new CLASSNAME());
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-            ChangeChatNameActivity.this.showDialog(builder.create());
-        }
-    }
-
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -114,7 +81,7 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChangeChatNameActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChangeChatNameActivity.this.finishFragment();
             } else if (id == 1 && !ChangeChatNameActivity.this.donePressed) {
                 if (ChangeChatNameActivity.this.editText.length() == 0) {
                     Vibrator v = (Vibrator) ChangeChatNameActivity.this.getParentActivity().getSystemService("vibrator");
@@ -137,10 +104,10 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
                 } else if (ChangeChatNameActivity.this.avatar == null && (ChangeChatNameActivity.this.currentChat.photo instanceof TL_chatPhoto)) {
                     MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).changeChatAvatar(ChangeChatNameActivity.this.chatId, null, null, null);
                 }
-                ChangeChatNameActivity.this.lambda$checkDiscard$70$PassportActivity();
+                ChangeChatNameActivity.this.finishFragment();
                 if (ChangeChatNameActivity.this.editText.length() != 0) {
                     ChangeChatNameActivity.this.saveName();
-                    ChangeChatNameActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    ChangeChatNameActivity.this.finishFragment();
                 }
             }
         }
@@ -149,6 +116,39 @@ public class ChangeChatNameActivity extends BaseFragment implements ImageUpdater
             ChangeChatNameActivity.this.createAfterUpload = false;
             ChangeChatNameActivity.this.progressDialog = null;
             ChangeChatNameActivity.this.donePressed = false;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ChangeChatNameActivity$6 */
+    class CLASSNAME implements OnClickListener {
+
+        /* renamed from: org.telegram.ui.ChangeChatNameActivity$6$1 */
+        class CLASSNAME implements DialogInterface.OnClickListener {
+            CLASSNAME() {
+            }
+
+            public void onClick(DialogInterface dialogInterface, int i) {
+                NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
+                if (AndroidUtilities.isTablet()) {
+                    NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) ChangeChatNameActivity.this.chatId)));
+                } else {
+                    NotificationCenter.getInstance(ChangeChatNameActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                }
+                MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).deleteUserFromChat(ChangeChatNameActivity.this.chatId, MessagesController.getInstance(ChangeChatNameActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(ChangeChatNameActivity.this.currentAccount).getClientUserId())), null, true);
+                ChangeChatNameActivity.this.finishFragment();
+            }
+        }
+
+        CLASSNAME() {
+        }
+
+        public void onClick(View v) {
+            Builder builder = new Builder(ChangeChatNameActivity.this.getParentActivity());
+            builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new CLASSNAME());
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            ChangeChatNameActivity.this.showDialog(builder.create());
         }
     }
 

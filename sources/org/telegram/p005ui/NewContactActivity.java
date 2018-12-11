@@ -85,6 +85,82 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     private HashMap<String, String> phoneFormatMap = new HashMap();
     private TextView textView;
 
+    /* renamed from: org.telegram.ui.NewContactActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                NewContactActivity.this.finishFragment();
+            } else if (id == 1 && !NewContactActivity.this.donePressed) {
+                Vibrator v;
+                if (NewContactActivity.this.firstNameField.length() == 0) {
+                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
+                    if (v != null) {
+                        v.vibrate(200);
+                    }
+                    AndroidUtilities.shakeView(NewContactActivity.this.firstNameField, 2.0f, 0);
+                } else if (NewContactActivity.this.codeField.length() == 0) {
+                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
+                    if (v != null) {
+                        v.vibrate(200);
+                    }
+                    AndroidUtilities.shakeView(NewContactActivity.this.codeField, 2.0f, 0);
+                } else if (NewContactActivity.this.phoneField.length() == 0) {
+                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
+                    if (v != null) {
+                        v.vibrate(200);
+                    }
+                    AndroidUtilities.shakeView(NewContactActivity.this.phoneField, 2.0f, 0);
+                } else {
+                    NewContactActivity.this.donePressed = true;
+                    NewContactActivity.this.showEditDoneProgress(true, true);
+                    TL_contacts_importContacts req = new TL_contacts_importContacts();
+                    TL_inputPhoneContact inputPhoneContact = new TL_inputPhoneContact();
+                    inputPhoneContact.first_name = NewContactActivity.this.firstNameField.getText().toString();
+                    inputPhoneContact.last_name = NewContactActivity.this.lastNameField.getText().toString();
+                    inputPhoneContact.phone = "+" + NewContactActivity.this.codeField.getText().toString() + NewContactActivity.this.phoneField.getText().toString();
+                    req.contacts.add(inputPhoneContact);
+                    ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).sendRequest(req, new NewContactActivity$1$$Lambda$0(this, inputPhoneContact, req), 2), NewContactActivity.this.classGuid);
+                }
+            }
+        }
+
+        final /* synthetic */ void lambda$onItemClick$2$NewContactActivity$1(TL_inputPhoneContact inputPhoneContact, TL_contacts_importContacts req, TLObject response, TL_error error) {
+            AndroidUtilities.runOnUIThread(new NewContactActivity$1$$Lambda$1(this, (TL_contacts_importedContacts) response, inputPhoneContact, error, req));
+        }
+
+        final /* synthetic */ void lambda$null$1$NewContactActivity$1(TL_contacts_importedContacts res, TL_inputPhoneContact inputPhoneContact, TL_error error, TL_contacts_importContacts req) {
+            NewContactActivity.this.donePressed = false;
+            if (res == null) {
+                NewContactActivity.this.showEditDoneProgress(false, true);
+                AlertsCreator.processError(NewContactActivity.this.currentAccount, error, NewContactActivity.this, req, new Object[0]);
+            } else if (!res.users.isEmpty()) {
+                MessagesController.getInstance(NewContactActivity.this.currentAccount).putUsers(res.users, false);
+                MessagesController.openChatOrProfileWith((User) res.users.get(0), null, NewContactActivity.this, 1, true);
+            } else if (NewContactActivity.this.getParentActivity() != null) {
+                NewContactActivity.this.showEditDoneProgress(false, true);
+                Builder builder = new Builder(NewContactActivity.this.getParentActivity());
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setMessage(LocaleController.formatString("ContactNotRegistered", R.string.ContactNotRegistered, ContactsController.formatName(inputPhoneContact.first_name, inputPhoneContact.last_name)));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setPositiveButton(LocaleController.getString("Invite", R.string.Invite), new NewContactActivity$1$$Lambda$2(this, inputPhoneContact));
+                NewContactActivity.this.showDialog(builder.create());
+            }
+        }
+
+        final /* synthetic */ void lambda$null$0$NewContactActivity$1(TL_inputPhoneContact inputPhoneContact, DialogInterface dialog, int which) {
+            try {
+                Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", inputPhoneContact.phone, null));
+                intent.putExtra("sms_body", ContactsController.getInstance(NewContactActivity.this.currentAccount).getInviteText(1));
+                NewContactActivity.this.getParentActivity().startActivityForResult(intent, 500);
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.NewContactActivity$2 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
@@ -268,82 +344,6 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 }
                 NewContactActivity.this.phoneField.onTextChange();
                 NewContactActivity.this.ignoreOnPhoneChange = false;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.NewContactActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                NewContactActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1 && !NewContactActivity.this.donePressed) {
-                Vibrator v;
-                if (NewContactActivity.this.firstNameField.length() == 0) {
-                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
-                    if (v != null) {
-                        v.vibrate(200);
-                    }
-                    AndroidUtilities.shakeView(NewContactActivity.this.firstNameField, 2.0f, 0);
-                } else if (NewContactActivity.this.codeField.length() == 0) {
-                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
-                    if (v != null) {
-                        v.vibrate(200);
-                    }
-                    AndroidUtilities.shakeView(NewContactActivity.this.codeField, 2.0f, 0);
-                } else if (NewContactActivity.this.phoneField.length() == 0) {
-                    v = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
-                    if (v != null) {
-                        v.vibrate(200);
-                    }
-                    AndroidUtilities.shakeView(NewContactActivity.this.phoneField, 2.0f, 0);
-                } else {
-                    NewContactActivity.this.donePressed = true;
-                    NewContactActivity.this.showEditDoneProgress(true, true);
-                    TL_contacts_importContacts req = new TL_contacts_importContacts();
-                    TL_inputPhoneContact inputPhoneContact = new TL_inputPhoneContact();
-                    inputPhoneContact.first_name = NewContactActivity.this.firstNameField.getText().toString();
-                    inputPhoneContact.last_name = NewContactActivity.this.lastNameField.getText().toString();
-                    inputPhoneContact.phone = "+" + NewContactActivity.this.codeField.getText().toString() + NewContactActivity.this.phoneField.getText().toString();
-                    req.contacts.add(inputPhoneContact);
-                    ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(NewContactActivity.this.currentAccount).sendRequest(req, new NewContactActivity$1$$Lambda$0(this, inputPhoneContact, req), 2), NewContactActivity.this.classGuid);
-                }
-            }
-        }
-
-        final /* synthetic */ void lambda$onItemClick$2$NewContactActivity$1(TL_inputPhoneContact inputPhoneContact, TL_contacts_importContacts req, TLObject response, TL_error error) {
-            AndroidUtilities.runOnUIThread(new NewContactActivity$1$$Lambda$1(this, (TL_contacts_importedContacts) response, inputPhoneContact, error, req));
-        }
-
-        final /* synthetic */ void lambda$null$1$NewContactActivity$1(TL_contacts_importedContacts res, TL_inputPhoneContact inputPhoneContact, TL_error error, TL_contacts_importContacts req) {
-            NewContactActivity.this.donePressed = false;
-            if (res == null) {
-                NewContactActivity.this.showEditDoneProgress(false, true);
-                AlertsCreator.processError(NewContactActivity.this.currentAccount, error, NewContactActivity.this, req, new Object[0]);
-            } else if (!res.users.isEmpty()) {
-                MessagesController.getInstance(NewContactActivity.this.currentAccount).putUsers(res.users, false);
-                MessagesController.openChatOrProfileWith((User) res.users.get(0), null, NewContactActivity.this, 1, true);
-            } else if (NewContactActivity.this.getParentActivity() != null) {
-                NewContactActivity.this.showEditDoneProgress(false, true);
-                Builder builder = new Builder(NewContactActivity.this.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.formatString("ContactNotRegistered", R.string.ContactNotRegistered, ContactsController.formatName(inputPhoneContact.first_name, inputPhoneContact.last_name)));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                builder.setPositiveButton(LocaleController.getString("Invite", R.string.Invite), new NewContactActivity$1$$Lambda$2(this, inputPhoneContact));
-                NewContactActivity.this.showDialog(builder.create());
-            }
-        }
-
-        final /* synthetic */ void lambda$null$0$NewContactActivity$1(TL_inputPhoneContact inputPhoneContact, DialogInterface dialog, int which) {
-            try {
-                Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", inputPhoneContact.phone, null));
-                intent.putExtra("sms_body", ContactsController.getInstance(NewContactActivity.this.currentAccount).getInviteText(1));
-                NewContactActivity.this.getParentActivity().startActivityForResult(intent, 500);
-            } catch (Throwable e) {
-                FileLog.m13e(e);
             }
         }
     }

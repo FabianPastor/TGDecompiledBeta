@@ -69,11 +69,6 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.EditTextEmoji$EditTextEmojiDelegate */
-    public interface EditTextEmojiDelegate {
-        void onWindowSizeChanged(int i);
-    }
-
     /* renamed from: org.telegram.ui.Components.EditTextEmoji$3 */
     class CLASSNAME implements Listener {
         CLASSNAME() {
@@ -157,6 +152,11 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
         public boolean isExpanded() {
             return false;
         }
+    }
+
+    /* renamed from: org.telegram.ui.Components.EditTextEmoji$EditTextEmojiDelegate */
+    public interface EditTextEmojiDelegate {
+        void onWindowSizeChanged(int i);
     }
 
     public EditTextEmoji(Activity context, SizeNotifierFrameLayout parent, BaseFragment fragment) {

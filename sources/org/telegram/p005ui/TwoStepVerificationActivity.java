@@ -135,6 +135,20 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private int type;
     private boolean waitingForEmail;
 
+    /* renamed from: org.telegram.ui.TwoStepVerificationActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                TwoStepVerificationActivity.this.lambda$checkDiscard$70$PassportActivity();
+            } else if (id == 1) {
+                TwoStepVerificationActivity.this.processDone();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.TwoStepVerificationActivity$2 */
     class CLASSNAME implements Callback {
         CLASSNAME() {
@@ -169,20 +183,6 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
         public void afterTextChanged(Editable s) {
             if (TwoStepVerificationActivity.this.emailCodeLength != 0 && s.length() == TwoStepVerificationActivity.this.emailCodeLength) {
-                TwoStepVerificationActivity.this.processDone();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.TwoStepVerificationActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                TwoStepVerificationActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1) {
                 TwoStepVerificationActivity.this.processDone();
             }
         }

@@ -64,13 +64,44 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private LongSparseArray<AudioEntry> selectedAudios = new LongSparseArray();
     private View shadow;
 
+    /* renamed from: org.telegram.ui.AudioSelectActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                AudioSelectActivity.this.finishFragment();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.AudioSelectActivity$2 */
+    class CLASSNAME implements OnItemClickListener {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(View view, int position) {
+            AudioCell audioCell = (AudioCell) view;
+            AudioEntry audioEntry = audioCell.getAudioEntry();
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.var_id) >= 0) {
+                AudioSelectActivity.this.selectedAudios.remove(audioEntry.var_id);
+                audioCell.setChecked(false);
+            } else {
+                AudioSelectActivity.this.selectedAudios.put(audioEntry.var_id, audioEntry);
+                audioCell.setChecked(true);
+            }
+            AudioSelectActivity.this.updateBottomLayoutCount();
+        }
+    }
+
     /* renamed from: org.telegram.ui.AudioSelectActivity$3 */
     class CLASSNAME implements OnClickListener {
         CLASSNAME() {
         }
 
         public void onClick(View view) {
-            AudioSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
+            AudioSelectActivity.this.finishFragment();
         }
     }
 
@@ -87,7 +118,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 }
                 AudioSelectActivity.this.delegate.didSelectAudio(audios);
             }
-            AudioSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
+            AudioSelectActivity.this.finishFragment();
         }
     }
 
@@ -183,37 +214,6 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     /* renamed from: org.telegram.ui.AudioSelectActivity$AudioSelectActivityDelegate */
     public interface AudioSelectActivityDelegate {
         void didSelectAudio(ArrayList<MessageObject> arrayList);
-    }
-
-    /* renamed from: org.telegram.ui.AudioSelectActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                AudioSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.AudioSelectActivity$2 */
-    class CLASSNAME implements OnItemClickListener {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(View view, int position) {
-            AudioCell audioCell = (AudioCell) view;
-            AudioEntry audioEntry = audioCell.getAudioEntry();
-            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.var_id) >= 0) {
-                AudioSelectActivity.this.selectedAudios.remove(audioEntry.var_id);
-                audioCell.setChecked(false);
-            } else {
-                AudioSelectActivity.this.selectedAudios.put(audioEntry.var_id, audioEntry);
-                audioCell.setChecked(true);
-            }
-            AudioSelectActivity.this.updateBottomLayoutCount();
-        }
     }
 
     /* renamed from: org.telegram.ui.AudioSelectActivity$ListAdapter */
@@ -339,7 +339,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.closeChats) {
-            lambda$null$10$ProfileActivity();
+            removeSelfFromStack();
         } else if (id == NotificationCenter.messagePlayingDidReset && this.listViewAdapter != null) {
             this.listViewAdapter.notifyDataSetChanged();
         }

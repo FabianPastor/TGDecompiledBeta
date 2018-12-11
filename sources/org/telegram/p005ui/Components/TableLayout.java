@@ -70,6 +70,19 @@ public class TableLayout extends View {
     private RectF rect = new RectF();
     private ArrayList<Point> rowSpans = new ArrayList();
 
+    /* renamed from: org.telegram.ui.Components.TableLayout$TableLayoutDelegate */
+    public interface TableLayoutDelegate {
+        DrawingText createTextLayout(TL_pageTableCell tL_pageTableCell, int i);
+
+        Paint getHalfLinePaint();
+
+        Paint getHeaderPaint();
+
+        Paint getLinePaint();
+
+        Paint getStripPaint();
+    }
+
     /* renamed from: org.telegram.ui.Components.TableLayout$Alignment */
     public static abstract class Alignment {
         abstract int getAlignmentValue(Child child, int i);
@@ -85,6 +98,170 @@ public class TableLayout extends View {
 
         Bounds getBounds() {
             return new Bounds();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.TableLayout$1 */
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
+        }
+
+        int getGravityOffset(Child view, int cellDelta) {
+            return Integer.MIN_VALUE;
+        }
+
+        public int getAlignmentValue(Child view, int viewSize) {
+            return Integer.MIN_VALUE;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.TableLayout$2 */
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
+        }
+
+        int getGravityOffset(Child view, int cellDelta) {
+            return 0;
+        }
+
+        public int getAlignmentValue(Child view, int viewSize) {
+            return 0;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.TableLayout$3 */
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
+        }
+
+        int getGravityOffset(Child view, int cellDelta) {
+            return cellDelta;
+        }
+
+        public int getAlignmentValue(Child view, int viewSize) {
+            return viewSize;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.TableLayout$5 */
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
+        }
+
+        int getGravityOffset(Child view, int cellDelta) {
+            return cellDelta >> 1;
+        }
+
+        public int getAlignmentValue(Child view, int viewSize) {
+            return viewSize >> 1;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.TableLayout$Bounds */
+    static class Bounds {
+        public int after;
+        public int before;
+        public int flexibility;
+
+        /* synthetic */ Bounds(CLASSNAME x0) {
+            this();
+        }
+
+        private Bounds() {
+            reset();
+        }
+
+        protected void reset() {
+            this.before = Integer.MIN_VALUE;
+            this.after = Integer.MIN_VALUE;
+            this.flexibility = 2;
+        }
+
+        protected void include(int before, int after) {
+            this.before = Math.max(this.before, before);
+            this.after = Math.max(this.after, after);
+        }
+
+        protected int size(boolean min) {
+            if (min || !TableLayout.canStretch(this.flexibility)) {
+                return this.before + this.after;
+            }
+            return 100000;
+        }
+
+        protected int getOffset(TableLayout gl, Child c, Alignment a, int size, boolean horizontal) {
+            return this.before - a.getAlignmentValue(c, size);
+        }
+
+        protected final void include(TableLayout gl, Child c, Spec spec, Axis axis, int size) {
+            this.flexibility &= spec.getFlexibility();
+            boolean horizontal = axis.horizontal;
+            int before = spec.getAbsoluteAlignment(axis.horizontal).getAlignmentValue(c, size);
+            include(before, size - before);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.TableLayout$6 */
+    static class CLASSNAME extends Alignment {
+
+        /* renamed from: org.telegram.ui.Components.TableLayout$6$1 */
+        class CLASSNAME extends Bounds {
+            private int size;
+
+            CLASSNAME() {
+                super();
+            }
+
+            protected void reset() {
+                super.reset();
+                this.size = Integer.MIN_VALUE;
+            }
+
+            protected void include(int before, int after) {
+                super.include(before, after);
+                this.size = Math.max(this.size, before + after);
+            }
+
+            protected int size(boolean min) {
+                return Math.max(super.size(min), this.size);
+            }
+
+            protected int getOffset(TableLayout gl, Child c, Alignment a, int size, boolean hrz) {
+                return Math.max(0, super.getOffset(gl, c, a, size, hrz));
+            }
+        }
+
+        CLASSNAME() {
+        }
+
+        int getGravityOffset(Child view, int cellDelta) {
+            return 0;
+        }
+
+        public int getAlignmentValue(Child view, int viewSize) {
+            return Integer.MIN_VALUE;
+        }
+
+        public Bounds getBounds() {
+            return new CLASSNAME();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.TableLayout$7 */
+    static class CLASSNAME extends Alignment {
+        CLASSNAME() {
+        }
+
+        int getGravityOffset(Child view, int cellDelta) {
+            return 0;
+        }
+
+        public int getAlignmentValue(Child view, int viewSize) {
+            return Integer.MIN_VALUE;
+        }
+
+        public int getSizeInCell(Child view, int viewSize, int cellSize) {
+            return cellSize;
         }
     }
 
@@ -111,7 +288,7 @@ public class TableLayout extends View {
         }
 
         /* renamed from: of */
-        public static <K, V> Assoc<K, V> m27of(Class<K> keyType, Class<V> valueType) {
+        public static <K, V> Assoc<K, V> m35of(Class<K> keyType, Class<V> valueType) {
             return new Assoc(keyType, valueType);
         }
 
@@ -220,7 +397,7 @@ public class TableLayout extends View {
         }
 
         private PackedMap<Spec, Bounds> createGroupBounds() {
-            Assoc<Spec, Bounds> assoc = Assoc.m27of(Spec.class, Bounds.class);
+            Assoc<Spec, Bounds> assoc = Assoc.m35of(Spec.class, Bounds.class);
             int N = TableLayout.this.getChildCount();
             for (int i = 0; i < N; i++) {
                 LayoutParams lp = TableLayout.this.getChildAt(i).getLayoutParams();
@@ -258,7 +435,7 @@ public class TableLayout extends View {
         }
 
         private PackedMap<Interval, MutableInt> createLinks(boolean min) {
-            Assoc<Interval, MutableInt> result = Assoc.m27of(Interval.class, MutableInt.class);
+            Assoc<Interval, MutableInt> result = Assoc.m35of(Interval.class, MutableInt.class);
             Spec[] keys = getGroupBounds().keys;
             int N = keys.length;
             for (int i = 0; i < N; i++) {
@@ -692,50 +869,6 @@ public class TableLayout extends View {
             this.trailingMarginsValid = false;
             this.arcsValid = false;
             this.locationsValid = false;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.TableLayout$Bounds */
-    static class Bounds {
-        public int after;
-        public int before;
-        public int flexibility;
-
-        /* synthetic */ Bounds(CLASSNAME x0) {
-            this();
-        }
-
-        private Bounds() {
-            reset();
-        }
-
-        protected void reset() {
-            this.before = Integer.MIN_VALUE;
-            this.after = Integer.MIN_VALUE;
-            this.flexibility = 2;
-        }
-
-        protected void include(int before, int after) {
-            this.before = Math.max(this.before, before);
-            this.after = Math.max(this.after, after);
-        }
-
-        protected int size(boolean min) {
-            if (min || !TableLayout.canStretch(this.flexibility)) {
-                return this.before + this.after;
-            }
-            return 100000;
-        }
-
-        protected int getOffset(TableLayout gl, Child c, Alignment a, int size, boolean horizontal) {
-            return this.before - a.getAlignmentValue(c, size);
-        }
-
-        protected final void include(TableLayout gl, Child c, Spec spec, Axis axis, int size) {
-            this.flexibility &= spec.getFlexibility();
-            boolean horizontal = axis.horizontal;
-            int before = spec.getAbsoluteAlignment(axis.horizontal).getAlignmentValue(c, size);
-            include(before, size - before);
         }
     }
 
@@ -1256,139 +1389,6 @@ public class TableLayout extends View {
 
         public int hashCode() {
             return (this.span.hashCode() * 31) + this.alignment.hashCode();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.TableLayout$TableLayoutDelegate */
-    public interface TableLayoutDelegate {
-        DrawingText createTextLayout(TL_pageTableCell tL_pageTableCell, int i);
-
-        Paint getHalfLinePaint();
-
-        Paint getHeaderPaint();
-
-        Paint getLinePaint();
-
-        Paint getStripPaint();
-    }
-
-    /* renamed from: org.telegram.ui.Components.TableLayout$1 */
-    static class CLASSNAME extends Alignment {
-        CLASSNAME() {
-        }
-
-        int getGravityOffset(Child view, int cellDelta) {
-            return Integer.MIN_VALUE;
-        }
-
-        public int getAlignmentValue(Child view, int viewSize) {
-            return Integer.MIN_VALUE;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.TableLayout$2 */
-    static class CLASSNAME extends Alignment {
-        CLASSNAME() {
-        }
-
-        int getGravityOffset(Child view, int cellDelta) {
-            return 0;
-        }
-
-        public int getAlignmentValue(Child view, int viewSize) {
-            return 0;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.TableLayout$3 */
-    static class CLASSNAME extends Alignment {
-        CLASSNAME() {
-        }
-
-        int getGravityOffset(Child view, int cellDelta) {
-            return cellDelta;
-        }
-
-        public int getAlignmentValue(Child view, int viewSize) {
-            return viewSize;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.TableLayout$5 */
-    static class CLASSNAME extends Alignment {
-        CLASSNAME() {
-        }
-
-        int getGravityOffset(Child view, int cellDelta) {
-            return cellDelta >> 1;
-        }
-
-        public int getAlignmentValue(Child view, int viewSize) {
-            return viewSize >> 1;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.TableLayout$6 */
-    static class CLASSNAME extends Alignment {
-
-        /* renamed from: org.telegram.ui.Components.TableLayout$6$1 */
-        class CLASSNAME extends Bounds {
-            private int size;
-
-            CLASSNAME() {
-                super();
-            }
-
-            protected void reset() {
-                super.reset();
-                this.size = Integer.MIN_VALUE;
-            }
-
-            protected void include(int before, int after) {
-                super.include(before, after);
-                this.size = Math.max(this.size, before + after);
-            }
-
-            protected int size(boolean min) {
-                return Math.max(super.size(min), this.size);
-            }
-
-            protected int getOffset(TableLayout gl, Child c, Alignment a, int size, boolean hrz) {
-                return Math.max(0, super.getOffset(gl, c, a, size, hrz));
-            }
-        }
-
-        CLASSNAME() {
-        }
-
-        int getGravityOffset(Child view, int cellDelta) {
-            return 0;
-        }
-
-        public int getAlignmentValue(Child view, int viewSize) {
-            return Integer.MIN_VALUE;
-        }
-
-        public Bounds getBounds() {
-            return new CLASSNAME();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.TableLayout$7 */
-    static class CLASSNAME extends Alignment {
-        CLASSNAME() {
-        }
-
-        int getGravityOffset(Child view, int cellDelta) {
-            return 0;
-        }
-
-        public int getAlignmentValue(Child view, int viewSize) {
-            return Integer.MIN_VALUE;
-        }
-
-        public int getSizeInCell(Child view, int viewSize, int cellSize) {
-            return cellSize;
         }
     }
 

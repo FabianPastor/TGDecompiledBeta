@@ -36,6 +36,21 @@ public class ChangeNameActivity extends BaseFragment {
     private View headerLabelView;
     private EditTextBoldCursor lastNameField;
 
+    /* renamed from: org.telegram.ui.ChangeNameActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ChangeNameActivity.this.finishFragment();
+            } else if (id == 1 && ChangeNameActivity.this.firstNameField.getText().length() != 0) {
+                ChangeNameActivity.this.saveName();
+                ChangeNameActivity.this.finishFragment();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ChangeNameActivity$2 */
     class CLASSNAME implements OnTouchListener {
         CLASSNAME() {
@@ -75,6 +90,15 @@ public class ChangeNameActivity extends BaseFragment {
         }
     }
 
+    /* renamed from: org.telegram.ui.ChangeNameActivity$5 */
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
+        }
+
+        public void run(TLObject response, TL_error error) {
+        }
+    }
+
     /* renamed from: org.telegram.ui.ChangeNameActivity$6 */
     class CLASSNAME implements Runnable {
         CLASSNAME() {
@@ -85,30 +109,6 @@ public class ChangeNameActivity extends BaseFragment {
                 ChangeNameActivity.this.firstNameField.requestFocus();
                 AndroidUtilities.showKeyboard(ChangeNameActivity.this.firstNameField);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChangeNameActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ChangeNameActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1 && ChangeNameActivity.this.firstNameField.getText().length() != 0) {
-                ChangeNameActivity.this.saveName();
-                ChangeNameActivity.this.lambda$checkDiscard$70$PassportActivity();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChangeNameActivity$5 */
-    class CLASSNAME implements RequestDelegate {
-        CLASSNAME() {
-        }
-
-        public void run(TLObject response, TL_error error) {
         }
     }
 

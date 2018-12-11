@@ -69,6 +69,28 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     private boolean sendPressed;
     private boolean singlePhoto;
 
+    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$PhotoAlbumPickerActivityDelegate */
+    public interface PhotoAlbumPickerActivityDelegate {
+        void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList);
+
+        void startPhotoSelectActivity();
+    }
+
+    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                PhotoAlbumPickerActivity.this.lambda$checkDiscard$70$PassportActivity();
+            } else if (id == 1 && PhotoAlbumPickerActivity.this.delegate != null) {
+                PhotoAlbumPickerActivity.this.finishFragment(false);
+                PhotoAlbumPickerActivity.this.delegate.startPhotoSelectActivity();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$2 */
     class CLASSNAME implements OnTouchListener {
         CLASSNAME() {
@@ -111,28 +133,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 PhotoAlbumPickerActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
             }
             return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$PhotoAlbumPickerActivityDelegate */
-    public interface PhotoAlbumPickerActivityDelegate {
-        void didSelectPhotos(ArrayList<SendingMediaInfo> arrayList);
-
-        void startPhotoSelectActivity();
-    }
-
-    /* renamed from: org.telegram.ui.PhotoAlbumPickerActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                PhotoAlbumPickerActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1 && PhotoAlbumPickerActivity.this.delegate != null) {
-                PhotoAlbumPickerActivity.this.finishFragment(false);
-                PhotoAlbumPickerActivity.this.delegate.startPhotoSelectActivity();
-            }
         }
     }
 

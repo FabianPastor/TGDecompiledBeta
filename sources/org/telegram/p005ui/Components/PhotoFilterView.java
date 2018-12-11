@@ -181,6 +181,34 @@ public class PhotoFilterView extends FrameLayout {
         }
     }
 
+    /* renamed from: org.telegram.ui.Components.PhotoFilterView$2 */
+    class CLASSNAME implements PhotoFilterLinearBlurControlDelegate {
+        CLASSNAME() {
+        }
+
+        public void valueChanged(Point centerPoint, float falloff, float size, float angle) {
+            PhotoFilterView.this.blurExcludeSize = size;
+            PhotoFilterView.this.blurExcludePoint = centerPoint;
+            PhotoFilterView.this.blurExcludeBlurSize = falloff;
+            PhotoFilterView.this.blurAngle = angle;
+            if (PhotoFilterView.this.eglThread != null) {
+                PhotoFilterView.this.eglThread.requestRender(false);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoFilterView$3 */
+    class CLASSNAME implements PhotoFilterCurvesControlDelegate {
+        CLASSNAME() {
+        }
+
+        public void valueChanged() {
+            if (PhotoFilterView.this.eglThread != null) {
+                PhotoFilterView.this.eglThread.requestRender(false);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.Components.PhotoFilterView$4 */
     class CLASSNAME implements OnClickListener {
         CLASSNAME() {
@@ -400,34 +428,6 @@ public class PhotoFilterView extends FrameLayout {
 
         public boolean isDefault() {
             return ((double) Math.abs(this.blacksLevel - 0.0f)) < 1.0E-5d && ((double) Math.abs(this.shadowsLevel - 25.0f)) < 1.0E-5d && ((double) Math.abs(this.midtonesLevel - 50.0f)) < 1.0E-5d && ((double) Math.abs(this.highlightsLevel - 75.0f)) < 1.0E-5d && ((double) Math.abs(this.whitesLevel - 100.0f)) < 1.0E-5d;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PhotoFilterView$2 */
-    class CLASSNAME implements PhotoFilterLinearBlurControlDelegate {
-        CLASSNAME() {
-        }
-
-        public void valueChanged(Point centerPoint, float falloff, float size, float angle) {
-            PhotoFilterView.this.blurExcludeSize = size;
-            PhotoFilterView.this.blurExcludePoint = centerPoint;
-            PhotoFilterView.this.blurExcludeBlurSize = falloff;
-            PhotoFilterView.this.blurAngle = angle;
-            if (PhotoFilterView.this.eglThread != null) {
-                PhotoFilterView.this.eglThread.requestRender(false);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PhotoFilterView$3 */
-    class CLASSNAME implements PhotoFilterCurvesControlDelegate {
-        CLASSNAME() {
-        }
-
-        public void valueChanged() {
-            if (PhotoFilterView.this.eglThread != null) {
-                PhotoFilterView.this.eglThread.requestRender(false);
-            }
         }
     }
 
@@ -1271,24 +1271,6 @@ public class PhotoFilterView extends FrameLayout {
     public class ToolsAdapter extends SelectionAdapter {
         private Context mContext;
 
-        /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$2 */
-        class CLASSNAME implements OnClickListener {
-            CLASSNAME() {
-            }
-
-            public void onClick(View v) {
-                PhotoEditRadioCell cell = (PhotoEditRadioCell) v;
-                if (((Integer) cell.getTag()).intValue() == PhotoFilterView.this.tintShadowsTool) {
-                    PhotoFilterView.this.tintShadowsColor = cell.getCurrentColor();
-                } else {
-                    PhotoFilterView.this.tintHighlightsColor = cell.getCurrentColor();
-                }
-                if (PhotoFilterView.this.eglThread != null) {
-                    PhotoFilterView.this.eglThread.requestRender(false);
-                }
-            }
-        }
-
         /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$1 */
         class CLASSNAME implements PhotoEditorSeekBarDelegate {
             CLASSNAME() {
@@ -1320,6 +1302,24 @@ public class PhotoFilterView extends FrameLayout {
                 }
                 if (PhotoFilterView.this.eglThread != null) {
                     PhotoFilterView.this.eglThread.requestRender(true);
+                }
+            }
+        }
+
+        /* renamed from: org.telegram.ui.Components.PhotoFilterView$ToolsAdapter$2 */
+        class CLASSNAME implements OnClickListener {
+            CLASSNAME() {
+            }
+
+            public void onClick(View v) {
+                PhotoEditRadioCell cell = (PhotoEditRadioCell) v;
+                if (((Integer) cell.getTag()).intValue() == PhotoFilterView.this.tintShadowsTool) {
+                    PhotoFilterView.this.tintShadowsColor = cell.getCurrentColor();
+                } else {
+                    PhotoFilterView.this.tintHighlightsColor = cell.getCurrentColor();
+                }
+                if (PhotoFilterView.this.eglThread != null) {
+                    PhotoFilterView.this.eglThread.requestRender(false);
                 }
             }
         }

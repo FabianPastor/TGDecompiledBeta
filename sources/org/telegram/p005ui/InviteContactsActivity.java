@@ -90,6 +90,18 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
     private SpansContainer spansContainer;
     private TextView textView;
 
+    /* renamed from: org.telegram.ui.InviteContactsActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                InviteContactsActivity.this.finishFragment();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.InviteContactsActivity$5 */
     class CLASSNAME implements Callback {
         CLASSNAME() {
@@ -154,6 +166,191 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                 return;
             }
             InviteContactsActivity.this.closeSearch();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.InviteContactsActivity$8 */
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
+        }
+
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            if (newState == 1) {
+                AndroidUtilities.hideKeyboard(InviteContactsActivity.this.editText);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.InviteContactsActivity$InviteAdapter */
+    public class InviteAdapter extends SelectionAdapter {
+        private Context context;
+        private ArrayList<Contact> searchResult = new ArrayList();
+        private ArrayList<CharSequence> searchResultNames = new ArrayList();
+        private Timer searchTimer;
+        private boolean searching;
+
+        public InviteAdapter(Context ctx) {
+            this.context = ctx;
+        }
+
+        public void setSearching(boolean value) {
+            if (this.searching != value) {
+                this.searching = value;
+                notifyDataSetChanged();
+            }
+        }
+
+        public int getItemCount() {
+            if (this.searching) {
+                return this.searchResult.size();
+            }
+            return InviteContactsActivity.this.phoneBookContacts.size() + 1;
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 1:
+                    view = new InviteTextCell(this.context);
+                    ((InviteTextCell) view).setTextAndIcon(LocaleController.getString("ShareTelegram", R.string.ShareTelegram), R.drawable.share);
+                    break;
+                default:
+                    view = new InviteUserCell(this.context, true);
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case 0:
+                    Contact contact;
+                    CharSequence name;
+                    InviteUserCell cell = holder.itemView;
+                    if (this.searching) {
+                        contact = (Contact) this.searchResult.get(position);
+                        name = (CharSequence) this.searchResultNames.get(position);
+                    } else {
+                        contact = (Contact) InviteContactsActivity.this.phoneBookContacts.get(position - 1);
+                        name = null;
+                    }
+                    cell.setUser(contact, name);
+                    cell.setChecked(InviteContactsActivity.this.selectedContacts.containsKey(contact.key), false);
+                    return;
+                default:
+                    return;
+            }
+        }
+
+        public int getItemViewType(int position) {
+            if (this.searching || position != 0) {
+                return 0;
+            }
+            return 1;
+        }
+
+        public void onViewRecycled(ViewHolder holder) {
+            if (holder.itemView instanceof InviteUserCell) {
+                ((InviteUserCell) holder.itemView).recycle();
+            }
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
+        }
+
+        public void searchDialogs(final String query) {
+            try {
+                if (this.searchTimer != null) {
+                    this.searchTimer.cancel();
+                }
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+            if (query == null) {
+                this.searchResult.clear();
+                this.searchResultNames.clear();
+                notifyDataSetChanged();
+                return;
+            }
+            this.searchTimer = new Timer();
+            this.searchTimer.schedule(new TimerTask() {
+                public void run() {
+                    try {
+                        InviteAdapter.this.searchTimer.cancel();
+                        InviteAdapter.this.searchTimer = null;
+                    } catch (Throwable e) {
+                        FileLog.m13e(e);
+                    }
+                    AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$1$$Lambda$0(this, query));
+                }
+
+                final /* synthetic */ void lambda$run$1$InviteContactsActivity$InviteAdapter$1(String query) {
+                    Utilities.searchQueue.postRunnable(new InviteContactsActivity$InviteAdapter$1$$Lambda$1(this, query));
+                }
+
+                final /* synthetic */ void lambda$null$0$InviteContactsActivity$InviteAdapter$1(String query) {
+                    String search1 = query.trim().toLowerCase();
+                    if (search1.length() == 0) {
+                        InviteAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
+                        return;
+                    }
+                    String search2 = LocaleController.getInstance().getTranslitString(search1);
+                    if (search1.equals(search2) || search2.length() == 0) {
+                        search2 = null;
+                    }
+                    String[] search = new String[((search2 != null ? 1 : 0) + 1)];
+                    search[0] = search1;
+                    if (search2 != null) {
+                        search[1] = search2;
+                    }
+                    ArrayList<Contact> resultArray = new ArrayList();
+                    ArrayList<CharSequence> resultArrayNames = new ArrayList();
+                    for (int a = 0; a < InviteContactsActivity.this.phoneBookContacts.size(); a++) {
+                        Contact contact = (Contact) InviteContactsActivity.this.phoneBookContacts.get(a);
+                        String name = ContactsController.formatName(contact.first_name, contact.last_name).toLowerCase();
+                        String tName = LocaleController.getInstance().getTranslitString(name);
+                        if (name.equals(tName)) {
+                            tName = null;
+                        }
+                        int found = 0;
+                        for (String q : search) {
+                            if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
+                                found = 1;
+                            }
+                            if (found != 0) {
+                                resultArrayNames.add(AndroidUtilities.generateSearchName(contact.first_name, contact.last_name, q));
+                                resultArray.add(contact);
+                                break;
+                            }
+                        }
+                    }
+                    InviteAdapter.this.updateSearchResults(resultArray, resultArrayNames);
+                }
+            }, 200, 300);
+        }
+
+        private void updateSearchResults(ArrayList<Contact> users, ArrayList<CharSequence> names) {
+            AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$$Lambda$0(this, users, names));
+        }
+
+        /* renamed from: lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter */
+        final /* synthetic */ void mo18412xvar_d2e5d(ArrayList users, ArrayList names) {
+            this.searchResult = users;
+            this.searchResultNames = names;
+            notifyDataSetChanged();
+        }
+
+        public void notifyDataSetChanged() {
+            boolean z = false;
+            super.notifyDataSetChanged();
+            int count = getItemCount();
+            InviteContactsActivity.this.emptyView.setVisibility(count == 1 ? 0 : 4);
+            GroupCreateDividerItemDecoration access$2700 = InviteContactsActivity.this.decoration;
+            if (count == 1) {
+                z = true;
+            }
+            access$2700.setSingle(z);
         }
     }
 
@@ -326,203 +523,6 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleY", new float[]{1.0f, 0.01f}));
             this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "alpha", new float[]{1.0f, 0.0f}));
             requestLayout();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.InviteContactsActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                InviteContactsActivity.this.lambda$checkDiscard$70$PassportActivity();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.InviteContactsActivity$8 */
-    class CLASSNAME extends OnScrollListener {
-        CLASSNAME() {
-        }
-
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            if (newState == 1) {
-                AndroidUtilities.hideKeyboard(InviteContactsActivity.this.editText);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.InviteContactsActivity$InviteAdapter */
-    public class InviteAdapter extends SelectionAdapter {
-        private Context context;
-        private ArrayList<Contact> searchResult = new ArrayList();
-        private ArrayList<CharSequence> searchResultNames = new ArrayList();
-        private Timer searchTimer;
-        private boolean searching;
-
-        public InviteAdapter(Context ctx) {
-            this.context = ctx;
-        }
-
-        public void setSearching(boolean value) {
-            if (this.searching != value) {
-                this.searching = value;
-                notifyDataSetChanged();
-            }
-        }
-
-        public int getItemCount() {
-            if (this.searching) {
-                return this.searchResult.size();
-            }
-            return InviteContactsActivity.this.phoneBookContacts.size() + 1;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            switch (viewType) {
-                case 1:
-                    view = new InviteTextCell(this.context);
-                    ((InviteTextCell) view).setTextAndIcon(LocaleController.getString("ShareTelegram", R.string.ShareTelegram), R.drawable.share);
-                    break;
-                default:
-                    view = new InviteUserCell(this.context, true);
-                    break;
-            }
-            return new Holder(view);
-        }
-
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            switch (holder.getItemViewType()) {
-                case 0:
-                    Contact contact;
-                    CharSequence name;
-                    InviteUserCell cell = holder.itemView;
-                    if (this.searching) {
-                        contact = (Contact) this.searchResult.get(position);
-                        name = (CharSequence) this.searchResultNames.get(position);
-                    } else {
-                        contact = (Contact) InviteContactsActivity.this.phoneBookContacts.get(position - 1);
-                        name = null;
-                    }
-                    cell.setUser(contact, name);
-                    cell.setChecked(InviteContactsActivity.this.selectedContacts.containsKey(contact.key), false);
-                    return;
-                default:
-                    return;
-            }
-        }
-
-        public int getItemViewType(int position) {
-            if (this.searching || position != 0) {
-                return 0;
-            }
-            return 1;
-        }
-
-        public void onViewRecycled(ViewHolder holder) {
-            if (holder.itemView instanceof InviteUserCell) {
-                ((InviteUserCell) holder.itemView).recycle();
-            }
-        }
-
-        public boolean isEnabled(ViewHolder holder) {
-            return true;
-        }
-
-        public void searchDialogs(final String query) {
-            try {
-                if (this.searchTimer != null) {
-                    this.searchTimer.cancel();
-                }
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
-            if (query == null) {
-                this.searchResult.clear();
-                this.searchResultNames.clear();
-                notifyDataSetChanged();
-                return;
-            }
-            this.searchTimer = new Timer();
-            this.searchTimer.schedule(new TimerTask() {
-                public void run() {
-                    try {
-                        InviteAdapter.this.searchTimer.cancel();
-                        InviteAdapter.this.searchTimer = null;
-                    } catch (Throwable e) {
-                        FileLog.m13e(e);
-                    }
-                    AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$1$$Lambda$0(this, query));
-                }
-
-                final /* synthetic */ void lambda$run$1$InviteContactsActivity$InviteAdapter$1(String query) {
-                    Utilities.searchQueue.postRunnable(new InviteContactsActivity$InviteAdapter$1$$Lambda$1(this, query));
-                }
-
-                final /* synthetic */ void lambda$null$0$InviteContactsActivity$InviteAdapter$1(String query) {
-                    String search1 = query.trim().toLowerCase();
-                    if (search1.length() == 0) {
-                        InviteAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
-                        return;
-                    }
-                    String search2 = LocaleController.getInstance().getTranslitString(search1);
-                    if (search1.equals(search2) || search2.length() == 0) {
-                        search2 = null;
-                    }
-                    String[] search = new String[((search2 != null ? 1 : 0) + 1)];
-                    search[0] = search1;
-                    if (search2 != null) {
-                        search[1] = search2;
-                    }
-                    ArrayList<Contact> resultArray = new ArrayList();
-                    ArrayList<CharSequence> resultArrayNames = new ArrayList();
-                    for (int a = 0; a < InviteContactsActivity.this.phoneBookContacts.size(); a++) {
-                        Contact contact = (Contact) InviteContactsActivity.this.phoneBookContacts.get(a);
-                        String name = ContactsController.formatName(contact.first_name, contact.last_name).toLowerCase();
-                        String tName = LocaleController.getInstance().getTranslitString(name);
-                        if (name.equals(tName)) {
-                            tName = null;
-                        }
-                        int found = 0;
-                        for (String q : search) {
-                            if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
-                                found = 1;
-                            }
-                            if (found != 0) {
-                                resultArrayNames.add(AndroidUtilities.generateSearchName(contact.first_name, contact.last_name, q));
-                                resultArray.add(contact);
-                                break;
-                            }
-                        }
-                    }
-                    InviteAdapter.this.updateSearchResults(resultArray, resultArrayNames);
-                }
-            }, 200, 300);
-        }
-
-        private void updateSearchResults(ArrayList<Contact> users, ArrayList<CharSequence> names) {
-            AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$$Lambda$0(this, users, names));
-        }
-
-        /* renamed from: lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter */
-        final /* synthetic */ void mo17111xvar_d2e5d(ArrayList users, ArrayList names) {
-            this.searchResult = users;
-            this.searchResultNames = names;
-            notifyDataSetChanged();
-        }
-
-        public void notifyDataSetChanged() {
-            boolean z = false;
-            super.notifyDataSetChanged();
-            int count = getItemCount();
-            InviteContactsActivity.this.emptyView.setVisibility(count == 1 ? 0 : 4);
-            GroupCreateDividerItemDecoration access$2700 = InviteContactsActivity.this.decoration;
-            if (count == 1) {
-                z = true;
-            }
-            access$2700.setSingle(z);
         }
     }
 
@@ -781,7 +781,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
     public void onResume() {

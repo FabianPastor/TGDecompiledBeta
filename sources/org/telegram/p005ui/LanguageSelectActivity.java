@@ -58,7 +58,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
         public void onItemClick(int id) {
             if (id == -1) {
-                LanguageSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
+                LanguageSelectActivity.this.finishFragment();
             }
         }
     }
@@ -259,7 +259,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, this.currentAccount);
                 this.parentLayout.rebuildAllFragmentViews(false, false);
             }
-            lambda$checkDiscard$70$PassportActivity();
+            finishFragment();
         }
     }
 

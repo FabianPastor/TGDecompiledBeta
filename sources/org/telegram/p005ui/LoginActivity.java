@@ -145,30 +145,6 @@ public class LoginActivity extends BaseFragment {
     private boolean syncContacts;
     private SlideView[] views;
 
-    /* renamed from: org.telegram.ui.LoginActivity$ProgressView */
-    private class ProgressView extends View {
-        private Paint paint = new Paint();
-        private Paint paint2 = new Paint();
-        private float progress;
-
-        public ProgressView(Context context) {
-            super(context);
-            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
-            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
-        }
-
-        public void setProgress(float value) {
-            this.progress = value;
-            invalidate();
-        }
-
-        protected void onDraw(Canvas canvas) {
-            int start = (int) (((float) getMeasuredWidth()) * this.progress);
-            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
-            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-        }
-    }
-
     /* renamed from: org.telegram.ui.LoginActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -841,13 +817,13 @@ public class LoginActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$showTermsOfService$0$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo17238x6d0cdb6d(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo18640x6d0cdb6d(DialogInterface dialog, int which) {
             LoginActivity.this.currentTermsOfService.popup = false;
             onNextPressed();
         }
 
         /* renamed from: lambda$showTermsOfService$3$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo17239x12ed5CLASSNAME(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo18641x12ed5CLASSNAME(DialogInterface dialog, int which) {
             Builder builder1 = new Builder(LoginActivity.this.getParentActivity());
             builder1.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
             builder1.setMessage(LocaleController.getString("TosDecline", R.string.TosDecline));
@@ -2689,7 +2665,7 @@ public class LoginActivity extends BaseFragment {
             if (UserConfig.selectedAccount != num) {
                 ((LaunchActivity) LoginActivity.this.getParentActivity()).switchToAccount(num, false);
             }
-            LoginActivity.this.lambda$checkDiscard$70$PassportActivity();
+            LoginActivity.this.finishFragment();
         }
 
         final /* synthetic */ void lambda$onNextPressed$8$LoginActivity$PhoneView(Bundle params, TL_auth_sendCode req, TLObject response, TL_error error) {
@@ -2841,6 +2817,30 @@ public class LoginActivity extends BaseFragment {
             if (phone != null) {
                 this.phoneField.setText(phone);
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.LoginActivity$ProgressView */
+    private class ProgressView extends View {
+        private Paint paint = new Paint();
+        private Paint paint2 = new Paint();
+        private float progress;
+
+        public ProgressView(Context context) {
+            super(context);
+            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
+            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int start = (int) (((float) getMeasuredWidth()) * this.progress);
+            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
+            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
         }
     }
 
@@ -3096,7 +3096,7 @@ public class LoginActivity extends BaseFragment {
             if (!this.newAccount) {
                 return true;
             }
-            lambda$checkDiscard$70$PassportActivity();
+            finishFragment();
             return true;
         }
         if (this.currentViewNum == 6) {
@@ -3323,7 +3323,7 @@ public class LoginActivity extends BaseFragment {
             if (this.newAccount) {
                 this.newAccount = false;
                 ((LaunchActivity) getParentActivity()).switchToAccount(this.currentAccount, false);
-                lambda$checkDiscard$70$PassportActivity();
+                finishFragment();
                 return;
             }
             presentFragment(new DialogsActivity(null), true);

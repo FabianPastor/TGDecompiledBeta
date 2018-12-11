@@ -1,14 +1,16 @@
 package org.telegram.messenger;
 
+import java.util.ArrayList;
+
 final /* synthetic */ class MessagesController$$Lambda$142 implements Runnable {
     private final MessagesController arg$1;
-    private final int arg$2;
+    private final ArrayList arg$2;
     private final int arg$3;
 
-    MessagesController$$Lambda$142(MessagesController messagesController, int i, int i2) {
+    MessagesController$$Lambda$142(MessagesController messagesController, ArrayList arrayList, int i) {
         this.arg$1 = messagesController;
-        this.arg$2 = i;
-        this.arg$3 = i2;
+        this.arg$2 = arrayList;
+        this.arg$3 = i;
     }
 
     public void run() {

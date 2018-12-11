@@ -91,6 +91,45 @@ public class PhonebookShareActivity extends BaseFragment {
     private int vcardEndRow;
     private int vcardStartRow;
 
+    /* renamed from: org.telegram.ui.PhonebookShareActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                PhonebookShareActivity.this.lambda$checkDiscard$70$PassportActivity();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PhonebookShareActivity$4 */
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
+        }
+
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            int i = 0;
+            if (PhonebookShareActivity.this.layoutManager.getItemCount() != 0) {
+                int height = 0;
+                View child = recyclerView.getChildAt(0);
+                if (child != null) {
+                    if (PhonebookShareActivity.this.layoutManager.findFirstVisibleItemPosition() == 0) {
+                        int dp = AndroidUtilities.m9dp(88.0f);
+                        if (child.getTop() < 0) {
+                            i = child.getTop();
+                        }
+                        height = dp + i;
+                    }
+                    if (PhonebookShareActivity.this.extraHeight != height) {
+                        PhonebookShareActivity.this.extraHeight = height;
+                        PhonebookShareActivity.this.needLayout();
+                    }
+                }
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.PhonebookShareActivity$5 */
     class CLASSNAME implements OnClickListener {
         CLASSNAME() {
@@ -334,6 +373,98 @@ public class PhonebookShareActivity extends BaseFragment {
         }
     }
 
+    /* renamed from: org.telegram.ui.PhonebookShareActivity$ListAdapter */
+    private class ListAdapter extends SelectionAdapter {
+        private Context mContext;
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public int getItemCount() {
+            return PhonebookShareActivity.this.rowCount;
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case 0:
+                    if (position == PhonebookShareActivity.this.overscrollRow) {
+                        ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.m9dp(88.0f));
+                        return;
+                    } else {
+                        ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.m9dp(16.0f));
+                        return;
+                    }
+                case 1:
+                    VcardItem item;
+                    int icon;
+                    TextCheckBoxCell cell = holder.itemView;
+                    if (position < PhonebookShareActivity.this.phoneStartRow || position >= PhonebookShareActivity.this.phoneEndRow) {
+                        item = (VcardItem) PhonebookShareActivity.this.other.get(position - PhonebookShareActivity.this.vcardStartRow);
+                        if (position == PhonebookShareActivity.this.vcardStartRow) {
+                            icon = R.drawable.profile_info;
+                        } else {
+                            icon = 0;
+                        }
+                    } else {
+                        item = (VcardItem) PhonebookShareActivity.this.phones.get(position - PhonebookShareActivity.this.phoneStartRow);
+                        if (position == PhonebookShareActivity.this.phoneStartRow) {
+                            icon = R.drawable.profile_phone;
+                        } else {
+                            icon = 0;
+                        }
+                    }
+                    cell.setVCardItem(item, icon);
+                    return;
+                default:
+                    return;
+            }
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            int position = holder.getAdapterPosition();
+            return (position >= PhonebookShareActivity.this.phoneStartRow && position < PhonebookShareActivity.this.phoneEndRow) || (position >= PhonebookShareActivity.this.vcardStartRow && position < PhonebookShareActivity.this.vcardEndRow);
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = null;
+            switch (viewType) {
+                case 0:
+                    view = new EmptyCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 1:
+                    view = new TextCheckBoxCell(PhonebookShareActivity.this, this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 2:
+                    view = new DividerCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    view.setPadding(AndroidUtilities.m9dp(72.0f), AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f));
+                    break;
+                case 3:
+                    view = new ShadowSectionCell(this.mContext);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    break;
+            }
+            view.setLayoutParams(new LayoutParams(-1, -2));
+            return new Holder(view);
+        }
+
+        public int getItemViewType(int position) {
+            if (position == PhonebookShareActivity.this.emptyRow || position == PhonebookShareActivity.this.overscrollRow) {
+                return 0;
+            }
+            if ((position >= PhonebookShareActivity.this.phoneStartRow && position < PhonebookShareActivity.this.phoneEndRow) || (position >= PhonebookShareActivity.this.vcardStartRow && position < PhonebookShareActivity.this.vcardEndRow)) {
+                return 1;
+            }
+            if (position == PhonebookShareActivity.this.phoneDividerRow || position != PhonebookShareActivity.this.detailRow) {
+                return 2;
+            }
+            return 3;
+        }
+    }
+
     /* renamed from: org.telegram.ui.PhonebookShareActivity$TextCheckBoxCell */
     public class TextCheckBoxCell extends FrameLayout {
         private CheckBoxSquare checkBox;
@@ -472,137 +603,6 @@ public class PhonebookShareActivity extends BaseFragment {
 
         public boolean isChecked() {
             return this.checkBox != null && this.checkBox.isChecked();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhonebookShareActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                PhonebookShareActivity.this.lambda$checkDiscard$70$PassportActivity();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhonebookShareActivity$4 */
-    class CLASSNAME extends OnScrollListener {
-        CLASSNAME() {
-        }
-
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            int i = 0;
-            if (PhonebookShareActivity.this.layoutManager.getItemCount() != 0) {
-                int height = 0;
-                View child = recyclerView.getChildAt(0);
-                if (child != null) {
-                    if (PhonebookShareActivity.this.layoutManager.findFirstVisibleItemPosition() == 0) {
-                        int dp = AndroidUtilities.m9dp(88.0f);
-                        if (child.getTop() < 0) {
-                            i = child.getTop();
-                        }
-                        height = dp + i;
-                    }
-                    if (PhonebookShareActivity.this.extraHeight != height) {
-                        PhonebookShareActivity.this.extraHeight = height;
-                        PhonebookShareActivity.this.needLayout();
-                    }
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PhonebookShareActivity$ListAdapter */
-    private class ListAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public ListAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public int getItemCount() {
-            return PhonebookShareActivity.this.rowCount;
-        }
-
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            switch (holder.getItemViewType()) {
-                case 0:
-                    if (position == PhonebookShareActivity.this.overscrollRow) {
-                        ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.m9dp(88.0f));
-                        return;
-                    } else {
-                        ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.m9dp(16.0f));
-                        return;
-                    }
-                case 1:
-                    VcardItem item;
-                    int icon;
-                    TextCheckBoxCell cell = holder.itemView;
-                    if (position < PhonebookShareActivity.this.phoneStartRow || position >= PhonebookShareActivity.this.phoneEndRow) {
-                        item = (VcardItem) PhonebookShareActivity.this.other.get(position - PhonebookShareActivity.this.vcardStartRow);
-                        if (position == PhonebookShareActivity.this.vcardStartRow) {
-                            icon = R.drawable.profile_info;
-                        } else {
-                            icon = 0;
-                        }
-                    } else {
-                        item = (VcardItem) PhonebookShareActivity.this.phones.get(position - PhonebookShareActivity.this.phoneStartRow);
-                        if (position == PhonebookShareActivity.this.phoneStartRow) {
-                            icon = R.drawable.profile_phone;
-                        } else {
-                            icon = 0;
-                        }
-                    }
-                    cell.setVCardItem(item, icon);
-                    return;
-                default:
-                    return;
-            }
-        }
-
-        public boolean isEnabled(ViewHolder holder) {
-            int position = holder.getAdapterPosition();
-            return (position >= PhonebookShareActivity.this.phoneStartRow && position < PhonebookShareActivity.this.phoneEndRow) || (position >= PhonebookShareActivity.this.vcardStartRow && position < PhonebookShareActivity.this.vcardEndRow);
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = null;
-            switch (viewType) {
-                case 0:
-                    view = new EmptyCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 1:
-                    view = new TextCheckBoxCell(PhonebookShareActivity.this, this.mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 2:
-                    view = new DividerCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    view.setPadding(AndroidUtilities.m9dp(72.0f), AndroidUtilities.m9dp(8.0f), 0, AndroidUtilities.m9dp(8.0f));
-                    break;
-                case 3:
-                    view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                    break;
-            }
-            view.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(view);
-        }
-
-        public int getItemViewType(int position) {
-            if (position == PhonebookShareActivity.this.emptyRow || position == PhonebookShareActivity.this.overscrollRow) {
-                return 0;
-            }
-            if ((position >= PhonebookShareActivity.this.phoneStartRow && position < PhonebookShareActivity.this.phoneEndRow) || (position >= PhonebookShareActivity.this.vcardStartRow && position < PhonebookShareActivity.this.vcardEndRow)) {
-                return 1;
-            }
-            if (position == PhonebookShareActivity.this.phoneDividerRow || position != PhonebookShareActivity.this.detailRow) {
-                return 2;
-            }
-            return 3;
         }
     }
 

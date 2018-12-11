@@ -1182,7 +1182,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                             messageText = LocaleController.formatString("NotificationActionPinnedGeoLive", R.string.NotificationActionPinnedGeoLive, args[0], args[1]);
                                                             break;
                                                         }
-                                                    case VoIPService.CALL_MAX_LAYER /*74*/:
+                                                    case 74:
                                                         if (chat_from_id == 0) {
                                                             messageText = LocaleController.formatString("NotificationActionPinnedGameChannel", R.string.NotificationActionPinnedGameChannel, args[0]);
                                                             break;

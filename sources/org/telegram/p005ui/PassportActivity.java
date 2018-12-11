@@ -401,6 +401,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     private int usingSavedPassword;
     private SlideView[] views;
 
+    /* renamed from: org.telegram.ui.PassportActivity$ErrorRunnable */
+    private interface ErrorRunnable {
+        void onError(String str, String str2);
+    }
+
     /* renamed from: org.telegram.ui.PassportActivity$10 */
     class CLASSNAME implements TextWatcher {
         private int actionPosition;
@@ -478,6 +483,93 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* renamed from: org.telegram.ui.PassportActivity$PassportActivityDelegate */
+    private interface PassportActivityDelegate {
+        void deleteValue(TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, ArrayList<TL_secureRequiredType> arrayList, boolean z, Runnable runnable, ErrorRunnable errorRunnable);
+
+        SecureDocument saveFile(TL_secureFile tL_secureFile);
+
+        void saveValue(TL_secureRequiredType tL_secureRequiredType, String str, String str2, TL_secureRequiredType tL_secureRequiredType2, String str3, ArrayList<SecureDocument> arrayList, SecureDocument secureDocument, ArrayList<SecureDocument> arrayList2, SecureDocument secureDocument2, SecureDocument secureDocument3, Runnable runnable, ErrorRunnable errorRunnable);
+    }
+
+    /* renamed from: org.telegram.ui.PassportActivity$1 */
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
+        }
+
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            int i = 0;
+            if (index < 0 || index >= PassportActivity.this.currentPhotoViewerLayout.getChildCount()) {
+                return null;
+            }
+            SecureDocumentCell cell = (SecureDocumentCell) PassportActivity.this.currentPhotoViewerLayout.getChildAt(index);
+            int[] coords = new int[2];
+            cell.imageView.getLocationInWindow(coords);
+            PlaceProviderObject object = new PlaceProviderObject();
+            object.viewX = coords[0];
+            int i2 = coords[1];
+            if (VERSION.SDK_INT < 21) {
+                i = AndroidUtilities.statusBarHeight;
+            }
+            object.viewY = i2 - i;
+            object.parentView = PassportActivity.this.currentPhotoViewerLayout;
+            object.imageReceiver = cell.imageView.getImageReceiver();
+            object.thumb = object.imageReceiver.getBitmapSafe();
+            return object;
+        }
+
+        public void deleteImageAtIndex(int index) {
+            SecureDocument document;
+            if (PassportActivity.this.uploadingFileType == 1) {
+                document = PassportActivity.this.selfieDocument;
+            } else if (PassportActivity.this.uploadingFileType == 4) {
+                document = (SecureDocument) PassportActivity.this.translationDocuments.get(index);
+            } else if (PassportActivity.this.uploadingFileType == 2) {
+                document = PassportActivity.this.frontDocument;
+            } else if (PassportActivity.this.uploadingFileType == 3) {
+                document = PassportActivity.this.reverseDocument;
+            } else {
+                document = (SecureDocument) PassportActivity.this.documents.get(index);
+            }
+            SecureDocumentCell cell = (SecureDocumentCell) PassportActivity.this.documentsCells.remove(document);
+            if (cell != null) {
+                String key = null;
+                String hash = PassportActivity.this.getDocumentHash(document);
+                if (PassportActivity.this.uploadingFileType == 1) {
+                    PassportActivity.this.selfieDocument = null;
+                    key = "selfie" + hash;
+                } else if (PassportActivity.this.uploadingFileType == 4) {
+                    key = "translation" + hash;
+                } else if (PassportActivity.this.uploadingFileType == 2) {
+                    PassportActivity.this.frontDocument = null;
+                    key = "front" + hash;
+                } else if (PassportActivity.this.uploadingFileType == 3) {
+                    PassportActivity.this.reverseDocument = null;
+                    key = "reverse" + hash;
+                } else if (PassportActivity.this.uploadingFileType == 0) {
+                    key = "files" + hash;
+                }
+                if (key != null) {
+                    if (PassportActivity.this.documentsErrors != null) {
+                        PassportActivity.this.documentsErrors.remove(key);
+                    }
+                    if (PassportActivity.this.errorsValues != null) {
+                        PassportActivity.this.errorsValues.remove(key);
+                    }
+                }
+                PassportActivity.this.updateUploadText(PassportActivity.this.uploadingFileType);
+                PassportActivity.this.currentPhotoViewerLayout.removeView(cell);
+            }
+        }
+
+        public String getDeleteMessageString() {
+            if (PassportActivity.this.uploadingFileType == 1) {
+                return LocaleController.formatString("PassportDeleteSelfieAlert", R.string.PassportDeleteSelfieAlert, new Object[0]);
+            }
+            return LocaleController.formatString("PassportDeleteScanAlert", R.string.PassportDeleteScanAlert, new Object[0]);
+        }
+    }
+
     /* renamed from: org.telegram.ui.PassportActivity$1ValueToSend */
     class AnonymousClass1ValueToSend {
         boolean selfie_required;
@@ -488,310 +580,6 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.value = v;
             this.selfie_required = s;
             this.translation_required = t;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$2 */
-    class CLASSNAME implements Comparator<SecureValueError> {
-        CLASSNAME() {
-        }
-
-        int getErrorValue(SecureValueError error) {
-            if (error instanceof TL_secureValueError) {
-                return 0;
-            }
-            if (error instanceof TL_secureValueErrorFrontSide) {
-                return 1;
-            }
-            if (error instanceof TL_secureValueErrorReverseSide) {
-                return 2;
-            }
-            if (error instanceof TL_secureValueErrorSelfie) {
-                return 3;
-            }
-            if (error instanceof TL_secureValueErrorTranslationFile) {
-                return 4;
-            }
-            if (error instanceof TL_secureValueErrorTranslationFiles) {
-                return 5;
-            }
-            if (error instanceof TL_secureValueErrorFile) {
-                return 6;
-            }
-            if (error instanceof TL_secureValueErrorFiles) {
-                return 7;
-            }
-            if (!(error instanceof TL_secureValueErrorData)) {
-                return 100;
-            }
-            return PassportActivity.this.getFieldCost(((TL_secureValueErrorData) error).field);
-        }
-
-        public int compare(SecureValueError e1, SecureValueError e2) {
-            int val1 = getErrorValue(e1);
-            int val2 = getErrorValue(e2);
-            if (val1 < val2) {
-                return -1;
-            }
-            if (val1 > val2) {
-                return 1;
-            }
-            return 0;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$6 */
-    class CLASSNAME implements TextWatcher {
-        CLASSNAME() {
-        }
-
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        public void afterTextChanged(Editable s) {
-            if (!PassportActivity.this.ignoreOnTextChange && PassportActivity.this.emailCodeLength != 0 && PassportActivity.this.inputFields[0].length() == PassportActivity.this.emailCodeLength) {
-                PassportActivity.this.doneItem.callOnClick();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$7 */
-    class CLASSNAME implements Callback {
-        CLASSNAME() {
-        }
-
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        public void onDestroyActionMode(ActionMode mode) {
-        }
-
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return false;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$9 */
-    class CLASSNAME implements TextWatcher {
-        CLASSNAME() {
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            if (!PassportActivity.this.ignoreOnTextChange) {
-                PassportActivity.this.ignoreOnTextChange = true;
-                String text = CLASSNAMEPhoneFormat.stripExceptNumbers(PassportActivity.this.inputFields[1].getText().toString());
-                PassportActivity.this.inputFields[1].setText(text);
-                HintEditText phoneField = PassportActivity.this.inputFields[2];
-                if (text.length() == 0) {
-                    phoneField.setHintText(null);
-                    phoneField.setHint(LocaleController.getString("PaymentShippingPhoneNumber", R.string.PaymentShippingPhoneNumber));
-                    PassportActivity.this.inputFields[0].setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
-                } else {
-                    boolean ok = false;
-                    String textToSet = null;
-                    if (text.length() > 4) {
-                        for (int a = 4; a >= 1; a--) {
-                            String sub = text.substring(0, a);
-                            if (((String) PassportActivity.this.codesMap.get(sub)) != null) {
-                                ok = true;
-                                textToSet = text.substring(a, text.length()) + PassportActivity.this.inputFields[2].getText().toString();
-                                text = sub;
-                                PassportActivity.this.inputFields[1].setText(sub);
-                                break;
-                            }
-                        }
-                        if (!ok) {
-                            textToSet = text.substring(1, text.length()) + PassportActivity.this.inputFields[2].getText().toString();
-                            EditTextBoldCursor editTextBoldCursor = PassportActivity.this.inputFields[1];
-                            text = text.substring(0, 1);
-                            editTextBoldCursor.setText(text);
-                        }
-                    }
-                    String country = (String) PassportActivity.this.codesMap.get(text);
-                    boolean set = false;
-                    if (country != null) {
-                        int index = PassportActivity.this.countriesArray.indexOf(country);
-                        if (index != -1) {
-                            PassportActivity.this.inputFields[0].setText((CharSequence) PassportActivity.this.countriesArray.get(index));
-                            String hint = (String) PassportActivity.this.phoneFormatMap.get(text);
-                            set = true;
-                            if (hint != null) {
-                                phoneField.setHintText(hint.replace('X', 8211));
-                                phoneField.setHint(null);
-                            }
-                        }
-                    }
-                    if (!set) {
-                        phoneField.setHintText(null);
-                        phoneField.setHint(LocaleController.getString("PaymentShippingPhoneNumber", R.string.PaymentShippingPhoneNumber));
-                        PassportActivity.this.inputFields[0].setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
-                    }
-                    if (!ok) {
-                        PassportActivity.this.inputFields[1].setSelection(PassportActivity.this.inputFields[1].getText().length());
-                    }
-                    if (textToSet != null) {
-                        phoneField.requestFocus();
-                        phoneField.setText(textToSet);
-                        phoneField.setSelection(phoneField.length());
-                    }
-                }
-                PassportActivity.this.ignoreOnTextChange = false;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$EncryptionResult */
-    private class EncryptionResult {
-        byte[] decrypyedFileSecret;
-        byte[] encryptedData;
-        byte[] fileHash;
-        byte[] fileSecret;
-        SecureDocumentKey secureDocumentKey;
-
-        public EncryptionResult(byte[] d, byte[] fs, byte[] dfs, byte[] fh, byte[] fk, byte[] fi) {
-            this.encryptedData = d;
-            this.fileSecret = fs;
-            this.fileHash = fh;
-            this.decrypyedFileSecret = dfs;
-            this.secureDocumentKey = new SecureDocumentKey(fk, fi);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$ErrorRunnable */
-    private interface ErrorRunnable {
-        void onError(String str, String str2);
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$LinkSpan */
-    public class LinkSpan extends ClickableSpan {
-        public void updateDrawState(TextPaint ds) {
-            super.updateDrawState(ds);
-            ds.setUnderlineText(true);
-            ds.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        }
-
-        public void onClick(View widget) {
-            Browser.openUrl(PassportActivity.this.getParentActivity(), PassportActivity.this.currentForm.privacy_policy_url);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$PassportActivityDelegate */
-    private interface PassportActivityDelegate {
-        void deleteValue(TL_secureRequiredType tL_secureRequiredType, TL_secureRequiredType tL_secureRequiredType2, ArrayList<TL_secureRequiredType> arrayList, boolean z, Runnable runnable, ErrorRunnable errorRunnable);
-
-        SecureDocument saveFile(TL_secureFile tL_secureFile);
-
-        void saveValue(TL_secureRequiredType tL_secureRequiredType, String str, String str2, TL_secureRequiredType tL_secureRequiredType2, String str3, ArrayList<SecureDocument> arrayList, SecureDocument secureDocument, ArrayList<SecureDocument> arrayList2, SecureDocument secureDocument2, SecureDocument secureDocument3, Runnable runnable, ErrorRunnable errorRunnable);
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$ProgressView */
-    private class ProgressView extends View {
-        private Paint paint = new Paint();
-        private Paint paint2 = new Paint();
-        private float progress;
-
-        public ProgressView(Context context) {
-            super(context);
-            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
-            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
-        }
-
-        public void setProgress(float value) {
-            this.progress = value;
-            invalidate();
-        }
-
-        protected void onDraw(Canvas canvas) {
-            int start = (int) (((float) getMeasuredWidth()) * this.progress);
-            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
-            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PassportActivity$TextDetailSecureCell */
-    public class TextDetailSecureCell extends FrameLayout {
-        private ImageView checkImageView;
-        private boolean needDivider;
-        private TextView textView;
-        private TextView valueTextView;
-
-        public TextDetailSecureCell(Context context) {
-            super(context);
-            int padding = PassportActivity.this.currentActivityType == 8 ? 21 : 51;
-            this.textView = new TextView(context);
-            this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            this.textView.setTextSize(1, 16.0f);
-            this.textView.setLines(1);
-            this.textView.setMaxLines(1);
-            this.textView.setSingleLine(true);
-            this.textView.setEllipsize(TruncateAt.END);
-            this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? padding : 21), 10.0f, (float) (LocaleController.isRTL ? 21 : padding), 0.0f));
-            this.valueTextView = new TextView(context);
-            this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
-            this.valueTextView.setTextSize(1, 13.0f);
-            this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.valueTextView.setLines(1);
-            this.valueTextView.setMaxLines(1);
-            this.valueTextView.setSingleLine(true);
-            this.valueTextView.setEllipsize(TruncateAt.END);
-            this.valueTextView.setPadding(0, 0, 0, 0);
-            View view = this.valueTextView;
-            int i = (LocaleController.isRTL ? 5 : 3) | 48;
-            float f = (float) (LocaleController.isRTL ? padding : 21);
-            if (LocaleController.isRTL) {
-                padding = 21;
-            }
-            addView(view, LayoutHelper.createFrame(-2, -2.0f, i, f, 35.0f, (float) padding, 0.0f));
-            this.checkImageView = new ImageView(context);
-            this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-            this.checkImageView.setImageResource(R.drawable.sticker_added);
-            addView(this.checkImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 25.0f, 21.0f, 0.0f));
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(64.0f), NUM));
-        }
-
-        public void setTextAndValue(String text, CharSequence value, boolean divider) {
-            this.textView.setText(text);
-            this.valueTextView.setText(value);
-            this.needDivider = divider;
-            setWillNotDraw(!divider);
-        }
-
-        public void setChecked(boolean checked) {
-            this.checkImageView.setVisibility(checked ? 0 : 4);
-        }
-
-        public void setValue(CharSequence value) {
-            this.valueTextView.setText(value);
-        }
-
-        public void setNeedDivider(boolean value) {
-            this.needDivider = value;
-            setWillNotDraw(!this.needDivider);
-            invalidate();
-        }
-
-        protected void onDraw(Canvas canvas) {
-            if (this.needDivider) {
-                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
-            }
         }
     }
 
@@ -897,6 +685,55 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             } catch (Throwable e) {
                 FileLog.m13e(e);
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PassportActivity$2 */
+    class CLASSNAME implements Comparator<SecureValueError> {
+        CLASSNAME() {
+        }
+
+        int getErrorValue(SecureValueError error) {
+            if (error instanceof TL_secureValueError) {
+                return 0;
+            }
+            if (error instanceof TL_secureValueErrorFrontSide) {
+                return 1;
+            }
+            if (error instanceof TL_secureValueErrorReverseSide) {
+                return 2;
+            }
+            if (error instanceof TL_secureValueErrorSelfie) {
+                return 3;
+            }
+            if (error instanceof TL_secureValueErrorTranslationFile) {
+                return 4;
+            }
+            if (error instanceof TL_secureValueErrorTranslationFiles) {
+                return 5;
+            }
+            if (error instanceof TL_secureValueErrorFile) {
+                return 6;
+            }
+            if (error instanceof TL_secureValueErrorFiles) {
+                return 7;
+            }
+            if (!(error instanceof TL_secureValueErrorData)) {
+                return 100;
+            }
+            return PassportActivity.this.getFieldCost(((TL_secureValueErrorData) error).field);
+        }
+
+        public int compare(SecureValueError e1, SecureValueError e2) {
+            int val1 = getErrorValue(e1);
+            int val2 = getErrorValue(e2);
+            if (val1 < val2) {
+                return -1;
+            }
+            if (val1 > val2) {
+                return 1;
+            }
+            return 0;
         }
     }
 
@@ -1214,6 +1051,150 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
             AlertsCreator.processError(PassportActivity.this.currentAccount, error, PassportActivity.this, req, new Object[0]);
             errorRunnable.onError(null, null);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PassportActivity$6 */
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        public void afterTextChanged(Editable s) {
+            if (!PassportActivity.this.ignoreOnTextChange && PassportActivity.this.emailCodeLength != 0 && PassportActivity.this.inputFields[0].length() == PassportActivity.this.emailCodeLength) {
+                PassportActivity.this.doneItem.callOnClick();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PassportActivity$7 */
+    class CLASSNAME implements Callback {
+        CLASSNAME() {
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PassportActivity$9 */
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            if (!PassportActivity.this.ignoreOnTextChange) {
+                PassportActivity.this.ignoreOnTextChange = true;
+                String text = CLASSNAMEPhoneFormat.stripExceptNumbers(PassportActivity.this.inputFields[1].getText().toString());
+                PassportActivity.this.inputFields[1].setText(text);
+                HintEditText phoneField = PassportActivity.this.inputFields[2];
+                if (text.length() == 0) {
+                    phoneField.setHintText(null);
+                    phoneField.setHint(LocaleController.getString("PaymentShippingPhoneNumber", R.string.PaymentShippingPhoneNumber));
+                    PassportActivity.this.inputFields[0].setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                } else {
+                    boolean ok = false;
+                    String textToSet = null;
+                    if (text.length() > 4) {
+                        for (int a = 4; a >= 1; a--) {
+                            String sub = text.substring(0, a);
+                            if (((String) PassportActivity.this.codesMap.get(sub)) != null) {
+                                ok = true;
+                                textToSet = text.substring(a, text.length()) + PassportActivity.this.inputFields[2].getText().toString();
+                                text = sub;
+                                PassportActivity.this.inputFields[1].setText(sub);
+                                break;
+                            }
+                        }
+                        if (!ok) {
+                            textToSet = text.substring(1, text.length()) + PassportActivity.this.inputFields[2].getText().toString();
+                            EditTextBoldCursor editTextBoldCursor = PassportActivity.this.inputFields[1];
+                            text = text.substring(0, 1);
+                            editTextBoldCursor.setText(text);
+                        }
+                    }
+                    String country = (String) PassportActivity.this.codesMap.get(text);
+                    boolean set = false;
+                    if (country != null) {
+                        int index = PassportActivity.this.countriesArray.indexOf(country);
+                        if (index != -1) {
+                            PassportActivity.this.inputFields[0].setText((CharSequence) PassportActivity.this.countriesArray.get(index));
+                            String hint = (String) PassportActivity.this.phoneFormatMap.get(text);
+                            set = true;
+                            if (hint != null) {
+                                phoneField.setHintText(hint.replace('X', 8211));
+                                phoneField.setHint(null);
+                            }
+                        }
+                    }
+                    if (!set) {
+                        phoneField.setHintText(null);
+                        phoneField.setHint(LocaleController.getString("PaymentShippingPhoneNumber", R.string.PaymentShippingPhoneNumber));
+                        PassportActivity.this.inputFields[0].setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                    }
+                    if (!ok) {
+                        PassportActivity.this.inputFields[1].setSelection(PassportActivity.this.inputFields[1].getText().length());
+                    }
+                    if (textToSet != null) {
+                        phoneField.requestFocus();
+                        phoneField.setText(textToSet);
+                        phoneField.setSelection(phoneField.length());
+                    }
+                }
+                PassportActivity.this.ignoreOnTextChange = false;
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PassportActivity$EncryptionResult */
+    private class EncryptionResult {
+        byte[] decrypyedFileSecret;
+        byte[] encryptedData;
+        byte[] fileHash;
+        byte[] fileSecret;
+        SecureDocumentKey secureDocumentKey;
+
+        public EncryptionResult(byte[] d, byte[] fs, byte[] dfs, byte[] fh, byte[] fk, byte[] fi) {
+            this.encryptedData = d;
+            this.fileSecret = fs;
+            this.fileHash = fh;
+            this.decrypyedFileSecret = dfs;
+            this.secureDocumentKey = new SecureDocumentKey(fk, fi);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PassportActivity$LinkSpan */
+    public class LinkSpan extends ClickableSpan {
+        public void updateDrawState(TextPaint ds) {
+            super.updateDrawState(ds);
+            ds.setUnderlineText(true);
+            ds.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        }
+
+        public void onClick(View widget) {
+            Browser.openUrl(PassportActivity.this.getParentActivity(), PassportActivity.this.currentForm.privacy_policy_url);
         }
     }
 
@@ -1928,6 +1909,30 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* renamed from: org.telegram.ui.PassportActivity$ProgressView */
+    private class ProgressView extends View {
+        private Paint paint = new Paint();
+        private Paint paint2 = new Paint();
+        private float progress;
+
+        public ProgressView(Context context) {
+            super(context);
+            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
+            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int start = (int) (((float) getMeasuredWidth()) * this.progress);
+            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
+            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        }
+    }
+
     /* renamed from: org.telegram.ui.PassportActivity$SecureDocumentCell */
     public class SecureDocumentCell extends FrameLayout implements FileDownloadProgressListener {
         private int TAG;
@@ -2106,81 +2111,76 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* renamed from: org.telegram.ui.PassportActivity$1 */
-    class CLASSNAME extends EmptyPhotoViewerProvider {
-        CLASSNAME() {
+    /* renamed from: org.telegram.ui.PassportActivity$TextDetailSecureCell */
+    public class TextDetailSecureCell extends FrameLayout {
+        private ImageView checkImageView;
+        private boolean needDivider;
+        private TextView textView;
+        private TextView valueTextView;
+
+        public TextDetailSecureCell(Context context) {
+            super(context);
+            int padding = PassportActivity.this.currentActivityType == 8 ? 21 : 51;
+            this.textView = new TextView(context);
+            this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.textView.setTextSize(1, 16.0f);
+            this.textView.setLines(1);
+            this.textView.setMaxLines(1);
+            this.textView.setSingleLine(true);
+            this.textView.setEllipsize(TruncateAt.END);
+            this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+            addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? padding : 21), 10.0f, (float) (LocaleController.isRTL ? 21 : padding), 0.0f));
+            this.valueTextView = new TextView(context);
+            this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+            this.valueTextView.setTextSize(1, 13.0f);
+            this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+            this.valueTextView.setLines(1);
+            this.valueTextView.setMaxLines(1);
+            this.valueTextView.setSingleLine(true);
+            this.valueTextView.setEllipsize(TruncateAt.END);
+            this.valueTextView.setPadding(0, 0, 0, 0);
+            View view = this.valueTextView;
+            int i = (LocaleController.isRTL ? 5 : 3) | 48;
+            float f = (float) (LocaleController.isRTL ? padding : 21);
+            if (LocaleController.isRTL) {
+                padding = 21;
+            }
+            addView(view, LayoutHelper.createFrame(-2, -2.0f, i, f, 35.0f, (float) padding, 0.0f));
+            this.checkImageView = new ImageView(context);
+            this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
+            this.checkImageView.setImageResource(R.drawable.sticker_added);
+            addView(this.checkImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 25.0f, 21.0f, 0.0f));
         }
 
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-            int i = 0;
-            if (index < 0 || index >= PassportActivity.this.currentPhotoViewerLayout.getChildCount()) {
-                return null;
-            }
-            SecureDocumentCell cell = (SecureDocumentCell) PassportActivity.this.currentPhotoViewerLayout.getChildAt(index);
-            int[] coords = new int[2];
-            cell.imageView.getLocationInWindow(coords);
-            PlaceProviderObject object = new PlaceProviderObject();
-            object.viewX = coords[0];
-            int i2 = coords[1];
-            if (VERSION.SDK_INT < 21) {
-                i = AndroidUtilities.statusBarHeight;
-            }
-            object.viewY = i2 - i;
-            object.parentView = PassportActivity.this.currentPhotoViewerLayout;
-            object.imageReceiver = cell.imageView.getImageReceiver();
-            object.thumb = object.imageReceiver.getBitmapSafe();
-            return object;
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(64.0f), NUM));
         }
 
-        public void deleteImageAtIndex(int index) {
-            SecureDocument document;
-            if (PassportActivity.this.uploadingFileType == 1) {
-                document = PassportActivity.this.selfieDocument;
-            } else if (PassportActivity.this.uploadingFileType == 4) {
-                document = (SecureDocument) PassportActivity.this.translationDocuments.get(index);
-            } else if (PassportActivity.this.uploadingFileType == 2) {
-                document = PassportActivity.this.frontDocument;
-            } else if (PassportActivity.this.uploadingFileType == 3) {
-                document = PassportActivity.this.reverseDocument;
-            } else {
-                document = (SecureDocument) PassportActivity.this.documents.get(index);
-            }
-            SecureDocumentCell cell = (SecureDocumentCell) PassportActivity.this.documentsCells.remove(document);
-            if (cell != null) {
-                String key = null;
-                String hash = PassportActivity.this.getDocumentHash(document);
-                if (PassportActivity.this.uploadingFileType == 1) {
-                    PassportActivity.this.selfieDocument = null;
-                    key = "selfie" + hash;
-                } else if (PassportActivity.this.uploadingFileType == 4) {
-                    key = "translation" + hash;
-                } else if (PassportActivity.this.uploadingFileType == 2) {
-                    PassportActivity.this.frontDocument = null;
-                    key = "front" + hash;
-                } else if (PassportActivity.this.uploadingFileType == 3) {
-                    PassportActivity.this.reverseDocument = null;
-                    key = "reverse" + hash;
-                } else if (PassportActivity.this.uploadingFileType == 0) {
-                    key = "files" + hash;
-                }
-                if (key != null) {
-                    if (PassportActivity.this.documentsErrors != null) {
-                        PassportActivity.this.documentsErrors.remove(key);
-                    }
-                    if (PassportActivity.this.errorsValues != null) {
-                        PassportActivity.this.errorsValues.remove(key);
-                    }
-                }
-                PassportActivity.this.updateUploadText(PassportActivity.this.uploadingFileType);
-                PassportActivity.this.currentPhotoViewerLayout.removeView(cell);
-            }
+        public void setTextAndValue(String text, CharSequence value, boolean divider) {
+            this.textView.setText(text);
+            this.valueTextView.setText(value);
+            this.needDivider = divider;
+            setWillNotDraw(!divider);
         }
 
-        public String getDeleteMessageString() {
-            if (PassportActivity.this.uploadingFileType == 1) {
-                return LocaleController.formatString("PassportDeleteSelfieAlert", R.string.PassportDeleteSelfieAlert, new Object[0]);
+        public void setChecked(boolean checked) {
+            this.checkImageView.setVisibility(checked ? 0 : 4);
+        }
+
+        public void setValue(CharSequence value) {
+            this.valueTextView.setText(value);
+        }
+
+        public void setNeedDivider(boolean value) {
+            this.needDivider = value;
+            setWillNotDraw(!this.needDivider);
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            if (this.needDivider) {
+                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.m9dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.m9dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
             }
-            return LocaleController.formatString("PassportDeleteScanAlert", R.string.PassportDeleteScanAlert, new Object[0]);
         }
     }
 

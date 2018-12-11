@@ -3161,8 +3161,12 @@ public class ImageLoader {
             this.currentArtworkTasksCount--;
         }
         while (this.currentArtworkTasksCount < 4 && !this.artworkTasks.isEmpty()) {
-            ((ArtworkLoadTask) this.artworkTasks.poll()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            this.currentArtworkTasksCount++;
+            try {
+                ((ArtworkLoadTask) this.artworkTasks.poll()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentArtworkTasksCount++;
+            } catch (Throwable th) {
+                runArtworkTasks(false);
+            }
         }
     }
 

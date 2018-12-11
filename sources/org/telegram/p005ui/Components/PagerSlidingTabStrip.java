@@ -40,6 +40,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int underlineColor = NUM;
     private int underlineHeight = AndroidUtilities.m9dp(2.0f);
 
+    /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$IconTabProvider */
+    public interface IconTabProvider {
+        boolean canScrollToTab(int i);
+
+        void customOnDraw(Canvas canvas, int i);
+
+        Drawable getPageIconDrawable(int i);
+    }
+
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$1 */
     class CLASSNAME implements OnGlobalLayoutListener {
         CLASSNAME() {
@@ -60,15 +69,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         public void run() {
             PagerSlidingTabStrip.this.notifyDataSetChanged();
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$IconTabProvider */
-    public interface IconTabProvider {
-        boolean canScrollToTab(int i);
-
-        void customOnDraw(Canvas canvas, int i);
-
-        Drawable getPageIconDrawable(int i);
     }
 
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$PageListener */

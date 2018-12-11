@@ -52,6 +52,15 @@ public class SearchAdapterHelper {
     private ArrayList<TLObject> localServerSearch = new ArrayList();
     private int reqId = 0;
 
+    /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$SearchAdapterHelperDelegate */
+    public interface SearchAdapterHelperDelegate {
+        SparseArray<User> getExcludeUsers();
+
+        void onDataSetChanged();
+
+        void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
+    }
+
     /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$DialogSearchResult */
     protected static final class DialogSearchResult {
         public int date;
@@ -66,15 +75,6 @@ public class SearchAdapterHelper {
     public static class HashtagObject {
         int date;
         String hashtag;
-    }
-
-    /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$SearchAdapterHelperDelegate */
-    public interface SearchAdapterHelperDelegate {
-        SparseArray<User> getExcludeUsers();
-
-        void onDataSetChanged();
-
-        void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
     }
 
     public SearchAdapterHelper(boolean global) {

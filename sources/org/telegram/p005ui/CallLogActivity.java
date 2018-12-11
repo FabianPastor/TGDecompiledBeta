@@ -109,49 +109,6 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    /* renamed from: org.telegram.ui.CallLogActivity$4 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.CallLogActivity$CallLogRow */
-    private class CallLogRow {
-        public List<Message> calls;
-        public int type;
-        public User user;
-
-        private CallLogRow() {
-        }
-
-        /* synthetic */ CallLogRow(CallLogActivity x0, CLASSNAME x1) {
-            this();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.CallLogActivity$CustomCell */
-    private class CustomCell extends FrameLayout {
-        public CustomCell(Context context) {
-            super(context);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.CallLogActivity$ViewItem */
-    private class ViewItem {
-        public ImageView button;
-        public ProfileSearchCell cell;
-
-        public ViewItem(ImageView button, ProfileSearchCell cell) {
-            this.button = button;
-            this.cell = cell;
-        }
-    }
-
     /* renamed from: org.telegram.ui.CallLogActivity$2 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -159,7 +116,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
 
         public void onItemClick(int id) {
             if (id == -1) {
-                CallLogActivity.this.lambda$checkDiscard$70$PassportActivity();
+                CallLogActivity.this.finishFragment();
             }
         }
     }
@@ -209,6 +166,38 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
 
         final /* synthetic */ void lambda$onScrolled$0$CallLogActivity$3(CallLogRow row) {
             CallLogActivity.this.getCalls(((Message) row.calls.get(row.calls.size() - 1)).var_id, 100);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.CallLogActivity$4 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
+        }
+    }
+
+    /* renamed from: org.telegram.ui.CallLogActivity$CallLogRow */
+    private class CallLogRow {
+        public List<Message> calls;
+        public int type;
+        public User user;
+
+        private CallLogRow() {
+        }
+
+        /* synthetic */ CallLogRow(CallLogActivity x0, CLASSNAME x1) {
+            this();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.CallLogActivity$CustomCell */
+    private class CustomCell extends FrameLayout {
+        public CustomCell(Context context) {
+            super(context);
         }
     }
 
@@ -309,6 +298,17 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 return 2;
             }
             return 1;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.CallLogActivity$ViewItem */
+    private class ViewItem {
+        public ImageView button;
+        public ProfileSearchCell cell;
+
+        public ViewItem(ImageView button, ProfileSearchCell cell) {
+            this.button = button;
+            this.cell = cell;
         }
     }
 

@@ -191,54 +191,6 @@ public class EmbedBottomSheet extends BottomSheet {
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$7 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            EmbedBottomSheet.this.animationInProgress = false;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$YoutubeProxy */
-    private class YoutubeProxy {
-        private YoutubeProxy() {
-        }
-
-        /* synthetic */ YoutubeProxy(EmbedBottomSheet x0, CLASSNAME x1) {
-            this();
-        }
-
-        @JavascriptInterface
-        public void postEvent(String eventName, String eventData) {
-            AndroidUtilities.runOnUIThread(new EmbedBottomSheet$YoutubeProxy$$Lambda$0(this, eventName));
-        }
-
-        final /* synthetic */ void lambda$postEvent$0$EmbedBottomSheet$YoutubeProxy(String eventName) {
-            boolean z = true;
-            switch (eventName.hashCode()) {
-                case -1097519099:
-                    if (eventName.equals("loaded")) {
-                        z = false;
-                        break;
-                    }
-                    break;
-            }
-            switch (z) {
-                case false:
-                    EmbedBottomSheet.this.progressBar.setVisibility(4);
-                    EmbedBottomSheet.this.progressBarBlackBackground.setVisibility(4);
-                    EmbedBottomSheet.this.pipButton.setEnabled(true);
-                    EmbedBottomSheet.this.pipButton.setAlpha(1.0f);
-                    EmbedBottomSheet.this.showOrHideYoutubeLogo(false);
-                    return;
-                default:
-                    return;
-            }
-        }
-    }
-
     /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$6 */
     class CLASSNAME implements WebPlayerViewDelegate {
 
@@ -437,7 +389,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 EmbedBottomSheet.this.animationInProgress = true;
                 EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
                 int[] access$3700 = EmbedBottomSheet.this.position;
-                access$3700[0] = access$3700[0] - EmbedBottomSheet.this.access$3800();
+                access$3700[0] = access$3700[0] - EmbedBottomSheet.this.access$1100();
                 access$3700 = EmbedBottomSheet.this.position;
                 access$3700[1] = (int) (((float) access$3700[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
                 TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
@@ -491,6 +443,16 @@ public class EmbedBottomSheet extends BottomSheet {
 
         public ViewGroup getTextureViewContainer() {
             return EmbedBottomSheet.this.container;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$7 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            EmbedBottomSheet.this.animationInProgress = false;
         }
     }
 
@@ -569,6 +531,44 @@ public class EmbedBottomSheet extends BottomSheet {
                 FileLog.m13e(e);
             }
             return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$YoutubeProxy */
+    private class YoutubeProxy {
+        private YoutubeProxy() {
+        }
+
+        /* synthetic */ YoutubeProxy(EmbedBottomSheet x0, CLASSNAME x1) {
+            this();
+        }
+
+        @JavascriptInterface
+        public void postEvent(String eventName, String eventData) {
+            AndroidUtilities.runOnUIThread(new EmbedBottomSheet$YoutubeProxy$$Lambda$0(this, eventName));
+        }
+
+        final /* synthetic */ void lambda$postEvent$0$EmbedBottomSheet$YoutubeProxy(String eventName) {
+            boolean z = true;
+            switch (eventName.hashCode()) {
+                case -1097519099:
+                    if (eventName.equals("loaded")) {
+                        z = false;
+                        break;
+                    }
+                    break;
+            }
+            switch (z) {
+                case false:
+                    EmbedBottomSheet.this.progressBar.setVisibility(4);
+                    EmbedBottomSheet.this.progressBarBlackBackground.setVisibility(4);
+                    EmbedBottomSheet.this.pipButton.setEnabled(true);
+                    EmbedBottomSheet.this.pipButton.setAlpha(1.0f);
+                    EmbedBottomSheet.this.showOrHideYoutubeLogo(false);
+                    return;
+                default:
+                    return;
+            }
         }
     }
 
@@ -808,7 +808,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 this.animationInProgress = true;
                 this.videoView.getAspectRatioView().getLocationInWindow(this.position);
                 int[] iArr = this.position;
-                iArr[0] = iArr[0] - access$3800();
+                iArr[0] = iArr[0] - access$1100();
                 iArr = this.position;
                 iArr[1] = (int) (((float) iArr[1]) - this.containerView.getTranslationY());
                 TextureView textureView = this.videoView.getTextureView();
@@ -961,7 +961,7 @@ public class EmbedBottomSheet extends BottomSheet {
     public void updateTextureViewPosition() {
         this.videoView.getAspectRatioView().getLocationInWindow(this.position);
         int[] iArr = this.position;
-        iArr[0] = iArr[0] - access$3800();
+        iArr[0] = iArr[0] - access$1100();
         if (!(this.videoView.isInline() || this.animationInProgress)) {
             TextureView textureView = this.videoView.getTextureView();
             textureView.setTranslationX((float) this.position[0]);

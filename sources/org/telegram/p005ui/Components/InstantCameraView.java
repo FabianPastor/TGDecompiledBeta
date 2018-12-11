@@ -28,11 +28,7 @@ import android.media.MediaCodec.BufferInfo;
 import android.media.MediaFormat;
 import android.net.Uri;
 import android.opengl.EGL14;
-import android.opengl.EGLConfig;
-import android.opengl.EGLContext;
-import android.opengl.EGLDisplay;
 import android.opengl.EGLExt;
-import android.opengl.EGLSurface;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
@@ -67,6 +63,10 @@ import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -298,6 +298,326 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
+    /* renamed from: org.telegram.ui.Components.InstantCameraView$CameraGLThread */
+    public class CameraGLThread extends DispatchQueue {
+        private final int DO_REINIT_MESSAGE = 2;
+        private final int DO_RENDER_MESSAGE = 0;
+        private final int DO_SETSESSION_MESSAGE = 3;
+        private final int DO_SHUTDOWN_MESSAGE = 1;
+        private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
+        private final int EGL_OPENGL_ES2_BIT = 4;
+        private Integer cameraId = Integer.valueOf(0);
+        private SurfaceTexture cameraSurface;
+        private CameraSession currentSession;
+        private int drawProgram;
+        private EGL10 egl10;
+        private EGLConfig eglConfig;
+        private EGLContext eglContext;
+        private EGLDisplay eglDisplay;
+        private EGLSurface eglSurface;
+        /* renamed from: gl */
+        private GL var_gl;
+        private boolean initied;
+        private int positionHandle;
+        private boolean recording;
+        private int rotationAngle;
+        private SurfaceTexture surfaceTexture;
+        private int textureHandle;
+        private int textureMatrixHandle;
+        private int vertexMatrixHandle;
+        private VideoRecorder videoEncoder;
+
+        public CameraGLThread(SurfaceTexture surface, int surfaceWidth, int surfaceHeight) {
+            super("CameraGLThread");
+            this.surfaceTexture = surface;
+            int width = InstantCameraView.this.previewSize.getWidth();
+            int height = InstantCameraView.this.previewSize.getHeight();
+            float scale = ((float) surfaceWidth) / ((float) Math.min(width, height));
+            width = (int) (((float) width) * scale);
+            height = (int) (((float) height) * scale);
+            if (width > height) {
+                InstantCameraView.this.scaleX = 1.0f;
+                InstantCameraView.this.scaleY = ((float) width) / ((float) surfaceHeight);
+                return;
+            }
+            InstantCameraView.this.scaleX = ((float) height) / ((float) surfaceWidth);
+            InstantCameraView.this.scaleY = 1.0f;
+        }
+
+        private boolean initGL() {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m10d("start init gl");
+            }
+            this.egl10 = (EGL10) EGLContext.getEGL();
+            this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+            if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m11e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                }
+                finish();
+                return false;
+            }
+            if (this.egl10.eglInitialize(this.eglDisplay, new int[2])) {
+                int[] configsCount = new int[1];
+                EGLConfig[] configs = new EGLConfig[1];
+                if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 0, 12325, 0, 12326, 0, 12344}, configs, 1, configsCount)) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m11e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    }
+                    finish();
+                    return false;
+                } else if (configsCount[0] > 0) {
+                    this.eglConfig = configs[0];
+                    this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                    if (this.eglContext == null) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.m11e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        }
+                        finish();
+                        return false;
+                    } else if (this.surfaceTexture instanceof SurfaceTexture) {
+                        this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surfaceTexture, null);
+                        if (this.eglSurface == null || this.eglSurface == EGL10.EGL_NO_SURFACE) {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m11e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            }
+                            finish();
+                            return false;
+                        }
+                        if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
+                            this.var_gl = this.eglContext.getGL();
+                            float tX = (1.0f / InstantCameraView.this.scaleX) / 2.0f;
+                            float tY = (1.0f / InstantCameraView.this.scaleY) / 2.0f;
+                            float[] fArr = new float[12];
+                            fArr = new float[]{-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f};
+                            float[] texData = new float[]{0.5f - tX, 0.5f - tY, 0.5f + tX, 0.5f - tY, 0.5f - tX, 0.5f + tY, 0.5f + tX, 0.5f + tY};
+                            this.videoEncoder = new VideoRecorder(InstantCameraView.this, null);
+                            InstantCameraView.this.vertexBuffer = ByteBuffer.allocateDirect(fArr.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+                            InstantCameraView.this.vertexBuffer.put(fArr).position(0);
+                            InstantCameraView.this.textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+                            InstantCameraView.this.textureBuffer.put(texData).position(0);
+                            Matrix.setIdentityM(InstantCameraView.this.mSTMatrix, 0);
+                            int vertexShader = InstantCameraView.this.loadShader(35633, InstantCameraView.VERTEX_SHADER);
+                            int fragmentShader = InstantCameraView.this.loadShader(35632, InstantCameraView.FRAGMENT_SCREEN_SHADER);
+                            if (vertexShader == 0 || fragmentShader == 0) {
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.m11e("failed creating shader");
+                                }
+                                finish();
+                                return false;
+                            }
+                            this.drawProgram = GLES20.glCreateProgram();
+                            GLES20.glAttachShader(this.drawProgram, vertexShader);
+                            GLES20.glAttachShader(this.drawProgram, fragmentShader);
+                            GLES20.glLinkProgram(this.drawProgram);
+                            int[] linkStatus = new int[1];
+                            GLES20.glGetProgramiv(this.drawProgram, 35714, linkStatus, 0);
+                            if (linkStatus[0] == 0) {
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.m11e("failed link shader");
+                                }
+                                GLES20.glDeleteProgram(this.drawProgram);
+                                this.drawProgram = 0;
+                            } else {
+                                this.positionHandle = GLES20.glGetAttribLocation(this.drawProgram, "aPosition");
+                                this.textureHandle = GLES20.glGetAttribLocation(this.drawProgram, "aTextureCoord");
+                                this.vertexMatrixHandle = GLES20.glGetUniformLocation(this.drawProgram, "uMVPMatrix");
+                                this.textureMatrixHandle = GLES20.glGetUniformLocation(this.drawProgram, "uSTMatrix");
+                            }
+                            GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
+                            GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
+                            GLES20.glTexParameteri(36197, 10241, 9729);
+                            GLES20.glTexParameteri(36197, 10240, 9729);
+                            GLES20.glTexParameteri(36197, 10242, 33071);
+                            GLES20.glTexParameteri(36197, 10243, 33071);
+                            Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
+                            this.cameraSurface = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
+                            this.cameraSurface.setOnFrameAvailableListener(new InstantCameraView$CameraGLThread$$Lambda$0(this));
+                            InstantCameraView.this.createCamera(this.cameraSurface);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m11e("gl initied");
+                            }
+                            return true;
+                        }
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        }
+                        finish();
+                        return false;
+                    } else {
+                        finish();
+                        return false;
+                    }
+                } else {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m11e("eglConfig not initialized");
+                    }
+                    finish();
+                    return false;
+                }
+            }
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m11e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+            }
+            finish();
+            return false;
+        }
+
+        public void reinitForNewCamera() {
+            Handler handler = InstantCameraView.this.getHandler();
+            if (handler != null) {
+                sendMessage(handler.obtainMessage(2), 0);
+            }
+        }
+
+        public void finish() {
+            if (this.eglSurface != null) {
+                this.egl10.eglMakeCurrent(this.eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+                this.egl10.eglDestroySurface(this.eglDisplay, this.eglSurface);
+                this.eglSurface = null;
+            }
+            if (this.eglContext != null) {
+                this.egl10.eglDestroyContext(this.eglDisplay, this.eglContext);
+                this.eglContext = null;
+            }
+            if (this.eglDisplay != null) {
+                this.egl10.eglTerminate(this.eglDisplay);
+                this.eglDisplay = null;
+            }
+        }
+
+        public void setCurrentSession(CameraSession session) {
+            Handler handler = InstantCameraView.this.getHandler();
+            if (handler != null) {
+                sendMessage(handler.obtainMessage(3, session), 0);
+            }
+        }
+
+        private void onDraw(Integer cameraId) {
+            if (!this.initied) {
+                return;
+            }
+            if ((this.eglContext.equals(this.egl10.eglGetCurrentContext()) && this.eglSurface.equals(this.egl10.eglGetCurrentSurface(12377))) || this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
+                this.cameraSurface.updateTexImage();
+                if (!this.recording) {
+                    this.videoEncoder.startRecording(InstantCameraView.this.cameraFile, EGL14.eglGetCurrentContext());
+                    this.recording = true;
+                    int orientation = this.currentSession.getCurrentOrientation();
+                    if (orientation == 90 || orientation == 270) {
+                        float temp = InstantCameraView.this.scaleX;
+                        InstantCameraView.this.scaleX = InstantCameraView.this.scaleY;
+                        InstantCameraView.this.scaleY = temp;
+                    }
+                }
+                this.videoEncoder.frameAvailable(this.cameraSurface, cameraId, System.nanoTime());
+                this.cameraSurface.getTransformMatrix(InstantCameraView.this.mSTMatrix);
+                GLES20.glUseProgram(this.drawProgram);
+                GLES20.glActiveTexture(33984);
+                GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
+                GLES20.glVertexAttribPointer(this.positionHandle, 3, 5126, false, 12, InstantCameraView.this.vertexBuffer);
+                GLES20.glEnableVertexAttribArray(this.positionHandle);
+                GLES20.glVertexAttribPointer(this.textureHandle, 2, 5126, false, 8, InstantCameraView.this.textureBuffer);
+                GLES20.glEnableVertexAttribArray(this.textureHandle);
+                GLES20.glUniformMatrix4fv(this.textureMatrixHandle, 1, false, InstantCameraView.this.mSTMatrix, 0);
+                GLES20.glUniformMatrix4fv(this.vertexMatrixHandle, 1, false, InstantCameraView.this.mMVPMatrix, 0);
+                GLES20.glDrawArrays(5, 0, 4);
+                GLES20.glDisableVertexAttribArray(this.positionHandle);
+                GLES20.glDisableVertexAttribArray(this.textureHandle);
+                GLES20.glBindTexture(36197, 0);
+                GLES20.glUseProgram(0);
+                this.egl10.eglSwapBuffers(this.eglDisplay, this.eglSurface);
+            } else if (BuildVars.LOGS_ENABLED) {
+                FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+            }
+        }
+
+        public void run() {
+            this.initied = initGL();
+            super.run();
+        }
+
+        public void handleMessage(Message inputMessage) {
+            switch (inputMessage.what) {
+                case 0:
+                    onDraw((Integer) inputMessage.obj);
+                    return;
+                case 1:
+                    finish();
+                    if (this.recording) {
+                        this.videoEncoder.stopRecording(inputMessage.arg1);
+                    }
+                    Looper looper = Looper.myLooper();
+                    if (looper != null) {
+                        looper.quit();
+                        return;
+                    }
+                    return;
+                case 2:
+                    if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
+                        if (this.cameraSurface != null) {
+                            this.cameraSurface.getTransformMatrix(InstantCameraView.this.moldSTMatrix);
+                            this.cameraSurface.setOnFrameAvailableListener(null);
+                            this.cameraSurface.release();
+                            InstantCameraView.this.oldCameraTexture[0] = InstantCameraView.this.cameraTexture[0];
+                            InstantCameraView.this.cameraTextureAlpha = 0.0f;
+                            InstantCameraView.this.cameraTexture[0] = 0;
+                        }
+                        Integer num = this.cameraId;
+                        this.cameraId = Integer.valueOf(this.cameraId.intValue() + 1);
+                        InstantCameraView.this.cameraReady = false;
+                        GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
+                        GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
+                        GLES20.glTexParameteri(36197, 10241, 9729);
+                        GLES20.glTexParameteri(36197, 10240, 9729);
+                        GLES20.glTexParameteri(36197, 10242, 33071);
+                        GLES20.glTexParameteri(36197, 10243, 33071);
+                        this.cameraSurface = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
+                        this.cameraSurface.setOnFrameAvailableListener(new InstantCameraView$CameraGLThread$$Lambda$1(this));
+                        InstantCameraView.this.createCamera(this.cameraSurface);
+                        return;
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m10d("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        return;
+                    } else {
+                        return;
+                    }
+                case 3:
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m10d("set gl rednderer session");
+                    }
+                    CameraSession newSession = inputMessage.obj;
+                    if (this.currentSession == newSession) {
+                        this.rotationAngle = this.currentSession.getWorldAngle();
+                        Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
+                        if (this.rotationAngle != 0) {
+                            Matrix.rotateM(InstantCameraView.this.mMVPMatrix, 0, (float) this.rotationAngle, 0.0f, 0.0f, 1.0f);
+                            return;
+                        }
+                        return;
+                    }
+                    this.currentSession = newSession;
+                    return;
+                default:
+                    return;
+            }
+        }
+
+        public void shutdown(int send) {
+            Handler handler = InstantCameraView.this.getHandler();
+            if (handler != null) {
+                sendMessage(handler.obtainMessage(1, send, 0), 0);
+            }
+        }
+
+        /* renamed from: requestRender */
+        public void lambda$initGL$0$InstantCameraView$CameraGLThread() {
+            Handler handler = InstantCameraView.this.getHandler();
+            if (handler != null) {
+                sendMessage(handler.obtainMessage(0, this.cameraId), 0);
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.Components.InstantCameraView$EncoderHandler */
     private static class EncoderHandler extends Handler {
         private WeakReference<VideoRecorder> mWeakEncoder;
@@ -368,10 +688,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private long currentTimestamp;
         private long desyncTime;
         private int drawProgram;
-        private EGLConfig eglConfig;
-        private EGLContext eglContext;
-        private EGLDisplay eglDisplay;
-        private EGLSurface eglSurface;
+        private android.opengl.EGLConfig eglConfig;
+        private android.opengl.EGLContext eglContext;
+        private android.opengl.EGLDisplay eglDisplay;
+        private android.opengl.EGLSurface eglSurface;
         private volatile EncoderHandler handler;
         private Integer lastCameraId;
         private long lastCommitedFrameTime;
@@ -384,7 +704,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private int scaleXHandle;
         private int scaleYHandle;
         private volatile int sendWhenDone;
-        private EGLContext sharedEglContext;
+        private android.opengl.EGLContext sharedEglContext;
         private boolean skippedFirst;
         private long skippedTime;
         private Surface surface;
@@ -534,7 +854,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this();
         }
 
-        public void startRecording(File outputFile, EGLContext sharedContext) {
+        public void startRecording(File outputFile, android.opengl.EGLContext sharedContext) {
             int resolution;
             int bitrate;
             String model = Build.DEVICE;
@@ -848,12 +1168,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         /* renamed from: lambda$handleVideoFrameAvailable$0$InstantCameraView$VideoRecorder */
-        final /* synthetic */ void mo11402x44721c1a() {
+        final /* synthetic */ void mo16734x44721c1a() {
             InstantCameraView.this.textureOverlayView.animate().setDuration(120).alpha(0.0f).setInterpolator(new DecelerateInterpolator()).start();
         }
 
         /* renamed from: lambda$handleVideoFrameAvailable$1$InstantCameraView$VideoRecorder */
-        final /* synthetic */ void mo11403xCLASSNAMEd81b() {
+        final /* synthetic */ void mo16735xCLASSNAMEd81b() {
             InstantCameraView.this.textureOverlayView.animate().setDuration(120).alpha(0.0f).setInterpolator(new DecelerateInterpolator()).start();
         }
 
@@ -1019,7 +1339,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 int[] version = new int[2];
                 if (EGL14.eglInitialize(this.eglDisplay, version, 0, version, 1)) {
                     if (this.eglContext == EGL14.EGL_NO_CONTEXT) {
-                        EGLConfig[] configs = new EGLConfig[1];
+                        android.opengl.EGLConfig[] configs = new android.opengl.EGLConfig[1];
                         if (EGL14.eglChooseConfig(this.eglDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12352, 4, 12610, 1, 12344}, 0, configs, 0, configs.length, new int[1], 0)) {
                             int[] iArr = new int[3];
                             this.eglContext = EGL14.eglCreateContext(this.eglDisplay, configs[0], this.sharedEglContext, new int[]{12440, 2, 12344}, 0);
@@ -1259,326 +1579,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 super.finalize();
             } catch (Throwable th) {
                 super.finalize();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.InstantCameraView$CameraGLThread */
-    public class CameraGLThread extends DispatchQueue {
-        private final int DO_REINIT_MESSAGE = 2;
-        private final int DO_RENDER_MESSAGE = 0;
-        private final int DO_SETSESSION_MESSAGE = 3;
-        private final int DO_SHUTDOWN_MESSAGE = 1;
-        private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
-        private final int EGL_OPENGL_ES2_BIT = 4;
-        private Integer cameraId = Integer.valueOf(0);
-        private SurfaceTexture cameraSurface;
-        private CameraSession currentSession;
-        private int drawProgram;
-        private EGL10 egl10;
-        private javax.microedition.khronos.egl.EGLConfig eglConfig;
-        private javax.microedition.khronos.egl.EGLContext eglContext;
-        private javax.microedition.khronos.egl.EGLDisplay eglDisplay;
-        private javax.microedition.khronos.egl.EGLSurface eglSurface;
-        /* renamed from: gl */
-        private GL var_gl;
-        private boolean initied;
-        private int positionHandle;
-        private boolean recording;
-        private int rotationAngle;
-        private SurfaceTexture surfaceTexture;
-        private int textureHandle;
-        private int textureMatrixHandle;
-        private int vertexMatrixHandle;
-        private VideoRecorder videoEncoder;
-
-        public CameraGLThread(SurfaceTexture surface, int surfaceWidth, int surfaceHeight) {
-            super("CameraGLThread");
-            this.surfaceTexture = surface;
-            int width = InstantCameraView.this.previewSize.getWidth();
-            int height = InstantCameraView.this.previewSize.getHeight();
-            float scale = ((float) surfaceWidth) / ((float) Math.min(width, height));
-            width = (int) (((float) width) * scale);
-            height = (int) (((float) height) * scale);
-            if (width > height) {
-                InstantCameraView.this.scaleX = 1.0f;
-                InstantCameraView.this.scaleY = ((float) width) / ((float) surfaceHeight);
-                return;
-            }
-            InstantCameraView.this.scaleX = ((float) height) / ((float) surfaceWidth);
-            InstantCameraView.this.scaleY = 1.0f;
-        }
-
-        private boolean initGL() {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("start init gl");
-            }
-            this.egl10 = (EGL10) javax.microedition.khronos.egl.EGLContext.getEGL();
-            this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-            if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                }
-                finish();
-                return false;
-            }
-            if (this.egl10.eglInitialize(this.eglDisplay, new int[2])) {
-                int[] configsCount = new int[1];
-                javax.microedition.khronos.egl.EGLConfig[] configs = new javax.microedition.khronos.egl.EGLConfig[1];
-                if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 0, 12325, 0, 12326, 0, 12344}, configs, 1, configsCount)) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                    }
-                    finish();
-                    return false;
-                } else if (configsCount[0] > 0) {
-                    this.eglConfig = configs[0];
-                    this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
-                    if (this.eglContext == null) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                        }
-                        finish();
-                        return false;
-                    } else if (this.surfaceTexture instanceof SurfaceTexture) {
-                        this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surfaceTexture, null);
-                        if (this.eglSurface == null || this.eglSurface == EGL10.EGL_NO_SURFACE) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                            }
-                            finish();
-                            return false;
-                        }
-                        if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                            this.var_gl = this.eglContext.getGL();
-                            float tX = (1.0f / InstantCameraView.this.scaleX) / 2.0f;
-                            float tY = (1.0f / InstantCameraView.this.scaleY) / 2.0f;
-                            float[] fArr = new float[12];
-                            fArr = new float[]{-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f};
-                            float[] texData = new float[]{0.5f - tX, 0.5f - tY, 0.5f + tX, 0.5f - tY, 0.5f - tX, 0.5f + tY, 0.5f + tX, 0.5f + tY};
-                            this.videoEncoder = new VideoRecorder(InstantCameraView.this, null);
-                            InstantCameraView.this.vertexBuffer = ByteBuffer.allocateDirect(fArr.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-                            InstantCameraView.this.vertexBuffer.put(fArr).position(0);
-                            InstantCameraView.this.textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-                            InstantCameraView.this.textureBuffer.put(texData).position(0);
-                            Matrix.setIdentityM(InstantCameraView.this.mSTMatrix, 0);
-                            int vertexShader = InstantCameraView.this.loadShader(35633, InstantCameraView.VERTEX_SHADER);
-                            int fragmentShader = InstantCameraView.this.loadShader(35632, InstantCameraView.FRAGMENT_SCREEN_SHADER);
-                            if (vertexShader == 0 || fragmentShader == 0) {
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11e("failed creating shader");
-                                }
-                                finish();
-                                return false;
-                            }
-                            this.drawProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.drawProgram, vertexShader);
-                            GLES20.glAttachShader(this.drawProgram, fragmentShader);
-                            GLES20.glLinkProgram(this.drawProgram);
-                            int[] linkStatus = new int[1];
-                            GLES20.glGetProgramiv(this.drawProgram, 35714, linkStatus, 0);
-                            if (linkStatus[0] == 0) {
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m11e("failed link shader");
-                                }
-                                GLES20.glDeleteProgram(this.drawProgram);
-                                this.drawProgram = 0;
-                            } else {
-                                this.positionHandle = GLES20.glGetAttribLocation(this.drawProgram, "aPosition");
-                                this.textureHandle = GLES20.glGetAttribLocation(this.drawProgram, "aTextureCoord");
-                                this.vertexMatrixHandle = GLES20.glGetUniformLocation(this.drawProgram, "uMVPMatrix");
-                                this.textureMatrixHandle = GLES20.glGetUniformLocation(this.drawProgram, "uSTMatrix");
-                            }
-                            GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
-                            GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
-                            GLES20.glTexParameteri(36197, 10241, 9729);
-                            GLES20.glTexParameteri(36197, 10240, 9729);
-                            GLES20.glTexParameteri(36197, 10242, 33071);
-                            GLES20.glTexParameteri(36197, 10243, 33071);
-                            Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
-                            this.cameraSurface = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
-                            this.cameraSurface.setOnFrameAvailableListener(new InstantCameraView$CameraGLThread$$Lambda$0(this));
-                            InstantCameraView.this.createCamera(this.cameraSurface);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m11e("gl initied");
-                            }
-                            return true;
-                        }
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                        }
-                        finish();
-                        return false;
-                    } else {
-                        finish();
-                        return false;
-                    }
-                } else {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m11e("eglConfig not initialized");
-                    }
-                    finish();
-                    return false;
-                }
-            }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-            }
-            finish();
-            return false;
-        }
-
-        public void reinitForNewCamera() {
-            Handler handler = InstantCameraView.this.getHandler();
-            if (handler != null) {
-                sendMessage(handler.obtainMessage(2), 0);
-            }
-        }
-
-        public void finish() {
-            if (this.eglSurface != null) {
-                this.egl10.eglMakeCurrent(this.eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
-                this.egl10.eglDestroySurface(this.eglDisplay, this.eglSurface);
-                this.eglSurface = null;
-            }
-            if (this.eglContext != null) {
-                this.egl10.eglDestroyContext(this.eglDisplay, this.eglContext);
-                this.eglContext = null;
-            }
-            if (this.eglDisplay != null) {
-                this.egl10.eglTerminate(this.eglDisplay);
-                this.eglDisplay = null;
-            }
-        }
-
-        public void setCurrentSession(CameraSession session) {
-            Handler handler = InstantCameraView.this.getHandler();
-            if (handler != null) {
-                sendMessage(handler.obtainMessage(3, session), 0);
-            }
-        }
-
-        private void onDraw(Integer cameraId) {
-            if (!this.initied) {
-                return;
-            }
-            if ((this.eglContext.equals(this.egl10.eglGetCurrentContext()) && this.eglSurface.equals(this.egl10.eglGetCurrentSurface(12377))) || this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                this.cameraSurface.updateTexImage();
-                if (!this.recording) {
-                    this.videoEncoder.startRecording(InstantCameraView.this.cameraFile, EGL14.eglGetCurrentContext());
-                    this.recording = true;
-                    int orientation = this.currentSession.getCurrentOrientation();
-                    if (orientation == 90 || orientation == 270) {
-                        float temp = InstantCameraView.this.scaleX;
-                        InstantCameraView.this.scaleX = InstantCameraView.this.scaleY;
-                        InstantCameraView.this.scaleY = temp;
-                    }
-                }
-                this.videoEncoder.frameAvailable(this.cameraSurface, cameraId, System.nanoTime());
-                this.cameraSurface.getTransformMatrix(InstantCameraView.this.mSTMatrix);
-                GLES20.glUseProgram(this.drawProgram);
-                GLES20.glActiveTexture(33984);
-                GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
-                GLES20.glVertexAttribPointer(this.positionHandle, 3, 5126, false, 12, InstantCameraView.this.vertexBuffer);
-                GLES20.glEnableVertexAttribArray(this.positionHandle);
-                GLES20.glVertexAttribPointer(this.textureHandle, 2, 5126, false, 8, InstantCameraView.this.textureBuffer);
-                GLES20.glEnableVertexAttribArray(this.textureHandle);
-                GLES20.glUniformMatrix4fv(this.textureMatrixHandle, 1, false, InstantCameraView.this.mSTMatrix, 0);
-                GLES20.glUniformMatrix4fv(this.vertexMatrixHandle, 1, false, InstantCameraView.this.mMVPMatrix, 0);
-                GLES20.glDrawArrays(5, 0, 4);
-                GLES20.glDisableVertexAttribArray(this.positionHandle);
-                GLES20.glDisableVertexAttribArray(this.textureHandle);
-                GLES20.glBindTexture(36197, 0);
-                GLES20.glUseProgram(0);
-                this.egl10.eglSwapBuffers(this.eglDisplay, this.eglSurface);
-            } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-            }
-        }
-
-        public void run() {
-            this.initied = initGL();
-            super.run();
-        }
-
-        public void handleMessage(Message inputMessage) {
-            switch (inputMessage.what) {
-                case 0:
-                    onDraw((Integer) inputMessage.obj);
-                    return;
-                case 1:
-                    finish();
-                    if (this.recording) {
-                        this.videoEncoder.stopRecording(inputMessage.arg1);
-                    }
-                    Looper looper = Looper.myLooper();
-                    if (looper != null) {
-                        looper.quit();
-                        return;
-                    }
-                    return;
-                case 2:
-                    if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                        if (this.cameraSurface != null) {
-                            this.cameraSurface.getTransformMatrix(InstantCameraView.this.moldSTMatrix);
-                            this.cameraSurface.setOnFrameAvailableListener(null);
-                            this.cameraSurface.release();
-                            InstantCameraView.this.oldCameraTexture[0] = InstantCameraView.this.cameraTexture[0];
-                            InstantCameraView.this.cameraTextureAlpha = 0.0f;
-                            InstantCameraView.this.cameraTexture[0] = 0;
-                        }
-                        Integer num = this.cameraId;
-                        this.cameraId = Integer.valueOf(this.cameraId.intValue() + 1);
-                        InstantCameraView.this.cameraReady = false;
-                        GLES20.glGenTextures(1, InstantCameraView.this.cameraTexture, 0);
-                        GLES20.glBindTexture(36197, InstantCameraView.this.cameraTexture[0]);
-                        GLES20.glTexParameteri(36197, 10241, 9729);
-                        GLES20.glTexParameteri(36197, 10240, 9729);
-                        GLES20.glTexParameteri(36197, 10242, 33071);
-                        GLES20.glTexParameteri(36197, 10243, 33071);
-                        this.cameraSurface = new SurfaceTexture(InstantCameraView.this.cameraTexture[0]);
-                        this.cameraSurface.setOnFrameAvailableListener(new InstantCameraView$CameraGLThread$$Lambda$1(this));
-                        InstantCameraView.this.createCamera(this.cameraSurface);
-                        return;
-                    } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m10d("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                        return;
-                    } else {
-                        return;
-                    }
-                case 3:
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m10d("set gl rednderer session");
-                    }
-                    CameraSession newSession = inputMessage.obj;
-                    if (this.currentSession == newSession) {
-                        this.rotationAngle = this.currentSession.getWorldAngle();
-                        Matrix.setIdentityM(InstantCameraView.this.mMVPMatrix, 0);
-                        if (this.rotationAngle != 0) {
-                            Matrix.rotateM(InstantCameraView.this.mMVPMatrix, 0, (float) this.rotationAngle, 0.0f, 0.0f, 1.0f);
-                            return;
-                        }
-                        return;
-                    }
-                    this.currentSession = newSession;
-                    return;
-                default:
-                    return;
-            }
-        }
-
-        public void shutdown(int send) {
-            Handler handler = InstantCameraView.this.getHandler();
-            if (handler != null) {
-                sendMessage(handler.obtainMessage(1, send, 0), 0);
-            }
-        }
-
-        /* renamed from: requestRender */
-        public void lambda$initGL$0$InstantCameraView$CameraGLThread() {
-            Handler handler = InstantCameraView.this.getHandler();
-            if (handler != null) {
-                sendMessage(handler.obtainMessage(0, this.cameraId), 0);
             }
         }
     }

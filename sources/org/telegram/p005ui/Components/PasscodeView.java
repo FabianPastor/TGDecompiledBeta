@@ -113,6 +113,38 @@ public class PasscodeView extends FrameLayout {
         }
     }
 
+    /* renamed from: org.telegram.ui.Components.PasscodeView$12 */
+    class CLASSNAME extends AuthenticationCallback {
+        CLASSNAME() {
+        }
+
+        public void onAuthenticationError(int errMsgId, CharSequence errString) {
+            if (!PasscodeView.this.selfCancelled) {
+                PasscodeView.this.showFingerprintError(errString);
+            }
+        }
+
+        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+            PasscodeView.this.showFingerprintError(helpString);
+        }
+
+        public void onAuthenticationFailed() {
+            PasscodeView.this.showFingerprintError(LocaleController.getString("FingerprintNotRecognized", R.string.FingerprintNotRecognized));
+        }
+
+        public void onAuthenticationSucceeded(AuthenticationResult result) {
+            try {
+                if (PasscodeView.this.fingerprintDialog.isShowing()) {
+                    PasscodeView.this.fingerprintDialog.dismiss();
+                }
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+            PasscodeView.this.fingerprintDialog = null;
+            PasscodeView.this.processDone(true);
+        }
+    }
+
     /* renamed from: org.telegram.ui.Components.PasscodeView$13 */
     class CLASSNAME implements OnTouchListener {
         CLASSNAME() {
@@ -588,38 +620,6 @@ public class PasscodeView extends FrameLayout {
     /* renamed from: org.telegram.ui.Components.PasscodeView$PasscodeViewDelegate */
     public interface PasscodeViewDelegate {
         void didAcceptedPassword();
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$12 */
-    class CLASSNAME extends AuthenticationCallback {
-        CLASSNAME() {
-        }
-
-        public void onAuthenticationError(int errMsgId, CharSequence errString) {
-            if (!PasscodeView.this.selfCancelled) {
-                PasscodeView.this.showFingerprintError(errString);
-            }
-        }
-
-        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-            PasscodeView.this.showFingerprintError(helpString);
-        }
-
-        public void onAuthenticationFailed() {
-            PasscodeView.this.showFingerprintError(LocaleController.getString("FingerprintNotRecognized", R.string.FingerprintNotRecognized));
-        }
-
-        public void onAuthenticationSucceeded(AuthenticationResult result) {
-            try {
-                if (PasscodeView.this.fingerprintDialog.isShowing()) {
-                    PasscodeView.this.fingerprintDialog.dismiss();
-                }
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
-            PasscodeView.this.fingerprintDialog = null;
-            PasscodeView.this.processDone(true);
-        }
     }
 
     public PasscodeView(Context context) {

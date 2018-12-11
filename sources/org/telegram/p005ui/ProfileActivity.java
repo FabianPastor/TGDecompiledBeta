@@ -273,43 +273,55 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    /* renamed from: org.telegram.ui.ProfileActivity$8 */
-    class CLASSNAME extends ViewOutlineProvider {
+    /* renamed from: org.telegram.ui.ProfileActivity$1 */
+    class CLASSNAME extends EmptyPhotoViewerProvider {
         CLASSNAME() {
         }
 
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ProfileActivity$TopView */
-    private class TopView extends View {
-        private int currentColor;
-        private Paint paint = new Paint();
-
-        public TopView(Context context) {
-            super(context);
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), ((ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight()) + AndroidUtilities.m9dp(91.0f));
-        }
-
-        public void setBackgroundColor(int color) {
-            if (color != this.currentColor) {
-                this.paint.setColor(color);
-                invalidate();
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            PlaceProviderObject object = null;
+            int i = 0;
+            if (fileLocation != null) {
+                FileLocation photoBig = null;
+                if (ProfileActivity.this.user_id != 0) {
+                    User user = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUser(Integer.valueOf(ProfileActivity.this.user_id));
+                    if (!(user == null || user.photo == null || user.photo.photo_big == null)) {
+                        photoBig = user.photo.photo_big;
+                    }
+                } else if (ProfileActivity.this.chat_id != 0) {
+                    Chat chat = MessagesController.getInstance(ProfileActivity.this.currentAccount).getChat(Integer.valueOf(ProfileActivity.this.chat_id));
+                    if (!(chat == null || chat.photo == null || chat.photo.photo_big == null)) {
+                        photoBig = chat.photo.photo_big;
+                    }
+                }
+                if (photoBig != null && photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id) {
+                    int[] coords = new int[2];
+                    ProfileActivity.this.avatarImage.getLocationInWindow(coords);
+                    object = new PlaceProviderObject();
+                    object.viewX = coords[0];
+                    int i2 = coords[1];
+                    if (VERSION.SDK_INT < 21) {
+                        i = AndroidUtilities.statusBarHeight;
+                    }
+                    object.viewY = i2 - i;
+                    object.parentView = ProfileActivity.this.avatarImage;
+                    object.imageReceiver = ProfileActivity.this.avatarImage.getImageReceiver();
+                    if (ProfileActivity.this.user_id != 0) {
+                        object.dialogId = ProfileActivity.this.user_id;
+                    } else if (ProfileActivity.this.chat_id != 0) {
+                        object.dialogId = -ProfileActivity.this.chat_id;
+                    }
+                    object.thumb = object.imageReceiver.getBitmapSafe();
+                    object.size = -1;
+                    object.radius = ProfileActivity.this.avatarImage.getImageReceiver().getRoundRadius();
+                    object.scale = ProfileActivity.this.avatarImage.getScaleX();
+                }
             }
+            return object;
         }
 
-        protected void onDraw(Canvas canvas) {
-            int height = getMeasuredHeight() - AndroidUtilities.m9dp(91.0f);
-            canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (ProfileActivity.this.extraHeight + height), this.paint);
-            if (ProfileActivity.this.parentLayout != null) {
-                ProfileActivity.this.parentLayout.drawHeaderShadow(canvas, ProfileActivity.this.extraHeight + height);
-            }
+        public void willHidePhotoViewer() {
+            ProfileActivity.this.avatarImage.getImageReceiver().setVisible(true, true);
         }
     }
 
@@ -494,6 +506,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
+    /* renamed from: org.telegram.ui.ProfileActivity$8 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
+        }
+    }
+
     /* renamed from: org.telegram.ui.ProfileActivity$9 */
     class CLASSNAME extends OnScrollListener {
         CLASSNAME() {
@@ -504,58 +527,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             if (ProfileActivity.this.participantsMap != null && !ProfileActivity.this.usersEndReached && ProfileActivity.this.layoutManager.findLastVisibleItemPosition() > ProfileActivity.this.membersEndRow - 8) {
                 ProfileActivity.this.getChannelParticipants(false);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ProfileActivity$1 */
-    class CLASSNAME extends EmptyPhotoViewerProvider {
-        CLASSNAME() {
-        }
-
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-            PlaceProviderObject object = null;
-            int i = 0;
-            if (fileLocation != null) {
-                FileLocation photoBig = null;
-                if (ProfileActivity.this.user_id != 0) {
-                    User user = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUser(Integer.valueOf(ProfileActivity.this.user_id));
-                    if (!(user == null || user.photo == null || user.photo.photo_big == null)) {
-                        photoBig = user.photo.photo_big;
-                    }
-                } else if (ProfileActivity.this.chat_id != 0) {
-                    Chat chat = MessagesController.getInstance(ProfileActivity.this.currentAccount).getChat(Integer.valueOf(ProfileActivity.this.chat_id));
-                    if (!(chat == null || chat.photo == null || chat.photo.photo_big == null)) {
-                        photoBig = chat.photo.photo_big;
-                    }
-                }
-                if (photoBig != null && photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id) {
-                    int[] coords = new int[2];
-                    ProfileActivity.this.avatarImage.getLocationInWindow(coords);
-                    object = new PlaceProviderObject();
-                    object.viewX = coords[0];
-                    int i2 = coords[1];
-                    if (VERSION.SDK_INT < 21) {
-                        i = AndroidUtilities.statusBarHeight;
-                    }
-                    object.viewY = i2 - i;
-                    object.parentView = ProfileActivity.this.avatarImage;
-                    object.imageReceiver = ProfileActivity.this.avatarImage.getImageReceiver();
-                    if (ProfileActivity.this.user_id != 0) {
-                        object.dialogId = ProfileActivity.this.user_id;
-                    } else if (ProfileActivity.this.chat_id != 0) {
-                        object.dialogId = -ProfileActivity.this.chat_id;
-                    }
-                    object.thumb = object.imageReceiver.getBitmapSafe();
-                    object.size = -1;
-                    object.radius = ProfileActivity.this.avatarImage.getImageReceiver().getRoundRadius();
-                    object.scale = ProfileActivity.this.avatarImage.getScaleX();
-                }
-            }
-            return object;
-        }
-
-        public void willHidePhotoViewer() {
-            ProfileActivity.this.avatarImage.getImageReceiver().setVisible(true, true);
         }
     }
 
@@ -944,6 +915,35 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 return 11;
             }
             return 0;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ProfileActivity$TopView */
+    private class TopView extends View {
+        private int currentColor;
+        private Paint paint = new Paint();
+
+        public TopView(Context context) {
+            super(context);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), ((ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight()) + AndroidUtilities.m9dp(91.0f));
+        }
+
+        public void setBackgroundColor(int color) {
+            if (color != this.currentColor) {
+                this.paint.setColor(color);
+                invalidate();
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int height = getMeasuredHeight() - AndroidUtilities.m9dp(91.0f);
+            canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (ProfileActivity.this.extraHeight + height), this.paint);
+            if (ProfileActivity.this.parentLayout != null) {
+                ProfileActivity.this.parentLayout.drawHeaderShadow(canvas, ProfileActivity.this.extraHeight + height);
+            }
         }
     }
 

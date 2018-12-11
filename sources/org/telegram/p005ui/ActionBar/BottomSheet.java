@@ -83,237 +83,6 @@ public class BottomSheet extends Dialog {
     private boolean useFastDismiss;
     private boolean useHardwareLayer = true;
 
-    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$3 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            if (BottomSheet.this.startAnimationRunnable == this && !BottomSheet.this.dismissed) {
-                BottomSheet.this.startAnimationRunnable = null;
-                BottomSheet.this.startOpenAnimation();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$4 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
-                BottomSheet.this.currentSheetAnimation = null;
-                if (BottomSheet.this.delegate != null) {
-                    BottomSheet.this.delegate.onOpenAnimationEnd();
-                }
-                if (BottomSheet.this.useHardwareLayer) {
-                    BottomSheet.this.container.setLayerType(0, null);
-                }
-            }
-        }
-
-        public void onAnimationCancel(Animator animation) {
-            if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
-                BottomSheet.this.currentSheetAnimation = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$6 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
-                BottomSheet.this.currentSheetAnimation = null;
-                AndroidUtilities.runOnUIThread(new BottomSheet$6$$Lambda$0(this));
-            }
-        }
-
-        final /* synthetic */ void lambda$onAnimationEnd$0$BottomSheet$6() {
-            try {
-                BottomSheet.this.dismissInternal();
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
-        }
-
-        public void onAnimationCancel(Animator animation) {
-            if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
-                BottomSheet.this.currentSheetAnimation = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$BottomSheetCell */
-    public static class BottomSheetCell extends FrameLayout {
-        private ImageView imageView;
-        private TextView textView;
-
-        public BottomSheetCell(Context context, int type) {
-            int i = 3;
-            super(context);
-            setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            setPadding(AndroidUtilities.m9dp(16.0f), 0, AndroidUtilities.m9dp(16.0f), 0);
-            this.imageView = new ImageView(context);
-            this.imageView.setScaleType(ScaleType.CENTER);
-            this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
-            addView(this.imageView, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? 5 : 3) | 16));
-            this.textView = new TextView(context);
-            this.textView.setLines(1);
-            this.textView.setSingleLine(true);
-            this.textView.setGravity(1);
-            this.textView.setEllipsize(TruncateAt.END);
-            if (type == 0) {
-                this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                this.textView.setTextSize(1, 16.0f);
-                View view = this.textView;
-                if (LocaleController.isRTL) {
-                    i = 5;
-                }
-                addView(view, LayoutHelper.createFrame(-2, -2, i | 16));
-            } else if (type == 1) {
-                this.textView.setGravity(17);
-                this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                this.textView.setTextSize(1, 14.0f);
-                this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                addView(this.textView, LayoutHelper.createFrame(-1, -1.0f));
-            }
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f), NUM));
-        }
-
-        public void setTextColor(int color) {
-            this.textView.setTextColor(color);
-        }
-
-        public void setGravity(int gravity) {
-            this.textView.setGravity(gravity);
-        }
-
-        public void setTextAndIcon(CharSequence text, int icon) {
-            this.textView.setText(text);
-            if (icon != 0) {
-                this.imageView.setImageResource(icon);
-                this.imageView.setVisibility(0);
-                this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.m9dp(56.0f), 0, LocaleController.isRTL ? AndroidUtilities.m9dp(56.0f) : 0, 0);
-                return;
-            }
-            this.imageView.setVisibility(4);
-            this.textView.setPadding(0, 0, 0, 0);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$BottomSheetDelegateInterface */
-    public interface BottomSheetDelegateInterface {
-        boolean canDismiss();
-
-        void onOpenAnimationEnd();
-
-        void onOpenAnimationStart();
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$Builder */
-    public static class Builder {
-        private BottomSheet bottomSheet;
-
-        public Builder(Context context) {
-            this.bottomSheet = new BottomSheet(context, false);
-        }
-
-        public Builder(Context context, boolean needFocus) {
-            this.bottomSheet = new BottomSheet(context, needFocus);
-        }
-
-        public Builder setItems(CharSequence[] items, OnClickListener onClickListener) {
-            this.bottomSheet.items = items;
-            this.bottomSheet.onClickListener = onClickListener;
-            return this;
-        }
-
-        public Builder setItems(CharSequence[] items, int[] icons, OnClickListener onClickListener) {
-            this.bottomSheet.items = items;
-            this.bottomSheet.itemIcons = icons;
-            this.bottomSheet.onClickListener = onClickListener;
-            return this;
-        }
-
-        public Builder setCustomView(View view) {
-            this.bottomSheet.customView = view;
-            return this;
-        }
-
-        public Builder setTitle(CharSequence title) {
-            this.bottomSheet.title = title;
-            return this;
-        }
-
-        public BottomSheet create() {
-            return this.bottomSheet;
-        }
-
-        public BottomSheet show() {
-            this.bottomSheet.show();
-            return this.bottomSheet;
-        }
-
-        public Builder setTag(int tag) {
-            this.bottomSheet.tag = tag;
-            return this;
-        }
-
-        public Builder setUseHardwareLayer(boolean value) {
-            this.bottomSheet.useHardwareLayer = value;
-            return this;
-        }
-
-        public Builder setDelegate(BottomSheetDelegate delegate) {
-            this.bottomSheet.setDelegate(delegate);
-            return this;
-        }
-
-        public Builder setApplyTopPadding(boolean value) {
-            this.bottomSheet.applyTopPadding = value;
-            return this;
-        }
-
-        public Builder setApplyBottomPadding(boolean value) {
-            this.bottomSheet.applyBottomPadding = value;
-            return this;
-        }
-
-        public Runnable getDismissRunnable() {
-            return this.bottomSheet.dismissRunnable;
-        }
-
-        public BottomSheet setUseFullWidth(boolean value) {
-            this.bottomSheet.fullWidth = value;
-            return this.bottomSheet;
-        }
-
-        public BottomSheet setUseFullscreen(boolean value) {
-            this.bottomSheet.fullscreen = value;
-            return this.bottomSheet;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$BottomSheetDelegate */
-    public static class BottomSheetDelegate implements BottomSheetDelegateInterface {
-        public void onOpenAnimationStart() {
-        }
-
-        public void onOpenAnimationEnd() {
-        }
-
-        public boolean canDismiss() {
-            return true;
-        }
-    }
-
     /* renamed from: org.telegram.ui.ActionBar.BottomSheet$ContainerView */
     protected class ContainerView extends FrameLayout implements NestedScrollingParent {
         private AnimatorSet currentAnimation = null;
@@ -629,6 +398,237 @@ public class BottomSheet extends Dialog {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             BottomSheet.this.onContainerDraw(canvas);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$3 */
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
+        }
+
+        public void run() {
+            if (BottomSheet.this.startAnimationRunnable == this && !BottomSheet.this.dismissed) {
+                BottomSheet.this.startAnimationRunnable = null;
+                BottomSheet.this.startOpenAnimation();
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$4 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                BottomSheet.this.currentSheetAnimation = null;
+                if (BottomSheet.this.delegate != null) {
+                    BottomSheet.this.delegate.onOpenAnimationEnd();
+                }
+                if (BottomSheet.this.useHardwareLayer) {
+                    BottomSheet.this.container.setLayerType(0, null);
+                }
+            }
+        }
+
+        public void onAnimationCancel(Animator animation) {
+            if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                BottomSheet.this.currentSheetAnimation = null;
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$6 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                BottomSheet.this.currentSheetAnimation = null;
+                AndroidUtilities.runOnUIThread(new BottomSheet$6$$Lambda$0(this));
+            }
+        }
+
+        final /* synthetic */ void lambda$onAnimationEnd$0$BottomSheet$6() {
+            try {
+                BottomSheet.this.dismissInternal();
+            } catch (Throwable e) {
+                FileLog.m13e(e);
+            }
+        }
+
+        public void onAnimationCancel(Animator animation) {
+            if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                BottomSheet.this.currentSheetAnimation = null;
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$BottomSheetCell */
+    public static class BottomSheetCell extends FrameLayout {
+        private ImageView imageView;
+        private TextView textView;
+
+        public BottomSheetCell(Context context, int type) {
+            int i = 3;
+            super(context);
+            setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            setPadding(AndroidUtilities.m9dp(16.0f), 0, AndroidUtilities.m9dp(16.0f), 0);
+            this.imageView = new ImageView(context);
+            this.imageView.setScaleType(ScaleType.CENTER);
+            this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
+            addView(this.imageView, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? 5 : 3) | 16));
+            this.textView = new TextView(context);
+            this.textView.setLines(1);
+            this.textView.setSingleLine(true);
+            this.textView.setGravity(1);
+            this.textView.setEllipsize(TruncateAt.END);
+            if (type == 0) {
+                this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                this.textView.setTextSize(1, 16.0f);
+                View view = this.textView;
+                if (LocaleController.isRTL) {
+                    i = 5;
+                }
+                addView(view, LayoutHelper.createFrame(-2, -2, i | 16));
+            } else if (type == 1) {
+                this.textView.setGravity(17);
+                this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                this.textView.setTextSize(1, 14.0f);
+                this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                addView(this.textView, LayoutHelper.createFrame(-1, -1.0f));
+            }
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(48.0f), NUM));
+        }
+
+        public void setTextColor(int color) {
+            this.textView.setTextColor(color);
+        }
+
+        public void setGravity(int gravity) {
+            this.textView.setGravity(gravity);
+        }
+
+        public void setTextAndIcon(CharSequence text, int icon) {
+            this.textView.setText(text);
+            if (icon != 0) {
+                this.imageView.setImageResource(icon);
+                this.imageView.setVisibility(0);
+                this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.m9dp(56.0f), 0, LocaleController.isRTL ? AndroidUtilities.m9dp(56.0f) : 0, 0);
+                return;
+            }
+            this.imageView.setVisibility(4);
+            this.textView.setPadding(0, 0, 0, 0);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$BottomSheetDelegateInterface */
+    public interface BottomSheetDelegateInterface {
+        boolean canDismiss();
+
+        void onOpenAnimationEnd();
+
+        void onOpenAnimationStart();
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$BottomSheetDelegate */
+    public static class BottomSheetDelegate implements BottomSheetDelegateInterface {
+        public void onOpenAnimationStart() {
+        }
+
+        public void onOpenAnimationEnd() {
+        }
+
+        public boolean canDismiss() {
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.BottomSheet$Builder */
+    public static class Builder {
+        private BottomSheet bottomSheet;
+
+        public Builder(Context context) {
+            this.bottomSheet = new BottomSheet(context, false);
+        }
+
+        public Builder(Context context, boolean needFocus) {
+            this.bottomSheet = new BottomSheet(context, needFocus);
+        }
+
+        public Builder setItems(CharSequence[] items, OnClickListener onClickListener) {
+            this.bottomSheet.items = items;
+            this.bottomSheet.onClickListener = onClickListener;
+            return this;
+        }
+
+        public Builder setItems(CharSequence[] items, int[] icons, OnClickListener onClickListener) {
+            this.bottomSheet.items = items;
+            this.bottomSheet.itemIcons = icons;
+            this.bottomSheet.onClickListener = onClickListener;
+            return this;
+        }
+
+        public Builder setCustomView(View view) {
+            this.bottomSheet.customView = view;
+            return this;
+        }
+
+        public Builder setTitle(CharSequence title) {
+            this.bottomSheet.title = title;
+            return this;
+        }
+
+        public BottomSheet create() {
+            return this.bottomSheet;
+        }
+
+        public BottomSheet show() {
+            this.bottomSheet.show();
+            return this.bottomSheet;
+        }
+
+        public Builder setTag(int tag) {
+            this.bottomSheet.tag = tag;
+            return this;
+        }
+
+        public Builder setUseHardwareLayer(boolean value) {
+            this.bottomSheet.useHardwareLayer = value;
+            return this;
+        }
+
+        public Builder setDelegate(BottomSheetDelegate delegate) {
+            this.bottomSheet.setDelegate(delegate);
+            return this;
+        }
+
+        public Builder setApplyTopPadding(boolean value) {
+            this.bottomSheet.applyTopPadding = value;
+            return this;
+        }
+
+        public Builder setApplyBottomPadding(boolean value) {
+            this.bottomSheet.applyBottomPadding = value;
+            return this;
+        }
+
+        public Runnable getDismissRunnable() {
+            return this.bottomSheet.dismissRunnable;
+        }
+
+        public BottomSheet setUseFullWidth(boolean value) {
+            this.bottomSheet.fullWidth = value;
+            return this.bottomSheet;
+        }
+
+        public BottomSheet setUseFullscreen(boolean value) {
+            this.bottomSheet.fullscreen = value;
+            return this.bottomSheet;
         }
     }
 

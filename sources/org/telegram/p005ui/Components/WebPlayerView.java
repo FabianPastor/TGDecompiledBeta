@@ -148,6 +148,34 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     private int waitingForFirstTextureUpload;
     private WebView webView;
 
+    /* renamed from: org.telegram.ui.Components.WebPlayerView$WebPlayerViewDelegate */
+    public interface WebPlayerViewDelegate {
+        boolean checkInlinePermissions();
+
+        ViewGroup getTextureViewContainer();
+
+        void onInitFailed();
+
+        void onInlineSurfaceTextureReady();
+
+        void onPlayStateChanged(WebPlayerView webPlayerView, boolean z);
+
+        void onSharePressed();
+
+        TextureView onSwitchInlineMode(View view, boolean z, float f, int i, boolean z2);
+
+        TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
+
+        void onVideoSizeChanged(float f, int i);
+
+        void prepareToSwitchInlineMode(boolean z, Runnable runnable, float f, boolean z2);
+    }
+
+    /* renamed from: org.telegram.ui.Components.WebPlayerView$CallJavaResultInterface */
+    public interface CallJavaResultInterface {
+        void jsCallFinished(String str);
+    }
+
     /* renamed from: org.telegram.ui.Components.WebPlayerView$1 */
     class CLASSNAME implements Runnable {
         CLASSNAME() {
@@ -329,11 +357,6 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 WebPlayerView.this.onInitFailed();
             }
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.WebPlayerView$CallJavaResultInterface */
-    public interface CallJavaResultInterface {
-        void jsCallFinished(String str);
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$ControlsView */
@@ -1074,29 +1097,6 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 WebPlayerView.this.onInitFailed();
             }
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.WebPlayerView$WebPlayerViewDelegate */
-    public interface WebPlayerViewDelegate {
-        boolean checkInlinePermissions();
-
-        ViewGroup getTextureViewContainer();
-
-        void onInitFailed();
-
-        void onInlineSurfaceTextureReady();
-
-        void onPlayStateChanged(WebPlayerView webPlayerView, boolean z);
-
-        void onSharePressed();
-
-        TextureView onSwitchInlineMode(View view, boolean z, float f, int i, boolean z2);
-
-        TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
-
-        void onVideoSizeChanged(float f, int i);
-
-        void prepareToSwitchInlineMode(boolean z, Runnable runnable, float f, boolean z2);
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask */

@@ -41,6 +41,17 @@ public class VideoTimelineView extends View {
     private Rect rect2;
     private long videoLength;
 
+    /* renamed from: org.telegram.ui.Components.VideoTimelineView$VideoTimelineViewDelegate */
+    public interface VideoTimelineViewDelegate {
+        void didStartDragging();
+
+        void didStopDragging();
+
+        void onLeftProgressChanged(float f);
+
+        void onRightProgressChanged(float f);
+    }
+
     /* renamed from: org.telegram.ui.Components.VideoTimelineView$1 */
     class CLASSNAME extends AsyncTask<Integer, Integer, Bitmap> {
         private int frameNum = 0;
@@ -95,17 +106,6 @@ public class VideoTimelineView extends View {
                 }
             }
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.VideoTimelineView$VideoTimelineViewDelegate */
-    public interface VideoTimelineViewDelegate {
-        void didStartDragging();
-
-        void didStopDragging();
-
-        void onLeftProgressChanged(float f);
-
-        void onRightProgressChanged(float f);
     }
 
     public VideoTimelineView(Context context) {

@@ -101,6 +101,59 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     private int stickersStartRow;
     private EditTextBoldCursor usernameTextView;
 
+    /* renamed from: org.telegram.ui.GroupStickersActivity$10 */
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
+        }
+
+        public void run(TLObject response, final TL_error error) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    if (error == null) {
+                        if (GroupStickersActivity.this.selectedStickerSet == null) {
+                            GroupStickersActivity.this.info.stickerset = null;
+                        } else {
+                            GroupStickersActivity.this.info.stickerset = GroupStickersActivity.this.selectedStickerSet.set;
+                            DataQuery.getInstance(GroupStickersActivity.this.currentAccount).putGroupStickerSet(GroupStickersActivity.this.selectedStickerSet);
+                        }
+                        if (GroupStickersActivity.this.info.stickerset == null) {
+                            ChatFull access$2100 = GroupStickersActivity.this.info;
+                            access$2100.flags |= 256;
+                        } else {
+                            GroupStickersActivity.this.info.flags &= -257;
+                        }
+                        MessagesStorage.getInstance(GroupStickersActivity.this.currentAccount).updateChatInfo(GroupStickersActivity.this.info, false);
+                        NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
+                        GroupStickersActivity.this.finishFragment();
+                        return;
+                    }
+                    Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text, 0).show();
+                    GroupStickersActivity.this.donePressed = false;
+                    GroupStickersActivity.this.showEditDoneProgress(false);
+                }
+            });
+        }
+    }
+
+    /* renamed from: org.telegram.ui.GroupStickersActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                GroupStickersActivity.this.finishFragment();
+            } else if (id == 1 && !GroupStickersActivity.this.donePressed) {
+                GroupStickersActivity.this.donePressed = true;
+                if (GroupStickersActivity.this.searching) {
+                    GroupStickersActivity.this.showEditDoneProgress(true);
+                } else {
+                    GroupStickersActivity.this.saveStickerSet();
+                }
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.GroupStickersActivity$3 */
     class CLASSNAME implements TextWatcher {
         boolean ignoreTextChange;
@@ -149,72 +202,6 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             GroupStickersActivity.this.selectedStickerSet = null;
             GroupStickersActivity.this.usernameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             GroupStickersActivity.this.updateRows();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.GroupStickersActivity$9 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            if (GroupStickersActivity.this.usernameTextView != null) {
-                GroupStickersActivity.this.usernameTextView.requestFocus();
-                AndroidUtilities.showKeyboard(GroupStickersActivity.this.usernameTextView);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.GroupStickersActivity$10 */
-    class CLASSNAME implements RequestDelegate {
-        CLASSNAME() {
-        }
-
-        public void run(TLObject response, final TL_error error) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    if (error == null) {
-                        if (GroupStickersActivity.this.selectedStickerSet == null) {
-                            GroupStickersActivity.this.info.stickerset = null;
-                        } else {
-                            GroupStickersActivity.this.info.stickerset = GroupStickersActivity.this.selectedStickerSet.set;
-                            DataQuery.getInstance(GroupStickersActivity.this.currentAccount).putGroupStickerSet(GroupStickersActivity.this.selectedStickerSet);
-                        }
-                        if (GroupStickersActivity.this.info.stickerset == null) {
-                            ChatFull access$2100 = GroupStickersActivity.this.info;
-                            access$2100.flags |= 256;
-                        } else {
-                            GroupStickersActivity.this.info.flags &= -257;
-                        }
-                        MessagesStorage.getInstance(GroupStickersActivity.this.currentAccount).updateChatInfo(GroupStickersActivity.this.info, false);
-                        NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
-                        GroupStickersActivity.this.lambda$checkDiscard$70$PassportActivity();
-                        return;
-                    }
-                    Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text, 0).show();
-                    GroupStickersActivity.this.donePressed = false;
-                    GroupStickersActivity.this.showEditDoneProgress(false);
-                }
-            });
-        }
-    }
-
-    /* renamed from: org.telegram.ui.GroupStickersActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                GroupStickersActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1 && !GroupStickersActivity.this.donePressed) {
-                GroupStickersActivity.this.donePressed = true;
-                if (GroupStickersActivity.this.searching) {
-                    GroupStickersActivity.this.showEditDoneProgress(true);
-                } else {
-                    GroupStickersActivity.this.saveStickerSet();
-                }
-            }
         }
     }
 
@@ -269,6 +256,19 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.GroupStickersActivity$9 */
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
+        }
+
+        public void run() {
+            if (GroupStickersActivity.this.usernameTextView != null) {
+                GroupStickersActivity.this.usernameTextView.requestFocus();
+                AndroidUtilities.showKeyboard(GroupStickersActivity.this.usernameTextView);
+            }
         }
     }
 
@@ -658,7 +658,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     private void saveStickerSet() {
         if (this.info == null || (!(this.info.stickerset == null || this.selectedStickerSet == null || this.selectedStickerSet.set.var_id != this.info.stickerset.var_id) || (this.info.stickerset == null && this.selectedStickerSet == null))) {
-            lambda$checkDiscard$70$PassportActivity();
+            finishFragment();
             return;
         }
         showEditDoneProgress(true);

@@ -36,7 +36,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.EmuDetector;
@@ -366,7 +365,7 @@ public class ConnectionsManager {
                     throw new Exception("test backend");
                 }
                 this.firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-                this.firebaseRemoteConfig.setConfigSettings(new Builder().setDeveloperModeEnabled(BuildConfig.DEBUG).build());
+                this.firebaseRemoteConfig.setConfigSettings(new Builder().setDeveloperModeEnabled(false).build());
                 String currentValue = this.firebaseRemoteConfig.getString("ipconfigv2");
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m10d("current firebase value = " + currentValue);

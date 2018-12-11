@@ -243,6 +243,37 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private WebView webView;
     private boolean webviewLoading;
 
+    /* renamed from: org.telegram.ui.PaymentFormActivity$PaymentFormActivityDelegate */
+    private interface PaymentFormActivityDelegate {
+        void currentPasswordUpdated(TL_account_password tL_account_password);
+
+        boolean didSelectNewCard(String str, String str2, boolean z, TL_inputPaymentCredentialsAndroidPay tL_inputPaymentCredentialsAndroidPay);
+
+        void onFragmentDestroyed();
+    }
+
+    /* renamed from: org.telegram.ui.PaymentFormActivity$12 */
+    class CLASSNAME implements PaymentFormActivityDelegate {
+        CLASSNAME() {
+        }
+
+        public boolean didSelectNewCard(String tokenJson, String card, boolean saveCard, TL_inputPaymentCredentialsAndroidPay androidPay) {
+            PaymentFormActivity.this.paymentForm.saved_credentials = null;
+            PaymentFormActivity.this.paymentJson = tokenJson;
+            PaymentFormActivity.this.saveCardInfo = saveCard;
+            PaymentFormActivity.this.cardName = card;
+            PaymentFormActivity.this.androidPayCredentials = androidPay;
+            PaymentFormActivity.this.detailSettingsCell[0].setTextAndValue(PaymentFormActivity.this.cardName, LocaleController.getString("PaymentCheckoutMethod", R.string.PaymentCheckoutMethod), true);
+            return false;
+        }
+
+        public void onFragmentDestroyed() {
+        }
+
+        public void currentPasswordUpdated(TL_account_password password) {
+        }
+    }
+
     /* renamed from: org.telegram.ui.PaymentFormActivity$14 */
     class CLASSNAME extends WebViewClient {
         CLASSNAME() {
@@ -292,6 +323,97 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         public void afterTextChanged(Editable s) {
             if (PaymentFormActivity.this.emailCodeLength != 0 && s.length() == PaymentFormActivity.this.emailCodeLength) {
                 PaymentFormActivity.this.sendSavePassword(false);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PaymentFormActivity$17 */
+    class CLASSNAME implements PaymentFormActivityDelegate {
+        CLASSNAME() {
+        }
+
+        public boolean didSelectNewCard(String tokenJson, String card, boolean saveCard, TL_inputPaymentCredentialsAndroidPay androidPay) {
+            if (PaymentFormActivity.this.delegate != null) {
+                PaymentFormActivity.this.delegate.didSelectNewCard(tokenJson, card, saveCard, androidPay);
+            }
+            if (PaymentFormActivity.this.isWebView) {
+                PaymentFormActivity.this.lambda$null$10$ProfileActivity();
+            }
+            return PaymentFormActivity.this.delegate != null;
+        }
+
+        public void onFragmentDestroyed() {
+            PaymentFormActivity.this.passwordFragment = null;
+        }
+
+        public void currentPasswordUpdated(TL_account_password password) {
+            PaymentFormActivity.this.currentPassword = password;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PaymentFormActivity$18 */
+    class CLASSNAME implements TokenCallback {
+        CLASSNAME() {
+        }
+
+        public void onSuccess(Token token) {
+            if (!PaymentFormActivity.this.canceled) {
+                PaymentFormActivity.this.paymentJson = String.format(Locale.US, "{\"type\":\"%1$s\", \"id\":\"%2$s\"}", new Object[]{token.getType(), token.getId()});
+                AndroidUtilities.runOnUIThread(new PaymentFormActivity$18$$Lambda$0(this));
+            }
+        }
+
+        final /* synthetic */ void lambda$onSuccess$0$PaymentFormActivity$18() {
+            PaymentFormActivity.this.goToNextStep();
+            PaymentFormActivity.this.showEditDoneProgress(true, false);
+            PaymentFormActivity.this.setDonePressed(false);
+        }
+
+        public void onError(Exception error) {
+            if (!PaymentFormActivity.this.canceled) {
+                PaymentFormActivity.this.showEditDoneProgress(true, false);
+                PaymentFormActivity.this.setDonePressed(false);
+                if ((error instanceof APIConnectionException) || (error instanceof APIException)) {
+                    AlertsCreator.showSimpleToast(PaymentFormActivity.this, LocaleController.getString("PaymentConnectionFailed", R.string.PaymentConnectionFailed));
+                } else {
+                    AlertsCreator.showSimpleToast(PaymentFormActivity.this, error.getMessage());
+                }
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.PaymentFormActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                if (!PaymentFormActivity.this.donePressed) {
+                    PaymentFormActivity.this.lambda$checkDiscard$70$PassportActivity();
+                }
+            } else if (id == 1 && !PaymentFormActivity.this.donePressed) {
+                if (PaymentFormActivity.this.currentStep != 3) {
+                    AndroidUtilities.hideKeyboard(PaymentFormActivity.this.getParentActivity().getCurrentFocus());
+                }
+                if (PaymentFormActivity.this.currentStep == 0) {
+                    PaymentFormActivity.this.setDonePressed(true);
+                    PaymentFormActivity.this.sendForm();
+                } else if (PaymentFormActivity.this.currentStep == 1) {
+                    for (int a = 0; a < PaymentFormActivity.this.radioCells.length; a++) {
+                        if (PaymentFormActivity.this.radioCells[a].isChecked()) {
+                            PaymentFormActivity.this.shippingOption = (TL_shippingOption) PaymentFormActivity.this.requestedInfo.shipping_options.get(a);
+                            break;
+                        }
+                    }
+                    PaymentFormActivity.this.goToNextStep();
+                } else if (PaymentFormActivity.this.currentStep == 2) {
+                    PaymentFormActivity.this.sendCardData();
+                } else if (PaymentFormActivity.this.currentStep == 3) {
+                    PaymentFormActivity.this.checkPassword();
+                } else if (PaymentFormActivity.this.currentStep == 6) {
+                    PaymentFormActivity.this.sendSavePassword(false);
+                }
             }
         }
     }
@@ -731,15 +853,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    /* renamed from: org.telegram.ui.PaymentFormActivity$PaymentFormActivityDelegate */
-    private interface PaymentFormActivityDelegate {
-        void currentPasswordUpdated(TL_account_password tL_account_password);
-
-        boolean didSelectNewCard(String str, String str2, boolean z, TL_inputPaymentCredentialsAndroidPay tL_inputPaymentCredentialsAndroidPay);
-
-        void onFragmentDestroyed();
-    }
-
     /* renamed from: org.telegram.ui.PaymentFormActivity$TelegramWebviewProxy */
     private class TelegramWebviewProxy {
         private TelegramWebviewProxy() {
@@ -765,119 +878,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     FileLog.m13e(e);
                 }
                 PaymentFormActivity.this.goToNextStep();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PaymentFormActivity$12 */
-    class CLASSNAME implements PaymentFormActivityDelegate {
-        CLASSNAME() {
-        }
-
-        public boolean didSelectNewCard(String tokenJson, String card, boolean saveCard, TL_inputPaymentCredentialsAndroidPay androidPay) {
-            PaymentFormActivity.this.paymentForm.saved_credentials = null;
-            PaymentFormActivity.this.paymentJson = tokenJson;
-            PaymentFormActivity.this.saveCardInfo = saveCard;
-            PaymentFormActivity.this.cardName = card;
-            PaymentFormActivity.this.androidPayCredentials = androidPay;
-            PaymentFormActivity.this.detailSettingsCell[0].setTextAndValue(PaymentFormActivity.this.cardName, LocaleController.getString("PaymentCheckoutMethod", R.string.PaymentCheckoutMethod), true);
-            return false;
-        }
-
-        public void onFragmentDestroyed() {
-        }
-
-        public void currentPasswordUpdated(TL_account_password password) {
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PaymentFormActivity$17 */
-    class CLASSNAME implements PaymentFormActivityDelegate {
-        CLASSNAME() {
-        }
-
-        public boolean didSelectNewCard(String tokenJson, String card, boolean saveCard, TL_inputPaymentCredentialsAndroidPay androidPay) {
-            if (PaymentFormActivity.this.delegate != null) {
-                PaymentFormActivity.this.delegate.didSelectNewCard(tokenJson, card, saveCard, androidPay);
-            }
-            if (PaymentFormActivity.this.isWebView) {
-                PaymentFormActivity.this.lambda$null$10$ProfileActivity();
-            }
-            return PaymentFormActivity.this.delegate != null;
-        }
-
-        public void onFragmentDestroyed() {
-            PaymentFormActivity.this.passwordFragment = null;
-        }
-
-        public void currentPasswordUpdated(TL_account_password password) {
-            PaymentFormActivity.this.currentPassword = password;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PaymentFormActivity$18 */
-    class CLASSNAME implements TokenCallback {
-        CLASSNAME() {
-        }
-
-        public void onSuccess(Token token) {
-            if (!PaymentFormActivity.this.canceled) {
-                PaymentFormActivity.this.paymentJson = String.format(Locale.US, "{\"type\":\"%1$s\", \"id\":\"%2$s\"}", new Object[]{token.getType(), token.getId()});
-                AndroidUtilities.runOnUIThread(new PaymentFormActivity$18$$Lambda$0(this));
-            }
-        }
-
-        final /* synthetic */ void lambda$onSuccess$0$PaymentFormActivity$18() {
-            PaymentFormActivity.this.goToNextStep();
-            PaymentFormActivity.this.showEditDoneProgress(true, false);
-            PaymentFormActivity.this.setDonePressed(false);
-        }
-
-        public void onError(Exception error) {
-            if (!PaymentFormActivity.this.canceled) {
-                PaymentFormActivity.this.showEditDoneProgress(true, false);
-                PaymentFormActivity.this.setDonePressed(false);
-                if ((error instanceof APIConnectionException) || (error instanceof APIException)) {
-                    AlertsCreator.showSimpleToast(PaymentFormActivity.this, LocaleController.getString("PaymentConnectionFailed", R.string.PaymentConnectionFailed));
-                } else {
-                    AlertsCreator.showSimpleToast(PaymentFormActivity.this, error.getMessage());
-                }
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.PaymentFormActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                if (!PaymentFormActivity.this.donePressed) {
-                    PaymentFormActivity.this.lambda$checkDiscard$70$PassportActivity();
-                }
-            } else if (id == 1 && !PaymentFormActivity.this.donePressed) {
-                if (PaymentFormActivity.this.currentStep != 3) {
-                    AndroidUtilities.hideKeyboard(PaymentFormActivity.this.getParentActivity().getCurrentFocus());
-                }
-                if (PaymentFormActivity.this.currentStep == 0) {
-                    PaymentFormActivity.this.setDonePressed(true);
-                    PaymentFormActivity.this.sendForm();
-                } else if (PaymentFormActivity.this.currentStep == 1) {
-                    for (int a = 0; a < PaymentFormActivity.this.radioCells.length; a++) {
-                        if (PaymentFormActivity.this.radioCells[a].isChecked()) {
-                            PaymentFormActivity.this.shippingOption = (TL_shippingOption) PaymentFormActivity.this.requestedInfo.shipping_options.get(a);
-                            break;
-                        }
-                    }
-                    PaymentFormActivity.this.goToNextStep();
-                } else if (PaymentFormActivity.this.currentStep == 2) {
-                    PaymentFormActivity.this.sendCardData();
-                } else if (PaymentFormActivity.this.currentStep == 3) {
-                    PaymentFormActivity.this.checkPassword();
-                } else if (PaymentFormActivity.this.currentStep == 6) {
-                    PaymentFormActivity.this.sendSavePassword(false);
-                }
             }
         }
     }

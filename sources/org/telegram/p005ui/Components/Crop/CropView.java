@@ -526,25 +526,27 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
     public void rotate90Degrees() {
         boolean z = true;
-        this.areaView.resetAnimator();
-        resetRotationStartScale();
-        float orientation = ((this.state.getOrientation() - this.state.getBaseRotation()) - 90.0f) % 360.0f;
-        boolean fform = this.freeform;
-        if (!this.freeform || this.areaView.getLockAspectRatio() <= 0.0f) {
-            this.areaView.setBitmap(this.bitmap, (this.state.getBaseRotation() + orientation) % 180.0f != 0.0f, this.freeform);
-        } else {
-            this.areaView.setLockedAspectRatio(1.0f / this.areaView.getLockAspectRatio());
-            this.areaView.setActualRect(this.areaView.getLockAspectRatio());
-            fform = false;
-        }
-        this.state.reset(this.areaView, orientation, fform);
-        updateMatrix();
-        if (this.listener != null) {
-            CropViewListener cropViewListener = this.listener;
-            if (!(orientation == 0.0f && this.areaView.getLockAspectRatio() == 0.0f)) {
-                z = false;
+        if (this.state != null) {
+            this.areaView.resetAnimator();
+            resetRotationStartScale();
+            float orientation = ((this.state.getOrientation() - this.state.getBaseRotation()) - 90.0f) % 360.0f;
+            boolean fform = this.freeform;
+            if (!this.freeform || this.areaView.getLockAspectRatio() <= 0.0f) {
+                this.areaView.setBitmap(this.bitmap, (this.state.getBaseRotation() + orientation) % 180.0f != 0.0f, this.freeform);
+            } else {
+                this.areaView.setLockedAspectRatio(1.0f / this.areaView.getLockAspectRatio());
+                this.areaView.setActualRect(this.areaView.getLockAspectRatio());
+                fform = false;
             }
-            cropViewListener.onChange(z);
+            this.state.reset(this.areaView, orientation, fform);
+            updateMatrix();
+            if (this.listener != null) {
+                CropViewListener cropViewListener = this.listener;
+                if (!(orientation == 0.0f && this.areaView.getLockAspectRatio() == 0.0f)) {
+                    z = false;
+                }
+                cropViewListener.onChange(z);
+            }
         }
     }
 
@@ -653,7 +655,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     public Bitmap getResult() {
-        if (!this.state.hasChanges() && this.state.getBaseRotation() < EPSILON && this.freeform) {
+        if (this.state == null || (!this.state.hasChanges() && this.state.getBaseRotation() < EPSILON && this.freeform)) {
             return this.bitmap;
         }
         RectF cropRect = new RectF();

@@ -59,6 +59,20 @@ public class ChangeUsernameActivity extends BaseFragment {
     private String lastCheckName;
     private boolean lastNameAvailable;
 
+    /* renamed from: org.telegram.ui.ChangeUsernameActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                ChangeUsernameActivity.this.finishFragment();
+            } else if (id == 1) {
+                ChangeUsernameActivity.this.saveName();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$2 */
     class CLASSNAME implements TextWatcher {
         CLASSNAME() {
@@ -132,20 +146,6 @@ public class ChangeUsernameActivity extends BaseFragment {
                 Toast.makeText(ChangeUsernameActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
             } catch (Throwable e) {
                 FileLog.m13e(e);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.ChangeUsernameActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                ChangeUsernameActivity.this.lambda$checkDiscard$70$PassportActivity();
-            } else if (id == 1) {
-                ChangeUsernameActivity.this.saveName();
             }
         }
     }
@@ -354,7 +354,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 }
                 String newName = this.firstNameField.getText().toString();
                 if (currentName.equals(newName)) {
-                    lambda$checkDiscard$70$PassportActivity();
+                    finishFragment();
                     return;
                 }
                 AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
@@ -388,7 +388,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         MessagesController.getInstance(this.currentAccount).putUsers(users, false);
         MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, false, true);
         UserConfig.getInstance(this.currentAccount).saveConfig(true);
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
     final /* synthetic */ void lambda$null$6$ChangeUsernameActivity(AlertDialog progressDialog, TL_error error, TL_account_updateUsername req) {

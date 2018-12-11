@@ -74,6 +74,18 @@ public class DataSettingsActivity extends BaseFragment {
     private int voiceMessagesRow;
     private int wifiUsageRow;
 
+    /* renamed from: org.telegram.ui.DataSettingsActivity$1 */
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
+        }
+
+        public void onItemClick(int id) {
+            if (id == -1) {
+                DataSettingsActivity.this.finishFragment();
+            }
+        }
+    }
+
     /* renamed from: org.telegram.ui.DataSettingsActivity$2 */
     class CLASSNAME extends AnimatorListenerAdapter {
         CLASSNAME() {
@@ -82,18 +94,6 @@ public class DataSettingsActivity extends BaseFragment {
         public void onAnimationEnd(Animator animator) {
             if (animator.equals(DataSettingsActivity.this.animatorSet)) {
                 DataSettingsActivity.this.animatorSet = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DataSettingsActivity$1 */
-    class CLASSNAME extends ActionBarMenuOnItemClick {
-        CLASSNAME() {
-        }
-
-        public void onItemClick(int id) {
-            if (id == -1) {
-                DataSettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
             }
         }
     }

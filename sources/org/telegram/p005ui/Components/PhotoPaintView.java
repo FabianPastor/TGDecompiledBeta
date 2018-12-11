@@ -110,29 +110,6 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private FrameLayout toolsView;
     private UndoStore undoStore;
 
-    /* renamed from: org.telegram.ui.Components.PhotoPaintView$8 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animator) {
-            PhotoPaintView.this.stickersView.setVisibility(8);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PhotoPaintView$StickerPosition */
-    private class StickerPosition {
-        private float angle;
-        private Point position;
-        private float scale;
-
-        StickerPosition(Point position, float scale, float angle) {
-            this.position = position;
-            this.scale = scale;
-            this.angle = angle;
-        }
-    }
-
     /* renamed from: org.telegram.ui.Components.PhotoPaintView$1 */
     class CLASSNAME implements RenderViewDelegate {
         CLASSNAME() {
@@ -223,6 +200,29 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         }
 
         public void onTypeChanged() {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoPaintView$8 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animator) {
+            PhotoPaintView.this.stickersView.setVisibility(8);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PhotoPaintView$StickerPosition */
+    private class StickerPosition {
+        private float angle;
+        private Point position;
+        private float scale;
+
+        StickerPosition(Point position, float scale, float angle) {
+            this.position = position;
+            this.scale = scale;
+            this.angle = angle;
         }
     }
 

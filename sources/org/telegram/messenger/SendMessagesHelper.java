@@ -234,6 +234,23 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     private HashMap<String, Boolean> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
 
+    /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
+    class CLASSNAME implements LocationProviderDelegate {
+        CLASSNAME() {
+        }
+
+        public void onLocationAcquired(Location location) {
+            SendMessagesHelper.this.sendLocation(location);
+            SendMessagesHelper.this.waitingForLocation.clear();
+        }
+
+        public void onUnableLocationAcquire() {
+            HashMap<String, MessageObject> waitingForLocationCopy = new HashMap(SendMessagesHelper.this.waitingForLocation);
+            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.wasUnableToFindCurrentLocation, waitingForLocationCopy);
+            SendMessagesHelper.this.waitingForLocation.clear();
+        }
+    }
+
     protected class DelayedMessage {
         public EncryptedChat encryptedChat;
         public HashMap<Object, Object> extraHashMap;
@@ -367,6 +384,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         private Runnable locationQueryCancelRunnable;
         private GpsLocationListener networkLocationListener = new GpsLocationListener(this, null);
 
+        public interface LocationProviderDelegate {
+            void onLocationAcquired(Location location);
+
+            void onUnableLocationAcquire();
+        }
+
         /* renamed from: org.telegram.messenger.SendMessagesHelper$LocationProvider$1 */
         class CLASSNAME implements Runnable {
             CLASSNAME() {
@@ -420,12 +443,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
             public void onProviderDisabled(String provider) {
             }
-        }
-
-        public interface LocationProviderDelegate {
-            void onLocationAcquired(Location location);
-
-            void onUnableLocationAcquire();
         }
 
         public LocationProvider(LocationProviderDelegate locationProviderDelegate) {
@@ -506,23 +523,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         public int ttl;
         public Uri uri;
         public VideoEditedInfo videoEditedInfo;
-    }
-
-    /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
-    class CLASSNAME implements LocationProviderDelegate {
-        CLASSNAME() {
-        }
-
-        public void onLocationAcquired(Location location) {
-            SendMessagesHelper.this.sendLocation(location);
-            SendMessagesHelper.this.waitingForLocation.clear();
-        }
-
-        public void onUnableLocationAcquire() {
-            HashMap<String, MessageObject> waitingForLocationCopy = new HashMap(SendMessagesHelper.this.waitingForLocation);
-            NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).postNotificationName(NotificationCenter.wasUnableToFindCurrentLocation, waitingForLocationCopy);
-            SendMessagesHelper.this.waitingForLocation.clear();
-        }
     }
 
     static {

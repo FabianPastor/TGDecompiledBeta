@@ -103,14 +103,6 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     private boolean reseting = false;
     private int rowCount = 0;
 
-    /* renamed from: org.telegram.ui.NotificationsSettingsActivity$NotificationException */
-    public static class NotificationException {
-        public long did;
-        public boolean hasCustom;
-        public int muteUntil;
-        public int notify;
-    }
-
     /* renamed from: org.telegram.ui.NotificationsSettingsActivity$1 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -118,7 +110,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
 
         public void onItemClick(int id) {
             if (id == -1) {
-                NotificationsSettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                NotificationsSettingsActivity.this.finishFragment();
             }
         }
     }
@@ -373,6 +365,14 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             }
             return 5;
         }
+    }
+
+    /* renamed from: org.telegram.ui.NotificationsSettingsActivity$NotificationException */
+    public static class NotificationException {
+        public long did;
+        public boolean hasCustom;
+        public int muteUntil;
+        public int notify;
     }
 
     public boolean onFragmentCreate() {

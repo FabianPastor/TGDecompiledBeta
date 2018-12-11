@@ -92,17 +92,6 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     private SizeNotifierFrameLayout page2;
     private File themeFile;
 
-    /* renamed from: org.telegram.ui.ThemePreviewActivity$3 */
-    class CLASSNAME extends ViewOutlineProvider {
-        CLASSNAME() {
-        }
-
-        @SuppressLint({"NewApi"})
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
-        }
-    }
-
     /* renamed from: org.telegram.ui.ThemePreviewActivity$1 */
     class CLASSNAME extends ActionBarMenuItemSearchListener {
         CLASSNAME() {
@@ -119,6 +108,17 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
 
         public void onTextChanged(EditText editText) {
+        }
+    }
+
+    /* renamed from: org.telegram.ui.ThemePreviewActivity$3 */
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
+        }
+
+        @SuppressLint({"NewApi"})
+        public void getOutline(View view, Outline outline) {
+            outline.setOval(0, 0, AndroidUtilities.m9dp(56.0f), AndroidUtilities.m9dp(56.0f));
         }
     }
 

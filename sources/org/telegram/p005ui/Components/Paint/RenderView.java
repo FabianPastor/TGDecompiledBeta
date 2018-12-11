@@ -101,27 +101,6 @@ public class RenderView extends TextureView {
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.Paint.RenderView$3 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            RenderView.this.painting.cleanResources(RenderView.this.transformedBitmap);
-            RenderView.this.internal.shutdown();
-            RenderView.this.internal = null;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.Paint.RenderView$RenderViewDelegate */
-    public interface RenderViewDelegate {
-        void onBeganDrawing();
-
-        void onFinishedDrawing(boolean z);
-
-        boolean shouldDraw();
-    }
-
     /* renamed from: org.telegram.ui.Components.Paint.RenderView$2 */
     class CLASSNAME implements PaintingDelegate {
         CLASSNAME() {
@@ -142,6 +121,18 @@ public class RenderView extends TextureView {
 
         public DispatchQueue requestDispatchQueue() {
             return RenderView.this.queue;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.Paint.RenderView$3 */
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
+        }
+
+        public void run() {
+            RenderView.this.painting.cleanResources(RenderView.this.transformedBitmap);
+            RenderView.this.internal.shutdown();
+            RenderView.this.internal = null;
         }
     }
 
@@ -402,6 +393,15 @@ public class RenderView extends TextureView {
             }
             return object[0];
         }
+    }
+
+    /* renamed from: org.telegram.ui.Components.Paint.RenderView$RenderViewDelegate */
+    public interface RenderViewDelegate {
+        void onBeganDrawing();
+
+        void onFinishedDrawing(boolean z);
+
+        boolean shouldDraw();
     }
 
     public RenderView(Context context, Painting paint, Bitmap b, int rotation) {

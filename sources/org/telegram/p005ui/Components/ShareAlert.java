@@ -196,16 +196,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.ShareAlert$9 */
-    class CLASSNAME implements OnTouchListener {
-        CLASSNAME() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
-        }
-    }
-
     /* renamed from: org.telegram.ui.Components.ShareAlert$6 */
     class CLASSNAME extends ItemDecoration {
         CLASSNAME() {
@@ -263,6 +253,16 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             ShareAlert.this.updateLayout();
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.ShareAlert$9 */
+    class CLASSNAME implements OnTouchListener {
+        CLASSNAME() {
+        }
+
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
         }
     }
 

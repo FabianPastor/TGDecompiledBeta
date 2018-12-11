@@ -30,6 +30,15 @@ public class ShutterButton extends View {
     private long totalTime;
     private Paint whitePaint = new Paint(1);
 
+    /* renamed from: org.telegram.ui.Components.ShutterButton$ShutterButtonDelegate */
+    public interface ShutterButtonDelegate {
+        void shutterCancel();
+
+        boolean shutterLongPressed();
+
+        void shutterReleased();
+    }
+
     /* renamed from: org.telegram.ui.Components.ShutterButton$1 */
     class CLASSNAME implements Runnable {
         CLASSNAME() {
@@ -40,15 +49,6 @@ public class ShutterButton extends View {
                 ShutterButton.this.processRelease = false;
             }
         }
-    }
-
-    /* renamed from: org.telegram.ui.Components.ShutterButton$ShutterButtonDelegate */
-    public interface ShutterButtonDelegate {
-        void shutterCancel();
-
-        boolean shutterLongPressed();
-
-        void shutterReleased();
     }
 
     /* renamed from: org.telegram.ui.Components.ShutterButton$State */

@@ -74,6 +74,13 @@ public class DocumentSelectActivity extends BaseFragment {
     private NumberTextView selectedMessagesCountTextView;
     private long sizeLimit = NUM;
 
+    /* renamed from: org.telegram.ui.DocumentSelectActivity$DocumentSelectActivityDelegate */
+    public interface DocumentSelectActivityDelegate {
+        void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList);
+
+        void startDocumentSelectActivity();
+    }
+
     /* renamed from: org.telegram.ui.DocumentSelectActivity$1 */
     class CLASSNAME extends BroadcastReceiver {
         CLASSNAME() {
@@ -101,60 +108,6 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
-    class CLASSNAME implements OnPreDrawListener {
-        CLASSNAME() {
-        }
-
-        public boolean onPreDraw() {
-            DocumentSelectActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
-            DocumentSelectActivity.this.fixLayoutInternal();
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DocumentSelectActivity$DocumentSelectActivityDelegate */
-    public interface DocumentSelectActivityDelegate {
-        void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList);
-
-        void startDocumentSelectActivity();
-    }
-
-    /* renamed from: org.telegram.ui.DocumentSelectActivity$HistoryEntry */
-    private class HistoryEntry {
-        File dir;
-        int scrollItem;
-        int scrollOffset;
-        String title;
-
-        private HistoryEntry() {
-        }
-
-        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, CLASSNAME x1) {
-            this();
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DocumentSelectActivity$ListItem */
-    private class ListItem {
-        long date;
-        String ext;
-        File file;
-        int icon;
-        String subtitle;
-        String thumb;
-        String title;
-
-        private ListItem() {
-            this.subtitle = TtmlNode.ANONYMOUS_REGION_ID;
-            this.ext = TtmlNode.ANONYMOUS_REGION_ID;
-        }
-
-        /* synthetic */ ListItem(DocumentSelectActivity x0, CLASSNAME x1) {
-            this();
-        }
-    }
-
     /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
     class CLASSNAME extends ActionBarMenuOnItemClick {
         CLASSNAME() {
@@ -174,7 +127,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     }
                     return;
                 }
-                DocumentSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
+                DocumentSelectActivity.this.finishFragment();
             } else if (id == 3 && DocumentSelectActivity.this.delegate != null) {
                 DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet()));
                 for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
@@ -191,6 +144,33 @@ public class DocumentSelectActivity extends BaseFragment {
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             DocumentSelectActivity.this.scrolling = newState != 0;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
+        }
+
+        public boolean onPreDraw() {
+            DocumentSelectActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
+            DocumentSelectActivity.this.fixLayoutInternal();
+            return true;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DocumentSelectActivity$HistoryEntry */
+    private class HistoryEntry {
+        File dir;
+        int scrollItem;
+        int scrollOffset;
+        String title;
+
+        private HistoryEntry() {
+        }
+
+        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, CLASSNAME x1) {
+            this();
         }
     }
 
@@ -271,6 +251,26 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
                 documentCell.setChecked(containsKey, z2);
             }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.DocumentSelectActivity$ListItem */
+    private class ListItem {
+        long date;
+        String ext;
+        File file;
+        int icon;
+        String subtitle;
+        String thumb;
+        String title;
+
+        private ListItem() {
+            this.subtitle = TtmlNode.ANONYMOUS_REGION_ID;
+            this.ext = TtmlNode.ANONYMOUS_REGION_ID;
+        }
+
+        /* synthetic */ ListItem(DocumentSelectActivity x0, CLASSNAME x1) {
+            this();
         }
     }
 

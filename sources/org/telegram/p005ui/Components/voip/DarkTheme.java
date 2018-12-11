@@ -1487,7 +1487,7 @@ public class DarkTheme {
                 return -2236963;
             case SecretChatHelper.CURRENT_SECRET_CHAT_LAYER /*73*/:
                 return -14605274;
-            case VoIPService.CALL_MAX_LAYER /*74*/:
+            case 74:
                 return -11167525;
             case 75:
                 return -7105645;

@@ -47,7 +47,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
         public void onItemClick(int id) {
             if (id == -1) {
-                BlockedUsersActivity.this.lambda$checkDiscard$70$PassportActivity();
+                BlockedUsersActivity.this.finishFragment();
             } else if (id == 1) {
                 Bundle args = new Bundle();
                 args.putBoolean("onlyUsers", true);
