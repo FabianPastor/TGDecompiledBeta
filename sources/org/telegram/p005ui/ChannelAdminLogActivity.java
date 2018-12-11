@@ -363,7 +363,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             public void didPressedChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
                 if (chat != null && chat != ChannelAdminLogActivity.this.currentChat) {
                     Bundle args = new Bundle();
-                    args.putInt("chat_id", chat.f78id);
+                    args.putInt("chat_id", chat.var_id);
                     if (postId != 0) {
                         args.putInt("message_id", postId);
                     }
@@ -378,10 +378,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             public void didPressedUserAvatar(ChatMessageCell cell, User user) {
-                if (user != null && user.f176id != UserConfig.getInstance(ChannelAdminLogActivity.this.currentAccount).getClientUserId()) {
+                if (user != null && user.var_id != UserConfig.getInstance(ChannelAdminLogActivity.this.currentAccount).getClientUserId()) {
                     Bundle args = new Bundle();
-                    args.putInt("user_id", user.f176id);
-                    ChannelAdminLogActivity.this.addCanBanUser(args, user.f176id);
+                    args.putInt("user_id", user.var_id);
+                    ChannelAdminLogActivity.this.addCanBanUser(args, user.var_id);
                     ProfileActivity fragment = new ProfileActivity(args);
                     fragment.setPlayProfileAnimation(false);
                     ChannelAdminLogActivity.this.presentFragment(fragment);
@@ -449,7 +449,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             /* renamed from: lambda$didPressedUrl$0$ChannelAdminLogActivity$ChatActivityAdapter$1 */
-            final /* synthetic */ void mo16041xd3354c8f(String urlFinal, DialogInterface dialog, int which) {
+            final /* synthetic */ void mo16124xd3354c8f(String urlFinal, DialogInterface dialog, int which) {
                 if (which == 0) {
                     Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), urlFinal, true);
                 } else if (which == 1) {
@@ -674,7 +674,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: lambda$onCreateViewHolder$0$ChannelAdminLogActivity$ChatActivityAdapter */
-        final /* synthetic */ void mo16042xd4cdd41c(String url) {
+        final /* synthetic */ void mo16125xd4cdd41c(String url) {
             if (url.startsWith("@")) {
                 MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).openByUserName(url.substring(1), ChannelAdminLogActivity.this, 0);
             } else if (url.startsWith("#")) {
@@ -970,7 +970,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             this.loading = true;
             TL_channels_getAdminLog req = new TL_channels_getAdminLog();
             req.channel = MessagesController.getInputChannel(this.currentChat);
-            req.f116q = this.searchQuery;
+            req.var_q = this.searchQuery;
             req.limit = 50;
             if (reset || this.messages.isEmpty()) {
                 req.max_id = 0;
@@ -1009,12 +1009,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         int oldRowsCount = this.messages.size();
         for (int a = 0; a < res.events.size(); a++) {
             TL_channelAdminLogEvent event = (TL_channelAdminLogEvent) res.events.get(a);
-            if (this.messagesDict.indexOfKey(event.f113id) < 0) {
-                this.minEventId = Math.min(this.minEventId, event.f113id);
+            if (this.messagesDict.indexOfKey(event.var_id) < 0) {
+                this.minEventId = Math.min(this.minEventId, event.var_id);
                 added = true;
                 MessageObject messageObject = new MessageObject(this.currentAccount, event, this.messages, this.messagesByDays, this.currentChat, this.mid);
                 if (messageObject.contentType >= 0) {
-                    this.messagesDict.put(event.f113id, messageObject);
+                    this.messagesDict.put(event.var_id, messageObject);
                 }
             }
         }
@@ -1164,7 +1164,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             protected void onAttachedToWindow() {
                 super.onAttachedToWindow();
                 MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
-                if (messageObject != null && messageObject.isRoundVideo() && messageObject.eventId != 0 && messageObject.getDialogId() == ((long) (-ChannelAdminLogActivity.this.currentChat.f78id))) {
+                if (messageObject != null && messageObject.isRoundVideo() && messageObject.eventId != 0 && messageObject.getDialogId() == ((long) (-ChannelAdminLogActivity.this.currentChat.var_id))) {
                     MediaController.getInstance().setTextureView(ChannelAdminLogActivity.this.createTextureView(false), ChannelAdminLogActivity.this.aspectRatioFrameLayout, ChannelAdminLogActivity.this.roundVideoContainer, true);
                 }
             }
@@ -1592,7 +1592,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     options.add(Integer.valueOf(9));
                 } else if (type == 8) {
                     User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
-                    if (!(user == null || user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.f176id)) != null)) {
+                    if (!(user == null || user.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.var_id)) != null)) {
                         items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
                         options.add(Integer.valueOf(15));
                     }
@@ -1910,7 +1910,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             if (messageObject.isSticker()) {
                 InputStickerSet inputStickerSet = messageObject.getInputStickerSet();
                 if (inputStickerSet instanceof TL_inputStickerSetID) {
-                    if (!DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.f103id)) {
+                    if (!DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.var_id)) {
                         return 7;
                     }
                 } else if ((inputStickerSet instanceof TL_inputStickerSetShortName) && !DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.short_name)) {
@@ -2274,10 +2274,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     if (!channelParticipant.can_edit) {
                         return;
                     }
-                    bundle.putInt("ban_chat_id", this.currentChat.f78id);
+                    bundle.putInt("ban_chat_id", this.currentChat.var_id);
                 }
             }
-            bundle.putInt("ban_chat_id", this.currentChat.f78id);
+            bundle.putInt("ban_chat_id", this.currentChat.var_id);
         }
     }
 

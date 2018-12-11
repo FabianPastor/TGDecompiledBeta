@@ -279,13 +279,13 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             float lifeTime;
             float velocity;
             /* renamed from: vx */
-            float f251vx;
+            float var_vx;
             /* renamed from: vy */
-            float f252vy;
+            float var_vy;
             /* renamed from: x */
-            float f253x;
+            float var_x;
             /* renamed from: y */
-            float f254y;
+            float var_y;
 
             private Particle() {
             }
@@ -340,8 +340,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                     count--;
                 } else {
                     particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(particle.currentTime / particle.lifeTime);
-                    particle.f253x += ((particle.f251vx * particle.velocity) * ((float) dt)) / 500.0f;
-                    particle.f254y += ((particle.f252vy * particle.velocity) * ((float) dt)) / 500.0f;
+                    particle.var_x += ((particle.var_vx * particle.velocity) * ((float) dt)) / 500.0f;
+                    particle.var_y += ((particle.var_vy * particle.velocity) * ((float) dt)) / 500.0f;
                     particle.currentTime += (float) dt;
                 }
                 a++;
@@ -383,7 +383,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 for (a = 0; a < count; a++) {
                     Particle particle = (Particle) this.particles.get(a);
                     this.particlePaint.setAlpha((int) (255.0f * particle.alpha));
-                    canvas.drawPoint(particle.f253x, particle.f254y, this.particlePaint);
+                    canvas.drawPoint(particle.var_x, particle.var_y, this.particlePaint);
                 }
                 double vx = Math.sin(0.017453292519943295d * ((double) (radProgress - 90.0f)));
                 double vy = -Math.cos(0.017453292519943295d * ((double) (radProgress - 90.0f)));
@@ -398,14 +398,14 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                         newParticle = (Particle) this.freeParticles.get(0);
                         this.freeParticles.remove(0);
                     }
-                    newParticle.f253x = cx;
-                    newParticle.f254y = cy;
+                    newParticle.var_x = cx;
+                    newParticle.var_y = cy;
                     double angle = 0.017453292519943295d * ((double) (Utilities.random.nextInt(140) - 70));
                     if (angle < 0.0d) {
                         angle += 6.283185307179586d;
                     }
-                    newParticle.f251vx = (float) ((Math.cos(angle) * vx) - (Math.sin(angle) * vy));
-                    newParticle.f252vy = (float) ((Math.sin(angle) * vx) + (Math.cos(angle) * vy));
+                    newParticle.var_vx = (float) ((Math.cos(angle) * vx) - (Math.sin(angle) * vy));
+                    newParticle.var_vy = (float) ((Math.sin(angle) * vx) + (Math.cos(angle) * vy));
                     newParticle.alpha = 1.0f;
                     newParticle.currentTime = 0.0f;
                     newParticle.lifeTime = (float) (Utilities.random.nextInt(100) + 400);
@@ -571,7 +571,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 }
             }
         } else if (id == NotificationCenter.updateMessageMedia) {
-            if (this.currentMessageObject.getId() != args[0].f104id) {
+            if (this.currentMessageObject.getId() != args[0].var_id) {
                 return;
             }
             if (!this.isVideo || this.videoWatchedOneTime) {

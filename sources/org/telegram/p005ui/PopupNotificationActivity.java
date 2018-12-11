@@ -490,7 +490,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.gravity = 80;
         this.onlineTextView.setLayoutParams(layoutParams2);
         this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
-        this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(268435462, "screen");
+        this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(NUM, "screen");
         this.wakeLock.setReferenceCounted(false);
         handleIntent(getIntent());
     }
@@ -1223,19 +1223,19 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     private void updateSubtitle() {
         if (this.actionBar != null && this.currentMessageObject != null && this.currentChat == null && this.currentUser != null) {
-            if (this.currentUser.f176id / id_chat_compose_panel == 777 || this.currentUser.f176id / id_chat_compose_panel == 333 || ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.f176id)) != null || (ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentMessageObject.currentAccount).isLoadingContacts())) {
+            if (this.currentUser.var_id / id_chat_compose_panel == 777 || this.currentUser.var_id / id_chat_compose_panel == 333 || ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.var_id)) != null || (ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentMessageObject.currentAccount).isLoadingContacts())) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else if (this.currentUser.phone == null || this.currentUser.phone.length() == 0) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else {
                 this.nameTextView.setText(CLASSNAMEPhoneFormat.getInstance().format("+" + this.currentUser.phone));
             }
-            if (this.currentUser == null || this.currentUser.f176id != 777000) {
+            if (this.currentUser == null || this.currentUser.var_id != 777000) {
                 CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentMessageObject.currentAccount).printingStrings.get(this.currentMessageObject.getDialogId());
                 if (printString == null || printString.length() == 0) {
                     this.lastPrintString = null;
                     setTypingAnimation(false);
-                    User user = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.f176id));
+                    User user = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.var_id));
                     if (user != null) {
                         this.currentUser = user;
                     }
@@ -1257,7 +1257,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             Drawable avatarDrawable = null;
             Object parentObject = null;
             if (this.currentChat != null) {
-                Chat chat = MessagesController.getInstance(this.currentMessageObject.currentAccount).getChat(Integer.valueOf(this.currentChat.f78id));
+                Chat chat = MessagesController.getInstance(this.currentMessageObject.currentAccount).getChat(Integer.valueOf(this.currentChat.var_id));
                 if (chat != null) {
                     this.currentChat = chat;
                     parentObject = chat;
@@ -1269,7 +1269,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     return;
                 }
             } else if (this.currentUser != null) {
-                User user = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.f176id));
+                User user = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.var_id));
                 if (user != null) {
                     this.currentUser = user;
                     User parentObject2 = user;

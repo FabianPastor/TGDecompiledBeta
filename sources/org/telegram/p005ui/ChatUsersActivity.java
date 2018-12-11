@@ -557,7 +557,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
             boolean byChannelUsers = ((Boolean) args[2]).booleanValue();
-            if (chatFull.f79id == this.chatId && !byChannelUsers) {
+            if (chatFull.var_id == this.chatId && !byChannelUsers) {
                 this.info = chatFull;
                 fetchUsers();
                 updateRows();

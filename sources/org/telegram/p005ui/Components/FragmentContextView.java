@@ -293,7 +293,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
         } else if (this.currentStyle == 1) {
             Intent intent = new Intent(getContext(), VoIPActivity.class);
-            intent.addFlags(805306368);
+            intent.addFlags(NUM);
             getContext().startActivity(intent);
         } else if (this.currentStyle == 2) {
             long did = 0;

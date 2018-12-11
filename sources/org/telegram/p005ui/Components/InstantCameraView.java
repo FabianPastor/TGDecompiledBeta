@@ -125,7 +125,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private boolean isFrontface = true;
     private boolean isSecretChat;
     /* renamed from: iv */
-    private byte[] f268iv;
+    private byte[] var_iv;
     private byte[] key;
     private Bitmap lastBitmap;
     private float[] mMVPMatrix;
@@ -644,7 +644,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             boolean ok = false;
                             a = 0;
                             while (a < input.results) {
-                                if (a == 0 && Math.abs(this.videoFirst - input.offset[a]) > 100000000) {
+                                if (a == 0 && Math.abs(this.videoFirst - input.offset[a]) > NUM) {
                                     this.desyncTime = this.videoFirst - input.offset[a];
                                     this.audioFirst = input.offset[a];
                                     ok = true;
@@ -785,7 +785,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.lastCommitedFrameTime = System.currentTimeMillis();
             if (!this.skippedFirst) {
                 this.skippedTime += dt;
-                if (this.skippedTime >= 200000000) {
+                if (this.skippedTime >= NUM) {
                     this.skippedFirst = true;
                 } else {
                     return;
@@ -925,7 +925,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             InstantCameraView.this.videoEditedInfo.file = InstantCameraView.this.file;
             InstantCameraView.this.videoEditedInfo.encryptedFile = InstantCameraView.this.encryptedFile;
             InstantCameraView.this.videoEditedInfo.key = InstantCameraView.this.key;
-            InstantCameraView.this.videoEditedInfo.f60iv = InstantCameraView.this.f268iv;
+            InstantCameraView.this.videoEditedInfo.var_iv = InstantCameraView.this.var_iv;
             InstantCameraView.this.videoEditedInfo.estimatedSize = Math.max(1, InstantCameraView.this.size);
             InstantCameraView.this.videoEditedInfo.framerate = 25;
             VideoEditedInfo access$1000 = InstantCameraView.this.videoEditedInfo;
@@ -1281,7 +1281,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private javax.microedition.khronos.egl.EGLDisplay eglDisplay;
         private javax.microedition.khronos.egl.EGLSurface eglSurface;
         /* renamed from: gl */
-        private GL f267gl;
+        private GL var_gl;
         private boolean initied;
         private int positionHandle;
         private boolean recording;
@@ -1350,7 +1350,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             return false;
                         }
                         if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                            this.f267gl = this.eglContext.getGL();
+                            this.var_gl = this.eglContext.getGL();
                             float tX = (1.0f / InstantCameraView.this.scaleX) / 2.0f;
                             float tY = (1.0f / InstantCameraView.this.scaleY) / 2.0f;
                             float[] fArr = new float[12];
@@ -1768,7 +1768,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.size = ((Long) args[5]).longValue();
                 if (this.encryptedFile != null) {
                     this.key = (byte[]) args[3];
-                    this.f268iv = (byte[]) args[4];
+                    this.var_iv = (byte[]) args[4];
                 }
             }
         }
@@ -1855,7 +1855,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.file = null;
             this.encryptedFile = null;
             this.key = null;
-            this.f268iv = null;
+            this.var_iv = null;
             if (initCamera()) {
                 MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
                 this.cameraFile = new File(FileLoader.getDirectory(4), SharedConfig.getLastLocalId() + ".mp4");
@@ -2041,7 +2041,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     this.file = null;
                     this.encryptedFile = null;
                     this.key = null;
-                    this.f268iv = null;
+                    this.var_iv = null;
                     double totalDuration = (double) this.videoEditedInfo.estimatedDuration;
                     long startTime = this.videoEditedInfo.startTime >= 0 ? this.videoEditedInfo.startTime : 0;
                     if (this.videoEditedInfo.endTime >= 0) {
@@ -2067,7 +2067,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.videoEditedInfo.file = this.file;
                 this.videoEditedInfo.encryptedFile = this.encryptedFile;
                 this.videoEditedInfo.key = this.key;
-                this.videoEditedInfo.f60iv = this.f268iv;
+                this.videoEditedInfo.var_iv = this.var_iv;
                 this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, this.cameraFile.getAbsolutePath(), 0, true), this.videoEditedInfo);
                 return;
             }

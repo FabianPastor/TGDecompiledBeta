@@ -13,7 +13,7 @@ public class VideoEditedInfo {
     public InputFile file;
     public int framerate = 24;
     /* renamed from: iv */
-    public byte[] f60iv;
+    public byte[] var_iv;
     public byte[] key;
     public boolean muted;
     public int originalHeight;

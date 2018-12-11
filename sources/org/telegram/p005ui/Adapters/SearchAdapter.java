@@ -148,7 +148,7 @@ public class SearchAdapter extends SelectionAdapter {
         for (int a = 0; a < contactsCopy.size(); a++) {
             TL_contact contact = (TL_contact) contactsCopy.get(a);
             User user = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(contact.user_id));
-            if (user.f176id != UserConfig.getInstance(currentAccount).getClientUserId() && ((!this.onlyMutual || user.mutual_contact) && (this.ignoreUsers == null || this.ignoreUsers.indexOfKey(contact.user_id) < 0))) {
+            if (user.var_id != UserConfig.getInstance(currentAccount).getClientUserId() && ((!this.onlyMutual || user.mutual_contact) && (this.ignoreUsers == null || this.ignoreUsers.indexOfKey(contact.user_id) < 0))) {
                 String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                 String tName = LocaleController.getInstance().getTranslitString(name);
                 if (name.equals(tName)) {
@@ -255,10 +255,10 @@ public class SearchAdapter extends SelectionAdapter {
                 String un = null;
                 if (object instanceof User) {
                     un = ((User) object).username;
-                    id = ((User) object).f176id;
+                    id = ((User) object).var_id;
                 } else if (object instanceof Chat) {
                     un = ((Chat) object).username;
-                    id = ((Chat) object).f78id;
+                    id = ((Chat) object).var_id;
                 }
                 CharSequence username = null;
                 CharSequence name = null;

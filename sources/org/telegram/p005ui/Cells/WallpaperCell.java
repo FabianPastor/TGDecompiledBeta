@@ -66,7 +66,7 @@ public class WallpaperCell extends FrameLayout {
         this.imageView.setVisibility(0);
         this.imageView2.setVisibility(4);
         View view2 = this.selectionView;
-        if (selectedBackground != wallpaper.f181id) {
+        if (selectedBackground != wallpaper.var_id) {
             i = 4;
         }
         view2.setVisibility(i);
@@ -80,7 +80,7 @@ public class WallpaperCell extends FrameLayout {
         for (int a = 0; a < wallpaper.sizes.size(); a++) {
             PhotoSize obj = (PhotoSize) wallpaper.sizes.get(a);
             if (obj != null) {
-                int currentSide = obj.f108w >= obj.f107h ? obj.f108w : obj.f107h;
+                int currentSide = obj.var_w >= obj.var_h ? obj.var_w : obj.var_h;
                 if (size == null || ((side > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || currentSide <= side)) {
                     size = obj;
                 }

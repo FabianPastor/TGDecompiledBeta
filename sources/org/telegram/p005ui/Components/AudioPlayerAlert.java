@@ -1019,7 +1019,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                     }
                     if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
                         int currentDate = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                        if (!((currentUser == null || currentUser.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId()) && currentChat == null) && ((messageObject.messageOwner.action == null || (messageObject.messageOwner.action instanceof TL_messageActionEmpty)) && messageObject.isOut() && currentDate - messageObject.messageOwner.date <= 172800)) {
+                        if (!((currentUser == null || currentUser.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) && currentChat == null) && ((messageObject.messageOwner.action == null || (messageObject.messageOwner.action instanceof TL_messageActionEmpty)) && messageObject.isOut() && currentDate - messageObject.messageOwner.date <= 172800)) {
                             int dp;
                             int dp2;
                             View frameLayout = new FrameLayout(this.parentActivity);

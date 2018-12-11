@@ -111,7 +111,7 @@ public class TableLayout extends View {
         }
 
         /* renamed from: of */
-        public static <K, V> Assoc<K, V> m25of(Class<K> keyType, Class<V> valueType) {
+        public static <K, V> Assoc<K, V> m27of(Class<K> keyType, Class<V> valueType) {
             return new Assoc(keyType, valueType);
         }
 
@@ -220,7 +220,7 @@ public class TableLayout extends View {
         }
 
         private PackedMap<Spec, Bounds> createGroupBounds() {
-            Assoc<Spec, Bounds> assoc = Assoc.m25of(Spec.class, Bounds.class);
+            Assoc<Spec, Bounds> assoc = Assoc.m27of(Spec.class, Bounds.class);
             int N = TableLayout.this.getChildCount();
             for (int i = 0; i < N; i++) {
                 LayoutParams lp = TableLayout.this.getChildAt(i).getLayoutParams();
@@ -258,7 +258,7 @@ public class TableLayout extends View {
         }
 
         private PackedMap<Interval, MutableInt> createLinks(boolean min) {
-            Assoc<Interval, MutableInt> result = Assoc.m25of(Interval.class, MutableInt.class);
+            Assoc<Interval, MutableInt> result = Assoc.m27of(Interval.class, MutableInt.class);
             Spec[] keys = getGroupBounds().keys;
             int N = keys.length;
             for (int i = 0; i < N; i++) {
@@ -754,9 +754,9 @@ public class TableLayout extends View {
         public int textX;
         public int textY;
         /* renamed from: x */
-        public int f248x;
+        public int var_x;
         /* renamed from: y */
-        public int f249y;
+        public int var_y;
 
         public Child(int i) {
             this.index = i;
@@ -834,16 +834,16 @@ public class TableLayout extends View {
         }
 
         public void layout(int left, int top, int right, int bottom) {
-            this.f248x = left;
-            this.f249y = top;
+            this.var_x = left;
+            this.var_y = top;
         }
 
         public int getTextX() {
-            return this.f248x + this.textX;
+            return this.var_x + this.textX;
         }
 
         public int getTextY() {
-            return this.f249y + this.textY;
+            return this.var_y + this.textY;
         }
 
         public void setFixedHeight(int value) {
@@ -857,14 +857,14 @@ public class TableLayout extends View {
 
         public void draw(Canvas canvas) {
             if (this.cell != null) {
-                boolean isLastX = this.f248x + this.measuredWidth == TableLayout.this.getMeasuredWidth();
-                boolean isLastY = this.f249y + this.measuredHeight == TableLayout.this.getMeasuredHeight();
+                boolean isLastX = this.var_x + this.measuredWidth == TableLayout.this.getMeasuredWidth();
+                boolean isLastY = this.var_y + this.measuredHeight == TableLayout.this.getMeasuredHeight();
                 int rad = AndroidUtilities.m9dp(3.0f);
                 if (this.cell.header || (TableLayout.this.isStriped && this.layoutParams.rowSpec.span.min % 2 == 0)) {
                     float[] access$500;
                     float f;
                     boolean hasCorners = false;
-                    if (this.f248x == 0 && this.f249y == 0) {
+                    if (this.var_x == 0 && this.var_y == 0) {
                         access$500 = TableLayout.this.radii;
                         f = (float) rad;
                         TableLayout.this.radii[1] = f;
@@ -875,7 +875,7 @@ public class TableLayout extends View {
                         TableLayout.this.radii[1] = 0.0f;
                         access$500[0] = 0.0f;
                     }
-                    if (isLastX && this.f249y == 0) {
+                    if (isLastX && this.var_y == 0) {
                         access$500 = TableLayout.this.radii;
                         f = (float) rad;
                         TableLayout.this.radii[3] = f;
@@ -897,7 +897,7 @@ public class TableLayout extends View {
                         TableLayout.this.radii[5] = 0.0f;
                         access$500[4] = 0.0f;
                     }
-                    if (this.f248x == 0 && isLastY) {
+                    if (this.var_x == 0 && isLastY) {
                         access$500 = TableLayout.this.radii;
                         f = (float) rad;
                         TableLayout.this.radii[7] = f;
@@ -909,7 +909,7 @@ public class TableLayout extends View {
                         access$500[6] = 0.0f;
                     }
                     if (hasCorners) {
-                        TableLayout.this.rect.set((float) this.f248x, (float) this.f249y, (float) (this.f248x + this.measuredWidth), (float) (this.f249y + this.measuredHeight));
+                        TableLayout.this.rect.set((float) this.var_x, (float) this.var_y, (float) (this.var_x + this.measuredWidth), (float) (this.var_y + this.measuredHeight));
                         TableLayout.this.backgroundPath.reset();
                         TableLayout.this.backgroundPath.addRoundRect(TableLayout.this.rect, TableLayout.this.radii, Direction.CW);
                         if (this.cell.header) {
@@ -918,9 +918,9 @@ public class TableLayout extends View {
                             canvas.drawPath(TableLayout.this.backgroundPath, TableLayout.this.delegate.getStripPaint());
                         }
                     } else if (this.cell.header) {
-                        canvas.drawRect((float) this.f248x, (float) this.f249y, (float) (this.f248x + this.measuredWidth), (float) (this.f249y + this.measuredHeight), TableLayout.this.delegate.getHeaderPaint());
+                        canvas.drawRect((float) this.var_x, (float) this.var_y, (float) (this.var_x + this.measuredWidth), (float) (this.var_y + this.measuredHeight), TableLayout.this.delegate.getHeaderPaint());
                     } else {
-                        canvas.drawRect((float) this.f248x, (float) this.f249y, (float) (this.f248x + this.measuredWidth), (float) (this.f249y + this.measuredHeight), TableLayout.this.delegate.getStripPaint());
+                        canvas.drawRect((float) this.var_x, (float) this.var_y, (float) (this.var_x + this.measuredWidth), (float) (this.var_y + this.measuredHeight), TableLayout.this.delegate.getStripPaint());
                     }
                 }
                 if (this.textLayout != null) {
@@ -936,68 +936,68 @@ public class TableLayout extends View {
                     Paint halfLinePaint = TableLayout.this.delegate.getLinePaint();
                     float strokeWidth = linePaint.getStrokeWidth() / 2.0f;
                     float halfStrokeWidth = halfLinePaint.getStrokeWidth() / 2.0f;
-                    if (this.f248x == 0) {
-                        start = (float) this.f249y;
-                        end = (float) (this.f249y + this.measuredHeight);
-                        if (this.f249y == 0) {
+                    if (this.var_x == 0) {
+                        start = (float) this.var_y;
+                        end = (float) (this.var_y + this.measuredHeight);
+                        if (this.var_y == 0) {
                             start += (float) rad;
                         }
                         if (end == ((float) TableLayout.this.getMeasuredHeight())) {
                             end -= (float) rad;
                         }
-                        canvas.drawLine(((float) this.f248x) + strokeWidth, start, ((float) this.f248x) + strokeWidth, end, linePaint);
+                        canvas.drawLine(((float) this.var_x) + strokeWidth, start, ((float) this.var_x) + strokeWidth, end, linePaint);
                     } else {
-                        canvas.drawLine(((float) this.f248x) - halfStrokeWidth, (float) this.f249y, ((float) this.f248x) - halfStrokeWidth, (float) (this.f249y + this.measuredHeight), halfLinePaint);
+                        canvas.drawLine(((float) this.var_x) - halfStrokeWidth, (float) this.var_y, ((float) this.var_x) - halfStrokeWidth, (float) (this.var_y + this.measuredHeight), halfLinePaint);
                     }
-                    if (this.f249y == 0) {
-                        start = (float) this.f248x;
-                        end = (float) (this.f248x + this.measuredWidth);
-                        if (this.f248x == 0) {
+                    if (this.var_y == 0) {
+                        start = (float) this.var_x;
+                        end = (float) (this.var_x + this.measuredWidth);
+                        if (this.var_x == 0) {
                             start += (float) rad;
                         }
                         if (end == ((float) TableLayout.this.getMeasuredWidth())) {
                             end -= (float) rad;
                         }
-                        canvas.drawLine(start, ((float) this.f249y) + strokeWidth, end, ((float) this.f249y) + strokeWidth, linePaint);
+                        canvas.drawLine(start, ((float) this.var_y) + strokeWidth, end, ((float) this.var_y) + strokeWidth, linePaint);
                     } else {
-                        canvas.drawLine((float) this.f248x, ((float) this.f249y) - halfStrokeWidth, (float) (this.f248x + this.measuredWidth), ((float) this.f249y) - halfStrokeWidth, halfLinePaint);
+                        canvas.drawLine((float) this.var_x, ((float) this.var_y) - halfStrokeWidth, (float) (this.var_x + this.measuredWidth), ((float) this.var_y) - halfStrokeWidth, halfLinePaint);
                     }
-                    if (isLastX && this.f249y == 0) {
-                        start = (float) (this.f249y + rad);
+                    if (isLastX && this.var_y == 0) {
+                        start = (float) (this.var_y + rad);
                     } else {
-                        start = ((float) this.f249y) - strokeWidth;
-                    }
-                    if (isLastX && isLastY) {
-                        end = (float) ((this.f249y + this.measuredHeight) - rad);
-                    } else {
-                        end = ((float) (this.f249y + this.measuredHeight)) - strokeWidth;
-                    }
-                    canvas.drawLine(((float) (this.f248x + this.measuredWidth)) - strokeWidth, start, ((float) (this.f248x + this.measuredWidth)) - strokeWidth, end, linePaint);
-                    if (this.f248x == 0 && isLastY) {
-                        start = (float) (this.f248x + rad);
-                    } else {
-                        start = ((float) this.f248x) - strokeWidth;
+                        start = ((float) this.var_y) - strokeWidth;
                     }
                     if (isLastX && isLastY) {
-                        end = (float) ((this.f248x + this.measuredWidth) - rad);
+                        end = (float) ((this.var_y + this.measuredHeight) - rad);
                     } else {
-                        end = ((float) (this.f248x + this.measuredWidth)) - strokeWidth;
+                        end = ((float) (this.var_y + this.measuredHeight)) - strokeWidth;
                     }
-                    canvas.drawLine(start, ((float) (this.f249y + this.measuredHeight)) - strokeWidth, end, ((float) (this.f249y + this.measuredHeight)) - strokeWidth, linePaint);
-                    if (this.f248x == 0 && this.f249y == 0) {
-                        TableLayout.this.rect.set(((float) this.f248x) + strokeWidth, ((float) this.f249y) + strokeWidth, (((float) this.f248x) + strokeWidth) + ((float) (rad * 2)), (((float) this.f249y) + strokeWidth) + ((float) (rad * 2)));
+                    canvas.drawLine(((float) (this.var_x + this.measuredWidth)) - strokeWidth, start, ((float) (this.var_x + this.measuredWidth)) - strokeWidth, end, linePaint);
+                    if (this.var_x == 0 && isLastY) {
+                        start = (float) (this.var_x + rad);
+                    } else {
+                        start = ((float) this.var_x) - strokeWidth;
+                    }
+                    if (isLastX && isLastY) {
+                        end = (float) ((this.var_x + this.measuredWidth) - rad);
+                    } else {
+                        end = ((float) (this.var_x + this.measuredWidth)) - strokeWidth;
+                    }
+                    canvas.drawLine(start, ((float) (this.var_y + this.measuredHeight)) - strokeWidth, end, ((float) (this.var_y + this.measuredHeight)) - strokeWidth, linePaint);
+                    if (this.var_x == 0 && this.var_y == 0) {
+                        TableLayout.this.rect.set(((float) this.var_x) + strokeWidth, ((float) this.var_y) + strokeWidth, (((float) this.var_x) + strokeWidth) + ((float) (rad * 2)), (((float) this.var_y) + strokeWidth) + ((float) (rad * 2)));
                         canvas.drawArc(TableLayout.this.rect, -180.0f, 90.0f, false, linePaint);
                     }
-                    if (isLastX && this.f249y == 0) {
-                        TableLayout.this.rect.set((((float) (this.f248x + this.measuredWidth)) - strokeWidth) - ((float) (rad * 2)), ((float) this.f249y) + strokeWidth, ((float) (this.f248x + this.measuredWidth)) - strokeWidth, (((float) this.f249y) + strokeWidth) + ((float) (rad * 2)));
+                    if (isLastX && this.var_y == 0) {
+                        TableLayout.this.rect.set((((float) (this.var_x + this.measuredWidth)) - strokeWidth) - ((float) (rad * 2)), ((float) this.var_y) + strokeWidth, ((float) (this.var_x + this.measuredWidth)) - strokeWidth, (((float) this.var_y) + strokeWidth) + ((float) (rad * 2)));
                         canvas.drawArc(TableLayout.this.rect, 0.0f, -90.0f, false, linePaint);
                     }
-                    if (this.f248x == 0 && isLastY) {
-                        TableLayout.this.rect.set(((float) this.f248x) + strokeWidth, (((float) (this.f249y + this.measuredHeight)) - strokeWidth) - ((float) (rad * 2)), (((float) this.f248x) + strokeWidth) + ((float) (rad * 2)), ((float) (this.f249y + this.measuredHeight)) - strokeWidth);
+                    if (this.var_x == 0 && isLastY) {
+                        TableLayout.this.rect.set(((float) this.var_x) + strokeWidth, (((float) (this.var_y + this.measuredHeight)) - strokeWidth) - ((float) (rad * 2)), (((float) this.var_x) + strokeWidth) + ((float) (rad * 2)), ((float) (this.var_y + this.measuredHeight)) - strokeWidth);
                         canvas.drawArc(TableLayout.this.rect, 180.0f, -90.0f, false, linePaint);
                     }
                     if (isLastX && isLastY) {
-                        TableLayout.this.rect.set((((float) (this.f248x + this.measuredWidth)) - strokeWidth) - ((float) (rad * 2)), (((float) (this.f249y + this.measuredHeight)) - strokeWidth) - ((float) (rad * 2)), ((float) (this.f248x + this.measuredWidth)) - strokeWidth, ((float) (this.f249y + this.measuredHeight)) - strokeWidth);
+                        TableLayout.this.rect.set((((float) (this.var_x + this.measuredWidth)) - strokeWidth) - ((float) (rad * 2)), (((float) (this.var_y + this.measuredHeight)) - strokeWidth) - ((float) (rad * 2)), ((float) (this.var_x + this.measuredWidth)) - strokeWidth, ((float) (this.var_y + this.measuredHeight)) - strokeWidth);
                         canvas.drawArc(TableLayout.this.rect, 0.0f, 90.0f, false, linePaint);
                     }
                 }
@@ -1876,7 +1876,7 @@ public class TableLayout extends View {
                     size = this.rowSpans.size();
                     for (a = 0; a < size; a++) {
                         Point p = (Point) this.rowSpans.get(a);
-                        if (p.f240x <= ((float) c.layoutParams.rowSpec.span.min) && p.f241y > ((float) c.layoutParams.rowSpec.span.min)) {
+                        if (p.var_x <= ((float) c.layoutParams.rowSpec.span.min) && p.var_y > ((float) c.layoutParams.rowSpec.span.min)) {
                             found = true;
                             break;
                         }
@@ -1949,7 +1949,7 @@ public class TableLayout extends View {
                             next.measuredHeight = next.measuredHeight - heightDiff;
                             next.measure(next.measuredWidth, next.measuredHeight, true);
                         } else if (child.layoutParams.rowSpec.span.min < next.layoutParams.rowSpec.span.min) {
-                            next.f249y -= heightDiff;
+                            next.var_y -= heightDiff;
                         }
                     }
                 }

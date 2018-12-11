@@ -441,7 +441,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$resendCode$3$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ void mo15924x5f36a36a(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
+        final /* synthetic */ void mo15924x5var_a36a(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$7(this, error, params, response, req));
         }
 
@@ -511,7 +511,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                         Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
                         pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
                         this.codeField[a].setBackgroundDrawable(pressedDrawable);
-                        this.codeField[a].setImeOptions(268435461);
+                        this.codeField[a].setImeOptions(NUM);
                         this.codeField[a].setTextSize(1, 20.0f);
                         this.codeField[a].setMaxLines(1);
                         this.codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -615,7 +615,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$setParams$4$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ boolean mo15925x631f1f63(int num, View v, int keyCode, KeyEvent event) {
+        final /* synthetic */ boolean mo15925x631f1var_(int num, View v, int keyCode, KeyEvent event) {
             if (keyCode != 67 || this.codeField[num].length() != 0 || num <= 0) {
                 return false;
             }

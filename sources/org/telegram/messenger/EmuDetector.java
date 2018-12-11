@@ -18,11 +18,11 @@ import java.util.List;
 
 public class EmuDetector {
     private static final String[] ANDY_FILES = new String[]{"fstab.andy", "ueventd.andy.rc"};
-    private static final String[] DEVICE_IDS = new String[]{"000000000000000", "e21833235b6eef10", "012345678912345"};
+    private static final String[] DEVICE_IDS = new String[]{"000000000000000", "e21833235b6eevar_", "012345678912345"};
     private static final String[] GENY_FILES = new String[]{"/dev/socket/genyd", "/dev/socket/baseband_genyd"};
     private static final String[] IMSI_IDS = new String[]{"310260000000000"};
     /* renamed from: IP */
-    private static final String f48IP = "10.0.2.15";
+    private static final String var_IP = "10.0.2.15";
     private static final int MIN_PROPERTIES_THRESHOLD = 5;
     private static final String[] NOX_FILES = new String[]{"fstab.nox", "init.nox.rc", "ueventd.nox.rc"};
     private static final String[] PHONE_NUMBERS = new String[]{"15555215554", "15555215556", "15555215558", "15555215560", "15555215562", "15555215564", "15555215566", "15555215568", "15555215570", "15555215572", "15555215574", "15555215576", "15555215578", "15555215580", "15555215582", "15555215584"};
@@ -279,7 +279,7 @@ public class EmuDetector {
         int length = array.length;
         while (i < length) {
             String lan = array[i];
-            if ((lan.contains("wlan0") || lan.contains("tunl0") || lan.contains("eth0")) && lan.contains(f48IP)) {
+            if ((lan.contains("wlan0") || lan.contains("tunl0") || lan.contains("eth0")) && lan.contains(var_IP)) {
                 return true;
             }
             i++;

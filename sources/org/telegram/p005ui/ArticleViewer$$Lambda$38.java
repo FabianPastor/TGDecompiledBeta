@@ -14,6 +14,6 @@ final /* synthetic */ class ArticleViewer$$Lambda$38 implements Runnable {
     }
 
     public void run() {
-        MessagesController.getInstance(this.arg$1).loadFullChat(this.arg$2.f78id, 0, true);
+        MessagesController.getInstance(this.arg$1).loadFullChat(this.arg$2.var_id, 0, true);
     }
 }

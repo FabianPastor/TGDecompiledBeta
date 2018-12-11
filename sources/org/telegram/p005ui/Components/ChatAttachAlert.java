@@ -367,7 +367,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
 
         final /* synthetic */ void lambda$onLongPress$0$ChatAttachAlert$AttachBotButton(DialogInterface dialogInterface, int i) {
-            DataQuery.getInstance(ChatAttachAlert.this.currentAccount).removeInline(this.currentUser.f176id);
+            DataQuery.getInstance(ChatAttachAlert.this.currentAccount).removeInline(this.currentUser.var_id);
         }
 
         public void setUser(User user) {

@@ -960,7 +960,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.termsOfServiceView.setDelegate(new CLASSNAME());
         }
         TL_help_termsOfService currentTos = UserConfig.getInstance(account).unacceptedTermsOfService;
-        if (currentTos != tos && (currentTos == null || !currentTos.f133id.data.equals(tos.f133id.data))) {
+        if (currentTos != tos && (currentTos == null || !currentTos.var_id.data.equals(tos.var_id.data))) {
             UserConfig.getInstance(account).unacceptedTermsOfService = tos;
             UserConfig.getInstance(account).saveConfig(false);
         }
@@ -1891,11 +1891,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 args = new Bundle();
                 long dialog_id;
                 if (res.chats.isEmpty()) {
-                    args.putInt("user_id", ((User) res.users.get(0)).f176id);
-                    dialog_id = (long) ((User) res.users.get(0)).f176id;
+                    args.putInt("user_id", ((User) res.users.get(0)).var_id);
+                    dialog_id = (long) ((User) res.users.get(0)).var_id;
                 } else {
-                    args.putInt("chat_id", ((Chat) res.chats.get(0)).f78id);
-                    dialog_id = (long) (-((Chat) res.chats.get(0)).f78id);
+                    args.putInt("chat_id", ((Chat) res.chats.get(0)).var_id);
+                    dialog_id = (long) (-((Chat) res.chats.get(0)).var_id);
                 }
                 if (botUser != null && res.users.size() > 0 && ((User) res.users.get(0)).bot) {
                     args.putString("botUser", botUser);
@@ -1920,9 +1920,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     final /* synthetic */ void lambda$null$9$LaunchActivity(String game, int intentAccount, TL_contacts_resolvedPeer res, DialogsActivity fragment1, ArrayList dids, CharSequence message1, boolean param) {
         long did = ((Long) dids.get(0)).longValue();
         TL_inputMediaGame inputMediaGame = new TL_inputMediaGame();
-        inputMediaGame.f189id = new TL_inputGameShortName();
-        inputMediaGame.f189id.short_name = game;
-        inputMediaGame.f189id.bot_id = MessagesController.getInstance(intentAccount).getInputUser((User) res.users.get(0));
+        inputMediaGame.var_id = new TL_inputGameShortName();
+        inputMediaGame.var_id.short_name = game;
+        inputMediaGame.var_id.bot_id = MessagesController.getInstance(intentAccount).getInputUser((User) res.users.get(0));
         SendMessagesHelper.getInstance(intentAccount).sendGame(MessagesController.getInstance(intentAccount).getInputPeer((int) did), inputMediaGame, 0, 0);
         Bundle args1 = new Bundle();
         args1.putBoolean("scrollToTopOnResume", true);
@@ -1986,7 +1986,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 chats.add(invite.chat);
                 MessagesStorage.getInstance(intentAccount).putUsersAndChats(null, chats, false, true);
                 Bundle args = new Bundle();
-                args.putInt("chat_id", invite.chat.f78id);
+                args.putInt("chat_id", invite.chat.var_id);
                 if (!mainFragmentsStack.isEmpty()) {
                     if (!MessagesController.getInstance(intentAccount).checkCanOpenChat(args, (BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1))) {
                         return;
@@ -2051,7 +2051,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     MessagesController.getInstance(intentAccount).putUsers(updates.users, false);
                     MessagesController.getInstance(intentAccount).putChats(updates.chats, false);
                     Bundle args = new Bundle();
-                    args.putInt("chat_id", chat.f78id);
+                    args.putInt("chat_id", chat.var_id);
                     if (mainFragmentsStack.isEmpty() || MessagesController.getInstance(intentAccount).checkCanOpenChat(args, (BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1))) {
                         ChatActivity fragment = new ChatActivity(args);
                         NotificationCenter.getInstance(intentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
@@ -2824,7 +2824,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             try {
                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                if (Math.abs(preferences.getLong("last_space_check", 0) - System.currentTimeMillis()) >= 259200000) {
+                if (Math.abs(preferences.getLong("last_space_check", 0) - System.currentTimeMillis()) >= NUM) {
                     File path = FileLoader.getDirectory(4);
                     if (path != null) {
                         long freeSpace;
@@ -2835,7 +2835,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                             freeSpace = statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
                         }
                         preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
-                        if (freeSpace < 104857600) {
+                        if (freeSpace < NUM) {
                             AndroidUtilities.runOnUIThread(new LaunchActivity$$Lambda$36(this));
                         }
                     }

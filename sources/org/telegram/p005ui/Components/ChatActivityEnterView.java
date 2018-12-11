@@ -302,10 +302,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         currentUser = MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).getUser(Integer.valueOf((int) ChatActivityEnterView.this.dialog_id));
                     }
                     if (currentUser != null) {
-                        if (currentUser.f176id == UserConfig.getInstance(ChatActivityEnterView.this.currentAccount).getClientUserId()) {
+                        if (currentUser.var_id == UserConfig.getInstance(ChatActivityEnterView.this.currentAccount).getClientUserId()) {
                             return;
                         }
-                        if (!(currentUser.status == null || currentUser.status.expires >= currentTime || MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.f176id)))) {
+                        if (!(currentUser.status == null || currentUser.status.expires >= currentTime || MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.var_id)))) {
                             return;
                         }
                     }
@@ -1223,7 +1223,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (stickerSet != null) {
                     inputStickerSet = new TL_inputStickerSetID();
                     inputStickerSet.access_hash = stickerSet.access_hash;
-                    inputStickerSet.f103id = stickerSet.f109id;
+                    inputStickerSet.var_id = stickerSet.var_id;
                 }
                 ChatActivityEnterView.this.parentFragment.showDialog(new StickersAlert(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment, inputStickerSet, null, ChatActivityEnterView.this));
             }
@@ -2303,7 +2303,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (this.emojiView != null) {
                     EmojiView emojiView = this.emojiView;
                     boolean z = chat.banned_rights != null && chat.banned_rights.send_stickers;
-                    emojiView.setStickersBanned(z, chat.f78id);
+                    emojiView.setStickersBanned(z, chat.var_id);
                 }
             }
         }
@@ -2906,7 +2906,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.recordInterfaceState = 1;
             try {
                 if (this.wakeLock == null) {
-                    this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(536870918, "audio record lock");
+                    this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(NUM, "audio record lock");
                     this.wakeLock.acquire();
                 }
             } catch (Throwable e2) {
@@ -3831,7 +3831,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.recordedAudioSeekBar.setVisibility(0);
                     TL_message message = new TL_message();
                     message.out = true;
-                    message.f104id = 0;
+                    message.var_id = 0;
                     message.to_id = new TL_peerUser();
                     Peer peer = message.to_id;
                     int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();

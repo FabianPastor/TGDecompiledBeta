@@ -507,7 +507,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         }
 
         /* renamed from: lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter */
-        final /* synthetic */ void mo16997xf72d2e5d(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo17109xvar_d2e5d(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
@@ -649,7 +649,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.editText.setHorizontalScrollBarEnabled(false);
         this.editText.setTextIsSelectable(false);
         this.editText.setPadding(0, 0, 0, 0);
-        this.editText.setImeOptions(268435462);
+        this.editText.setImeOptions(NUM);
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         this.editText.setHintText(LocaleController.getString("SearchFriends", R.string.SearchFriends));

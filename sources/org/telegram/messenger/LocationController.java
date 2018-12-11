@@ -213,7 +213,7 @@ public class LocationController implements NotificationCenterDelegate {
                 SharingLocationInfo info = (SharingLocationInfo) LocationController.this.sharingLocations.get(a);
                 TL_messages_editMessage req = new TL_messages_editMessage();
                 req.peer = MessagesController.getInstance(LocationController.this.currentAccount).getInputPeer((int) info.did);
-                req.f141id = info.mid;
+                req.var_id = info.mid;
                 req.stop_geo_live = true;
                 ConnectionsManager.getInstance(LocationController.this.currentAccount).sendRequest(req, new CLASSNAME());
             }
@@ -403,7 +403,7 @@ public class LocationController implements NotificationCenterDelegate {
                 }
                 TL_messages_editMessage req = new TL_messages_editMessage();
                 req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) info.did);
-                req.f141id = info.mid;
+                req.var_id = info.mid;
                 req.stop_geo_live = false;
                 req.flags |= MessagesController.UPDATE_MASK_CHANNEL;
                 req.geo_point = new TL_inputGeoPoint();
@@ -598,7 +598,7 @@ public class LocationController implements NotificationCenterDelegate {
                 if (info != null) {
                     TL_messages_editMessage req = new TL_messages_editMessage();
                     req.peer = MessagesController.getInstance(LocationController.this.currentAccount).getInputPeer((int) info.did);
-                    req.f141id = info.mid;
+                    req.var_id = info.mid;
                     req.stop_geo_live = true;
                     ConnectionsManager.getInstance(LocationController.this.currentAccount).sendRequest(req, new CLASSNAME());
                     LocationController.this.sharingLocations.remove(info);

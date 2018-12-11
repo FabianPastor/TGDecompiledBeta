@@ -330,20 +330,20 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, false, true);
                 }
                 if (this.returnAsResult) {
-                    if (this.ignoreUsers == null || this.ignoreUsers.indexOfKey(user.f176id) < 0) {
+                    if (this.ignoreUsers == null || this.ignoreUsers.indexOfKey(user.var_id) < 0) {
                         didSelectResult(user, true, null);
                         return;
                     }
                     return;
                 } else if (!this.createSecretChat) {
                     args = new Bundle();
-                    args.putInt("user_id", user.f176id);
+                    args.putInt("user_id", user.var_id);
                     if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(args, this)) {
                         presentFragment(new ChatActivity(args), true);
                         return;
                     }
                     return;
-                } else if (user.f176id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                } else if (user.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                     this.creatingChat = true;
                     SecretChatHelper.getInstance(this.currentAccount).startSecretChat(getParentActivity(), user);
                     return;
@@ -361,7 +361,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 if (item1 instanceof User) {
                     user = (User) item1;
                     if (this.returnAsResult) {
-                        if (this.ignoreUsers == null || this.ignoreUsers.indexOfKey(user.f176id) < 0) {
+                        if (this.ignoreUsers == null || this.ignoreUsers.indexOfKey(user.var_id) < 0) {
                             didSelectResult(user, true, null);
                         }
                     } else if (this.createSecretChat) {
@@ -369,7 +369,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         SecretChatHelper.getInstance(this.currentAccount).startSecretChat(getParentActivity(), user);
                     } else {
                         args = new Bundle();
-                        args.putInt("user_id", user.f176id);
+                        args.putInt("user_id", user.var_id);
                         if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(args, this)) {
                             presentFragment(new ChatActivity(args), true);
                         }
@@ -643,7 +643,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (this.createSecretChat && this.creatingChat) {
                 EncryptedChat encryptedChat = args[0];
                 Bundle args2 = new Bundle();
-                args2.putInt("enc_id", encryptedChat.f88id);
+                args2.putInt("enc_id", encryptedChat.var_id);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 presentFragment(new ChatActivity(args2), true);
             }

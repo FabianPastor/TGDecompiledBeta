@@ -250,7 +250,7 @@ public class PhotoCropActivity extends BaseFragment {
             this.circlePaint = new Paint();
             this.circlePaint.setColor(-1);
             this.halfPaint = new Paint();
-            this.halfPaint.setColor(-939524096);
+            this.halfPaint.setColor(-NUM);
             setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
             setOnTouchListener(new CLASSNAME());
         }

@@ -16,6 +16,6 @@ final /* synthetic */ class NotificationsCustomSettingsActivity$SearchAdapter$$L
     }
 
     public void run() {
-        this.arg$1.mo17206x264e3040(this.arg$2, this.arg$3);
+        this.arg$1.mo17319x264e3040(this.arg$2, this.arg$3);
     }
 }

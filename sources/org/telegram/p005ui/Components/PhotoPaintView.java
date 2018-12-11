@@ -419,7 +419,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 canvas.save();
                 if (v instanceof EntityView) {
                     EntityView entity = (EntityView) v;
-                    canvas.translate(entity.getPosition().f240x, entity.getPosition().f241y);
+                    canvas.translate(entity.getPosition().var_x, entity.getPosition().var_y);
                     canvas.scale(v.getScaleX(), v.getScaleY());
                     canvas.rotate(v.getRotation());
                     canvas.translate((float) ((-entity.getWidth()) / 2), (float) ((-entity.getHeight()) / 2));
@@ -621,7 +621,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         Point position;
         if (entityView != null) {
             position = entityView.getPosition();
-            return new Point(position.f240x + 200.0f, position.f241y + 200.0f);
+            return new Point(position.var_x + 200.0f, position.var_y + 200.0f);
         }
         position = centerPositionForEntity();
         while (true) {
@@ -630,7 +630,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 View view = this.entitiesView.getChildAt(index);
                 if (view instanceof EntityView) {
                     Point location = ((EntityView) view).getPosition();
-                    if (((float) Math.sqrt(Math.pow((double) (location.f240x - position.f240x), 2.0d) + Math.pow((double) (location.f241y - position.f241y), 2.0d))) < 100.0f) {
+                    if (((float) Math.sqrt(Math.pow((double) (location.var_x - position.var_x), 2.0d) + Math.pow((double) (location.var_y - position.var_y), 2.0d))) < 100.0f) {
                         occupied = true;
                     }
                 }
@@ -638,7 +638,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             if (!occupied) {
                 return position;
             }
-            position = new Point(position.f240x + 200.0f, position.f241y + 200.0f);
+            position = new Point(position.var_x + 200.0f, position.var_y + 200.0f);
         }
     }
 
@@ -653,7 +653,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                     result = new ArrayList();
                 }
                 TL_inputDocument inputDocument = new TL_inputDocument();
-                inputDocument.f95id = document.f84id;
+                inputDocument.var_id = document.var_id;
                 inputDocument.access_hash = document.access_hash;
                 inputDocument.file_reference = document.file_reference;
                 if (inputDocument.file_reference == null) {
@@ -866,7 +866,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     private void showMenuForEntity(EntityView entityView) {
-        showPopup(new PhotoPaintView$$Lambda$8(this, entityView), entityView, 17, (int) ((entityView.getPosition().f240x - ((float) (this.entitiesView.getWidth() / 2))) * this.entitiesView.getScaleX()), ((int) (((entityView.getPosition().f241y - ((((float) entityView.getHeight()) * entityView.getScale()) / 2.0f)) - ((float) (this.entitiesView.getHeight() / 2))) * this.entitiesView.getScaleY())) - AndroidUtilities.m9dp(32.0f));
+        showPopup(new PhotoPaintView$$Lambda$8(this, entityView), entityView, 17, (int) ((entityView.getPosition().var_x - ((float) (this.entitiesView.getWidth() / 2))) * this.entitiesView.getScaleX()), ((int) (((entityView.getPosition().var_y - ((((float) entityView.getHeight()) * entityView.getScale()) / 2.0f)) - ((float) (this.entitiesView.getHeight() / 2))) * this.entitiesView.getScaleY())) - AndroidUtilities.m9dp(32.0f));
     }
 
     final /* synthetic */ void lambda$showMenuForEntity$11$PhotoPaintView(EntityView entityView) {
@@ -1192,8 +1192,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         if (maskCoords == null || this.faces == null || this.faces.size() == 0) {
             return defaultPosition;
         }
-        int anchor = maskCoords.f137n;
-        PhotoFace face = getRandomFaceWithVacantAnchor(anchor, document.f84id, maskCoords);
+        int anchor = maskCoords.var_n;
+        PhotoFace face = getRandomFaceWithVacantAnchor(anchor, document.var_id, maskCoords);
         if (face == null) {
             return defaultPosition;
         }
@@ -1202,10 +1202,10 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         float angle = face.getAngle();
         float scale = (float) (((double) (referenceWidth / baseStickerSize().width)) * maskCoords.zoom);
         float radAngle = (float) Math.toRadians((double) angle);
-        float yCompX = (float) ((Math.cos(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f139y);
-        float yCompY = (float) ((Math.sin(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f139y);
-        float x = (referencePoint.f240x + ((float) ((Math.sin(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f138x))) + yCompX;
-        return new StickerPosition(new Point(x, (referencePoint.f241y + ((float) ((Math.cos(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.f138x))) + yCompY), scale, angle);
+        float yCompX = (float) ((Math.cos(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.var_y);
+        float yCompY = (float) ((Math.sin(1.5707963267948966d + ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.var_y);
+        float x = (referencePoint.var_x + ((float) ((Math.sin(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.var_x))) + yCompX;
+        return new StickerPosition(new Point(x, (referencePoint.var_y + ((float) ((Math.cos(1.5707963267948966d - ((double) radAngle)) * ((double) referenceWidth)) * maskCoords.var_x))) + yCompY), scale, angle);
     }
 
     private PhotoFace getRandomFaceWithVacantAnchor(int anchor, long documentId, TL_maskCoords maskCoords) {
@@ -1236,8 +1236,8 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 StickerView stickerView = (StickerView) view;
                 if (stickerView.getAnchor() == anchor) {
                     Point location = stickerView.getPosition();
-                    float distance = (float) Math.hypot((double) (location.f240x - anchorPoint.f240x), (double) (location.f241y - anchorPoint.f241y));
-                    if ((documentId == stickerView.getSticker().f84id || this.faces.size() > 1) && distance < minDistance) {
+                    float distance = (float) Math.hypot((double) (location.var_x - anchorPoint.var_x), (double) (location.var_y - anchorPoint.var_y));
+                    if ((documentId == stickerView.getSticker().var_id || this.faces.size() > 1) && distance < minDistance) {
                         return true;
                     }
                 }

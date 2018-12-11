@@ -32,7 +32,7 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
                     }
                     if (user != null) {
                         ContactsController.getInstance(currentAccount).markAsContacted(contactUri);
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(text, (long) user.f176id, null, null, true, null, null, null);
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(text, (long) user.var_id, null, null, true, null, null, null);
                     }
                 }
             }

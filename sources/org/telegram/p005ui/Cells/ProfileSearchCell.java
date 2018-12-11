@@ -187,7 +187,7 @@ public class ProfileSearchCell extends BaseCell {
         this.drawNameBot = false;
         if (this.encryptedChat != null) {
             this.drawNameLock = true;
-            this.dialog_id = ((long) this.encryptedChat.f88id) << 32;
+            this.dialog_id = ((long) this.encryptedChat.var_id) << 32;
             if (LocaleController.isRTL) {
                 this.nameLockLeft = (getMeasuredWidth() - AndroidUtilities.m9dp((float) (AndroidUtilities.leftBaseline + 2))) - Theme.dialogs_lockDrawable.getIntrinsicWidth();
                 this.nameLeft = AndroidUtilities.m9dp(11.0f);
@@ -197,12 +197,12 @@ public class ProfileSearchCell extends BaseCell {
             }
             this.nameLockTop = AndroidUtilities.m9dp(16.5f);
         } else if (this.chat != null) {
-            if (this.chat.f78id < 0) {
-                this.dialog_id = AndroidUtilities.makeBroadcastId(this.chat.f78id);
+            if (this.chat.var_id < 0) {
+                this.dialog_id = AndroidUtilities.makeBroadcastId(this.chat.var_id);
                 this.drawNameBroadcast = true;
                 this.nameLockTop = AndroidUtilities.m9dp(28.5f);
             } else {
-                this.dialog_id = (long) (-this.chat.f78id);
+                this.dialog_id = (long) (-this.chat.var_id);
                 if (!ChatObject.isChannel(this.chat) || this.chat.megagroup) {
                     this.drawNameGroup = true;
                     this.nameLockTop = AndroidUtilities.m9dp(30.0f);
@@ -227,7 +227,7 @@ public class ProfileSearchCell extends BaseCell {
                 this.nameLeft = intrinsicWidth + dp;
             }
         } else if (this.user != null) {
-            this.dialog_id = (long) this.user.f176id;
+            this.dialog_id = (long) this.user.var_id;
             if (LocaleController.isRTL) {
                 this.nameLeft = AndroidUtilities.m9dp(11.0f);
             } else {
@@ -326,11 +326,11 @@ public class ProfileSearchCell extends BaseCell {
             } else if (this.user != null) {
                 if (this.user.bot) {
                     onlineString = LocaleController.getString("Bot", R.string.Bot);
-                } else if (this.user.f176id == 333000 || this.user.f176id == 777000) {
+                } else if (this.user.var_id == 333000 || this.user.var_id == 777000) {
                     onlineString = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
                 } else {
                     onlineString = LocaleController.formatUserStatus(this.currentAccount, this.user);
-                    if (this.user != null && (this.user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
+                    if (this.user != null && (this.user.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
                         currentOnlinePaint = Theme.dialogs_onlinePaint;
                         onlineString = LocaleController.getString("Online", R.string.Online);
                     }

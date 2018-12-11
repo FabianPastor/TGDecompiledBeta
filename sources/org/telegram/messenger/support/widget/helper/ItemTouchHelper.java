@@ -52,7 +52,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
     public static final int START = 16;
     static final String TAG = "ItemTouchHelper";
     /* renamed from: UP */
-    public static final int f264UP = 1;
+    public static final int var_UP = 1;
     int mActionState = 0;
     int mActivePointerId = -1;
     Callback mCallback;
@@ -331,7 +331,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
                 RecoverAnimation anim = (RecoverAnimation) recoverAnimationList.get(i);
                 anim.update();
                 count = c.save();
-                onChildDraw(c, parent, anim.mViewHolder, anim.f69mX, anim.f70mY, anim.mActionState, false);
+                onChildDraw(c, parent, anim.mViewHolder, anim.var_mX, anim.var_mY, anim.mActionState, false);
                 c.restoreToCount(count);
             }
             if (selected != null) {
@@ -349,7 +349,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
             for (i = 0; i < recoverAnimSize; i++) {
                 anim = (RecoverAnimation) recoverAnimationList.get(i);
                 count = c.save();
-                onChildDrawOver(c, parent, anim.mViewHolder, anim.f69mX, anim.f70mY, anim.mActionState, false);
+                onChildDrawOver(c, parent, anim.mViewHolder, anim.var_mX, anim.var_mY, anim.mActionState, false);
                 c.restoreToCount(count);
             }
             if (selected != null) {
@@ -463,9 +463,9 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         private final ValueAnimator mValueAnimator;
         final ViewHolder mViewHolder;
         /* renamed from: mX */
-        float f69mX;
+        float var_mX;
         /* renamed from: mY */
-        float f70mY;
+        float var_mY;
 
         /* renamed from: org.telegram.messenger.support.widget.helper.ItemTouchHelper$RecoverAnimation$1 */
         class CLASSNAME implements AnimatorUpdateListener {
@@ -511,14 +511,14 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
 
         public void update() {
             if (this.mStartDx == this.mTargetX) {
-                this.f69mX = this.mViewHolder.itemView.getTranslationX();
+                this.var_mX = this.mViewHolder.itemView.getTranslationX();
             } else {
-                this.f69mX = this.mStartDx + (this.mFraction * (this.mTargetX - this.mStartDx));
+                this.var_mX = this.mStartDx + (this.mFraction * (this.mTargetX - this.mStartDx));
             }
             if (this.mStartDy == this.mTargetY) {
-                this.f70mY = this.mViewHolder.itemView.getTranslationY();
+                this.var_mY = this.mViewHolder.itemView.getTranslationY();
             } else {
-                this.f70mY = this.mStartDy + (this.mFraction * (this.mTargetY - this.mStartDy));
+                this.var_mY = this.mStartDy + (this.mFraction * (this.mTargetY - this.mStartDy));
             }
         }
 
@@ -561,9 +561,9 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
                     RecoverAnimation animation = ItemTouchHelper.this.findAnimation(event);
                     if (animation != null) {
                         ItemTouchHelper itemTouchHelper = ItemTouchHelper.this;
-                        itemTouchHelper.mInitialTouchX -= animation.f69mX;
+                        itemTouchHelper.mInitialTouchX -= animation.var_mX;
                         itemTouchHelper = ItemTouchHelper.this;
-                        itemTouchHelper.mInitialTouchY -= animation.f70mY;
+                        itemTouchHelper.mInitialTouchY -= animation.var_mY;
                         ItemTouchHelper.this.endRecoverAnimation(animation.mViewHolder, true);
                         if (ItemTouchHelper.this.mPendingCleanup.remove(animation.mViewHolder.itemView)) {
                             ItemTouchHelper.this.mCallback.clearView(ItemTouchHelper.this.mRecyclerView, animation.mViewHolder);
@@ -1183,7 +1183,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         for (int i = this.mRecoverAnimations.size() - 1; i >= 0; i--) {
             RecoverAnimation anim = (RecoverAnimation) this.mRecoverAnimations.get(i);
             View view = anim.mViewHolder.itemView;
-            if (hitTest(view, x, y, anim.f69mX, anim.f70mY)) {
+            if (hitTest(view, x, y, anim.var_mX, anim.var_mY)) {
                 return view;
             }
         }

@@ -95,7 +95,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 b = 0;
                 while (b < users.size()) {
                     User user = (User) users.get(b);
-                    if (user.f176id != id2) {
+                    if (user.var_id != id2) {
                         b++;
                     } else if (!user.bot) {
                         extras.putLong("dialogId", (long) id2);
@@ -109,7 +109,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 b = 0;
                 while (b < chats.size()) {
                     Chat chat = (Chat) chats.get(b);
-                    if (chat.f78id != (-id2)) {
+                    if (chat.var_id != (-id2)) {
                         b++;
                     } else if (!ChatObject.isNotInChat(chat) && (!ChatObject.isChannel(chat) || chat.megagroup)) {
                         extras.putLong("dialogId", (long) id2);

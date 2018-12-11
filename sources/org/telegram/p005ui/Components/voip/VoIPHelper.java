@@ -99,7 +99,7 @@ public class VoIPHelper {
     private static void initiateCall(final User user, final Activity activity) {
         if (activity != null && user != null) {
             if (VoIPService.getSharedInstance() != null) {
-                if (VoIPService.getSharedInstance().getUser().f176id != user.f176id) {
+                if (VoIPService.getSharedInstance().getUser().var_id != user.var_id) {
                     new Builder((Context) activity).setTitle(LocaleController.getString("VoipOngoingAlertTitle", R.string.VoipOngoingAlertTitle)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", R.string.VoipOngoingAlert, ContactsController.formatName(callUser.first_name, callUser.last_name), ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
 
                         /* renamed from: org.telegram.ui.Components.voip.VoIPHelper$2$1 */
@@ -133,7 +133,7 @@ public class VoIPHelper {
         if (activity != null && user != null && System.currentTimeMillis() - lastCallTime >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
             lastCallTime = System.currentTimeMillis();
             Intent intent = new Intent(activity, VoIPService.class);
-            intent.putExtra("user_id", user.f176id);
+            intent.putExtra("user_id", user.var_id);
             intent.putExtra("is_outgoing", true);
             intent.putExtra("start_incall_activity", true);
             intent.putExtra("account", UserConfig.selectedAccount);
@@ -275,7 +275,7 @@ public class VoIPHelper {
                 }
                 req.peer = new TL_inputPhoneCall();
                 req.peer.access_hash = j;
-                req.peer.f136id = j2;
+                req.peer.var_id = j2;
                 ConnectionsManager.getInstance(i).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                         if (response instanceof TL_updates) {

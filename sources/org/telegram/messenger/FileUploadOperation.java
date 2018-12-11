@@ -47,7 +47,7 @@ public class FileUploadOperation {
     private boolean isEncrypted;
     private boolean isLastPart;
     /* renamed from: iv */
-    private byte[] f51iv;
+    private byte[] var_iv;
     private byte[] ivChange;
     private byte[] key;
     private int lastSavedPartNum;
@@ -83,7 +83,7 @@ public class FileUploadOperation {
     private class UploadCachedResult {
         private long bytesOffset;
         /* renamed from: iv */
-        private byte[] f50iv;
+        private byte[] var_iv;
 
         private UploadCachedResult() {
         }
@@ -155,7 +155,7 @@ public class FileUploadOperation {
             this.uploadedBytesCount = 0;
             this.saveInfoTimes = 0;
             this.key = null;
-            this.f51iv = null;
+            this.var_iv = null;
             this.ivChange = null;
             this.currentUploadRequetsCount = 0;
             this.lastSavedPartNum = 0;
@@ -229,7 +229,7 @@ public class FileUploadOperation {
         editor.putLong(this.fileKey + "_id", this.currentFileId);
         editor.remove(this.fileKey + "_uploaded");
         if (this.isEncrypted) {
-            editor.putString(this.fileKey + "_iv", Utilities.bytesToHex(this.f51iv));
+            editor.putString(this.fileKey + "_iv", Utilities.bytesToHex(this.var_iv));
             editor.putString(this.fileKey + "_ivc", Utilities.bytesToHex(this.ivChange));
             editor.putString(this.fileKey + "_key", Utilities.bytesToHex(this.key));
         }
@@ -302,12 +302,12 @@ public class FileUploadOperation {
                                 rewrite = true;
                             } else {
                                 this.key = Utilities.hexToBytes(keyString);
-                                this.f51iv = Utilities.hexToBytes(ivString);
-                                if (this.key == null || this.f51iv == null || this.key.length != 32 || this.f51iv.length != 32) {
+                                this.var_iv = Utilities.hexToBytes(ivString);
+                                if (this.key == null || this.var_iv == null || this.key.length != 32 || this.var_iv.length != 32) {
                                     rewrite = true;
                                 } else {
                                     this.ivChange = new byte[32];
-                                    System.arraycopy(this.f51iv, 0, this.ivChange, 0, 32);
+                                    System.arraycopy(this.var_iv, 0, this.ivChange, 0, 32);
                                 }
                             }
                         }
@@ -369,12 +369,12 @@ public class FileUploadOperation {
                     }
                     if (rewrite) {
                         if (this.isEncrypted) {
-                            this.f51iv = new byte[32];
+                            this.var_iv = new byte[32];
                             this.key = new byte[32];
                             this.ivChange = new byte[32];
-                            Utilities.random.nextBytes(this.f51iv);
+                            Utilities.random.nextBytes(this.var_iv);
                             Utilities.random.nextBytes(this.key);
-                            System.arraycopy(this.f51iv, 0, this.ivChange, 0, 32);
+                            System.arraycopy(this.var_iv, 0, this.ivChange, 0, 32);
                         }
                         this.currentFileId = Utilities.random.nextLong();
                         if (!(this.nextPartFirst || this.uploadFirstPartLater || this.estimatedSize != 0)) {
@@ -386,7 +386,7 @@ public class FileUploadOperation {
                             MessageDigest md = MessageDigest.getInstance("MD5");
                             Object arr = new byte[64];
                             System.arraycopy(this.key, 0, arr, 0, 32);
-                            System.arraycopy(this.f51iv, 0, arr, 32, 32);
+                            System.arraycopy(this.var_iv, 0, arr, 32, 32);
                             byte[] digest = md.digest(arr);
                             for (a = 0; a < 4; a++) {
                                 this.fingerprint |= ((digest[a] ^ digest[a + 4]) & 255) << (a * 8);
@@ -546,7 +546,7 @@ public class FileUploadOperation {
                             result.md5_checksum = TtmlNode.ANONYMOUS_REGION_ID;
                         }
                         result.parts = this.currentPartNum;
-                        result.f97id = this.currentFileId;
+                        result.var_id = this.currentFileId;
                         result.name = this.uploadingFilePath.substring(this.uploadingFilePath.lastIndexOf("/") + 1);
                         this.delegate.didFinishUploadingFile(this, result, null, null, null);
                         cleanup();
@@ -559,9 +559,9 @@ public class FileUploadOperation {
                             result2.md5_checksum = TtmlNode.ANONYMOUS_REGION_ID;
                         }
                         result2.parts = this.currentPartNum;
-                        result2.f96id = this.currentFileId;
+                        result2.var_id = this.currentFileId;
                         result2.key_fingerprint = this.fingerprint;
-                        this.delegate.didFinishUploadingFile(this, null, result2, this.key, this.f51iv);
+                        this.delegate.didFinishUploadingFile(this, null, result2, this.key, this.var_iv);
                         cleanup();
                     }
                     if (this.currentType == ConnectionsManager.FileTypeAudio) {
@@ -589,7 +589,7 @@ public class FileUploadOperation {
                                     break;
                                 }
                                 offsetToSave = result3.bytesOffset;
-                                ivToSave = result3.f50iv;
+                                ivToSave = result3.var_iv;
                                 this.cachedResults.remove(this.lastSavedPartNum);
                                 this.lastSavedPartNum++;
                             }
@@ -605,8 +605,8 @@ public class FileUploadOperation {
                             result3 = new UploadCachedResult();
                             result3.bytesOffset = currentRequestBytesOffset;
                             if (currentRequestIv != null) {
-                                result3.f50iv = new byte[32];
-                                System.arraycopy(currentRequestIv, 0, result3.f50iv, 0, 32);
+                                result3.var_iv = new byte[32];
+                                System.arraycopy(currentRequestIv, 0, result3.var_iv, 0, 32);
                             }
                             this.cachedResults.put(currentRequestPartNum, result3);
                         }

@@ -170,19 +170,19 @@ public class NotificationsController {
     /* renamed from: org.telegram.messenger.NotificationsController$1NotificationHolder */
     class AnonymousClass1NotificationHolder {
         /* renamed from: id */
-        int f57id;
+        int var_id;
         Notification notification;
 
         AnonymousClass1NotificationHolder(int i, Notification n) {
-            this.f57id = i;
+            this.var_id = i;
             this.notification = n;
         }
 
         void call() {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m14w("show dialog notification with id " + this.f57id);
+                FileLog.m14w("show dialog notification with id " + this.var_id);
             }
-            NotificationsController.notificationManager.notify(this.f57id, this.notification);
+            NotificationsController.notificationManager.notify(this.var_id, this.notification);
         }
     }
 
@@ -420,7 +420,7 @@ public class NotificationsController {
         Intent popupIntent = new Intent(ApplicationLoader.applicationContext, PopupNotificationActivity.class);
         popupIntent.putExtra("force", true);
         popupIntent.putExtra("currentAccount", this.currentAccount);
-        popupIntent.setFlags(268763140);
+        popupIntent.setFlags(NUM);
         ApplicationLoader.applicationContext.startActivity(popupIntent);
         ApplicationLoader.applicationContext.sendBroadcast(new Intent("android.intent.action.CLOSE_SYSTEM_DIALOGS"));
     }
@@ -430,7 +430,7 @@ public class NotificationsController {
     }
 
     /* renamed from: lambda$removeDeletedMessagesFromNotifications$8$NotificationsController */
-    final /* synthetic */ void mo7077xbCLASSNAMEe(SparseArray deletedMessages, ArrayList popupArrayRemove) {
+    final /* synthetic */ void mo7057xbCLASSNAMEe(SparseArray deletedMessages, ArrayList popupArrayRemove) {
         int old_unread_count = this.total_unread_count;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
         for (int a = 0; a < deletedMessages.size(); a++) {
@@ -505,7 +505,7 @@ public class NotificationsController {
     }
 
     /* renamed from: lambda$removeDeletedHisoryFromNotifications$11$NotificationsController */
-    final /* synthetic */ void mo7076x6900fe42(SparseIntArray deletedMessages, ArrayList popupArrayRemove) {
+    final /* synthetic */ void mo7056x6900fe42(SparseIntArray deletedMessages, ArrayList popupArrayRemove) {
         int old_unread_count = this.total_unread_count;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
         for (int a = 0; a < deletedMessages.size(); a++) {
@@ -833,7 +833,7 @@ public class NotificationsController {
         }
         if (popupFinal == 3 || ((popupFinal == 1 && ApplicationLoader.isScreenOn) || (popupFinal == 2 && !ApplicationLoader.isScreenOn))) {
             Intent popupIntent = new Intent(ApplicationLoader.applicationContext, PopupNotificationActivity.class);
-            popupIntent.setFlags(268763140);
+            popupIntent.setFlags(NUM);
             ApplicationLoader.applicationContext.startActivity(popupIntent);
         }
     }
@@ -963,7 +963,7 @@ public class NotificationsController {
         if (messages != null) {
             for (a = 0; a < messages.size(); a++) {
                 Message message = (Message) messages.get(a);
-                mid = (long) message.f104id;
+                mid = (long) message.var_id;
                 if (message.to_id.channel_id != 0) {
                     mid |= ((long) message.to_id.channel_id) << 32;
                 }
@@ -1279,7 +1279,7 @@ public class NotificationsController {
                         if (u2 == null) {
                             return null;
                         }
-                        if (from_id != u2.f176id) {
+                        if (from_id != u2.var_id) {
                             return LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
                         } else if (chat.megagroup) {
                             return LocaleController.formatString("NotificationGroupAddSelfMega", R.string.NotificationGroupAddSelfMega, name, chat.title);
@@ -1685,7 +1685,7 @@ public class NotificationsController {
                         if (u2 == null) {
                             return null;
                         }
-                        msg = from_id == u2.f176id ? chat.megagroup ? LocaleController.formatString("NotificationGroupAddSelfMega", R.string.NotificationGroupAddSelfMega, name, chat.title) : LocaleController.formatString("NotificationGroupAddSelf", R.string.NotificationGroupAddSelf, name, chat.title) : LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
+                        msg = from_id == u2.var_id ? chat.megagroup ? LocaleController.formatString("NotificationGroupAddSelfMega", R.string.NotificationGroupAddSelfMega, name, chat.title) : LocaleController.formatString("NotificationGroupAddSelf", R.string.NotificationGroupAddSelf, name, chat.title) : LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
                     }
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionChatJoinedByLink) {
                     msg = LocaleController.formatString("NotificationInvitedToGroupByLink", R.string.NotificationInvitedToGroupByLink, name, chat.title);
@@ -2428,7 +2428,7 @@ public class NotificationsController {
             intent = new Intent(ApplicationLoader.applicationContext, NotificationDismissReceiver.class);
             intent.putExtra("messageDate", lastMessageObject.messageOwner.date);
             intent.putExtra("currentAccount", this.currentAccount);
-            mBuilder.setDeleteIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 1, intent, 134217728));
+            mBuilder.setDeleteIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 1, intent, NUM));
             if (photoPath != null) {
                 BitmapDrawable img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
                 if (img != null) {
@@ -2540,7 +2540,7 @@ public class NotificationsController {
                             Context context = ApplicationLoader.applicationContext;
                             int i3 = this.lastButtonId;
                             this.lastButtonId = i3 + 1;
-                            mBuilder.addAction(0, str, PendingIntent.getBroadcast(context, i3, intent, 134217728));
+                            mBuilder.addAction(0, str, PendingIntent.getBroadcast(context, i3, intent, NUM));
                             hasCallback = true;
                         }
                     }
@@ -2550,9 +2550,9 @@ public class NotificationsController {
                 intent = new Intent(ApplicationLoader.applicationContext, PopupReplyReceiver.class);
                 intent.putExtra("currentAccount", this.currentAccount);
                 if (VERSION.SDK_INT <= 19) {
-                    mBuilder.addAction(R.drawable.ic_ab_reply2, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                    mBuilder.addAction(R.drawable.ic_ab_reply2, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, NUM));
                 } else {
-                    mBuilder.addAction(R.drawable.ic_ab_reply, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                    mBuilder.addAction(R.drawable.ic_ab_reply, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, NUM));
                 }
             }
             if (VERSION.SDK_INT >= 26) {
@@ -2724,7 +2724,7 @@ public class NotificationsController {
             intent.putExtra("dialog_id", dialog_id);
             intent.putExtra("max_id", max_id);
             intent.putExtra("currentAccount", this.currentAccount);
-            unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728));
+            unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, NUM));
             Action wearReplyAction = null;
             if ((!isChannel || isSupergroup) && canReply && !SharedConfig.isWaitingForPasscodeEnter) {
                 String replyToString;
@@ -2734,12 +2734,12 @@ public class NotificationsController {
                 intent.putExtra("dialog_id", dialog_id);
                 intent.putExtra("max_id", max_id);
                 intent.putExtra("currentAccount", this.currentAccount);
-                unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
+                unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, NUM), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
                 intent = new Intent(ApplicationLoader.applicationContext, WearReplyReceiver.class);
                 intent.putExtra("dialog_id", dialog_id);
                 intent.putExtra("max_id", max_id);
                 intent.putExtra("currentAccount", this.currentAccount);
-                PendingIntent replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728);
+                PendingIntent replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, NUM);
                 RemoteInput remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
                 if (lowerId < 0) {
                     replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
@@ -2909,7 +2909,7 @@ public class NotificationsController {
             if (wearReplyAction != null) {
                 wearableExtender.addAction(wearReplyAction);
             }
-            Action readAction = new Action.Builder(R.drawable.menu_read, LocaleController.getString("MarkAsRead", R.string.MarkAsRead), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728)).build();
+            Action readAction = new Action.Builder(R.drawable.menu_read, LocaleController.getString("MarkAsRead", R.string.MarkAsRead), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, NUM)).build();
             if (lowerId != 0) {
                 if (lowerId > 0) {
                     dismissalID = "tguser" + lowerId + "_" + max_id;
@@ -2966,7 +2966,7 @@ public class NotificationsController {
                             Context context = ApplicationLoader.applicationContext;
                             int i2 = this.lastButtonId;
                             this.lastButtonId = i2 + 1;
-                            builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, intent, 134217728));
+                            builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, intent, NUM));
                         }
                     }
                 }

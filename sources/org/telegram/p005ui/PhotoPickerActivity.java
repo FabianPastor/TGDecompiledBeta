@@ -591,7 +591,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 } else {
                     array = PhotoPickerActivity.this.searchResult;
                 }
-                if (index < 0 || index >= array.size() || !PhotoPickerActivity.this.selectedPhotos.containsKey(((SearchImage) array.get(index)).f53id)) {
+                if (index < 0 || index >= array.size() || !PhotoPickerActivity.this.selectedPhotos.containsKey(((SearchImage) array.get(index)).var_id)) {
                     z = false;
                 }
                 return z;
@@ -604,7 +604,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             if (object instanceof PhotoEntry) {
                 key = Integer.valueOf(((PhotoEntry) object).imageId);
             } else if (object instanceof SearchImage) {
-                key = ((SearchImage) object).f53id;
+                key = ((SearchImage) object).var_id;
             }
             if (key != null && PhotoPickerActivity.this.selectedPhotos.containsKey(key)) {
                 PhotoPickerActivity.this.selectedPhotos.remove(key);
@@ -635,7 +635,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 SearchImage photoEntry = (SearchImage) array.get(index);
                 num = PhotoPickerActivity.this.addToSelectedPhotos(photoEntry, -1);
                 if (num == -1) {
-                    num = PhotoPickerActivity.this.selectedPhotosOrder.indexOf(photoEntry.f53id);
+                    num = PhotoPickerActivity.this.selectedPhotosOrder.indexOf(photoEntry.var_id);
                 } else {
                     add = false;
                 }
@@ -763,7 +763,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 } else {
                     photoEntry2 = (SearchImage) PhotoPickerActivity.this.searchResult.get(((Integer) ((View) v.getParent()).getTag()).intValue());
                 }
-                if (!PhotoPickerActivity.this.selectedPhotos.containsKey(photoEntry2.f53id)) {
+                if (!PhotoPickerActivity.this.selectedPhotos.containsKey(photoEntry2.var_id)) {
                     added = true;
                 }
                 if (!added || PhotoPickerActivity.this.maxSelectedPhotos < 0 || PhotoPickerActivity.this.selectedPhotos.size() < PhotoPickerActivity.this.maxSelectedPhotos) {
@@ -889,7 +889,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         }
                         cell.setImage(photoEntry2);
                         cell.videoInfoContainer.setVisibility(4);
-                        cell.setChecked(PhotoPickerActivity.this.allowIndices ? PhotoPickerActivity.this.selectedPhotosOrder.indexOf(photoEntry2.f53id) : -1, PhotoPickerActivity.this.selectedPhotos.containsKey(photoEntry2.f53id), false);
+                        cell.setChecked(PhotoPickerActivity.this.allowIndices ? PhotoPickerActivity.this.selectedPhotosOrder.indexOf(photoEntry2.var_id) : -1, PhotoPickerActivity.this.selectedPhotos.containsKey(photoEntry2.var_id), false);
                         showing = PhotoViewer.isShowingImage(photoEntry2.getPathToAttach());
                     }
                     imageView.getImageReceiver().setVisible(!showing, true);
@@ -1162,7 +1162,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             photoEntry = (SearchImage) this.searchResult.get(index.intValue());
                         }
                         if (this.allowIndices) {
-                            indexOf = this.selectedPhotosOrder.indexOf(photoEntry.f53id);
+                            indexOf = this.selectedPhotosOrder.indexOf(photoEntry.var_id);
                         } else {
                             indexOf = -1;
                         }
@@ -1211,7 +1211,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (object instanceof PhotoEntry) {
             key = Integer.valueOf(((PhotoEntry) object).imageId);
         } else if (object instanceof SearchImage) {
-            key = ((SearchImage) object).f53id;
+            key = ((SearchImage) object).var_id;
         }
         if (key != null) {
             if (this.selectedPhotos.containsKey(key)) {
@@ -1270,7 +1270,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
         this.searching = true;
         TL_messages_searchGifs req = new TL_messages_searchGifs();
-        req.f157q = query;
+        req.var_q = query;
         req.offset = offset;
         final int token = this.lastSearchToken + 1;
         this.lastSearchToken = token;
@@ -1290,19 +1290,19 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                     if (!PhotoPickerActivity.this.searchResultKeys.containsKey(gif.url)) {
                                         added = true;
                                         SearchImage bingImage = new SearchImage();
-                                        bingImage.f53id = gif.url;
+                                        bingImage.var_id = gif.url;
                                         if (gif.document != null) {
                                             for (int b = 0; b < gif.document.attributes.size(); b++) {
                                                 DocumentAttribute attribute = (DocumentAttribute) gif.document.attributes.get(b);
                                                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                                                    bingImage.width = attribute.f87w;
-                                                    bingImage.height = attribute.f86h;
+                                                    bingImage.width = attribute.var_w;
+                                                    bingImage.height = attribute.var_h;
                                                     break;
                                                 }
                                             }
                                         } else {
-                                            bingImage.width = gif.f92w;
-                                            bingImage.height = gif.f91h;
+                                            bingImage.width = gif.var_w;
+                                            bingImage.height = gif.var_h;
                                         }
                                         bingImage.size = 0;
                                         bingImage.imageUrl = gif.content_url;
@@ -1318,7 +1318,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                         bingImage.type = 1;
                                         PhotoPickerActivity.this.searchResult.add(bingImage);
                                         addedCount++;
-                                        PhotoPickerActivity.this.searchResultKeys.put(bingImage.f53id, bingImage);
+                                        PhotoPickerActivity.this.searchResultKeys.put(bingImage.var_id, bingImage);
                                     }
                                 }
                                 PhotoPickerActivity photoPickerActivity = PhotoPickerActivity.this;
@@ -1407,15 +1407,15 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                     int count = res.results.size();
                                     for (int a = 0; a < count; a++) {
                                         BotInlineResult result = (BotInlineResult) res.results.get(a);
-                                        if ("photo".equals(result.type) && !PhotoPickerActivity.this.searchResultKeys.containsKey(result.f76id)) {
+                                        if ("photo".equals(result.type) && !PhotoPickerActivity.this.searchResultKeys.containsKey(result.var_id)) {
                                             added = true;
                                             SearchImage bingImage = new SearchImage();
                                             if (result.photo != null) {
                                                 PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(result.photo.sizes, AndroidUtilities.getPhotoSize());
                                                 PhotoSize size2 = FileLoader.getClosestPhotoSizeWithSize(result.photo.sizes, 320);
                                                 if (size != null) {
-                                                    bingImage.width = size.f108w;
-                                                    bingImage.height = size.f107h;
+                                                    bingImage.width = size.var_w;
+                                                    bingImage.height = size.var_h;
                                                     bingImage.photoSize = size;
                                                     bingImage.photo = result.photo;
                                                     bingImage.size = size.size;
@@ -1425,8 +1425,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                                 for (int b = 0; b < result.content.attributes.size(); b++) {
                                                     DocumentAttribute attribute = (DocumentAttribute) result.content.attributes.get(b);
                                                     if (attribute instanceof TL_documentAttributeImageSize) {
-                                                        bingImage.width = attribute.f87w;
-                                                        bingImage.height = attribute.f86h;
+                                                        bingImage.width = attribute.var_w;
+                                                        bingImage.height = attribute.var_h;
                                                         break;
                                                     }
                                                 }
@@ -1438,11 +1438,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                                 bingImage.imageUrl = result.content.url;
                                                 bingImage.size = result.content.size;
                                             }
-                                            bingImage.f53id = result.f76id;
+                                            bingImage.var_id = result.var_id;
                                             bingImage.type = 0;
                                             bingImage.localUrl = TtmlNode.ANONYMOUS_REGION_ID;
                                             PhotoPickerActivity.this.searchResult.add(bingImage);
-                                            PhotoPickerActivity.this.searchResultKeys.put(bingImage.f53id, bingImage);
+                                            PhotoPickerActivity.this.searchResultKeys.put(bingImage.var_id, bingImage);
                                             addedCount++;
                                             added = true;
                                         }

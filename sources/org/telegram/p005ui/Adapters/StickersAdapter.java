@@ -107,7 +107,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
 
     private void addStickerToResult(Document document, Object parent) {
         if (document != null) {
-            String key = document.dc_id + "_" + document.f84id;
+            String key = document.dc_id + "_" + document.var_id;
             if (this.stickersMap == null || !this.stickersMap.containsKey(key)) {
                 if (this.stickers == null) {
                     this.stickers = new ArrayList();
@@ -126,7 +126,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             int size = documents.size();
             for (int a = 0; a < size; a++) {
                 Document document = (Document) documents.get(a);
-                String key = document.dc_id + "_" + document.f84id;
+                String key = document.dc_id + "_" + document.var_id;
                 if (this.stickersMap == null || !this.stickersMap.containsKey(key)) {
                     if (this.stickers == null) {
                         this.stickers = new ArrayList();
@@ -234,14 +234,14 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                                     int i;
                                     int a = 0;
                                     while (a < favsStickers.size()) {
-                                        if (((Document) favsStickers.get(a)).f84id == id) {
+                                        if (((Document) favsStickers.get(a)).var_id == id) {
                                             return a + 1000;
                                         }
                                         a++;
                                     }
                                     a = 0;
                                     while (a < recentStickers.size()) {
-                                        if (((Document) recentStickers.get(a)).f84id == id) {
+                                        if (((Document) recentStickers.get(a)).var_id == id) {
                                             i = a;
                                             return a;
                                         }
@@ -252,8 +252,8 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                                 }
 
                                 public int compare(Document lhs, Document rhs) {
-                                    int idx1 = getIndex(lhs.f84id);
-                                    int idx2 = getIndex(rhs.f84id);
+                                    int idx1 = getIndex(lhs.var_id);
+                                    int idx2 = getIndex(rhs.var_id);
                                     if (idx1 > idx2) {
                                         return -1;
                                     }

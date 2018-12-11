@@ -230,7 +230,7 @@ public class UserConfig {
     public int getClientUserId() {
         int i;
         synchronized (this.sync) {
-            i = this.currentUser != null ? this.currentUser.f176id : 0;
+            i = this.currentUser != null ? this.currentUser.var_id : 0;
         }
         return i;
     }
@@ -254,7 +254,7 @@ public class UserConfig {
     public void setCurrentUser(User user) {
         synchronized (this.sync) {
             this.currentUser = user;
-            this.clientUserId = user.f176id;
+            this.clientUserId = user.var_id;
         }
     }
 
@@ -369,7 +369,7 @@ public class UserConfig {
                 }
             }
             if (this.currentUser != null) {
-                this.clientUserId = this.currentUser.f176id;
+                this.clientUserId = this.currentUser.var_id;
             }
             this.configLoaded = true;
             return;

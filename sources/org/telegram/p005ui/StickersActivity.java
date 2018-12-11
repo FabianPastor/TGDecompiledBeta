@@ -138,7 +138,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         public long getItemId(int i) {
             if (i >= StickersActivity.this.stickersStartRow && i < StickersActivity.this.stickersEndRow) {
-                return ((TL_messages_stickerSet) DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType).get(i - StickersActivity.this.stickersStartRow)).set.f109id;
+                return ((TL_messages_stickerSet) DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType).get(i - StickersActivity.this.stickersStartRow)).set.var_id;
             }
             if (i == StickersActivity.this.suggestRow || i == StickersActivity.this.suggestInfoRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.archivedInfoRow || i == StickersActivity.this.featuredRow || i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.masksRow || i == StickersActivity.this.masksInfoRow) {
                 return -2147483648L;
@@ -466,7 +466,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             req.masks = z;
             ArrayList<TL_messages_stickerSet> arrayList = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
             for (int a = 0; a < arrayList.size(); a++) {
-                req.order.add(Long.valueOf(((TL_messages_stickerSet) arrayList.get(a)).set.f109id));
+                req.order.add(Long.valueOf(((TL_messages_stickerSet) arrayList.get(a)).set.var_id));
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, StickersActivity$$Lambda$1.$instance);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(this.currentType));

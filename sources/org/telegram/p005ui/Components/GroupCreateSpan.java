@@ -63,7 +63,7 @@ public class GroupCreateSpan extends View {
         this.avatarDrawable.setTextSize(AndroidUtilities.m9dp(12.0f));
         if (user != null) {
             this.avatarDrawable.setInfo(user);
-            this.uid = user.f176id;
+            this.uid = user.var_id;
         } else {
             this.avatarDrawable.setInfo(0, contact.first_name, contact.last_name, false);
             this.uid = contact.contact_id;

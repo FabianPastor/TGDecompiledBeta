@@ -255,7 +255,7 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public int getContextBotId() {
-        return this.foundContextBot != null ? this.foundContextBot.f176id : 0;
+        return this.foundContextBot != null ? this.foundContextBot.var_id : 0;
     }
 
     public User getContextBotUser() {
@@ -286,7 +286,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
             }
             if (this.foundContextBot.bot_inline_geo) {
-                if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("inlinegeo_" + this.foundContextBot.f176id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
+                if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("inlinegeo_" + this.foundContextBot.var_id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
                     checkLocationPermissionsOrStart();
                 } else {
                     User foundContextBotFinal = this.foundContextBot;
@@ -313,7 +313,7 @@ public class MentionsAdapter extends SelectionAdapter {
     final /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] buttonClicked, User foundContextBotFinal, DialogInterface dialogInterface, int i) {
         buttonClicked[0] = true;
         if (foundContextBotFinal != null) {
-            MessagesController.getNotificationsSettings(this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.f176id, true).commit();
+            MessagesController.getNotificationsSettings(this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.var_id, true).commit();
             checkLocationPermissionsOrStart();
         }
     }
@@ -483,7 +483,7 @@ public class MentionsAdapter extends SelectionAdapter {
             if (query == null || user == null) {
                 this.searchingContextQuery = null;
             } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
-                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.f176id).append("_");
+                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.var_id).append("_");
                 Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? TtmlNode.ANONYMOUS_REGION_ID : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
                 String key = append.append(valueOf).toString();
                 MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
@@ -728,7 +728,7 @@ public class MentionsAdapter extends SelectionAdapter {
                         if (user != null) {
                             if (user.username != null && user.username.length() > 0 && ((usernameString.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) || usernameString.length() == 0)) {
                                 newResult2.add(user);
-                                newResultsHashMap.put(user.f176id, user);
+                                newResultsHashMap.put(user.var_id, user);
                                 count++;
                             }
                             if (count == 5) {
@@ -740,7 +740,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (this.parentFragment != null) {
                     chat = this.parentFragment.getCurrentChat();
                 } else if (this.info != null) {
-                    chat = messagesController.getChat(Integer.valueOf(this.info.f79id));
+                    chat = messagesController.getChat(Integer.valueOf(this.info.var_id));
                 } else {
                     chat = null;
                 }
@@ -748,23 +748,23 @@ public class MentionsAdapter extends SelectionAdapter {
                     for (a = 0; a < this.info.participants.participants.size(); a++) {
                         user = messagesController.getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));
                         if (user != null && (usernameOnly || !UserObject.isUserSelf(user))) {
-                            if (newResultsHashMap.indexOfKey(user.f176id) < 0) {
+                            if (newResultsHashMap.indexOfKey(user.var_id) < 0) {
                                 if (usernameString.length() == 0) {
                                     if (!user.deleted) {
                                         newResult2.add(user);
                                     }
                                 } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f176id, user);
+                                    newMap.put(user.var_id, user);
                                 } else if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f176id, user);
+                                    newMap.put(user.var_id, user);
                                 } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f176id, user);
+                                    newMap.put(user.var_id, user);
                                 } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f176id, user);
+                                    newMap.put(user.var_id, user);
                                 }
                             }
                         }
@@ -788,7 +788,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                 req.limit = 20;
                                 req.offset = 0;
                                 req.filter = new TL_channelParticipantsSearch();
-                                req.filter.f77q = str;
+                                req.filter.var_q = str;
                                 MentionsAdapter.this.channelReqId = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new MentionsAdapter$5$$Lambda$0(this, MentionsAdapter.access$1604(MentionsAdapter.this), messagesController2));
                             }
                         }
@@ -899,17 +899,17 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     static final /* synthetic */ int lambda$searchUsernameOrHashtag$5$MentionsAdapter(SparseArray newResultsHashMap, ArrayList users, User lhs, User rhs) {
-        if (newResultsHashMap.indexOfKey(lhs.f176id) >= 0 && newResultsHashMap.indexOfKey(rhs.f176id) >= 0) {
+        if (newResultsHashMap.indexOfKey(lhs.var_id) >= 0 && newResultsHashMap.indexOfKey(rhs.var_id) >= 0) {
             return 0;
         }
-        if (newResultsHashMap.indexOfKey(lhs.f176id) >= 0) {
+        if (newResultsHashMap.indexOfKey(lhs.var_id) >= 0) {
             return -1;
         }
-        if (newResultsHashMap.indexOfKey(rhs.f176id) >= 0) {
+        if (newResultsHashMap.indexOfKey(rhs.var_id) >= 0) {
             return 1;
         }
-        int lhsNum = users.indexOf(Integer.valueOf(lhs.f176id));
-        int rhsNum = users.indexOf(Integer.valueOf(rhs.f176id));
+        int lhsNum = users.indexOf(Integer.valueOf(lhs.var_id));
+        int rhsNum = users.indexOf(Integer.valueOf(rhs.var_id));
         if (lhsNum == -1 || rhsNum == -1) {
             if (lhsNum != -1 && rhsNum == -1) {
                 return -1;

@@ -332,7 +332,7 @@ public class ContactsController {
                 int b = 0;
                 while (b < 3) {
                     User user = UserConfig.getInstance(b).getCurrentUser();
-                    if (user == null || !acc.name.equals(TtmlNode.ANONYMOUS_REGION_ID + user.f176id)) {
+                    if (user == null || !acc.name.equals(TtmlNode.ANONYMOUS_REGION_ID + user.var_id)) {
                         b++;
                     } else {
                         if (b == this.currentAccount) {
@@ -374,7 +374,7 @@ public class ContactsController {
                 boolean found = false;
                 for (int b = 0; b < 3; b++) {
                     User user = UserConfig.getInstance(b).getCurrentUser();
-                    if (user != null && acc.name.equals(TtmlNode.ANONYMOUS_REGION_ID + user.f176id)) {
+                    if (user != null && acc.name.equals(TtmlNode.ANONYMOUS_REGION_ID + user.var_id)) {
                         found = true;
                         break;
                     }
@@ -431,7 +431,7 @@ public class ContactsController {
         TL_contacts_deleteContacts req = new TL_contacts_deleteContacts();
         int size = this.contacts.size();
         for (int a = 0; a < size; a++) {
-            req.f124id.add(MessagesController.getInstance(this.currentAccount).getInputUser(((TL_contact) this.contacts.get(a)).user_id));
+            req.var_id.add(MessagesController.getInstance(this.currentAccount).getInputUser(((TL_contact) this.contacts.get(a)).user_id));
         }
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ContactsController$$Lambda$6(this, runnable));
     }
@@ -459,7 +459,7 @@ public class ContactsController {
             for (Account acc : accounts) {
                 for (int b = 0; b < 3; b++) {
                     User user = UserConfig.getInstance(b).getCurrentUser();
-                    if (user != null && acc.name.equals(TtmlNode.ANONYMOUS_REGION_ID + user.f176id)) {
+                    if (user != null && acc.name.equals(TtmlNode.ANONYMOUS_REGION_ID + user.var_id)) {
                         am.removeAccount(acc, null, null);
                         break;
                     }
@@ -1435,7 +1435,7 @@ public class ContactsController {
         for (a = 0; a < contactsArr.size(); a++) {
             User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) contactsArr.get(a)).user_id));
             if (user != null) {
-                usersDict.put(user.f176id, user);
+                usersDict.put(user.var_id, user);
             }
         }
         Utilities.stageQueue.postRunnable(new ContactsController$$Lambda$38(this, from, contactsArr, usersDict, usersArr, isEmpty));
@@ -2064,7 +2064,7 @@ public class ContactsController {
             ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
             if (check) {
                 try {
-                    contentResolver.delete(RawContacts.CONTENT_URI.buildUpon().appendQueryParameter("caller_is_syncadapter", "true").appendQueryParameter("account_name", this.systemAccount.name).appendQueryParameter("account_type", this.systemAccount.type).build(), "sync2 = " + user.f176id, null);
+                    contentResolver.delete(RawContacts.CONTENT_URI.buildUpon().appendQueryParameter("caller_is_syncadapter", "true").appendQueryParameter("account_name", this.systemAccount.name).appendQueryParameter("account_type", this.systemAccount.type).build(), "sync2 = " + user.var_id, null);
                 } catch (Throwable e) {
                     FileLog.m13e(e);
                 }
@@ -2074,7 +2074,7 @@ public class ContactsController {
             builder.withValue("account_name", this.systemAccount.name);
             builder.withValue("account_type", this.systemAccount.type);
             builder.withValue("sync1", user.phone);
-            builder.withValue("sync2", Integer.valueOf(user.f176id));
+            builder.withValue("sync2", Integer.valueOf(user.var_id));
             query.add(builder.build());
             builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
             builder.withValueBackReference("raw_contact_id", 0);
@@ -2085,10 +2085,10 @@ public class ContactsController {
             builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
             builder.withValueBackReference("raw_contact_id", 0);
             builder.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile");
-            builder.withValue("data1", Integer.valueOf(user.f176id));
+            builder.withValue("data1", Integer.valueOf(user.var_id));
             builder.withValue("data2", "Telegram Profile");
             builder.withValue("data3", "+" + user.phone);
-            builder.withValue("data4", Integer.valueOf(user.f176id));
+            builder.withValue("data4", Integer.valueOf(user.var_id));
             query.add(builder.build());
             try {
                 ContentProviderResult[] result = contentResolver.applyBatch("com.android.contacts", query);
@@ -2160,7 +2160,7 @@ public class ContactsController {
                 User u = (User) res.users.get(a);
                 Utilities.phoneBookQueue.postRunnable(new ContactsController$$Lambda$33(this, u));
                 TL_contact newContact = new TL_contact();
-                newContact.user_id = u.f176id;
+                newContact.user_id = u.var_id;
                 ArrayList<TL_contact> arrayList = new ArrayList();
                 arrayList.add(newContact);
                 MessagesStorage.getInstance(this.currentAccount).putContacts(arrayList, false);
@@ -2189,9 +2189,9 @@ public class ContactsController {
         while (it.hasNext()) {
             User u = (User) it.next();
             MessagesController.getInstance(this.currentAccount).putUser(u, false);
-            if (this.contactsDict.get(Integer.valueOf(u.f176id)) == null) {
+            if (this.contactsDict.get(Integer.valueOf(u.var_id)) == null) {
                 TL_contact newContact = new TL_contact();
-                newContact.user_id = u.f176id;
+                newContact.user_id = u.var_id;
                 this.contacts.add(newContact);
                 this.contactsDict.put(Integer.valueOf(newContact.user_id), newContact);
             }
@@ -2209,8 +2209,8 @@ public class ContactsController {
                 User user = (User) it.next();
                 InputUser inputUser = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                 if (inputUser != null) {
-                    uids.add(Integer.valueOf(user.f176id));
-                    req.f124id.add(inputUser);
+                    uids.add(Integer.valueOf(user.var_id));
+                    req.var_id.add(inputUser);
                 }
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ContactsController$$Lambda$24(this, uids, users));
@@ -2242,7 +2242,7 @@ public class ContactsController {
     final /* synthetic */ void lambda$null$51$ContactsController(ArrayList users) {
         Iterator it = users.iterator();
         while (it.hasNext()) {
-            deleteContactFromPhoneBook(((User) it.next()).f176id);
+            deleteContactFromPhoneBook(((User) it.next()).var_id);
         }
     }
 
@@ -2251,11 +2251,11 @@ public class ContactsController {
         Iterator it = users.iterator();
         while (it.hasNext()) {
             User user = (User) it.next();
-            TL_contact contact = (TL_contact) this.contactsDict.get(Integer.valueOf(user.f176id));
+            TL_contact contact = (TL_contact) this.contactsDict.get(Integer.valueOf(user.var_id));
             if (contact != null) {
                 remove = true;
                 this.contacts.remove(contact);
-                this.contactsDict.remove(Integer.valueOf(user.f176id));
+                this.contactsDict.remove(Integer.valueOf(user.var_id));
             }
         }
         if (remove) {

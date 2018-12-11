@@ -609,10 +609,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 loadLastUnreadMention();
                 return;
             }
-            int id = ((Message) res.messages.get(0)).f104id;
+            int id = ((Message) res.messages.get(0)).var_id;
             long mid = (long) id;
             if (ChatObject.isChannel(ChatActivity.this.currentChat)) {
-                mid |= ((long) ChatActivity.this.currentChat.f78id) << 32;
+                mid |= ((long) ChatActivity.this.currentChat.var_id) << 32;
             }
             MessageObject object = (MessageObject) ChatActivity.this.messagesDict[0].get(id);
             messagesStorage.markMessageAsMention(mid);
@@ -1019,7 +1019,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         for (a = 0; a < count; a++) {
                             GroupedMessagePosition pos = (GroupedMessagePosition) group.posArray.get(a);
                             if (pos.minY == position.minY && ((pos.minX != position.minX || pos.maxX != position.maxX || pos.minY != position.minY || pos.maxY != position.maxY) && pos.minY == position.minY)) {
-                                h -= ((int) Math.ceil((double) (pos.f54ph * maxHeight))) - AndroidUtilities.m9dp(4.0f);
+                                h -= ((int) Math.ceil((double) (pos.var_ph * maxHeight))) - AndroidUtilities.m9dp(4.0f);
                                 break;
                             }
                         }
@@ -1562,7 +1562,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (set != null && ChatActivity.this.getParentActivity() != null) {
                 TL_inputStickerSetID inputStickerSet = new TL_inputStickerSetID();
                 inputStickerSet.access_hash = set.access_hash;
-                inputStickerSet.f103id = set.f103id;
+                inputStickerSet.var_id = set.var_id;
                 ChatActivity.this.showDialog(new StickersAlert(ChatActivity.this.getParentActivity(), ChatActivity.this, inputStickerSet, null, ChatActivity.this.chatActivityEnterView));
             }
         }
@@ -1872,7 +1872,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         return;
                     }
                     args = new Bundle();
-                    args.putInt("user_id", ChatActivity.this.currentUser.f176id);
+                    args.putInt("user_id", ChatActivity.this.currentUser.var_id);
                     args.putBoolean("addContact", true);
                     ChatActivity.this.presentFragment(new ContactAddActivity(args));
                 }
@@ -1880,7 +1880,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 ChatActivity.this.toggleMute(false);
             } else if (id == 24) {
                 try {
-                    DataQuery.getInstance(ChatActivity.this.currentAccount).installShortcut((long) ChatActivity.this.currentUser.f176id);
+                    DataQuery.getInstance(ChatActivity.this.currentAccount).installShortcut((long) ChatActivity.this.currentUser.var_id);
                 } catch (Throwable e) {
                     FileLog.m13e(e);
                 }
@@ -1902,7 +1902,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.selectedMessagesCanStarIds[a].clear();
                     a--;
                 }
-                if (messageObject != null && (messageObject.messageOwner.f104id > 0 || (messageObject.messageOwner.f104id < 0 && ChatActivity.this.currentEncryptedChat != null))) {
+                if (messageObject != null && (messageObject.messageOwner.var_id > 0 || (messageObject.messageOwner.var_id < 0 && ChatActivity.this.currentEncryptedChat != null))) {
                     ChatActivity.this.showFieldPanelForReply(true, messageObject);
                 }
                 ChatActivity.this.cantDeleteMessagesCount = 0;
@@ -1963,7 +1963,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 ChatActivity.this.openSearchWithText(null);
             } else if (id == 32) {
                 if (ChatActivity.this.currentUser != null && ChatActivity.this.getParentActivity() != null) {
-                    VoIPHelper.startCall(ChatActivity.this.currentUser, ChatActivity.this.getParentActivity(), MessagesController.getInstance(ChatActivity.this.currentAccount).getUserFull(ChatActivity.this.currentUser.f176id));
+                    VoIPHelper.startCall(ChatActivity.this.currentUser, ChatActivity.this.getParentActivity(), MessagesController.getInstance(ChatActivity.this.currentAccount).getUserFull(ChatActivity.this.currentUser.var_id));
                 }
             } else if (id == 50) {
                 if (ChatActivity.this.chatActivityEnterView != null) {
@@ -2180,7 +2180,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.processRowSelect(cell, true);
                 } else if (chat != null && chat != ChatActivity.this.currentChat) {
                     Bundle args = new Bundle();
-                    args.putInt("chat_id", chat.f78id);
+                    args.putInt("chat_id", chat.var_id);
                     if (postId != 0) {
                         args.putInt("message_id", postId);
                     }
@@ -2194,7 +2194,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 if (cell.getMessageObject().type != 16) {
                     ChatActivity.this.createMenu(cell, true, false, false);
                 } else if (ChatActivity.this.currentUser != null) {
-                    VoIPHelper.startCall(ChatActivity.this.currentUser, ChatActivity.this.getParentActivity(), MessagesController.getInstance(ChatActivity.this.currentAccount).getUserFull(ChatActivity.this.currentUser.f176id));
+                    VoIPHelper.startCall(ChatActivity.this.currentUser, ChatActivity.this.getParentActivity(), MessagesController.getInstance(ChatActivity.this.currentAccount).getUserFull(ChatActivity.this.currentUser.var_id));
                 }
             }
 
@@ -2202,11 +2202,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 boolean z = true;
                 if (ChatActivity.this.actionBar.isActionModeShowed()) {
                     ChatActivity.this.processRowSelect(cell, true);
-                } else if (user != null && user.f176id != UserConfig.getInstance(ChatActivity.this.currentAccount).getClientUserId()) {
+                } else if (user != null && user.var_id != UserConfig.getInstance(ChatActivity.this.currentAccount).getClientUserId()) {
                     Bundle args = new Bundle();
-                    args.putInt("user_id", user.f176id);
+                    args.putInt("user_id", user.var_id);
                     ProfileActivity fragment = new ProfileActivity(args);
-                    if (ChatActivity.this.currentUser == null || ChatActivity.this.currentUser.f176id != user.f176id) {
+                    if (ChatActivity.this.currentUser == null || ChatActivity.this.currentUser.var_id != user.var_id) {
                         z = false;
                     }
                     fragment.setPlayProfileAnimation(z);
@@ -2258,9 +2258,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                             Bundle args = new Bundle();
                             if (ChatActivity.this.currentChat != null) {
-                                args.putInt("chat_id", ChatActivity.this.currentChat.f78id);
+                                args.putInt("chat_id", ChatActivity.this.currentChat.var_id);
                             } else if (ChatActivity.this.currentUser != null) {
-                                args.putInt("user_id", ChatActivity.this.currentUser.f176id);
+                                args.putInt("user_id", ChatActivity.this.currentUser.var_id);
                                 if (ChatActivity.this.currentEncryptedChat != null) {
                                     args.putLong("dialog_id", ChatActivity.this.dialog_id);
                                 }
@@ -2498,7 +2498,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
             public boolean isChatAdminCell(int uid) {
                 if (ChatObject.isChannel(ChatActivity.this.currentChat) && ChatActivity.this.currentChat.megagroup) {
-                    return MessagesController.getInstance(ChatActivity.this.currentAccount).isChannelAdmin(ChatActivity.this.currentChat.f78id, uid);
+                    return MessagesController.getInstance(ChatActivity.this.currentAccount).isChannelAdmin(ChatActivity.this.currentChat.var_id, uid);
                 }
                 return false;
             }
@@ -2535,11 +2535,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 } else if (uid != UserConfig.getInstance(ChatActivity.this.currentAccount).getClientUserId()) {
                     args = new Bundle();
                     args.putInt("user_id", uid);
-                    if (ChatActivity.this.currentEncryptedChat != null && uid == ChatActivity.this.currentUser.f176id) {
+                    if (ChatActivity.this.currentEncryptedChat != null && uid == ChatActivity.this.currentUser.var_id) {
                         args.putLong("dialog_id", ChatActivity.this.dialog_id);
                     }
                     ProfileActivity fragment = new ProfileActivity(args);
-                    boolean z = ChatActivity.this.currentUser != null && ChatActivity.this.currentUser.f176id == uid;
+                    boolean z = ChatActivity.this.currentUser != null && ChatActivity.this.currentUser.var_id == uid;
                     fragment.setPlayProfileAnimation(z);
                     ChatActivity.this.presentFragment(fragment);
                 }
@@ -2669,7 +2669,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 String str;
                 BotHelpCell helpView = holder.itemView;
                 if (ChatActivity.this.botInfo.size() != 0) {
-                    str = ((BotInfo) ChatActivity.this.botInfo.get(ChatActivity.this.currentUser.f176id)).description;
+                    str = ((BotInfo) ChatActivity.this.botInfo.get(ChatActivity.this.currentUser.var_id)).description;
                 } else {
                     str = null;
                 }
@@ -2775,8 +2775,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         r8[0] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView, "alpha", new float[]{0.0f});
                                         r8[1] = ObjectAnimator.ofFloat(cameraContainer, "scaleX", new float[]{scale});
                                         r8[2] = ObjectAnimator.ofFloat(cameraContainer, "scaleY", new float[]{scale});
-                                        r8[3] = ObjectAnimator.ofFloat(cameraContainer, "translationX", new float[]{((float) position[0]) - rect.f242x});
-                                        r8[4] = ObjectAnimator.ofFloat(cameraContainer, "translationY", new float[]{((float) position[1]) - rect.f243y});
+                                        r8[3] = ObjectAnimator.ofFloat(cameraContainer, "translationX", new float[]{((float) position[0]) - rect.var_x});
+                                        r8[4] = ObjectAnimator.ofFloat(cameraContainer, "translationY", new float[]{((float) position[1]) - rect.var_y});
                                         r8[5] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView.getSwitchButtonView(), "alpha", new float[]{0.0f});
                                         r8[6] = ObjectAnimator.ofInt(ChatActivity.this.instantCameraView.getPaint(), "alpha", new int[]{0});
                                         r8[7] = ObjectAnimator.ofFloat(ChatActivity.this.instantCameraView.getMuteImageView(), "alpha", new float[]{0.0f});
@@ -2849,7 +2849,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else {
                             ChatActivity.this.mentiondownButtonCounter.setText(String.format("%d", new Object[]{Integer.valueOf(ChatActivity.this.newMentionsCount)}));
                         }
-                        MessagesController.getInstance(ChatActivity.this.currentAccount).markMentionMessageAsRead(message.getId(), ChatObject.isChannel(ChatActivity.this.currentChat) ? ChatActivity.this.currentChat.f78id : 0, ChatActivity.this.dialog_id);
+                        MessagesController.getInstance(ChatActivity.this.currentAccount).markMentionMessageAsRead(message.getId(), ChatObject.isChannel(ChatActivity.this.currentChat) ? ChatActivity.this.currentChat.var_id : 0, ChatActivity.this.dialog_id);
                         message.setContentIsRead();
                     }
                     if (!(view instanceof ChatMessageCell)) {
@@ -3099,7 +3099,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     object.thumb = imageReceiver.getBitmapSafe();
                     object.radius = imageReceiver.getRoundRadius();
                     if ((view instanceof ChatActionCell) && ChatActivity.this.currentChat != null) {
-                        object.dialogId = -ChatActivity.this.currentChat.f78id;
+                        object.dialogId = -ChatActivity.this.currentChat.var_id;
                     }
                     if ((ChatActivity.this.pinnedMessageView == null || ChatActivity.this.pinnedMessageView.getTag() != null) && (ChatActivity.this.reportSpamView == null || ChatActivity.this.reportSpamView.getTag() != null)) {
                         return object;
@@ -3377,7 +3377,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.isBroadcast) {
                 countDownLatch = new CountDownLatch(1);
             }
-            MessagesController.getInstance(this.currentAccount).loadChatInfo(this.currentChat.f78id, countDownLatch2, true);
+            MessagesController.getInstance(this.currentAccount).loadChatInfo(this.currentChat.var_id, countDownLatch2, true);
             if (this.isBroadcast && countDownLatch2 != null) {
                 try {
                     countDownLatch2.await();
@@ -3394,12 +3394,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             for (int a = 0; a < this.chatInfo.participants.participants.size(); a++) {
                 User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((ChatParticipant) this.chatInfo.participants.participants.get(a)).user_id));
                 if (user != null && user.bot) {
-                    DataQuery.getInstance(this.currentAccount).loadBotInfo(user.f176id, true, this.classGuid);
+                    DataQuery.getInstance(this.currentAccount).loadBotInfo(user.var_id, true, this.classGuid);
                 }
             }
         }
         if (this.currentUser != null) {
-            this.userBlocked = MessagesController.getInstance(this.currentAccount).blockedUsers.indexOfKey(this.currentUser.f176id) >= 0;
+            this.userBlocked = MessagesController.getInstance(this.currentAccount).blockedUsers.indexOfKey(this.currentUser.var_id) >= 0;
         }
         if (AndroidUtilities.isTablet()) {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.openedChatChanged, Long.valueOf(this.dialog_id), Boolean.valueOf(false));
@@ -3503,7 +3503,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         }
         if (this.currentUser != null) {
-            MessagesController.getInstance(this.currentAccount).cancelLoadFullUser(this.currentUser.f176id);
+            MessagesController.getInstance(this.currentAccount).cancelLoadFullUser(this.currentUser.var_id);
         }
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
         if (this.stickersAdapter != null) {
@@ -3514,7 +3514,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         AndroidUtilities.unlockOrientation(getParentActivity());
         if (ChatObject.isChannel(this.currentChat)) {
-            MessagesController.getInstance(this.currentAccount).startShortPoll(this.currentChat.f78id, true);
+            MessagesController.getInstance(this.currentAccount).startShortPoll(this.currentChat.var_id, true);
         }
     }
 
@@ -3579,7 +3579,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.headerItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
         if (this.currentUser != null) {
             this.headerItem.addSubItem(32, LocaleController.getString("Call", R.string.Call));
-            TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(this.currentUser.f176id);
+            TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(this.currentUser.var_id);
             if (userFull == null || !userFull.phone_calls_available) {
                 this.headerItem.hideSubItem(32);
             } else {
@@ -3955,7 +3955,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.emptyViewContainer.addView(this.bigEmptyView, new FrameLayout.LayoutParams(-2, -2, 17));
         } else if (this.currentUser == null || !this.currentUser.self) {
             this.emptyView = new TextView(context);
-            if (this.currentUser == null || this.currentUser.f176id == 777000 || this.currentUser.f176id == 429000 || this.currentUser.f176id == 4244000 || !MessagesController.isSupportId(this.currentUser.f176id)) {
+            if (this.currentUser == null || this.currentUser.var_id == 777000 || this.currentUser.var_id == 429000 || this.currentUser.var_id == 4244000 || !MessagesController.isSupportId(this.currentUser.var_id)) {
                 this.emptyView.setText(LocaleController.getString("NoMessages", R.string.NoMessages));
             } else {
                 this.emptyView.setText(LocaleController.getString("GotAQuestion", R.string.GotAQuestion));
@@ -4252,7 +4252,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     position = cell.getCurrentPosition();
                     GroupedMessages group = cell.getCurrentMessagesGroup();
                     if (position != null) {
-                        if (position.f55pw != position.spanSize && position.spanSize == ChatActivity.id_chat_compose_panel && position.siblingHeights == null && group.hasSibling) {
+                        if (position.var_pw != position.spanSize && position.spanSize == ChatActivity.id_chat_compose_panel && position.siblingHeights == null && group.hasSibling) {
                             clipLeft = cell.getBackgroundDrawableLeft();
                         } else if (position.siblingHeights != null) {
                             clipBottom = child.getBottom() - AndroidUtilities.m9dp((float) ((cell.isPinnedBottom() ? 1 : 0) + 1));
@@ -4782,21 +4782,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             float f2;
                             Size size = this.size;
                             if (inlineResult.document.thumb != null) {
-                                f2 = (float) inlineResult.document.thumb.f108w;
+                                f2 = (float) inlineResult.document.thumb.var_w;
                             } else {
                                 f2 = 100.0f;
                             }
                             size.width = f2;
                             Size size2 = this.size;
                             if (inlineResult.document.thumb != null) {
-                                f = (float) inlineResult.document.thumb.f107h;
+                                f = (float) inlineResult.document.thumb.var_h;
                             }
                             size2.height = f;
                             for (b = 0; b < inlineResult.document.attributes.size(); b++) {
                                 attribute = (DocumentAttribute) inlineResult.document.attributes.get(b);
                                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                                    this.size.width = (float) attribute.f87w;
-                                    this.size.height = (float) attribute.f86h;
+                                    this.size.width = (float) attribute.var_w;
+                                    this.size.height = (float) attribute.var_h;
                                     break;
                                 }
                             }
@@ -4804,8 +4804,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             for (b = 0; b < inlineResult.content.attributes.size(); b++) {
                                 attribute = (DocumentAttribute) inlineResult.content.attributes.get(b);
                                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                                    this.size.width = (float) attribute.f87w;
-                                    this.size.height = (float) attribute.f86h;
+                                    this.size.width = (float) attribute.var_w;
+                                    this.size.height = (float) attribute.var_h;
                                     break;
                                 }
                             }
@@ -4813,16 +4813,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             for (b = 0; b < inlineResult.thumb.attributes.size(); b++) {
                                 attribute = (DocumentAttribute) inlineResult.thumb.attributes.get(b);
                                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                                    this.size.width = (float) attribute.f87w;
-                                    this.size.height = (float) attribute.f86h;
+                                    this.size.width = (float) attribute.var_w;
+                                    this.size.height = (float) attribute.var_h;
                                     break;
                                 }
                             }
                         } else if (inlineResult.photo != null) {
                             PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(inlineResult.photo.sizes, AndroidUtilities.photoSize.intValue());
                             if (photoSize != null) {
-                                this.size.width = (float) photoSize.f108w;
-                                this.size.height = (float) photoSize.f107h;
+                                this.size.width = (float) photoSize.var_w;
+                                this.size.height = (float) photoSize.var_h;
                             }
                         }
                     }
@@ -5254,7 +5254,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     final /* synthetic */ void lambda$createView$10$ChatActivity(View v) {
         Bundle args = new Bundle();
-        args.putInt("user_id", this.currentUser.f176id);
+        args.putInt("user_id", this.currentUser.var_id);
         args.putBoolean("addContact", true);
         presentFragment(new ContactAddActivity(args));
     }
@@ -5278,7 +5278,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     final /* synthetic */ void lambda$null$11$ChatActivity(DialogInterface dialogInterface, int i) {
         if (this.currentUser != null) {
-            MessagesController.getInstance(this.currentAccount).blockUser(this.currentUser.f176id);
+            MessagesController.getInstance(this.currentAccount).blockUser(this.currentUser.var_id);
         }
         MessagesController.getInstance(this.currentAccount).reportSpam(this.dialog_id, this.currentUser, this.currentChat, this.currentEncryptedChat);
         updateSpamView();
@@ -5363,7 +5363,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     return;
                 }
                 spannableString = new SpannableString(UserObject.getFirstName(user, false) + " ");
-                spannableString.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + user.f176id, 1), 0, spannableString.length(), 33);
+                spannableString.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + user.var_id, 1), 0, spannableString.length(), 33);
                 this.chatActivityEnterView.replaceWithText(start, len, spannableString, false);
             } else if (object instanceof String) {
                 if (this.mentionsAdapter.isBotCommands()) {
@@ -5562,7 +5562,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatActivity$$Lambda$78(this));
                 } else if (ChatObject.isNotInChat(this.currentChat)) {
                     showBottomOverlayProgress(true, true);
-                    MessagesController.getInstance(this.currentAccount).addUserToChat(this.currentChat.f78id, UserConfig.getInstance(this.currentAccount).getCurrentUser(), null, 0, null, this);
+                    MessagesController.getInstance(this.currentAccount).addUserToChat(this.currentChat.var_id, UserConfig.getInstance(this.currentAccount).getCurrentUser(), null, 0, null, this);
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeSearchByActiveAction, new Object[0]);
                 } else {
                     toggleMute(true);
@@ -5570,7 +5570,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             } else if (this.currentUser.bot) {
                 String botUserLast = this.botUser;
                 this.botUser = null;
-                MessagesController.getInstance(this.currentAccount).unblockUser(this.currentUser.f176id);
+                MessagesController.getInstance(this.currentAccount).unblockUser(this.currentUser.var_id);
                 if (botUserLast == null || botUserLast.length() == 0) {
                     SendMessagesHelper.getInstance(this.currentAccount).sendMessage("/start", this.dialog_id, null, null, false, null, null, null);
                 } else {
@@ -5590,7 +5590,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     final /* synthetic */ void lambda$null$32$ChatActivity(DialogInterface dialogInterface, int i) {
-        MessagesController.getInstance(this.currentAccount).unblockUser(this.currentUser.f176id);
+        MessagesController.getInstance(this.currentAccount).unblockUser(this.currentUser.var_id);
     }
 
     final /* synthetic */ void lambda$null$33$ChatActivity(DialogInterface dialogInterface, int i) {
@@ -5787,7 +5787,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private void sendBotInlineResult(BotInlineResult result) {
         int uid = this.mentionsAdapter.getContextBotId();
         HashMap<String, String> params = new HashMap();
-        params.put(TtmlNode.ATTR_ID, result.f76id);
+        params.put(TtmlNode.ATTR_ID, result.var_id);
         params.put("query_id", TtmlNode.ANONYMOUS_REGION_ID + result.query_id);
         params.put("bot", TtmlNode.ANONYMOUS_REGION_ID + uid);
         params.put("bot_name", this.mentionsAdapter.getContextBotName());
@@ -5924,13 +5924,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             User user = this.mentionsAdapter.getContextBotUser();
             if (user != null) {
                 this.chatActivityEnterView.setFieldText(TtmlNode.ANONYMOUS_REGION_ID);
-                if (this.dialog_id == ((long) user.f176id)) {
+                if (this.dialog_id == ((long) user.var_id)) {
                     this.inlineReturn = this.dialog_id;
                     MessagesController.getInstance(this.currentAccount).sendBotStart(this.currentUser, object.start_param);
                     return;
                 }
                 Bundle args = new Bundle();
-                args.putInt("user_id", user.f176id);
+                args.putInt("user_id", user.var_id);
                 args.putString("inline_query", object.start_param);
                 args.putLong("inline_return", this.dialog_id);
                 if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(args, this)) {
@@ -7110,7 +7110,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             MessagesController instance = MessagesController.getInstance(this.currentAccount);
             int id = messageObject.getId();
             if (ChatObject.isChannel(this.currentChat)) {
-                i = this.currentChat.f78id;
+                i = this.currentChat.var_id;
             }
             instance.markMessageAsRead(id, i, messageObject.messageOwner.ttl);
         }
@@ -7476,7 +7476,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (currentPosition.siblingHeights != null) {
                 itemHeight = currentPosition.siblingHeights[0];
             } else {
-                itemHeight = currentPosition.f54ph;
+                itemHeight = currentPosition.var_ph;
             }
             float totalHeight = 0.0f;
             float moveDiff = 0.0f;
@@ -7486,11 +7486,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 if (array.indexOfKey(pos.minY) < 0 && pos.siblingHeights == null) {
                     array.put(pos.minY, true);
                     if (pos.minY < currentPosition.minY) {
-                        moveDiff -= pos.f54ph;
+                        moveDiff -= pos.var_ph;
                     } else if (pos.minY > currentPosition.minY) {
-                        moveDiff += pos.f54ph;
+                        moveDiff += pos.var_ph;
                     }
-                    totalHeight += pos.f54ph;
+                    totalHeight += pos.var_ph;
                 }
             }
             if (Math.abs(totalHeight - itemHeight) < 0.02f) {
@@ -7780,7 +7780,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (grantResults.length <= 0 || grantResults[0] != 0) {
                 VoIPHelper.permissionDenied(getParentActivity(), null);
             } else {
-                VoIPHelper.startCall(this.currentUser, getParentActivity(), MessagesController.getInstance(this.currentAccount).getUserFull(this.currentUser.f176id));
+                VoIPHelper.startCall(this.currentUser, getParentActivity(), MessagesController.getInstance(this.currentAccount).getUserFull(this.currentUser.var_id));
             }
         }
     }
@@ -7849,7 +7849,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     if (messageObject.isSticker()) {
                         inputStickerSet = messageObject.getInputStickerSet();
                         if (inputStickerSet instanceof TL_inputStickerSetID) {
-                            if (!DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.f103id)) {
+                            if (!DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.var_id)) {
                                 return 7;
                             }
                         } else if ((inputStickerSet instanceof TL_inputStickerSetShortName) && !DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.short_name)) {
@@ -8162,7 +8162,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             } else {
                 if (this.currentUser.self) {
                     this.avatarContainer.setTitle(LocaleController.getString("SavedMessages", R.string.SavedMessages));
-                } else if (MessagesController.isSupportId(this.currentUser.f176id) || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.f176id)) != null || (ContactsController.getInstance(this.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
+                } else if (MessagesController.isSupportId(this.currentUser.var_id) || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.var_id)) != null || (ContactsController.getInstance(this.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
                     this.avatarContainer.setTitle(UserObject.getUserName(this.currentUser));
                 } else if (TextUtils.isEmpty(this.currentUser.phone)) {
                     this.avatarContainer.setTitle(UserObject.getUserName(this.currentUser));
@@ -8233,14 +8233,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     private void checkAndUpdateAvatar() {
         if (this.currentUser != null) {
-            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.f176id));
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.var_id));
             if (user != null) {
                 this.currentUser = user;
             } else {
                 return;
             }
         } else if (this.currentChat != null) {
-            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.f78id));
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.var_id));
             if (chat != null) {
                 this.currentChat = chat;
             } else {
@@ -8613,7 +8613,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             if (this.currentUser.self) {
                                 obj.messageOwner.out = true;
                             }
-                            if ((this.currentUser.bot && obj.isOut()) || this.currentUser.f176id == currentUserId) {
+                            if ((this.currentUser.bot && obj.isOut()) || this.currentUser.var_id == currentUserId) {
                                 obj.setIsRead();
                             }
                         }
@@ -8660,7 +8660,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     this.messagesByDays.put(obj.dateKey, dayArray);
                                     dateMsg = new TL_message();
                                     dateMsg.message = LocaleController.formatDateChat((long) obj.messageOwner.date);
-                                    dateMsg.f104id = 0;
+                                    dateMsg.var_id = 0;
                                     dateMsg.date = obj.messageOwner.date;
                                     messageObject = new MessageObject(this.currentAccount, dateMsg, false);
                                     messageObject.type = 10;
@@ -8746,7 +8746,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     if (approximateHeightSum > AndroidUtilities.displaySize.y / 2 || !this.forwardEndReached[0]) {
                                         dateMsg = new TL_message();
                                         dateMsg.message = TtmlNode.ANONYMOUS_REGION_ID;
-                                        dateMsg.f104id = 0;
+                                        dateMsg.var_id = 0;
                                         messageObject = new MessageObject(this.currentAccount, dateMsg, false);
                                         messageObject.type = 6;
                                         messageObject.contentType = 2;
@@ -8771,7 +8771,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if (load_type != 2 && this.unreadMessageObject == null && this.createUnreadMessageAfterId != 0 && (((this.currentEncryptedChat == null && !obj.isOut() && obj.getId() >= this.createUnreadMessageAfterId) || !(this.currentEncryptedChat == null || obj.isOut() || obj.getId() > this.createUnreadMessageAfterId)) && (load_type == 1 || prevObj != null || (prevObj == null && createUnreadLoading && a == messArr.size() - 1)))) {
                                     dateMsg = new TL_message();
                                     dateMsg.message = TtmlNode.ANONYMOUS_REGION_ID;
-                                    dateMsg.f104id = 0;
+                                    dateMsg.var_id = 0;
                                     messageObject = new MessageObject(this.currentAccount, dateMsg, false);
                                     messageObject.type = 6;
                                     messageObject.contentType = 2;
@@ -9050,12 +9050,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             int updateMask = ((Integer) args[0]).intValue();
             if (!((updateMask & 1) == 0 && (updateMask & 16) == 0)) {
                 if (this.currentChat != null) {
-                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.f78id));
+                    chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.var_id));
                     if (chat != null) {
                         this.currentChat = chat;
                     }
                 } else if (this.currentUser != null) {
-                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.f176id));
+                    user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.var_id));
                     if (user != null) {
                         this.currentUser = user;
                     }
@@ -9077,7 +9077,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 updateSubtitle = true;
             }
             if ((updateMask & MessagesController.UPDATE_MASK_CHANNEL) != 0 && ChatObject.isChannel(this.currentChat)) {
-                chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.f78id));
+                chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.var_id));
                 if (chat != null) {
                     this.currentChat = chat;
                     updateSubtitle = true;
@@ -9121,7 +9121,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         }
                         if (this.currentChat != null) {
                             if (((messageObject2.messageOwner.action instanceof TL_messageActionChatDeleteUser) && messageObject2.messageOwner.action.user_id == currentUserId) || ((messageObject2.messageOwner.action instanceof TL_messageActionChatAddUser) && messageObject2.messageOwner.action.users.contains(Integer.valueOf(currentUserId)))) {
-                                Chat newChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.f78id));
+                                Chat newChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.currentChat.var_id));
                                 if (newChat != null) {
                                     this.currentChat = newChat;
                                     checkActionBarMenu();
@@ -9172,14 +9172,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (isSecretChat()) {
                             checkSecretMessageForLocation(obj);
                         }
-                        if (this.currentUser != null && ((this.currentUser.bot && obj.isOut()) || this.currentUser.f176id == currentUserId)) {
+                        if (this.currentUser != null && ((this.currentUser.bot && obj.isOut()) || this.currentUser.var_id == currentUserId)) {
                             obj.setIsRead();
                         }
                         if (!(this.avatarContainer == null || this.currentEncryptedChat == null || obj.messageOwner.action == null || !(obj.messageOwner.action instanceof TL_messageEncryptedAction) || !(obj.messageOwner.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL))) {
                             this.avatarContainer.setTime(((TL_decryptedMessageActionSetMessageTTL) obj.messageOwner.action.encryptedAction).ttl_seconds);
                         }
                         if (obj.type >= 0 && this.messagesDict[0].indexOfKey(obj.getId()) < 0) {
-                            if (a == 0 && obj.messageOwner.f104id < 0 && obj.type == 5) {
+                            if (a == 0 && obj.messageOwner.var_id < 0 && obj.type == 5) {
                                 this.animatingMessageObjects.add(obj);
                             }
                             if (obj.hasValidGroupId()) {
@@ -9204,14 +9204,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 }
                             }
                             if (placeToPaste == -1) {
-                                if (obj.messageOwner.f104id < 0 || this.messages.isEmpty()) {
+                                if (obj.messageOwner.var_id < 0 || this.messages.isEmpty()) {
                                     placeToPaste = 0;
                                 } else {
                                     size = this.messages.size();
                                     b = 0;
                                     while (b < size) {
                                         MessageObject lastMessage = (MessageObject) this.messages.get(b);
-                                        if (lastMessage.type < 0 || lastMessage.messageOwner.date <= 0 || ((lastMessage.messageOwner.f104id <= 0 || obj.messageOwner.f104id <= 0 || lastMessage.messageOwner.f104id >= obj.messageOwner.f104id) && lastMessage.messageOwner.date >= obj.messageOwner.date)) {
+                                        if (lastMessage.type < 0 || lastMessage.messageOwner.date <= 0 || ((lastMessage.messageOwner.var_id <= 0 || obj.messageOwner.var_id <= 0 || lastMessage.messageOwner.var_id >= obj.messageOwner.var_id) && lastMessage.messageOwner.date >= obj.messageOwner.date)) {
                                             b++;
                                         } else {
                                             GroupedMessages lastGroupedMessages;
@@ -9288,7 +9288,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 this.messagesByDays.put(obj.dateKey, dayArray);
                                 dateMsg = new TL_message();
                                 dateMsg.message = LocaleController.formatDateChat((long) obj.messageOwner.date);
-                                dateMsg.f104id = 0;
+                                dateMsg.var_id = 0;
                                 dateMsg.date = obj.messageOwner.date;
                                 messageObject = new MessageObject(this.currentAccount, dateMsg, false);
                                 messageObject.type = 10;
@@ -9310,7 +9310,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if (this.unreadMessageObject == null) {
                                     dateMsg = new TL_message();
                                     dateMsg.message = TtmlNode.ANONYMOUS_REGION_ID;
-                                    dateMsg.f104id = 0;
+                                    dateMsg.var_id = 0;
                                     messageObject = new MessageObject(this.currentAccount, dateMsg, false);
                                     messageObject.type = 6;
                                     messageObject.contentType = 2;
@@ -9410,7 +9410,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                     for (a = 0; a < arr.size(); a++) {
                         obj = (MessageObject) arr.get(a);
-                        if (this.currentUser != null && ((this.currentUser.bot && obj.isOut()) || this.currentUser.f176id == currentUserId)) {
+                        if (this.currentUser != null && ((this.currentUser.bot && obj.isOut()) || this.currentUser.var_id == currentUserId)) {
                             obj.setIsRead();
                         }
                         if (!(this.avatarContainer == null || this.currentEncryptedChat == null || obj.messageOwner.action == null || !(obj.messageOwner.action instanceof TL_messageEncryptedAction) || !(obj.messageOwner.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL))) {
@@ -9425,7 +9425,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (this.currentChat != null && this.currentChat.megagroup && ((obj.messageOwner.action instanceof TL_messageActionChatAddUser) || (obj.messageOwner.action instanceof TL_messageActionChatDeleteUser))) {
                             reloadMegagroup = true;
                         }
-                        if (a == 0 && obj.messageOwner.f104id < 0 && obj.type == 5) {
+                        if (a == 0 && obj.messageOwner.var_id < 0 && obj.type == 5) {
                             this.needAnimateToMessage = obj;
                         }
                         if (obj.isOut() && obj.isSending()) {
@@ -9474,7 +9474,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     checkAndUpdateAvatar();
                 }
                 if (reloadMegagroup) {
-                    MessagesController.getInstance(this.currentAccount).loadFullChat(this.currentChat.f78id, 0, true);
+                    MessagesController.getInstance(this.currentAccount).loadFullChat(this.currentChat.var_id, 0, true);
                 }
             }
         } else if (id == NotificationCenter.closeChats) {
@@ -9569,12 +9569,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (this.chatInfo != null && this.chatInfo.pinned_msg_id == mid2) {
                             this.pinnedMessageObject = null;
                             this.chatInfo.pinned_msg_id = 0;
-                            MessagesStorage.getInstance(this.currentAccount).updateChatPinnedMessage(this.chatInfo.f79id, 0);
+                            MessagesStorage.getInstance(this.currentAccount).updateChatPinnedMessage(this.chatInfo.var_id, 0);
                             updatePinnedMessageView(true);
                         } else if (this.userInfo != null && this.userInfo.pinned_msg_id == mid2) {
                             this.pinnedMessageObject = null;
                             this.userInfo.pinned_msg_id = 0;
-                            MessagesStorage.getInstance(this.currentAccount).updateUserPinnedMessage(this.chatInfo.f79id, 0);
+                            MessagesStorage.getInstance(this.currentAccount).updateUserPinnedMessage(this.chatInfo.var_id, 0);
                             updatePinnedMessageView(true);
                         }
                         this.messages.remove(b);
@@ -9660,7 +9660,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (ChatObject.isChannel(this.currentChat)) {
                 if (channelId == 0 && this.mergeDialogId != 0) {
                     loadIndex = 1;
-                } else if (channelId == this.currentChat.f78id) {
+                } else if (channelId == this.currentChat.var_id) {
                     loadIndex = 0;
                 } else {
                     return;
@@ -9874,7 +9874,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                     this.messagesDict[0].remove(msgId.intValue());
                     this.messagesDict[0].put(newMsgId.intValue(), obj);
-                    obj.messageOwner.f104id = newMsgId.intValue();
+                    obj.messageOwner.var_id = newMsgId.intValue();
                     obj.messageOwner.send_state = 0;
                     obj.forceUpdate = mediaUpdated;
                     messArr = new ArrayList();
@@ -9925,7 +9925,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
-            if (this.currentChat != null && chatFull.f79id == this.currentChat.f78id) {
+            if (this.currentChat != null && chatFull.var_id == this.currentChat.var_id) {
                 if (chatFull instanceof TL_channelFull) {
                     if (this.currentChat.megagroup) {
                         int lastDate = 0;
@@ -9935,7 +9935,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                         }
                         if (lastDate == 0 || Math.abs((System.currentTimeMillis() / 1000) - ((long) lastDate)) > 3600) {
-                            MessagesController.getInstance(this.currentAccount).loadChannelParticipants(Integer.valueOf(this.currentChat.f78id));
+                            MessagesController.getInstance(this.currentAccount).loadChannelParticipants(Integer.valueOf(this.currentChat.var_id));
                         }
                     }
                     if (chatFull.participants == null && this.chatInfo != null) {
@@ -9972,7 +9972,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (user != null && user.bot) {
                             URLSpanBotCommand.enabled = true;
                             this.botsCount++;
-                            DataQuery.getInstance(this.currentAccount).loadBotInfo(user.f176id, true, this.classGuid);
+                            DataQuery.getInstance(this.currentAccount).loadBotInfo(user.var_id, true, this.classGuid);
                         }
                     }
                     if (this.chatListView != null) {
@@ -10015,7 +10015,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.chatInfoCantLoad) {
             int chatId = ((Integer) args[0]).intValue();
-            if (this.currentChat != null && this.currentChat.f78id == chatId) {
+            if (this.currentChat != null && this.currentChat.var_id == chatId) {
                 int reason = ((Integer) args[1]).intValue();
                 if (getParentActivity() != null && this.closeChatDialog == null) {
                     builder = new Builder(getParentActivity());
@@ -10050,7 +10050,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.encryptedChatUpdated) {
             EncryptedChat chat2 = args[0];
-            if (this.currentEncryptedChat != null && chat2.f88id == this.currentEncryptedChat.f88id) {
+            if (this.currentEncryptedChat != null && chat2.var_id == this.currentEncryptedChat.var_id) {
                 this.currentEncryptedChat = chat2;
                 updateContactStatus();
                 updateSecretStatus();
@@ -10070,7 +10070,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.messagesReadEncrypted) {
             int encId = ((Integer) args[0]).intValue();
-            if (this.currentEncryptedChat != null && this.currentEncryptedChat.f88id == encId) {
+            if (this.currentEncryptedChat != null && this.currentEncryptedChat.var_id == encId) {
                 int date = ((Integer) args[1]).intValue();
                 Iterator it = this.messages.iterator();
                 while (it.hasNext()) {
@@ -10157,7 +10157,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         } else if (id == NotificationCenter.blockedUsersDidLoad) {
             if (this.currentUser != null) {
                 boolean oldValue = this.userBlocked;
-                this.userBlocked = MessagesController.getInstance(this.currentAccount).blockedUsers.indexOfKey(this.currentUser.f176id) >= 0;
+                this.userBlocked = MessagesController.getInstance(this.currentAccount).blockedUsers.indexOfKey(this.currentUser.var_id) >= 0;
                 if (oldValue != this.userBlocked) {
                     updateBottomOverlay();
                 }
@@ -10185,7 +10185,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (channelId < 0) {
                             channelId = 0;
                         }
-                        if (channelId != (ChatObject.isChannel(this.currentChat) ? this.currentChat.f78id : 0)) {
+                        if (channelId != (ChatObject.isChannel(this.currentChat) ? this.currentChat.var_id : 0)) {
                             return;
                         }
                     }
@@ -10302,7 +10302,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.updateMessageMedia) {
             message = args[0];
-            MessageObject existMessageObject = (MessageObject) this.messagesDict[0].get(message.f104id);
+            MessageObject existMessageObject = (MessageObject) this.messagesDict[0].get(message.var_id);
             if (existMessageObject != null) {
                 existMessageObject.messageOwner.media = message.media;
                 existMessageObject.messageOwner.attachPath = message.attachPath;
@@ -10497,7 +10497,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 message = (Message) arrayList2.get(a);
                 did = MessageObject.getDialogId(message);
                 if (did == this.dialog_id || did == this.mergeDialogId) {
-                    currentMessage = (MessageObject) this.messagesDict[did == this.dialog_id ? 0 : 1].get(message.f104id);
+                    currentMessage = (MessageObject) this.messagesDict[did == this.dialog_id ? 0 : 1].get(message.var_id);
                     if (currentMessage != null) {
                         currentMessage.messageOwner.media = new TL_messageMediaWebPage();
                         currentMessage.messageOwner.media.webpage = message.media.webpage;
@@ -10514,7 +10514,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 LongSparseArray<WebPage> hashMap = args[0];
                 for (a = 0; a < hashMap.size(); a++) {
                     WebPage webPage = (WebPage) hashMap.valueAt(a);
-                    if (webPage.f182id == this.foundWebPage.f182id) {
+                    if (webPage.var_id == this.foundWebPage.var_id) {
                         showFieldPanelForWebPage(!(webPage instanceof TL_webPageEmpty), webPage, false);
                         return;
                     }
@@ -10523,7 +10523,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         } else if (id == NotificationCenter.messagesReadContent) {
             ArrayList<Long> arrayList3 = args[0];
             updated = false;
-            int currentChannelId = ChatObject.isChannel(this.currentChat) ? this.currentChat.f78id : 0;
+            int currentChannelId = ChatObject.isChannel(this.currentChat) ? this.currentChat.var_id : 0;
             for (a = 0; a < arrayList3.size(); a++) {
                 mid = ((Long) arrayList3.get(a)).longValue();
                 channelId = (int) (mid >> 32);
@@ -10634,7 +10634,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.userInfoDidLoad) {
             Integer uid = args[0];
-            if (this.currentUser != null && this.currentUser.f176id == uid.intValue()) {
+            if (this.currentUser != null && this.currentUser.var_id == uid.intValue()) {
                 this.userInfo = (TL_userFull) args[1];
                 if (this.headerItem != null) {
                     if (this.userInfo.phone_calls_available) {
@@ -10664,7 +10664,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (id == NotificationCenter.channelRightsUpdated) {
             chat = args[0];
-            if (this.currentChat != null && chat.f78id == this.currentChat.f78id && this.chatActivityEnterView != null) {
+            if (this.currentChat != null && chat.var_id == this.currentChat.var_id && this.chatActivityEnterView != null) {
                 this.currentChat = chat;
                 this.chatActivityEnterView.checkChannelRights();
                 checkRaiseSensors();
@@ -10935,7 +10935,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     z = false;
                 }
                 showBottomOverlayProgress(false, z);
-            } else if (MessagesController.getInstance(this.currentAccount).isJoiningChannel(this.currentChat.f78id)) {
+            } else if (MessagesController.getInstance(this.currentAccount).isJoiningChannel(this.currentChat.var_id)) {
                 showBottomOverlayProgress(true, false);
             } else {
                 this.bottomOverlayChatText.setText(LocaleController.getString("ChannelJoin", R.string.ChannelJoin));
@@ -11147,7 +11147,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 hidePinnedMessageView(animated);
                 if (this.loadingPinnedMessage != pinned_msg_id) {
                     this.loadingPinnedMessage = pinned_msg_id;
-                    DataQuery.getInstance(this.currentAccount).loadPinnedMessage(this.dialog_id, ChatObject.isChannel(this.currentChat) ? this.currentChat.f78id : 0, pinned_msg_id, true);
+                    DataQuery.getInstance(this.currentAccount).loadPinnedMessage(this.dialog_id, ChatObject.isChannel(this.currentChat) ? this.currentChat.var_id : 0, pinned_msg_id, true);
                 }
             }
             checkListViewPaddings();
@@ -11159,7 +11159,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             boolean show;
             SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
             if (this.currentEncryptedChat != null) {
-                if (this.currentEncryptedChat.admin_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).isLoadingContacts() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.f176id)) != null) {
+                if (this.currentEncryptedChat.admin_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).isLoadingContacts() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.var_id)) != null) {
                     show = false;
                 } else {
                     show = true;
@@ -11219,11 +11219,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.currentUser == null) {
                 this.addContactItem.setVisibility(8);
             } else {
-                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.f176id));
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.var_id));
                 if (user != null) {
                     this.currentUser = user;
                 }
-                if ((this.currentEncryptedChat != null && !(this.currentEncryptedChat instanceof TL_encryptedChat)) || MessagesController.isSupportId(this.currentUser.f176id) || UserObject.isDeleted(this.currentUser) || ContactsController.getInstance(this.currentAccount).isLoadingContacts() || (!TextUtils.isEmpty(this.currentUser.phone) && ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.f176id)) != null && (ContactsController.getInstance(this.currentAccount).contactsDict.size() != 0 || !ContactsController.getInstance(this.currentAccount).isLoadingContacts()))) {
+                if ((this.currentEncryptedChat != null && !(this.currentEncryptedChat instanceof TL_encryptedChat)) || MessagesController.isSupportId(this.currentUser.var_id) || UserObject.isDeleted(this.currentUser) || ContactsController.getInstance(this.currentAccount).isLoadingContacts() || (!TextUtils.isEmpty(this.currentUser.phone) && ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.var_id)) != null && (ContactsController.getInstance(this.currentAccount).contactsDict.size() != 0 || !ContactsController.getInstance(this.currentAccount).isLoadingContacts()))) {
                     this.addContactItem.setVisibility(8);
                 } else {
                     this.addContactItem.setVisibility(0);
@@ -11355,7 +11355,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else {
                             this.mentiondownButtonCounter.setText(String.format("%d", new Object[]{Integer.valueOf(this.newMentionsCount)}));
                         }
-                        MessagesController.getInstance(this.currentAccount).markMentionMessageAsRead(message.getId(), ChatObject.isChannel(this.currentChat) ? this.currentChat.f78id : 0, this.dialog_id);
+                        MessagesController.getInstance(this.currentAccount).markMentionMessageAsRead(message.getId(), ChatObject.isChannel(this.currentChat) ? this.currentChat.var_id : 0, this.dialog_id);
                         message.setContentIsRead();
                     }
                     if (view instanceof ChatMessageCell) {
@@ -11819,7 +11819,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(from_id));
                     }
                 }
-                if (user == null || user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() || loadParticipant == 2) {
+                if (user == null || user.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || loadParticipant == 2) {
                     if (hasOutgoing) {
                         frameLayout = new FrameLayout(getParentActivity());
                         frameLayout = new CheckBoxCell(getParentActivity(), 1);
@@ -11887,7 +11887,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             } else if (!ChatObject.isChannel(this.currentChat) && this.currentEncryptedChat == null) {
                 hasOutgoing = false;
                 currentDate = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                if ((this.currentUser != null && this.currentUser.f176id != UserConfig.getInstance(this.currentAccount).getClientUserId() && !this.currentUser.bot) || this.currentChat != null) {
+                if ((this.currentUser != null && this.currentUser.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId() && !this.currentUser.bot) || this.currentChat != null) {
                     if (finalSelectedObject == null) {
                         exit = false;
                         for (a = 1; a >= 0; a--) {
@@ -12056,13 +12056,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         if (userFinal != null) {
             if (checks[0]) {
-                MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.currentChat.f78id, userFinal, this.chatInfo);
+                MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.currentChat.var_id, userFinal, this.chatInfo);
             }
             if (checks[1]) {
                 TL_channels_reportSpam req = new TL_channels_reportSpam();
                 req.channel = MessagesController.getInputChannel(this.currentChat);
                 req.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(userFinal);
-                req.f120id = ids;
+                req.var_id = ids;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, ChatActivity$$Lambda$66.$instance);
             }
             if (checks[2]) {
@@ -12092,7 +12092,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (message != null) {
                 int type = getMessageType(message);
                 if (single && (message.messageOwner.action instanceof TL_messageActionPinMessage)) {
-                    scrollToMessageId(message.messageOwner.reply_to_msg_id, message.messageOwner.f104id, true, 0, false);
+                    scrollToMessageId(message.messageOwner.reply_to_msg_id, message.messageOwner.var_id, true, 0, false);
                     return;
                 }
                 int a;
@@ -12307,7 +12307,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         }
                                     } else if (type == 8) {
                                         user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
-                                        if (!(user == null || user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.f176id)) != null)) {
+                                        if (!(user == null || user.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.var_id)) != null)) {
                                             items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
                                             options.add(Integer.valueOf(15));
                                         }
@@ -12389,7 +12389,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         options.add(Integer.valueOf(9));
                                     } else if (type == 8) {
                                         user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
-                                        if (!(user == null || user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.f176id)) != null)) {
+                                        if (!(user == null || user.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.var_id)) != null)) {
                                             items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
                                             options.add(Integer.valueOf(15));
                                         }
@@ -12453,7 +12453,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             updateVisibleRows();
             TL_messages_getMessageEditData req = new TL_messages_getMessageEditData();
             req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) this.dialog_id);
-            req.f148id = messageObject.getId();
+            req.var_id = messageObject.getId();
             this.editingMessageObjectReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChatActivity$$Lambda$53(this));
         }
     }
@@ -12784,7 +12784,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 case 18:
                     if (this.currentUser != null) {
-                        VoIPHelper.startCall(this.currentUser, getParentActivity(), MessagesController.getInstance(this.currentAccount).getUserFull(this.currentUser.f176id));
+                        VoIPHelper.startCall(this.currentUser, getParentActivity(), MessagesController.getInstance(this.currentAccount).getUserFull(this.currentUser.var_id));
                         break;
                     }
                     break;
@@ -12799,7 +12799,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     break;
                 case 22:
                     TLObject req = new TL_channels_exportMessageLink();
-                    req.f115id = this.selectedObject.getId();
+                    req.var_id = this.selectedObject.getId();
                     req.channel = MessagesController.getInputChannel(this.currentChat);
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, ChatActivity$$Lambda$57.$instance);
                     break;

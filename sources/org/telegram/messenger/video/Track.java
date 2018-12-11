@@ -44,7 +44,7 @@ public class Track {
 
     private class SamplePresentationTime {
         /* renamed from: dt */
-        private long f72dt;
+        private long var_dt;
         private int index;
         private long presentationTime;
 
@@ -270,13 +270,13 @@ public class Track {
             this.duration += minDelta;
         }
         for (a = 1; a < original.size(); a++) {
-            ((SamplePresentationTime) original.get(a)).f72dt = this.sampleDurations[a] + ((SamplePresentationTime) original.get(a - 1)).f72dt;
+            ((SamplePresentationTime) original.get(a)).var_dt = this.sampleDurations[a] + ((SamplePresentationTime) original.get(a - 1)).var_dt;
         }
         if (outOfOrder) {
             this.sampleCompositions = new int[this.samplePresentationTimes.size()];
             for (a = 0; a < this.samplePresentationTimes.size(); a++) {
                 presentationTime = (SamplePresentationTime) this.samplePresentationTimes.get(a);
-                this.sampleCompositions[presentationTime.index] = (int) (presentationTime.presentationTime - presentationTime.f72dt);
+                this.sampleCompositions[presentationTime.index] = (int) (presentationTime.presentationTime - presentationTime.var_dt);
             }
         }
     }

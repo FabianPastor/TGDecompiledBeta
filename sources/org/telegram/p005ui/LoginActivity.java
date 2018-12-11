@@ -238,7 +238,7 @@ public class LoginActivity extends BaseFragment {
             this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.codeField.setHint(LocaleController.getString("LoginPassword", R.string.LoginPassword));
-            this.codeField.setImeOptions(268435461);
+            this.codeField.setImeOptions(NUM);
             this.codeField.setTextSize(1, 18.0f);
             this.codeField.setMaxLines(1);
             this.codeField.setPadding(0, 0, 0, 0);
@@ -461,8 +461,8 @@ public class LoginActivity extends BaseFragment {
                 PasswordKdfAlgo algo = new CLASSNAMExb6caa888();
                 algo.salt1 = this.current_salt1;
                 algo.salt2 = this.current_salt2;
-                algo.f201g = this.current_g;
-                algo.f202p = this.current_p;
+                algo.var_g = this.current_g;
+                algo.var_p = this.current_p;
                 current_algo = algo;
             }
             if (current_algo instanceof CLASSNAMExb6caa888) {
@@ -476,8 +476,8 @@ public class LoginActivity extends BaseFragment {
                 CLASSNAMExb6caa888 algo2 = (CLASSNAMExb6caa888) current_algo;
                 algo2.salt1 = this.current_salt1;
                 algo2.salt2 = this.current_salt2;
-                algo2.f201g = this.current_g;
-                algo2.f202p = this.current_p;
+                algo2.var_g = this.current_g;
+                algo2.var_p = this.current_p;
                 req.password = SRPHelper.startCheck(x_bytes, this.current_srp_id, this.current_srp_B, algo2);
                 if (req.password == null) {
                     TL_error error = new TL_error();
@@ -617,7 +617,7 @@ public class LoginActivity extends BaseFragment {
             this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.codeField.setHint(LocaleController.getString("PasswordCode", R.string.PasswordCode));
-            this.codeField.setImeOptions(268435461);
+            this.codeField.setImeOptions(NUM);
             this.codeField.setTextSize(1, 18.0f);
             this.codeField.setMaxLines(1);
             this.codeField.setPadding(0, 0, 0, 0);
@@ -841,13 +841,13 @@ public class LoginActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$showTermsOfService$0$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo17123x6d0cdb6d(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo17236x6d0cdb6d(DialogInterface dialog, int which) {
             LoginActivity.this.currentTermsOfService.popup = false;
             onNextPressed();
         }
 
         /* renamed from: lambda$showTermsOfService$3$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo17124x12ed5CLASSNAME(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo17237x12ed5CLASSNAME(DialogInterface dialog, int which) {
             Builder builder1 = new Builder(LoginActivity.this.getParentActivity());
             builder1.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
             builder1.setMessage(LocaleController.getString("TosDecline", R.string.TosDecline));
@@ -883,7 +883,7 @@ public class LoginActivity extends BaseFragment {
             this.firstNameField.setCursorSize(AndroidUtilities.m9dp(20.0f));
             this.firstNameField.setCursorWidth(1.5f);
             this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
-            this.firstNameField.setImeOptions(268435461);
+            this.firstNameField.setImeOptions(NUM);
             this.firstNameField.setTextSize(1, 18.0f);
             this.firstNameField.setMaxLines(1);
             this.firstNameField.setInputType(MessagesController.UPDATE_MASK_CHANNEL);
@@ -897,7 +897,7 @@ public class LoginActivity extends BaseFragment {
             this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.lastNameField.setCursorSize(AndroidUtilities.m9dp(20.0f));
             this.lastNameField.setCursorWidth(1.5f);
-            this.lastNameField.setImeOptions(268435462);
+            this.lastNameField.setImeOptions(NUM);
             this.lastNameField.setTextSize(1, 18.0f);
             this.lastNameField.setMaxLines(1);
             this.lastNameField.setInputType(MessagesController.UPDATE_MASK_CHANNEL);
@@ -1702,7 +1702,7 @@ public class LoginActivity extends BaseFragment {
                         Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
                         pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
                         this.codeField[a].setBackgroundDrawable(pressedDrawable);
-                        this.codeField[a].setImeOptions(268435461);
+                        this.codeField[a].setImeOptions(NUM);
                         this.codeField[a].setTextSize(1, 20.0f);
                         this.codeField[a].setMaxLines(1);
                         this.codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -2009,8 +2009,8 @@ public class LoginActivity extends BaseFragment {
                         CLASSNAMExb6caa888 algo = password.current_algo;
                         bundle.putString("current_salt1", Utilities.bytesToHex(algo.salt1));
                         bundle.putString("current_salt2", Utilities.bytesToHex(algo.salt2));
-                        bundle.putString("current_p", Utilities.bytesToHex(algo.f202p));
-                        bundle.putInt("current_g", algo.f201g);
+                        bundle.putString("current_p", Utilities.bytesToHex(algo.var_p));
+                        bundle.putInt("current_g", algo.var_g);
                         bundle.putString("current_srp_B", Utilities.bytesToHex(password.srp_B));
                         bundle.putLong("current_srp_id", password.srp_id);
                         bundle.putInt("passwordType", 1);
@@ -2231,7 +2231,7 @@ public class LoginActivity extends BaseFragment {
             this.codeField.setTextSize(1, 18.0f);
             this.codeField.setMaxLines(1);
             this.codeField.setGravity(19);
-            this.codeField.setImeOptions(268435461);
+            this.codeField.setImeOptions(NUM);
             this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
             linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
             final LoginActivity loginActivity = LoginActivity.this;
@@ -2317,7 +2317,7 @@ public class LoginActivity extends BaseFragment {
             this.phoneField.setTextSize(1, 18.0f);
             this.phoneField.setMaxLines(1);
             this.phoneField.setGravity(19);
-            this.phoneField.setImeOptions(268435461);
+            this.phoneField.setImeOptions(NUM);
             linearLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
             final LoginActivity loginActivity2 = LoginActivity.this;
             this.phoneField.addTextChangedListener(new TextWatcher() {
@@ -3334,7 +3334,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     private void onAuthSuccess(TL_auth_authorization res) {
-        ConnectionsManager.getInstance(this.currentAccount).setUserId(res.user.f176id);
+        ConnectionsManager.getInstance(this.currentAccount).setUserId(res.user.var_id);
         UserConfig.getInstance(this.currentAccount).clearConfig();
         MessagesController.getInstance(this.currentAccount).cleanup();
         UserConfig.getInstance(this.currentAccount).syncContacts = this.syncContacts;

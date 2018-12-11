@@ -2612,10 +2612,10 @@ public class ImageLoader {
             key = location.volume_id + "_" + location.local_id;
         } else if (fileLocation instanceof Document) {
             Document location2 = (Document) fileLocation;
-            key = location2.dc_id + "_" + location2.f84id;
+            key = location2.dc_id + "_" + location2.var_id;
         } else if (fileLocation instanceof SecureDocument) {
             SecureDocument location3 = (SecureDocument) fileLocation;
-            key = location3.secureFile.dc_id + "_" + location3.secureFile.f203id;
+            key = location3.secureFile.dc_id + "_" + location3.secureFile.var_id;
         } else if (fileLocation instanceof WebFile) {
             key = "hash" + ((WebFile) fileLocation).url.hashCode();
         }
@@ -2978,15 +2978,15 @@ public class ImageLoader {
                     url = key + "." + getHttpUrlExtension(document.url, defaultExt);
                 } else if (imageLocation instanceof SecureDocument) {
                     SecureDocument document2 = (SecureDocument) imageLocation;
-                    key = document2.secureFile.dc_id + "_" + document2.secureFile.f203id;
+                    key = document2.secureFile.dc_id + "_" + document2.secureFile.var_id;
                     url = key + "." + ext;
                     if (null != null) {
                         thumbUrl = null + "." + ext;
                     }
                 } else if (imageLocation instanceof Document) {
                     Document document3 = (Document) imageLocation;
-                    if (document3.f84id != 0 && document3.dc_id != 0) {
-                        key = document3.dc_id + "_" + document3.f84id;
+                    if (document3.var_id != 0 && document3.dc_id != 0) {
+                        key = document3.dc_id + "_" + document3.var_id;
                         String docExt = FileLoader.getDocumentFileName(document3);
                         if (docExt != null) {
                             int idx = docExt.lastIndexOf(46);
@@ -3436,15 +3436,15 @@ public class ImageLoader {
             location.file_reference = new byte[0];
             photoSize = new TL_photoSize();
             photoSize.location = location;
-            photoSize.f108w = scaledBitmap.getWidth();
-            photoSize.f107h = scaledBitmap.getHeight();
-            if (photoSize.f108w <= 100 && photoSize.f107h <= 100) {
+            photoSize.var_w = scaledBitmap.getWidth();
+            photoSize.var_h = scaledBitmap.getHeight();
+            if (photoSize.var_w <= 100 && photoSize.var_h <= 100) {
                 photoSize.type = "s";
-            } else if (photoSize.f108w <= 320 && photoSize.f107h <= 320) {
+            } else if (photoSize.var_w <= 320 && photoSize.var_h <= 320) {
                 photoSize.type = "m";
-            } else if (photoSize.f108w <= 800 && photoSize.f107h <= 800) {
+            } else if (photoSize.var_w <= 800 && photoSize.var_h <= 800) {
                 photoSize.type = "x";
-            } else if (photoSize.f108w > 1280 || photoSize.f107h > 1280) {
+            } else if (photoSize.var_w > 1280 || photoSize.var_h > 1280) {
                 photoSize.type = "w";
             } else {
                 photoSize.type = "y";
@@ -3601,8 +3601,8 @@ public class ImageLoader {
                 randomAccessFile.close();
             }
             PhotoSize newPhotoSize = new TL_photoSize();
-            newPhotoSize.f108w = photoSize.f108w;
-            newPhotoSize.f107h = photoSize.f107h;
+            newPhotoSize.var_w = photoSize.var_w;
+            newPhotoSize.var_h = photoSize.var_h;
             newPhotoSize.location = photoSize.location;
             newPhotoSize.size = photoSize.size;
             newPhotoSize.type = photoSize.type;

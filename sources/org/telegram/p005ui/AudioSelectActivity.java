@@ -105,7 +105,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 int id = -NUM;
                 while (cursor.moveToNext()) {
                     AudioEntry audioEntry = new AudioEntry();
-                    audioEntry.f52id = (long) cursor.getInt(0);
+                    audioEntry.var_id = (long) cursor.getInt(0);
                     audioEntry.author = cursor.getString(1);
                     audioEntry.title = cursor.getString(2);
                     audioEntry.path = cursor.getString(3);
@@ -114,7 +114,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     File file = new File(audioEntry.path);
                     Message message = new TL_message();
                     message.out = true;
-                    message.f104id = id;
+                    message.var_id = id;
                     message.to_id = new TL_peerUser();
                     Peer peer = message.to_id;
                     int clientUserId = UserConfig.getInstance(AudioSelectActivity.this.currentAccount).getClientUserId();
@@ -129,7 +129,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     message.media.document = new TL_document();
                     message.flags |= 768;
                     String ext = FileLoader.getFileExtension(file);
-                    message.media.document.f84id = 0;
+                    message.media.document.var_id = 0;
                     message.media.document.access_hash = 0;
                     message.media.document.file_reference = new byte[0];
                     message.media.document.date = message.date;
@@ -205,11 +205,11 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         public void onItemClick(View view, int position) {
             AudioCell audioCell = (AudioCell) view;
             AudioEntry audioEntry = audioCell.getAudioEntry();
-            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.f52id) >= 0) {
-                AudioSelectActivity.this.selectedAudios.remove(audioEntry.f52id);
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.var_id) >= 0) {
+                AudioSelectActivity.this.selectedAudios.remove(audioEntry.var_id);
                 audioCell.setChecked(false);
             } else {
-                AudioSelectActivity.this.selectedAudios.put(audioEntry.f52id, audioEntry);
+                AudioSelectActivity.this.selectedAudios.put(audioEntry.var_id, audioEntry);
                 audioCell.setChecked(true);
             }
             AudioSelectActivity.this.updateBottomLayoutCount();
@@ -267,7 +267,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             } else {
                 z = false;
             }
-            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.f52id) < 0) {
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.var_id) < 0) {
                 z2 = false;
             }
             audioCell.setAudio(audioEntry2, z, z2);

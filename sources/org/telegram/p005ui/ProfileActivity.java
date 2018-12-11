@@ -351,7 +351,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 } else if (id == 1) {
                     user = MessagesController.getInstance(ProfileActivity.this.currentAccount).getUser(Integer.valueOf(ProfileActivity.this.user_id));
                     args = new Bundle();
-                    args.putInt("user_id", user.f176id);
+                    args.putInt("user_id", user.var_id);
                     args.putBoolean("addContact", true);
                     ProfileActivity.this.presentFragment(new ContactAddActivity(args));
                 } else if (id == 3) {
@@ -430,7 +430,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     try {
                         long did;
                         if (ProfileActivity.this.currentEncryptedChat != null) {
-                            did = ((long) ProfileActivity.this.currentEncryptedChat.f88id) << 32;
+                            did = ((long) ProfileActivity.this.currentEncryptedChat.var_id) << 32;
                         } else if (ProfileActivity.this.user_id != 0) {
                             did = (long) ProfileActivity.this.user_id;
                         } else if (ProfileActivity.this.chat_id != 0) {
@@ -978,7 +978,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.userBlocked = z;
             if (user.bot) {
                 this.isBot = true;
-                DataQuery.getInstance(this.currentAccount).loadBotInfo(user.f176id, true, this.classGuid);
+                DataQuery.getInstance(this.currentAccount).loadBotInfo(user.var_id, true, this.classGuid);
             }
             MessagesController.getInstance(this.currentAccount).loadFullUser(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id)), this.classGuid, true);
             this.participantsMap = null;
@@ -1397,7 +1397,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             } else if (position == this.leaveChannelRow) {
                 leaveChatPressed();
             } else if (position == this.joinRow) {
-                MessagesController.getInstance(this.currentAccount).addUserToChat(this.currentChat.f78id, UserConfig.getInstance(this.currentAccount).getCurrentUser(), null, 0, null, this);
+                MessagesController.getInstance(this.currentAccount).addUserToChat(this.currentChat.var_id, UserConfig.getInstance(this.currentAccount).getCurrentUser(), null, 0, null, this);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeSearchByActiveAction, new Object[0]);
             } else if (position == this.subscribersRow) {
                 args = new Bundle();
@@ -1823,7 +1823,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         args.putBoolean(str, z);
         if (this.chat_id > 0) {
             if (ChatObject.canAddViaLink(this.currentChat)) {
-                args.putInt("chat_id", this.currentChat.f78id);
+                args.putInt("chat_id", this.currentChat.var_id);
             }
             args.putString("selectAlertString", LocaleController.getString("AddToTheGroup", R.string.AddToTheGroup));
         }
@@ -2115,7 +2115,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         } else if (id == NotificationCenter.encryptedChatUpdated) {
             EncryptedChat chat = args[0];
-            if (this.currentEncryptedChat != null && chat.f88id == this.currentEncryptedChat.f88id) {
+            if (this.currentEncryptedChat != null && chat.var_id == this.currentEncryptedChat.var_id) {
                 this.currentEncryptedChat = chat;
                 updateRowsIds();
                 if (this.listAdapter != null) {
@@ -2130,7 +2130,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         } else if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
-            if (chatFull.f79id == this.chat_id) {
+            if (chatFull.var_id == this.chat_id) {
                 boolean byChannelUsers = ((Boolean) args[2]).booleanValue();
                 if ((this.chatInfo instanceof TL_channelFull) && chatFull.participants == null && this.chatInfo != null) {
                     chatFull.participants = this.chatInfo.participants;
@@ -2209,7 +2209,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         } else if (id == NotificationCenter.messagesDeleted && !((Boolean) args[2]).booleanValue()) {
             int channelId = ((Integer) args[1]).intValue();
             if (ChatObject.isChannel(this.currentChat)) {
-                if ((channelId != 0 || this.mergeDialogId == 0) && channelId != this.currentChat.f78id) {
+                if ((channelId != 0 || this.mergeDialogId == 0) && channelId != this.currentChat.var_id) {
                     return;
                 }
             } else if (channelId != 0) {
@@ -2224,7 +2224,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
         EncryptedChat encryptedChat = args[0];
         Bundle args2 = new Bundle();
-        args2.putInt("enc_id", encryptedChat.f88id);
+        args2.putInt("enc_id", encryptedChat.var_id);
         presentFragment(new ChatActivity(args2), true);
     }
 
@@ -2552,7 +2552,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if ((this.chatInfo instanceof TL_chatFull) || ((this.chatInfo instanceof TL_channelFull) && this.chatInfo.participants_count <= Callback.DEFAULT_DRAG_ANIMATION_DURATION && this.chatInfo.participants != null)) {
             for (int a = 0; a < this.chatInfo.participants.participants.size(); a++) {
                 User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((ChatParticipant) this.chatInfo.participants.participants.get(a)).user_id));
-                if (!(user == null || user.status == null || ((user.status.expires <= currentTime && user.f176id != UserConfig.getInstance(this.currentAccount).getClientUserId()) || user.status.expires <= 10000))) {
+                if (!(user == null || user.status == null || ((user.status.expires <= currentTime && user.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) || user.status.expires <= 10000))) {
                     this.onlineCount++;
                 }
                 this.sortedUsers.add(Integer.valueOf(a));
@@ -2576,10 +2576,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         int status1 = 0;
         int status2 = 0;
         if (!(user1 == null || user1.status == null)) {
-            status1 = user1.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user1.status.expires;
+            status1 = user1.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user1.status.expires;
         }
         if (!(user2 == null || user2.status == null)) {
-            status2 = user2.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user2.status.expires;
+            status2 = user2.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user2.status.expires;
         }
         if (status1 <= 0 || status2 <= 0) {
             if (status1 >= 0 || status2 >= 0) {
@@ -2804,7 +2804,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.rowCount = i4 + 1;
                 this.sharedSectionRow = i4;
             }
-            if (user != null && !this.isBot && this.currentEncryptedChat == null && user.f176id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+            if (user != null && !this.isBot && this.currentEncryptedChat == null && user.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                 i4 = this.rowCount;
                 this.rowCount = i4 + 1;
                 this.startSecretChatRow = i4;
@@ -3017,10 +3017,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.avatarDrawable.setInfo(user);
                 this.avatarImage.setImage(photo, "50_50", this.avatarDrawable, (Object) user);
                 newString = UserObject.getUserName(user);
-                if (user.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                if (user.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                     newString2 = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
                     newString = LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName);
-                } else if (user.f176id == 333000 || user.f176id == 777000) {
+                } else if (user.var_id == 333000 || user.var_id == 777000) {
                     newString2 = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
                 } else if (this.isBot) {
                     newString2 = LocaleController.getString("Bot", R.string.Bot);
@@ -3029,7 +3029,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
                 for (a = 0; a < 2; a++) {
                     if (this.nameTextView[a] != null) {
-                        if (a == 0 && user.f176id != UserConfig.getInstance(this.currentAccount).getClientUserId() && user.f176id / 1000 != 777 && user.f176id / 1000 != 333 && user.phone != null && user.phone.length() != 0 && ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.f176id)) == null && (ContactsController.getInstance(this.currentAccount).contactsDict.size() != 0 || !ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
+                        if (a == 0 && user.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId() && user.var_id / 1000 != 777 && user.var_id / 1000 != 333 && user.phone != null && user.phone.length() != 0 && ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.var_id)) == null && (ContactsController.getInstance(this.currentAccount).contactsDict.size() != 0 || !ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
                             String phoneString = CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
                             if (!this.nameTextView[a].getText().equals(phoneString)) {
                                 this.nameTextView[a].setText(phoneString);

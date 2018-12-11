@@ -1229,7 +1229,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                                 }
                                                 if (messageText != null) {
                                                     TL_message messageOwner = new TL_message();
-                                                    messageOwner.f104id = msg_id;
+                                                    messageOwner.var_id = msg_id;
                                                     messageOwner.random_id = random_id;
                                                     if (message1 == null) {
                                                         message1 = messageText;

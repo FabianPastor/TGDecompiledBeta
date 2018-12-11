@@ -1035,7 +1035,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             PhotoSize small = FileLoader.getClosestPhotoSizeWithSize(sizes, 150);
             PhotoSize big = FileLoader.getClosestPhotoSizeWithSize(sizes, 800);
             user.photo = new TL_userProfilePhoto();
-            user.photo.photo_id = photo.photo.f106id;
+            user.photo.photo_id = photo.photo.var_id;
             if (small != null) {
                 user.photo.photo_small = small.location;
             }
@@ -1053,7 +1053,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     FileLoader.getPathToAttach(this.avatarBig, true).renameTo(FileLoader.getPathToAttach(big, true));
                 }
             }
-            MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user.f176id);
+            MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user.var_id);
             ArrayList<User> users = new ArrayList();
             users.add(user);
             MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, false, true);
@@ -1133,7 +1133,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         if (datacentersBytes != null) {
                             SerializedData data = new SerializedData(datacentersBytes);
                             supportUser = User.TLdeserialize(data, data.readInt32(false), false);
-                            if (supportUser != null && supportUser.f176id == 333000) {
+                            if (supportUser != null && supportUser.var_id == 333000) {
                                 supportUser = null;
                             }
                             data.cleanup();
@@ -1154,7 +1154,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         MessagesController.getInstance(this.currentAccount).putUser(supportUser, true);
         Bundle args = new Bundle();
-        args.putInt("user_id", supportUser.f176id);
+        args.putInt("user_id", supportUser.var_id);
         presentFragment(new ChatActivity(args));
     }
 
@@ -1168,7 +1168,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     final /* synthetic */ void lambda$null$10$SettingsActivity(SharedPreferences preferences, TL_help_support res, AlertDialog progressDialog) {
         Editor editor = preferences.edit();
-        editor.putInt("support_id", res.user.f176id);
+        editor.putInt("support_id", res.user.var_id);
         SerializedData data = new SerializedData();
         res.user.serializeToStream(data);
         editor.putString("support_user", Base64.encodeToString(data.toByteArray(), 0));
@@ -1184,7 +1184,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, true, true);
         MessagesController.getInstance(this.currentAccount).putUser(res.user, false);
         Bundle args = new Bundle();
-        args.putInt("user_id", res.user.f176id);
+        args.putInt("user_id", res.user.var_id);
         presentFragment(new ChatActivity(args));
     }
 

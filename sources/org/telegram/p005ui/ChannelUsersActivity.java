@@ -536,7 +536,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             ArrayList<CharSequence> resultArrayNames = new ArrayList();
             for (int a = 0; a < contactsCopy.size(); a++) {
                 User user = MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
-                if (user.f176id != UserConfig.getInstance(ChannelUsersActivity.this.currentAccount).getClientUserId()) {
+                if (user.var_id != UserConfig.getInstance(ChannelUsersActivity.this.currentAccount).getClientUserId()) {
                     String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                     String tName = LocaleController.getInstance().getTranslitString(name);
                     if (name.equals(tName)) {
@@ -1106,7 +1106,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     User user = (User) object;
                     MessagesController.getInstance(this.currentAccount).putUser(user, false);
                     SparseArray sparseArray = this.participantsMap;
-                    user_id = user.f176id;
+                    user_id = user.var_id;
                     participant = (ChannelParticipant) sparseArray.get(user_id);
                 } else if (object instanceof ChannelParticipant) {
                     participant = (ChannelParticipant) object;
@@ -1290,7 +1290,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             }
             return;
         }
-        ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(user.f176id, this.chatId, participant.admin_rights, participant.banned_rights, ((Integer) actions.get(i)).intValue(), true);
+        ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(user.var_id, this.chatId, participant.admin_rights, participant.banned_rights, ((Integer) actions.get(i)).intValue(), true);
         fragment.setDelegate(new ChannelUsersActivity$$Lambda$12(this, actions, i, participant));
         presentFragment(fragment);
     }
@@ -1358,14 +1358,14 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     }
 
     final /* synthetic */ void lambda$null$7$ChannelUsersActivity(Updates updates) {
-        MessagesController.getInstance(this.currentAccount).loadFullChat(((Chat) updates.chats.get(0)).f78id, 0, true);
+        MessagesController.getInstance(this.currentAccount).loadFullChat(((Chat) updates.chats.get(0)).var_id, 0, true);
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
             boolean byChannelUsers = ((Boolean) args[2]).booleanValue();
-            if (chatFull.f79id == this.chatId && !byChannelUsers) {
+            if (chatFull.var_id == this.chatId && !byChannelUsers) {
                 AndroidUtilities.runOnUIThread(new ChannelUsersActivity$$Lambda$4(this));
             }
         }
@@ -1409,7 +1409,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             } else if (this.type == 2) {
                 req.filter = new TL_channelParticipantsRecent();
             }
-            req.filter.f77q = TtmlNode.ANONYMOUS_REGION_ID;
+            req.filter.var_q = TtmlNode.ANONYMOUS_REGION_ID;
             req.offset = offset;
             req.limit = count;
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChannelUsersActivity$$Lambda$5(this, byEndReached)), this.classGuid);
@@ -1486,10 +1486,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         int status1 = 0;
         int status2 = 0;
         if (!(user1 == null || user1.status == null)) {
-            status1 = user1.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user1.status.expires;
+            status1 = user1.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user1.status.expires;
         }
         if (!(user2 == null || user2.status == null)) {
-            status2 = user2.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user2.status.expires;
+            status2 = user2.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + DefaultLoadControl.DEFAULT_MAX_BUFFER_MS : user2.status.expires;
         }
         if (status1 <= 0 || status2 <= 0) {
             if (status1 >= 0 || status2 >= 0) {

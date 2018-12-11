@@ -823,7 +823,7 @@ public class AlertsCreator {
         if (messageId != 0) {
             request = new TL_messages_report();
             request.peer = peer;
-            request.f153id.add(Integer.valueOf(messageId));
+            request.var_id.add(Integer.valueOf(messageId));
             if (i == 0) {
                 request.reason = new TL_inputReportReasonSpam();
             } else if (i == 1) {

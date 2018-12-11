@@ -243,11 +243,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 }
                 if (dialog != null) {
                     ShareDialogCell cell = (ShareDialogCell) view;
-                    if (ShareAlert.this.selectedDialogs.indexOfKey(dialog.f128id) >= 0) {
-                        ShareAlert.this.selectedDialogs.remove(dialog.f128id);
+                    if (ShareAlert.this.selectedDialogs.indexOfKey(dialog.var_id) >= 0) {
+                        ShareAlert.this.selectedDialogs.remove(dialog.var_id);
                         cell.setChecked(false, true);
                     } else {
-                        ShareAlert.this.selectedDialogs.put(dialog.f128id, dialog);
+                        ShareAlert.this.selectedDialogs.put(dialog.var_id, dialog);
                         cell.setChecked(true, true);
                     }
                     ShareAlert.this.updateSelectedCount();
@@ -281,8 +281,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             this.dialogs.clear();
             for (int a = 0; a < MessagesController.getInstance(ShareAlert.this.currentAccount).dialogsForward.size(); a++) {
                 TL_dialog dialog = (TL_dialog) MessagesController.getInstance(ShareAlert.this.currentAccount).dialogsForward.get(a);
-                int lower_id = (int) dialog.f128id;
-                int high_id = (int) (dialog.f128id >> 32);
+                int lower_id = (int) dialog.var_id;
+                int high_id = (int) (dialog.var_id >> 32);
                 if (!(lower_id == 0 || high_id == 1)) {
                     if (lower_id > 0) {
                         this.dialogs.add(dialog);
@@ -321,7 +321,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         public void onBindViewHolder(ViewHolder holder, int position) {
             ShareDialogCell cell = holder.itemView;
             TL_dialog dialog = getItem(position);
-            cell.setDialog((int) dialog.f128id, ShareAlert.this.selectedDialogs.indexOfKey(dialog.f128id) >= 0, null);
+            cell.setDialog((int) dialog.var_id, ShareAlert.this.selectedDialogs.indexOfKey(dialog.var_id) >= 0, null);
         }
 
         public int getItemViewType(int i) {
@@ -458,7 +458,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                         if (data != null) {
                                             user = User.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
-                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get((long) user.f176id);
+                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get((long) user.var_id);
                                             if (user.status != null) {
                                                 user.status.expires = cursor.intValue(1);
                                             }
@@ -468,7 +468,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                                 dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
                                             }
                                             dialogSearchResult.object = user;
-                                            dialogSearchResult.dialog.f128id = (long) user.f176id;
+                                            dialogSearchResult.dialog.var_id = (long) user.var_id;
                                             resultCount++;
                                         }
                                     } else {
@@ -496,10 +496,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                             data.reuse();
                                             if (!(chat == null || ChatObject.isNotInChat(chat))) {
                                                 if (!ChatObject.isChannel(chat) || chat.creator || ((chat.admin_rights != null && chat.admin_rights.post_messages) || chat.megagroup)) {
-                                                    dialogSearchResult = (DialogSearchResult) dialogsResult.get(-((long) chat.f78id));
+                                                    dialogSearchResult = (DialogSearchResult) dialogsResult.get(-((long) chat.var_id));
                                                     dialogSearchResult.name = AndroidUtilities.generateSearchName(chat.title, null, q);
                                                     dialogSearchResult.object = chat;
-                                                    dialogSearchResult.dialog.f128id = (long) (-chat.f78id);
+                                                    dialogSearchResult.dialog.var_id = (long) (-chat.var_id);
                                                     resultCount++;
                                                 }
                                             }
@@ -550,7 +550,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                             if (user.status != null) {
                                                 user.status.expires = cursor.intValue(1);
                                             }
-                                            dialogSearchResult.dialog.f128id = (long) user.f176id;
+                                            dialogSearchResult.dialog.var_id = (long) user.var_id;
                                             dialogSearchResult.object = user;
                                             if (found == 1) {
                                                 dialogSearchResult.name = AndroidUtilities.generateSearchName(user.first_name, user.last_name, q);
@@ -675,7 +675,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             DialogSearchResult result = (DialogSearchResult) this.searchResult.get(position);
-            holder.itemView.setDialog((int) result.dialog.f128id, ShareAlert.this.selectedDialogs.indexOfKey(result.dialog.f128id) >= 0, result.name);
+            holder.itemView.setDialog((int) result.dialog.var_id, ShareAlert.this.selectedDialogs.indexOfKey(result.dialog.var_id) >= 0, result.name);
         }
 
         public int getItemViewType(int i) {
@@ -707,7 +707,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         if (publicChannel) {
             this.loadingLink = true;
             TL_channels_exportMessageLink req = new TL_channels_exportMessageLink();
-            req.f115id = ((MessageObject) messages.get(0)).getId();
+            req.var_id = ((MessageObject) messages.get(0)).getId();
             req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(((MessageObject) messages.get(0)).messageOwner.to_id.channel_id);
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, TL_error error) {

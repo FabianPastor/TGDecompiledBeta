@@ -474,7 +474,7 @@ public class CacheControlActivity extends BaseFragment {
                                     message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                                     data.reuse();
                                     if (message != null) {
-                                        messageId = message.f104id;
+                                        messageId = message.var_id;
                                     }
                                 }
                             } catch (Throwable e) {

@@ -351,7 +351,7 @@ public class ChannelEditInfoActivity extends BaseFragment implements Notificatio
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
-            if (chatFull.f79id == this.chatId) {
+            if (chatFull.var_id == this.chatId) {
                 this.info = chatFull;
                 this.invite = chatFull.exported_invite;
                 updatePrivatePublic();

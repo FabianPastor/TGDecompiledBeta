@@ -1017,13 +1017,13 @@ public class FileLoader {
             if (obj != null) {
                 int currentSide;
                 if (byMinSide) {
-                    currentSide = obj.f107h >= obj.f108w ? obj.f108w : obj.f107h;
+                    currentSide = obj.var_h >= obj.var_w ? obj.var_w : obj.var_h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (side > lastSide && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
                     }
                 } else {
-                    currentSide = obj.f108w >= obj.f107h ? obj.f108w : obj.f107h;
+                    currentSide = obj.var_w >= obj.var_h ? obj.var_w : obj.var_h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (currentSide <= side && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
@@ -1149,15 +1149,15 @@ public class FileLoader {
                 docExt = TtmlNode.ANONYMOUS_REGION_ID;
             }
             if (docExt.length() > 1) {
-                return document.dc_id + "_" + document.f84id + docExt;
+                return document.dc_id + "_" + document.var_id + docExt;
             }
-            return document.dc_id + "_" + document.f84id;
+            return document.dc_id + "_" + document.var_id;
         } else if (attach instanceof SecureDocument) {
             SecureDocument secureDocument = (SecureDocument) attach;
-            return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.f203id + ".jpg";
+            return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.var_id + ".jpg";
         } else if (attach instanceof TL_secureFile) {
             TL_secureFile secureFile = (TL_secureFile) attach;
-            return secureFile.dc_id + "_" + secureFile.f203id + ".jpg";
+            return secureFile.dc_id + "_" + secureFile.var_id + ".jpg";
         } else if (attach instanceof WebFile) {
             WebFile document2 = (WebFile) attach;
             return Utilities.MD5(document2.url) + "." + ImageLoader.getHttpUrlExtension(document2.url, getExtensionByMime(document2.mime_type));

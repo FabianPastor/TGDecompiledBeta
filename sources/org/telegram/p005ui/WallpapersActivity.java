@@ -104,7 +104,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
             } else if (id == 1) {
                 boolean done;
                 WallPaper wallPaper = (WallPaper) WallpapersActivity.this.wallpappersByIds.get(WallpapersActivity.this.selectedBackground);
-                if (wallPaper != null && wallPaper.f181id != 1000001 && (wallPaper instanceof TL_wallPaper)) {
+                if (wallPaper != null && wallPaper.var_id != 1000001 && (wallPaper instanceof TL_wallPaper)) {
                     int width = AndroidUtilities.displaySize.x;
                     int height = AndroidUtilities.displaySize.y;
                     if (width > height) {
@@ -284,7 +284,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         } else {
             position -= 2;
         }
-        this.selectedBackground = ((WallPaper) this.wallPapers.get(position)).f181id;
+        this.selectedBackground = ((WallPaper) this.wallPapers.get(position)).var_id;
         this.overrideThemeWallpaper = true;
         this.listAdapter.notifyDataSetChanged();
         processSelectedBackground();
@@ -420,7 +420,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
             Iterator it = this.wallPapers.iterator();
             while (it.hasNext()) {
                 WallPaper wallPaper = (WallPaper) it.next();
-                this.wallpappersByIds.put(wallPaper.f181id, wallPaper);
+                this.wallpappersByIds.put(wallPaper.var_id, wallPaper);
             }
             if (this.listAdapter != null) {
                 this.listAdapter.notifyDataSetChanged();
@@ -450,7 +450,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         while (it.hasNext()) {
             Object obj = it.next();
             this.wallPapers.add((WallPaper) obj);
-            this.wallpappersByIds.put(((WallPaper) obj).f181id, (WallPaper) obj);
+            this.wallpappersByIds.put(((WallPaper) obj).var_id, (WallPaper) obj);
         }
         if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();

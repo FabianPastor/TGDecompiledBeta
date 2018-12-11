@@ -299,7 +299,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             for (int a = 0; a < contactsCopy.size(); a++) {
                 ChatParticipant participant = (ChatParticipant) contactsCopy.get(a);
                 User user = MessagesController.getInstance(SetAdminsActivity.this.currentAccount).getUser(Integer.valueOf(participant.user_id));
-                if (user.f176id != UserConfig.getInstance(SetAdminsActivity.this.currentAccount).getClientUserId()) {
+                if (user.var_id != UserConfig.getInstance(SetAdminsActivity.this.currentAccount).getClientUserId()) {
                     String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                     String tName = LocaleController.getInstance().getTranslitString(name);
                     if (name.equals(tName)) {
@@ -527,7 +527,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
-            if (chatFull.f79id == this.chat_id) {
+            if (chatFull.var_id == this.chat_id) {
                 this.info = chatFull;
                 updateChatParticipants();
                 updateRowsIds();

@@ -122,7 +122,7 @@ public class DialogCell extends BaseCell {
     public static class CustomDialog {
         public int date;
         /* renamed from: id */
-        public int f218id;
+        public int var_id;
         public boolean isMedia;
         public String message;
         public boolean muted;
@@ -146,7 +146,7 @@ public class DialogCell extends BaseCell {
     }
 
     public void setDialog(TL_dialog dialog, int i, int type) {
-        this.currentDialogId = dialog.f128id;
+        this.currentDialogId = dialog.var_id;
         this.isDialogCell = true;
         this.index = i;
         this.dialogsType = type;
@@ -359,7 +359,7 @@ public class DialogCell extends BaseCell {
                     this.nameLeft = AndroidUtilities.m9dp((float) (AndroidUtilities.leftBaseline + 4)) + Theme.dialogs_lockDrawable.getIntrinsicWidth();
                 }
             } else if (this.chat != null) {
-                if (this.chat.f78id < 0 || (ChatObject.isChannel(this.chat) && !this.chat.megagroup)) {
+                if (this.chat.var_id < 0 || (ChatObject.isChannel(this.chat) && !this.chat.megagroup)) {
                     this.drawNameBroadcast = true;
                     this.nameLockTop = AndroidUtilities.m9dp(16.5f);
                 } else {
@@ -457,7 +457,7 @@ public class DialogCell extends BaseCell {
                             messageString = this.message.messageText;
                         }
                         currentMessagePaint = Theme.dialogs_messagePrintingPaint;
-                    } else if (this.chat != null && this.chat.f78id > 0 && fromChat == null) {
+                    } else if (this.chat != null && this.chat.var_id > 0 && fromChat == null) {
                         if (this.message.isOutOwner()) {
                             name = LocaleController.getString("FromYou", R.string.FromYou);
                         } else if (fromUser != null) {
@@ -613,7 +613,7 @@ public class DialogCell extends BaseCell {
                         this.drawPinBackground = true;
                     }
                     nameString = LocaleController.getString("SavedMessages", R.string.SavedMessages);
-                } else if (this.user.f176id / 1000 == 777 || this.user.f176id / 1000 == 333 || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.user.f176id)) != null) {
+                } else if (this.user.var_id / 1000 == 777 || this.user.var_id / 1000 == 333 || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.user.var_id)) != null) {
                     nameString = UserObject.getUserName(this.user);
                 } else if (ContactsController.getInstance(this.currentAccount).contactsDict.size() == 0 && (!ContactsController.getInstance(this.currentAccount).contactsLoaded || ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
                     nameString = UserObject.getUserName(this.user);
@@ -872,10 +872,10 @@ public class DialogCell extends BaseCell {
             TL_dialog dialog = (TL_dialog) dialogsArray.get(this.index);
             TL_dialog nextDialog = this.index + 1 < dialogsArray.size() ? (TL_dialog) dialogsArray.get(this.index + 1) : null;
             DraftMessage newDraftMessage = DataQuery.getInstance(this.currentAccount).getDraft(this.currentDialogId);
-            MessageObject newMessageObject = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.f128id);
-            if (this.currentDialogId != dialog.f128id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.mentionCount != dialog.unread_mentions_count || this.markUnread != dialog.unread_mark || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage || this.drawPin != dialog.pinned)))) {
+            MessageObject newMessageObject = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.var_id);
+            if (this.currentDialogId != dialog.var_id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.mentionCount != dialog.unread_mentions_count || this.markUnread != dialog.unread_mark || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage || this.drawPin != dialog.pinned)))) {
                 boolean z;
-                this.currentDialogId = dialog.f128id;
+                this.currentDialogId = dialog.var_id;
                 if (!dialog.pinned || nextDialog == null || nextDialog.pinned) {
                     z = false;
                 } else {
@@ -900,7 +900,7 @@ public class DialogCell extends BaseCell {
             this.unreadCount = this.customDialog.unread_count;
             this.drawPin = this.customDialog.pinned;
             this.dialogMuted = this.customDialog.muted;
-            this.avatarDrawable.setInfo(this.customDialog.f218id, this.customDialog.name, null, false);
+            this.avatarDrawable.setInfo(this.customDialog.var_id, this.customDialog.name, null, false);
             this.avatarImage.setImage(null, "50_50", this.avatarDrawable, null, 0);
         } else {
             TL_dialog dialog;
@@ -908,7 +908,7 @@ public class DialogCell extends BaseCell {
             if (this.isDialogCell) {
                 dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.currentDialogId);
                 if (dialog != null && mask == 0) {
-                    this.message = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.f128id);
+                    this.message = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.var_id);
                     z = this.message != null && this.message.isUnread();
                     this.lastUnreadState = z;
                     this.unreadCount = dialog.unread_count;

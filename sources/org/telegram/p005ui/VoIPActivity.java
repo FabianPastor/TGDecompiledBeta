@@ -430,7 +430,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             VoIPActivity.this.endBtn.setEnabled(false);
             if (VoIPActivity.this.retrying) {
                 Intent intent = new Intent(VoIPActivity.this, VoIPService.class);
-                intent.putExtra("user_id", VoIPActivity.this.user.f176id);
+                intent.putExtra("user_id", VoIPActivity.this.user.var_id);
                 intent.putExtra("is_outgoing", true);
                 intent.putExtra("start_incall_activity", false);
                 intent.putExtra("account", VoIPActivity.this.currentAccount);
@@ -490,7 +490,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
             intent.putExtra("currentAccount", VoIPActivity.this.currentAccount);
             intent.setFlags(32768);
-            intent.putExtra("userId", VoIPActivity.this.user.f176id);
+            intent.putExtra("userId", VoIPActivity.this.user.var_id);
             VoIPActivity.this.startActivity(intent);
             VoIPActivity.this.finish();
         }
@@ -760,7 +760,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             getWindow().setNavigationBarColor(0);
             getWindow().getDecorView().setSystemUiVisibility(1792);
         } else if (VERSION.SDK_INT >= 19) {
-            getWindow().addFlags(201326592);
+            getWindow().addFlags(NUM);
             getWindow().getDecorView().setSystemUiVisibility(1792);
         }
         this.user = VoIPService.getSharedInstance().getUser();
@@ -842,7 +842,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         this.blurOverlayView2.setAlpha(0.0f);
         CLASSNAME.addView(this.blurOverlayView2);
         TextView branding = new TextView(this);
-        branding.setTextColor(-855638017);
+        branding.setTextColor(-NUM);
         branding.setText(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding));
         Drawable logo = getResources().getDrawable(R.drawable.notification).mutate();
         logo.setAlpha(204);
@@ -875,7 +875,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         this.nameText = CLASSNAME;
         CLASSNAME.addView(CLASSNAME, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 43.0f, 18.0f, 0.0f));
         CLASSNAME = new TextView(this);
-        CLASSNAME.setTextColor(-855638017);
+        CLASSNAME.setTextColor(-NUM);
         CLASSNAME.setSingleLine();
         CLASSNAME.setEllipsize(TruncateAt.END);
         CLASSNAME.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -886,7 +886,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         CLASSNAME.addView(CLASSNAME, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
         this.durationText = CLASSNAME;
         CLASSNAME = new TextView(this);
-        CLASSNAME.setTextColor(-855638017);
+        CLASSNAME.setTextColor(-NUM);
         CLASSNAME.setSingleLine();
         CLASSNAME.setEllipsize(TruncateAt.END);
         CLASSNAME.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -901,7 +901,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         buttons.setOrientation(0);
         CLASSNAME.addView(buttons, LayoutHelper.createFrame(-1, -2, 80));
         TextView accountName = new TextView(this);
-        accountName.setTextColor(-855638017);
+        accountName.setTextColor(-NUM);
         accountName.setSingleLine();
         accountName.setEllipsize(TruncateAt.END);
         accountName.setShadowLayer((float) AndroidUtilities.m9dp(3.0f), 0.0f, (float) AndroidUtilities.m9dp(0.6666667f), NUM);
@@ -1020,7 +1020,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         this.emojiExpandedText.setAlpha(0.0f);
         CLASSNAME.addView(this.emojiExpandedText, LayoutHelper.createFrame(-1, -2.0f, 17, 10.0f, 32.0f, 10.0f, 0.0f));
         this.hintTextView = new CorrectlyMeasuringTextView(this);
-        this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m9dp(3.0f), -231525581));
+        this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m9dp(3.0f), -NUM));
         this.hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
         this.hintTextView.setTextSize(1, 14.0f);
         this.hintTextView.setPadding(AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(10.0f), AndroidUtilities.m9dp(10.0f));
@@ -1108,7 +1108,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
 
     private void updateKeyView() {
         if (VoIPService.getSharedInstance() != null) {
-            new IdenticonDrawable().setColors(new int[]{16777215, -1, -NUM, 872415231});
+            new IdenticonDrawable().setColors(new int[]{16777215, -1, -NUM, NUM});
             EncryptedChat encryptedChat = new TL_encryptedChat();
             try {
                 ByteArrayOutputStream buf = new ByteArrayOutputStream();
@@ -1153,7 +1153,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             VoIPService.getSharedInstance().forceRating();
             final LinearLayout debugOverlay = new LinearLayout(this);
             debugOverlay.setOrientation(1);
-            debugOverlay.setBackgroundColor(-872415232);
+            debugOverlay.setBackgroundColor(-NUM);
             int pad = AndroidUtilities.m9dp(16.0f);
             debugOverlay.setPadding(pad, pad * 2, pad, pad * 2);
             TextView title = new TextView(this);
@@ -1673,7 +1673,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                     Palette palette = Palette.from(src.bitmap).generate();
                     Paint paint = new Paint();
                     paint.setColor((palette.getDarkMutedColor(-11242343) & 16777215) | NUM);
-                    canvas.drawColor(637534208);
+                    canvas.drawColor(NUM);
                     canvas.drawRect(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), paint);
                     Bitmap blur2 = Bitmap.createBitmap(50, 50, Config.ARGB_8888);
                     Canvas canvas2 = new Canvas(blur2);
@@ -1693,7 +1693,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     private void sendTextMessage(final String text) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                SendMessagesHelper.getInstance(VoIPActivity.this.currentAccount).sendMessage(text, (long) VoIPActivity.this.user.f176id, null, null, false, null, null, null);
+                SendMessagesHelper.getInstance(VoIPActivity.this.currentAccount).sendMessage(text, (long) VoIPActivity.this.user.var_id, null, null, false, null, null, null);
             }
         });
     }

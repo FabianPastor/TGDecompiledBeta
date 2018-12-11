@@ -1598,7 +1598,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
                         pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
                         this.codeField[a].setBackgroundDrawable(pressedDrawable);
-                        this.codeField[a].setImeOptions(268435461);
+                        this.codeField[a].setImeOptions(NUM);
                         this.codeField[a].setTextSize(1, 20.0f);
                         this.codeField[a].setMaxLines(1);
                         this.codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -2777,7 +2777,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[a].setCursorSize(AndroidUtilities.m9dp(20.0f));
             this.inputFields[a].setCursorWidth(1.5f);
             this.inputFields[a].setInputType(3);
-            this.inputFields[a].setImeOptions(268435462);
+            this.inputFields[a].setImeOptions(NUM);
             switch (a) {
                 case 0:
                     this.inputFields[a].setHint(LocaleController.getString("PassportEmailCode", R.string.PassportEmailCode));
@@ -2810,7 +2810,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (this.currentForm != null) {
             for (a = 0; a < this.currentForm.users.size(); a++) {
                 User user = (User) this.currentForm.users.get(a);
-                if (user.f176id == this.currentBotId) {
+                if (user.var_id == this.currentBotId) {
                     botUser = user;
                     break;
                 }
@@ -2883,7 +2883,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[a].setSingleLine(true);
             this.inputFields[a].setTransformationMethod(PasswordTransformationMethod.getInstance());
             this.inputFields[a].setTypeface(Typeface.DEFAULT);
-            this.inputFields[a].setImeOptions(268435462);
+            this.inputFields[a].setImeOptions(NUM);
             this.inputFields[a].setPadding(0, 0, 0, AndroidUtilities.m9dp(6.0f));
             this.inputFields[a].setGravity(LocaleController.isRTL ? 5 : 3);
             this.inputFieldContainers[a].addView(this.inputFields[a], LayoutHelper.createFrame(-1, -2.0f, 51, 21.0f, 12.0f, 21.0f, 6.0f));
@@ -3304,7 +3304,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (this.currentForm != null) {
             for (a = 0; a < this.currentForm.users.size(); a++) {
                 User user = (User) this.currentForm.users.get(a);
-                if (user.f176id == this.currentBotId) {
+                if (user.var_id == this.currentBotId) {
                     botUser = user;
                     break;
                 }
@@ -4050,7 +4050,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputFields[a].setCursorSize(AndroidUtilities.m9dp(20.0f));
             this.inputFields[a].setCursorWidth(1.5f);
             this.inputFields[a].setInputType(33);
-            this.inputFields[a].setImeOptions(268435462);
+            this.inputFields[a].setImeOptions(NUM);
             switch (a) {
                 case 0:
                     this.inputFields[a].setHint(LocaleController.getString("PaymentShippingEmailPlaceholder", R.string.PaymentShippingEmailPlaceholder));
@@ -4164,9 +4164,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             } else {
                 this.inputFields[a].setInputType(3);
                 if (a == 2) {
-                    this.inputFields[a].setImeOptions(268435462);
+                    this.inputFields[a].setImeOptions(NUM);
                 } else {
-                    this.inputFields[a].setImeOptions(268435461);
+                    this.inputFields[a].setImeOptions(NUM);
                 }
             }
             this.inputFields[a].setSelection(this.inputFields[a].length());
@@ -4487,7 +4487,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.inputFields[a].setFocusable(false);
             } else {
                 this.inputFields[a].setInputType(16385);
-                this.inputFields[a].setImeOptions(268435461);
+                this.inputFields[a].setImeOptions(NUM);
             }
             switch (a) {
                 case 0:
@@ -5214,7 +5214,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.inputFields[a].setFocusable(false);
             } else {
                 this.inputFields[a].setInputType(16385);
-                this.inputFields[a].setImeOptions(268435461);
+                this.inputFields[a].setImeOptions(NUM);
             }
             switch (a) {
                 case 0:
@@ -5408,7 +5408,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.inputExtraFields[a].setCursorWidth(1.5f);
             this.inputExtraFields[a].setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
             this.inputExtraFields[a].setInputType(16385);
-            this.inputExtraFields[a].setImeOptions(268435461);
+            this.inputExtraFields[a].setImeOptions(NUM);
             switch (a) {
                 case 0:
                     key = "first_name_native";
@@ -6651,7 +6651,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 private InputSecureFile getInputSecureFile(SecureDocument document) {
                     if (document.inputFile != null) {
                         TL_inputSecureFileUploaded inputSecureFileUploaded = new TL_inputSecureFileUploaded();
-                        inputSecureFileUploaded.f192id = document.inputFile.f97id;
+                        inputSecureFileUploaded.var_id = document.inputFile.var_id;
                         inputSecureFileUploaded.parts = document.inputFile.parts;
                         inputSecureFileUploaded.md5_checksum = document.inputFile.md5_checksum;
                         inputSecureFileUploaded.file_hash = document.fileHash;
@@ -6659,16 +6659,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         return inputSecureFileUploaded;
                     }
                     InputSecureFile inputSecureFile = new TL_inputSecureFile();
-                    inputSecureFile.f191id = document.secureFile.f203id;
+                    inputSecureFile.var_id = document.secureFile.var_id;
                     inputSecureFile.access_hash = document.secureFile.access_hash;
                     return inputSecureFile;
                 }
 
                 private void renameFile(SecureDocument oldDocument, TL_secureFile newSecureFile) {
                     File oldFile = FileLoader.getPathToAttach(oldDocument);
-                    String oldKey = oldDocument.secureFile.dc_id + "_" + oldDocument.secureFile.f203id;
+                    String oldKey = oldDocument.secureFile.dc_id + "_" + oldDocument.secureFile.var_id;
                     File newFile = FileLoader.getPathToAttach(newSecureFile);
-                    String newKey = newSecureFile.dc_id + "_" + newSecureFile.f203id;
+                    String newKey = newSecureFile.dc_id + "_" + newSecureFile.var_id;
                     oldFile.renameTo(newFile);
                     ImageLoader.getInstance().replaceImageInCache(oldKey, newKey, null, false);
                 }
@@ -6917,7 +6917,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public SecureDocument saveFile(TL_secureFile secureFile) {
-                    String path = FileLoader.getDirectory(4) + "/" + secureFile.dc_id + "_" + secureFile.f203id + ".jpg";
+                    String path = FileLoader.getDirectory(4) + "/" + secureFile.dc_id + "_" + secureFile.var_id + ".jpg";
                     EncryptionResult result = PassportActivity.this.createSecureDocument(path);
                     return new SecureDocument(result.secureDocumentKey, secureFile, path, result.fileHash, result.fileSecret);
                 }
@@ -8048,20 +8048,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         int count = this.documents.size();
         for (a = 0; a < count; a++) {
-            values.append(((SecureDocument) this.documents.get(a)).secureFile.f203id);
+            values.append(((SecureDocument) this.documents.get(a)).secureFile.var_id);
         }
         if (this.frontDocument != null) {
-            values.append(this.frontDocument.secureFile.f203id);
+            values.append(this.frontDocument.secureFile.var_id);
         }
         if (this.reverseDocument != null) {
-            values.append(this.reverseDocument.secureFile.f203id);
+            values.append(this.reverseDocument.secureFile.var_id);
         }
         if (this.selfieDocument != null) {
-            values.append(this.selfieDocument.secureFile.f203id);
+            values.append(this.selfieDocument.secureFile.var_id);
         }
         count = this.translationDocuments.size();
         for (a = 0; a < count; a++) {
-            values.append(((SecureDocument) this.translationDocuments.get(a)).secureFile.f203id);
+            values.append(((SecureDocument) this.translationDocuments.get(a)).secureFile.var_id);
         }
         return values.toString();
     }
@@ -8118,7 +8118,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 if (size != null) {
                     TL_secureFile secureFile = new TL_secureFile();
                     secureFile.dc_id = (int) size.location.volume_id;
-                    secureFile.f203id = (long) size.location.local_id;
+                    secureFile.var_id = (long) size.location.local_id;
                     secureFile.date = (int) (System.currentTimeMillis() / 1000);
                     SecureDocument document = this.delegate.saveFile(secureFile);
                     document.type = type;

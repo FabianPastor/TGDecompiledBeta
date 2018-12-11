@@ -391,7 +391,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 it = this.recentWebImages.iterator();
                 while (it.hasNext()) {
                     searchImage = (SearchImage) it.next();
-                    this.recentImagesWebKeys.put(searchImage.f53id, searchImage);
+                    this.recentImagesWebKeys.put(searchImage.var_id, searchImage);
                 }
             } else if (type == 1) {
                 this.recentGifImages = (ArrayList) args[1];
@@ -399,7 +399,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 it = this.recentGifImages.iterator();
                 while (it.hasNext()) {
                     searchImage = (SearchImage) it.next();
-                    this.recentImagesGifKeys.put(searchImage.f53id, searchImage);
+                    this.recentImagesGifKeys.put(searchImage.var_id, searchImage);
                 }
             }
         }
@@ -457,7 +457,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     SearchImage recentImage;
                     if (searchImage.type == 0) {
                         webChange = true;
-                        recentImage = (SearchImage) this.recentImagesWebKeys.get(searchImage.f53id);
+                        recentImage = (SearchImage) this.recentImagesWebKeys.get(searchImage.var_id);
                         if (recentImage != null) {
                             this.recentWebImages.remove(recentImage);
                             this.recentWebImages.add(0, recentImage);
@@ -466,7 +466,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         }
                     } else if (searchImage.type == 1) {
                         gifChanged = true;
-                        recentImage = (SearchImage) this.recentImagesGifKeys.get(searchImage.f53id);
+                        recentImage = (SearchImage) this.recentImagesGifKeys.get(searchImage.var_id);
                         if (recentImage != null) {
                             this.recentGifImages.remove(recentImage);
                             this.recentGifImages.add(0, recentImage);

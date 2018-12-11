@@ -566,7 +566,7 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
             TLObject object = (TLObject) this.currentPhotos.get(this.currentImage);
             if (object instanceof PhotoSize) {
                 photoSize = (PhotoSize) object;
-                trueWidth = Math.max(this.itemWidth, (int) (((float) photoSize.f108w) * (((float) this.itemHeight) / ((float) photoSize.f107h))));
+                trueWidth = Math.max(this.itemWidth, (int) (((float) photoSize.var_w) * (((float) this.itemHeight) / ((float) photoSize.var_h))));
             } else {
                 trueWidth = this.itemHeight;
             }
@@ -578,7 +578,7 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
                 object = (TLObject) this.currentPhotos.get(this.nextImage);
                 if (object instanceof PhotoSize) {
                     photoSize = (PhotoSize) object;
-                    nextTrueWidth = Math.max(this.itemWidth, (int) (((float) photoSize.f108w) * (((float) this.itemHeight) / ((float) photoSize.f107h))));
+                    nextTrueWidth = Math.max(this.itemWidth, (int) (((float) photoSize.var_w) * (((float) this.itemHeight) / ((float) photoSize.var_h))));
                 } else {
                     nextTrueWidth = this.itemHeight;
                 }

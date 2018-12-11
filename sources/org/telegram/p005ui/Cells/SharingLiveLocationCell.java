@@ -208,7 +208,7 @@ public class SharingLiveLocationCell extends FrameLayout {
 
     public void setDialog(LiveLocation info, Location userLocation) {
         this.liveLocation = info;
-        int lower_id = info.f250id;
+        int lower_id = info.var_id;
         TLObject photo = null;
         Object parentObject = null;
         if (lower_id > 0) {

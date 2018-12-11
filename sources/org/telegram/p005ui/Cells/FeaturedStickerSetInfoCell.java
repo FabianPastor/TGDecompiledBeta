@@ -134,7 +134,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.isUnread = unread;
         if (this.hasOnClick) {
             this.addButton.setVisibility(0);
-            boolean isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSet.set.f109id);
+            boolean isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSet.set.var_id);
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
                 this.addButton.setBackgroundDrawable(this.delDrawable);

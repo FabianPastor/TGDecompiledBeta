@@ -328,12 +328,12 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.parentActivity = (Activity) context;
         TL_messages_getAttachedStickers req = new TL_messages_getAttachedStickers();
         TL_inputStickeredMediaPhoto inputStickeredMediaPhoto = new TL_inputStickeredMediaPhoto();
-        inputStickeredMediaPhoto.f194id = new TL_inputPhoto();
-        inputStickeredMediaPhoto.f194id.f102id = photo.f106id;
-        inputStickeredMediaPhoto.f194id.access_hash = photo.access_hash;
-        inputStickeredMediaPhoto.f194id.file_reference = photo.file_reference;
-        if (inputStickeredMediaPhoto.f194id.file_reference == null) {
-            inputStickeredMediaPhoto.f194id.file_reference = new byte[0];
+        inputStickeredMediaPhoto.var_id = new TL_inputPhoto();
+        inputStickeredMediaPhoto.var_id.var_id = photo.var_id;
+        inputStickeredMediaPhoto.var_id.access_hash = photo.access_hash;
+        inputStickeredMediaPhoto.var_id.file_reference = photo.file_reference;
+        if (inputStickeredMediaPhoto.var_id.file_reference == null) {
+            inputStickeredMediaPhoto.var_id.file_reference = new byte[0];
         }
         req.media = inputStickeredMediaPhoto;
         this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new StickersAlert$$Lambda$1(this, parentObject, req, new StickersAlert$$Lambda$0(this, req)));
@@ -354,7 +354,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             } else if (vector.objects.size() == 1) {
                 StickerSetCovered set = (StickerSetCovered) vector.objects.get(0);
                 this.inputStickerSet = new TL_inputStickerSetID();
-                this.inputStickerSet.f103id = set.set.f109id;
+                this.inputStickerSet.var_id = set.set.var_id;
                 this.inputStickerSet.access_hash = set.set.access_hash;
                 loadStickerSet();
                 return;
@@ -400,7 +400,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetByName(this.inputStickerSet.short_name);
             }
             if (this.stickerSet == null) {
-                this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetById(this.inputStickerSet.f103id);
+                this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetById(this.inputStickerSet.var_id);
             }
             if (this.stickerSet == null) {
                 TL_messages_getStickerSet req = new TL_messages_getStickerSet();
@@ -591,7 +591,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.pickerBottomLayout.doneButton.setPadding(AndroidUtilities.m9dp(18.0f), 0, AndroidUtilities.m9dp(18.0f), 0);
         this.pickerBottomLayout.doneButtonBadgeTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m9dp(12.5f), Theme.getColor(Theme.key_dialogBadgeBackground)));
         this.stickerPreviewLayout = new FrameLayout(context);
-        this.stickerPreviewLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground) & -536870913);
+        this.stickerPreviewLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground) & -NUM);
         this.stickerPreviewLayout.setVisibility(8);
         this.stickerPreviewLayout.setSoundEffectsEnabled(false);
         this.containerView.addView(this.stickerPreviewLayout, LayoutHelper.createFrame(-1, -1.0f));
@@ -652,7 +652,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 lambda$init$8$StickersAlert();
                 TL_inputStickerSetID inputStickerSetID = new TL_inputStickerSetID();
                 inputStickerSetID.access_hash = pack.set.access_hash;
-                inputStickerSetID.f103id = pack.set.f109id;
+                inputStickerSetID.var_id = pack.set.var_id;
                 new StickersAlert(this.parentActivity, this.parentFragment, inputStickerSetID, null, null).show();
             }
         } else if (this.stickerSet != null && position >= 0 && position < this.stickerSet.documents.size()) {
@@ -669,7 +669,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                         set = true;
                     }
                     if (!set) {
-                        this.stickerEmojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.selectedSticker.f84id), this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(30.0f), false));
+                        this.stickerEmojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.selectedSticker.var_id), this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(30.0f), false));
                     }
                     fav = DataQuery.getInstance(this.currentAccount).isStickerInFavorites(this.selectedSticker);
                     this.previewFavButton.setImageResource(fav ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite);
@@ -839,7 +839,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     stringBuilder = this.stickerSet.set.title;
                 }
                 textView.setText(stringBuilder);
-                if (this.stickerSet.set != null || !DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(this.stickerSet.set.f109id)) {
+                if (this.stickerSet.set != null || !DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(this.stickerSet.set.var_id)) {
                     stickersAlert$$Lambda$11 = new StickersAlert$$Lambda$11(this);
                     string = (this.stickerSet == null && this.stickerSet.set.masks) ? LocaleController.getString("AddMasks", R.string.AddMasks) : LocaleController.getString("AddStickers", R.string.AddStickers);
                     setRightButton(stickersAlert$$Lambda$11, string, Theme.getColor(Theme.key_dialogTextBlue2), true);

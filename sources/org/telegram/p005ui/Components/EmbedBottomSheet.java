@@ -350,18 +350,18 @@ public class EmbedBottomSheet extends BottomSheet {
                     rect = PipVideoView.getPipRect(aspectRatio);
                     scale = rect.width / ((float) textureView.getWidth());
                     if (VERSION.SDK_INT >= 21) {
-                        rect.f243y += (float) AndroidUtilities.statusBarHeight;
+                        rect.var_y += (float) AndroidUtilities.statusBarHeight;
                     }
                     AnimatorSet animatorSet = new AnimatorSet();
                     r9 = new Animator[12];
                     r9[0] = ObjectAnimator.ofFloat(textureImageView, "scaleX", new float[]{scale});
                     r9[1] = ObjectAnimator.ofFloat(textureImageView, "scaleY", new float[]{scale});
-                    r9[2] = ObjectAnimator.ofFloat(textureImageView, "translationX", new float[]{rect.f242x});
-                    r9[3] = ObjectAnimator.ofFloat(textureImageView, "translationY", new float[]{rect.f243y});
+                    r9[2] = ObjectAnimator.ofFloat(textureImageView, "translationX", new float[]{rect.var_x});
+                    r9[3] = ObjectAnimator.ofFloat(textureImageView, "translationY", new float[]{rect.var_y});
                     r9[4] = ObjectAnimator.ofFloat(textureView, "scaleX", new float[]{scale});
                     r9[5] = ObjectAnimator.ofFloat(textureView, "scaleY", new float[]{scale});
-                    r9[6] = ObjectAnimator.ofFloat(textureView, "translationX", new float[]{rect.f242x});
-                    r9[7] = ObjectAnimator.ofFloat(textureView, "translationY", new float[]{rect.f243y});
+                    r9[6] = ObjectAnimator.ofFloat(textureView, "translationX", new float[]{rect.var_x});
+                    r9[7] = ObjectAnimator.ofFloat(textureView, "translationY", new float[]{rect.var_y});
                     r9[8] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.containerView, "translationY", new float[]{(float) (EmbedBottomSheet.this.containerView.getMeasuredHeight() + AndroidUtilities.m9dp(10.0f))});
                     r9[9] = ObjectAnimator.ofInt(EmbedBottomSheet.this.backDrawable, "alpha", new int[]{0});
                     r9[10] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.fullscreenVideoContainer, "alpha", new float[]{0.0f});
@@ -404,16 +404,16 @@ public class EmbedBottomSheet extends BottomSheet {
                 textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
                 scale = rect.width / ((float) textureView.getLayoutParams().width);
                 if (VERSION.SDK_INT >= 21) {
-                    rect.f243y += (float) AndroidUtilities.statusBarHeight;
+                    rect.var_y += (float) AndroidUtilities.statusBarHeight;
                 }
                 textureImageView.setScaleX(scale);
                 textureImageView.setScaleY(scale);
-                textureImageView.setTranslationX(rect.f242x);
-                textureImageView.setTranslationY(rect.f243y);
+                textureImageView.setTranslationX(rect.var_x);
+                textureImageView.setTranslationY(rect.var_y);
                 textureView.setScaleX(scale);
                 textureView.setScaleY(scale);
-                textureView.setTranslationX(rect.f242x);
-                textureView.setTranslationY(rect.f243y);
+                textureView.setTranslationX(rect.var_x);
+                textureView.setTranslationY(rect.var_y);
             } else {
                 EmbedBottomSheet.this.pipVideoView.close();
                 EmbedBottomSheet.this.pipVideoView = null;

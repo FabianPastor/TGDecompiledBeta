@@ -102,9 +102,9 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         private float scale;
         private float width;
         /* renamed from: x */
-        private float f222x;
+        private float var_x;
         /* renamed from: y */
-        private float f223y;
+        private float var_y;
 
         /* synthetic */ CropState(CropView x0, Bitmap x1, int x2, CLASSNAME x3) {
             this(x1, x2);
@@ -113,8 +113,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         private CropState(Bitmap bitmap, int bRotation) {
             this.width = (float) bitmap.getWidth();
             this.height = (float) bitmap.getHeight();
-            this.f222x = 0.0f;
-            this.f223y = 0.0f;
+            this.var_x = 0.0f;
+            this.var_y = 0.0f;
             this.scale = 1.0f;
             this.baseRotation = (float) bRotation;
             this.rotation = 0.0f;
@@ -135,7 +135,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private boolean hasChanges() {
-            return Math.abs(this.f222x) > CropView.EPSILON || Math.abs(this.f223y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
+            return Math.abs(this.var_x) > CropView.EPSILON || Math.abs(this.var_y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
         }
 
         private float getWidth() {
@@ -155,17 +155,17 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private void translate(float x, float y) {
-            this.f222x += x;
-            this.f223y += y;
+            this.var_x += x;
+            this.var_y += y;
             this.matrix.postTranslate(x, y);
         }
 
         private float getX() {
-            return this.f222x;
+            return this.var_x;
         }
 
         private float getY() {
-            return this.f223y;
+            return this.var_y;
         }
 
         private void scale(float s, float pivotX, float pivotY) {
@@ -200,8 +200,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
         private void reset(CropAreaView areaView, float orient, boolean freeform) {
             this.matrix.reset();
-            this.f222x = 0.0f;
-            this.f223y = 0.0f;
+            this.var_x = 0.0f;
+            this.var_y = 0.0f;
             this.rotation = 0.0f;
             this.orientation = orient;
             updateMinimumScale();

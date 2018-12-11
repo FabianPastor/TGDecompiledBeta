@@ -1198,7 +1198,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 } else {
                     this.inputFields[a].setInputType(16385);
                 }
-                this.inputFields[a].setImeOptions(268435461);
+                this.inputFields[a].setImeOptions(NUM);
                 switch (a) {
                     case 0:
                         this.inputFields[a].setHint(LocaleController.getString("PaymentShippingAddress1Placeholder", R.string.PaymentShippingAddress1Placeholder));
@@ -1283,7 +1283,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         providerUser = null;
                         for (int b = 0; b < this.paymentForm.users.size(); b++) {
                             user = (User) this.paymentForm.users.get(b);
-                            if (user.f176id == this.paymentForm.provider_id) {
+                            if (user.var_id == this.paymentForm.provider_id) {
                                 providerUser = user;
                             }
                         }
@@ -1328,13 +1328,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 ((ViewGroup) this.inputFields[7].getParent()).setVisibility(8);
             }
             if (this.paymentForm.invoice.phone_requested) {
-                this.inputFields[9].setImeOptions(268435462);
+                this.inputFields[9].setImeOptions(NUM);
             } else if (this.paymentForm.invoice.email_requested) {
-                this.inputFields[7].setImeOptions(268435462);
+                this.inputFields[7].setImeOptions(NUM);
             } else if (this.paymentForm.invoice.name_requested) {
-                this.inputFields[6].setImeOptions(268435462);
+                this.inputFields[6].setImeOptions(NUM);
             } else {
-                this.inputFields[5].setImeOptions(268435462);
+                this.inputFields[5].setImeOptions(NUM);
             }
             if (this.sectionCell[1] != null) {
                 ShadowSectionCell shadowSectionCell = this.sectionCell[1];
@@ -1518,7 +1518,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     } else {
                         this.inputFields[a].setInputType(16385);
                     }
-                    this.inputFields[a].setImeOptions(268435461);
+                    this.inputFields[a].setImeOptions(NUM);
                     switch (a) {
                         case 0:
                             this.inputFields[a].setHint(LocaleController.getString("PaymentCardNumber", R.string.PaymentCardNumber));
@@ -1590,9 +1590,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     this.sectionCell[0].setVisibility(8);
                 }
                 if (this.need_card_postcode) {
-                    this.inputFields[5].setImeOptions(268435462);
+                    this.inputFields[5].setImeOptions(NUM);
                 } else {
-                    this.inputFields[3].setImeOptions(268435462);
+                    this.inputFields[3].setImeOptions(NUM);
                 }
             }
         } else if (this.currentStep == 1) {
@@ -1663,7 +1663,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                     this.inputFields[a].setTypeface(Typeface.DEFAULT);
                 }
-                this.inputFields[a].setImeOptions(268435462);
+                this.inputFields[a].setImeOptions(NUM);
                 switch (a) {
                     case 0:
                         this.inputFields[a].setText(this.paymentForm.saved_credentials.title);
@@ -1734,7 +1734,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             providerUser = null;
             for (a = 0; a < this.paymentForm.users.size(); a++) {
                 user = (User) this.paymentForm.users.get(a);
-                if (user.f176id == this.paymentForm.provider_id) {
+                if (user.var_id == this.paymentForm.provider_id) {
                     providerUser = user;
                 }
             }
@@ -1887,10 +1887,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 if (a == 0 || a == 1) {
                     this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                     this.inputFields[a].setTypeface(Typeface.DEFAULT);
-                    this.inputFields[a].setImeOptions(268435461);
+                    this.inputFields[a].setImeOptions(NUM);
                 } else {
                     this.inputFields[a].setInputType(33);
-                    this.inputFields[a].setImeOptions(268435462);
+                    this.inputFields[a].setImeOptions(NUM);
                 }
                 switch (a) {
                     case 0:
@@ -2048,7 +2048,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             showPayAlert(totalPrice);
             return;
         }
-        String botKey = "payment_warning_" + this.botUser.f176id;
+        String botKey = "payment_warning_" + this.botUser.var_id;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
         if (preferences.getBoolean(botKey, false)) {
             showPayAlert(totalPrice);
@@ -3015,7 +3015,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             req.msg_id = this.messageObject.getId();
             if (UserConfig.getInstance(this.currentAccount).tmpPassword != null && this.paymentForm.saved_credentials != null) {
                 req.credentials = new TL_inputPaymentCredentialsSaved();
-                req.credentials.f101id = this.paymentForm.saved_credentials.f164id;
+                req.credentials.var_id = this.paymentForm.saved_credentials.var_id;
                 req.credentials.tmp_password = UserConfig.getInstance(this.currentAccount).tmpPassword.tmp_password;
             } else if (this.androidPayCredentials != null) {
                 req.credentials = this.androidPayCredentials;
@@ -3025,12 +3025,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 req.credentials.data = new TL_dataJSON();
                 req.credentials.data.data = this.paymentJson;
             }
-            if (!(this.requestedInfo == null || this.requestedInfo.f165id == null)) {
-                req.requested_info_id = this.requestedInfo.f165id;
+            if (!(this.requestedInfo == null || this.requestedInfo.var_id == null)) {
+                req.requested_info_id = this.requestedInfo.var_id;
                 req.flags |= 1;
             }
             if (this.shippingOption != null) {
-                req.shipping_option_id = this.shippingOption.f171id;
+                req.shipping_option_id = this.shippingOption.var_id;
                 req.flags |= 2;
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new PaymentFormActivity$$Lambda$23(this, req), 2);

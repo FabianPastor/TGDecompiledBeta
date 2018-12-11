@@ -237,7 +237,7 @@ public class Browser {
                         if (forceBrowser[0] || allActivities == null || allActivities.isEmpty()) {
                             intent = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                             intent.setAction("android.intent.action.SEND");
-                            PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
+                            PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), NUM);
                             Builder builder = new Builder(getSession());
                             builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
                             builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));

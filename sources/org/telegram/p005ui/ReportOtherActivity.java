@@ -52,7 +52,7 @@ public class ReportOtherActivity extends BaseFragment {
                 if (ReportOtherActivity.this.message_id != 0) {
                     request = new TL_messages_report();
                     request.peer = peer;
-                    request.f153id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
+                    request.var_id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
                     reportReasonOther = new TL_inputReportReasonOther();
                     reportReasonOther.text = ReportOtherActivity.this.firstNameField.getText().toString();
                     request.reason = reportReasonOther;

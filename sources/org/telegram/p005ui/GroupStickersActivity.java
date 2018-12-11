@@ -296,13 +296,13 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     TL_messages_stickerSet set = (TL_messages_stickerSet) arrayList.get(row);
                     cell.setStickersSet((TL_messages_stickerSet) arrayList.get(row), row != arrayList.size() + -1);
                     if (GroupStickersActivity.this.selectedStickerSet != null) {
-                        id = GroupStickersActivity.this.selectedStickerSet.set.f109id;
+                        id = GroupStickersActivity.this.selectedStickerSet.set.var_id;
                     } else if (GroupStickersActivity.this.info == null || GroupStickersActivity.this.info.stickerset == null) {
                         id = 0;
                     } else {
-                        id = GroupStickersActivity.this.info.stickerset.f109id;
+                        id = GroupStickersActivity.this.info.stickerset.var_id;
                     }
-                    if (set.set.f109id == id) {
+                    if (set.set.var_id == id) {
                         z = true;
                     } else {
                         z = false;
@@ -540,7 +540,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             }
         } else if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
-            if (chatFull.f79id == this.chatId) {
+            if (chatFull.var_id == this.chatId) {
                 if (this.info == null && chatFull.stickerset != null) {
                     this.selectedStickerSet = DataQuery.getInstance(this.currentAccount).getGroupStickerSetById(chatFull.stickerset);
                 }
@@ -549,7 +549,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             }
         } else if (id == NotificationCenter.groupStickersDidLoad) {
             long setId = ((Long) args[0]).longValue();
-            if (this.info != null && this.info.stickerset != null && this.info.stickerset.f109id == ((long) id)) {
+            if (this.info != null && this.info.stickerset != null && this.info.stickerset.var_id == ((long) id)) {
                 updateRows();
             }
         }
@@ -657,7 +657,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     private void saveStickerSet() {
-        if (this.info == null || (!(this.info.stickerset == null || this.selectedStickerSet == null || this.selectedStickerSet.set.f109id != this.info.stickerset.f109id) || (this.info.stickerset == null && this.selectedStickerSet == null))) {
+        if (this.info == null || (!(this.info.stickerset == null || this.selectedStickerSet == null || this.selectedStickerSet.set.var_id != this.info.stickerset.var_id) || (this.info.stickerset == null && this.selectedStickerSet == null))) {
             lambda$checkDiscard$70$PassportActivity();
             return;
         }
@@ -667,9 +667,9 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         if (this.selectedStickerSet == null) {
             req.stickerset = new TL_inputStickerSetEmpty();
         } else {
-            MessagesController.getEmojiSettings(this.currentAccount).edit().remove("group_hide_stickers_" + this.info.f79id).commit();
+            MessagesController.getEmojiSettings(this.currentAccount).edit().remove("group_hide_stickers_" + this.info.var_id).commit();
             req.stickerset = new TL_inputStickerSetID();
-            req.stickerset.f103id = this.selectedStickerSet.set.f109id;
+            req.stickerset.var_id = this.selectedStickerSet.set.var_id;
             req.stickerset.access_hash = this.selectedStickerSet.set.access_hash;
         }
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());

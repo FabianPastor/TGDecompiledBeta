@@ -197,7 +197,7 @@ public class ChangeBioActivity extends BaseFragment {
             FileLog.m13e(e);
         }
         userFull.about = newName;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(user.f176id), userFull, null);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(user.var_id), userFull, null);
         lambda$checkDiscard$70$PassportActivity();
     }
 

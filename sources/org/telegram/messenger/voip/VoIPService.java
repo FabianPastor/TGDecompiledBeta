@@ -168,7 +168,7 @@ public class VoIPService extends VoIPBaseService {
 
         public void run() {
             Intent intent = new Intent(VoIPService.this, VoIPActivity.class);
-            intent.addFlags(805306368);
+            intent.addFlags(NUM);
             try {
                 PendingIntent.getActivity(VoIPService.this, 0, intent, 0).send();
             } catch (CanceledException e) {
@@ -314,8 +314,8 @@ public class VoIPService extends VoIPBaseService {
                         extras.putParcelable("android.telecom.extra.PHONE_ACCOUNT_HANDLE", addAccountToTelecomManager());
                         myExtras.putInt("call_type", 1);
                         extras.putBundle("android.telecom.extra.OUTGOING_CALL_EXTRAS", myExtras);
-                        ContactsController.getInstance(this.currentAccount).createOrUpdateConnectionServiceContact(this.user.f176id, this.user.first_name, this.user.last_name);
-                        tm.placeCall(Uri.fromParts("tel", "+99084" + this.user.f176id, null), extras);
+                        ContactsController.getInstance(this.currentAccount).createOrUpdateConnectionServiceContact(this.user.var_id, this.user.first_name, this.user.last_name);
+                        tm.placeCall(Uri.fromParts("tel", "+99084" + this.user.var_id, null), extras);
                     } else {
                         this.delayedStartOutgoingCall = new CLASSNAME();
                         AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
@@ -372,7 +372,7 @@ public class VoIPService extends VoIPBaseService {
             req.debug.data = debugLog;
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
-            req.peer.f136id = this.call.f105id;
+            req.peer.var_id = this.call.var_id;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
         }
     }
@@ -417,9 +417,9 @@ public class VoIPService extends VoIPBaseService {
                 } else if (error == null) {
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
-                        if (Utilities.isGoodPrime(res.f184p, res.f183g)) {
-                            messagesStorage.setSecretPBytes(res.f184p);
-                            messagesStorage.setSecretG(res.f183g);
+                        if (Utilities.isGoodPrime(res.var_p, res.var_g)) {
+                            messagesStorage.setSecretPBytes(res.var_p);
+                            messagesStorage.setSecretG(res.var_g);
                             messagesStorage.setLastSecretVersion(res.version);
                             messagesStorage.saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
                         } else {
@@ -490,7 +490,7 @@ public class VoIPService extends VoIPBaseService {
                                         TL_phone_discardCall req = new TL_phone_discardCall();
                                         req.peer = new TL_inputPhoneCall();
                                         req.peer.access_hash = VoIPService.this.call.access_hash;
-                                        req.peer.f136id = VoIPService.this.call.f105id;
+                                        req.peer.var_id = VoIPService.this.call.var_id;
                                         req.reason = new TL_phoneCallDiscardReasonMissed();
                                         ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new CLASSNAME(), 2);
                                     }
@@ -543,13 +543,13 @@ public class VoIPService extends VoIPBaseService {
     private void acknowledgeCall(final boolean startRinging) {
         if (this.call instanceof TL_phoneCallDiscarded) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m14w("Call " + this.call.f105id + " was discarded before the service started, stopping");
+                FileLog.m14w("Call " + this.call.var_id + " was discarded before the service started, stopping");
             }
             stopSelf();
         } else if (VERSION.SDK_INT < 19 || !XiaomiUtilities.isMIUI() || XiaomiUtilities.isCustomPermissionGranted(XiaomiUtilities.OP_SHOW_WHEN_LOCKED) || !((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
             TL_phone_receivedCall req = new TL_phone_receivedCall();
             req.peer = new TL_inputPhoneCall();
-            req.peer.f136id = this.call.f105id;
+            req.peer.var_id = this.call.var_id;
             req.peer.access_hash = this.call.access_hash;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
@@ -567,7 +567,7 @@ public class VoIPService extends VoIPBaseService {
                                     return;
                                 }
                                 if (VoIPBaseService.USE_CONNECTION_SERVICE) {
-                                    ContactsController.getInstance(VoIPService.this.currentAccount).createOrUpdateConnectionServiceContact(VoIPService.this.user.f176id, VoIPService.this.user.first_name, VoIPService.this.user.last_name);
+                                    ContactsController.getInstance(VoIPService.this.currentAccount).createOrUpdateConnectionServiceContact(VoIPService.this.user.var_id, VoIPService.this.user.first_name, VoIPService.this.user.last_name);
                                     TelecomManager tm = (TelecomManager) VoIPService.this.getSystemService("telecom");
                                     Bundle extras = new Bundle();
                                     extras.putInt("call_type", 1);
@@ -595,10 +595,10 @@ public class VoIPService extends VoIPBaseService {
                 this.systemCallConnection.setRinging();
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("starting ringing for call " + this.call.f105id);
+                FileLog.m10d("starting ringing for call " + this.call.var_id);
             }
             dispatchStateChanged(15);
-            startRingtoneAndVibration(this.user.f176id);
+            startRingtoneAndVibration(this.user.var_id);
             if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode() || !NotificationManagerCompat.from(this).areNotificationsEnabled()) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m10d("Starting incall activity for incoming call");
@@ -672,9 +672,9 @@ public class VoIPService extends VoIPBaseService {
                 if (error == null) {
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
-                        if (Utilities.isGoodPrime(res.f184p, res.f183g)) {
-                            messagesStorage.setSecretPBytes(res.f184p);
-                            messagesStorage.setSecretG(res.f183g);
+                        if (Utilities.isGoodPrime(res.var_p, res.var_g)) {
+                            messagesStorage.setSecretPBytes(res.var_p);
+                            messagesStorage.setSecretG(res.var_g);
                             messagesStorage.setLastSecretVersion(res.version);
                             MessagesStorage.getInstance(VoIPService.this.currentAccount).saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
                         } else {
@@ -708,7 +708,7 @@ public class VoIPService extends VoIPBaseService {
                     TL_phone_acceptCall req = new TL_phone_acceptCall();
                     req.g_b = g_b_bytes;
                     req.peer = new TL_inputPhoneCall();
-                    req.peer.f136id = VoIPService.this.call.f105id;
+                    req.peer.var_id = VoIPService.this.call.var_id;
                     req.peer.access_hash = VoIPService.this.call.access_hash;
                     req.protocol = new TL_phoneCallProtocol();
                     TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
@@ -764,7 +764,7 @@ public class VoIPService extends VoIPBaseService {
             TL_phone_discardCall req = new TL_phone_discardCall();
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
-            req.peer.f136id = this.call.f105id;
+            req.peer.var_id = this.call.var_id;
             if (this.controller == null || !this.controllerStarted) {
                 i = 0;
             } else {
@@ -854,7 +854,7 @@ public class VoIPService extends VoIPBaseService {
             this.pendingUpdates.add(call);
         } else if (call == null) {
         } else {
-            if (call.f105id == this.call.f105id) {
+            if (call.var_id == this.call.var_id) {
                 if (call.access_hash == 0) {
                     call.access_hash = this.call.access_hash;
                 }
@@ -954,14 +954,14 @@ public class VoIPService extends VoIPBaseService {
                     AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance(this.currentAccount).callRingTimeout);
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m14w("onCallUpdated called with wrong call id (got " + call.f105id + ", expected " + this.call.f105id + ")");
+                FileLog.m14w("onCallUpdated called with wrong call id (got " + call.var_id + ", expected " + this.call.var_id + ")");
             }
         }
     }
 
     private void startRatingActivity() {
         try {
-            PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).putExtra("call_id", this.call.f105id).putExtra("call_access_hash", this.call.access_hash).putExtra("account", this.currentAccount).addFlags(805306368), 0).send();
+            PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).putExtra("call_id", this.call.var_id).putExtra("call_access_hash", this.call.access_hash).putExtra("account", this.currentAccount).addFlags(NUM), 0).send();
         } catch (Exception x) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m12e("Error starting incall activity", x);
@@ -1002,7 +1002,7 @@ public class VoIPService extends VoIPBaseService {
             req.g_a = this.g_a;
             req.key_fingerprint = fingerprint;
             req.peer = new TL_inputPhoneCall();
-            req.peer.f136id = this.call.f105id;
+            req.peer.var_id = this.call.var_id;
             req.peer.access_hash = this.call.access_hash;
             req.protocol = new TL_phoneCallProtocol();
             req.protocol.max_layer = 74;
@@ -1030,7 +1030,7 @@ public class VoIPService extends VoIPBaseService {
             }
             SharedPreferences nprefs = MessagesController.getNotificationsSettings(this.currentAccount);
             HashSet<String> hashes = new HashSet(nprefs.getStringSet("calls_access_hashes", Collections.EMPTY_SET));
-            hashes.add(this.call.f105id + " " + this.call.access_hash + " " + System.currentTimeMillis());
+            hashes.add(this.call.var_id + " " + this.call.access_hash + " " + System.currentTimeMillis());
             while (hashes.size() > 20) {
                 String oldest = null;
                 long oldestTime = Long.MAX_VALUE;
@@ -1057,7 +1057,7 @@ public class VoIPService extends VoIPBaseService {
                 }
             }
             nprefs.edit().putStringSet("calls_access_hashes", hashes).commit();
-            this.controller.setConfig(((double) MessagesController.getInstance(this.currentAccount).callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance(this.currentAccount).callConnectTimeout) / 1000.0d, MessagesController.getGlobalMainSettings().getInt("VoipDataSaving", 0), this.call.f105id);
+            this.controller.setConfig(((double) MessagesController.getInstance(this.currentAccount).callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance(this.currentAccount).callConnectTimeout) / 1000.0d, MessagesController.getGlobalMainSettings().getInt("VoipDataSaving", 0), this.call.var_id);
             this.controller.setEncryptionKey(this.authKey, this.isOutgoing);
             TL_phoneConnection[] endpoints = new TL_phoneConnection[(this.call.alternative_connections.size() + 1)];
             endpoints[0] = this.call.connection;
@@ -1115,7 +1115,7 @@ public class VoIPService extends VoIPBaseService {
             TL_phone_discardCall req = new TL_phone_discardCall();
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
-            req.peer.f136id = this.call.f105id;
+            req.peer.var_id = this.call.var_id;
             int callDuration = (this.controller == null || !this.controllerStarted) ? 0 : (int) (this.controller.getCallDuration() / 1000);
             req.duration = callDuration;
             long preferredRelayID = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getPreferredRelayID();
@@ -1127,7 +1127,7 @@ public class VoIPService extends VoIPBaseService {
     }
 
     public long getCallID() {
-        return this.call != null ? this.call.f105id : 0;
+        return this.call != null ? this.call.var_id : 0;
     }
 
     public void onUIForegroundStateChanged(boolean isForeground) {
@@ -1255,7 +1255,7 @@ public class VoIPService extends VoIPBaseService {
                 this.delayedStartOutgoingCall = new CLASSNAME();
                 AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
             }
-            this.systemCallConnection.setAddress(Uri.fromParts("tel", "+99084" + this.user.f176id, null), 1);
+            this.systemCallConnection.setAddress(Uri.fromParts("tel", "+99084" + this.user.var_id, null), 1);
             this.systemCallConnection.setCallerDisplayName(ContactsController.formatName(this.user.first_name, this.user.last_name), 1);
         }
         return this.systemCallConnection;

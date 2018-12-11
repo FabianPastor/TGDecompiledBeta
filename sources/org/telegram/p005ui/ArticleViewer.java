@@ -900,7 +900,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.backgroundPaint.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
                 this.imageView.setColorFilter(new PorterDuffColorFilter(-1, Mode.MULTIPLY));
             }
-            Chat channel = MessagesController.getInstance(ArticleViewer.this.currentAccount).getChat(Integer.valueOf(block.channel.f78id));
+            Chat channel = MessagesController.getInstance(ArticleViewer.this.currentAccount).getChat(Integer.valueOf(block.channel.var_id));
             if (channel == null || channel.min) {
                 ArticleViewer.this.loadChannel(this, block.channel);
                 setState(1, false);
@@ -1169,7 +1169,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                 photoSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize());
                                 position = new GroupedMessagePosition();
                                 position.last = a != count + -1;
-                                position.aspectRatio = photoSize != null ? 1.0f : ((float) photoSize.f108w) / ((float) photoSize.f107h);
+                                position.aspectRatio = photoSize != null ? 1.0f : ((float) photoSize.var_w) / ((float) photoSize.var_h);
                                 if (position.aspectRatio <= 1.2f) {
                                     proportions.append("w");
                                 } else if (position.aspectRatio < 0.8f) {
@@ -1194,7 +1194,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                 position.last = a != count + -1;
                                 if (photoSize != null) {
                                 }
-                                position.aspectRatio = photoSize != null ? 1.0f : ((float) photoSize.f108w) / ((float) photoSize.f107h);
+                                position.aspectRatio = photoSize != null ? 1.0f : ((float) photoSize.var_w) / ((float) photoSize.var_h);
                                 if (position.aspectRatio <= 1.2f) {
                                 }
                                 averageAspectRatio += position.aspectRatio;
@@ -1314,7 +1314,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                     pos.set(k, k, i, i, width, lineHeight / 814.0f, flags);
                                     index++;
                                 }
-                                posToFix.f55pw += spanLeft;
+                                posToFix.var_pw += spanLeft;
                                 posToFix.spanSize += spanLeft;
                                 y += lineHeight;
                             }
@@ -1454,7 +1454,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         for (a = 0; a < count; a++) {
                             GroupedMessagePosition pos = (GroupedMessagePosition) BlockCollageCell.this.group.posArray.get(a);
                             if (pos.minY == position.minY && ((pos.minX != position.minX || pos.maxX != position.maxX || pos.minY != position.minY || pos.maxY != position.maxY) && pos.minY == position.minY)) {
-                                h -= ((int) Math.ceil((double) (pos.f54ph * maxHeight))) - AndroidUtilities.m9dp(4.0f);
+                                h -= ((int) Math.ceil((double) (pos.var_ph * maxHeight))) - AndroidUtilities.m9dp(4.0f);
                                 break;
                             }
                         }
@@ -1766,7 +1766,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
 
             /* renamed from: lambda$postEvent$0$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy */
-            final /* synthetic */ void mo9492x2b8da535(String eventName, String eventData) {
+            final /* synthetic */ void mo9497x2b8da535(String eventName, String eventData) {
                 Object obj = -1;
                 switch (eventName.hashCode()) {
                     case -1065790942:
@@ -2064,19 +2064,19 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         this.listX += AndroidUtilities.m9dp(18.0f);
                     }
                 }
-                if (this.currentBlock.f198w == 0) {
+                if (this.currentBlock.var_w == 0) {
                     scale = 1.0f;
                 } else {
-                    scale = ((float) width) / ((float) this.currentBlock.f198w);
+                    scale = ((float) width) / ((float) this.currentBlock.var_w);
                 }
                 if (this.exactWebViewHeight != 0) {
                     height = AndroidUtilities.m9dp((float) this.exactWebViewHeight);
                 } else {
                     float dp2;
-                    if (this.currentBlock.f198w == 0) {
-                        dp2 = ((float) AndroidUtilities.m9dp((float) this.currentBlock.f197h)) * scale;
+                    if (this.currentBlock.var_w == 0) {
+                        dp2 = ((float) AndroidUtilities.m9dp((float) this.currentBlock.var_h)) * scale;
                     } else {
-                        dp2 = ((float) this.currentBlock.f197h) * scale;
+                        dp2 = ((float) this.currentBlock.var_h) * scale;
                     }
                     height = (int) dp2;
                 }
@@ -2694,11 +2694,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     textWidth = photoWidth;
                 }
                 if (this.currentType == 0) {
-                    height = (int) (((float) this.currentBlock.f199h) * (((float) photoWidth) / ((float) this.currentBlock.f200w)));
+                    height = (int) (((float) this.currentBlock.var_h) * (((float) photoWidth) / ((float) this.currentBlock.var_w)));
                     int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.m9dp(56.0f))) * 0.9f);
                     if (height > maxHeight) {
                         height = maxHeight;
-                        photoWidth = (int) (((float) this.currentBlock.f200w) * (((float) height) / ((float) this.currentBlock.f199h)));
+                        photoWidth = (int) (((float) this.currentBlock.var_w) * (((float) height) / ((float) this.currentBlock.var_h)));
                         photoX += ((width - photoX) - photoWidth) / 2;
                     }
                 }
@@ -3785,7 +3785,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 ArticleViewer.selectorPaint.setStyle(Style.STROKE);
                 ArticleViewer.selectorPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
             }
-            setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
+            setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 2));
             setWillNotDraw(false);
             this.textView = new TextView(context);
             this.textView.setTextColor(-14606047);
@@ -3898,7 +3898,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             int i3 = 5;
             this.this$0 = this$0;
             super(context);
-            setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
+            setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 2));
             this.textView = new TextView(context);
             this.textView.setTextColor(-14606047);
             this.textView.setTextSize(1, 16.0f);
@@ -4262,9 +4262,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         private int bHeight;
         private int bWidth;
         /* renamed from: bX */
-        private int f214bX;
+        private int var_bX;
         /* renamed from: bY */
-        private int f215bY;
+        private int var_bY;
         private boolean closeAnimationInProgress;
         private float innerTranslationX;
         private boolean maybeStartTracking;
@@ -4330,14 +4330,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     WindowInsets insets = (WindowInsets) ArticleViewer.this.lastInsets;
                     x = insets.getSystemWindowInsetLeft();
                     if (insets.getSystemWindowInsetRight() != 0) {
-                        this.f214bX = width - this.bWidth;
-                        this.f215bY = 0;
+                        this.var_bX = width - this.bWidth;
+                        this.var_bY = 0;
                     } else if (insets.getSystemWindowInsetLeft() != 0) {
-                        this.f214bX = 0;
-                        this.f215bY = 0;
+                        this.var_bX = 0;
+                        this.var_bY = 0;
                     } else {
-                        this.f214bX = 0;
-                        this.f215bY = (bottom - top) - this.bHeight;
+                        this.var_bX = 0;
+                        this.var_bY = (bottom - top) - this.bHeight;
                     }
                 }
                 ArticleViewer.this.containerView.layout(x, 0, ArticleViewer.this.containerView.getMeasuredWidth() + x, ArticleViewer.this.containerView.getMeasuredHeight());
@@ -4511,11 +4511,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         protected void dispatchDraw(Canvas canvas) {
             super.dispatchDraw(canvas);
             if (this.bWidth != 0 && this.bHeight != 0) {
-                if (this.f214bX == 0 && this.f215bY == 0) {
-                    canvas.drawRect((float) this.f214bX, (float) this.f215bY, (float) (this.f214bX + this.bWidth), (float) (this.f215bY + this.bHeight), ArticleViewer.this.blackPaint);
+                if (this.var_bX == 0 && this.var_bY == 0) {
+                    canvas.drawRect((float) this.var_bX, (float) this.var_bY, (float) (this.var_bX + this.bWidth), (float) (this.var_bY + this.bHeight), ArticleViewer.this.blackPaint);
                     return;
                 }
-                canvas.drawRect(((float) this.f214bX) - getTranslationX(), (float) this.f215bY, ((float) (this.f214bX + this.bWidth)) - getTranslationX(), (float) (this.f215bY + this.bHeight), ArticleViewer.this.blackPaint);
+                canvas.drawRect(((float) this.var_bX) - getTranslationX(), (float) this.var_bY, ((float) (this.var_bX + this.bWidth)) - getTranslationX(), (float) (this.var_bY + this.bHeight), ArticleViewer.this.blackPaint);
             }
         }
 
@@ -5156,7 +5156,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 width = ((View) getParent()).getMeasuredWidth();
                 height = ((View) getParent()).getMeasuredHeight();
             } else if (this.currentType == 2) {
-                height = (int) Math.ceil((double) ((this.groupPosition.f54ph * ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y))) * 0.5f));
+                height = (int) Math.ceil((double) ((this.groupPosition.var_ph * ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y))) * 0.5f));
             }
             if (this.currentBlock != null) {
                 int photoX;
@@ -5183,14 +5183,14 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         thumb = null;
                     }
                     if (this.currentType == 0) {
-                        height = (int) (((float) this.currentPhotoObject.f107h) * (((float) photoWidth) / ((float) this.currentPhotoObject.f108w)));
+                        height = (int) (((float) this.currentPhotoObject.var_h) * (((float) photoWidth) / ((float) this.currentPhotoObject.var_w)));
                         if (this.parentBlock instanceof TL_pageBlockCover) {
                             height = Math.min(height, photoWidth);
                         } else {
                             int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.m9dp(56.0f))) * 0.9f);
                             if (height > maxHeight) {
                                 height = maxHeight;
-                                photoWidth = (int) (((float) this.currentPhotoObject.f108w) * (((float) height) / ((float) this.currentPhotoObject.f107h)));
+                                photoWidth = (int) (((float) this.currentPhotoObject.var_w) * (((float) height) / ((float) this.currentPhotoObject.var_h)));
                                 photoX += ((width - photoX) - photoWidth) / 2;
                             }
                         }
@@ -5698,7 +5698,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 width = ((View) getParent()).getMeasuredWidth();
                 height = ((View) getParent()).getMeasuredHeight();
             } else if (this.currentType == 2) {
-                height = (int) Math.ceil((double) ((this.groupPosition.f54ph * ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y))) * 0.5f));
+                height = (int) Math.ceil((double) ((this.groupPosition.var_ph * ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y))) * 0.5f));
             }
             if (this.currentBlock != null) {
                 int photoX;
@@ -5724,13 +5724,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         for (int a = 0; a < count; a++) {
                             DocumentAttribute attribute = (DocumentAttribute) this.currentDocument.attributes.get(a);
                             if (attribute instanceof TL_documentAttributeVideo) {
-                                height = (int) (((float) attribute.f86h) * (((float) photoWidth) / ((float) attribute.f87w)));
+                                height = (int) (((float) attribute.var_h) * (((float) photoWidth) / ((float) attribute.var_w)));
                                 found = true;
                                 break;
                             }
                         }
                         if (!found) {
-                            height = (int) (((float) thumb.f107h) * (((float) photoWidth) / ((float) thumb.f108w)));
+                            height = (int) (((float) thumb.var_h) * (((float) photoWidth) / ((float) thumb.var_w)));
                         }
                         if (this.parentBlock instanceof TL_pageBlockCover) {
                             height = Math.min(height, photoWidth);
@@ -5738,7 +5738,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             int maxHeight = (int) (((float) (Math.max(ArticleViewer.this.listView.getMeasuredWidth(), ArticleViewer.this.listView.getMeasuredHeight()) - AndroidUtilities.m9dp(56.0f))) * 0.9f);
                             if (height > maxHeight) {
                                 height = maxHeight;
-                                photoWidth = (int) (((float) thumb.f108w) * (((float) height) / ((float) thumb.f107h)));
+                                photoWidth = (int) (((float) thumb.var_w) * (((float) height) / ((float) thumb.var_h)));
                                 photoX += ((width - photoX) - photoWidth) / 2;
                             }
                         }
@@ -6697,7 +6697,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.popupLayout.setDispatchKeyEventListener(new ArticleViewer$$Lambda$2(this));
                 this.popupLayout.setShowedFromBotton(false);
                 this.deleteView = new TextView(this.parentActivity);
-                this.deleteView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240, 2));
+                this.deleteView.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 2));
                 this.deleteView.setGravity(16);
                 this.deleteView.setPadding(AndroidUtilities.m9dp(20.0f), 0, AndroidUtilities.m9dp(20.0f), 0);
                 this.deleteView.setTextSize(1, 15.0f);
@@ -7155,7 +7155,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 message.out = true;
                 int i = -Long.valueOf(blockAudio.audio_id).hashCode();
                 block.mid = i;
-                message.f104id = i;
+                message.var_id = i;
                 message.to_id = new TL_peerUser();
                 Peer peer = message.to_id;
                 int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
@@ -7411,7 +7411,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.pagesStack.size() == 1 || back) {
                 int offset;
                 SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("articles", 0);
-                String key = "article" + this.currentPage.f182id;
+                String key = "article" + this.currentPage.var_id;
                 int position = preferences.getInt(key, -1);
                 if (preferences.getBoolean(key + "r", true) == (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y)) {
                     offset = preferences.getInt(key + "o", 0) - this.listView.getPaddingTop();
@@ -7761,8 +7761,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         return TtmlNode.ANONYMOUS_REGION_ID;
                     }
                     spannableStringBuilder = new SpannableStringBuilder("*");
-                    int w = AndroidUtilities.m9dp((float) textImage.f205w);
-                    int h = AndroidUtilities.m9dp((float) textImage.f204h);
+                    int w = AndroidUtilities.m9dp((float) textImage.var_w);
+                    int h = AndroidUtilities.m9dp((float) textImage.var_h);
                     maxWidth = Math.abs(maxWidth);
                     if (w > maxWidth) {
                         float scale = ((float) maxWidth) / ((float) w);
@@ -8493,12 +8493,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (this.currentPage == null || this.currentPage.cached_page == null) {
             return null;
         }
-        if (this.currentPage.photo != null && this.currentPage.photo.f106id == id) {
+        if (this.currentPage.photo != null && this.currentPage.photo.var_id == id) {
             return this.currentPage.photo;
         }
         for (int a = 0; a < this.currentPage.cached_page.photos.size(); a++) {
             Photo photo = (Photo) this.currentPage.cached_page.photos.get(a);
-            if (photo.f106id == id) {
+            if (photo.var_id == id) {
                 return photo;
             }
         }
@@ -8509,12 +8509,12 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (this.currentPage == null || this.currentPage.cached_page == null) {
             return null;
         }
-        if (this.currentPage.document != null && this.currentPage.document.f84id == id) {
+        if (this.currentPage.document != null && this.currentPage.document.var_id == id) {
             return this.currentPage.document;
         }
         for (int a = 0; a < this.currentPage.cached_page.documents.size(); a++) {
             Document document = (Document) this.currentPage.cached_page.documents.get(a);
-            if (document.f84id == id) {
+            if (document.var_id == id) {
                 return document;
             }
         }
@@ -8992,7 +8992,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     ImageView imageView = this.nightModeImageView;
                     int i = (!this.nightModeEnabled || this.selectedColor == 2) ? -3355444 : -15428119;
                     imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
-                    this.nightModeImageView.setBackgroundDrawable(Theme.createSelectorDrawable(251658240));
+                    this.nightModeImageView.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
                     this.colorCells[a].addView(this.nightModeImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 48));
                     this.nightModeImageView.setOnClickListener(new ArticleViewer$$Lambda$12(this));
                     this.colorCells[a].setTextAndColor(LocaleController.getString("ColorWhite", R.string.ColorWhite), -1);
@@ -9119,7 +9119,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.captionTextViewNext.setPadding(AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(8.0f));
         this.captionTextViewNext.setLinkTextColor(-1);
         this.captionTextViewNext.setTextColor(-1);
-        this.captionTextViewNext.setHighlightColor(872415231);
+        this.captionTextViewNext.setHighlightColor(NUM);
         this.captionTextViewNext.setGravity(19);
         this.captionTextViewNext.setTextSize(1, 16.0f);
         this.captionTextViewNext.setVisibility(8);
@@ -9131,7 +9131,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.captionTextView.setPadding(AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(8.0f), AndroidUtilities.m9dp(20.0f), AndroidUtilities.m9dp(8.0f));
         this.captionTextView.setLinkTextColor(-1);
         this.captionTextView.setTextColor(-1);
-        this.captionTextView.setHighlightColor(872415231);
+        this.captionTextView.setHighlightColor(NUM);
         this.captionTextView.setGravity(19);
         this.captionTextView.setTextSize(1, 16.0f);
         this.captionTextView.setVisibility(8);
@@ -9275,11 +9275,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         } else if (this.previewsReqId == 0) {
             TLObject object = MessagesController.getInstance(this.currentAccount).getUserOrChat("previews");
             if (object instanceof TL_user) {
-                openPreviewsChat((User) object, this.currentPage.f182id);
+                openPreviewsChat((User) object, this.currentPage.var_id);
                 return;
             }
             int currentAccount = UserConfig.selectedAccount;
-            long pageId = this.currentPage.f182id;
+            long pageId = this.currentPage.var_id;
             showProgressView(true, true);
             TLObject req = new TL_contacts_resolveUsername();
             req.username = "previews";
@@ -9489,7 +9489,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private void openPreviewsChat(User user, long wid) {
         if (user != null && this.parentActivity != null) {
             Bundle args = new Bundle();
-            args.putInt("user_id", user.f176id);
+            args.putInt("user_id", user.var_id);
             args.putString("botUser", "webpage" + wid);
             ((LaunchActivity) this.parentActivity).presentFragment(new ChatActivity(args), false, true);
             close(false, true);
@@ -9670,7 +9670,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (webPage.cached_page != null) {
                 AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$40(this, webPageFinal, webPage, messageObject, anchorFinal));
                 LongSparseArray<WebPage> webpages = new LongSparseArray(1);
-                webpages.put(webPage.f182id, webPage);
+                webpages.put(webPage.var_id, webPage);
                 MessagesStorage.getInstance(currentAccount).putWebPages(webpages);
             }
         }
@@ -9684,7 +9684,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.pagesStack.set(0, webPage);
             if (this.pagesStack.size() == 1) {
                 this.currentPage = webPage;
-                ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().remove("article" + this.currentPage.f182id).commit();
+                ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().remove("article" + this.currentPage.var_id).commit();
                 updateInterfaceForCurrentPage(false);
                 if (anchorFinal != null) {
                     scrollToAnchor(anchorFinal);
@@ -9901,7 +9901,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     offset = 0;
                 }
                 Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit();
-                String key = "article" + this.currentPage.f182id;
+                String key = "article" + this.currentPage.var_id;
                 Editor putInt = editor.putInt(key, position).putInt(key + "o", offset);
                 String str = key + "r";
                 if (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y) {
@@ -10084,11 +10084,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
         MessagesController.getInstance(currentAccount).processUpdates(updates, false);
         if (!hasJoinMessage) {
-            MessagesController.getInstance(currentAccount).generateJoinMessage(channel.f78id, true);
+            MessagesController.getInstance(currentAccount).generateJoinMessage(channel.var_id, true);
         }
         AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$37(cell));
         AndroidUtilities.runOnUIThread(new ArticleViewer$$Lambda$38(currentAccount, channel), 1000);
-        MessagesStorage.getInstance(currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), null, true, channel.f78id);
+        MessagesStorage.getInstance(currentAccount).updateDialogsWithDeletedMessages(new ArrayList(), null, true, channel.var_id);
     }
 
     final /* synthetic */ void lambda$null$32$ArticleViewer(BlockChannelCell cell, int currentAccount, TL_error error, TL_channels_joinChannel req) {

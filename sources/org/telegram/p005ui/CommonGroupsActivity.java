@@ -74,7 +74,7 @@ public class CommonGroupsActivity extends BaseFragment {
             if (visibleItemCount > 0) {
                 int totalItemCount = CommonGroupsActivity.this.listViewAdapter.getItemCount();
                 if (!CommonGroupsActivity.this.endReached && !CommonGroupsActivity.this.loading && !CommonGroupsActivity.this.chats.isEmpty() && firstVisibleItem + visibleItemCount >= totalItemCount - 5) {
-                    CommonGroupsActivity.this.getChats(((Chat) CommonGroupsActivity.this.chats.get(CommonGroupsActivity.this.chats.size() - 1)).f78id, 100);
+                    CommonGroupsActivity.this.getChats(((Chat) CommonGroupsActivity.this.chats.get(CommonGroupsActivity.this.chats.size() - 1)).var_id, 100);
                 }
             }
         }
@@ -198,7 +198,7 @@ public class CommonGroupsActivity extends BaseFragment {
         if (position >= 0 && position < this.chats.size()) {
             Chat chat = (Chat) this.chats.get(position);
             Bundle args = new Bundle();
-            args.putInt("chat_id", chat.f78id);
+            args.putInt("chat_id", chat.var_id);
             if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(args, this)) {
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 presentFragment(new ChatActivity(args), true);

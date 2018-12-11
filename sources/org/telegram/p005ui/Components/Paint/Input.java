@@ -135,7 +135,7 @@ public class Input {
         double a1 = Math.pow((double) (1.0f - t), 2.0d);
         double a2 = (double) ((2.0f * (1.0f - t)) * t);
         double a3 = (double) (t * t);
-        return new Point(((midPoint1.f231x * a1) + (prev1.f231x * a2)) + (midPoint2.f231x * a3), ((midPoint1.f232y * a1) + (prev1.f232y * a2)) + (midPoint2.f232y * a3), 1.0d);
+        return new Point(((midPoint1.var_x * a1) + (prev1.var_x * a2)) + (midPoint2.var_x * a3), ((midPoint1.var_y * a1) + (prev1.var_y * a2)) + (midPoint2.var_y * a3), 1.0d);
     }
 
     private void paintPath(final Path path) {

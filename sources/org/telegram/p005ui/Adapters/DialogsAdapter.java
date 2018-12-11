@@ -260,13 +260,13 @@ public class DialogsAdapter extends SelectionAdapter {
                 cell.fullSeparator = z;
                 if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
                     boolean z2;
-                    if (dialog.f128id != this.openedDialogId) {
+                    if (dialog.var_id != this.openedDialogId) {
                         z2 = false;
                     }
                     cell.setDialogSelected(z2);
                 }
                 if (this.selectedDialogs != null) {
-                    cell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialog.f128id)), false);
+                    cell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialog.var_id)), false);
                 }
                 cell.setDialog(dialog, i, this.dialogsType);
                 return;

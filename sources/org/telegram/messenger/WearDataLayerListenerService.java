@@ -95,7 +95,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     dataOutputStream = new DataOutputStream(new BufferedOutputStream(((GetOutputStreamResult) ch.getOutputStream(apiClient).await()).getOutputStream()));
                     if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
                         user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
-                        dataOutputStream.writeInt(user.f176id);
+                        dataOutputStream.writeInt(user.var_id);
                         dataOutputStream.writeUTF(user.first_name);
                         dataOutputStream.writeUTF(user.last_name);
                         dataOutputStream.writeUTF(user.phone);

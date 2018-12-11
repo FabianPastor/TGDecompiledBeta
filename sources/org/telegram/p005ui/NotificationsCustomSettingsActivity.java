@@ -501,7 +501,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$processSearch$1$NotificationsCustomSettingsActivity$SearchAdapter */
-        final /* synthetic */ void mo17205x19ea3dd1(String query) {
+        final /* synthetic */ void mo17318x19ea3dd1(String query) {
             Utilities.searchQueue.postRunnable(new NotificationsCustomSettingsActivity$SearchAdapter$$Lambda$2(this, query, new ArrayList(NotificationsCustomSettingsActivity.this.exceptions)));
         }
 
@@ -612,7 +612,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$updateSearchResults$2$NotificationsCustomSettingsActivity$SearchAdapter */
-        final /* synthetic */ void mo17206x264e3040(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo17319x264e3040(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
@@ -1118,7 +1118,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     /* renamed from: lambda$getThemeDescriptions$7$NotificationsCustomSettingsActivity */
-    final /* synthetic */ void mo17197xf5302461() {
+    final /* synthetic */ void mo17310xvar_() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

@@ -714,7 +714,7 @@ public class PasscodeView extends FrameLayout {
         this.checkImage.setLayoutParams(layoutParams);
         this.checkImage.setOnClickListener(new CLASSNAME());
         FrameLayout lineFrameLayout = new FrameLayout(context);
-        lineFrameLayout.setBackgroundColor(654311423);
+        lineFrameLayout.setBackgroundColor(NUM);
         this.passwordFrameLayout.addView(lineFrameLayout);
         layoutParams = (LayoutParams) lineFrameLayout.getLayoutParams();
         layoutParams.width = -1;

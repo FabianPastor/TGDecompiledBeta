@@ -162,7 +162,7 @@ public class CountrySelectActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter */
-        final /* synthetic */ void mo16882xa1825eb2(String query) {
+        final /* synthetic */ void mo16992xa1825eb2(String query) {
             if (query.trim().toLowerCase().length() == 0) {
                 updateSearchResults(new ArrayList());
                 return;
@@ -186,7 +186,7 @@ public class CountrySelectActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter */
-        final /* synthetic */ void mo16883xa883bb23(ArrayList arrCounties) {
+        final /* synthetic */ void mo16993xa883bb23(ArrayList arrCounties) {
             this.searchResult = arrCounties;
             notifyDataSetChanged();
         }

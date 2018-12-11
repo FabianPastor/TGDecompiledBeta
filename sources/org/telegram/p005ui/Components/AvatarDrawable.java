@@ -46,7 +46,7 @@ public class AvatarDrawable extends Drawable {
         this();
         this.isProfile = profile;
         if (user != null) {
-            setInfo(user.f176id, user.first_name, user.last_name, false, null);
+            setInfo(user.var_id, user.first_name, user.last_name, false, null);
         }
     }
 
@@ -54,7 +54,7 @@ public class AvatarDrawable extends Drawable {
         this();
         this.isProfile = profile;
         if (chat != null) {
-            setInfo(chat.f78id, chat.title, null, chat.f78id < 0, null);
+            setInfo(chat.var_id, chat.title, null, chat.var_id < 0, null);
         }
     }
 
@@ -96,7 +96,7 @@ public class AvatarDrawable extends Drawable {
 
     public void setInfo(User user) {
         if (user != null) {
-            setInfo(user.f176id, user.first_name, user.last_name, false, null);
+            setInfo(user.var_id, user.first_name, user.last_name, false, null);
         }
     }
 
@@ -107,7 +107,7 @@ public class AvatarDrawable extends Drawable {
 
     public void setInfo(Chat chat) {
         if (chat != null) {
-            setInfo(chat.f78id, chat.title, null, chat.f78id < 0, null);
+            setInfo(chat.var_id, chat.title, null, chat.var_id < 0, null);
         }
     }
 

@@ -179,7 +179,7 @@ public class FastDateParser implements Serializable, DateParser {
 
     private static class TimeZoneStrategy extends Strategy {
         /* renamed from: ID */
-        private static final int f265ID = 0;
+        private static final int var_ID = 0;
         private static final int LONG_DST = 3;
         private static final int LONG_STD = 1;
         private static final int SHORT_DST = 4;

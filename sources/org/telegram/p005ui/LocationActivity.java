@@ -181,7 +181,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     public class LiveLocation {
         public Chat chat;
         /* renamed from: id */
-        public int f250id;
+        public int var_id;
         public Marker marker;
         public Message object;
         public User user;
@@ -788,15 +788,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             liveLocation.object = message;
             if (liveLocation.object.from_id != 0) {
                 liveLocation.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(liveLocation.object.from_id));
-                liveLocation.f250id = liveLocation.object.from_id;
+                liveLocation.var_id = liveLocation.object.from_id;
             } else {
                 int did = (int) MessageObject.getDialogId(message);
                 if (did > 0) {
                     liveLocation.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(did));
-                    liveLocation.f250id = did;
+                    liveLocation.var_id = did;
                 } else {
                     liveLocation.chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-did));
-                    liveLocation.f250id = did;
+                    liveLocation.var_id = did;
                 }
             }
             try {
@@ -807,9 +807,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     options.anchor(0.5f, 0.907f);
                     liveLocation.marker = this.googleMap.addMarker(options);
                     this.markers.add(liveLocation);
-                    this.markersMap.put(liveLocation.f250id, liveLocation);
+                    this.markersMap.put(liveLocation.var_id, liveLocation);
                     SharingLocationInfo myInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
-                    if (liveLocation.f250id == UserConfig.getInstance(this.currentAccount).getClientUserId() && myInfo != null && liveLocation.object.f104id == myInfo.mid && this.myLocation != null) {
+                    if (liveLocation.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() && myInfo != null && liveLocation.object.var_id == myInfo.mid && this.myLocation != null) {
                         liveLocation.marker.setPosition(new LatLng(this.myLocation.getLatitude(), this.myLocation.getLongitude()));
                     }
                 }
@@ -1066,7 +1066,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.myLocation = new Location(location);
             LiveLocation liveLocation = (LiveLocation) this.markersMap.get(UserConfig.getInstance(this.currentAccount).getClientUserId());
             SharingLocationInfo myInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
-            if (!(liveLocation == null || myInfo == null || liveLocation.object.f104id != myInfo.mid)) {
+            if (!(liveLocation == null || myInfo == null || liveLocation.object.var_id != myInfo.mid)) {
                 liveLocation.marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
             }
             if (this.messageObject != null || this.googleMap == null) {

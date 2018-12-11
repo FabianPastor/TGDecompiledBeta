@@ -83,7 +83,7 @@ public class FileLoadOperation {
     private boolean isCdn;
     private boolean isForceRequest;
     /* renamed from: iv */
-    private byte[] f49iv;
+    private byte[] var_iv;
     private byte[] key;
     private InputFileLocation location;
     private ArrayList<Range> notCheckedCdnRanges;
@@ -145,12 +145,12 @@ public class FileLoadOperation {
         int i;
         if (photoLocation instanceof TL_fileEncryptedLocation) {
             this.location = new TL_inputEncryptedFileLocation();
-            this.location.f98id = photoLocation.volume_id;
+            this.location.var_id = photoLocation.volume_id;
             this.location.volume_id = photoLocation.volume_id;
             this.location.access_hash = photoLocation.secret;
             this.location.local_id = photoLocation.local_id;
-            this.f49iv = new byte[32];
-            System.arraycopy(photoLocation.f90iv, 0, this.f49iv, 0, this.f49iv.length);
+            this.var_iv = new byte[32];
+            System.arraycopy(photoLocation.var_iv, 0, this.var_iv, 0, this.var_iv.length);
             this.key = photoLocation.key;
             i = photoLocation.dc_id;
             this.datacenterId = i;
@@ -180,7 +180,7 @@ public class FileLoadOperation {
     public FileLoadOperation(SecureDocument secureDocument) {
         this.state = 0;
         this.location = new TL_inputSecureFileLocation();
-        this.location.f98id = secureDocument.secureFile.f203id;
+        this.location.var_id = secureDocument.secureFile.var_id;
         this.location.access_hash = secureDocument.secureFile.access_hash;
         this.datacenterId = secureDocument.secureFile.dc_id;
         this.totalBytesCount = secureDocument.secureFile.size;
@@ -225,17 +225,17 @@ public class FileLoadOperation {
             int i2;
             if (documentLocation instanceof TL_documentEncrypted) {
                 this.location = new TL_inputEncryptedFileLocation();
-                this.location.f98id = documentLocation.f84id;
+                this.location.var_id = documentLocation.var_id;
                 this.location.access_hash = documentLocation.access_hash;
                 i2 = documentLocation.dc_id;
                 this.datacenterId = i2;
                 this.initialDatacenterId = i2;
-                this.f49iv = new byte[32];
-                System.arraycopy(documentLocation.f85iv, 0, this.f49iv, 0, this.f49iv.length);
+                this.var_iv = new byte[32];
+                System.arraycopy(documentLocation.var_iv, 0, this.var_iv, 0, this.var_iv.length);
                 this.key = documentLocation.key;
             } else if (documentLocation instanceof TL_document) {
                 this.location = new TL_inputDocumentFileLocation();
-                this.location.f98id = documentLocation.f84id;
+                this.location.var_id = documentLocation.var_id;
                 this.location.access_hash = documentLocation.access_hash;
                 this.location.file_reference = documentLocation.file_reference;
                 if (this.location.file_reference == null) {
@@ -588,23 +588,23 @@ public class FileLoadOperation {
                 }
             }
         } else if (this.location.volume_id == 0 || this.location.local_id == 0) {
-            if (this.datacenterId == 0 || this.location.f98id == 0) {
+            if (this.datacenterId == 0 || this.location.var_id == 0) {
                 onFail(true, 0);
                 return false;
             } else if (this.encryptFile) {
-                fileNameTemp = this.datacenterId + "_" + this.location.f98id + ".temp.enc";
-                fileNameFinal = this.datacenterId + "_" + this.location.f98id + this.ext + ".enc";
+                fileNameTemp = this.datacenterId + "_" + this.location.var_id + ".temp.enc";
+                fileNameFinal = this.datacenterId + "_" + this.location.var_id + this.ext + ".enc";
                 if (this.key != null) {
-                    fileNameIv = this.datacenterId + "_" + this.location.f98id + ".iv.enc";
+                    fileNameIv = this.datacenterId + "_" + this.location.var_id + ".iv.enc";
                 }
             } else {
-                fileNameTemp = this.datacenterId + "_" + this.location.f98id + ".temp";
-                fileNameFinal = this.datacenterId + "_" + this.location.f98id + this.ext;
+                fileNameTemp = this.datacenterId + "_" + this.location.var_id + ".temp";
+                fileNameFinal = this.datacenterId + "_" + this.location.var_id + this.ext;
                 if (this.key != null) {
-                    fileNameIv = this.datacenterId + "_" + this.location.f98id + ".iv";
+                    fileNameIv = this.datacenterId + "_" + this.location.var_id + ".iv";
                 }
                 if (this.notLoadedBytesRanges != null) {
-                    fileNameParts = this.datacenterId + "_" + this.location.f98id + ".pt";
+                    fileNameParts = this.datacenterId + "_" + this.location.var_id + ".pt";
                 }
             }
         } else if (this.datacenterId == Integer.MIN_VALUE || this.location.volume_id == -2147483648L || this.datacenterId == 0) {
@@ -738,7 +738,7 @@ public class FileLoadOperation {
                             this.downloadedBytes = 0;
                             this.requestedBytesCount = 0;
                         } else {
-                            this.fiv.read(this.f49iv, 0, 32);
+                            this.fiv.read(this.var_iv, 0, 32);
                         }
                     }
                 } catch (Throwable e2222) {
@@ -1046,7 +1046,7 @@ public class FileLoadOperation {
                     this.downloadedBytes += currentBytesSize;
                     boolean finishedDownloading = this.totalBytesCount > 0 ? this.downloadedBytes >= this.totalBytesCount : currentBytesSize != this.currentDownloadChunkSize || ((this.totalBytesCount == this.downloadedBytes || this.downloadedBytes % this.currentDownloadChunkSize != 0) && (this.totalBytesCount <= 0 || this.totalBytesCount <= this.downloadedBytes));
                     if (this.key != null) {
-                        Utilities.aesIgeEncryption(bytes.buffer, this.key, this.f49iv, false, true, 0, bytes.limit());
+                        Utilities.aesIgeEncryption(bytes.buffer, this.key, this.var_iv, false, true, 0, bytes.limit());
                         if (finishedDownloading && this.bytesCountPadding != 0) {
                             bytes.limit(bytes.limit() - this.bytesCountPadding);
                         }
@@ -1095,7 +1095,7 @@ public class FileLoadOperation {
                                 } else {
                                     if (BuildVars.LOGS_ENABLED) {
                                         if (this.location != null) {
-                                            FileLog.m11e("invalid cdn hash " + this.location + " id = " + this.location.f98id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
+                                            FileLog.m11e("invalid cdn hash " + this.location + " id = " + this.location.var_id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
                                         } else if (this.webLocation != null) {
                                             FileLog.m11e("invalid cdn hash  " + this.webLocation + " id = " + getFileName());
                                         }
@@ -1109,7 +1109,7 @@ public class FileLoadOperation {
                     }
                     if (this.fiv != null) {
                         this.fiv.seek(0);
-                        this.fiv.write(this.f49iv);
+                        this.fiv.write(this.var_iv);
                     }
                     if (this.totalBytesCount > 0 && this.state == 1) {
                         copytNotLoadedRanges();
@@ -1184,7 +1184,7 @@ public class FileLoadOperation {
         } else {
             if (BuildVars.LOGS_ENABLED) {
                 if (this.location != null) {
-                    FileLog.m11e(error.text + " " + this.location + " id = " + this.location.f98id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
+                    FileLog.m11e(error.text + " " + this.location + " id = " + this.location.var_id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
                 } else if (this.webLocation != null) {
                     FileLog.m11e(error.text + " " + this.webLocation + " id = " + getFileName());
                 }

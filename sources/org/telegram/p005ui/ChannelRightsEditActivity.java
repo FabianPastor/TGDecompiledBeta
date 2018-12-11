@@ -244,7 +244,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
                         String value;
                         actionCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                         actionCell.setTag(Theme.key_windowBackgroundWhiteBlackText);
-                        if (ChannelRightsEditActivity.this.bannedRights.until_date == 0 || Math.abs(((long) ChannelRightsEditActivity.this.bannedRights.until_date) - (System.currentTimeMillis() / 1000)) > 315360000) {
+                        if (ChannelRightsEditActivity.this.bannedRights.until_date == 0 || Math.abs(((long) ChannelRightsEditActivity.this.bannedRights.until_date) - (System.currentTimeMillis() / 1000)) > NUM) {
                             value = LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever);
                         } else {
                             value = LocaleController.formatDateForBan((long) ChannelRightsEditActivity.this.bannedRights.until_date);
@@ -579,7 +579,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
         }
         if (position == 0) {
             Bundle args = new Bundle();
-            args.putInt("user_id", this.currentUser.f176id);
+            args.putInt("user_id", this.currentUser.var_id);
             presentFragment(new ProfileActivity(args));
         } else if (position == this.removeAdminRow) {
             if (this.currentType == 0) {

@@ -559,7 +559,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                         user = (User) this.contacts.get(position);
                     }
                     cell2.setUser(user, name, username2);
-                    cell2.setChecked(GroupCreateActivity.this.selectedContacts.indexOfKey(user.f176id) >= 0, false);
+                    cell2.setChecked(GroupCreateActivity.this.selectedContacts.indexOfKey(user.var_id) >= 0, false);
                     return;
             }
         }
@@ -673,7 +673,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
 
         /* renamed from: lambda$updateSearchResults$0$GroupCreateActivity$GroupCreateAdapter */
-        final /* synthetic */ void mo16962x38f269e(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo17072x38var_e(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
@@ -830,7 +830,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         this.editText.setHorizontalScrollBarEnabled(false);
         this.editText.setTextIsSelectable(false);
         this.editText.setPadding(0, 0, 0, 0);
-        this.editText.setImeOptions(268435462);
+        this.editText.setImeOptions(NUM);
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         if (this.chatType == 2) {
@@ -938,13 +938,13 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             User user = cell.getUser();
             if (user != null) {
                 boolean exists;
-                if (this.selectedContacts.indexOfKey(user.f176id) >= 0) {
+                if (this.selectedContacts.indexOfKey(user.var_id) >= 0) {
                     exists = true;
                 } else {
                     exists = false;
                 }
                 if (exists) {
-                    this.spansContainer.removeSpan((GroupCreateSpan) this.selectedContacts.get(user.f176id));
+                    this.spansContainer.removeSpan((GroupCreateSpan) this.selectedContacts.get(user.var_id));
                 } else if (this.maxCount != 0 && this.selectedContacts.size() == this.maxCount) {
                     return;
                 } else {
@@ -1039,7 +1039,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 User user = cell.getUser();
                 if (user != null) {
                     boolean z;
-                    if (this.selectedContacts.indexOfKey(user.f176id) >= 0) {
+                    if (this.selectedContacts.indexOfKey(user.var_id) >= 0) {
                         z = true;
                     } else {
                         z = false;

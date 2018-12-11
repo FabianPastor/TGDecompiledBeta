@@ -80,15 +80,15 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                 } else {
                     z = false;
                 }
-                boolean z2 = FeaturedStickersActivity.this.unreadStickers != null && FeaturedStickersActivity.this.unreadStickers.contains(Long.valueOf(stickerSet.set.f109id));
+                boolean z2 = FeaturedStickersActivity.this.unreadStickers != null && FeaturedStickersActivity.this.unreadStickers.contains(Long.valueOf(stickerSet.set.var_id));
                 cell.setStickersSet(stickerSet, z, z2);
-                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSet.set.f109id) >= 0) {
+                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSet.set.var_id) >= 0) {
                     installing = true;
                 } else {
                     installing = false;
                 }
                 if (installing && cell.isInstalled()) {
-                    FeaturedStickersActivity.this.installingStickerSets.remove(stickerSet.set.f109id);
+                    FeaturedStickersActivity.this.installingStickerSets.remove(stickerSet.set.var_id);
                     installing = false;
                     cell.setDrawProgress(false);
                 }
@@ -120,8 +120,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         final /* synthetic */ void lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(View v) {
             FeaturedStickerSetCell parent1 = (FeaturedStickerSetCell) v.getParent();
             StickerSetCovered pack = parent1.getStickerSet();
-            if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.f109id) < 0) {
-                FeaturedStickersActivity.this.installingStickerSets.put(pack.set.f109id, pack);
+            if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.var_id) < 0) {
+                FeaturedStickersActivity.this.installingStickerSets.put(pack.set.var_id, pack);
                 DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), pack.set, 2, FeaturedStickersActivity.this, false);
                 parent1.setDrawProgress(true);
             }
@@ -185,9 +185,9 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         if (position >= this.stickersStartRow && position < this.stickersEndRow && getParentActivity() != null) {
             InputStickerSet inputStickerSet;
             final StickerSetCovered stickerSet = (StickerSetCovered) DataQuery.getInstance(this.currentAccount).getFeaturedStickerSets().get(position);
-            if (stickerSet.set.f109id != 0) {
+            if (stickerSet.set.var_id != 0) {
                 inputStickerSet = new TL_inputStickerSetID();
-                inputStickerSet.f103id = stickerSet.set.f109id;
+                inputStickerSet.var_id = stickerSet.set.var_id;
             } else {
                 inputStickerSet = new TL_inputStickerSetShortName();
                 inputStickerSet.short_name = stickerSet.set.short_name;
@@ -197,7 +197,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
             stickersAlert.setInstallDelegate(new StickersAlertInstallDelegate() {
                 public void onStickerSetInstalled() {
                     view.setDrawProgress(true);
-                    FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.f109id, stickerSet);
+                    FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.var_id, stickerSet);
                 }
 
                 public void onStickerSetUninstalled() {

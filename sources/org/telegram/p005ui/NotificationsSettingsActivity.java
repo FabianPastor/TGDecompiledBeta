@@ -576,8 +576,8 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             for (a = 0; a < size; a++) {
                 chat = (Chat) chats.get(a);
                 if (!(chat.left || chat.kicked || chat.migrated_to != null)) {
-                    exception = (NotificationException) waitingForLoadExceptions.get((long) (-chat.f78id));
-                    waitingForLoadExceptions.remove((long) (-chat.f78id));
+                    exception = (NotificationException) waitingForLoadExceptions.get((long) (-chat.var_id));
+                    waitingForLoadExceptions.remove((long) (-chat.var_id));
                     if (exception != null) {
                         if (!ChatObject.isChannel(chat) || chat.megagroup) {
                             chatsResult.add(exception);
@@ -591,12 +591,12 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             for (a = 0; a < size; a++) {
                 user = (User) users.get(a);
                 if (!user.deleted) {
-                    waitingForLoadExceptions.remove((long) user.f176id);
+                    waitingForLoadExceptions.remove((long) user.var_id);
                 }
             }
             size = encryptedChats.size();
             for (a = 0; a < size; a++) {
-                waitingForLoadExceptions.remove(((long) ((EncryptedChat) encryptedChats.get(a)).f88id) << 32);
+                waitingForLoadExceptions.remove(((long) ((EncryptedChat) encryptedChats.get(a)).var_id) << 32);
             }
             size = waitingForLoadExceptions.size();
             for (a = 0; a < size; a++) {

@@ -34,12 +34,12 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     private class Item {
         public int icon;
         /* renamed from: id */
-        public int f213id;
+        public int var_id;
         public String text;
 
         public Item(int id, String text, int icon) {
             this.icon = icon;
-            this.f213id = id;
+            this.var_id = id;
             this.text = text;
         }
 
@@ -236,7 +236,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         }
         Item item = (Item) this.items.get(position);
         if (item != null) {
-            return item.f213id;
+            return item.var_id;
         }
         return -1;
     }

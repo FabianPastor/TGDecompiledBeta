@@ -76,9 +76,9 @@ public class MaxFileSizeCell extends FrameLayout {
         if (this.maxSize <= 10485760) {
             size = (int) (((float) this.maxSize) * progress);
         } else if (progress <= 0.8f) {
-            size = (int) (((float) 104857600) * (progress / 0.8f));
+            size = (int) (((float) NUM) * (progress / 0.8f));
         } else {
-            size = (int) (((float) 104857600) + ((((float) (this.maxSize - ((long) 104857600))) * (progress - 0.8f)) / 0.2f));
+            size = (int) (((float) NUM) + ((((float) (this.maxSize - ((long) NUM))) * (progress - 0.8f)) / 0.2f));
         }
         this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize((long) size)));
         didChangedSizeValue(size);
@@ -96,10 +96,10 @@ public class MaxFileSizeCell extends FrameLayout {
         this.maxSize = max;
         if (this.maxSize <= 10485760) {
             progress = ((float) size) / ((float) this.maxSize);
-        } else if (size <= ((long) 104857600)) {
-            progress = (((float) size) / ((float) 104857600)) * 0.8f;
+        } else if (size <= ((long) NUM)) {
+            progress = (((float) size) / ((float) NUM)) * 0.8f;
         } else {
-            progress = 0.8f + ((((float) (size - ((long) 104857600))) / ((float) (this.maxSize - ((long) 104857600)))) * 0.2f);
+            progress = 0.8f + ((((float) (size - ((long) NUM))) / ((float) (this.maxSize - ((long) NUM)))) * 0.2f);
         }
         this.seekBarView.setProgress(progress);
         this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));

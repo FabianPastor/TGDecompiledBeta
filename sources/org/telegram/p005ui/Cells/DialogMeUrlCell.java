@@ -97,7 +97,7 @@ public class DialogMeUrlCell extends BaseCell {
         this.drawVerified = false;
         if (this.recentMeUrl instanceof TL_recentMeUrlChat) {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.recentMeUrl.chat_id));
-            if (chat.f78id < 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
+            if (chat.var_id < 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
                 this.drawNameBroadcast = true;
                 this.nameLockTop = AndroidUtilities.m9dp(16.5f);
             } else {
@@ -170,7 +170,7 @@ public class DialogMeUrlCell extends BaseCell {
                 } else {
                     image = null;
                 }
-                if (this.recentMeUrl.chat_invite.chat.f78id < 0 || (ChatObject.isChannel(this.recentMeUrl.chat_invite.chat) && !this.recentMeUrl.chat_invite.chat.megagroup)) {
+                if (this.recentMeUrl.chat_invite.chat.var_id < 0 || (ChatObject.isChannel(this.recentMeUrl.chat_invite.chat) && !this.recentMeUrl.chat_invite.chat.megagroup)) {
                     this.drawNameBroadcast = true;
                     this.nameLockTop = AndroidUtilities.m9dp(16.5f);
                 } else {

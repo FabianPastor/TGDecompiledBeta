@@ -208,7 +208,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         }
 
         final /* synthetic */ void lambda$onScrolled$0$CallLogActivity$3(CallLogRow row) {
-            CallLogActivity.this.getCalls(((Message) row.calls.get(row.calls.size() - 1)).f104id, 100);
+            CallLogActivity.this.getCalls(((Message) row.calls.get(row.calls.size() - 1)).var_id, 100);
         }
     }
 
@@ -327,7 +327,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     }
                     if (this.calls.size() > 0) {
                         CallLogRow topRow = (CallLogRow) this.calls.get(0);
-                        if (topRow.user.f176id == userID && topRow.type == callType) {
+                        if (topRow.user.var_id == userID && topRow.type == callType) {
                             topRow.calls.add(0, msg.messageOwner);
                             this.listViewAdapter.notifyItemChanged(0);
                         }
@@ -349,7 +349,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 row = (CallLogRow) itrtr.next();
                 Iterator<Message> msgs = row.calls.iterator();
                 while (msgs.hasNext()) {
-                    if (ids.contains(Integer.valueOf(((Message) msgs.next()).f104id))) {
+                    if (ids.contains(Integer.valueOf(((Message) msgs.next()).var_id))) {
                         didChange = true;
                         msgs.remove();
                     }
@@ -451,8 +451,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         if (position >= 0 && position < this.calls.size()) {
             CallLogRow row = (CallLogRow) this.calls.get(position);
             Bundle args = new Bundle();
-            args.putInt("user_id", row.user.f176id);
-            args.putInt("message_id", ((Message) row.calls.get(0)).f104id);
+            args.putInt("user_id", row.user.var_id);
+            args.putInt("message_id", ((Message) row.calls.get(0)).var_id);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
             presentFragment(new ChatActivity(args), true);
         }
@@ -533,7 +533,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             req.limit = count;
             req.peer = new TL_inputPeerEmpty();
             req.filter = new TL_inputMessagesFilterPhoneCalls();
-            req.f156q = TtmlNode.ANONYMOUS_REGION_ID;
+            req.var_q = TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CallLogActivity$$Lambda$3(this), 2), this.classGuid);
         }
@@ -551,7 +551,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             this.endReached = msgs.messages.isEmpty();
             for (a = 0; a < msgs.users.size(); a++) {
                 User user = (User) msgs.users.get(a);
-                users.put(user.f176id, user);
+                users.put(user.var_id, user);
             }
             CallLogRow currentRow = this.calls.size() > 0 ? (CallLogRow) this.calls.get(this.calls.size() - 1) : null;
             for (a = 0; a < msgs.messages.size(); a++) {
@@ -563,7 +563,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                         callType = 2;
                     }
                     int userID = msg.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? msg.to_id.user_id : msg.from_id;
-                    if (!(currentRow != null && currentRow.user.f176id == userID && currentRow.type == callType)) {
+                    if (!(currentRow != null && currentRow.user.var_id == userID && currentRow.type == callType)) {
                         if (!(currentRow == null || this.calls.contains(currentRow))) {
                             this.calls.add(currentRow);
                         }
@@ -601,7 +601,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     final /* synthetic */ void lambda$confirmAndDelete$7$CallLogActivity(CallLogRow row, DialogInterface dialog, int which) {
         ArrayList<Integer> ids = new ArrayList();
         for (Message msg : row.calls) {
-            ids.add(Integer.valueOf(msg.f104id));
+            ids.add(Integer.valueOf(msg.var_id));
         }
         MessagesController.getInstance(this.currentAccount).deleteMessages(ids, null, null, 0, false);
     }

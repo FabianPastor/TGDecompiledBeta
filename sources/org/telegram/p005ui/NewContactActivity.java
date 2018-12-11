@@ -440,7 +440,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.codeField.setTextSize(1, 18.0f);
         this.codeField.setMaxLines(1);
         this.codeField.setGravity(19);
-        this.codeField.setImeOptions(268435461);
+        this.codeField.setImeOptions(NUM);
         this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
         linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
         this.codeField.addTextChangedListener(new CLASSNAME());
@@ -457,7 +457,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.phoneField.setTextSize(1, 18.0f);
         this.phoneField.setMaxLines(1);
         this.phoneField.setGravity(19);
-        this.phoneField.setImeOptions(268435462);
+        this.phoneField.setImeOptions(NUM);
         linearLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
         this.phoneField.addTextChangedListener(new CLASSNAME());
         this.phoneField.setOnEditorActionListener(new NewContactActivity$$Lambda$5(this));

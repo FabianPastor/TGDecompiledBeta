@@ -169,7 +169,7 @@ public class TermsOfServiceView extends FrameLayout {
     private void accept() {
         this.delegate.onAcceptTerms(this.currentAccount);
         TL_help_acceptTermsOfService req = new TL_help_acceptTermsOfService();
-        req.f132id = this.currentTos.f133id;
+        req.var_id = this.currentTos.var_id;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, TermsOfServiceView$$Lambda$2.$instance);
     }
 

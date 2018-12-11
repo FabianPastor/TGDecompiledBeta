@@ -976,7 +976,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
         protected String doInBackground(Void... voids) {
             HashMap<String, String> headers = new HashMap();
-            headers.put("Client-ID", "jzkbprff40iqj646a697cyrvl0zt2m6");
+            headers.put("Client-ID", "jzkbprfvar_iqj646a697cyrvl0zt2m6");
             int idx = this.videoId.indexOf(38);
             if (idx > 0) {
                 this.videoId = this.videoId.substring(0, idx);

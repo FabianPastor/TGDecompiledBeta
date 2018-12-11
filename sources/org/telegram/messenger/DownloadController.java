@@ -524,7 +524,7 @@ public class DownloadController implements NotificationCenterDelegate {
         if (downloadObject != null) {
             this.downloadQueueKeys.remove(fileName);
             if (state == 0 || state == 2) {
-                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.f47id, downloadObject.type, false);
+                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.var_id, downloadObject.type, false);
             }
             if (downloadObject.type == 1) {
                 this.photoDownloadQueue.remove(downloadObject);

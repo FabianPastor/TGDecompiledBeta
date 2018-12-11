@@ -101,10 +101,10 @@ public class CropAreaView extends View {
 
     public CropAreaView(Context context) {
         super(context);
-        this.dimPaint.setColor(-872415232);
+        this.dimPaint.setColor(-NUM);
         this.shadowPaint = new Paint();
         this.shadowPaint.setStyle(Style.FILL);
-        this.shadowPaint.setColor(436207616);
+        this.shadowPaint.setColor(NUM);
         this.shadowPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
         this.linePaint = new Paint();
         this.linePaint.setStyle(Style.FILL);

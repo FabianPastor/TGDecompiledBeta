@@ -139,14 +139,14 @@ public class FileRefController {
             TL_inputSingleMedia req = args[0];
             if (req.media instanceof TL_inputMediaDocument) {
                 mediaDocument = req.media;
-                locationKey = "file_" + mediaDocument.f188id.f95id;
+                locationKey = "file_" + mediaDocument.var_id.var_id;
                 location = new TL_inputDocumentFileLocation();
-                location.f98id = mediaDocument.f188id.f95id;
+                location.var_id = mediaDocument.var_id.var_id;
             } else if (req.media instanceof TL_inputMediaPhoto) {
                 mediaPhoto = req.media;
-                locationKey = "photo_" + mediaPhoto.f190id.f102id;
+                locationKey = "photo_" + mediaPhoto.var_id.var_id;
                 location = new TL_inputSecureFileLocation();
-                location.f98id = mediaPhoto.f190id.f102id;
+                location.var_id = mediaPhoto.var_id.var_id;
             } else {
                 sendErrorToObject(args, 0);
                 return;
@@ -168,14 +168,14 @@ public class FileRefController {
             TL_messages_sendMedia req3 = args[0];
             if (req3.media instanceof TL_inputMediaDocument) {
                 mediaDocument = (TL_inputMediaDocument) req3.media;
-                locationKey = "file_" + mediaDocument.f188id.f95id;
+                locationKey = "file_" + mediaDocument.var_id.var_id;
                 location = new TL_inputDocumentFileLocation();
-                location.f98id = mediaDocument.f188id.f95id;
+                location.var_id = mediaDocument.var_id.var_id;
             } else if (req3.media instanceof TL_inputMediaPhoto) {
                 mediaPhoto = (TL_inputMediaPhoto) req3.media;
-                locationKey = "photo_" + mediaPhoto.f190id.f102id;
+                locationKey = "photo_" + mediaPhoto.var_id.var_id;
                 location = new TL_inputSecureFileLocation();
-                location.f98id = mediaPhoto.f190id.f102id;
+                location.var_id = mediaPhoto.var_id.var_id;
             } else {
                 sendErrorToObject(args, 0);
                 return;
@@ -184,45 +184,45 @@ public class FileRefController {
             TL_messages_editMessage req4 = args[0];
             if (req4.media instanceof TL_inputMediaDocument) {
                 mediaDocument = (TL_inputMediaDocument) req4.media;
-                locationKey = "file_" + mediaDocument.f188id.f95id;
+                locationKey = "file_" + mediaDocument.var_id.var_id;
                 location = new TL_inputDocumentFileLocation();
-                location.f98id = mediaDocument.f188id.f95id;
+                location.var_id = mediaDocument.var_id.var_id;
             } else if (req4.media instanceof TL_inputMediaPhoto) {
                 mediaPhoto = (TL_inputMediaPhoto) req4.media;
-                locationKey = "photo_" + mediaPhoto.f190id.f102id;
+                locationKey = "photo_" + mediaPhoto.var_id.var_id;
                 location = new TL_inputSecureFileLocation();
-                location.f98id = mediaPhoto.f190id.f102id;
+                location.var_id = mediaPhoto.var_id.var_id;
             } else {
                 sendErrorToObject(args, 0);
                 return;
             }
         } else if (args[0] instanceof TL_messages_saveGif) {
             TL_messages_saveGif req5 = args[0];
-            locationKey = "file_" + req5.f154id.f95id;
+            locationKey = "file_" + req5.var_id.var_id;
             location = new TL_inputDocumentFileLocation();
-            location.f98id = req5.f154id.f95id;
+            location.var_id = req5.var_id.var_id;
         } else if (args[0] instanceof TL_messages_saveRecentSticker) {
             TL_messages_saveRecentSticker req6 = args[0];
-            locationKey = "file_" + req6.f155id.f95id;
+            locationKey = "file_" + req6.var_id.var_id;
             location = new TL_inputDocumentFileLocation();
-            location.f98id = req6.f155id.f95id;
+            location.var_id = req6.var_id.var_id;
         } else if (args[0] instanceof TL_messages_faveSticker) {
             TL_messages_faveSticker req7 = args[0];
-            locationKey = "file_" + req7.f142id.f95id;
+            locationKey = "file_" + req7.var_id.var_id;
             location = new TL_inputDocumentFileLocation();
-            location.f98id = req7.f142id.f95id;
+            location.var_id = req7.var_id.var_id;
         } else if (args[0] instanceof TL_messages_getAttachedStickers) {
             TL_messages_getAttachedStickers req8 = args[0];
             if (req8.media instanceof TL_inputStickeredMediaDocument) {
                 TL_inputStickeredMediaDocument mediaDocument2 = req8.media;
-                locationKey = "file_" + mediaDocument2.f193id.f95id;
+                locationKey = "file_" + mediaDocument2.var_id.var_id;
                 location = new TL_inputDocumentFileLocation();
-                location.f98id = mediaDocument2.f193id.f95id;
+                location.var_id = mediaDocument2.var_id.var_id;
             } else if (req8.media instanceof TL_inputStickeredMediaPhoto) {
                 TL_inputStickeredMediaPhoto mediaPhoto2 = req8.media;
-                locationKey = "photo_" + mediaPhoto2.f194id.f102id;
+                locationKey = "photo_" + mediaPhoto2.var_id.var_id;
                 location = new TL_inputSecureFileLocation();
-                location.f98id = mediaPhoto2.f194id.f102id;
+                location.var_id = mediaPhoto2.var_id.var_id;
             } else {
                 sendErrorToObject(args, 0);
                 return;
@@ -232,7 +232,7 @@ public class FileRefController {
             locationKey = "loc_" + location2.local_id + "_" + location2.volume_id;
         } else if (args[0] instanceof TL_inputDocumentFileLocation) {
             TL_inputDocumentFileLocation location22 = (TL_inputDocumentFileLocation) args[0];
-            locationKey = "file_" + location22.f98id;
+            locationKey = "file_" + location22.var_id;
         } else {
             sendErrorToObject(args, 0);
             return;
@@ -248,22 +248,22 @@ public class FileRefController {
             parentKey = "message" + messageObject.getId() + "_" + messageObject.getChannelId();
         } else if (parentObject2 instanceof WebPage) {
             WebPage webPage = (WebPage) parentObject2;
-            parentKey = "webpage" + webPage.f182id;
+            parentKey = "webpage" + webPage.var_id;
         } else if (parentObject2 instanceof User) {
-            parentKey = "user" + ((User) parentObject2).f176id;
+            parentKey = "user" + ((User) parentObject2).var_id;
         } else if (parentObject2 instanceof Chat) {
-            parentKey = "chat" + ((Chat) parentObject2).f78id;
+            parentKey = "chat" + ((Chat) parentObject2).var_id;
         } else if (parentObject2 instanceof String) {
             parentKey = "str" + ((String) parentObject2);
         } else if (parentObject2 instanceof TL_messages_stickerSet) {
             TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) parentObject2;
-            parentKey = "set" + stickerSet.set.f109id;
+            parentKey = "set" + stickerSet.set.var_id;
         } else if (parentObject2 instanceof StickerSetCovered) {
             StickerSetCovered stickerSet2 = (StickerSetCovered) parentObject2;
-            parentKey = "set" + stickerSet2.set.f109id;
+            parentKey = "set" + stickerSet2.set.var_id;
         } else if (parentObject2 instanceof InputStickerSet) {
             InputStickerSet inputStickerSet = (InputStickerSet) parentObject2;
-            parentKey = "set" + inputStickerSet.f103id;
+            parentKey = "set" + inputStickerSet.var_id;
         } else {
             parentKey = null;
         }
@@ -322,12 +322,12 @@ public class FileRefController {
             if (channelId != 0) {
                 req = new TL_channels_getMessages();
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-                req.f118id.add(Integer.valueOf(messageObject.getId()));
+                req.var_id.add(Integer.valueOf(messageObject.getId()));
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new FileRefController$$Lambda$0(this, locationKey, parentKey));
                 return;
             }
             req2 = new TL_messages_getMessages();
-            req2.f149id.add(Integer.valueOf(messageObject.getId()));
+            req2.var_id.add(Integer.valueOf(messageObject.getId()));
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new FileRefController$$Lambda$1(this, locationKey, parentKey));
         } else if (parentObject instanceof WebPage) {
             WebPage webPage = (WebPage) parentObject;
@@ -338,17 +338,17 @@ public class FileRefController {
         } else if (parentObject instanceof User) {
             User user = (User) parentObject;
             TL_users_getUsers req5 = new TL_users_getUsers();
-            req5.f173id.add(MessagesController.getInstance(this.currentAccount).getInputUser(user));
+            req5.var_id.add(MessagesController.getInstance(this.currentAccount).getInputUser(user));
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req5, new FileRefController$$Lambda$3(this, locationKey, parentKey));
         } else if (parentObject instanceof Chat) {
             Chat chat = (Chat) parentObject;
             if (chat instanceof TL_chat) {
                 TL_messages_getChats req6 = new TL_messages_getChats();
-                req6.f145id.add(Integer.valueOf(chat.f78id));
+                req6.var_id.add(Integer.valueOf(chat.var_id));
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req6, new FileRefController$$Lambda$4(this, locationKey, parentKey));
             } else if (chat instanceof TL_channel) {
                 TL_channels_getChannels req7 = new TL_channels_getChannels();
-                req7.f117id.add(MessagesController.getInputChannel(chat));
+                req7.var_id.add(MessagesController.getInputChannel(chat));
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req7, new FileRefController$$Lambda$5(this, locationKey, parentKey));
             }
         } else if (parentObject instanceof String) {
@@ -376,7 +376,7 @@ public class FileRefController {
                 req9.filter = new TL_inputMessagesFilterChatPhotos();
                 req9.limit = 80;
                 req9.offset_id = 0;
-                req9.f156q = TtmlNode.ANONYMOUS_REGION_ID;
+                req9.var_q = TtmlNode.ANONYMOUS_REGION_ID;
                 req9.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(id);
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req9, new FileRefController$$Lambda$11(this, locationKey, parentKey));
             } else if (string.startsWith("sent_")) {
@@ -386,12 +386,12 @@ public class FileRefController {
                     if (channelId != 0) {
                         req = new TL_channels_getMessages();
                         req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-                        req.f118id.add(Utilities.parseInt(params[2]));
+                        req.var_id.add(Utilities.parseInt(params[2]));
                         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new FileRefController$$Lambda$12(this, locationKey, parentKey));
                         return;
                     }
                     req2 = new TL_messages_getMessages();
-                    req2.f149id.add(Utilities.parseInt(params[2]));
+                    req2.var_id.add(Utilities.parseInt(params[2]));
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new FileRefController$$Lambda$13(this, locationKey, parentKey));
                     return;
                 }
@@ -403,14 +403,14 @@ public class FileRefController {
             TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) parentObject;
             req3 = new TL_messages_getStickerSet();
             req3.stickerset = new TL_inputStickerSetID();
-            req3.stickerset.f103id = stickerSet.set.f109id;
+            req3.stickerset.var_id = stickerSet.set.var_id;
             req3.stickerset.access_hash = stickerSet.set.access_hash;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, new FileRefController$$Lambda$14(this, locationKey, parentKey));
         } else if (parentObject instanceof StickerSetCovered) {
             StickerSetCovered stickerSet2 = (StickerSetCovered) parentObject;
             req3 = new TL_messages_getStickerSet();
             req3.stickerset = new TL_inputStickerSetID();
-            req3.stickerset.f103id = stickerSet2.set.f109id;
+            req3.stickerset.var_id = stickerSet2.set.var_id;
             req3.stickerset.access_hash = stickerSet2.set.access_hash;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, new FileRefController$$Lambda$15(this, locationKey, parentKey));
         } else if (parentObject instanceof InputStickerSet) {
@@ -501,9 +501,9 @@ public class FileRefController {
             if (objects != null) {
                 TL_inputSingleMedia req2 = requester.args[0];
                 if (req2.media instanceof TL_inputMediaDocument) {
-                    req2.media.f188id.file_reference = file_reference;
+                    req2.media.var_id.file_reference = file_reference;
                 } else if (req2.media instanceof TL_inputMediaPhoto) {
-                    ((TL_inputMediaPhoto) req2.media).f190id.file_reference = file_reference;
+                    ((TL_inputMediaPhoto) req2.media).var_id.file_reference = file_reference;
                 }
                 int index = multiMedia.multi_media.indexOf(req2);
                 if (index >= 0) {
@@ -524,37 +524,37 @@ public class FileRefController {
         } else if (requester.args[0] instanceof TL_messages_sendMedia) {
             TL_messages_sendMedia req3 = requester.args[0];
             if (req3.media instanceof TL_inputMediaDocument) {
-                ((TL_inputMediaDocument) req3.media).f188id.file_reference = file_reference;
+                ((TL_inputMediaDocument) req3.media).var_id.file_reference = file_reference;
             } else if (req3.media instanceof TL_inputMediaPhoto) {
-                ((TL_inputMediaPhoto) req3.media).f190id.file_reference = file_reference;
+                ((TL_inputMediaPhoto) req3.media).var_id.file_reference = file_reference;
             }
             SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
         } else if (requester.args[0] instanceof TL_messages_editMessage) {
             TL_messages_editMessage req4 = requester.args[0];
             if (req4.media instanceof TL_inputMediaDocument) {
-                ((TL_inputMediaDocument) req4.media).f188id.file_reference = file_reference;
+                ((TL_inputMediaDocument) req4.media).var_id.file_reference = file_reference;
             } else if (req4.media instanceof TL_inputMediaPhoto) {
-                ((TL_inputMediaPhoto) req4.media).f190id.file_reference = file_reference;
+                ((TL_inputMediaPhoto) req4.media).var_id.file_reference = file_reference;
             }
             SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
         } else if (requester.args[0] instanceof TL_messages_saveGif) {
             req = requester.args[0];
-            req.f154id.file_reference = file_reference;
+            req.var_id.file_reference = file_reference;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$17.$instance);
         } else if (requester.args[0] instanceof TL_messages_saveRecentSticker) {
             req = requester.args[0];
-            req.f155id.file_reference = file_reference;
+            req.var_id.file_reference = file_reference;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$18.$instance);
         } else if (requester.args[0] instanceof TL_messages_faveSticker) {
             req = requester.args[0];
-            req.f142id.file_reference = file_reference;
+            req.var_id.file_reference = file_reference;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$19.$instance);
         } else if (requester.args[0] instanceof TL_messages_getAttachedStickers) {
             req = requester.args[0];
             if (req.media instanceof TL_inputStickeredMediaDocument) {
-                req.media.f193id.file_reference = file_reference;
+                req.media.var_id.file_reference = file_reference;
             } else if (req.media instanceof TL_inputStickeredMediaPhoto) {
-                ((TL_inputStickeredMediaPhoto) req.media).f194id.file_reference = file_reference;
+                ((TL_inputStickeredMediaPhoto) req.media).var_id.file_reference = file_reference;
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, (RequestDelegate) requester.args[1]);
         } else if (requester.args[1] instanceof FileLoadOperation) {
@@ -884,7 +884,7 @@ public class FileRefController {
         if (!(location instanceof TL_inputDocumentFileLocation)) {
             return getFileReference(document.thumb, location);
         }
-        if (document.f84id == location.f98id) {
+        if (document.var_id == location.var_id) {
             return document.file_reference;
         }
         return null;
@@ -917,7 +917,7 @@ public class FileRefController {
             return null;
         }
         if (location instanceof TL_inputSecureFileLocation) {
-            return photo.f106id == location.f98id ? photo.file_reference : null;
+            return photo.var_id == location.var_id ? photo.file_reference : null;
         } else if (!(location instanceof TL_inputFileLocation)) {
             return null;
         } else {

@@ -232,12 +232,12 @@ public class ContactsAdapter extends SectionsAdapter {
                 User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) ((ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section - i))).get(position)).user_id));
                 userCell.setData(user, null, null, 0);
                 if (this.checkedMap != null) {
-                    userCell.setChecked(this.checkedMap.indexOfKey(user.f176id) >= 0, !this.scrolling);
+                    userCell.setChecked(this.checkedMap.indexOfKey(user.var_id) >= 0, !this.scrolling);
                 }
                 if (this.ignoreUsers == null) {
                     return;
                 }
-                if (this.ignoreUsers.indexOfKey(user.f176id) >= 0) {
+                if (this.ignoreUsers.indexOfKey(user.var_id) >= 0) {
                     userCell.setAlpha(0.5f);
                     return;
                 } else {

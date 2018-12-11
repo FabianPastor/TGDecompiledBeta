@@ -109,8 +109,8 @@ public class SessionCell extends FrameLayout {
                 this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
             }
             stringBuilder = new StringBuilder();
-            if (session.f112ip.length() != 0) {
-                stringBuilder.append(session.f112ip);
+            if (session.var_ip.length() != 0) {
+                stringBuilder.append(session.var_ip);
             }
             if (session.country.length() != 0) {
                 if (stringBuilder.length() != 0) {
@@ -173,8 +173,8 @@ public class SessionCell extends FrameLayout {
             this.onlineTextView.setText(LocaleController.stringForMessageListDate((long) session2.date_active));
             this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
             stringBuilder = new StringBuilder();
-            if (session2.f174ip.length() != 0) {
-                stringBuilder.append(session2.f174ip);
+            if (session2.var_ip.length() != 0) {
+                stringBuilder.append(session2.var_ip);
             }
             if (session2.region.length() != 0) {
                 if (stringBuilder.length() != 0) {

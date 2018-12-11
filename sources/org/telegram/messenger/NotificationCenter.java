@@ -142,10 +142,10 @@ public class NotificationCenter {
     private class DelayedPost {
         private Object[] args;
         /* renamed from: id */
-        private int f56id;
+        private int var_id;
 
         private DelayedPost(int id, Object[] args) {
-            this.f56id = id;
+            this.var_id = id;
             this.args = args;
         }
     }
@@ -595,7 +595,7 @@ public class NotificationCenter {
         if (!this.animationInProgress && !this.delayedPosts.isEmpty()) {
             for (int a = 0; a < this.delayedPosts.size(); a++) {
                 DelayedPost delayedPost = (DelayedPost) this.delayedPosts.get(a);
-                postNotificationNameInternal(delayedPost.f56id, true, delayedPost.args);
+                postNotificationNameInternal(delayedPost.var_id, true, delayedPost.args);
             }
             this.delayedPosts.clear();
         }

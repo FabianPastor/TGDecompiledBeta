@@ -574,7 +574,7 @@ public class RecyclerListView extends RecyclerView {
         }
 
         /* renamed from: lambda$onInterceptTouchEvent$0$RecyclerListView$RecyclerListViewItemClickListener */
-        final /* synthetic */ void mo16784xe03CLASSNAMEc() {
+        final /* synthetic */ void mo16892xe03CLASSNAMEc() {
             if (RecyclerListView.this.selectChildRunnable != null && RecyclerListView.this.currentChildView != null) {
                 RecyclerListView.this.onChildPressed(RecyclerListView.this.currentChildView, true);
                 RecyclerListView.this.selectChildRunnable = null;

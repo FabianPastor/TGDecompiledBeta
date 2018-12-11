@@ -75,7 +75,7 @@ public class JoinGroupAlert extends BottomSheet {
                                         MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putUsers(updates.users, false);
                                         MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putChats(updates.chats, false);
                                         Bundle args = new Bundle();
-                                        args.putInt("chat_id", chat.f78id);
+                                        args.putInt("chat_id", chat.var_id);
                                         if (MessagesController.getInstance(JoinGroupAlert.this.currentAccount).checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
                                             JoinGroupAlert.this.fragment.presentFragment(new ChatActivity(args), JoinGroupAlert.this.fragment instanceof ChatActivity);
                                             return;

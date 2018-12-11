@@ -576,7 +576,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
                 TL_dialog dialog = (TL_dialog) dialogs.get(position);
                 if (!DialogsActivity.this.onlySelect) {
-                    DialogsActivity.this.selectedDialog = dialog.f128id;
+                    DialogsActivity.this.selectedDialog = dialog.var_id;
                     boolean pinned = dialog.pinned;
                     BottomSheet.Builder builder = new BottomSheet.Builder(DialogsActivity.this.getParentActivity());
                     int lower_id = (int) DialogsActivity.this.selectedDialog;
@@ -592,7 +592,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         icons[1] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
                         icons[2] = R.drawable.chats_clear;
                         icons[3] = R.drawable.chats_leave;
-                        if (MessagesController.getInstance(DialogsActivity.this.currentAccount).isProxyDialog(dialog.f128id)) {
+                        if (MessagesController.getInstance(DialogsActivity.this.currentAccount).isProxyDialog(dialog.var_id)) {
                             items = new CharSequence[4];
                             items[0] = null;
                             items[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
@@ -678,7 +678,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 } else if (DialogsActivity.this.dialogsType != 3 || DialogsActivity.this.selectAlertString != null) {
                     return false;
                 } else {
-                    DialogsActivity.this.dialogsAdapter.addOrRemoveSelectedDialog(dialog.f128id, view);
+                    DialogsActivity.this.dialogsAdapter.addOrRemoveSelectedDialog(dialog.var_id, view);
                     DialogsActivity.this.updateSelectedCount();
                 }
                 return true;
@@ -1355,9 +1355,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             if (adapter == this.dialogsAdapter) {
                 TLObject object = this.dialogsAdapter.getItem(position);
                 if (object instanceof User) {
-                    dialog_id = (long) ((User) object).f176id;
+                    dialog_id = (long) ((User) object).var_id;
                 } else if (object instanceof TL_dialog) {
-                    dialog_id = ((TL_dialog) object).f128id;
+                    dialog_id = ((TL_dialog) object).var_id;
                 } else if (object instanceof TL_recentMeUrlChat) {
                     dialog_id = (long) (-((TL_recentMeUrlChat) object).chat_id);
                 } else if (object instanceof TL_recentMeUrlUser) {
@@ -1374,14 +1374,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         showDialog(new JoinGroupAlert(getParentActivity(), invite, hash, this));
                         return;
                     } else if (invite.chat != null) {
-                        dialog_id = (long) (-invite.chat.f78id);
+                        dialog_id = (long) (-invite.chat.var_id);
                     } else {
                         return;
                     }
                 } else if (object instanceof TL_recentMeUrlStickerSet) {
                     StickerSet stickerSet = ((TL_recentMeUrlStickerSet) object).set.set;
                     TL_inputStickerSetID set = new TL_inputStickerSetID();
-                    set.f103id = stickerSet.f109id;
+                    set.var_id = stickerSet.var_id;
                     set.access_hash = stickerSet.access_hash;
                     showDialog(new StickersAlert(getParentActivity(), this, set, null, null));
                     return;
@@ -1394,21 +1394,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 MessageObject obj = this.dialogsSearchAdapter.getItem(position);
                 isGlobalSearch = this.dialogsSearchAdapter.isGlobalSearch(position);
                 if (obj instanceof User) {
-                    dialog_id = (long) ((User) obj).f176id;
+                    dialog_id = (long) ((User) obj).var_id;
                     if (!this.onlySelect) {
                         this.dialogsSearchAdapter.putRecentSearch(dialog_id, (User) obj);
                     }
                 } else if (obj instanceof Chat) {
-                    if (((Chat) obj).f78id > 0) {
-                        dialog_id = (long) (-((Chat) obj).f78id);
+                    if (((Chat) obj).var_id > 0) {
+                        dialog_id = (long) (-((Chat) obj).var_id);
                     } else {
-                        dialog_id = AndroidUtilities.makeBroadcastId(((Chat) obj).f78id);
+                        dialog_id = AndroidUtilities.makeBroadcastId(((Chat) obj).var_id);
                     }
                     if (!this.onlySelect) {
                         this.dialogsSearchAdapter.putRecentSearch(dialog_id, (Chat) obj);
                     }
                 } else if (obj instanceof EncryptedChat) {
-                    dialog_id = ((long) ((EncryptedChat) obj).f88id) << 32;
+                    dialog_id = ((long) ((EncryptedChat) obj).var_id) << 32;
                     if (!this.onlySelect) {
                         this.dialogsSearchAdapter.putRecentSearch(dialog_id, (EncryptedChat) obj);
                     }
@@ -1497,7 +1497,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             array = getDialogsArray();
             for (a = array.size() - 1; a >= 0; a--) {
                 dialog = (TL_dialog) array.get(a);
-                if ((dialog.unread_count != 0 || dialog.unread_mark) && !MessagesController.getInstance(this.currentAccount).isDialogMuted(dialog.f128id)) {
+                if ((dialog.unread_count != 0 || dialog.unread_mark) && !MessagesController.getInstance(this.currentAccount).isDialogMuted(dialog.var_id)) {
                     this.listView.smoothScrollToPosition(a);
                     return;
                 }
@@ -1518,7 +1518,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     array = getDialogsArray();
                     for (a = Math.min(holder.getAdapterPosition(), array.size()) - 1; a >= 0; a--) {
                         dialog = (TL_dialog) array.get(a);
-                        if ((dialog.unread_count != 0 || dialog.unread_mark) && !MessagesController.getInstance(this.currentAccount).isDialogMuted(dialog.f128id)) {
+                        if ((dialog.unread_count != 0 || dialog.unread_mark) && !MessagesController.getInstance(this.currentAccount).isDialogMuted(dialog.var_id)) {
                             found = true;
                             this.listView.smoothScrollToPosition(a);
                             break;
@@ -1685,7 +1685,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                 int size = array.size();
                                 for (int a = holder.getAdapterPosition() + 1; a < size; a++) {
                                     TL_dialog dialog = (TL_dialog) array.get(a);
-                                    if ((dialog.unread_count != 0 || dialog.unread_mark) && !MessagesController.getInstance(this.currentAccount).isDialogMuted(dialog.f128id)) {
+                                    if ((dialog.unread_count != 0 || dialog.unread_mark) && !MessagesController.getInstance(this.currentAccount).isDialogMuted(dialog.var_id)) {
                                         this.arrowDrawable.setAnimationProgressAnimated(1.0f);
                                         found = true;
                                         break;

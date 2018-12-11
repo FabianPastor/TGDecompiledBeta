@@ -651,15 +651,15 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
                 for (a = 0; a < this.currentAdmins.size(); a++) {
                     user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((ChannelParticipant) this.currentAdmins.get(a)).user_id));
-                    this.selectedAdmins.put(user.f176id, user);
+                    this.selectedAdmins.put(user.var_id, user);
                 }
             }
             isChecked = checkBoxUserCell.isChecked();
             user = checkBoxUserCell.getCurrentUser();
             if (isChecked) {
-                this.selectedAdmins.remove(user.f176id);
+                this.selectedAdmins.remove(user.var_id);
             } else {
-                this.selectedAdmins.put(user.f176id, user);
+                this.selectedAdmins.put(user.var_id, user);
             }
             checkBoxUserCell.setChecked(!isChecked, true);
         }

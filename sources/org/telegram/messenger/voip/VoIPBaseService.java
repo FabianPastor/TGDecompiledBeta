@@ -662,12 +662,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     protected void showNotification(String name, FileLocation photo, Class<? extends Activity> activity) {
         Intent intent = new Intent(this, activity);
-        intent.addFlags(805306368);
+        intent.addFlags(NUM);
         Notification.Builder builder = new Notification.Builder(this).setContentTitle(LocaleController.getString("VoipOutgoingCall", R.string.VoipOutgoingCall)).setContentText(name).setSmallIcon(R.drawable.notification).setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
         if (VERSION.SDK_INT >= 16) {
             Intent endIntent = new Intent(this, VoIPActionsReceiver.class);
             endIntent.setAction(getPackageName() + ".END_CALL");
-            builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipEndCall", R.string.VoipEndCall), PendingIntent.getBroadcast(this, 0, endIntent, 134217728));
+            builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipEndCall", R.string.VoipEndCall), PendingIntent.getBroadcast(this, 0, endIntent, NUM));
             builder.setPriority(2);
         }
         if (VERSION.SDK_INT >= 17) {
@@ -1191,7 +1191,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     protected void showIncomingNotification(String name, CharSequence subText, TLObject userOrChat, List<User> list, int additionalMemberCount, Class<? extends Activity> activityOnClick) {
         Intent intent = new Intent(this, activityOnClick);
-        intent.addFlags(805306368);
+        intent.addFlags(NUM);
         Notification.Builder builder = new Notification.Builder(this).setContentTitle(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding)).setContentText(name).setSmallIcon(R.drawable.notification).setSubText(subText).setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
         if (VERSION.SDK_INT >= 26) {
             SharedPreferences nprefs = MessagesController.getGlobalNotificationsSettings();
@@ -1408,7 +1408,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         if (VERSION.SDK_INT < 23 || checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
             acceptIncomingCall();
             try {
-                PendingIntent.getActivity(this, 0, new Intent(this, getUIActivityClass()).addFlags(805306368), 0).send();
+                PendingIntent.getActivity(this, 0, new Intent(this, getUIActivityClass()).addFlags(NUM), 0).send();
                 return;
             } catch (Exception x) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -1493,7 +1493,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected PhoneAccountHandle addAccountToTelecomManager() {
         TelecomManager tm = (TelecomManager) getSystemService("telecom");
         User self = UserConfig.getInstance(this.currentAccount).getCurrentUser();
-        PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(this, TelegramConnectionService.class), TtmlNode.ANONYMOUS_REGION_ID + self.f176id);
+        PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(this, TelegramConnectionService.class), TtmlNode.ANONYMOUS_REGION_ID + self.var_id);
         tm.registerPhoneAccount(new PhoneAccount.Builder(handle, ContactsController.formatName(self.first_name, self.last_name)).setCapabilities(2048).setIcon(Icon.createWithResource(this, R.drawable.ic_launcher)).setHighlightColor(-13851168).addSupportedUriScheme("sip").build());
         return handle;
     }

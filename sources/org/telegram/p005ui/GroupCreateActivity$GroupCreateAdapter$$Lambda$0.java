@@ -16,6 +16,6 @@ final /* synthetic */ class GroupCreateActivity$GroupCreateAdapter$$Lambda$0 imp
     }
 
     public void run() {
-        this.arg$1.mo16962x38f269e(this.arg$2, this.arg$3);
+        this.arg$1.mo17072x38var_e(this.arg$2, this.arg$3);
     }
 }

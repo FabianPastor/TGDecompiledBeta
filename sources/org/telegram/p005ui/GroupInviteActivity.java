@@ -260,7 +260,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull info = args[0];
             int guid = ((Integer) args[1]).intValue();
-            if (info.f79id == this.chat_id && guid == this.classGuid) {
+            if (info.var_id == this.chat_id && guid == this.classGuid) {
                 this.invite = MessagesController.getInstance(this.currentAccount).getExportedInvite(this.chat_id);
                 if (this.invite instanceof TL_chatInviteExported) {
                     this.loading = false;

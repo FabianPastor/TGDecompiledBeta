@@ -386,7 +386,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         public int duration;
         public String genre;
         /* renamed from: id */
-        public long f52id;
+        public long var_id;
         public MessageObject messageObject;
         public String path;
         public String title;
@@ -432,7 +432,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
 
         /* renamed from: lambda$scheduleReloadRunnable$0$MediaController$GalleryObserverInternal */
-        final /* synthetic */ void mo6321x623ff813() {
+        final /* synthetic */ void mo6297x623fvar_() {
             if (PhotoViewer.getInstance().isVisible()) {
                 scheduleReloadRunnable();
                 return;
@@ -542,7 +542,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         public ArrayList<MessageEntity> entities;
         public int height;
         /* renamed from: id */
-        public String f53id;
+        public String var_id;
         public String imagePath;
         public String imageUrl;
         public boolean isCropped;
@@ -2363,7 +2363,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     byte[] bArr;
                     int reference = FileLoader.getInstance(messageObject.currentAccount).getFileReference(messageObject);
                     Document document = messageObject.getDocument();
-                    StringBuilder append = new StringBuilder().append("?account=").append(messageObject.currentAccount).append("&id=").append(document.f84id).append("&hash=").append(document.access_hash).append("&dc=").append(document.dc_id).append("&size=").append(document.size).append("&mime=").append(URLEncoder.encode(document.mime_type, CLASSNAMEC.UTF8_NAME)).append("&rid=").append(reference).append("&name=").append(URLEncoder.encode(FileLoader.getDocumentFileName(document), CLASSNAMEC.UTF8_NAME)).append("&reference=");
+                    StringBuilder append = new StringBuilder().append("?account=").append(messageObject.currentAccount).append("&id=").append(document.var_id).append("&hash=").append(document.access_hash).append("&dc=").append(document.dc_id).append("&size=").append(document.size).append("&mime=").append(URLEncoder.encode(document.mime_type, CLASSNAMEC.UTF8_NAME)).append("&rid=").append(reference).append("&name=").append(URLEncoder.encode(FileLoader.getDocumentFileName(document), CLASSNAMEC.UTF8_NAME)).append("&reference=");
                     if (document.file_reference != null) {
                         bArr = document.file_reference;
                     } else {
@@ -2640,7 +2640,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         this.recordingAudio = new TL_document();
         this.recordingAudio.file_reference = new byte[0];
         this.recordingAudio.dc_id = Integer.MIN_VALUE;
-        this.recordingAudio.f84id = (long) SharedConfig.getLastLocalId();
+        this.recordingAudio.var_id = (long) SharedConfig.getLastLocalId();
         this.recordingAudio.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
         this.recordingAudio.mime_type = "audio/ogg";
         this.recordingAudio.file_reference = new byte[0];
@@ -3840,7 +3840,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{Splitter: B:126:0x03c1, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x01f4 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x01f9 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
     /* JADX WARNING: Removed duplicated region for block: B:72:0x01fe A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
@@ -3849,7 +3849,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0216 A:{SYNTHETIC, Splitter: B:79:0x0216} */
     /* JADX WARNING: Removed duplicated region for block: B:385:0x099e  */
     /* JADX WARNING: Removed duplicated region for block: B:83:0x021d  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{Splitter: B:126:0x03c1, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x01f4 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x01f9 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
     /* JADX WARNING: Removed duplicated region for block: B:72:0x01fe A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
@@ -3858,7 +3858,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0216 A:{SYNTHETIC, Splitter: B:79:0x0216} */
     /* JADX WARNING: Removed duplicated region for block: B:83:0x021d  */
     /* JADX WARNING: Removed duplicated region for block: B:385:0x099e  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{Splitter: B:126:0x03c1, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Missing block: B:94:0x0289, code:
             if (r61.equals("nokia") != false) goto L_0x028b;
      */

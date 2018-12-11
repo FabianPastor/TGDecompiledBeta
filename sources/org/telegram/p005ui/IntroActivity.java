@@ -209,7 +209,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         private EGLDisplay eglDisplay;
         private EGLSurface eglSurface;
         /* renamed from: gl */
-        private GL f269gl;
+        private GL var_gl;
         private boolean initied;
         private long lastRenderCallTime;
         private int surfaceHeight;
@@ -286,7 +286,7 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                             finish();
                             return false;
                         } else if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                            this.f269gl = this.eglContext.getGL();
+                            this.var_gl = this.eglContext.getGL();
                             GLES20.glGenTextures(23, this.textures, 0);
                             loadTexture(R.drawable.intro_fast_arrow_shadow, 0);
                             loadTexture(R.drawable.intro_fast_arrow, 1);

@@ -199,7 +199,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         this.mediaSession.setCallback(new MediaSessionCallback());
         this.mediaSession.setFlags(3);
         Context context = getApplicationContext();
-        this.mediaSession.setSessionActivity(PendingIntent.getActivity(context, 99, new Intent(context, LaunchActivity.class), 134217728));
+        this.mediaSession.setSessionActivity(PendingIntent.getActivity(context, 99, new Intent(context, LaunchActivity.class), NUM));
         Bundle extras = new Bundle();
         extras.putBoolean(SLOT_RESERVATION_QUEUE, true);
         extras.putBoolean(SLOT_RESERVATION_SKIP_TO_PREV, true);
@@ -270,7 +270,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                         data.reuse();
                         if (MessageObject.isMusicMessage(message)) {
                             int did = cursor.intValue(0);
-                            message.f104id = cursor.intValue(2);
+                            message.var_id = cursor.intValue(2);
                             message.dialog_id = (long) did;
                             ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(did);
                             ArrayList<QueueItem> arrayList1 = (ArrayList) this.musicQueues.get(did);
@@ -295,7 +295,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     messagesStorage.getUsersInternal(TextUtils.join(",", usersToLoad), usersArrayList);
                     for (a = 0; a < usersArrayList.size(); a++) {
                         User user = (User) usersArrayList.get(a);
-                        this.users.put(user.f176id, user);
+                        this.users.put(user.var_id, user);
                     }
                 }
                 if (!chatsToLoad.isEmpty()) {
@@ -303,7 +303,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     messagesStorage.getChatsInternal(TextUtils.join(",", chatsToLoad), chatsArrayList);
                     for (a = 0; a < chatsArrayList.size(); a++) {
                         Chat chat = (Chat) chatsArrayList.get(a);
-                        this.chats.put(chat.f78id, chat);
+                        this.chats.put(chat.var_id, chat);
                     }
                 }
             }

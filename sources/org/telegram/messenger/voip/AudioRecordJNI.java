@@ -19,7 +19,7 @@ public class AudioRecordJNI {
     private long nativeInst;
     private boolean needResampling = false;
     /* renamed from: ns */
-    private NoiseSuppressor f73ns;
+    private NoiseSuppressor var_ns;
     private boolean running;
     private Thread thread;
 
@@ -103,9 +103,9 @@ public class AudioRecordJNI {
             this.agc.release();
             this.agc = null;
         }
-        if (this.f73ns != null) {
-            this.f73ns.release();
-            this.f73ns = null;
+        if (this.var_ns != null) {
+            this.var_ns.release();
+            this.var_ns = null;
         }
         if (this.aec != null) {
             this.aec.release();
@@ -138,9 +138,9 @@ public class AudioRecordJNI {
                     }
                     try {
                         if (NoiseSuppressor.isAvailable()) {
-                            this.f73ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
-                            if (this.f73ns != null) {
-                                this.f73ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
+                            this.var_ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
+                            if (this.var_ns != null) {
+                                this.var_ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
                             FileLog.m14w("NoiseSuppressor is not available on this device :(");

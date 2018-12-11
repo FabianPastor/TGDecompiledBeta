@@ -133,7 +133,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                         resultArrayNames.add(AndroidUtilities.generateSearchName("@" + contact.user.username, null, "@" + q));
                     }
                     if (contact.user != null) {
-                        foundUids.put(contact.user.f176id, true);
+                        foundUids.put(contact.user.var_id, true);
                     }
                     resultArray.add(contact);
                 } else {

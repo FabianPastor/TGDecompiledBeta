@@ -212,13 +212,13 @@ public class ID3v2Info extends AudioInfo {
                 }
                 break;
             case 2015625:
-                if (frameId.equals(ApicFrame.f270ID)) {
+                if (frameId.equals(ApicFrame.var_ID)) {
                     obj = 1;
                     break;
                 }
                 break;
             case 2074380:
-                if (frameId.equals(CommentFrame.f273ID)) {
+                if (frameId.equals(CommentFrame.var_ID)) {
                     obj = 3;
                     break;
                 }

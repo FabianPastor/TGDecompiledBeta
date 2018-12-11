@@ -821,7 +821,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     }
 
     final /* synthetic */ void lambda$createView$16$ChannelEditActivity(View v) {
-        GroupStickersActivity groupStickersActivity = new GroupStickersActivity(this.currentChat.f78id);
+        GroupStickersActivity groupStickersActivity = new GroupStickersActivity(this.currentChat.var_id);
         groupStickersActivity.setInfo(this.info);
         presentFragment(groupStickersActivity);
     }
@@ -852,7 +852,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoad) {
             ChatFull chatFull = args[0];
-            if (chatFull.f79id == this.chatId) {
+            if (chatFull.var_id == this.chatId) {
                 if (this.info == null) {
                     this.descriptionTextView.setText(chatFull.about);
                 }

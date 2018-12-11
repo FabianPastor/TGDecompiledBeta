@@ -101,7 +101,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 cell.setTag(Integer.valueOf(position));
                 StickerSetCovered stickerSet = (StickerSetCovered) ArchivedStickersActivity.this.sets.get(position);
                 cell.setStickersSet(stickerSet, position != ArchivedStickersActivity.this.sets.size() + -1);
-                cell.setChecked(DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).isStickerPackInstalled(stickerSet.set.f109id));
+                cell.setChecked(DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).isStickerPackInstalled(stickerSet.set.var_id));
             }
         }
 
@@ -211,9 +211,9 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         if (position >= this.stickersStartRow && position < this.stickersEndRow && getParentActivity() != null) {
             InputStickerSet inputStickerSet;
             StickerSetCovered stickerSet = (StickerSetCovered) this.sets.get(position);
-            if (stickerSet.set.f109id != 0) {
+            if (stickerSet.set.var_id != 0) {
                 inputStickerSet = new TL_inputStickerSetID();
-                inputStickerSet.f103id = stickerSet.set.f109id;
+                inputStickerSet.var_id = stickerSet.set.var_id;
             } else {
                 inputStickerSet = new TL_inputStickerSetShortName();
                 inputStickerSet.short_name = stickerSet.set.short_name;
@@ -272,7 +272,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 this.listAdapter.notifyDataSetChanged();
             }
             TL_messages_getArchivedStickers req = new TL_messages_getArchivedStickers();
-            req.offset_id = this.sets.isEmpty() ? 0 : ((StickerSetCovered) this.sets.get(this.sets.size() - 1)).set.f109id;
+            req.offset_id = this.sets.isEmpty() ? 0 : ((StickerSetCovered) this.sets.get(this.sets.size() - 1)).set.var_id;
             req.limit = 15;
             req.masks = this.currentType == 1;
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ArchivedStickersActivity$$Lambda$1(this)), this.classGuid);

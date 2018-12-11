@@ -240,7 +240,7 @@ public class UserCell extends FrameLayout {
                 } else {
                     this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                 }
-            } else if (currentUser.f176id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.f176id)))) {
+            } else if (currentUser.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.var_id)))) {
                 this.statusTextView.setTextColor(this.statusOnlineColor);
                 this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
             } else {

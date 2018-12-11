@@ -227,7 +227,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public void didSelectContact(User user, String param, ContactsActivity activity) {
         if (user != null) {
-            MessagesController.getInstance(this.currentAccount).blockUser(user.f176id);
+            MessagesController.getInstance(this.currentAccount).blockUser(user.var_id);
         }
     }
 

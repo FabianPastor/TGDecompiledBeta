@@ -34,7 +34,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private int tabCount;
     private int tabPadding = AndroidUtilities.m9dp(24.0f);
     private LinearLayout tabsContainer;
-    private int underlineColor = 436207616;
+    private int underlineColor = NUM;
     private int underlineHeight = AndroidUtilities.m9dp(2.0f);
 
     /* renamed from: org.telegram.ui.Components.ScrollSlidingTabStrip$ScrollSlidingTabStripDelegate */

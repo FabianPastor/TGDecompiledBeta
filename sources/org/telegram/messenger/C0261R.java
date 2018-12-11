@@ -2189,9 +2189,9 @@ public final class CLASSNAMER {
         public static final int NotificationsUnmuted = NUM;
         public static final int NumberUnknown = NUM;
         /* renamed from: OK */
-        public static final int f58OK = NUM;
+        public static final int var_OK = NUM;
         /* renamed from: Of */
-        public static final int f59Of = NUM;
+        public static final int var_Of = NUM;
         public static final int Online = NUM;
         public static final int OnlineCount_few = NUM;
         public static final int OnlineCount_many = NUM;

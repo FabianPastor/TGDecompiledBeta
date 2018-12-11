@@ -529,7 +529,7 @@ public class ChangePhoneActivity extends BaseFragment {
                         Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
                         pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
                         this.codeField[a].setBackgroundDrawable(pressedDrawable);
-                        this.codeField[a].setImeOptions(268435461);
+                        this.codeField[a].setImeOptions(NUM);
                         this.codeField[a].setTextSize(1, 20.0f);
                         this.codeField[a].setMaxLines(1);
                         this.codeField[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -931,7 +931,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.codeField.setTextSize(1, 18.0f);
             this.codeField.setMaxLines(1);
             this.codeField.setGravity(19);
-            this.codeField.setImeOptions(268435461);
+            this.codeField.setImeOptions(NUM);
             this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
             linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
             final ChangePhoneActivity changePhoneActivity = ChangePhoneActivity.this;
@@ -1019,7 +1019,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.phoneField.setTextSize(1, 18.0f);
             this.phoneField.setMaxLines(1);
             this.phoneField.setGravity(19);
-            this.phoneField.setImeOptions(268435461);
+            this.phoneField.setImeOptions(NUM);
             linearLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
             final ChangePhoneActivity changePhoneActivity2 = ChangePhoneActivity.this;
             this.phoneField.addTextChangedListener(new TextWatcher() {

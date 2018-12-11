@@ -301,7 +301,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         boolean isStickerPackInstalled;
         if (sameSet) {
             boolean wasInstalled = this.isInstalled;
-            isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.f109id);
+            isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.var_id);
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
                 if (!wasInstalled) {
@@ -328,7 +328,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 return;
             }
         }
-        isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.f109id);
+        isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(set.set.var_id);
         this.isInstalled = isStickerPackInstalled;
         if (isStickerPackInstalled) {
             this.addButton.setVisibility(4);

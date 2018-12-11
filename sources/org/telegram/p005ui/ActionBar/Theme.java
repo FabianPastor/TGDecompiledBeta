@@ -75,7 +75,7 @@ import org.telegram.p005ui.Components.ThemeEditorView;
 
 /* renamed from: org.telegram.ui.ActionBar.Theme */
 public class Theme {
-    public static final int ACTION_BAR_AUDIO_SELECTOR_COLOR = 788529152;
+    public static final int ACTION_BAR_AUDIO_SELECTOR_COLOR = NUM;
     public static final int ACTION_BAR_MEDIA_PICKER_COLOR = -13421773;
     public static final int ACTION_BAR_PHOTO_VIEWER_COLOR = NUM;
     public static final int ACTION_BAR_PICKER_SELECTOR_COLOR = -12763843;
@@ -1173,7 +1173,7 @@ public class Theme {
         defaultColors.put(key_dialogBackgroundGray, Integer.valueOf(-986896));
         defaultColors.put(key_dialogTextBlack, Integer.valueOf(-14540254));
         defaultColors.put(key_dialogTextLink, Integer.valueOf(-14255946));
-        defaultColors.put(key_dialogLinkSelection, Integer.valueOf(862104035));
+        defaultColors.put(key_dialogLinkSelection, Integer.valueOf(NUM));
         defaultColors.put(key_dialogTextRed, Integer.valueOf(-3319206));
         defaultColors.put(key_dialogTextRed2, Integer.valueOf(-1434339));
         defaultColors.put(key_dialogTextBlue, Integer.valueOf(-13660983));
@@ -1201,14 +1201,14 @@ public class Theme {
         defaultColors.put(key_dialogLineProgress, Integer.valueOf(-11371101));
         defaultColors.put(key_dialogLineProgressBackground, Integer.valueOf(-2368549));
         defaultColors.put(key_dialogButton, Integer.valueOf(-11955764));
-        defaultColors.put(key_dialogButtonSelector, Integer.valueOf(251658240));
+        defaultColors.put(key_dialogButtonSelector, Integer.valueOf(NUM));
         defaultColors.put(key_dialogScrollGlow, Integer.valueOf(-657673));
         defaultColors.put(key_dialogRoundCheckBox, Integer.valueOf(-12664327));
         defaultColors.put(key_dialogRoundCheckBoxCheck, Integer.valueOf(-1));
         defaultColors.put(key_dialogBadgeBackground, Integer.valueOf(-12664327));
         defaultColors.put(key_dialogBadgeText, Integer.valueOf(-1));
         defaultColors.put(key_dialogCameraIcon, Integer.valueOf(-1));
-        defaultColors.put(key_dialog_inlineProgressBackground, Integer.valueOf(-151981323));
+        defaultColors.put(key_dialog_inlineProgressBackground, Integer.valueOf(-NUM));
         defaultColors.put(key_dialog_inlineProgress, Integer.valueOf(-9735304));
         defaultColors.put(key_windowBackgroundWhite, Integer.valueOf(-1));
         defaultColors.put(key_progressCircle, Integer.valueOf(-11371101));
@@ -1241,7 +1241,7 @@ public class Theme {
         defaultColors.put(key_windowBackgroundWhiteHintText, Integer.valueOf(-5723992));
         defaultColors.put(key_windowBackgroundWhiteValueText, Integer.valueOf(-12937771));
         defaultColors.put(key_windowBackgroundWhiteLinkText, Integer.valueOf(-14255946));
-        defaultColors.put(key_windowBackgroundWhiteLinkSelection, Integer.valueOf(862104035));
+        defaultColors.put(key_windowBackgroundWhiteLinkSelection, Integer.valueOf(NUM));
         defaultColors.put(key_windowBackgroundWhiteBlueHeader, Integer.valueOf(-12937771));
         defaultColors.put(key_windowBackgroundWhiteInputField, Integer.valueOf(-2368549));
         defaultColors.put(key_windowBackgroundWhiteInputFieldActivated, Integer.valueOf(-13129232));
@@ -1253,7 +1253,7 @@ public class Theme {
         defaultColors.put(key_checkboxSquareCheck, Integer.valueOf(-1));
         defaultColors.put(key_checkboxSquareUnchecked, Integer.valueOf(-9211021));
         defaultColors.put(key_checkboxSquareDisabled, Integer.valueOf(-5197648));
-        defaultColors.put(key_listSelector, Integer.valueOf(251658240));
+        defaultColors.put(key_listSelector, Integer.valueOf(NUM));
         defaultColors.put(key_radioBackground, Integer.valueOf(-5000269));
         defaultColors.put(key_radioBackgroundChecked, Integer.valueOf(-13129232));
         defaultColors.put(key_windowBackgroundGray, Integer.valueOf(-986896));
@@ -1321,8 +1321,8 @@ public class Theme {
         defaultColors.put(key_chats_attachMessage, Integer.valueOf(-11697229));
         defaultColors.put(key_chats_actionMessage, Integer.valueOf(-11697229));
         defaultColors.put(key_chats_date, Integer.valueOf(-6710887));
-        defaultColors.put(key_chats_pinnedOverlay, Integer.valueOf(134217728));
-        defaultColors.put(key_chats_tabletSelectedOverlay, Integer.valueOf(251658240));
+        defaultColors.put(key_chats_pinnedOverlay, Integer.valueOf(NUM));
+        defaultColors.put(key_chats_tabletSelectedOverlay, Integer.valueOf(NUM));
         defaultColors.put(key_chats_sentCheck, Integer.valueOf(-12146122));
         defaultColors.put(key_chats_sentClock, Integer.valueOf(-9061026));
         defaultColors.put(key_chats_sentError, Integer.valueOf(-2796974));
@@ -1508,7 +1508,7 @@ public class Theme {
         defaultColors.put(key_chat_inVenueInfoSelectedText, Integer.valueOf(-7752511));
         defaultColors.put(key_chat_outVenueInfoSelectedText, Integer.valueOf(-10112933));
         defaultColors.put(key_chat_mediaInfoText, Integer.valueOf(-1));
-        defaultColors.put(key_chat_linkSelectBackground, Integer.valueOf(862104035));
+        defaultColors.put(key_chat_linkSelectBackground, Integer.valueOf(NUM));
         defaultColors.put(key_chat_textSelectBackground, Integer.valueOf(NUM));
         defaultColors.put(key_chat_emojiPanelBackground, Integer.valueOf(-657673));
         defaultColors.put(key_chat_emojiPanelBadgeBackground, Integer.valueOf(-11688214));
@@ -1577,7 +1577,7 @@ public class Theme {
         defaultColors.put(key_chat_recordTime, Integer.valueOf(-11711413));
         defaultColors.put(key_chat_emojiPanelNewTrending, Integer.valueOf(-11688214));
         defaultColors.put(key_chat_gifSaveHintText, Integer.valueOf(-1));
-        defaultColors.put(key_chat_gifSaveHintBackground, Integer.valueOf(-871296751));
+        defaultColors.put(key_chat_gifSaveHintBackground, Integer.valueOf(-NUM));
         defaultColors.put(key_chat_goDownButton, Integer.valueOf(-1));
         defaultColors.put(key_chat_goDownButtonShadow, Integer.valueOf(ACTION_BAR_VIDEO_EDIT_COLOR));
         defaultColors.put(key_chat_goDownButtonIcon, Integer.valueOf(-5723992));
@@ -1586,7 +1586,7 @@ public class Theme {
         defaultColors.put(key_chat_messagePanelCancelInlineBot, Integer.valueOf(-5395027));
         defaultColors.put(key_chat_messagePanelVoicePressed, Integer.valueOf(-1));
         defaultColors.put(key_chat_messagePanelVoiceBackground, Integer.valueOf(-11037236));
-        defaultColors.put(key_chat_messagePanelVoiceShadow, Integer.valueOf(218103808));
+        defaultColors.put(key_chat_messagePanelVoiceShadow, Integer.valueOf(NUM));
         defaultColors.put(key_chat_messagePanelVoiceDelete, Integer.valueOf(-9211021));
         defaultColors.put(key_chat_messagePanelVoiceDuration, Integer.valueOf(-1));
         defaultColors.put(key_chat_inlineResultIcon, Integer.valueOf(-11037236));
@@ -1613,7 +1613,7 @@ public class Theme {
         defaultColors.put(key_chat_mediaLoaderPhotoSelected, Integer.valueOf(ACTION_BAR_PHOTO_VIEWER_COLOR));
         defaultColors.put(key_chat_mediaLoaderPhotoIcon, Integer.valueOf(-1));
         defaultColors.put(key_chat_mediaLoaderPhotoIconSelected, Integer.valueOf(-2500135));
-        defaultColors.put(key_chat_secretTimerBackground, Integer.valueOf(-868326258));
+        defaultColors.put(key_chat_secretTimerBackground, Integer.valueOf(-NUM));
         defaultColors.put(key_chat_secretTimerText, Integer.valueOf(-1));
         defaultColors.put(key_profile_creatorIcon, Integer.valueOf(-12937771));
         defaultColors.put(key_profile_adminIcon, Integer.valueOf(-8026747));
@@ -1631,8 +1631,8 @@ public class Theme {
         defaultColors.put(key_player_actionBarItems, Integer.valueOf(-7697782));
         defaultColors.put(key_player_background, Integer.valueOf(-1));
         defaultColors.put(key_player_time, Integer.valueOf(-7564650));
-        defaultColors.put(key_player_progressBackground, Integer.valueOf(419430400));
-        defaultColors.put(key_player_progressCachedBackground, Integer.valueOf(419430400));
+        defaultColors.put(key_player_progressBackground, Integer.valueOf(NUM));
+        defaultColors.put(key_player_progressCachedBackground, Integer.valueOf(NUM));
         defaultColors.put(key_player_progress, Integer.valueOf(-14438417));
         defaultColors.put(key_player_placeholder, Integer.valueOf(-5723992));
         defaultColors.put(key_player_placeholderBackground, Integer.valueOf(-986896));

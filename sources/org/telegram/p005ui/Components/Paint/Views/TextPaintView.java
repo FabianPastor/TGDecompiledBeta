@@ -202,7 +202,7 @@ public class TextPaintView extends EntityView {
         float scale = ((ViewGroup) getParent()).getScaleX();
         float width = (((float) getWidth()) * getScale()) + (((float) AndroidUtilities.m9dp(46.0f)) / scale);
         float height = (((float) getHeight()) * getScale()) + (((float) AndroidUtilities.m9dp(20.0f)) / scale);
-        return new Rect((this.position.f240x - (width / 2.0f)) * scale, (this.position.f241y - (height / 2.0f)) * scale, width * scale, height * scale);
+        return new Rect((this.position.var_x - (width / 2.0f)) * scale, (this.position.var_y - (height / 2.0f)) * scale, width * scale, height * scale);
     }
 
     protected TextViewSelectionView createSelectionView() {

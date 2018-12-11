@@ -271,9 +271,9 @@ public class MessageObject {
         public byte minX;
         public byte minY;
         /* renamed from: ph */
-        public float f54ph;
+        public float var_ph;
         /* renamed from: pw */
-        public int f55pw;
+        public int var_pw;
         public float[] siblingHeights;
         public int spanSize;
 
@@ -282,9 +282,9 @@ public class MessageObject {
             this.maxX = (byte) maxX;
             this.minY = (byte) minY;
             this.maxY = (byte) maxY;
-            this.f55pw = w;
+            this.var_pw = w;
             this.spanSize = w;
-            this.f54ph = h;
+            this.var_ph = h;
             this.flags = (byte) flags;
         }
     }
@@ -350,7 +350,7 @@ public class MessageObject {
                     PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
                     GroupedMessagePosition position = new GroupedMessagePosition();
                     position.last = a == count + -1;
-                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.f108w) / ((float) photoSize.f107h);
+                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.var_w) / ((float) photoSize.var_h);
                     if (position.aspectRatio > 1.2f) {
                         proportions.append("w");
                     } else if (position.aspectRatio < 0.8f) {
@@ -485,7 +485,7 @@ public class MessageObject {
                                 pos.set(k, k, i, i, width, lineHeight / 814.0f, flags);
                                 index++;
                             }
-                            posToFix.f55pw += spanLeft;
+                            posToFix.var_pw += spanLeft;
                             posToFix.spanSize += spanLeft;
                             y += lineHeight;
                         }
@@ -626,7 +626,7 @@ public class MessageObject {
                             if (pos.spanSize != 1000) {
                                 pos.spanSize += 108;
                             }
-                            pos.f55pw += 108;
+                            pos.var_pw += 108;
                         } else if ((pos.flags & 2) != 0) {
                             if (pos.spanSize != 1000) {
                                 pos.spanSize -= 108;
@@ -1285,7 +1285,7 @@ public class MessageObject {
             messagesByDays.put(this.dateKey, new ArrayList());
             TL_message dateMsg = new TL_message();
             dateMsg.message = LocaleController.formatDateChat((long) event.date);
-            dateMsg.f104id = 0;
+            dateMsg.var_id = 0;
             dateMsg.date = event.date;
             MessageObject dateObj = new MessageObject(accountNum, dateMsg, false);
             dateObj.type = 10;
@@ -1312,7 +1312,7 @@ public class MessageObject {
         this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth), Integer.valueOf(dateDay)});
         this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth)});
         Peer to_id = new TL_peerChannel();
-        to_id.channel_id = chat.f78id;
+        to_id.channel_id = chat.var_id;
         Message message = null;
         User whoUser;
         String str;
@@ -1341,14 +1341,14 @@ public class MessageObject {
                 TL_photoSize photoSize = new TL_photoSize();
                 photoSize.location = event.action.new_photo.photo_small;
                 photoSize.type = "s";
-                photoSize.f107h = 80;
-                photoSize.f108w = 80;
+                photoSize.var_h = 80;
+                photoSize.var_w = 80;
                 this.messageOwner.action.photo.sizes.add(photoSize);
                 photoSize = new TL_photoSize();
                 photoSize.location = event.action.new_photo.photo_big;
                 photoSize.type = "m";
-                photoSize.f107h = 640;
-                photoSize.f108w = 640;
+                photoSize.var_h = 640;
+                photoSize.var_w = 640;
                 this.messageOwner.action.photo.sizes.add(photoSize);
                 if (chat.megagroup) {
                     this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedGroupPhoto", R.string.EventLogEditedGroupPhoto), "un1", fromUser);
@@ -1653,7 +1653,7 @@ public class MessageObject {
                 } else {
                     changedCaption = true;
                 }
-                if (newMessage.media.getClass() == oldMessage.media.getClass() && ((newMessage.media.photo == null || oldMessage.media.photo == null || newMessage.media.photo.f106id == oldMessage.media.photo.f106id) && (newMessage.media.document == null || oldMessage.media.document == null || newMessage.media.document.f84id == oldMessage.media.document.f84id))) {
+                if (newMessage.media.getClass() == oldMessage.media.getClass() && ((newMessage.media.photo == null || oldMessage.media.photo == null || newMessage.media.photo.var_id == oldMessage.media.photo.var_id) && (newMessage.media.document == null || oldMessage.media.document == null || newMessage.media.document.var_id == oldMessage.media.document.var_id))) {
                     changedMedia = false;
                 } else {
                     changedMedia = true;
@@ -1702,11 +1702,11 @@ public class MessageObject {
         Message message2 = this.messageOwner;
         int i = mid[0];
         mid[0] = i + 1;
-        message2.f104id = i;
-        this.eventId = event.f113id;
+        message2.var_id = i;
+        this.eventId = event.var_id;
         this.messageOwner.out = false;
         this.messageOwner.to_id = new TL_peerChannel();
-        this.messageOwner.to_id.channel_id = chat.f78id;
+        this.messageOwner.to_id.channel_id = chat.var_id;
         this.messageOwner.unread = false;
         if (chat.megagroup) {
             message2 = this.messageOwner;
@@ -1720,7 +1720,7 @@ public class MessageObject {
             message.out = false;
             int i2 = mid[0];
             mid[0] = i2 + 1;
-            message.f104id = i2;
+            message.var_id = i2;
             message.reply_to_msg_id = 0;
             message.flags &= -32769;
             if (chat.megagroup) {
@@ -1802,7 +1802,7 @@ public class MessageObject {
         }
         if (offset >= 0) {
             entity = new TL_messageEntityMentionName();
-            entity.user_id = user.f176id;
+            entity.user_id = user.var_id;
             entity.offset = offset;
             entity.length = name.length();
             entities.add(entity);
@@ -1812,7 +1812,7 @@ public class MessageObject {
         }
         if (offset >= 0) {
             entity = new TL_messageEntityMentionName();
-            entity.user_id = user.f176id;
+            entity.user_id = user.var_id;
             entity.offset = (name.length() + offset) + 2;
             entity.length = user.username.length() + 1;
             entities.add(entity);
@@ -1847,13 +1847,13 @@ public class MessageObject {
             game = this.replyMessageObject.messageOwner.media.game;
         }
         if (game != null) {
-            if (fromUser == null || fromUser.f176id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+            if (fromUser == null || fromUser.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                 this.messageText = replaceWithLink(LocaleController.formatString("ActionUserScoredInGame", R.string.ActionUserScoredInGame, LocaleController.formatPluralString("Points", this.messageOwner.action.score)), "un1", fromUser);
             } else {
                 this.messageText = LocaleController.formatString("ActionYouScoredInGame", R.string.ActionYouScoredInGame, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
             }
             this.messageText = replaceWithLink(this.messageText, "un2", game);
-        } else if (fromUser == null || fromUser.f176id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+        } else if (fromUser == null || fromUser.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
             this.messageText = replaceWithLink(LocaleController.formatString("ActionUserScored", R.string.ActionUserScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score)), "un1", fromUser);
         } else {
             this.messageText = LocaleController.formatString("ActionYouScored", R.string.ActionYouScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
@@ -2012,12 +2012,12 @@ public class MessageObject {
         if (webPage == null || webPage.cached_page == null) {
             return null;
         }
-        if (webPage.photo != null && webPage.photo.f106id == id) {
+        if (webPage.photo != null && webPage.photo.var_id == id) {
             return webPage.photo;
         }
         for (int a = 0; a < webPage.cached_page.photos.size(); a++) {
             Photo photo = (Photo) webPage.cached_page.photos.get(a);
-            if (photo.f106id == id) {
+            if (photo.var_id == id) {
                 return photo;
             }
         }
@@ -2028,12 +2028,12 @@ public class MessageObject {
         if (webPage == null || webPage.cached_page == null) {
             return null;
         }
-        if (webPage.document != null && webPage.document.f84id == id) {
+        if (webPage.document != null && webPage.document.var_id == id) {
             return webPage.document;
         }
         for (int a = 0; a < webPage.cached_page.documents.size(); a++) {
             Document document = (Document) webPage.cached_page.documents.get(a);
-            if (document.f84id == id) {
+            if (document.var_id == id) {
                 return document;
             }
         }
@@ -2060,7 +2060,7 @@ public class MessageObject {
             message.media.document = getDocumentWithId(webPage, pageBlockVideo.video_id);
         }
         message.message = TtmlNode.ANONYMOUS_REGION_ID;
-        message.f104id = Utilities.random.nextInt();
+        message.var_id = Utilities.random.nextInt();
         message.date = this.messageOwner.date;
         message.to_id = this.messageOwner.to_id;
         message.out = this.messageOwner.out;
@@ -2106,7 +2106,7 @@ public class MessageObject {
         if (this.messageOwner.message == null) {
             return;
         }
-        if ((this.messageOwner.f104id < 0 || isEditing()) && this.messageOwner.params != null) {
+        if ((this.messageOwner.var_id < 0 || isEditing()) && this.messageOwner.params != null) {
             String param = (String) this.messageOwner.params.get("ve");
             if (param != null && (isVideo() || isNewGif() || isRoundVideo())) {
                 this.videoEditedInfo = new VideoEditedInfo();
@@ -2332,7 +2332,7 @@ public class MessageObject {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeImageSize) {
                 TL_documentAttributeImageSize size = (TL_documentAttributeImageSize) attribute;
-                if (size.f87w >= 6000 || size.f86h >= 6000) {
+                if (size.var_w >= 6000 || size.var_h >= 6000) {
                     return false;
                 }
                 return true;
@@ -2349,8 +2349,8 @@ public class MessageObject {
             for (int a = 0; a < document.attributes.size(); a++) {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f87w;
-                    height = attribute.f87w;
+                    width = attribute.var_w;
+                    height = attribute.var_w;
                     round = attribute.round_message;
                 }
             }
@@ -2369,8 +2369,8 @@ public class MessageObject {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (!(attribute instanceof TL_documentAttributeAnimated)) {
                     if (attribute instanceof TL_documentAttributeVideo) {
-                        width = attribute.f87w;
-                        height = attribute.f87w;
+                        width = attribute.var_w;
+                        height = attribute.var_w;
                     }
                 }
             }
@@ -2391,8 +2391,8 @@ public class MessageObject {
                 if (attribute instanceof TL_documentAttributeAnimated) {
                     animated = true;
                 } else if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f87w;
-                    height = attribute.f87w;
+                    width = attribute.var_w;
+                    height = attribute.var_w;
                 }
             }
             if (animated && width <= 1280 && height <= 1280) {
@@ -2449,8 +2449,8 @@ public class MessageObject {
                     } else if (this.photoThumbs != null && !this.photoThumbs.isEmpty() && this.messageOwner.media.document.thumb != null) {
                         photoObject = (PhotoSize) this.photoThumbs.get(0);
                         photoObject.location = this.messageOwner.media.document.thumb.location;
-                        photoObject.f108w = this.messageOwner.media.document.thumb.f108w;
-                        photoObject.f107h = this.messageOwner.media.document.thumb.f107h;
+                        photoObject.var_w = this.messageOwner.media.document.thumb.var_w;
+                        photoObject.var_h = this.messageOwner.media.document.thumb.var_h;
                     }
                 }
             } else if (this.messageOwner.media instanceof TL_messageMediaGame) {
@@ -2533,7 +2533,7 @@ public class MessageObject {
                     names.append(", ");
                 }
                 names.append(name);
-                names.setSpan(new URLSpanNoUnderlineBold(TtmlNode.ANONYMOUS_REGION_ID + user.f176id), start, name.length() + start, 33);
+                names.setSpan(new URLSpanNoUnderlineBold(TtmlNode.ANONYMOUS_REGION_ID + user.var_id), start, name.length() + start, 33);
             }
         }
         return TextUtils.replace(source, new String[]{param}, new CharSequence[]{names});
@@ -2548,10 +2548,10 @@ public class MessageObject {
         String id;
         if (object instanceof User) {
             name = UserObject.getUserName((User) object);
-            id = TtmlNode.ANONYMOUS_REGION_ID + ((User) object).f176id;
+            id = TtmlNode.ANONYMOUS_REGION_ID + ((User) object).var_id;
         } else if (object instanceof Chat) {
             name = ((Chat) object).title;
-            id = TtmlNode.ANONYMOUS_REGION_ID + (-((Chat) object).f78id);
+            id = TtmlNode.ANONYMOUS_REGION_ID + (-((Chat) object).var_id);
         } else if (object instanceof TL_game) {
             name = ((TL_game) object).title;
             id = "game";
@@ -2728,7 +2728,7 @@ public class MessageObject {
             } else {
                 hasEntities = !this.messageOwner.entities.isEmpty();
             }
-            if (hasEntities || !(this.eventId != 0 || (this.messageOwner.media instanceof TL_messageMediaPhoto_old) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer68) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer74) || (this.messageOwner.media instanceof TL_messageMediaDocument_old) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer68) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer74) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.f104id < 0))) {
+            if (hasEntities || !(this.eventId != 0 || (this.messageOwner.media instanceof TL_messageMediaPhoto_old) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer68) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer74) || (this.messageOwner.media instanceof TL_messageMediaDocument_old) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer68) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer74) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.var_id < 0))) {
                 useManualParse = false;
             } else {
                 useManualParse = true;
@@ -2817,9 +2817,9 @@ public class MessageObject {
         while (a < size) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeImageSize) {
-                return new int[]{attribute.f87w, attribute.f86h};
+                return new int[]{attribute.var_w, attribute.var_h};
             } else if (attribute instanceof TL_documentAttributeVideo) {
-                return new int[]{attribute.f87w, attribute.f86h};
+                return new int[]{attribute.var_w, attribute.var_h};
             } else {
                 a++;
             }
@@ -3097,7 +3097,7 @@ public class MessageObject {
             } else {
                 hasEntities = !this.messageOwner.entities.isEmpty();
             }
-            boolean useManualParse = !hasEntities && (this.eventId != 0 || (this.messageOwner instanceof TL_message_old) || (this.messageOwner instanceof TL_message_old2) || (this.messageOwner instanceof TL_message_old3) || (this.messageOwner instanceof TL_message_old4) || (this.messageOwner instanceof TL_messageForwarded_old) || (this.messageOwner instanceof TL_messageForwarded_old2) || (this.messageOwner instanceof TL_message_secret) || (this.messageOwner.media instanceof TL_messageMediaInvoice) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.f104id < 0 || (this.messageOwner.media instanceof TL_messageMediaUnsupported)));
+            boolean useManualParse = !hasEntities && (this.eventId != 0 || (this.messageOwner instanceof TL_message_old) || (this.messageOwner instanceof TL_message_old2) || (this.messageOwner instanceof TL_message_old3) || (this.messageOwner instanceof TL_message_old4) || (this.messageOwner instanceof TL_messageForwarded_old) || (this.messageOwner instanceof TL_messageForwarded_old2) || (this.messageOwner instanceof TL_message_secret) || (this.messageOwner.media instanceof TL_messageMediaInvoice) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.var_id < 0 || (this.messageOwner.media instanceof TL_messageMediaUnsupported)));
             if (useManualParse) {
                 addLinks(isOutOwner(), this.messageText);
             } else if ((this.messageText instanceof Spannable) && this.messageText.length() < 1000) {
@@ -3347,7 +3347,7 @@ public class MessageObject {
     }
 
     public int getId() {
-        return this.messageOwner.f104id;
+        return this.messageOwner.var_id;
     }
 
     public static int getMessageSize(Message message) {
@@ -3362,7 +3362,7 @@ public class MessageObject {
     }
 
     public long getIdWithChannel() {
-        long id = (long) this.messageOwner.f104id;
+        long id = (long) this.messageOwner.var_id;
         if (this.messageOwner.to_id == null || this.messageOwner.to_id.channel_id == 0) {
             return id;
         }
@@ -3526,19 +3526,19 @@ public class MessageObject {
     }
 
     public boolean isSending() {
-        return this.messageOwner.send_state == 1 && this.messageOwner.f104id < 0;
+        return this.messageOwner.send_state == 1 && this.messageOwner.var_id < 0;
     }
 
     public boolean isEditing() {
-        return this.messageOwner.send_state == 3 && this.messageOwner.f104id > 0;
+        return this.messageOwner.send_state == 3 && this.messageOwner.var_id > 0;
     }
 
     public boolean isSendError() {
-        return this.messageOwner.send_state == 2 && this.messageOwner.f104id < 0;
+        return this.messageOwner.send_state == 2 && this.messageOwner.var_id < 0;
     }
 
     public boolean isSent() {
-        return this.messageOwner.send_state == 0 || this.messageOwner.f104id > 0;
+        return this.messageOwner.send_state == 0 || this.messageOwner.var_id > 0;
     }
 
     public int getSecretTimeLeft() {
@@ -3658,8 +3658,8 @@ public class MessageObject {
                     return false;
                 }
                 isVideo = true;
-                width = attribute.f87w;
-                height = attribute.f86h;
+                width = attribute.var_w;
+                height = attribute.var_h;
             } else if (attribute instanceof TL_documentAttributeAnimated) {
                 isAnimated = true;
             }
@@ -3775,7 +3775,7 @@ public class MessageObject {
             } else if (attribute.stickerset instanceof TL_inputStickerSetEmpty) {
                 return -1;
             } else {
-                return attribute.stickerset.f103id;
+                return attribute.stickerset.var_id;
             }
         }
         return -1;
@@ -3840,8 +3840,8 @@ public class MessageObject {
                 while (it.hasNext()) {
                     DocumentAttribute attribute = (DocumentAttribute) it.next();
                     if (attribute instanceof TL_documentAttributeImageSize) {
-                        photoWidth = attribute.f87w;
-                        photoHeight = attribute.f86h;
+                        photoWidth = attribute.var_w;
+                        photoHeight = attribute.var_h;
                         break;
                     }
                 }
@@ -3872,7 +3872,7 @@ public class MessageObject {
             }
             PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.photoThumbs, AndroidUtilities.getPhotoSize());
             if (currentPhotoObject != null) {
-                int h = (int) (((float) currentPhotoObject.f107h) / (((float) currentPhotoObject.f108w) / ((float) photoWidth)));
+                int h = (int) (((float) currentPhotoObject.var_h) / (((float) currentPhotoObject.var_w) / ((float) photoWidth)));
                 if (h == 0) {
                     h = AndroidUtilities.m9dp(100.0f);
                 }
@@ -4198,7 +4198,7 @@ public class MessageObject {
     }
 
     public static boolean canEditMessageAnytime(int currentAccount, Message message, Chat chat) {
-        if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.f104id < 0))) {
+        if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.var_id < 0))) {
             return false;
         }
         if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getInstance(currentAccount).getClientUserId() && !isLiveLocationMessage(message)) {
@@ -4229,7 +4229,7 @@ public class MessageObject {
         if (message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) {
             return false;
         }
-        if ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.f104id < 0) {
+        if ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.var_id < 0) {
             return false;
         }
         if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getInstance(currentAccount).getClientUserId() && !isLiveLocationMessage(message) && !(message.media instanceof TL_messageMediaContact)) {
@@ -4284,14 +4284,14 @@ public class MessageObject {
 
     public static boolean canDeleteMessage(int currentAccount, Message message, Chat chat) {
         boolean z = false;
-        if (message.f104id < 0) {
+        if (message.var_id < 0) {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
             chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(message.to_id.channel_id));
         }
         if (ChatObject.isChannel(chat)) {
-            if (message.f104id != 1) {
+            if (message.var_id != 1) {
                 if (chat.creator) {
                     return true;
                 }

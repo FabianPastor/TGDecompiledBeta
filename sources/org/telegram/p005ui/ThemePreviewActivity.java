@@ -183,7 +183,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             CustomDialog customDialog = new CustomDialog();
             customDialog.name = "Eva Summer";
             customDialog.message = "Reminds me of a Chinese prove...";
-            customDialog.f218id = 0;
+            customDialog.var_id = 0;
             customDialog.unread_count = 0;
             customDialog.pinned = true;
             customDialog.muted = false;
@@ -196,7 +196,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog = new CustomDialog();
             customDialog.name = "Your inner Competition";
             customDialog.message = "hey, I've updated the source code.";
-            customDialog.f218id = 1;
+            customDialog.var_id = 1;
             customDialog.unread_count = 2;
             customDialog.pinned = false;
             customDialog.muted = false;
@@ -209,7 +209,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog = new CustomDialog();
             customDialog.name = "Mike Apple";
             customDialog.message = "\ud83e\udd37\u200d\u2642\ufe0f Sticker";
-            customDialog.f218id = 2;
+            customDialog.var_id = 2;
             customDialog.unread_count = 3;
             customDialog.pinned = false;
             customDialog.muted = true;
@@ -222,7 +222,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog = new CustomDialog();
             customDialog.name = "Paul Newman";
             customDialog.message = "Any ideas?";
-            customDialog.f218id = 3;
+            customDialog.var_id = 3;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
             customDialog.muted = false;
@@ -235,7 +235,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog = new CustomDialog();
             customDialog.name = "Old Pirates";
             customDialog.message = "Yo-ho-ho!";
-            customDialog.f218id = 4;
+            customDialog.var_id = 4;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
             customDialog.muted = false;
@@ -248,7 +248,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog = new CustomDialog();
             customDialog.name = "Kate Bright";
             customDialog.message = "Hola!";
-            customDialog.f218id = 5;
+            customDialog.var_id = 5;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
             customDialog.muted = false;
@@ -261,7 +261,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog = new CustomDialog();
             customDialog.name = "Nick K";
             customDialog.message = "These are not the droids you are looking for";
-            customDialog.f218id = 6;
+            customDialog.var_id = 6;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
             customDialog.muted = false;
@@ -274,7 +274,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             customDialog = new CustomDialog();
             customDialog.name = "Adler Toberg";
             customDialog.message = "Did someone say peanut butter?";
-            customDialog.f218id = 0;
+            customDialog.var_id = 0;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
             customDialog.muted = false;
@@ -413,7 +413,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.dialog_id = 1;
             message.flags = 259;
             message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            message.f104id = 1;
+            message.var_id = 1;
             message.media = new TL_messageMediaEmpty();
             message.out = true;
             message.to_id = new TL_peerUser();
@@ -425,7 +425,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.dialog_id = 1;
             message.flags = 259;
             message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            message.f104id = 1;
+            message.var_id = 1;
             message.media = new TL_messageMediaEmpty();
             message.out = true;
             message.to_id = new TL_peerUser();
@@ -436,7 +436,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.dialog_id = 1;
             message.flags = 259;
             message.from_id = 0;
-            message.f104id = 5;
+            message.var_id = 5;
             message.media = new TL_messageMediaDocument();
             MessageMedia messageMedia = message.media;
             messageMedia.flags |= 3;
@@ -460,7 +460,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.dialog_id = 1;
             message.flags = 265;
             message.from_id = 0;
-            message.f104id = 1;
+            message.var_id = 1;
             message.reply_to_msg_id = 5;
             message.media = new TL_messageMediaEmpty();
             message.out = false;
@@ -475,7 +475,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.dialog_id = 1;
             message.flags = 259;
             message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            message.f104id = 1;
+            message.var_id = 1;
             message.media = new TL_messageMediaDocument();
             messageMedia = message.media;
             messageMedia.flags |= 3;
@@ -504,20 +504,20 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.dialog_id = 1;
             message.flags = 257;
             message.from_id = 0;
-            message.f104id = 1;
+            message.var_id = 1;
             message.media = new TL_messageMediaPhoto();
             messageMedia = message.media;
             messageMedia.flags |= 3;
             message.media.photo = new TL_photo();
             message.media.photo.file_reference = new byte[0];
             message.media.photo.has_stickers = false;
-            message.media.photo.f106id = 1;
+            message.media.photo.var_id = 1;
             message.media.photo.access_hash = 0;
             message.media.photo.date = date;
             TL_photoSize photoSize = new TL_photoSize();
             photoSize.size = 0;
-            photoSize.f108w = 500;
-            photoSize.f107h = 302;
+            photoSize.var_w = 500;
+            photoSize.var_h = 302;
             photoSize.type = "s";
             photoSize.location = new TL_fileLocationUnavailable();
             message.media.photo.sizes.add(photoSize);
@@ -530,7 +530,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             this.messages.add(messageObject);
             message = new TL_message();
             message.message = LocaleController.formatDateChat((long) date);
-            message.f104id = 0;
+            message.var_id = 0;
             message.date = date;
             messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, false);
             messageObject.type = 10;

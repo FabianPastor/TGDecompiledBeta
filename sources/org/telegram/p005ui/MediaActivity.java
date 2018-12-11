@@ -275,7 +275,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             if (obj != null) {
                 this.messagesDict[0].remove(oldMid);
                 this.messagesDict[0].put(newMid, obj);
-                obj.messageOwner.f104id = newMid;
+                obj.messageOwner.var_id = newMid;
             }
         }
     }
@@ -353,7 +353,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         }
                         if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
                             int currentDate = ConnectionsManager.getInstance(MediaActivity.this.currentAccount).getCurrentTime();
-                            if (!((currentUser == null || currentUser.f176id == UserConfig.getInstance(MediaActivity.this.currentAccount).getClientUserId()) && currentChat == null)) {
+                            if (!((currentUser == null || currentUser.var_id == UserConfig.getInstance(MediaActivity.this.currentAccount).getClientUserId()) && currentChat == null)) {
                                 boolean hasOutgoing = false;
                                 for (a = 1; a >= 0; a--) {
                                     for (int b = 0; b < MediaActivity.this.selectedFiles[a].size(); b++) {
@@ -726,7 +726,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 } else if (this.currentType == 4) {
                     req.filter = new TL_inputMessagesFilterMusic();
                 }
-                req.f156q = query;
+                req.var_q = query;
                 req.peer = MessagesController.getInstance(MediaActivity.this.currentAccount).getInputPeer(uid);
                 if (req.peer != null) {
                     int currentReqId = this.lastReqId + 1;
@@ -744,7 +744,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 messages_Messages res = (messages_Messages) response;
                 for (int a = 0; a < res.messages.size(); a++) {
                     Message message = (Message) res.messages.get(a);
-                    if (max_id == 0 || message.f104id <= max_id) {
+                    if (max_id == 0 || message.var_id <= max_id) {
                         messageObjects.add(new MessageObject(MediaActivity.this.currentAccount, message, false));
                     }
                 }
@@ -1118,7 +1118,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         public View getSectionHeaderView(int section, View view) {
             if (view == null) {
                 view = new GraySectionCell(this.mContext);
-                view.setBackgroundColor(Theme.getColor(Theme.key_graySection) & -218103809);
+                view.setBackgroundColor(Theme.getColor(Theme.key_graySection) & -NUM);
             }
             if (section < MediaActivity.this.sharedMediaData[this.currentType].sections.size()) {
                 ((GraySectionCell) view).setText(LocaleController.formatSectionDate((long) ((MessageObject) ((ArrayList) MediaActivity.this.sharedMediaData[this.currentType].sectionArrays.get((String) MediaActivity.this.sharedMediaData[this.currentType].sections.get(section))).get(0)).messageOwner.date));
@@ -1260,7 +1260,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         public View getSectionHeaderView(int section, View view) {
             if (view == null) {
                 view = new GraySectionCell(this.mContext);
-                view.setBackgroundColor(Theme.getColor(Theme.key_graySection) & -218103809);
+                view.setBackgroundColor(Theme.getColor(Theme.key_graySection) & -NUM);
             }
             if (section < MediaActivity.this.sharedMediaData[3].sections.size()) {
                 ((GraySectionCell) view).setText(LocaleController.formatSectionDate((long) ((MessageObject) ((ArrayList) MediaActivity.this.sharedMediaData[3].sectionArrays.get((String) MediaActivity.this.sharedMediaData[3].sections.get(section))).get(0)).messageOwner.date));
@@ -1397,7 +1397,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         public View getSectionHeaderView(int section, View view) {
             if (view == null) {
                 view = new SharedMediaSectionCell(this.mContext);
-                view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite) & -436207617);
+                view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite) & -NUM);
             }
             if (section < MediaActivity.this.sharedMediaData[0].sections.size()) {
                 ((SharedMediaSectionCell) view).setText(LocaleController.formatSectionDate((long) ((MessageObject) ((ArrayList) MediaActivity.this.sharedMediaData[0].sectionArrays.get((String) MediaActivity.this.sharedMediaData[0].sections.get(section))).get(0)).messageOwner.date));
@@ -2285,7 +2285,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             if (ChatObject.isChannel(currentChat)) {
                 if (channelId == 0 && this.mergeDialogId != 0) {
                     loadIndex = 1;
-                } else if (channelId == currentChat.f78id) {
+                } else if (channelId == currentChat.var_id) {
                     loadIndex = 0;
                 } else {
                     return;

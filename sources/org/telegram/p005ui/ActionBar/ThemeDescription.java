@@ -54,7 +54,7 @@ public class ThemeDescription {
     public static int FLAG_AB_AM_SELECTORCOLOR = 4194304;
     public static int FLAG_AB_AM_TOPBACKGROUND = 2097152;
     public static int FLAG_AB_ITEMSCOLOR = 64;
-    public static int FLAG_AB_SEARCH = 134217728;
+    public static int FLAG_AB_SEARCH = NUM;
     public static int FLAG_AB_SEARCHPLACEHOLDER = ConnectionsManager.FileTypeFile;
     public static int FLAG_AB_SELECTORCOLOR = 256;
     public static int FLAG_AB_SUBMENUBACKGROUND = Integer.MIN_VALUE;

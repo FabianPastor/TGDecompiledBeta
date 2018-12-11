@@ -77,7 +77,7 @@ public class StickerEmojiCell extends FrameLayout {
                             set = true;
                         }
                         if (!set) {
-                            this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.f84id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(16.0f), false));
+                            this.emojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.var_id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m9dp(16.0f), false));
                         }
                         this.emojiTextView.setVisibility(0);
                         return;

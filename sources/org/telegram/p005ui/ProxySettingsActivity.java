@@ -324,7 +324,7 @@ public class ProxySettingsActivity extends BaseFragment {
             } else {
                 this.inputFields[a].setInputType(524289);
             }
-            this.inputFields[a].setImeOptions(268435461);
+            this.inputFields[a].setImeOptions(NUM);
             switch (a) {
                 case 0:
                     this.inputFields[a].setHintText(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress));

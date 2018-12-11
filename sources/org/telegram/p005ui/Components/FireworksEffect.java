@@ -29,13 +29,13 @@ public class FireworksEffect {
         int type;
         float velocity;
         /* renamed from: vx */
-        float f227vx;
+        float var_vx;
         /* renamed from: vy */
-        float f228vy;
+        float var_vy;
         /* renamed from: x */
-        float f229x;
+        float var_x;
         /* renamed from: y */
-        float f230y;
+        float var_y;
 
         private Particle() {
         }
@@ -46,7 +46,7 @@ public class FireworksEffect {
                     FireworksEffect.this.particlePaint.setColor(this.color);
                     FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.m9dp(1.5f)) * this.scale);
                     FireworksEffect.this.particlePaint.setAlpha((int) (255.0f * this.alpha));
-                    canvas.drawPoint(this.f229x, this.f230y, FireworksEffect.this.particlePaint);
+                    canvas.drawPoint(this.var_x, this.var_y, FireworksEffect.this.particlePaint);
                     return;
                 default:
                     return;
@@ -78,9 +78,9 @@ public class FireworksEffect {
                 count--;
             } else {
                 particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(particle.currentTime / particle.lifeTime);
-                particle.f229x += ((particle.f227vx * particle.velocity) * ((float) dt)) / 500.0f;
-                particle.f230y += ((particle.f228vy * particle.velocity) * ((float) dt)) / 500.0f;
-                particle.f228vy += ((float) dt) / 100.0f;
+                particle.var_x += ((particle.var_vx * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.var_y += ((particle.var_vy * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.var_vy += ((float) dt) / 100.0f;
                 particle.currentTime += (float) dt;
             }
             a++;
@@ -127,10 +127,10 @@ public class FireworksEffect {
                         newParticle = (Particle) this.freeParticles.get(0);
                         this.freeParticles.remove(0);
                     }
-                    newParticle.f229x = cx;
-                    newParticle.f230y = cy;
-                    newParticle.f227vx = 1.5f * vx;
-                    newParticle.f228vy = vy;
+                    newParticle.var_x = cx;
+                    newParticle.var_y = cy;
+                    newParticle.var_vx = 1.5f * vx;
+                    newParticle.var_vy = vy;
                     newParticle.color = color;
                     newParticle.alpha = 1.0f;
                     newParticle.currentTime = 0.0f;

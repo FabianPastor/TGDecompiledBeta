@@ -11,18 +11,18 @@ public class CubicBezierInterpolator implements Interpolator {
     public static final CubicBezierInterpolator EASE_OUT = new CubicBezierInterpolator(0.0d, 0.0d, 0.58d, 1.0d);
     public static final CubicBezierInterpolator EASE_OUT_QUINT = new CubicBezierInterpolator(0.23d, 1.0d, 0.32d, 1.0d);
     /* renamed from: a */
-    protected PointF f224a;
+    protected PointF var_a;
     /* renamed from: b */
-    protected PointF f225b;
+    protected PointF var_b;
     /* renamed from: c */
-    protected PointF f226c;
+    protected PointF var_c;
     protected PointF end;
     protected PointF start;
 
     public CubicBezierInterpolator(PointF start, PointF end) throws IllegalArgumentException {
-        this.f224a = new PointF();
-        this.f225b = new PointF();
-        this.f226c = new PointF();
+        this.var_a = new PointF();
+        this.var_b = new PointF();
+        this.var_c = new PointF();
         if (start.x < 0.0f || start.x > 1.0f) {
             throw new IllegalArgumentException("startX value must be in the range [0, 1]");
         } else if (end.x < 0.0f || end.x > 1.0f) {
@@ -46,10 +46,10 @@ public class CubicBezierInterpolator implements Interpolator {
     }
 
     protected float getBezierCoordinateY(float time) {
-        this.f226c.y = this.start.y * 3.0f;
-        this.f225b.y = ((this.end.y - this.start.y) * 3.0f) - this.f226c.y;
-        this.f224a.y = (1.0f - this.f226c.y) - this.f225b.y;
-        return (this.f226c.y + ((this.f225b.y + (this.f224a.y * time)) * time)) * time;
+        this.var_c.y = this.start.y * 3.0f;
+        this.var_b.y = ((this.end.y - this.start.y) * 3.0f) - this.var_c.y;
+        this.var_a.y = (1.0f - this.var_c.y) - this.var_b.y;
+        return (this.var_c.y + ((this.var_b.y + (this.var_a.y * time)) * time)) * time;
     }
 
     protected float getXForTime(float time) {
@@ -65,13 +65,13 @@ public class CubicBezierInterpolator implements Interpolator {
     }
 
     private float getXDerivate(float t) {
-        return this.f226c.x + (((2.0f * this.f225b.x) + ((3.0f * this.f224a.x) * t)) * t);
+        return this.var_c.x + (((2.0f * this.var_b.x) + ((3.0f * this.var_a.x) * t)) * t);
     }
 
     private float getBezierCoordinateX(float time) {
-        this.f226c.x = this.start.x * 3.0f;
-        this.f225b.x = ((this.end.x - this.start.x) * 3.0f) - this.f226c.x;
-        this.f224a.x = (1.0f - this.f226c.x) - this.f225b.x;
-        return (this.f226c.x + ((this.f225b.x + (this.f224a.x * time)) * time)) * time;
+        this.var_c.x = this.start.x * 3.0f;
+        this.var_b.x = ((this.end.x - this.start.x) * 3.0f) - this.var_c.x;
+        this.var_a.x = (1.0f - this.var_c.x) - this.var_b.x;
+        return (this.var_c.x + ((this.var_b.x + (this.var_a.x * time)) * time)) * time;
     }
 }
