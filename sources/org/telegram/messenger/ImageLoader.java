@@ -97,8 +97,8 @@ public class ImageLoader {
     private SparseArray<String> waitingForQualityThumbByTag = new SparseArray();
 
     /* renamed from: org.telegram.messenger.ImageLoader$3 */
-    class C04463 extends BroadcastReceiver {
-        C04463() {
+    class CLASSNAME extends BroadcastReceiver {
+        CLASSNAME() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
@@ -146,7 +146,7 @@ public class ImageLoader {
             this.thumbs = new ArrayList();
         }
 
-        /* synthetic */ CacheImage(ImageLoader x0, C04441 x1) {
+        /* synthetic */ CacheImage(ImageLoader x0, CLASSNAME x1) {
             this();
         }
 
@@ -1663,7 +1663,7 @@ public class ImageLoader {
         private ThumbGenerateInfo() {
         }
 
-        /* synthetic */ ThumbGenerateInfo(ImageLoader x0, C04441 x1) {
+        /* synthetic */ ThumbGenerateInfo(ImageLoader x0, CLASSNAME x1) {
             this();
         }
     }
@@ -1882,7 +1882,7 @@ public class ImageLoader {
             });
         }
         FileLoader.setMediaDirs(mediaDirs);
-        BroadcastReceiver receiver = new C04463();
+        BroadcastReceiver receiver = new CLASSNAME();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
         filter.addAction("android.intent.action.MEDIA_CHECKING");
@@ -2250,13 +2250,13 @@ public class ImageLoader {
         } else if (fileLocation instanceof Document) {
             Document location2 = (Document) fileLocation;
             if (location2.version == 0) {
-                key = location2.dc_id + "_" + location2.f119id;
+                key = location2.dc_id + "_" + location2.var_id;
             } else {
-                key = location2.dc_id + "_" + location2.f119id + "_" + location2.version;
+                key = location2.dc_id + "_" + location2.var_id + "_" + location2.version;
             }
         } else if (fileLocation instanceof SecureDocument) {
             SecureDocument location3 = (SecureDocument) fileLocation;
-            key = location3.secureFile.dc_id + "_" + location3.secureFile.f223id;
+            key = location3.secureFile.dc_id + "_" + location3.secureFile.var_id;
         } else if (fileLocation instanceof WebFile) {
             key = Utilities.MD5(((WebFile) fileLocation).url);
         }
@@ -2559,18 +2559,18 @@ public class ImageLoader {
                     url = key + "." + getHttpUrlExtension(document.url, defaultExt);
                 } else if (imageLocation instanceof SecureDocument) {
                     SecureDocument document2 = (SecureDocument) imageLocation;
-                    key = document2.secureFile.dc_id + "_" + document2.secureFile.f223id;
+                    key = document2.secureFile.dc_id + "_" + document2.secureFile.var_id;
                     url = key + "." + ext;
                     if (null != null) {
                         thumbUrl = null + "." + ext;
                     }
                 } else if (imageLocation instanceof Document) {
                     Document document3 = (Document) imageLocation;
-                    if (document3.f119id != 0 && document3.dc_id != 0) {
+                    if (document3.var_id != 0 && document3.dc_id != 0) {
                         if (document3.version == 0) {
-                            key = document3.dc_id + "_" + document3.f119id;
+                            key = document3.dc_id + "_" + document3.var_id;
                         } else {
-                            key = document3.dc_id + "_" + document3.f119id + "_" + document3.version;
+                            key = document3.dc_id + "_" + document3.var_id + "_" + document3.version;
                         }
                         String docExt = FileLoader.getDocumentFileName(document3);
                         if (docExt != null) {
@@ -2951,15 +2951,15 @@ public class ImageLoader {
         location.local_id = SharedConfig.getLastLocalId();
         PhotoSize size = new TL_photoSize();
         size.location = location;
-        size.f145w = scaledBitmap.getWidth();
-        size.f144h = scaledBitmap.getHeight();
-        if (size.f145w <= 100 && size.f144h <= 100) {
+        size.var_w = scaledBitmap.getWidth();
+        size.var_h = scaledBitmap.getHeight();
+        if (size.var_w <= 100 && size.var_h <= 100) {
             size.type = "s";
-        } else if (size.f145w <= 320 && size.f144h <= 320) {
+        } else if (size.var_w <= 320 && size.var_h <= 320) {
             size.type = "m";
-        } else if (size.f145w <= 800 && size.f144h <= 800) {
+        } else if (size.var_w <= 800 && size.var_h <= 800) {
             size.type = "x";
-        } else if (size.f145w > 1280 || size.f144h > 1280) {
+        } else if (size.var_w > 1280 || size.var_h > 1280) {
             size.type = "w";
         } else {
             size.type = "y";
@@ -3104,8 +3104,8 @@ public class ImageLoader {
                 randomAccessFile.close();
             }
             PhotoSize newPhotoSize = new TL_photoSize();
-            newPhotoSize.f145w = photoSize.f145w;
-            newPhotoSize.f144h = photoSize.f144h;
+            newPhotoSize.var_w = photoSize.var_w;
+            newPhotoSize.var_h = photoSize.var_h;
             newPhotoSize.location = photoSize.location;
             newPhotoSize.size = photoSize.size;
             newPhotoSize.type = photoSize.type;

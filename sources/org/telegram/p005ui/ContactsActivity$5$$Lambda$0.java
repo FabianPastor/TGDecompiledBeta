@@ -2,15 +2,15 @@ package org.telegram.p005ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.ContactsActivity.C16525;
+import org.telegram.p005ui.ContactsActivity.CLASSNAME;
 
 /* renamed from: org.telegram.ui.ContactsActivity$5$$Lambda$0 */
 final /* synthetic */ class ContactsActivity$5$$Lambda$0 implements OnClickListener {
-    private final C16525 arg$1;
+    private final CLASSNAME arg$1;
     private final String arg$2;
 
-    ContactsActivity$5$$Lambda$0(C16525 c16525, String str) {
-        this.arg$1 = c16525;
+    ContactsActivity$5$$Lambda$0(CLASSNAME CLASSNAME, String str) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = str;
     }
 

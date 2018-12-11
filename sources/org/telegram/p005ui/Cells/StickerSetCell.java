@@ -18,7 +18,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.BackupImageView;
@@ -117,7 +117,7 @@ public class StickerSetCell extends FrameLayout {
             this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
             if (option == 1) {
                 this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
-                this.optionsButton.setImageResource(C0541R.drawable.msg_actions);
+                this.optionsButton.setImageResource(CLASSNAMER.drawable.msg_actions);
                 View view2 = this.optionsButton;
                 if (!LocaleController.isRTL) {
                     i4 = 5;
@@ -125,7 +125,7 @@ public class StickerSetCell extends FrameLayout {
                 addView(view2, LayoutHelper.createFrame(40, 40, i4 | 48));
             } else if (option == 3) {
                 this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-                this.optionsButton.setImageResource(C0541R.drawable.sticker_added);
+                this.optionsButton.setImageResource(CLASSNAMER.drawable.sticker_added);
                 view = this.optionsButton;
                 if (!LocaleController.isRTL) {
                     i4 = 5;

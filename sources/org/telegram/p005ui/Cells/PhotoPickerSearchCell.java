@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
@@ -24,8 +24,8 @@ public class PhotoPickerSearchCell extends LinearLayout {
     private PhotoPickerSearchCellDelegate delegate;
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerSearchCell$1 */
-    class C09251 implements OnClickListener {
-        C09251() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -36,8 +36,8 @@ public class PhotoPickerSearchCell extends LinearLayout {
     }
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerSearchCell$2 */
-    class C09262 implements OnClickListener {
-        C09262() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -98,9 +98,9 @@ public class PhotoPickerSearchCell extends LinearLayout {
         super(context);
         setOrientation(0);
         SearchButton searchButton = new SearchButton(context);
-        searchButton.textView1.setText(LocaleController.getString("SearchImages", C0541R.string.SearchImages));
-        searchButton.textView2.setText(LocaleController.getString("SearchImagesInfo", C0541R.string.SearchImagesInfo));
-        searchButton.imageView.setImageResource(C0541R.drawable.search_web);
+        searchButton.textView1.setText(LocaleController.getString("SearchImages", CLASSNAMER.string.SearchImages));
+        searchButton.textView2.setText(LocaleController.getString("SearchImagesInfo", CLASSNAMER.string.SearchImagesInfo));
+        searchButton.imageView.setImageResource(CLASSNAMER.drawable.search_web);
         addView(searchButton);
         LayoutParams layoutParams = (LayoutParams) searchButton.getLayoutParams();
         layoutParams.weight = 0.5f;
@@ -108,7 +108,7 @@ public class PhotoPickerSearchCell extends LinearLayout {
         layoutParams.height = AndroidUtilities.m10dp(48.0f);
         layoutParams.width = 0;
         searchButton.setLayoutParams(layoutParams);
-        searchButton.setOnClickListener(new C09251());
+        searchButton.setOnClickListener(new CLASSNAME());
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(0);
         addView(frameLayout);
@@ -118,9 +118,9 @@ public class PhotoPickerSearchCell extends LinearLayout {
         layoutParams.width = AndroidUtilities.m10dp(4.0f);
         frameLayout.setLayoutParams(layoutParams);
         searchButton = new SearchButton(context);
-        searchButton.textView1.setText(LocaleController.getString("SearchGifs", C0541R.string.SearchGifs));
+        searchButton.textView1.setText(LocaleController.getString("SearchGifs", CLASSNAMER.string.SearchGifs));
         searchButton.textView2.setText("GIPHY");
-        searchButton.imageView.setImageResource(C0541R.drawable.search_gif);
+        searchButton.imageView.setImageResource(CLASSNAMER.drawable.search_gif);
         addView(searchButton);
         layoutParams = (LayoutParams) searchButton.getLayoutParams();
         layoutParams.weight = 0.5f;
@@ -129,7 +129,7 @@ public class PhotoPickerSearchCell extends LinearLayout {
         layoutParams.width = 0;
         searchButton.setLayoutParams(layoutParams);
         if (allowGifs) {
-            searchButton.setOnClickListener(new C09262());
+            searchButton.setOnClickListener(new CLASSNAME());
         } else {
             searchButton.setAlpha(0.5f);
         }

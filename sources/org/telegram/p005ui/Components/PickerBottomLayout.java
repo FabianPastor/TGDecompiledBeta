@@ -6,7 +6,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.Theme;
 
@@ -34,7 +34,7 @@ public class PickerBottomLayout extends FrameLayout {
         this.cancelButton.setGravity(17);
         this.cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         this.cancelButton.setPadding(AndroidUtilities.m10dp(29.0f), 0, AndroidUtilities.m10dp(29.0f), 0);
-        this.cancelButton.setText(LocaleController.getString("Cancel", C0541R.string.Cancel).toUpperCase());
+        this.cancelButton.setText(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel).toUpperCase());
         this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
         this.doneButton = new LinearLayout(context);
@@ -65,7 +65,7 @@ public class PickerBottomLayout extends FrameLayout {
         textView.setTextColor(i);
         this.doneButtonTextView.setGravity(17);
         this.doneButtonTextView.setCompoundDrawablePadding(AndroidUtilities.m10dp(8.0f));
-        this.doneButtonTextView.setText(LocaleController.getString("Send", C0541R.string.Send).toUpperCase());
+        this.doneButtonTextView.setText(LocaleController.getString("Send", CLASSNAMER.string.Send).toUpperCase());
         this.doneButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.doneButton.addView(this.doneButtonTextView, LayoutHelper.createLinear(-2, -2, 16));
     }

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.p005ui.ActionBar.Theme;
@@ -45,7 +45,7 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setEllipsize(TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 61.0f, 0.0f, 56.0f, 0.0f));
         this.checkImageView = new ImageView(context);
-        this.checkImageView.setImageResource(C0541R.drawable.account_check);
+        this.checkImageView.setImageResource(CLASSNAMER.drawable.account_check);
         this.checkImageView.setScaleType(ScaleType.CENTER);
         this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemCheck), Mode.MULTIPLY));
         addView(this.checkImageView, LayoutHelper.createFrame(40, -1.0f, 53, 0.0f, 0.0f, 6.0f, 0.0f));

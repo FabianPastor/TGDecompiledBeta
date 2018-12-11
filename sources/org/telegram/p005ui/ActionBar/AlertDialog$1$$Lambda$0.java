@@ -1,13 +1,13 @@
 package org.telegram.p005ui.ActionBar;
 
-import org.telegram.p005ui.ActionBar.AlertDialog.C07201;
+import org.telegram.p005ui.ActionBar.AlertDialog.CLASSNAME;
 
 /* renamed from: org.telegram.ui.ActionBar.AlertDialog$1$$Lambda$0 */
 final /* synthetic */ class AlertDialog$1$$Lambda$0 implements Runnable {
-    private final C07201 arg$1;
+    private final CLASSNAME arg$1;
 
-    AlertDialog$1$$Lambda$0(C07201 c07201) {
-        this.arg$1 = c07201;
+    AlertDialog$1$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void run() {

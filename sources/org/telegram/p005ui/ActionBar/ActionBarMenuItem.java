@@ -27,7 +27,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
@@ -65,8 +65,8 @@ public class ActionBarMenuItem extends FrameLayout {
     private int subMenuOpenSide;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$3 */
-    class C07163 implements Callback {
-        C07163() {
+    class CLASSNAME implements Callback {
+        CLASSNAME() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -86,8 +86,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$4 */
-    class C07174 implements TextWatcher {
-        C07174() {
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -378,7 +378,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 if (this.popupWindow == null) {
                     this.popupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                     if (!this.animationEnabled || VERSION.SDK_INT < 19) {
-                        this.popupWindow.setAnimationStyle(C0541R.style.PopupAnimation);
+                        this.popupWindow.setAnimationStyle(CLASSNAMER.style.PopupAnimation);
                     } else {
                         this.popupWindow.setAnimationStyle(0);
                     }
@@ -556,10 +556,10 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchField.setPadding(0, 0, 0, 0);
                 this.searchField.setInputType(this.searchField.getInputType() | 524288);
                 if (VERSION.SDK_INT < 23) {
-                    this.searchField.setCustomSelectionActionModeCallback(new C07163());
+                    this.searchField.setCustomSelectionActionModeCallback(new CLASSNAME());
                 }
                 this.searchField.setOnEditorActionListener(new ActionBarMenuItem$$Lambda$6(this));
-                this.searchField.addTextChangedListener(new C07174());
+                this.searchField.addTextChangedListener(new CLASSNAME());
                 this.searchField.setImeOptions(33554435);
                 this.searchField.setTextIsSelectable(false);
                 if (LocaleController.isRTL) {

@@ -2,7 +2,7 @@ package org.telegram.p005ui;
 
 import android.view.View;
 import android.view.View.OnClickListener;
-import org.telegram.p005ui.MediaActivity.C18362;
+import org.telegram.p005ui.MediaActivity.CLASSNAME;
 
 /* renamed from: org.telegram.ui.MediaActivity$2$$Lambda$0 */
 final /* synthetic */ class MediaActivity$2$$Lambda$0 implements OnClickListener {
@@ -13,6 +13,6 @@ final /* synthetic */ class MediaActivity$2$$Lambda$0 implements OnClickListener
     }
 
     public void onClick(View view) {
-        C18362.lambda$onItemClick$0$MediaActivity$2(this.arg$1, view);
+        CLASSNAME.lambda$onItemClick$0$MediaActivity$2(this.arg$1, view);
     }
 }

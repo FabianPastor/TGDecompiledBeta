@@ -26,7 +26,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     private int animateIndicatorToX;
     private boolean animatingIndicator;
     private float animationIdicatorProgress;
-    private Runnable animationRunnable = new C15181();
+    private Runnable animationRunnable = new CLASSNAME();
     private boolean animationRunning;
     private float animationTime;
     private int currentPosition;
@@ -46,8 +46,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     private LinearLayout tabsContainer;
 
     /* renamed from: org.telegram.ui.Components.ScrollSlidingTextTabStrip$1 */
-    class C15181 implements Runnable {
-        C15181() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {

@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import org.telegram.PhoneFormat.C0216PhoneFormat;
-import org.telegram.messenger.C0541R;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -18,7 +18,7 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -41,8 +41,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     private int selectedUserId;
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$1 */
-    class C08571 extends ActionBarMenuOnItemClick {
-        C08571() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -87,7 +87,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                     break;
                 default:
                     view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", C0541R.string.UnblockText));
+                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", CLASSNAMER.string.UnblockText));
                     break;
             }
             return new Holder(view);
@@ -99,11 +99,11 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 if (user != null) {
                     String number;
                     if (user.bot) {
-                        number = LocaleController.getString("Bot", C0541R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", C0541R.string.Bot).substring(1);
+                        number = LocaleController.getString("Bot", CLASSNAMER.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", CLASSNAMER.string.Bot).substring(1);
                     } else if (user.phone == null || user.phone.length() == 0) {
-                        number = LocaleController.getString("NumberUnknown", C0541R.string.NumberUnknown);
+                        number = LocaleController.getString("NumberUnknown", CLASSNAMER.string.NumberUnknown);
                     } else {
-                        number = C0216PhoneFormat.getInstance().format("+" + user.phone);
+                        number = CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
                     }
                     ((UserCell) holder.itemView).setData(user, null, number, 0);
                 }
@@ -134,15 +134,15 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("BlockedUsers", C0541R.string.BlockedUsers));
-        this.actionBar.setActionBarMenuOnItemClick(new C08571());
-        this.actionBar.createMenu().addItem(1, (int) C0541R.drawable.plus);
+        this.actionBar.setTitle(LocaleController.getString("BlockedUsers", CLASSNAMER.string.BlockedUsers));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
+        this.actionBar.createMenu().addItem(1, (int) CLASSNAMER.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoBlocked", C0541R.string.NoBlocked));
+        this.emptyView.setText(LocaleController.getString("NoBlocked", CLASSNAMER.string.NoBlocked));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -180,7 +180,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         if (position < MessagesController.getInstance(this.currentAccount).blockedUsers.size() && getParentActivity() != null) {
             this.selectedUserId = MessagesController.getInstance(this.currentAccount).blockedUsers.keyAt(position);
             Builder builder = new Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", C0541R.string.Unblock)}, new BlockedUsersActivity$$Lambda$3(this));
+            builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", CLASSNAMER.string.Unblock)}, new BlockedUsersActivity$$Lambda$3(this));
             showDialog(builder.create());
         }
         return true;
@@ -227,7 +227,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public void didSelectContact(User user, String param, ContactsActivity activity) {
         if (user != null) {
-            MessagesController.getInstance(this.currentAccount).blockUser(user.f228id);
+            MessagesController.getInstance(this.currentAccount).blockUser(user.var_id);
         }
     }
 

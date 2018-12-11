@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.p005ui.ActionBar.Theme;
 
@@ -55,10 +55,10 @@ public class VideoTimelinePlayView extends View {
     private long videoLength;
 
     /* renamed from: org.telegram.ui.Components.VideoTimelinePlayView$1 */
-    class C16141 extends AsyncTask<Integer, Integer, Bitmap> {
+    class CLASSNAME extends AsyncTask<Integer, Integer, Bitmap> {
         private int frameNum = 0;
 
-        C16141() {
+        CLASSNAME() {
         }
 
         protected Bitmap doInBackground(Integer... objects) {
@@ -128,9 +128,9 @@ public class VideoTimelinePlayView extends View {
         this.paint.setColor(-1);
         this.paint2 = new Paint();
         this.paint2.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-        this.drawableLeft = context.getResources().getDrawable(C0541R.drawable.video_cropleft);
+        this.drawableLeft = context.getResources().getDrawable(CLASSNAMER.drawable.video_cropleft);
         this.drawableLeft.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
-        this.drawableRight = context.getResources().getDrawable(C0541R.drawable.video_cropright);
+        this.drawableRight = context.getResources().getDrawable(CLASSNAMER.drawable.video_cropright);
         this.drawableRight.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
     }
 
@@ -326,7 +326,7 @@ public class VideoTimelinePlayView extends View {
                 }
                 this.frameTimeOffset = this.videoLength / ((long) this.framesToLoad);
             }
-            this.currentTask = new C16141();
+            this.currentTask = new CLASSNAME();
             this.currentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(frameNum), null, null});
         }
     }

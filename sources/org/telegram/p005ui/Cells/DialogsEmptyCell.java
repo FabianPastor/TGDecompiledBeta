@@ -10,11 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.p005ui.ActionBar.C0704ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.tgnet.TLRPC.RecentMeUrl;
@@ -27,8 +27,8 @@ public class DialogsEmptyCell extends LinearLayout {
     private TextView emptyTextView2;
 
     /* renamed from: org.telegram.ui.Cells.DialogsEmptyCell$1 */
-    class C09061 implements OnTouchListener {
-        C09061() {
+    class CLASSNAME implements OnTouchListener {
+        CLASSNAME() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -40,15 +40,15 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener(new C09061());
+        setOnTouchListener(new CLASSNAME());
         this.emptyTextView1 = new TextView(context);
-        this.emptyTextView1.setText(LocaleController.getString("NoChats", C0541R.string.NoChats));
+        this.emptyTextView1.setText(LocaleController.getString("NoChats", CLASSNAMER.string.NoChats));
         this.emptyTextView1.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         this.emptyTextView1.setGravity(17);
         this.emptyTextView1.setTextSize(1, 20.0f);
         addView(this.emptyTextView1, LayoutHelper.createLinear(-2, -2, 0.0f, 20.0f, 0.0f, 0.0f));
         this.emptyTextView2 = new TextView(context);
-        String help = LocaleController.getString("NoChatsHelp", C0541R.string.NoChatsHelp);
+        String help = LocaleController.getString("NoChatsHelp", CLASSNAMER.string.NoChatsHelp);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
             help = help.replace(10, ' ');
         }
@@ -65,12 +65,12 @@ public class DialogsEmptyCell extends LinearLayout {
         String help;
         this.currentType = value;
         if (this.currentType == 0) {
-            help = LocaleController.getString("NoChatsHelp", C0541R.string.NoChatsHelp);
+            help = LocaleController.getString("NoChatsHelp", CLASSNAMER.string.NoChatsHelp);
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
                 help = help.replace(10, ' ');
             }
         } else {
-            help = LocaleController.getString("NoChatsContactsHelp", C0541R.string.NoChatsContactsHelp);
+            help = LocaleController.getString("NoChatsContactsHelp", CLASSNAMER.string.NoChatsContactsHelp);
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
                 help = help.replace(10, ' ');
             }
@@ -81,7 +81,7 @@ public class DialogsEmptyCell extends LinearLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int totalHeight = MeasureSpec.getSize(heightMeasureSpec);
         if (totalHeight == 0) {
-            totalHeight = (AndroidUtilities.displaySize.y - C0704ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            totalHeight = (AndroidUtilities.displaySize.y - CLASSNAMEActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
         if (this.currentType == 0) {
             ArrayList<RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;

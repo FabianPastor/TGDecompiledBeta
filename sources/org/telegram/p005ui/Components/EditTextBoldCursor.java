@@ -25,7 +25,7 @@ import android.widget.TextView.BufferType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.ConnectionsManager;
@@ -96,7 +96,7 @@ public class EditTextBoldCursor extends EditText {
             this.editor = mEditor.get(this);
             if (mCursorDrawableField != null) {
                 this.mCursorDrawable = (Drawable[]) mCursorDrawableField.get(this.editor);
-                mCursorDrawableResField.set(this, Integer.valueOf(C0541R.drawable.field_carret_empty));
+                mCursorDrawableResField.set(this, Integer.valueOf(CLASSNAMER.drawable.field_carret_empty));
             }
         } catch (Throwable e) {
             FileLog.m14e(e);

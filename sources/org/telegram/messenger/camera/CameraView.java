@@ -27,9 +27,9 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private int clipLeft;
     private int clipTop;
     /* renamed from: cx */
-    private int f92cx;
+    private int var_cx;
     /* renamed from: cy */
-    private int f93cy;
+    private int var_cy;
     private CameraViewDelegate delegate;
     private int focusAreaSize;
     private float focusProgress = 1.0f;
@@ -49,8 +49,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private Matrix txform = new Matrix();
 
     /* renamed from: org.telegram.messenger.camera.CameraView$1 */
-    class C05771 implements Runnable {
-        C05771() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -62,8 +62,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     /* renamed from: org.telegram.messenger.camera.CameraView$2 */
-    class C05782 implements Runnable {
-        C05782() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -179,7 +179,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 if (this.previewSize != null && surfaceTexture != null) {
                     surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                     this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);
-                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C05771(), new C05782());
+                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new CLASSNAME(), new CLASSNAME());
                 }
             }
         }
@@ -287,8 +287,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.focusProgress = 0.0f;
         this.innerAlpha = 1.0f;
         this.outerAlpha = 1.0f;
-        this.f92cx = x;
-        this.f93cy = y;
+        this.var_cx = x;
+        this.var_cy = y;
         this.lastDrawTime = System.currentTimeMillis();
         invalidate();
     }
@@ -325,8 +325,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             this.outerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.outerAlpha) * 255.0f));
             this.innerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.innerAlpha) * 127.0f));
             float interpolated = this.interpolator.getInterpolation(this.focusProgress);
-            canvas.drawCircle((float) this.f92cx, (float) this.f93cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), this.outerPaint);
-            canvas.drawCircle((float) this.f92cx, (float) this.f93cy, ((float) baseRad) * interpolated, this.innerPaint);
+            canvas.drawCircle((float) this.var_cx, (float) this.var_cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), this.outerPaint);
+            canvas.drawCircle((float) this.var_cx, (float) this.var_cy, ((float) baseRad) * interpolated, this.innerPaint);
             if (this.focusProgress < 1.0f) {
                 this.focusProgress += ((float) dt) / 200.0f;
                 if (this.focusProgress > 1.0f) {

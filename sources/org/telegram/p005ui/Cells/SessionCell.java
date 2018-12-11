@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -101,7 +101,7 @@ public class SessionCell extends FrameLayout {
             this.nameTextView.setText(String.format(Locale.US, "%s %s", new Object[]{session.app_name, session.app_version}));
             if ((session.flags & 1) != 0) {
                 setTag(Theme.key_windowBackgroundWhiteValueText);
-                this.onlineTextView.setText(LocaleController.getString("Online", C0541R.string.Online));
+                this.onlineTextView.setText(LocaleController.getString("Online", CLASSNAMER.string.Online));
                 this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
             } else {
                 setTag(Theme.key_windowBackgroundWhiteGrayText3);
@@ -109,8 +109,8 @@ public class SessionCell extends FrameLayout {
                 this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
             }
             stringBuilder = new StringBuilder();
-            if (session.f149ip.length() != 0) {
-                stringBuilder.append(session.f149ip);
+            if (session.var_ip.length() != 0) {
+                stringBuilder.append(session.var_ip);
             }
             if (session.country.length() != 0) {
                 if (stringBuilder.length() != 0) {
@@ -142,7 +142,7 @@ public class SessionCell extends FrameLayout {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }
-                stringBuilder.append(LocaleController.getString("UnofficialApp", C0541R.string.UnofficialApp));
+                stringBuilder.append(LocaleController.getString("UnofficialApp", CLASSNAMER.string.UnofficialApp));
                 stringBuilder.append(" (ID: ");
                 stringBuilder.append(session.api_id);
                 stringBuilder.append(")");
@@ -170,8 +170,8 @@ public class SessionCell extends FrameLayout {
             this.onlineTextView.setText(LocaleController.stringForMessageListDate((long) session2.date_active));
             this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
             stringBuilder = new StringBuilder();
-            if (session2.f236ip.length() != 0) {
-                stringBuilder.append(session2.f236ip);
+            if (session2.var_ip.length() != 0) {
+                stringBuilder.append(session2.var_ip);
             }
             if (session2.region.length() != 0) {
                 if (stringBuilder.length() != 0) {

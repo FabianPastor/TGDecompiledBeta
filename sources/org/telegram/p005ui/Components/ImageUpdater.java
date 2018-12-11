@@ -52,8 +52,8 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     }
 
     /* renamed from: org.telegram.ui.Components.ImageUpdater$1 */
-    class C13651 implements PhotoAlbumPickerActivityDelegate {
-        C13651() {
+    class CLASSNAME implements PhotoAlbumPickerActivityDelegate {
+        CLASSNAME() {
         }
 
         public void didSelectPhotos(ArrayList<SendingMediaInfo> photos) {
@@ -112,7 +112,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
         if (this.parentFragment != null) {
             if (VERSION.SDK_INT < 23 || this.parentFragment == null || this.parentFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(true, false, false, null);
-                fragment.setDelegate(new C13651());
+                fragment.setDelegate(new CLASSNAME());
                 this.parentFragment.presentFragment(fragment);
                 return;
             }
@@ -198,7 +198,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 if (this.delegate != null) {
                     TL_secureFile secureFile = new TL_secureFile();
                     secureFile.dc_id = (int) this.bigPhoto.location.volume_id;
-                    secureFile.f223id = (long) this.bigPhoto.location.local_id;
+                    secureFile.var_id = (long) this.bigPhoto.location.local_id;
                     secureFile.date = (int) (System.currentTimeMillis() / 1000);
                     this.delegate.didUploadedPhoto(null, null, null, secureFile);
                 }

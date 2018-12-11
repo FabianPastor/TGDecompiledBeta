@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.p005ui.ActionBar.Theme;
@@ -103,7 +103,7 @@ public class LanguageCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i2, f, f3, f2, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-        this.checkImage.setImageResource(C0541R.drawable.sticker_added);
+        this.checkImage.setImageResource(CLASSNAMER.drawable.sticker_added);
         View view2 = this.checkImage;
         if (!LocaleController.isRTL) {
             i3 = 5;

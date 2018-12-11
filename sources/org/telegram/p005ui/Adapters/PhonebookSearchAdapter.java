@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.telegram.PhoneFormat.C0216PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -133,7 +133,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                         resultArrayNames.add(AndroidUtilities.generateSearchName("@" + contact.user.username, null, "@" + q));
                     }
                     if (contact.user != null) {
-                        foundUids.put(contact.user.f228id, true);
+                        foundUids.put(contact.user.var_id, true);
                     }
                     resultArray.add(contact);
                 } else {
@@ -215,13 +215,13 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                     user = contact.user;
                 } else {
                     userCell.setCurrentId(contact.contact_id);
-                    userCell.setData(null, (CharSequence) this.searchResultNames.get(position), contact.phones.isEmpty() ? TtmlNode.ANONYMOUS_REGION_ID : C0216PhoneFormat.getInstance().format((String) contact.phones.get(0)), 0);
+                    userCell.setData(null, (CharSequence) this.searchResultNames.get(position), contact.phones.isEmpty() ? TtmlNode.ANONYMOUS_REGION_ID : CLASSNAMEPhoneFormat.getInstance().format((String) contact.phones.get(0)), 0);
                 }
             } else {
                 user = (User) object;
             }
             if (user != null) {
-                userCell.setData(user, (CharSequence) this.searchResultNames.get(position), C0216PhoneFormat.getInstance().format("+" + user.phone), 0);
+                userCell.setData(user, (CharSequence) this.searchResultNames.get(position), CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone), 0);
             }
         }
     }

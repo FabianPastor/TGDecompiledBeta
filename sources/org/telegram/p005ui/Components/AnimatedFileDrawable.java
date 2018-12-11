@@ -40,7 +40,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private long lastFrameDecodeTime;
     private long lastFrameTime;
     private int lastTimeStamp;
-    private Runnable loadFrameRunnable = new C11812();
+    private Runnable loadFrameRunnable = new CLASSNAME();
     private Runnable loadFrameTask;
     protected final Runnable mInvalidateTask = new AnimatedFileDrawable$$Lambda$0(this);
     private final Runnable mStartTask = new AnimatedFileDrawable$$Lambda$1(this);
@@ -60,11 +60,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private View secondParentView = null;
     private Matrix shaderMatrix = new Matrix();
     private boolean singleFrameDecoded;
-    private Runnable uiRunnable = new C11801();
+    private Runnable uiRunnable = new CLASSNAME();
 
     /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$1 */
-    class C11801 implements Runnable {
-        C11801() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -105,8 +105,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* renamed from: org.telegram.ui.Components.AnimatedFileDrawable$2 */
-    class C11812 implements Runnable {
-        C11812() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {

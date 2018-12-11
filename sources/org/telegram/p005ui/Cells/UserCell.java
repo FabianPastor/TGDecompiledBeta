@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -87,14 +87,14 @@ public class UserCell extends FrameLayout {
             this.checkBoxBig = new CheckBoxSquare(context, false);
             addView(this.checkBoxBig, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 3 : 5) | 16, LocaleController.isRTL ? 19.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 19.0f, 0.0f));
         } else if (checkbox == 1) {
-            this.checkBox = new CheckBox(context, C0541R.drawable.round_check2);
+            this.checkBox = new CheckBox(context, CLASSNAMER.drawable.round_check2);
             this.checkBox.setVisibility(4);
             this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 37), 38.0f, LocaleController.isRTL ? (float) (padding + 37) : 0.0f, 0.0f));
         }
         if (admin) {
             this.adminImage = new ImageView(context);
-            this.adminImage.setImageResource(C0541R.drawable.admin_star);
+            this.adminImage.setImageResource(CLASSNAMER.drawable.admin_star);
             addView(this.adminImage, LayoutHelper.createFrame(16, 16.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 24.0f : 0.0f, 13.5f, LocaleController.isRTL ? 0.0f : 24.0f, 0.0f));
         }
     }
@@ -264,13 +264,13 @@ public class UserCell extends FrameLayout {
             if (currentUser.bot) {
                 this.statusTextView.setTextColor(this.statusColor);
                 if (currentUser.bot_chat_history || (this.adminImage != null && this.adminImage.getVisibility() == 0)) {
-                    this.statusTextView.setText(LocaleController.getString("BotStatusRead", C0541R.string.BotStatusRead));
+                    this.statusTextView.setText(LocaleController.getString("BotStatusRead", CLASSNAMER.string.BotStatusRead));
                 } else {
-                    this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", C0541R.string.BotStatusCantRead));
+                    this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", CLASSNAMER.string.BotStatusCantRead));
                 }
-            } else if (currentUser.f228id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.f228id)))) {
+            } else if (currentUser.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.var_id)))) {
                 this.statusTextView.setTextColor(this.statusOnlineColor);
-                this.statusTextView.setText(LocaleController.getString("Online", C0541R.string.Online));
+                this.statusTextView.setText(LocaleController.getString("Online", CLASSNAMER.string.Online));
             } else {
                 this.statusTextView.setTextColor(this.statusColor);
                 this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, currentUser));

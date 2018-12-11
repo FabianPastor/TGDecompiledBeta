@@ -46,7 +46,7 @@ import net.hockeyapp.android.UpdateFragment;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -176,8 +176,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private AlertDialog visibleDialog;
 
     /* renamed from: org.telegram.ui.LaunchActivity$3 */
-    class C17963 implements TermsOfServiceViewDelegate {
-        C17963() {
+    class CLASSNAME implements TermsOfServiceViewDelegate {
+        CLASSNAME() {
         }
 
         public void onAcceptTerms(int account) {
@@ -194,15 +194,15 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$4 */
-    class C17974 implements OnDismissListener {
-        C17974() {
+    class CLASSNAME implements OnDismissListener {
+        CLASSNAME() {
         }
 
         public void onDismiss(DialogInterface dialog) {
             if (LaunchActivity.this.visibleDialog != null) {
                 if (LaunchActivity.this.visibleDialog == LaunchActivity.this.localeDialog) {
                     try {
-                        Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", C0541R.string.ChangeLanguageLater), 1).show();
+                        Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", CLASSNAMER.string.ChangeLanguageLater), 1).show();
                     } catch (Throwable e) {
                         FileLog.m14e(e);
                     }
@@ -224,8 +224,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$5 */
-    class C17985 implements Runnable {
-        C17985() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -309,14 +309,14 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             }
         }
         requestWindowFeature(1);
-        setTheme(C0541R.style.Theme.TMessages);
+        setTheme(CLASSNAMER.style.Theme.TMessages);
         if (VERSION.SDK_INT >= 21) {
             try {
                 setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
             } catch (Exception e) {
             }
         }
-        getWindow().setBackgroundDrawableResource(C0541R.drawable.transparent);
+        getWindow().setBackgroundDrawableResource(CLASSNAMER.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(MessagesController.UPDATE_MASK_CHANNEL, MessagesController.UPDATE_MASK_CHANNEL);
@@ -341,7 +341,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         setContentView(this.drawerLayoutContainer, new LayoutParams(-1, -1));
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(16);
-            View c17941 = new RelativeLayout(this) {
+            View CLASSNAME = new RelativeLayout(this) {
                 private boolean inLayout;
 
                 public void requestLayout() {
@@ -395,36 +395,36 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
                 }
             };
-            this.drawerLayoutContainer.addView(c17941, LayoutHelper.createFrame(-1, -1.0f));
+            this.drawerLayoutContainer.addView(CLASSNAME, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(C0541R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(CLASSNAMER.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
-            c17941.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            c17941.addView(this.actionBarLayout);
+            CLASSNAME.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            CLASSNAME.addView(this.actionBarLayout);
             this.rightActionBarLayout = new ActionBarLayout(this);
             this.rightActionBarLayout.init(rightFragmentsStack);
             this.rightActionBarLayout.setDelegate(this);
-            c17941.addView(this.rightActionBarLayout);
+            CLASSNAME.addView(this.rightActionBarLayout);
             this.shadowTabletSide = new FrameLayout(this);
             this.shadowTabletSide.setBackgroundColor(NUM);
-            c17941.addView(this.shadowTabletSide);
+            CLASSNAME.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
             this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            c17941.addView(this.shadowTablet);
+            CLASSNAME.addView(this.shadowTablet);
             this.shadowTablet.setOnTouchListener(new LaunchActivity$$Lambda$0(this));
             this.shadowTablet.setOnClickListener(LaunchActivity$$Lambda$1.$instance);
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(this.shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(C0541R.drawable.boxshadow);
+            this.layersActionBarLayout.setBackgroundResource(CLASSNAMER.drawable.boxshadow);
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
             this.layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            c17941.addView(this.layersActionBarLayout);
+            CLASSNAME.addView(this.layersActionBarLayout);
         } else {
             this.drawerLayoutContainer.addView(this.actionBarLayout, new LayoutParams(-1, -1));
         }
@@ -776,7 +776,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 presentFragment(new SettingsActivity());
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 9) {
-                Browser.openUrl((Context) this, LocaleController.getString("TelegramFaqUrl", C0541R.string.TelegramFaqUrl));
+                Browser.openUrl((Context) this, LocaleController.getString("TelegramFaqUrl", CLASSNAMER.string.TelegramFaqUrl));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 10) {
                 presentFragment(new CallLogActivity());
@@ -999,10 +999,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (this.termsOfServiceView == null) {
             this.termsOfServiceView = new TermsOfServiceView(this);
             this.drawerLayoutContainer.addView(this.termsOfServiceView, LayoutHelper.createFrame(-1, -1.0f));
-            this.termsOfServiceView.setDelegate(new C17963());
+            this.termsOfServiceView.setDelegate(new CLASSNAME());
         }
         TL_help_termsOfService currentTos = UserConfig.getInstance(account).unacceptedTermsOfService;
-        if (currentTos != tos && (currentTos == null || !currentTos.f171id.data.equals(tos.f171id.data))) {
+        if (currentTos != tos && (currentTos == null || !currentTos.var_id.data.equals(tos.var_id.data))) {
             UserConfig.getInstance(account).unacceptedTermsOfService = tos;
             UserConfig.getInstance(account).saveConfig(false);
         }
@@ -1640,11 +1640,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     args.putInt("dialogsType", 3);
                     args.putBoolean("allowSwitchAccount", true);
                     if (this.contactsToSend == null) {
-                        args.putString("selectAlertString", LocaleController.getString("SendMessagesTo", C0541R.string.SendMessagesTo));
-                        args.putString("selectAlertStringGroup", LocaleController.getString("SendMessagesToGroup", C0541R.string.SendMessagesToGroup));
+                        args.putString("selectAlertString", LocaleController.getString("SendMessagesTo", CLASSNAMER.string.SendMessagesTo));
+                        args.putString("selectAlertStringGroup", LocaleController.getString("SendMessagesToGroup", CLASSNAMER.string.SendMessagesToGroup));
                     } else if (this.contactsToSend.size() != 1) {
-                        args.putString("selectAlertString", LocaleController.getString("SendContactTo", C0541R.string.SendMessagesTo));
-                        args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", C0541R.string.SendContactToGroup));
+                        args.putString("selectAlertString", LocaleController.getString("SendContactTo", CLASSNAMER.string.SendMessagesTo));
+                        args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroup", CLASSNAMER.string.SendContactToGroup));
                     }
                     DialogsActivity dialogsActivity = new DialogsActivity(args);
                     dialogsActivity.setDelegate(this);
@@ -1751,7 +1751,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private void runLinkRequest(int intentAccount, String username, String group, String sticker, String botUser, String botChat, String message, boolean hasUrl, Integer messageId, String game, String[] instantView, HashMap<String, String> auth, String unsupportedUrl, int state) {
         if (state != 0 || UserConfig.getActivatedAccountsCount() < 2 || auth == null) {
             AlertDialog progressDialog = new AlertDialog(this, 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", C0541R.string.Loading));
+            progressDialog.setMessage(LocaleController.getString("Loading", CLASSNAMER.string.Loading));
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             int[] requestId = new int[]{0};
@@ -1806,7 +1806,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 }
             }
             if (requestId[0] != 0) {
-                progressDialog.setButton(-2, LocaleController.getString("Cancel", C0541R.string.Cancel), new LaunchActivity$$Lambda$14(intentAccount, requestId));
+                progressDialog.setButton(-2, LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), new LaunchActivity$$Lambda$14(intentAccount, requestId));
                 try {
                     progressDialog.show();
                     return;
@@ -1840,7 +1840,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             TL_contacts_resolvedPeer res = (TL_contacts_resolvedPeer) response;
             if (error != null || this.actionBarLayout == null || (game != null && (game == null || res.users.isEmpty()))) {
                 try {
-                    Toast.makeText(this, LocaleController.getString("NoUsernameFound", C0541R.string.NoUsernameFound), 0).show();
+                    Toast.makeText(this, LocaleController.getString("NoUsernameFound", CLASSNAMER.string.NoUsernameFound), 0).show();
                     return;
                 } catch (Throwable e2) {
                     FileLog.m14e(e2);
@@ -1857,8 +1857,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 args.putBoolean("onlySelect", true);
                 args.putBoolean("cantSendToChannels", true);
                 args.putInt("dialogsType", 1);
-                args.putString("selectAlertString", LocaleController.getString("SendGameTo", C0541R.string.SendGameTo));
-                args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", C0541R.string.SendGameToGroup));
+                args.putString("selectAlertString", LocaleController.getString("SendGameTo", CLASSNAMER.string.SendGameTo));
+                args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroup", CLASSNAMER.string.SendGameToGroup));
                 fragment = new DialogsActivity(args);
                 fragment.setDelegate(new LaunchActivity$$Lambda$46(this, game, intentAccount, res));
                 boolean removeLast = AndroidUtilities.isTablet() ? this.layersActionBarLayout.fragmentsStack.size() > 0 && (this.layersActionBarLayout.fragmentsStack.get(this.layersActionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity) : this.actionBarLayout.fragmentsStack.size() > 1 && (this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity);
@@ -1881,7 +1881,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 User user = !res.users.isEmpty() ? (User) res.users.get(0) : null;
                 if (user == null || (user.bot && user.bot_nochats)) {
                     try {
-                        Toast.makeText(this, LocaleController.getString("BotCantJoinGroups", C0541R.string.BotCantJoinGroups), 0).show();
+                        Toast.makeText(this, LocaleController.getString("BotCantJoinGroups", CLASSNAMER.string.BotCantJoinGroups), 0).show();
                         return;
                     } catch (Throwable e22) {
                         FileLog.m14e(e22);
@@ -1891,7 +1891,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 args = new Bundle();
                 args.putBoolean("onlySelect", true);
                 args.putInt("dialogsType", 2);
-                args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", C0541R.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
+                args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupTitle", CLASSNAMER.string.AddToTheGroupTitle, UserObject.getUserName(user), "%1$s"));
                 fragment = new DialogsActivity(args);
                 fragment.setDelegate(new LaunchActivity$$Lambda$47(this, intentAccount, user, botChat));
                 presentFragment(fragment);
@@ -1900,11 +1900,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 args = new Bundle();
                 long dialog_id;
                 if (res.chats.isEmpty()) {
-                    args.putInt("user_id", ((User) res.users.get(0)).f228id);
-                    dialog_id = (long) ((User) res.users.get(0)).f228id;
+                    args.putInt("user_id", ((User) res.users.get(0)).var_id);
+                    dialog_id = (long) ((User) res.users.get(0)).var_id;
                 } else {
-                    args.putInt("chat_id", ((Chat) res.chats.get(0)).f113id);
-                    dialog_id = (long) (-((Chat) res.chats.get(0)).f113id);
+                    args.putInt("chat_id", ((Chat) res.chats.get(0)).var_id);
+                    dialog_id = (long) (-((Chat) res.chats.get(0)).var_id);
                 }
                 if (botUser != null && res.users.size() > 0 && ((User) res.users.get(0)).bot) {
                     args.putString("botUser", botUser);
@@ -1931,9 +1931,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     final /* synthetic */ void lambda$null$9$LaunchActivity(String game, int intentAccount, TL_contacts_resolvedPeer res, DialogsActivity fragment1, ArrayList dids, CharSequence message1, boolean param) {
         long did = ((Long) dids.get(0)).longValue();
         TL_inputMediaGame inputMediaGame = new TL_inputMediaGame();
-        inputMediaGame.f177id = new TL_inputGameShortName();
-        inputMediaGame.f177id.short_name = game;
-        inputMediaGame.f177id.bot_id = MessagesController.getInstance(intentAccount).getInputUser((User) res.users.get(0));
+        inputMediaGame.var_id = new TL_inputGameShortName();
+        inputMediaGame.var_id.short_name = game;
+        inputMediaGame.var_id.bot_id = MessagesController.getInstance(intentAccount).getInputUser((User) res.users.get(0));
         SendMessagesHelper.getInstance(intentAccount).sendGame(MessagesController.getInstance(intentAccount).getInputPeer((int) did), inputMediaGame, 0, 0);
         Bundle args1 = new Bundle();
         args1.putBoolean("scrollToTopOnResume", true);
@@ -1980,13 +1980,13 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             Builder builder;
             if (error != null || this.actionBarLayout == null) {
                 builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
                 if (error.text.startsWith("FLOOD_WAIT")) {
-                    builder.setMessage(LocaleController.getString("FloodWait", C0541R.string.FloodWait));
+                    builder.setMessage(LocaleController.getString("FloodWait", CLASSNAMER.string.FloodWait));
                 } else {
-                    builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0541R.string.JoinToGroupErrorNotExist));
+                    builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", CLASSNAMER.string.JoinToGroupErrorNotExist));
                 }
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                 showAlertDialog(builder);
                 return;
             }
@@ -1997,7 +1997,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 chats.add(invite.chat);
                 MessagesStorage.getInstance(intentAccount).putUsersAndChats(null, chats, false, true);
                 Bundle args = new Bundle();
-                args.putInt("chat_id", invite.chat.f113id);
+                args.putInt("chat_id", invite.chat.var_id);
                 if (!mainFragmentsStack.isEmpty()) {
                     if (!MessagesController.getInstance(intentAccount).checkCanOpenChat(args, (BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1))) {
                         return;
@@ -2008,13 +2008,13 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 this.actionBarLayout.presentFragment(fragment, false, true, true, false);
             } else if (((invite.chat != null || (invite.channel && !invite.megagroup)) && (invite.chat == null || (ChatObject.isChannel(invite.chat) && !invite.chat.megagroup))) || mainFragmentsStack.isEmpty()) {
                 builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
                 String str = "ChannelJoinTo";
                 Object[] objArr = new Object[1];
                 objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
-                builder.setMessage(LocaleController.formatString(str, C0541R.string.ChannelJoinTo, objArr));
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), new LaunchActivity$$Lambda$44(this, intentAccount, username, group, sticker, botUser, botChat, message, hasUrl, messageId, game, instantView, auth, unsupportedUrl));
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+                builder.setMessage(LocaleController.formatString(str, CLASSNAMER.string.ChannelJoinTo, objArr));
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new LaunchActivity$$Lambda$44(this, intentAccount, username, group, sticker, botUser, botChat, message, hasUrl, messageId, game, instantView, auth, unsupportedUrl));
+                builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
                 showAlertDialog(builder);
             } else {
                 BaseFragment fragment2 = (BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1);
@@ -2043,15 +2043,15 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             }
             if (error != null) {
                 Builder builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
                 if (error.text.startsWith("FLOOD_WAIT")) {
-                    builder.setMessage(LocaleController.getString("FloodWait", C0541R.string.FloodWait));
+                    builder.setMessage(LocaleController.getString("FloodWait", CLASSNAMER.string.FloodWait));
                 } else if (error.text.equals("USERS_TOO_MUCH")) {
-                    builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", C0541R.string.JoinToGroupErrorFull));
+                    builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", CLASSNAMER.string.JoinToGroupErrorFull));
                 } else {
-                    builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", C0541R.string.JoinToGroupErrorNotExist));
+                    builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", CLASSNAMER.string.JoinToGroupErrorNotExist));
                 }
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                 showAlertDialog(builder);
             } else if (this.actionBarLayout != null) {
                 Updates updates = (Updates) response;
@@ -2062,7 +2062,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     MessagesController.getInstance(intentAccount).putUsers(updates.users, false);
                     MessagesController.getInstance(intentAccount).putChats(updates.chats, false);
                     Bundle args = new Bundle();
-                    args.putInt("chat_id", chat.f113id);
+                    args.putInt("chat_id", chat.var_id);
                     if (mainFragmentsStack.isEmpty() || MessagesController.getInstance(intentAccount).checkCanOpenChat(args, (BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1))) {
                         ChatActivity fragment = new ChatActivity(args);
                         NotificationCenter.getInstance(intentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
@@ -2126,9 +2126,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         try {
             progressDialog.dismiss();
             if ("APP_VERSION_OUTDATED".equals(error.text)) {
-                AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", C0541R.string.UpdateAppAlert), true);
+                AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", CLASSNAMER.string.UpdateAppAlert), true);
             } else {
-                showAlertDialog(AlertsCreator.createSimpleAlert(this, LocaleController.getString("ErrorOccurred", C0541R.string.ErrorOccurred) + "\n" + error.text));
+                showAlertDialog(AlertsCreator.createSimpleAlert(this, LocaleController.getString("ErrorOccurred", CLASSNAMER.string.ErrorOccurred) + "\n" + error.text));
             }
         } catch (Throwable e) {
             FileLog.m14e(e);
@@ -2222,7 +2222,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         try {
             this.visibleDialog = builder.show();
             this.visibleDialog.setCanceledOnTouchOutside(true);
-            this.visibleDialog.setOnDismissListener(new C17974());
+            this.visibleDialog.setOnDismissListener(new CLASSNAME());
             return this.visibleDialog;
         } catch (Throwable e2) {
             FileLog.m14e(e2);
@@ -2407,18 +2407,18 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             }
             if (showAlert) {
                 Builder builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
                 if (requestCode == 3) {
-                    builder.setMessage(LocaleController.getString("PermissionNoAudio", C0541R.string.PermissionNoAudio));
+                    builder.setMessage(LocaleController.getString("PermissionNoAudio", CLASSNAMER.string.PermissionNoAudio));
                 } else if (requestCode == 4) {
-                    builder.setMessage(LocaleController.getString("PermissionStorage", C0541R.string.PermissionStorage));
+                    builder.setMessage(LocaleController.getString("PermissionStorage", CLASSNAMER.string.PermissionStorage));
                 } else if (requestCode == 5) {
-                    builder.setMessage(LocaleController.getString("PermissionContacts", C0541R.string.PermissionContacts));
+                    builder.setMessage(LocaleController.getString("PermissionContacts", CLASSNAMER.string.PermissionContacts));
                 } else if (requestCode == 19 || requestCode == 20 || requestCode == 22) {
-                    builder.setMessage(LocaleController.getString("PermissionNoCamera", C0541R.string.PermissionNoCamera));
+                    builder.setMessage(LocaleController.getString("PermissionNoCamera", CLASSNAMER.string.PermissionNoCamera));
                 }
-                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", C0541R.string.PermissionOpenSettings), new LaunchActivity$$Lambda$17(this));
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", CLASSNAMER.string.PermissionOpenSettings), new LaunchActivity$$Lambda$17(this));
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                 builder.show();
                 return;
             }
@@ -2642,27 +2642,27 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 return;
             }
             builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
             if (!(reason.intValue() == 2 || reason.intValue() == 3)) {
-                builder.setNegativeButton(LocaleController.getString("MoreInfo", C0541R.string.MoreInfo), new LaunchActivity$$Lambda$20(account));
+                builder.setNegativeButton(LocaleController.getString("MoreInfo", CLASSNAMER.string.MoreInfo), new LaunchActivity$$Lambda$20(account));
             }
             if (reason.intValue() == 0) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", C0541R.string.NobodyLikesSpam1));
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", CLASSNAMER.string.NobodyLikesSpam1));
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
             } else if (reason.intValue() == 1) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", C0541R.string.NobodyLikesSpam2));
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", CLASSNAMER.string.NobodyLikesSpam2));
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
             } else if (reason.intValue() == 2) {
                 builder.setMessage((String) args[1]);
                 if (args[2].startsWith("AUTH_KEY_DROP_")) {
-                    builder.setPositiveButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
-                    builder.setNegativeButton(LocaleController.getString("LogOut", C0541R.string.LogOut), new LaunchActivity$$Lambda$21(this));
+                    builder.setPositiveButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("LogOut", CLASSNAMER.string.LogOut), new LaunchActivity$$Lambda$21(this));
                 } else {
-                    builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                    builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                 }
             } else if (reason.intValue() == 3) {
-                builder.setMessage(LocaleController.getString("UseProxyTelegramError", C0541R.string.UseProxyTelegramError));
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                builder.setMessage(LocaleController.getString("UseProxyTelegramError", CLASSNAMER.string.UseProxyTelegramError));
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                 this.proxyErrorDialog = showAlertDialog(builder);
                 return;
             }
@@ -2672,10 +2672,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         } else if (id == NotificationCenter.wasUnableToFindCurrentLocation) {
             HashMap<String, MessageObject> waitingForLocation = args[0];
             builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
-            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", C0541R.string.ShareYouLocationUnableManually), new LaunchActivity$$Lambda$22(this, waitingForLocation, account));
-            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", C0541R.string.ShareYouLocationUnable));
+            builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
+            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", CLASSNAMER.string.ShareYouLocationUnableManually), new LaunchActivity$$Lambda$22(this, waitingForLocation, account));
+            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", CLASSNAMER.string.ShareYouLocationUnable));
             if (!mainFragmentsStack.isEmpty()) {
                 ((BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)).showDialog(builder.create());
             }
@@ -2718,10 +2718,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 boolean schedule = ((Boolean) args[3]).booleanValue();
                 BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1);
                 builder = new Builder((Context) this);
-                builder.setTitle(LocaleController.getString("UpdateContactsTitle", C0541R.string.UpdateContactsTitle));
-                builder.setMessage(LocaleController.getString("UpdateContactsMessage", C0541R.string.UpdateContactsMessage));
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), new LaunchActivity$$Lambda$23(account, contactHashMap, first, schedule));
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), new LaunchActivity$$Lambda$24(account, contactHashMap, first, schedule));
+                builder.setTitle(LocaleController.getString("UpdateContactsTitle", CLASSNAMER.string.UpdateContactsTitle));
+                builder.setMessage(LocaleController.getString("UpdateContactsMessage", CLASSNAMER.string.UpdateContactsMessage));
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new LaunchActivity$$Lambda$23(account, contactHashMap, first, schedule));
+                builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), new LaunchActivity$$Lambda$24(account, contactHashMap, first, schedule));
                 builder.setOnBackButtonListener(new LaunchActivity$$Lambda$25(account, contactHashMap, first, schedule));
                 AlertDialog dialog = builder.create();
                 fragment.showDialog(dialog);
@@ -2804,7 +2804,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             try {
                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                if (Math.abs(preferences.getLong("last_space_check", 0) - System.currentTimeMillis()) >= 259200000) {
+                if (Math.abs(preferences.getLong("last_space_check", 0) - System.currentTimeMillis()) >= NUM) {
                     File path = FileLoader.getDirectory(4);
                     if (path != null) {
                         long freeSpace;
@@ -2815,7 +2815,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                             freeSpace = statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
                         }
                         preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
-                        if (freeSpace < 104857600) {
+                        if (freeSpace < NUM) {
                             AndroidUtilities.runOnUIThread(new LaunchActivity$$Lambda$35(this));
                         }
                     }
@@ -2838,14 +2838,14 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.loadingLocaleDialog = false;
             boolean firstSystem = systemInfo.builtIn || LocaleController.getInstance().isCurrentLocalLocale();
             Builder builder = new Builder((Context) this);
-            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", C0541R.string.ChooseYourLanguage));
-            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", C0541R.string.ChooseYourLanguage));
+            builder.setTitle(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguage", CLASSNAMER.string.ChooseYourLanguage));
+            builder.setSubtitle(getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguage", CLASSNAMER.string.ChooseYourLanguage));
             LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setOrientation(1);
             LanguageCell[] cells = new LanguageCell[2];
             LocaleInfo[] selectedLanguage = new LocaleInfo[1];
             LocaleInfo[] locales = new LocaleInfo[2];
-            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", C0541R.string.English);
+            String englishName = getStringForLanguageAlert(this.systemLocaleStrings, "English", CLASSNAMER.string.English);
             if (firstSystem) {
                 localeInfo = systemInfo;
             } else {
@@ -2874,11 +2874,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 a++;
             }
             LanguageCell cell = new LanguageCell(this, true);
-            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", C0541R.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", C0541R.string.ChooseYourLanguageOther));
+            cell.setValue(getStringForLanguageAlert(this.systemLocaleStrings, "ChooseYourLanguageOther", CLASSNAMER.string.ChooseYourLanguageOther), getStringForLanguageAlert(this.englishLocaleStrings, "ChooseYourLanguageOther", CLASSNAMER.string.ChooseYourLanguageOther));
             cell.setOnClickListener(new LaunchActivity$$Lambda$28(this));
             linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
             builder.setView(linearLayout);
-            builder.setNegativeButton(LocaleController.getString("OK", C0541R.string.OK), new LaunchActivity$$Lambda$29(this, selectedLanguage));
+            builder.setNegativeButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new LaunchActivity$$Lambda$29(this, selectedLanguage));
             this.localeDialog = showAlertDialog(builder);
             MessagesController.getGlobalMainSettings().edit().putString("language_showed2", systemLang).commit();
         } catch (Throwable e) {
@@ -3027,7 +3027,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-            this.lockRunnable = new C17985();
+            this.lockRunnable = new CLASSNAME();
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(this.lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {
@@ -3059,13 +3059,13 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             Runnable action = null;
             this.currentConnectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             if (this.currentConnectionState == 2) {
-                title = LocaleController.getString("WaitingForNetwork", C0541R.string.WaitingForNetwork);
+                title = LocaleController.getString("WaitingForNetwork", CLASSNAMER.string.WaitingForNetwork);
             } else if (this.currentConnectionState == 5) {
-                title = LocaleController.getString("Updating", C0541R.string.Updating);
+                title = LocaleController.getString("Updating", CLASSNAMER.string.Updating);
             } else if (this.currentConnectionState == 4) {
-                title = LocaleController.getString("ConnectingToProxy", C0541R.string.ConnectingToProxy);
+                title = LocaleController.getString("ConnectingToProxy", CLASSNAMER.string.ConnectingToProxy);
             } else if (this.currentConnectionState == 1) {
-                title = LocaleController.getString("Connecting", C0541R.string.Connecting);
+                title = LocaleController.getString("Connecting", CLASSNAMER.string.Connecting);
             }
             if (this.currentConnectionState == 1 || this.currentConnectionState == 4) {
                 action = new LaunchActivity$$Lambda$32(this);

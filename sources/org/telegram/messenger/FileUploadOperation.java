@@ -5,7 +5,7 @@ import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-import com.google.android.exoplayer2.C0021C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.security.MessageDigest;
@@ -49,7 +49,7 @@ public class FileUploadOperation {
     private boolean isEncrypted;
     private boolean isLastPart;
     /* renamed from: iv */
-    private byte[] f79iv;
+    private byte[] var_iv;
     private byte[] ivChange;
     private byte[] key;
     private int lastSavedPartNum;
@@ -68,7 +68,7 @@ public class FileUploadOperation {
     private RandomAccessFile stream;
     private long totalFileSize;
     private int totalPartsCount;
-    private int uploadChunkSize = C0021C.DEFAULT_BUFFER_SEGMENT_SIZE;
+    private int uploadChunkSize = CLASSNAMEC.DEFAULT_BUFFER_SEGMENT_SIZE;
     private boolean uploadFirstPartLater;
     private int uploadStartTime;
     private long uploadedBytesCount;
@@ -83,8 +83,8 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$1 */
-    class C04331 implements Runnable {
-        C04331() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -103,8 +103,8 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$3 */
-    class C04353 implements Runnable {
-        C04353() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -115,11 +115,11 @@ public class FileUploadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileUploadOperation$6 */
-    class C04396 implements WriteToSocketDelegate {
+    class CLASSNAME implements WriteToSocketDelegate {
 
         /* renamed from: org.telegram.messenger.FileUploadOperation$6$1 */
-        class C04381 implements Runnable {
-            C04381() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -129,23 +129,23 @@ public class FileUploadOperation {
             }
         }
 
-        C04396() {
+        CLASSNAME() {
         }
 
         public void run() {
-            Utilities.stageQueue.postRunnable(new C04381());
+            Utilities.stageQueue.postRunnable(new CLASSNAME());
         }
     }
 
     private class UploadCachedResult {
         private long bytesOffset;
         /* renamed from: iv */
-        private byte[] f78iv;
+        private byte[] var_iv;
 
         private UploadCachedResult() {
         }
 
-        /* synthetic */ UploadCachedResult(FileUploadOperation x0, C04331 x1) {
+        /* synthetic */ UploadCachedResult(FileUploadOperation x0, CLASSNAME x1) {
             this();
         }
     }
@@ -171,7 +171,7 @@ public class FileUploadOperation {
     public void start() {
         if (this.state == 0) {
             this.state = 1;
-            Utilities.stageQueue.postRunnable(new C04331());
+            Utilities.stageQueue.postRunnable(new CLASSNAME());
         }
     }
 
@@ -199,7 +199,7 @@ public class FileUploadOperation {
                         FileUploadOperation.this.uploadedBytesCount = 0;
                         FileUploadOperation.this.saveInfoTimes = 0;
                         FileUploadOperation.this.key = null;
-                        FileUploadOperation.this.f79iv = null;
+                        FileUploadOperation.this.var_iv = null;
                         FileUploadOperation.this.ivChange = null;
                         FileUploadOperation.this.currentUploadRequetsCount = 0;
                         FileUploadOperation.this.lastSavedPartNum = 0;
@@ -223,7 +223,7 @@ public class FileUploadOperation {
     public void cancel() {
         if (this.state != 3) {
             this.state = 2;
-            Utilities.stageQueue.postRunnable(new C04353());
+            Utilities.stageQueue.postRunnable(new CLASSNAME());
             this.delegate.didFailedUploadingFile(this);
             cleanup();
         }
@@ -272,7 +272,7 @@ public class FileUploadOperation {
         editor.putLong(this.fileKey + "_id", this.currentFileId);
         editor.remove(this.fileKey + "_uploaded");
         if (this.isEncrypted) {
-            editor.putString(this.fileKey + "_iv", Utilities.bytesToHex(this.f79iv));
+            editor.putString(this.fileKey + "_iv", Utilities.bytesToHex(this.var_iv));
             editor.putString(this.fileKey + "_ivc", Utilities.bytesToHex(this.ivChange));
             editor.putString(this.fileKey + "_key", Utilities.bytesToHex(this.key));
         }
@@ -345,12 +345,12 @@ public class FileUploadOperation {
                                 rewrite = true;
                             } else {
                                 this.key = Utilities.hexToBytes(keyString);
-                                this.f79iv = Utilities.hexToBytes(ivString);
-                                if (this.key == null || this.f79iv == null || this.key.length != 32 || this.f79iv.length != 32) {
+                                this.var_iv = Utilities.hexToBytes(ivString);
+                                if (this.key == null || this.var_iv == null || this.key.length != 32 || this.var_iv.length != 32) {
                                     rewrite = true;
                                 } else {
                                     this.ivChange = new byte[32];
-                                    System.arraycopy(this.f79iv, 0, this.ivChange, 0, 32);
+                                    System.arraycopy(this.var_iv, 0, this.ivChange, 0, 32);
                                 }
                             }
                         }
@@ -412,12 +412,12 @@ public class FileUploadOperation {
                     }
                     if (rewrite) {
                         if (this.isEncrypted) {
-                            this.f79iv = new byte[32];
+                            this.var_iv = new byte[32];
                             this.key = new byte[32];
                             this.ivChange = new byte[32];
-                            Utilities.random.nextBytes(this.f79iv);
+                            Utilities.random.nextBytes(this.var_iv);
                             Utilities.random.nextBytes(this.key);
-                            System.arraycopy(this.f79iv, 0, this.ivChange, 0, 32);
+                            System.arraycopy(this.var_iv, 0, this.ivChange, 0, 32);
                         }
                         this.currentFileId = Utilities.random.nextLong();
                         if (!(this.nextPartFirst || this.uploadFirstPartLater || this.estimatedSize != 0)) {
@@ -429,7 +429,7 @@ public class FileUploadOperation {
                             MessageDigest md = MessageDigest.getInstance("MD5");
                             Object arr = new byte[64];
                             System.arraycopy(this.key, 0, arr, 0, 32);
-                            System.arraycopy(this.f79iv, 0, arr, 32, 32);
+                            System.arraycopy(this.var_iv, 0, arr, 32, 32);
                             byte[] digest = md.digest(arr);
                             for (a = 0; a < 4; a++) {
                                 this.fingerprint |= ((digest[a] ^ digest[a + 4]) & 255) << (a * 8);
@@ -579,7 +579,7 @@ public class FileUploadOperation {
                                                     result.md5_checksum = TtmlNode.ANONYMOUS_REGION_ID;
                                                 }
                                                 result.parts = FileUploadOperation.this.currentPartNum;
-                                                result.f132id = FileUploadOperation.this.currentFileId;
+                                                result.var_id = FileUploadOperation.this.currentFileId;
                                                 result.name = FileUploadOperation.this.uploadingFilePath.substring(FileUploadOperation.this.uploadingFilePath.lastIndexOf("/") + 1);
                                                 FileUploadOperation.this.delegate.didFinishUploadingFile(FileUploadOperation.this, result, null, null, null);
                                                 FileUploadOperation.this.cleanup();
@@ -592,9 +592,9 @@ public class FileUploadOperation {
                                                     result2.md5_checksum = TtmlNode.ANONYMOUS_REGION_ID;
                                                 }
                                                 result2.parts = FileUploadOperation.this.currentPartNum;
-                                                result2.f131id = FileUploadOperation.this.currentFileId;
+                                                result2.var_id = FileUploadOperation.this.currentFileId;
                                                 result2.key_fingerprint = FileUploadOperation.this.fingerprint;
-                                                FileUploadOperation.this.delegate.didFinishUploadingFile(FileUploadOperation.this, null, result2, FileUploadOperation.this.key, FileUploadOperation.this.f79iv);
+                                                FileUploadOperation.this.delegate.didFinishUploadingFile(FileUploadOperation.this, null, result2, FileUploadOperation.this.key, FileUploadOperation.this.var_iv);
                                                 FileUploadOperation.this.cleanup();
                                             }
                                             if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
@@ -622,7 +622,7 @@ public class FileUploadOperation {
                                                             break;
                                                         }
                                                         offsetToSave = result3.bytesOffset;
-                                                        ivToSave = result3.f78iv;
+                                                        ivToSave = result3.var_iv;
                                                         FileUploadOperation.this.cachedResults.remove(FileUploadOperation.this.lastSavedPartNum);
                                                         FileUploadOperation.this.lastSavedPartNum = FileUploadOperation.this.lastSavedPartNum + 1;
                                                     }
@@ -638,8 +638,8 @@ public class FileUploadOperation {
                                                     result3 = new UploadCachedResult(FileUploadOperation.this, null);
                                                     result3.bytesOffset = currentRequestBytesOffset;
                                                     if (currentRequestIv != null) {
-                                                        result3.f78iv = new byte[32];
-                                                        System.arraycopy(currentRequestIv, 0, result3.f78iv, 0, 32);
+                                                        result3.var_iv = new byte[32];
+                                                        System.arraycopy(currentRequestIv, 0, result3.var_iv, 0, 32);
                                                     }
                                                     FileUploadOperation.this.cachedResults.put(currentRequestPartNum, result3);
                                                 }
@@ -650,7 +650,7 @@ public class FileUploadOperation {
                                     }
                                 }
                             }
-                        }, null, new C04396(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true));
+                        }, null, new CLASSNAME(), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true));
                     }
                 }
             } catch (Throwable e2) {

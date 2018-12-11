@@ -5,7 +5,7 @@
         <item name="android:textColor">#000000</item>
     </style>
     <style name="ActionBar.Transparent.TMessages.Start">
-        <item name="android:background">#ff527da3</item>
+        <item name="android:background">#fvar_da3</item>
         <item name="android:title" />
         <item name="android:logo">@drawable/transparent</item>
     </style>

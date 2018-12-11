@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -97,7 +97,7 @@ public class DialogMeUrlCell extends BaseCell {
         this.drawVerified = false;
         if (this.recentMeUrl instanceof TL_recentMeUrlChat) {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.recentMeUrl.chat_id));
-            if (chat.f113id < 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
+            if (chat.var_id < 0 || (ChatObject.isChannel(chat) && !chat.megagroup)) {
                 this.drawNameBroadcast = true;
                 this.nameLockTop = AndroidUtilities.m10dp(16.5f);
             } else {
@@ -170,7 +170,7 @@ public class DialogMeUrlCell extends BaseCell {
                 } else {
                     image = null;
                 }
-                if (this.recentMeUrl.chat_invite.chat.f113id < 0 || (ChatObject.isChannel(this.recentMeUrl.chat_invite.chat) && !this.recentMeUrl.chat_invite.chat.megagroup)) {
+                if (this.recentMeUrl.chat_invite.chat.var_id < 0 || (ChatObject.isChannel(this.recentMeUrl.chat_invite.chat) && !this.recentMeUrl.chat_invite.chat.megagroup)) {
                     this.drawNameBroadcast = true;
                     this.nameLockTop = AndroidUtilities.m10dp(16.5f);
                 } else {
@@ -218,7 +218,7 @@ public class DialogMeUrlCell extends BaseCell {
         CharSequence messageString = MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + this.recentMeUrl.url;
         this.avatarImage.setImage(image, "50_50", this.avatarDrawable, null, 0);
         if (TextUtils.isEmpty(nameString)) {
-            nameString = LocaleController.getString("HiddenName", C0541R.string.HiddenName);
+            nameString = LocaleController.getString("HiddenName", CLASSNAMER.string.HiddenName);
         }
         if (LocaleController.isRTL) {
             nameWidth = (getMeasuredWidth() - this.nameLeft) - AndroidUtilities.m10dp((float) AndroidUtilities.leftBaseline);

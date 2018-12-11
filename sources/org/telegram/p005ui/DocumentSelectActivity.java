@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -40,7 +40,7 @@ import org.telegram.p005ui.ActionBar.ActionBarMenu;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.GraySectionCell;
@@ -66,7 +66,7 @@ public class DocumentSelectActivity extends BaseFragment {
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private int maxSelectedFiles = -1;
-    private BroadcastReceiver receiver = new C16901();
+    private BroadcastReceiver receiver = new CLASSNAME();
     private boolean receiverRegistered = false;
     private ArrayList<ListItem> recentItems = new ArrayList();
     private boolean scrolling;
@@ -82,8 +82,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$1 */
-    class C16901 extends BroadcastReceiver {
-        C16901() {
+    class CLASSNAME extends BroadcastReceiver {
+        CLASSNAME() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
@@ -109,8 +109,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
-    class C16912 extends ActionBarMenuOnItemClick {
-        C16912() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -138,8 +138,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$3 */
-    class C16923 extends OnScrollListener {
-        C16923() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -148,8 +148,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
-    class C16934 implements OnPreDrawListener {
-        C16934() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -169,7 +169,7 @@ public class DocumentSelectActivity extends BaseFragment {
         private HistoryEntry() {
         }
 
-        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, C16901 x1) {
+        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, CLASSNAME x1) {
             this();
         }
     }
@@ -216,7 +216,7 @@ public class DocumentSelectActivity extends BaseFragment {
             switch (viewType) {
                 case 0:
                     view = new GraySectionCell(this.mContext);
-                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", C0541R.string.Recent).toUpperCase());
+                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", CLASSNAMER.string.Recent).toUpperCase());
                     break;
                 default:
                     view = new SharedDocumentCell(this.mContext);
@@ -269,7 +269,7 @@ public class DocumentSelectActivity extends BaseFragment {
             this.ext = TtmlNode.ANONYMOUS_REGION_ID;
         }
 
-        /* synthetic */ ListItem(DocumentSelectActivity x0, C16901 x1) {
+        /* synthetic */ ListItem(DocumentSelectActivity x0, CLASSNAME x1) {
             this();
         }
     }
@@ -308,8 +308,8 @@ public class DocumentSelectActivity extends BaseFragment {
         }
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("SelectFile", C0541R.string.SelectFile));
-        this.actionBar.setActionBarMenuOnItemClick(new C16912());
+        this.actionBar.setTitle(LocaleController.getString("SelectFile", CLASSNAMER.string.SelectFile));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.selectedFiles.clear();
         this.actionModeViews.clear();
         ActionBarMenu actionMode = this.actionBar.createActionMode();
@@ -319,7 +319,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
         this.selectedMessagesCountTextView.setOnTouchListener(DocumentSelectActivity$$Lambda$0.$instance);
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-        this.actionModeViews.add(actionMode.addItemWithWidth(3, C0541R.drawable.ic_ab_done, AndroidUtilities.m10dp(54.0f)));
+        this.actionModeViews.add(actionMode.addItemWithWidth(3, CLASSNAMER.drawable.ic_ab_done, AndroidUtilities.m10dp(54.0f)));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
@@ -337,7 +337,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.listAdapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnScrollListener(new C16923());
+        this.listView.setOnScrollListener(new CLASSNAME());
         this.listView.setOnItemLongClickListener(new DocumentSelectActivity$$Lambda$1(this));
         this.listView.setOnItemClickListener(new DocumentSelectActivity$$Lambda$2(this));
         listRoots();
@@ -355,16 +355,16 @@ public class DocumentSelectActivity extends BaseFragment {
         File file = item.file;
         if (!(file == null || file.isDirectory())) {
             if (!file.canRead()) {
-                showErrorBox(LocaleController.getString("AccessError", C0541R.string.AccessError));
+                showErrorBox(LocaleController.getString("AccessError", CLASSNAMER.string.AccessError));
                 return false;
             } else if (this.canSelectOnlyImageFiles && item.thumb == null) {
-                showErrorBox(LocaleController.formatString("PassportUploadNotImage", C0541R.string.PassportUploadNotImage, new Object[0]));
+                showErrorBox(LocaleController.formatString("PassportUploadNotImage", CLASSNAMER.string.PassportUploadNotImage, new Object[0]));
                 return false;
             } else if (this.sizeLimit != 0 && file.length() > this.sizeLimit) {
-                showErrorBox(LocaleController.formatString("FileUploadLimit", C0541R.string.FileUploadLimit, AndroidUtilities.formatFileSize(this.sizeLimit)));
+                showErrorBox(LocaleController.formatString("FileUploadLimit", CLASSNAMER.string.FileUploadLimit, AndroidUtilities.formatFileSize(this.sizeLimit)));
                 return false;
             } else if (this.maxSelectedFiles >= 0 && this.selectedFiles.size() >= this.maxSelectedFiles) {
-                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", C0541R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
+                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", CLASSNAMER.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
                 return false;
             } else if (file.length() == 0) {
                 return false;
@@ -397,7 +397,7 @@ public class DocumentSelectActivity extends BaseFragment {
             File file = item.file;
             HistoryEntry he;
             if (file == null) {
-                if (item.icon == C0541R.drawable.ic_storage_gallery) {
+                if (item.icon == CLASSNAMER.drawable.ic_storage_gallery) {
                     if (this.delegate != null) {
                         this.delegate.startDocumentSelectActivity();
                     }
@@ -429,13 +429,13 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
             } else {
                 if (!file.canRead()) {
-                    showErrorBox(LocaleController.getString("AccessError", C0541R.string.AccessError));
+                    showErrorBox(LocaleController.getString("AccessError", CLASSNAMER.string.AccessError));
                     file = new File("/mnt/sdcard");
                 }
                 if (this.canSelectOnlyImageFiles && item.thumb == null) {
-                    showErrorBox(LocaleController.formatString("PassportUploadNotImage", C0541R.string.PassportUploadNotImage, new Object[0]));
+                    showErrorBox(LocaleController.formatString("PassportUploadNotImage", CLASSNAMER.string.PassportUploadNotImage, new Object[0]));
                 } else if (this.sizeLimit != 0 && file.length() > this.sizeLimit) {
-                    showErrorBox(LocaleController.formatString("FileUploadLimit", C0541R.string.FileUploadLimit, AndroidUtilities.formatFileSize(this.sizeLimit)));
+                    showErrorBox(LocaleController.formatString("FileUploadLimit", CLASSNAMER.string.FileUploadLimit, AndroidUtilities.formatFileSize(this.sizeLimit)));
                 } else if (file.length() == 0) {
                 } else {
                     if (this.actionBar.isActionModeShowed()) {
@@ -444,7 +444,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         } else if (this.maxSelectedFiles < 0 || this.selectedFiles.size() < this.maxSelectedFiles) {
                             this.selectedFiles.put(file.toString(), item);
                         } else {
-                            showErrorBox(LocaleController.formatString("PassportUploadMaxReached", C0541R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
+                            showErrorBox(LocaleController.formatString("PassportUploadMaxReached", CLASSNAMER.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
                             return;
                         }
                         if (this.selectedFiles.isEmpty()) {
@@ -522,7 +522,7 @@ public class DocumentSelectActivity extends BaseFragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (this.listView != null) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new C16934());
+            this.listView.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 
@@ -560,7 +560,7 @@ public class DocumentSelectActivity extends BaseFragment {
             try {
                 File[] files = dir.listFiles();
                 if (files == null) {
-                    showErrorBox(LocaleController.getString("UnknownError", C0541R.string.UnknownError));
+                    showErrorBox(LocaleController.getString("UnknownError", CLASSNAMER.string.UnknownError));
                     return false;
                 }
                 ListItem item;
@@ -573,8 +573,8 @@ public class DocumentSelectActivity extends BaseFragment {
                         item.title = file.getName();
                         item.file = file;
                         if (file.isDirectory()) {
-                            item.icon = C0541R.drawable.ic_directory;
-                            item.subtitle = LocaleController.getString("Folder", C0541R.string.Folder);
+                            item.icon = CLASSNAMER.drawable.ic_directory;
+                            item.subtitle = LocaleController.getString("Folder", CLASSNAMER.string.Folder);
                         } else {
                             String fname = file.getName();
                             String[] sp = fname.split("\\.");
@@ -593,14 +593,14 @@ public class DocumentSelectActivity extends BaseFragment {
                 if (this.history.size() > 0) {
                     HistoryEntry entry = (HistoryEntry) this.history.get(this.history.size() - 1);
                     if (entry.dir == null) {
-                        item.subtitle = LocaleController.getString("Folder", C0541R.string.Folder);
+                        item.subtitle = LocaleController.getString("Folder", CLASSNAMER.string.Folder);
                     } else {
                         item.subtitle = entry.dir.toString();
                     }
                 } else {
-                    item.subtitle = LocaleController.getString("Folder", C0541R.string.Folder);
+                    item.subtitle = LocaleController.getString("Folder", CLASSNAMER.string.Folder);
                 }
-                item.icon = C0541R.drawable.ic_directory;
+                item.icon = CLASSNAMER.drawable.ic_directory;
                 item.file = null;
                 this.items.add(0, item);
                 AndroidUtilities.clearDrawableAnimation(this.listView);
@@ -612,15 +612,15 @@ public class DocumentSelectActivity extends BaseFragment {
                 return false;
             }
         } else if ((!dir.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().toString()) && !dir.getAbsolutePath().startsWith("/sdcard") && !dir.getAbsolutePath().startsWith("/mnt/sdcard")) || Environment.getExternalStorageState().equals("mounted") || Environment.getExternalStorageState().equals("mounted_ro")) {
-            showErrorBox(LocaleController.getString("AccessError", C0541R.string.AccessError));
+            showErrorBox(LocaleController.getString("AccessError", CLASSNAMER.string.AccessError));
             return false;
         } else {
             this.currentDir = dir;
             this.items.clear();
             if ("shared".equals(Environment.getExternalStorageState())) {
-                this.emptyView.setText(LocaleController.getString("UsbActive", C0541R.string.UsbActive));
+                this.emptyView.setText(LocaleController.getString("UsbActive", CLASSNAMER.string.UsbActive));
             } else {
-                this.emptyView.setText(LocaleController.getString("NotMounted", C0541R.string.NotMounted));
+                this.emptyView.setText(LocaleController.getString("NotMounted", CLASSNAMER.string.NotMounted));
             }
             AndroidUtilities.clearDrawableAnimation(this.listView);
             this.scrolling = true;
@@ -639,7 +639,7 @@ public class DocumentSelectActivity extends BaseFragment {
 
     private void showErrorBox(String error) {
         if (getParentActivity() != null) {
-            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", C0541R.string.AppName)).setMessage(error).setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null).show();
+            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName)).setMessage(error).setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null).show();
         }
     }
 
@@ -673,11 +673,11 @@ public class DocumentSelectActivity extends BaseFragment {
         if (defaultPathState.equals("mounted") || defaultPathState.equals("mounted_ro")) {
             ListItem ext = new ListItem(this, null);
             if (Environment.isExternalStorageRemovable()) {
-                ext.title = LocaleController.getString("SdCard", C0541R.string.SdCard);
-                ext.icon = C0541R.drawable.ic_external_storage;
+                ext.title = LocaleController.getString("SdCard", CLASSNAMER.string.SdCard);
+                ext.icon = CLASSNAMER.drawable.ic_external_storage;
             } else {
-                ext.title = LocaleController.getString("InternalStorage", C0541R.string.InternalStorage);
-                ext.icon = C0541R.drawable.ic_storage;
+                ext.title = LocaleController.getString("InternalStorage", CLASSNAMER.string.InternalStorage);
+                ext.icon = CLASSNAMER.drawable.ic_storage;
             }
             ext.subtitle = getRootSubtitle(defaultPath);
             ext.file = Environment.getExternalStorageDirectory();
@@ -711,11 +711,11 @@ public class DocumentSelectActivity extends BaseFragment {
                                 paths.add(path);
                                 ListItem item = new ListItem(this, null);
                                 if (path.toLowerCase().contains("sd")) {
-                                    item.title = LocaleController.getString("SdCard", C0541R.string.SdCard);
+                                    item.title = LocaleController.getString("SdCard", CLASSNAMER.string.SdCard);
                                 } else {
-                                    item.title = LocaleController.getString("ExternalStorage", C0541R.string.ExternalStorage);
+                                    item.title = LocaleController.getString("ExternalStorage", CLASSNAMER.string.ExternalStorage);
                                 }
-                                item.icon = C0541R.drawable.ic_external_storage;
+                                item.icon = CLASSNAMER.drawable.ic_external_storage;
                                 item.subtitle = getRootSubtitle(path);
                                 item.file = new File(path);
                                 this.items.add(item);
@@ -749,17 +749,17 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
                 fs = new ListItem(this, null);
                 fs.title = "/";
-                fs.subtitle = LocaleController.getString("SystemRoot", C0541R.string.SystemRoot);
-                fs.icon = C0541R.drawable.ic_directory;
+                fs.subtitle = LocaleController.getString("SystemRoot", CLASSNAMER.string.SystemRoot);
+                fs.icon = CLASSNAMER.drawable.ic_directory;
                 fs.file = new File("/");
                 this.items.add(fs);
                 file = new File(Environment.getExternalStorageDirectory(), "Telegram");
                 if (file.exists()) {
                 }
                 fs = new ListItem(this, null);
-                fs.title = LocaleController.getString("Gallery", C0541R.string.Gallery);
-                fs.subtitle = LocaleController.getString("GalleryInfo", C0541R.string.GalleryInfo);
-                fs.icon = C0541R.drawable.ic_storage_gallery;
+                fs.title = LocaleController.getString("Gallery", CLASSNAMER.string.Gallery);
+                fs.subtitle = LocaleController.getString("GalleryInfo", CLASSNAMER.string.GalleryInfo);
+                fs.icon = CLASSNAMER.drawable.ic_storage_gallery;
                 fs.file = null;
                 this.items.add(fs);
                 AndroidUtilities.clearDrawableAnimation(this.listView);
@@ -779,8 +779,8 @@ public class DocumentSelectActivity extends BaseFragment {
         }
         fs = new ListItem(this, null);
         fs.title = "/";
-        fs.subtitle = LocaleController.getString("SystemRoot", C0541R.string.SystemRoot);
-        fs.icon = C0541R.drawable.ic_directory;
+        fs.subtitle = LocaleController.getString("SystemRoot", CLASSNAMER.string.SystemRoot);
+        fs.icon = CLASSNAMER.drawable.ic_directory;
         fs.file = new File("/");
         this.items.add(fs);
         try {
@@ -790,7 +790,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 try {
                     fs2.title = "Telegram";
                     fs2.subtitle = file.toString();
-                    fs2.icon = C0541R.drawable.ic_directory;
+                    fs2.icon = CLASSNAMER.drawable.ic_directory;
                     fs2.file = file;
                     this.items.add(fs2);
                     fs = fs2;
@@ -799,9 +799,9 @@ public class DocumentSelectActivity extends BaseFragment {
                     fs = fs2;
                     FileLog.m14e(e222);
                     fs = new ListItem(this, null);
-                    fs.title = LocaleController.getString("Gallery", C0541R.string.Gallery);
-                    fs.subtitle = LocaleController.getString("GalleryInfo", C0541R.string.GalleryInfo);
-                    fs.icon = C0541R.drawable.ic_storage_gallery;
+                    fs.title = LocaleController.getString("Gallery", CLASSNAMER.string.Gallery);
+                    fs.subtitle = LocaleController.getString("GalleryInfo", CLASSNAMER.string.GalleryInfo);
+                    fs.icon = CLASSNAMER.drawable.ic_storage_gallery;
                     fs.file = null;
                     this.items.add(fs);
                     AndroidUtilities.clearDrawableAnimation(this.listView);
@@ -813,9 +813,9 @@ public class DocumentSelectActivity extends BaseFragment {
             e222 = e6;
             FileLog.m14e(e222);
             fs = new ListItem(this, null);
-            fs.title = LocaleController.getString("Gallery", C0541R.string.Gallery);
-            fs.subtitle = LocaleController.getString("GalleryInfo", C0541R.string.GalleryInfo);
-            fs.icon = C0541R.drawable.ic_storage_gallery;
+            fs.title = LocaleController.getString("Gallery", CLASSNAMER.string.Gallery);
+            fs.subtitle = LocaleController.getString("GalleryInfo", CLASSNAMER.string.GalleryInfo);
+            fs.icon = CLASSNAMER.drawable.ic_storage_gallery;
             fs.file = null;
             this.items.add(fs);
             AndroidUtilities.clearDrawableAnimation(this.listView);
@@ -823,9 +823,9 @@ public class DocumentSelectActivity extends BaseFragment {
             this.listAdapter.notifyDataSetChanged();
         }
         fs = new ListItem(this, null);
-        fs.title = LocaleController.getString("Gallery", C0541R.string.Gallery);
-        fs.subtitle = LocaleController.getString("GalleryInfo", C0541R.string.GalleryInfo);
-        fs.icon = C0541R.drawable.ic_storage_gallery;
+        fs.title = LocaleController.getString("Gallery", CLASSNAMER.string.Gallery);
+        fs.subtitle = LocaleController.getString("GalleryInfo", CLASSNAMER.string.GalleryInfo);
+        fs.icon = CLASSNAMER.drawable.ic_storage_gallery;
         fs.file = null;
         this.items.add(fs);
         AndroidUtilities.clearDrawableAnimation(this.listView);
@@ -840,7 +840,7 @@ public class DocumentSelectActivity extends BaseFragment {
             if (((long) stat.getBlockCount()) * ((long) stat.getBlockSize()) == 0) {
                 return TtmlNode.ANONYMOUS_REGION_ID;
             }
-            return LocaleController.formatString("FreeOfTotal", C0541R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
+            return LocaleController.formatString("FreeOfTotal", CLASSNAMER.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
         } catch (Throwable e) {
             FileLog.m14e(e);
             return path;

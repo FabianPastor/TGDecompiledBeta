@@ -6,7 +6,7 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-import com.google.android.exoplayer2.C0021C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import java.io.File;
 import java.util.ArrayList;
@@ -272,7 +272,7 @@ public class SharedConfig {
             try {
                 passcodeSalt = new byte[16];
                 Utilities.random.nextBytes(passcodeSalt);
-                passcodeBytes = passcode.getBytes(C0021C.UTF8_NAME);
+                passcodeBytes = passcode.getBytes(CLASSNAMEC.UTF8_NAME);
                 bytes = new byte[(passcodeBytes.length + 32)];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -286,7 +286,7 @@ public class SharedConfig {
             }
         }
         try {
-            passcodeBytes = passcode.getBytes(C0021C.UTF8_NAME);
+            passcodeBytes = passcode.getBytes(CLASSNAMEC.UTF8_NAME);
             bytes = new byte[(passcodeBytes.length + 32)];
             System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
             System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);

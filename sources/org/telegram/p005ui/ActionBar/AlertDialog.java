@@ -34,7 +34,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.Components.LayoutHelper;
@@ -255,8 +255,8 @@ public class AlertDialog extends Dialog implements Callback {
     }
 
     public AlertDialog(Context context, int progressStyle) {
-        super(context, C0541R.style.TransparentDialog);
-        this.shadowDrawable = context.getResources().getDrawable(C0541R.drawable.popup_fixed_alert).mutate();
+        super(context, CLASSNAMER.style.TransparentDialog);
+        this.shadowDrawable = context.getResources().getDrawable(CLASSNAMER.drawable.popup_fixed_alert).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.shadowDrawable.getPadding(this.backgroundPaddings);
         this.progressViewStyle = progressStyle;
@@ -434,7 +434,7 @@ public class AlertDialog extends Dialog implements Callback {
                 this.topImageView.setImageResource(this.topResId);
             }
             this.topImageView.setScaleType(ScaleType.CENTER);
-            this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(C0541R.drawable.popup_fixed_top));
+            this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(CLASSNAMER.drawable.popup_fixed_top));
             this.topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(this.topBackgroundColor, Mode.MULTIPLY));
             this.topImageView.setPadding(0, 0, 0, 0);
             containerView.addView(this.topImageView, LayoutHelper.createLinear(-1, this.topHeight, (LocaleController.isRTL ? 5 : 3) | 48, -8, -8, 0, 0));
@@ -478,8 +478,8 @@ public class AlertDialog extends Dialog implements Callback {
             containerView.addView(view2, LayoutHelper.createLinear(-2, -2, i, 24, 0, 24, i2));
         }
         if (this.progressViewStyle == 0) {
-            this.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(C0541R.drawable.header_shadow).mutate();
-            this.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(C0541R.drawable.header_shadow_reverse).mutate();
+            this.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(CLASSNAMER.drawable.header_shadow).mutate();
+            this.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(CLASSNAMER.drawable.header_shadow_reverse).mutate();
             this.shadow[0].setAlpha(0);
             this.shadow[1].setAlpha(0);
             this.shadow[0].setCallback(this);

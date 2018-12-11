@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
 
@@ -35,8 +35,8 @@ public class CropRotationWheel extends FrameLayout {
     private Paint whitePaint = new Paint();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$1 */
-    class C12631 implements OnClickListener {
-        C12631() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -47,8 +47,8 @@ public class CropRotationWheel extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropRotationWheel$2 */
-    class C12642 implements OnClickListener {
-        C12642() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -83,16 +83,16 @@ public class CropRotationWheel extends FrameLayout {
         this.bluePaint.setAlpha(255);
         this.bluePaint.setAntiAlias(true);
         this.aspectRatioButton = new ImageView(context);
-        this.aspectRatioButton.setImageResource(C0541R.drawable.tool_cropfix);
+        this.aspectRatioButton.setImageResource(CLASSNAMER.drawable.tool_cropfix);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.aspectRatioButton.setScaleType(ScaleType.CENTER);
-        this.aspectRatioButton.setOnClickListener(new C12631());
+        this.aspectRatioButton.setOnClickListener(new CLASSNAME());
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
         this.rotation90Button = new ImageView(context);
-        this.rotation90Button.setImageResource(C0541R.drawable.tool_rotate);
+        this.rotation90Button.setImageResource(CLASSNAMER.drawable.tool_rotate);
         this.rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.rotation90Button.setScaleType(ScaleType.CENTER);
-        this.rotation90Button.setOnClickListener(new C12642());
+        this.rotation90Button.setOnClickListener(new CLASSNAME());
         addView(this.rotation90Button, LayoutHelper.createFrame(70, 64, 21));
         this.degreesLabel = new TextView(context);
         this.degreesLabel.setTextColor(-1);

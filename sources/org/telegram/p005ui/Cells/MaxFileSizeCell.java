@@ -8,7 +8,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
@@ -24,8 +24,8 @@ public class MaxFileSizeCell extends FrameLayout {
     private TextView textView;
 
     /* renamed from: org.telegram.ui.Cells.MaxFileSizeCell$2 */
-    class C09152 implements SeekBarViewDelegate {
-        C09152() {
+    class CLASSNAME implements SeekBarViewDelegate {
+        CLASSNAME() {
         }
 
         public void onSeekBarDrag(float progress) {
@@ -33,11 +33,11 @@ public class MaxFileSizeCell extends FrameLayout {
             if (MaxFileSizeCell.this.maxSize <= 10485760) {
                 size = (int) (((float) MaxFileSizeCell.this.maxSize) * progress);
             } else if (progress <= 0.8f) {
-                size = (int) (((float) 104857600) * (progress / 0.8f));
+                size = (int) (((float) NUM) * (progress / 0.8f));
             } else {
-                size = (int) (((float) 104857600) + ((((float) (MaxFileSizeCell.this.maxSize - ((long) 104857600))) * (progress - 0.8f)) / 0.2f));
+                size = (int) (((float) NUM) + ((((float) (MaxFileSizeCell.this.maxSize - ((long) NUM))) * (progress - 0.8f)) / 0.2f));
             }
-            MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", C0541R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize((long) size)));
+            MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", CLASSNAMER.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize((long) size)));
             MaxFileSizeCell.this.didChangedSizeValue(size);
         }
     }
@@ -53,7 +53,7 @@ public class MaxFileSizeCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setText(LocaleController.getString("AutodownloadSizeLimit", C0541R.string.AutodownloadSizeLimit));
+        this.textView.setText(LocaleController.getString("AutodownloadSizeLimit", CLASSNAMER.string.AutodownloadSizeLimit));
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         this.textView.setEllipsize(TruncateAt.END);
         View view = this.textView;
@@ -87,7 +87,7 @@ public class MaxFileSizeCell extends FrameLayout {
             }
         };
         this.seekBarView.setReportChanges(true);
-        this.seekBarView.setDelegate(new C09152());
+        this.seekBarView.setDelegate(new CLASSNAME());
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 4.0f, 40.0f, 4.0f, 0.0f));
     }
 
@@ -103,12 +103,12 @@ public class MaxFileSizeCell extends FrameLayout {
         this.maxSize = max;
         if (this.maxSize <= 10485760) {
             progress = ((float) size) / ((float) this.maxSize);
-        } else if (size <= ((long) 104857600)) {
-            progress = (((float) size) / ((float) 104857600)) * 0.8f;
+        } else if (size <= ((long) NUM)) {
+            progress = (((float) size) / ((float) NUM)) * 0.8f;
         } else {
-            progress = 0.8f + ((((float) (size - ((long) 104857600))) / ((float) (this.maxSize - ((long) 104857600)))) * 0.2f);
+            progress = 0.8f + ((((float) (size - ((long) NUM))) / ((float) (this.maxSize - ((long) NUM)))) * 0.2f);
         }
         this.seekBarView.setProgress(progress);
-        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", C0541R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
+        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", CLASSNAMER.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
     }
 }

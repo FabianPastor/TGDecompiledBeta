@@ -118,7 +118,7 @@ public class SearchAdapterHelper {
             } else {
                 req.filter = new TL_channelParticipantsSearch();
             }
-            req.filter.f112q = query;
+            req.filter.var_q = query;
             req.limit = 50;
             req.offset = 0;
             req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
@@ -128,7 +128,7 @@ public class SearchAdapterHelper {
             if (kicked) {
                 req = new TL_channels_getParticipants();
                 req.filter = new TL_channelParticipantsKicked();
-                req.filter.f112q = query;
+                req.filter.var_q = query;
                 req.limit = 50;
                 req.offset = 0;
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
@@ -142,7 +142,7 @@ public class SearchAdapterHelper {
         }
         if (query.length() > 0) {
             req = new TL_contacts_search();
-            req.f162q = query;
+            req.var_q = query;
             req.limit = 50;
             currentReqId = this.lastReqId + 1;
             this.lastReqId = currentReqId;
@@ -209,11 +209,11 @@ public class SearchAdapterHelper {
             SparseArray<User> usersMap = new SparseArray();
             for (a = 0; a < res.chats.size(); a++) {
                 chat = (Chat) res.chats.get(a);
-                chatsMap.put(chat.f113id, chat);
+                chatsMap.put(chat.var_id, chat);
             }
             for (a = 0; a < res.users.size(); a++) {
                 user = (User) res.users.get(a);
-                usersMap.put(user.f228id, user);
+                usersMap.put(user.var_id, user);
             }
             for (int b = 0; b < 2; b++) {
                 ArrayList<Peer> arrayList;
@@ -237,11 +237,11 @@ public class SearchAdapterHelper {
                         if (chat != null) {
                             if (allowChats) {
                                 this.globalSearch.add(chat);
-                                this.globalSearchMap.put(-chat.f113id, chat);
+                                this.globalSearchMap.put(-chat.var_id, chat);
                             }
                         } else if (user != null && ((allowBots || !user.bot) && (allowSelf || !user.self))) {
                             this.globalSearch.add(user);
-                            this.globalSearchMap.put(user.f228id, user);
+                            this.globalSearchMap.put(user.var_id, user);
                         }
                     }
                 }
@@ -260,10 +260,10 @@ public class SearchAdapterHelper {
                     }
                     if (chat != null) {
                         this.localServerSearch.add(chat);
-                        this.globalSearchMap.put(-chat.f113id, chat);
+                        this.globalSearchMap.put(-chat.var_id, chat);
                     } else if (user != null) {
                         this.localServerSearch.add(user);
-                        this.globalSearchMap.put(user.f228id, user);
+                        this.globalSearchMap.put(user.var_id, user);
                     }
                 }
             }
@@ -325,18 +325,18 @@ public class SearchAdapterHelper {
             for (int a = 0; a < count; a++) {
                 TLObject obj = (TLObject) localResults.get(a);
                 if (obj instanceof User) {
-                    User u = (User) this.globalSearchMap.get(((User) obj).f228id);
+                    User u = (User) this.globalSearchMap.get(((User) obj).var_id);
                     if (u != null) {
                         this.globalSearch.remove(u);
                         this.localServerSearch.remove(u);
-                        this.globalSearchMap.remove(u.f228id);
+                        this.globalSearchMap.remove(u.var_id);
                     }
                 } else if (obj instanceof Chat) {
-                    Chat c = (Chat) this.globalSearchMap.get(-((Chat) obj).f113id);
+                    Chat c = (Chat) this.globalSearchMap.get(-((Chat) obj).var_id);
                     if (c != null) {
                         this.globalSearch.remove(c);
                         this.localServerSearch.remove(c);
-                        this.globalSearchMap.remove(-c.f113id);
+                        this.globalSearchMap.remove(-c.var_id);
                     }
                 }
             }

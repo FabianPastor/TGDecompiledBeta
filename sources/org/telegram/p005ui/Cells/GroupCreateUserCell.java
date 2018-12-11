@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -162,11 +162,11 @@ public class GroupCreateUserCell extends FrameLayout {
             } else if (this.currentUser.bot) {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
-                this.statusTextView.setText(LocaleController.getString("Bot", C0541R.string.Bot));
-            } else if (this.currentUser.f228id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.f228id)))) {
+                this.statusTextView.setText(LocaleController.getString("Bot", CLASSNAMER.string.Bot));
+            } else if (this.currentUser.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.var_id)))) {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_onlineText));
-                this.statusTextView.setText(LocaleController.getString("Online", C0541R.string.Online));
+                this.statusTextView.setText(LocaleController.getString("Online", CLASSNAMER.string.Online));
             } else {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));

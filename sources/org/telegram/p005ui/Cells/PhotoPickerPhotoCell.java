@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.p005ui.Components.BackupImageView;
 import org.telegram.p005ui.Components.CheckBox;
@@ -31,8 +31,8 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     private boolean zoomOnSelect;
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerPhotoCell$1 */
-    class C09231 extends AnimatorListenerAdapter {
-        C09231() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -50,17 +50,17 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.checkFrame = new FrameLayout(context);
         addView(this.checkFrame, LayoutHelper.createFrame(42, 42, 53));
         this.videoInfoContainer = new FrameLayout(context);
-        this.videoInfoContainer.setBackgroundResource(C0541R.drawable.phototime);
+        this.videoInfoContainer.setBackgroundResource(CLASSNAMER.drawable.phototime);
         this.videoInfoContainer.setPadding(AndroidUtilities.m10dp(3.0f), 0, AndroidUtilities.m10dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
         ImageView imageView1 = new ImageView(context);
-        imageView1.setImageResource(C0541R.drawable.ic_video);
+        imageView1.setImageResource(CLASSNAMER.drawable.ic_video);
         this.videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(-2, -2, 19));
         this.videoTextView = new TextView(context);
         this.videoTextView.setTextColor(-1);
         this.videoTextView.setTextSize(1, 12.0f);
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0541R.drawable.checkbig);
+        this.checkBox = new CheckBox(context, CLASSNAMER.drawable.checkbig);
         this.checkBox.setSize(zoom ? 30 : 26);
         this.checkBox.setCheckOffset(AndroidUtilities.m10dp(1.0f));
         this.checkBox.setDrawBackground(true);
@@ -97,7 +97,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         fArr2[0] = f;
         animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str2, fArr2);
         animatorSet.playTogether(animatorArr);
-        this.animatorSet.addListener(new C09231());
+        this.animatorSet.addListener(new CLASSNAME());
         this.animatorSet.start();
     }
 
@@ -106,7 +106,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     }
 
     public void setImage(SearchImage searchImage) {
-        Drawable thumb = getResources().getDrawable(C0541R.drawable.nophotos);
+        Drawable thumb = getResources().getDrawable(CLASSNAMER.drawable.nophotos);
         if (searchImage.thumbPhotoSize != null) {
             this.photoImage.setImage(searchImage.thumbPhotoSize.location, null, thumb);
         } else if (searchImage.photoSize != null) {

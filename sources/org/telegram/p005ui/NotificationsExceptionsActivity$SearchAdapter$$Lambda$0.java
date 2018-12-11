@@ -13,6 +13,6 @@ final /* synthetic */ class NotificationsExceptionsActivity$SearchAdapter$$Lambd
     }
 
     public void run() {
-        this.arg$1.mo17737xf1435ea1(this.arg$2);
+        this.arg$1.mo17737xvar_ea1(this.arg$2);
     }
 }

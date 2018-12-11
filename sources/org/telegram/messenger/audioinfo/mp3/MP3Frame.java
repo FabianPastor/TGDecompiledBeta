@@ -4,10 +4,10 @@ public class MP3Frame {
     private final byte[] bytes;
     private final Header header;
 
-    static final class CRC16 {
+    static final class CRCLASSNAME {
         private short crc = (short) -1;
 
-        CRC16() {
+        CRCLASSNAME() {
         }
 
         public void update(int value, int length) {
@@ -172,14 +172,14 @@ public class MP3Frame {
         if (this.header.getProtection() != 0 || this.header.getLayer() != 1) {
             return false;
         }
-        CRC16 crc16 = new CRC16();
-        crc16.update(this.bytes[2]);
-        crc16.update(this.bytes[3]);
+        CRCLASSNAME crCLASSNAME = new CRCLASSNAME();
+        crCLASSNAME.update(this.bytes[2]);
+        crCLASSNAME.update(this.bytes[3]);
         int sideInfoSize = this.header.getSideInfoSize();
         for (int i = 0; i < sideInfoSize; i++) {
-            crc16.update(this.bytes[i + 6]);
+            crCLASSNAME.update(this.bytes[i + 6]);
         }
-        if ((((this.bytes[4] & 255) << 8) | (this.bytes[5] & 255)) != crc16.getValue()) {
+        if ((((this.bytes[4] & 255) << 8) | (this.bytes[5] & 255)) != crCLASSNAME.getValue()) {
             return true;
         }
         return false;

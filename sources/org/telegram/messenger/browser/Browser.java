@@ -16,7 +16,7 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.CustomTabsCopyReceiver;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -51,8 +51,8 @@ public class Browser {
     private static CustomTabsSession customTabsSession;
 
     /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class C05601 implements ServiceConnectionCallback {
-        C05601() {
+    static class CLASSNAME implements ServiceConnectionCallback {
+        CLASSNAME() {
         }
 
         public void onServiceConnected(CustomTabsClient client) {
@@ -75,7 +75,7 @@ public class Browser {
         private NavigationCallback() {
         }
 
-        /* synthetic */ NavigationCallback(C05601 x0) {
+        /* synthetic */ NavigationCallback(CLASSNAME x0) {
             this();
         }
 
@@ -118,7 +118,7 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new C05601());
+                customTabsServiceConnection = new ServiceConnection(new CLASSNAME());
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }
@@ -238,12 +238,12 @@ public class Browser {
                         if (forceBrowser[0] || allActivities == null || allActivities.isEmpty()) {
                             intent = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                             intent.setAction("android.intent.action.SEND");
-                            PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
+                            PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), NUM);
                             Builder builder = new Builder(getSession());
-                            builder.addMenuItem(LocaleController.getString("CopyLink", C0541R.string.CopyLink), copy);
+                            builder.addMenuItem(LocaleController.getString("CopyLink", CLASSNAMER.string.CopyLink), copy);
                             builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
                             builder.setShowTitle(true);
-                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), C0541R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", C0541R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
+                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), CLASSNAMER.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", CLASSNAMER.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
                             CustomTabsIntent intent2 = builder.build();
                             intent2.setUseNewTask();
                             intent2.launchUrl(context, uri);
@@ -290,10 +290,10 @@ public class Browser {
     static final /* synthetic */ void lambda$openUrl$3$Browser(AlertDialog[] progressDialog, int reqId) {
         if (progressDialog[0] != null) {
             try {
-                progressDialog[0].setMessage(LocaleController.getString("Loading", C0541R.string.Loading));
+                progressDialog[0].setMessage(LocaleController.getString("Loading", CLASSNAMER.string.Loading));
                 progressDialog[0].setCanceledOnTouchOutside(false);
                 progressDialog[0].setCancelable(false);
-                progressDialog[0].setButton(-2, LocaleController.getString("Cancel", C0541R.string.Cancel), new Browser$$Lambda$2(reqId));
+                progressDialog[0].setButton(-2, LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), new Browser$$Lambda$2(reqId));
                 progressDialog[0].show();
             } catch (Exception e) {
             }

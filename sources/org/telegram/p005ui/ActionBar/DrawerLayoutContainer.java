@@ -26,7 +26,7 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 
 /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer */
@@ -56,8 +56,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     private VelocityTracker velocityTracker;
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$1 */
-    class C07341 extends AnimatorListenerAdapter {
-        C07341() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -66,8 +66,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.DrawerLayoutContainer$2 */
-    class C07352 extends AnimatorListenerAdapter {
-        C07352() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animator) {
@@ -84,7 +84,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             setOnApplyWindowInsetsListener(new DrawerLayoutContainer$$Lambda$0(this));
             setSystemUiVisibility(1280);
         }
-        this.shadowLeft = getResources().getDrawable(C0541R.drawable.menu_shadow);
+        this.shadowLeft = getResources().getDrawable(CLASSNAMER.drawable.menu_shadow);
     }
 
     final /* synthetic */ WindowInsets lambda$new$0$DrawerLayoutContainer(View v, WindowInsets insets) {
@@ -188,7 +188,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             } else {
                 animatorSet.setDuration(300);
             }
-            animatorSet.addListener(new C07341());
+            animatorSet.addListener(new CLASSNAME());
             animatorSet.start();
             this.currentAnimation = animatorSet;
         }
@@ -206,7 +206,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         } else {
             animatorSet.setDuration(300);
         }
-        animatorSet.addListener(new C07352());
+        animatorSet.addListener(new CLASSNAME());
         animatorSet.start();
     }
 

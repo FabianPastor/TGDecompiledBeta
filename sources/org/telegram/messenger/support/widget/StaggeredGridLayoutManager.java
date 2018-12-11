@@ -37,7 +37,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private static final String TAG = "StaggeredGridLManager";
     public static final int VERTICAL = 1;
     private final AnchorInfo mAnchorInfo = new AnchorInfo();
-    private final Runnable mCheckForGapsRunnable = new C06261();
+    private final Runnable mCheckForGapsRunnable = new CLASSNAME();
     private int mFullSizeSpec;
     private int mGapStrategy = 2;
     private boolean mLaidOutInvalidFullSpan = false;
@@ -62,8 +62,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private final Rect mTmpRect = new Rect();
 
     /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$1 */
-    class C06261 implements Runnable {
-        C06261() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -170,15 +170,15 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         List<FullSpanItem> mFullSpanItems;
 
         static class FullSpanItem implements Parcelable {
-            public static final Creator<FullSpanItem> CREATOR = new C06271();
+            public static final Creator<FullSpanItem> CREATOR = new CLASSNAME();
             int mGapDir;
             int[] mGapPerSpan;
             boolean mHasUnwantedGapAfter;
             int mPosition;
 
             /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$LazySpanLookup$FullSpanItem$1 */
-            static class C06271 implements Creator<FullSpanItem> {
-                C06271() {
+            static class CLASSNAME implements Creator<FullSpanItem> {
+                CLASSNAME() {
                 }
 
                 public FullSpanItem createFromParcel(Parcel in) {
@@ -423,7 +423,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new C06281();
+        public static final Creator<SavedState> CREATOR = new CLASSNAME();
         boolean mAnchorLayoutFromEnd;
         int mAnchorPosition;
         List<FullSpanItem> mFullSpanItems;
@@ -436,8 +436,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         int mVisibleAnchorPosition;
 
         /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$SavedState$1 */
-        static class C06281 implements Creator<SavedState> {
-            C06281() {
+        static class CLASSNAME implements Creator<SavedState> {
+            CLASSNAME() {
             }
 
             public SavedState createFromParcel(Parcel in) {

@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -128,8 +128,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$11 */
-    class C155511 implements OnTouchListener {
-        C155511() {
+    class CLASSNAME implements OnTouchListener {
+        CLASSNAME() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -138,8 +138,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$12 */
-    class C155612 implements OnClickListener {
-        C155612() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View view) {
@@ -148,8 +148,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$13 */
-    class C155713 implements OnClickListener {
-        C155713() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -158,8 +158,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$14 */
-    class C155814 implements OnClickListener {
-        C155814() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -168,8 +168,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$15 */
-    class C155915 implements OnClickListener {
-        C155915() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -179,28 +179,28 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$16 */
-    class C156016 implements OnClickListener {
-        C156016() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
             DataQuery.getInstance(StickersAlert.this.currentAccount).addRecentSticker(2, StickersAlert.this.selectedSticker, (int) (System.currentTimeMillis() / 1000), StickersAlert.this.previewFavButton.getTag() != null);
             if (StickersAlert.this.previewFavButton.getTag() == null) {
                 StickersAlert.this.previewFavButton.setTag(Integer.valueOf(1));
-                StickersAlert.this.previewFavButton.setImageResource(C0541R.drawable.stickers_unfavorite);
+                StickersAlert.this.previewFavButton.setImageResource(CLASSNAMER.drawable.stickers_unfavorite);
                 return;
             }
             StickersAlert.this.previewFavButton.setTag(null);
-            StickersAlert.this.previewFavButton.setImageResource(C0541R.drawable.stickers_favorite);
+            StickersAlert.this.previewFavButton.setImageResource(CLASSNAMER.drawable.stickers_favorite);
         }
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$18 */
-    class C156418 implements OnClickListener {
+    class CLASSNAME implements OnClickListener {
 
         /* renamed from: org.telegram.ui.Components.StickersAlert$18$1 */
-        class C15631 implements RequestDelegate {
-            C15631() {
+        class CLASSNAME implements RequestDelegate {
+            CLASSNAME() {
             }
 
             public void run(final TLObject response, final TL_error error) {
@@ -214,9 +214,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             int i;
                             if (error == null) {
                                 if (StickersAlert.this.stickerSet.set.masks) {
-                                    Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("AddMasksInstalled", C0541R.string.AddMasksInstalled), 0).show();
+                                    Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("AddMasksInstalled", CLASSNAMER.string.AddMasksInstalled), 0).show();
                                 } else {
-                                    Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("AddStickersInstalled", C0541R.string.AddStickersInstalled), 0).show();
+                                    Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("AddStickersInstalled", CLASSNAMER.string.AddStickersInstalled), 0).show();
                                 }
                                 if (response instanceof TL_messages_stickerSetInstallResultArchive) {
                                     NotificationCenter.getInstance(StickersAlert.this.currentAccount).postNotificationName(NotificationCenter.needReloadArchivedStickers, new Object[0]);
@@ -232,7 +232,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                                 }
                                 instance.loadStickers(i, false, true);
                             }
-                            Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("ErrorOccurred", C0541R.string.ErrorOccurred), 0).show();
+                            Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("ErrorOccurred", CLASSNAMER.string.ErrorOccurred), 0).show();
                             instance = DataQuery.getInstance(StickersAlert.this.currentAccount);
                             if (StickersAlert.this.stickerSet.set.masks) {
                             }
@@ -245,7 +245,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             }
         }
 
-        C156418() {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -255,13 +255,13 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             }
             TL_messages_installStickerSet req = new TL_messages_installStickerSet();
             req.stickerset = StickersAlert.this.inputStickerSet;
-            ConnectionsManager.getInstance(StickersAlert.this.currentAccount).sendRequest(req, new C15631());
+            ConnectionsManager.getInstance(StickersAlert.this.currentAccount).sendRequest(req, new CLASSNAME());
         }
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$19 */
-    class C156519 implements OnClickListener {
-        C156519() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -274,8 +274,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$20 */
-    class C156820 implements OnClickListener {
-        C156820() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -288,8 +288,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$21 */
-    class C156921 extends AnimatorListenerAdapter {
-        C156921() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -298,8 +298,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$2 */
-    class C15712 implements RequestDelegate {
-        C15712() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -314,7 +314,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                         StickersAlert.this.adapter.notifyDataSetChanged();
                         return;
                     }
-                    Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("AddStickersNotFound", C0541R.string.AddStickersNotFound), 0).show();
+                    Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("AddStickersNotFound", CLASSNAMER.string.AddStickersNotFound), 0).show();
                     StickersAlert.this.dismiss();
                 }
             });
@@ -322,8 +322,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$5 */
-    class C15745 extends SpanSizeLookup {
-        C15745() {
+    class CLASSNAME extends SpanSizeLookup {
+        CLASSNAME() {
         }
 
         public int getSpanSize(int position) {
@@ -335,8 +335,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$6 */
-    class C15756 extends ItemDecoration {
-        C15756() {
+    class CLASSNAME extends ItemDecoration {
+        CLASSNAME() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -348,8 +348,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$7 */
-    class C15767 implements OnTouchListener {
-        C15767() {
+    class CLASSNAME implements OnTouchListener {
+        CLASSNAME() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -358,8 +358,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$8 */
-    class C15778 extends OnScrollListener {
-        C15778() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -368,8 +368,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     /* renamed from: org.telegram.ui.Components.StickersAlert$9 */
-    class C15789 implements OnItemClickListener {
-        C15789() {
+    class CLASSNAME implements OnItemClickListener {
+        CLASSNAME() {
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:21:0x00ed  */
@@ -388,7 +388,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     StickersAlert.this.dismiss();
                     TL_inputStickerSetID inputStickerSetID = new TL_inputStickerSetID();
                     inputStickerSetID.access_hash = pack.set.access_hash;
-                    inputStickerSetID.f138id = pack.set.f146id;
+                    inputStickerSetID.var_id = pack.set.var_id;
                     new StickersAlert(StickersAlert.this.parentActivity, StickersAlert.this.parentFragment, inputStickerSetID, null, null).show();
                 }
             } else if (StickersAlert.this.stickerSet != null && position >= 0 && position < StickersAlert.this.stickerSet.documents.size()) {
@@ -405,10 +405,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             set = true;
                         }
                         if (!set) {
-                            StickersAlert.this.stickerEmojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(StickersAlert.this.currentAccount).getEmojiForSticker(StickersAlert.this.selectedSticker.f119id), StickersAlert.this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(30.0f), false));
+                            StickersAlert.this.stickerEmojiTextView.setText(Emoji.replaceEmoji(DataQuery.getInstance(StickersAlert.this.currentAccount).getEmojiForSticker(StickersAlert.this.selectedSticker.var_id), StickersAlert.this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.m10dp(30.0f), false));
                         }
                         fav = DataQuery.getInstance(StickersAlert.this.currentAccount).isStickerInFavorites(StickersAlert.this.selectedSticker);
-                        StickersAlert.this.previewFavButton.setImageResource(fav ? C0541R.drawable.stickers_unfavorite : C0541R.drawable.stickers_favorite);
+                        StickersAlert.this.previewFavButton.setImageResource(fav ? CLASSNAMER.drawable.stickers_unfavorite : CLASSNAMER.drawable.stickers_favorite);
                         StickersAlert.this.previewFavButton.setTag(fav ? Integer.valueOf(1) : null);
                         if (StickersAlert.this.previewFavButton.getVisibility() != 8) {
                             ImageView access$3400 = StickersAlert.this.previewFavButton;
@@ -431,7 +431,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 fav = DataQuery.getInstance(StickersAlert.this.currentAccount).isStickerInFavorites(StickersAlert.this.selectedSticker);
                 if (fav) {
                 }
-                StickersAlert.this.previewFavButton.setImageResource(fav ? C0541R.drawable.stickers_unfavorite : C0541R.drawable.stickers_favorite);
+                StickersAlert.this.previewFavButton.setImageResource(fav ? CLASSNAMER.drawable.stickers_unfavorite : CLASSNAMER.drawable.stickers_favorite);
                 if (fav) {
                 }
                 StickersAlert.this.previewFavButton.setTag(fav ? Integer.valueOf(1) : null);
@@ -581,7 +581,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         private LinkMovementMethodMy() {
         }
 
-        /* synthetic */ LinkMovementMethodMy(C15661 x0) {
+        /* synthetic */ LinkMovementMethodMy(CLASSNAME x0) {
             this();
         }
 
@@ -607,9 +607,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.parentActivity = (Activity) context;
         final TL_messages_getAttachedStickers req = new TL_messages_getAttachedStickers();
         TL_inputStickeredMediaPhoto inputStickeredMediaPhoto = new TL_inputStickeredMediaPhoto();
-        inputStickeredMediaPhoto.f183id = new TL_inputPhoto();
-        inputStickeredMediaPhoto.f183id.f137id = photo.f143id;
-        inputStickeredMediaPhoto.f183id.access_hash = photo.access_hash;
+        inputStickeredMediaPhoto.var_id = new TL_inputPhoto();
+        inputStickeredMediaPhoto.var_id.var_id = photo.var_id;
+        inputStickeredMediaPhoto.var_id.access_hash = photo.access_hash;
         req.media = inputStickeredMediaPhoto;
         this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {
@@ -624,7 +624,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             } else if (vector.objects.size() == 1) {
                                 StickerSetCovered set = (StickerSetCovered) vector.objects.get(0);
                                 StickersAlert.this.inputStickerSet = new TL_inputStickerSetID();
-                                StickersAlert.this.inputStickerSet.f138id = set.set.f146id;
+                                StickersAlert.this.inputStickerSet.var_id = set.set.var_id;
                                 StickersAlert.this.inputStickerSet.access_hash = set.set.access_hash;
                                 StickersAlert.this.loadStickerSet();
                                 return;
@@ -667,12 +667,12 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetByName(this.inputStickerSet.short_name);
             }
             if (this.stickerSet == null) {
-                this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetById(this.inputStickerSet.f138id);
+                this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetById(this.inputStickerSet.var_id);
             }
             if (this.stickerSet == null) {
                 TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                 req.stickerset = this.inputStickerSet;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C15712());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
             } else if (this.adapter != null) {
                 updateSendButton();
                 updateFields();
@@ -685,7 +685,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     private void init(Context context) {
-        this.shadowDrawable = context.getResources().getDrawable(C0541R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable = context.getResources().getDrawable(CLASSNAMER.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.containerView = new FrameLayout(context) {
             private int lastNotifyWidth;
@@ -759,7 +759,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.containerView.setWillNotDraw(false);
         this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
         this.shadow[0] = new View(context);
-        this.shadow[0].setBackgroundResource(C0541R.drawable.header_shadow);
+        this.shadow[0].setBackgroundResource(CLASSNAMER.drawable.header_shadow);
         this.shadow[0].setAlpha(0.0f);
         this.shadow[0].setVisibility(4);
         this.shadow[0].setTag(Integer.valueOf(1));
@@ -784,20 +784,20 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
         this.layoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.layoutManager.setSpanSizeLookup(new C15745());
+        this.layoutManager.setSpanSizeLookup(new CLASSNAME());
         recyclerListView = this.gridView;
         Adapter gridAdapter = new GridAdapter(context);
         this.adapter = gridAdapter;
         recyclerListView.setAdapter(gridAdapter);
         this.gridView.setVerticalScrollBarEnabled(false);
-        this.gridView.addItemDecoration(new C15756());
+        this.gridView.addItemDecoration(new CLASSNAME());
         this.gridView.setPadding(AndroidUtilities.m10dp(10.0f), 0, AndroidUtilities.m10dp(10.0f), 0);
         this.gridView.setClipToPadding(false);
         this.gridView.setEnabled(true);
         this.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.gridView.setOnTouchListener(new C15767());
-        this.gridView.setOnScrollListener(new C15778());
-        this.stickersOnItemClickListener = new C15789();
+        this.gridView.setOnTouchListener(new CLASSNAME());
+        this.gridView.setOnScrollListener(new CLASSNAME());
+        this.stickersOnItemClickListener = new CLASSNAME();
         this.gridView.setOnItemClickListener(this.stickersOnItemClickListener);
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 48.0f));
         this.emptyView = new FrameLayout(context) {
@@ -809,7 +809,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         };
         this.containerView.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         this.gridView.setEmptyView(this.emptyView);
-        this.emptyView.setOnTouchListener(new C155511());
+        this.emptyView.setOnTouchListener(new CLASSNAME());
         this.titleTextView = new TextView(context);
         this.titleTextView.setLines(1);
         this.titleTextView.setSingleLine(true);
@@ -825,29 +825,29 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.containerView.addView(this.titleTextView, LayoutHelper.createLinear(-1, 48));
         this.emptyView.addView(new RadialProgressView(context), LayoutHelper.createFrame(-2, -2, 17));
         this.shadow[1] = new View(context);
-        this.shadow[1].setBackgroundResource(C0541R.drawable.header_shadow_reverse);
+        this.shadow[1].setBackgroundResource(CLASSNAMER.drawable.header_shadow_reverse);
         this.containerView.addView(this.shadow[1], LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         this.pickerBottomLayout = new PickerBottomLayout(context, false);
         this.pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.containerView.addView(this.pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         this.pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
         this.pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        this.pickerBottomLayout.cancelButton.setText(LocaleController.getString("Close", C0541R.string.Close).toUpperCase());
-        this.pickerBottomLayout.cancelButton.setOnClickListener(new C155612());
+        this.pickerBottomLayout.cancelButton.setText(LocaleController.getString("Close", CLASSNAMER.string.Close).toUpperCase());
+        this.pickerBottomLayout.cancelButton.setOnClickListener(new CLASSNAME());
         this.pickerBottomLayout.doneButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
         this.pickerBottomLayout.doneButtonBadgeTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.m10dp(12.5f), Theme.getColor(Theme.key_dialogBadgeBackground)));
         this.stickerPreviewLayout = new FrameLayout(context);
-        this.stickerPreviewLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground) & -536870913);
+        this.stickerPreviewLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground) & -NUM);
         this.stickerPreviewLayout.setVisibility(8);
         this.stickerPreviewLayout.setSoundEffectsEnabled(false);
         this.containerView.addView(this.stickerPreviewLayout, LayoutHelper.createFrame(-1, -1.0f));
-        this.stickerPreviewLayout.setOnClickListener(new C155713());
+        this.stickerPreviewLayout.setOnClickListener(new CLASSNAME());
         ImageView closeButton = new ImageView(context);
-        closeButton.setImageResource(C0541R.drawable.msg_panel_clear);
+        closeButton.setImageResource(CLASSNAMER.drawable.msg_panel_clear);
         closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray3), Mode.MULTIPLY));
         closeButton.setScaleType(ScaleType.CENTER);
         this.stickerPreviewLayout.addView(closeButton, LayoutHelper.createFrame(48, 48, 53));
-        closeButton.setOnClickListener(new C155814());
+        closeButton.setOnClickListener(new CLASSNAME());
         this.stickerImageView = new BackupImageView(context);
         this.stickerImageView.setAspectFit(true);
         this.stickerPreviewLayout.addView(this.stickerImageView);
@@ -863,14 +863,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.previewSendButton.setPadding(AndroidUtilities.m10dp(29.0f), 0, AndroidUtilities.m10dp(29.0f), 0);
         this.previewSendButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.stickerPreviewLayout.addView(this.previewSendButton, LayoutHelper.createFrame(-1, 48, 83));
-        this.previewSendButton.setOnClickListener(new C155915());
+        this.previewSendButton.setOnClickListener(new CLASSNAME());
         this.previewFavButton = new ImageView(context);
         this.previewFavButton.setScaleType(ScaleType.CENTER);
         this.stickerPreviewLayout.addView(this.previewFavButton, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 4.0f, 0.0f));
         this.previewFavButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
-        this.previewFavButton.setOnClickListener(new C156016());
+        this.previewFavButton.setOnClickListener(new CLASSNAME());
         this.previewSendButtonShadow = new View(context);
-        this.previewSendButtonShadow.setBackgroundResource(C0541R.drawable.header_shadow_reverse);
+        this.previewSendButtonShadow.setBackgroundResource(CLASSNAMER.drawable.header_shadow_reverse);
         this.stickerPreviewLayout.addView(this.previewSendButtonShadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         updateFields();
@@ -881,7 +881,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private void updateSendButton() {
         int size = (int) (((float) (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) / 2)) / AndroidUtilities.density);
         if (this.delegate == null || (this.stickerSet != null && this.stickerSet.set.masks)) {
-            this.previewSendButton.setText(LocaleController.getString("Close", C0541R.string.Close).toUpperCase());
+            this.previewSendButton.setText(LocaleController.getString("Close", CLASSNAMER.string.Close).toUpperCase());
             this.stickerImageView.setLayoutParams(LayoutHelper.createFrame(size, size, 17));
             this.stickerEmojiTextView.setLayoutParams(LayoutHelper.createFrame(size, size, 17));
             this.previewSendButton.setVisibility(8);
@@ -889,7 +889,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             this.previewSendButtonShadow.setVisibility(8);
             return;
         }
-        this.previewSendButton.setText(LocaleController.getString("SendSticker", C0541R.string.SendSticker).toUpperCase());
+        this.previewSendButton.setText(LocaleController.getString("SendSticker", CLASSNAMER.string.SendSticker).toUpperCase());
         this.stickerImageView.setLayoutParams(LayoutHelper.createFrame(size, (float) size, 17, 0.0f, 0.0f, 0.0f, 30.0f));
         this.stickerEmojiTextView.setLayoutParams(LayoutHelper.createFrame(size, (float) size, 17, 0.0f, 0.0f, 0.0f, 30.0f));
         this.previewSendButton.setVisibility(0);
@@ -909,7 +909,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private void updateFields() {
         Throwable e;
         TextView textView;
-        OnClickListener c156418;
+        OnClickListener CLASSNAME;
         String string;
         if (this.titleTextView != null) {
             if (this.stickerSet != null) {
@@ -955,10 +955,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             textView.setText(stringBuilder);
                             if (this.stickerSet.set != null) {
                             }
-                            c156418 = new C156418();
+                            CLASSNAME = new CLASSNAME();
                             if (this.stickerSet == null) {
                             }
-                            setRightButton(c156418, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
+                            setRightButton(CLASSNAME, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
                             this.adapter.notifyDataSetChanged();
                             return;
                         }
@@ -973,10 +973,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     textView.setText(stringBuilder);
                     if (this.stickerSet.set != null) {
                     }
-                    c156418 = new C156418();
+                    CLASSNAME = new CLASSNAME();
                     if (this.stickerSet == null) {
                     }
-                    setRightButton(c156418, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
+                    setRightButton(CLASSNAME, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
                     this.adapter.notifyDataSetChanged();
                     return;
                 }
@@ -985,14 +985,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     stringBuilder = this.stickerSet.set.title;
                 }
                 textView.setText(stringBuilder);
-                if (this.stickerSet.set != null || !DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(this.stickerSet.set.f146id)) {
-                    c156418 = new C156418();
-                    string = (this.stickerSet == null && this.stickerSet.set.masks) ? LocaleController.getString("AddMasks", C0541R.string.AddMasks) : LocaleController.getString("AddStickers", C0541R.string.AddStickers);
-                    setRightButton(c156418, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
+                if (this.stickerSet.set != null || !DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(this.stickerSet.set.var_id)) {
+                    CLASSNAME = new CLASSNAME();
+                    string = (this.stickerSet == null && this.stickerSet.set.masks) ? LocaleController.getString("AddMasks", CLASSNAMER.string.AddMasks) : LocaleController.getString("AddStickers", CLASSNAMER.string.AddStickers);
+                    setRightButton(CLASSNAME, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
                 } else if (this.stickerSet.set.official) {
-                    setRightButton(new C156519(), LocaleController.getString("StickersRemove", C0541R.string.StickersHide), Theme.getColor(Theme.key_dialogTextRed), false);
+                    setRightButton(new CLASSNAME(), LocaleController.getString("StickersRemove", CLASSNAMER.string.StickersHide), Theme.getColor(Theme.key_dialogTextRed), false);
                 } else {
-                    setRightButton(new C156820(), LocaleController.getString("StickersRemove", C0541R.string.StickersRemove), Theme.getColor(Theme.key_dialogTextRed), false);
+                    setRightButton(new CLASSNAME(), LocaleController.getString("StickersRemove", CLASSNAMER.string.StickersRemove), Theme.getColor(Theme.key_dialogTextRed), false);
                 }
                 this.adapter.notifyDataSetChanged();
                 return;
@@ -1048,7 +1048,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         animatorArr[0] = ObjectAnimator.ofFloat(this.stickerPreviewLayout, "alpha", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
         animatorSet.setDuration(200);
-        animatorSet.addListener(new C156921());
+        animatorSet.addListener(new CLASSNAME());
         animatorSet.start();
     }
 

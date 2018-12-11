@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
@@ -54,8 +54,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$3 */
-    class C15363 extends OnScrollListener {
-        C15363() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -64,8 +64,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$4 */
-    class C15374 implements OnItemClickListener {
-        C15374() {
+    class CLASSNAME implements OnItemClickListener {
+        CLASSNAME() {
         }
 
         public void onItemClick(View view, int position) {
@@ -78,8 +78,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$5 */
-    class C15385 implements OnClickListener {
-        C15385() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View view) {
@@ -91,8 +91,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$6 */
-    class C15396 implements OnClickListener {
-        C15396() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View view) {
@@ -159,7 +159,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                     return;
                 case 1:
                     if (SharingLocationsAlert.this.textView != null) {
-                        SharingLocationsAlert.this.textView.setText(LocaleController.formatString("SharingLiveLocationTitle", C0541R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
+                        SharingLocationsAlert.this.textView.setText(LocaleController.formatString("SharingLiveLocationTitle", CLASSNAMER.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
                         return;
                     }
                     return;
@@ -173,7 +173,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         super(context, false);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
         this.delegate = sharingLocationsAlertDelegate;
-        this.shadowDrawable = context.getResources().getDrawable(C0541R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable = context.getResources().getDrawable(CLASSNAMER.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.containerView = new FrameLayout(context) {
             public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -254,23 +254,23 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.listView.setClipToPadding(false);
         this.listView.setEnabled(true);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.listView.setOnScrollListener(new C15363());
-        this.listView.setOnItemClickListener(new C15374());
+        this.listView.setOnScrollListener(new CLASSNAME());
+        this.listView.setOnItemClickListener(new CLASSNAME());
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View shadow = new View(context);
-        shadow.setBackgroundResource(C0541R.drawable.header_shadow_reverse);
+        shadow.setBackgroundResource(CLASSNAMER.drawable.header_shadow_reverse);
         this.containerView.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.containerView.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", C0541R.string.StopAllLocationSharings));
-        pickerBottomLayout.cancelButton.setOnClickListener(new C15385());
+        pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", CLASSNAMER.string.StopAllLocationSharings));
+        pickerBottomLayout.cancelButton.setOnClickListener(new CLASSNAME());
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", C0541R.string.Close).toUpperCase());
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", CLASSNAMER.string.Close).toUpperCase());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
-        pickerBottomLayout.doneButton.setOnClickListener(new C15396());
+        pickerBottomLayout.doneButton.setOnClickListener(new CLASSNAME());
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         this.adapter.notifyDataSetChanged();
     }

@@ -1357,7 +1357,7 @@ public class DarkTheme {
             case 6:
                 return -8224126;
             case 7:
-                return -645885536;
+                return -NUM;
             case 8:
                 return -13803892;
             case 9:
@@ -1393,7 +1393,7 @@ public class DarkTheme {
             case 24:
                 return -14339006;
             case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
-                return 251658239;
+                return NUM;
             case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                 return -14605274;
             case 27:
@@ -1415,13 +1415,13 @@ public class DarkTheme {
             case 35:
                 return -12829636;
             case 36:
-                return 268435455;
+                return NUM;
             case NalUnitTypes.NAL_TYPE_EOB_NUT /*37*/:
                 return -986896;
             case NalUnitTypes.NAL_TYPE_FD_NUT /*38*/:
                 return -2954241;
             case 39:
-                return 402653183;
+                return NUM;
             case 40:
                 return -8211748;
             case 41:
@@ -1439,7 +1439,7 @@ public class DarkTheme {
             case 47:
                 return NUM;
             case 48:
-                return -668259541;
+                return -NUM;
             case 49:
                 return -11108183;
             case 50:
@@ -1529,7 +1529,7 @@ public class DarkTheme {
             case 94:
                 return -7028510;
             case 95:
-                return 167772159;
+                return NUM;
             case 96:
                 return -5452289;
             case 97:
@@ -1541,7 +1541,7 @@ public class DarkTheme {
             case 100:
                 return -8812137;
             case 101:
-                return 771751936;
+                return NUM;
             case 102:
                 return -14803426;
             case 103:
@@ -1747,7 +1747,7 @@ public class DarkTheme {
             case 204:
                 return -4792577;
             case 205:
-                return -620756993;
+                return -NUM;
             case 206:
                 return -10987432;
             case 207:
@@ -1763,7 +1763,7 @@ public class DarkTheme {
             case 212:
                 return -8746857;
             case 213:
-                return 301989887;
+                return NUM;
             case 214:
                 return -1776412;
             case 215:
@@ -1787,7 +1787,7 @@ public class DarkTheme {
             case 224:
                 return -15526377;
             case 225:
-                return 217775871;
+                return NUM;
             case 226:
                 return -7434610;
             case 227:
@@ -1845,11 +1845,11 @@ public class DarkTheme {
             case 255:
                 return -11840163;
             case 256:
-                return 352321535;
+                return NUM;
             case 257:
                 return -4792321;
             case 258:
-                return -693579794;
+                return -NUM;
             case 259:
                 return -5582866;
             case 260:

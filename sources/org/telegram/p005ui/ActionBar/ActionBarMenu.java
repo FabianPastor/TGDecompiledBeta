@@ -10,9 +10,9 @@ import org.telegram.messenger.AndroidUtilities;
 /* renamed from: org.telegram.ui.ActionBar.ActionBarMenu */
 public class ActionBarMenu extends LinearLayout {
     protected boolean isActionMode;
-    protected C0704ActionBar parentActionBar;
+    protected CLASSNAMEActionBar parentActionBar;
 
-    public ActionBarMenu(Context context, C0704ActionBar layer) {
+    public ActionBarMenu(Context context, CLASSNAMEActionBar layer) {
         super(context);
         setOrientation(0);
         this.parentActionBar = layer;

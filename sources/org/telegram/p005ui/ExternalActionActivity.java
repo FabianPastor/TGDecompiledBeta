@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -63,8 +63,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     private PasscodeView passcodeView;
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$1 */
-    class C16941 implements OnGlobalLayoutListener {
-        C16941() {
+    class CLASSNAME implements OnGlobalLayoutListener {
+        CLASSNAME() {
         }
 
         public void onGlobalLayout() {
@@ -76,8 +76,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
     }
 
     /* renamed from: org.telegram.ui.ExternalActionActivity$2 */
-    class C16952 implements Runnable {
-        C16952() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -99,8 +99,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         boolean z = true;
         ApplicationLoader.postInitApplication();
         requestWindowFeature(1);
-        setTheme(C0541R.style.Theme.TMessages);
-        getWindow().setBackgroundDrawableResource(C0541R.drawable.transparent);
+        setTheme(CLASSNAMER.style.Theme.TMessages);
+        getWindow().setBackgroundDrawableResource(CLASSNAMER.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(MessagesController.UPDATE_MASK_CHANNEL, MessagesController.UPDATE_MASK_CHANNEL);
@@ -133,7 +133,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             layoutParams1.height = -1;
             launchLayout.setLayoutParams(layoutParams1);
             this.backgroundTablet = new View(this);
-            drawable = (BitmapDrawable) getResources().getDrawable(C0541R.drawable.catstile);
+            drawable = (BitmapDrawable) getResources().getDrawable(CLASSNAMER.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
@@ -147,7 +147,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(C0541R.drawable.boxshadow);
+            this.layersActionBarLayout.setBackgroundResource(CLASSNAMER.drawable.boxshadow);
             launchLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, AndroidUtilities.isSmallTablet() ? 528 : 700));
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
@@ -156,7 +156,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
             launchLayout = new RelativeLayout(this);
             this.drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(-1, -1.0f));
             this.backgroundTablet = new View(this);
-            drawable = (BitmapDrawable) getResources().getDrawable(C0541R.drawable.catstile);
+            drawable = (BitmapDrawable) getResources().getDrawable(CLASSNAMER.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             this.backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
@@ -274,9 +274,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                             this.layersActionBarLayout.showLastFragment();
                         }
                         Builder builder = new Builder((Context) this);
-                        builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-                        builder.setMessage(LocaleController.getString("PleaseLoginPassport", C0541R.string.PleaseLoginPassport));
-                        builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                        builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+                        builder.setMessage(LocaleController.getString("PleaseLoginPassport", CLASSNAMER.string.PleaseLoginPassport));
+                        builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                         builder.show();
                         return true;
                     } else if (activatedAccountsCount >= 2) {
@@ -288,7 +288,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
                     }
                 }
                 AlertDialog progressDialog = new AlertDialog(this, 1);
-                progressDialog.setMessage(LocaleController.getString("Loading", C0541R.string.Loading));
+                progressDialog.setMessage(LocaleController.getString("Loading", CLASSNAMER.string.Loading));
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.setCancelable(false);
                 int bot_id = intent.getIntExtra("bot_id", 0);
@@ -392,7 +392,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         try {
             progressDialog.dismiss();
             if ("APP_VERSION_OUTDATED".equals(error.text)) {
-                AlertDialog dialog = AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", C0541R.string.UpdateAppAlert), true);
+                AlertDialog dialog = AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", CLASSNAMER.string.UpdateAppAlert), true);
                 if (dialog != null) {
                     dialog.setOnDismissListener(new ExternalActionActivity$$Lambda$8(this, error));
                     return;
@@ -487,7 +487,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
 
     public void fixLayout() {
         if (AndroidUtilities.isTablet() && this.actionBarLayout != null) {
-            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C16941());
+            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new CLASSNAME());
         }
     }
 
@@ -539,7 +539,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayoutD
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
-            this.lockRunnable = new C16952();
+            this.lockRunnable = new CLASSNAME();
             if (SharedConfig.appLocked) {
                 AndroidUtilities.runOnUIThread(this.lockRunnable, 1000);
             } else if (SharedConfig.autoLockIn != 0) {

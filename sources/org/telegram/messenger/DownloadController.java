@@ -55,8 +55,8 @@ public class DownloadController implements NotificationCenterDelegate {
     public int[] wifiMaxFileSize = new int[7];
 
     /* renamed from: org.telegram.messenger.DownloadController$1 */
-    class C04001 implements Runnable {
-        C04001() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -70,8 +70,8 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.DownloadController$2 */
-    class C04012 extends BroadcastReceiver {
-        C04012() {
+    class CLASSNAME extends BroadcastReceiver {
+        CLASSNAME() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -158,8 +158,8 @@ public class DownloadController implements NotificationCenterDelegate {
             this.roamingMaxFileSize[a] = preferences.getInt("roamingMaxDownloadSize" + a, sdefault);
         }
         this.globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
-        AndroidUtilities.runOnUIThread(new C04001());
-        ApplicationLoader.applicationContext.registerReceiver(new C04012(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        AndroidUtilities.runOnUIThread(new CLASSNAME());
+        ApplicationLoader.applicationContext.registerReceiver(new CLASSNAME(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             checkAutodownloadSettings();
         }
@@ -526,7 +526,7 @@ public class DownloadController implements NotificationCenterDelegate {
         if (downloadObject != null) {
             this.downloadQueueKeys.remove(fileName);
             if (state == 0 || state == 2) {
-                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.f75id, downloadObject.type, false);
+                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.var_id, downloadObject.type, false);
             }
             if (downloadObject.type == 1) {
                 this.photoDownloadQueue.remove(downloadObject);

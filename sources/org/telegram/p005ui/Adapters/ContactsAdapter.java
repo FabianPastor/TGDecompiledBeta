@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.LocaleController;
@@ -201,7 +201,7 @@ public class ContactsAdapter extends SectionsAdapter {
                 break;
             case 2:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("Contacts", C0541R.string.Contacts).toUpperCase());
+                ((GraySectionCell) view).setText(LocaleController.getString("Contacts", CLASSNAMER.string.Contacts).toUpperCase());
                 break;
             default:
                 float f2;
@@ -231,12 +231,12 @@ public class ContactsAdapter extends SectionsAdapter {
                 User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) ((ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section - i))).get(position)).user_id));
                 userCell.setData(user, null, null, 0);
                 if (this.checkedMap != null) {
-                    userCell.setChecked(this.checkedMap.indexOfKey(user.f228id) >= 0, !this.scrolling);
+                    userCell.setChecked(this.checkedMap.indexOfKey(user.var_id) >= 0, !this.scrolling);
                 }
                 if (this.ignoreUsers == null) {
                     return;
                 }
-                if (this.ignoreUsers.indexOfKey(user.f228id) >= 0) {
+                if (this.ignoreUsers.indexOfKey(user.var_id) >= 0) {
                     userCell.setAlpha(0.5f);
                     return;
                 } else {
@@ -258,19 +258,19 @@ public class ContactsAdapter extends SectionsAdapter {
                         return;
                     }
                 } else if (this.needPhonebook) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", C0541R.string.InviteFriends), C0541R.drawable.menu_invite);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", CLASSNAMER.string.InviteFriends), CLASSNAMER.drawable.menu_invite);
                     return;
                 } else if (this.isAdmin) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", C0541R.string.InviteToGroupByLink), C0541R.drawable.menu_invite);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", CLASSNAMER.string.InviteToGroupByLink), CLASSNAMER.drawable.menu_invite);
                     return;
                 } else if (position == 0) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", C0541R.string.NewGroup), C0541R.drawable.menu_newgroup);
+                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", CLASSNAMER.string.NewGroup), CLASSNAMER.drawable.menu_newgroup);
                     return;
                 } else if (position == 1) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", C0541R.string.NewSecretChat), C0541R.drawable.menu_secret);
+                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", CLASSNAMER.string.NewSecretChat), CLASSNAMER.drawable.menu_secret);
                     return;
                 } else if (position == 2) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", C0541R.string.NewChannel), C0541R.drawable.menu_broadcast);
+                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", CLASSNAMER.string.NewChannel), CLASSNAMER.drawable.menu_broadcast);
                     return;
                 } else {
                     return;

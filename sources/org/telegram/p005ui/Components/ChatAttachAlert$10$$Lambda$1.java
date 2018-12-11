@@ -1,14 +1,14 @@
 package org.telegram.p005ui.Components;
 
 import org.telegram.messenger.camera.CameraController.VideoTakeCallback;
-import org.telegram.p005ui.Components.ChatAttachAlert.C122510;
+import org.telegram.p005ui.Components.ChatAttachAlert.CLASSNAME;
 
 /* renamed from: org.telegram.ui.Components.ChatAttachAlert$10$$Lambda$1 */
 final /* synthetic */ class ChatAttachAlert$10$$Lambda$1 implements VideoTakeCallback {
-    private final C122510 arg$1;
+    private final CLASSNAME arg$1;
 
-    ChatAttachAlert$10$$Lambda$1(C122510 c122510) {
-        this.arg$1 = c122510;
+    ChatAttachAlert$10$$Lambda$1(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void onFinishVideoRecording(String str, long j) {

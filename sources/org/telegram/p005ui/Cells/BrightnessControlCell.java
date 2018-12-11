@@ -8,7 +8,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.SeekBarView;
@@ -22,7 +22,7 @@ public class BrightnessControlCell extends FrameLayout {
     public BrightnessControlCell(Context context) {
         super(context);
         this.leftImageView = new ImageView(context);
-        this.leftImageView.setImageResource(C0541R.drawable.brightness_low);
+        this.leftImageView.setImageResource(CLASSNAMER.drawable.brightness_low);
         addView(this.leftImageView, LayoutHelper.createFrame(24, 24.0f, 51, 17.0f, 12.0f, 0.0f, 0.0f));
         this.seekBarView = new SeekBarView(context) {
             public boolean onTouchEvent(MotionEvent event) {
@@ -36,7 +36,7 @@ public class BrightnessControlCell extends FrameLayout {
         this.seekBarView.setDelegate(new BrightnessControlCell$$Lambda$0(this));
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 58.0f, 9.0f, 58.0f, 0.0f));
         this.rightImageView = new ImageView(context);
-        this.rightImageView.setImageResource(C0541R.drawable.brightness_high);
+        this.rightImageView.setImageResource(CLASSNAMER.drawable.brightness_high);
         addView(this.rightImageView, LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 12.0f, 17.0f, 0.0f));
     }
 

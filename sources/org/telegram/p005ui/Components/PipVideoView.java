@@ -30,9 +30,9 @@ import com.google.android.exoplayer2.p004ui.AspectRatioFrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
-import org.telegram.p005ui.ActionBar.C0704ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.PhotoViewer;
 
 /* renamed from: org.telegram.ui.Components.PipVideoView */
@@ -50,8 +50,8 @@ public class PipVideoView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.PipVideoView$2 */
-    class C15092 extends AnimatorListenerAdapter {
-        C15092() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -67,7 +67,7 @@ public class PipVideoView {
     private class MiniControlsView extends FrameLayout {
         private float bufferedPosition;
         private AnimatorSet currentAnimation;
-        private Runnable hideRunnable = new C15101();
+        private Runnable hideRunnable = new CLASSNAME();
         private ImageView inlineButton;
         private boolean isCompleted;
         private boolean isVisible = true;
@@ -75,11 +75,11 @@ public class PipVideoView {
         private float progress;
         private Paint progressInnerPaint;
         private Paint progressPaint;
-        private Runnable progressRunnable = new C15112();
+        private Runnable progressRunnable = new CLASSNAME();
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$1 */
-        class C15101 implements Runnable {
-            C15101() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -88,8 +88,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$2 */
-        class C15112 implements Runnable {
-            C15112() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -107,8 +107,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$6 */
-        class C15156 extends AnimatorListenerAdapter {
-            C15156() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -117,8 +117,8 @@ public class PipVideoView {
         }
 
         /* renamed from: org.telegram.ui.Components.PipVideoView$MiniControlsView$7 */
-        class C15167 extends AnimatorListenerAdapter {
-            C15167() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -130,7 +130,7 @@ public class PipVideoView {
             super(context);
             this.inlineButton = new ImageView(context);
             this.inlineButton.setScaleType(ScaleType.CENTER);
-            this.inlineButton.setImageResource(C0541R.drawable.ic_outinline);
+            this.inlineButton.setImageResource(CLASSNAMER.drawable.ic_outinline);
             addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new OnClickListener(PipVideoView.this) {
                 public void onClick(View v) {
@@ -181,12 +181,12 @@ public class PipVideoView {
                 if (videoPlayer != null) {
                     AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
                     if (videoPlayer.isPlaying()) {
-                        this.playButton.setImageResource(C0541R.drawable.ic_pauseinline);
+                        this.playButton.setImageResource(CLASSNAMER.drawable.ic_pauseinline);
                         AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
                     } else if (this.isCompleted) {
-                        this.playButton.setImageResource(C0541R.drawable.ic_againinline);
+                        this.playButton.setImageResource(CLASSNAMER.drawable.ic_againinline);
                     } else {
-                        this.playButton.setImageResource(C0541R.drawable.ic_playinline);
+                        this.playButton.setImageResource(CLASSNAMER.drawable.ic_playinline);
                     }
                 }
             }
@@ -218,7 +218,7 @@ public class PipVideoView {
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
-                        this.currentAnimation.addListener(new C15156());
+                        this.currentAnimation.addListener(new CLASSNAME());
                         this.currentAnimation.start();
                     } else {
                         setAlpha(1.0f);
@@ -230,7 +230,7 @@ public class PipVideoView {
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
-                    this.currentAnimation.addListener(new C15167());
+                    this.currentAnimation.addListener(new CLASSNAME());
                     this.currentAnimation.start();
                 } else {
                     setAlpha(0.0f);
@@ -452,7 +452,7 @@ public class PipVideoView {
         if (isX) {
             total = AndroidUtilities.displaySize.x - sideSize;
         } else {
-            total = (AndroidUtilities.displaySize.y - sideSize) - C0704ActionBar.getCurrentActionBarHeight();
+            total = (AndroidUtilities.displaySize.y - sideSize) - CLASSNAMEActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
             result = AndroidUtilities.m10dp(10.0f);
@@ -464,7 +464,7 @@ public class PipVideoView {
         if (isX) {
             return result;
         }
-        return result + C0704ActionBar.getCurrentActionBarHeight();
+        return result + CLASSNAMEActionBar.getCurrentActionBarHeight();
     }
 
     public void close() {
@@ -529,7 +529,7 @@ public class PipVideoView {
             editor.putInt("sidex", 2);
         }
         if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= C0704ActionBar.getCurrentActionBarHeight()) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= CLASSNAMEActionBar.getCurrentActionBarHeight()) {
                 if (animators == null) {
                     animators = new ArrayList();
                 }
@@ -556,7 +556,7 @@ public class PipVideoView {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C15092());
+                animatorSet.addListener(new CLASSNAME());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

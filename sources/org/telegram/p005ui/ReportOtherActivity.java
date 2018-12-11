@@ -12,12 +12,12 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Components.EditTextBoldCursor;
@@ -41,18 +41,18 @@ public class ReportOtherActivity extends BaseFragment {
     private int message_id = getArguments().getInt("message_id", 0);
 
     /* renamed from: org.telegram.ui.ReportOtherActivity$1 */
-    class C21651 extends ActionBarMenuOnItemClick {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ReportOtherActivity$1$1 */
-        class C21641 implements RequestDelegate {
-            C21641() {
+        class CLASSNAME implements RequestDelegate {
+            CLASSNAME() {
             }
 
             public void run(TLObject response, TL_error error) {
             }
         }
 
-        C21651() {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -65,7 +65,7 @@ public class ReportOtherActivity extends BaseFragment {
                 if (ReportOtherActivity.this.message_id != 0) {
                     request = new TL_messages_report();
                     request.peer = peer;
-                    request.f204id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
+                    request.var_id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
                     request.reason = new TL_inputReportReasonOther();
                     request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
                     req = request;
@@ -76,9 +76,9 @@ public class ReportOtherActivity extends BaseFragment {
                     request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
                     req = request;
                 }
-                ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, new C21641());
+                ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, new CLASSNAME());
                 if (ReportOtherActivity.this.getParentActivity() != null) {
-                    Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", C0541R.string.ReportChatSent), 0).show();
+                    Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", CLASSNAMER.string.ReportChatSent), 0).show();
                 }
                 ReportOtherActivity.this.lambda$checkDiscard$69$PassportActivity();
             }
@@ -86,8 +86,8 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ReportOtherActivity$2 */
-    class C21662 implements OnTouchListener {
-        C21662() {
+    class CLASSNAME implements OnTouchListener {
+        CLASSNAME() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -96,8 +96,8 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ReportOtherActivity$3 */
-    class C21673 implements OnEditorActionListener {
-        C21673() {
+    class CLASSNAME implements OnEditorActionListener {
+        CLASSNAME() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -110,8 +110,8 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ReportOtherActivity$4 */
-    class C21684 implements Runnable {
-        C21684() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -128,16 +128,16 @@ public class ReportOtherActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 3;
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ReportChat", C0541R.string.ReportChat));
-        this.actionBar.setActionBarMenuOnItemClick(new C21651());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, C0541R.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("ReportChat", CLASSNAMER.string.ReportChat));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, CLASSNAMER.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
         this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C21662());
+        this.fragmentView.setOnTouchListener(new CLASSNAME());
         this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -156,9 +156,9 @@ public class ReportOtherActivity extends BaseFragment {
         this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setCursorSize(AndroidUtilities.m10dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new C21673());
+        this.firstNameField.setOnEditorActionListener(new CLASSNAME());
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        this.firstNameField.setHint(LocaleController.getString("ReportChatDescription", C0541R.string.ReportChatDescription));
+        this.firstNameField.setHint(LocaleController.getString("ReportChatDescription", CLASSNAMER.string.ReportChatDescription));
         this.firstNameField.setSelection(this.firstNameField.length());
         return this.fragmentView;
     }
@@ -173,7 +173,7 @@ public class ReportOtherActivity extends BaseFragment {
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
-            AndroidUtilities.runOnUIThread(new C21684(), 100);
+            AndroidUtilities.runOnUIThread(new CLASSNAME(), 100);
         }
     }
 

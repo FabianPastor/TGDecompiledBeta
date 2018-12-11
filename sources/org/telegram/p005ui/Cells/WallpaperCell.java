@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.BackupImageView;
 import org.telegram.p005ui.Components.LayoutHelper;
@@ -28,11 +28,11 @@ public class WallpaperCell extends FrameLayout {
         this.imageView = new BackupImageView(context);
         addView(this.imageView, LayoutHelper.createFrame(100, 100, 83));
         this.imageView2 = new ImageView(context);
-        this.imageView2.setImageResource(C0541R.drawable.ic_gallery_background);
+        this.imageView2.setImageResource(CLASSNAMER.drawable.ic_gallery_background);
         this.imageView2.setScaleType(ScaleType.CENTER);
         addView(this.imageView2, LayoutHelper.createFrame(100, 100, 83));
         this.selectionView = new View(context);
-        this.selectionView.setBackgroundResource(C0541R.drawable.wall_selection);
+        this.selectionView.setBackgroundResource(CLASSNAMER.drawable.wall_selection);
         addView(this.selectionView, LayoutHelper.createFrame(100, 102.0f));
     }
 
@@ -60,13 +60,13 @@ public class WallpaperCell extends FrameLayout {
             int i2 = (selectedBackground == -1 || selectedBackground == 1000001) ? NUM : NUM;
             imageView.setBackgroundColor(i2);
             this.imageView2.setScaleType(ScaleType.CENTER);
-            this.imageView2.setImageResource(C0541R.drawable.ic_gallery_background);
+            this.imageView2.setImageResource(CLASSNAMER.drawable.ic_gallery_background);
             return;
         }
         this.imageView.setVisibility(0);
         this.imageView2.setVisibility(4);
         View view2 = this.selectionView;
-        if (selectedBackground != wallpaper.f235id) {
+        if (selectedBackground != wallpaper.var_id) {
             i = 4;
         }
         view2.setVisibility(i);
@@ -80,7 +80,7 @@ public class WallpaperCell extends FrameLayout {
         for (int a = 0; a < wallpaper.sizes.size(); a++) {
             PhotoSize obj = (PhotoSize) wallpaper.sizes.get(a);
             if (obj != null) {
-                int currentSide = obj.f145w >= obj.f144h ? obj.f145w : obj.f144h;
+                int currentSide = obj.var_w >= obj.var_h ? obj.var_w : obj.var_h;
                 if (size == null || ((side > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || currentSide <= side)) {
                     size = obj;
                 }

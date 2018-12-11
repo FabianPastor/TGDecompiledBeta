@@ -33,7 +33,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.MessagesController;
 import org.telegram.p005ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -57,7 +57,7 @@ public class ActionBarLayout extends FrameLayout {
     private boolean beginTrackingSent;
     private LinearLayoutContainer containerView;
     private LinearLayoutContainer containerViewBack;
-    private C0704ActionBar currentActionBar;
+    private CLASSNAMEActionBar currentActionBar;
     private AnimatorSet currentAnimation;
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator(1.5f);
     private Runnable delayedOpenAnimationRunnable;
@@ -96,8 +96,8 @@ public class ActionBarLayout extends FrameLayout {
     private Runnable waitingForKeyboardCloseRunnable;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$3 */
-    class C07073 extends ViewOutlineProvider {
-        C07073() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @TargetApi(21)
@@ -107,8 +107,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$4 */
-    class C07084 extends AnimatorListenerAdapter {
-        C07084() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -117,8 +117,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$7 */
-    class C07117 implements Runnable {
-        C07117() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -130,8 +130,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$8 */
-    class C07128 extends AnimatorListenerAdapter {
-        C07128() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationStart(Animator animation) {
@@ -144,8 +144,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$9 */
-    class C07139 extends AnimatorListenerAdapter {
-        C07139() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -197,7 +197,7 @@ public class ActionBarLayout extends FrameLayout {
         }
 
         protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-            if (child instanceof C0704ActionBar) {
+            if (child instanceof CLASSNAMEActionBar) {
                 return super.drawChild(canvas, child, drawingTime);
             }
             boolean result;
@@ -205,8 +205,8 @@ public class ActionBarLayout extends FrameLayout {
             int childCount = getChildCount();
             for (int a = 0; a < childCount; a++) {
                 View view = getChildAt(a);
-                if (view != child && (view instanceof C0704ActionBar) && view.getVisibility() == 0) {
-                    if (((C0704ActionBar) view).getCastShadows()) {
+                if (view != child && (view instanceof CLASSNAMEActionBar) && view.getVisibility() == 0) {
+                    if (((CLASSNAMEActionBar) view).getCastShadows()) {
                         actionBarHeight = view.getMeasuredHeight();
                     }
                     result = super.drawChild(canvas, child, drawingTime);
@@ -270,8 +270,8 @@ public class ActionBarLayout extends FrameLayout {
         super(context);
         this.parentActivity = (Activity) context;
         if (layerShadowDrawable == null) {
-            layerShadowDrawable = getResources().getDrawable(C0541R.drawable.layer_shadow);
-            headerShadowDrawable = getResources().getDrawable(C0541R.drawable.header_shadow).mutate();
+            layerShadowDrawable = getResources().getDrawable(CLASSNAMER.drawable.layer_shadow);
+            headerShadowDrawable = getResources().getDrawable(CLASSNAMER.drawable.header_shadow).mutate();
             scrimPaint = new Paint();
         }
     }
@@ -716,7 +716,7 @@ public class ActionBarLayout extends FrameLayout {
             this.animationProgress = 0.0f;
             this.lastFrameTime = System.nanoTime() / 1000000;
         }
-        Runnable c07062 = new Runnable() {
+        Runnable CLASSNAME = new Runnable() {
             public void run() {
                 if (ActionBarLayout.this.animationRunnable == this) {
                     ActionBarLayout.this.animationRunnable = null;
@@ -767,8 +767,8 @@ public class ActionBarLayout extends FrameLayout {
                 }
             }
         };
-        this.animationRunnable = c07062;
-        AndroidUtilities.runOnUIThread(c07062);
+        this.animationRunnable = CLASSNAME;
+        AndroidUtilities.runOnUIThread(CLASSNAME);
     }
 
     public void resumeDelayedFragmentAnimation() {
@@ -845,7 +845,7 @@ public class ActionBarLayout extends FrameLayout {
         this.containerView.setTranslationY(0.0f);
         if (preview) {
             if (VERSION.SDK_INT >= 21) {
-                fragmentView.setOutlineProvider(new C07073());
+                fragmentView.setOutlineProvider(new CLASSNAME());
                 fragmentView.setClipToOutline(true);
                 fragmentView.setElevation((float) AndroidUtilities.m10dp(4.0f));
             }
@@ -886,7 +886,7 @@ public class ActionBarLayout extends FrameLayout {
             this.currentAnimation.playTogether(animators);
             this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
             this.currentAnimation.setDuration(200);
-            this.currentAnimation.addListener(new C07084());
+            this.currentAnimation.addListener(new CLASSNAME());
             this.currentAnimation.start();
         } else {
             this.transitionAnimationPreviewMode = preview;
@@ -1125,7 +1125,7 @@ public class ActionBarLayout extends FrameLayout {
                         this.currentAnimation = animation;
                         return;
                     } else if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
-                        this.waitingForKeyboardCloseRunnable = new C07117();
+                        this.waitingForKeyboardCloseRunnable = new CLASSNAME();
                         AndroidUtilities.runOnUIThread(this.waitingForKeyboardCloseRunnable, 200);
                         return;
                     } else {
@@ -1150,7 +1150,7 @@ public class ActionBarLayout extends FrameLayout {
                 this.currentAnimation.playTogether(animators);
                 this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
                 this.currentAnimation.setDuration(200);
-                this.currentAnimation.addListener(new C07128());
+                this.currentAnimation.addListener(new CLASSNAME());
                 this.currentAnimation.start();
             } else {
                 removeFragmentFromStackInternal(currentFragment);
@@ -1349,7 +1349,7 @@ public class ActionBarLayout extends FrameLayout {
         }
         if (startAnimation) {
             this.themeAnimatorSet = new AnimatorSet();
-            this.themeAnimatorSet.addListener(new C07139());
+            this.themeAnimatorSet.addListener(new CLASSNAME());
             this.themeAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "themeAnimationValue", new float[]{0.0f, 1.0f})});
             this.themeAnimatorSet.setDuration(200);
             this.themeAnimatorSet.start();

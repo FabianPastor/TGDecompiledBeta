@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -24,7 +24,7 @@ import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -55,8 +55,8 @@ public class NotificationsExceptionsActivity extends BaseFragment {
     private boolean searching;
 
     /* renamed from: org.telegram.ui.NotificationsExceptionsActivity$1 */
-    class C18761 extends ActionBarMenuOnItemClick {
-        C18761() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -67,8 +67,8 @@ public class NotificationsExceptionsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.NotificationsExceptionsActivity$2 */
-    class C18772 extends ActionBarMenuItemSearchListener {
-        C18772() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchExpand() {
@@ -80,7 +80,7 @@ public class NotificationsExceptionsActivity extends BaseFragment {
             NotificationsExceptionsActivity.this.searchListViewAdapter.searchDialogs(null);
             NotificationsExceptionsActivity.this.searching = false;
             NotificationsExceptionsActivity.this.searchWas = false;
-            NotificationsExceptionsActivity.this.emptyView.setText(LocaleController.getString("NoExceptions", C0541R.string.NoExceptions));
+            NotificationsExceptionsActivity.this.emptyView.setText(LocaleController.getString("NoExceptions", CLASSNAMER.string.NoExceptions));
             NotificationsExceptionsActivity.this.listView.setAdapter(NotificationsExceptionsActivity.this.listViewAdapter);
             NotificationsExceptionsActivity.this.listViewAdapter.notifyDataSetChanged();
             NotificationsExceptionsActivity.this.listView.setFastScrollVisible(true);
@@ -94,7 +94,7 @@ public class NotificationsExceptionsActivity extends BaseFragment {
                 if (text.length() != 0) {
                     NotificationsExceptionsActivity.this.searchWas = true;
                     if (NotificationsExceptionsActivity.this.listView != null) {
-                        NotificationsExceptionsActivity.this.emptyView.setText(LocaleController.getString("NoResult", C0541R.string.NoResult));
+                        NotificationsExceptionsActivity.this.emptyView.setText(LocaleController.getString("NoResult", CLASSNAMER.string.NoResult));
                         NotificationsExceptionsActivity.this.listView.setAdapter(NotificationsExceptionsActivity.this.searchListViewAdapter);
                         NotificationsExceptionsActivity.this.searchListViewAdapter.notifyDataSetChanged();
                         NotificationsExceptionsActivity.this.listView.setFastScrollVisible(false);
@@ -107,8 +107,8 @@ public class NotificationsExceptionsActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.NotificationsExceptionsActivity$3 */
-    class C18783 extends OnScrollListener {
-        C18783() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -148,7 +148,7 @@ public class NotificationsExceptionsActivity extends BaseFragment {
                     break;
                 default:
                     view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0541R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             return new Holder(view);
@@ -175,32 +175,32 @@ public class NotificationsExceptionsActivity extends BaseFragment {
                             enabled = false;
                         }
                         if (enabled && custom) {
-                            text = LocaleController.getString("NotificationsCustom", C0541R.string.NotificationsCustom);
+                            text = LocaleController.getString("NotificationsCustom", CLASSNAMER.string.NotificationsCustom);
                         } else if (enabled) {
-                            text = LocaleController.getString("NotificationsUnmuted", C0541R.string.NotificationsUnmuted);
+                            text = LocaleController.getString("NotificationsUnmuted", CLASSNAMER.string.NotificationsUnmuted);
                         } else {
-                            text = LocaleController.getString("NotificationsMuted", C0541R.string.NotificationsMuted);
+                            text = LocaleController.getString("NotificationsMuted", CLASSNAMER.string.NotificationsMuted);
                         }
                     } else {
                         delta -= ConnectionsManager.getInstance(NotificationsExceptionsActivity.this.currentAccount).getCurrentTime();
                         if (delta <= 0) {
                             if (custom) {
-                                text = LocaleController.getString("NotificationsCustom", C0541R.string.NotificationsCustom);
+                                text = LocaleController.getString("NotificationsCustom", CLASSNAMER.string.NotificationsCustom);
                             } else {
-                                text = LocaleController.getString("NotificationsUnmuted", C0541R.string.NotificationsUnmuted);
+                                text = LocaleController.getString("NotificationsUnmuted", CLASSNAMER.string.NotificationsUnmuted);
                             }
                         } else if (delta < 3600) {
-                            text = LocaleController.formatString("WillUnmuteIn", C0541R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                            text = LocaleController.formatString("WillUnmuteIn", CLASSNAMER.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
                         } else if (delta < 86400) {
-                            text = LocaleController.formatString("WillUnmuteIn", C0541R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
+                            text = LocaleController.formatString("WillUnmuteIn", CLASSNAMER.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
                         } else if (delta < 31536000) {
-                            text = LocaleController.formatString("WillUnmuteIn", C0541R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
+                            text = LocaleController.formatString("WillUnmuteIn", CLASSNAMER.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
                         } else {
                             text = null;
                         }
                     }
                     if (text == null) {
-                        text = LocaleController.getString("NotificationsOff", C0541R.string.NotificationsOff);
+                        text = LocaleController.getString("NotificationsOff", CLASSNAMER.string.NotificationsOff);
                     }
                     int lower_id = (int) exception.did;
                     int high_id = (int) (exception.did >> 32);
@@ -287,7 +287,7 @@ public class NotificationsExceptionsActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$processSearch$1$NotificationsExceptionsActivity$SearchAdapter */
-        final /* synthetic */ void mo17737xf1435ea1(String query) {
+        final /* synthetic */ void mo17737xvar_ea1(String query) {
             Utilities.searchQueue.postRunnable(new NotificationsExceptionsActivity$SearchAdapter$$Lambda$2(this, query, new ArrayList(NotificationsExceptionsActivity.this.exceptions)));
         }
 
@@ -486,18 +486,18 @@ public class NotificationsExceptionsActivity extends BaseFragment {
         int i = 1;
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("NotificationsExceptions", C0541R.string.NotificationsExceptions));
-        this.actionBar.setActionBarMenuOnItemClick(new C18761());
+        this.actionBar.setTitle(LocaleController.getString("NotificationsExceptions", CLASSNAMER.string.NotificationsExceptions));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.searchListViewAdapter = new SearchAdapter(context);
-        this.actionBar.createMenu().addItem(0, (int) C0541R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C18772()).getSearchField().setHint(LocaleController.getString("Search", C0541R.string.Search));
+        this.actionBar.createMenu().addItem(0, (int) CLASSNAMER.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME()).getSearchField().setHint(LocaleController.getString("Search", CLASSNAMER.string.Search));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setTextSize(18);
-        this.emptyView.setText(LocaleController.getString("NoExceptions", C0541R.string.NoExceptions));
+        this.emptyView.setText(LocaleController.getString("NoExceptions", CLASSNAMER.string.NoExceptions));
         this.emptyView.showTextView();
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
@@ -514,7 +514,7 @@ public class NotificationsExceptionsActivity extends BaseFragment {
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new NotificationsExceptionsActivity$$Lambda$0(this));
-        this.listView.setOnScrollListener(new C18783());
+        this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
     }
 

@@ -16,7 +16,7 @@ import android.os.Build.VERSION;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-import com.google.android.exoplayer2.C0021C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.upstream.DataSchemeDataSource;
@@ -87,7 +87,7 @@ public class ConnectionsManager {
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
     private static AsyncTask currentTask;
-    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new C06831();
+    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new CLASSNAME();
     private static int lastClassGuid = 1;
     private static long lastDnsRequestTime;
     private boolean appPaused = true;
@@ -99,8 +99,8 @@ public class ConnectionsManager {
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$10 */
-    static class C068010 implements Runnable {
-        C068010() {
+    static class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -109,8 +109,8 @@ public class ConnectionsManager {
     }
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$1 */
-    static class C06831 extends ThreadLocal<HashMap<String, ResolvedDomain>> {
-        C06831() {
+    static class CLASSNAME extends ThreadLocal<HashMap<String, ResolvedDomain>> {
+        CLASSNAME() {
         }
 
         protected HashMap<String, ResolvedDomain> initialValue() {
@@ -119,8 +119,8 @@ public class ConnectionsManager {
     }
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$3 */
-    class C06873 extends BroadcastReceiver {
-        C06873() {
+    class CLASSNAME extends BroadcastReceiver {
+        CLASSNAME() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -227,8 +227,8 @@ public class ConnectionsManager {
         private int currentAccount;
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$DnsTxtLoadTask$1 */
-        class C06951 implements Comparator<String> {
-            C06951() {
+        class CLASSNAME implements Comparator<String> {
+            CLASSNAME() {
             }
 
             public int compare(String o1, String o2) {
@@ -312,13 +312,13 @@ public class ConnectionsManager {
                             } else if (read == -1) {
                             }
                         }
-                        JSONArray array = new JSONObject(new String(outbuf.toByteArray(), C0021C.UTF8_NAME)).getJSONArray("Answer");
+                        JSONArray array = new JSONObject(new String(outbuf.toByteArray(), CLASSNAMEC.UTF8_NAME)).getJSONArray("Answer");
                         int len = array.length();
                         ArrayList<String> arrayList = new ArrayList(len);
                         for (a = 0; a < len; a++) {
                             arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                         }
-                        Collections.sort(arrayList, new C06951());
+                        Collections.sort(arrayList, new CLASSNAME());
                         StringBuilder builder = new StringBuilder();
                         for (a = 0; a < arrayList.size(); a++) {
                             builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
@@ -393,8 +393,8 @@ public class ConnectionsManager {
         private FirebaseRemoteConfig firebaseRemoteConfig;
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$1 */
-        class C06981 implements OnCompleteListener<Void> {
-            C06981() {
+        class CLASSNAME implements OnCompleteListener<Void> {
+            CLASSNAME() {
             }
 
             public void onComplete(Task<Void> finishedTask) {
@@ -431,8 +431,8 @@ public class ConnectionsManager {
         }
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$2 */
-        class C06992 implements Runnable {
-            C06992() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -461,10 +461,10 @@ public class ConnectionsManager {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m11d("current firebase value = " + currentValue);
                 }
-                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C06981());
+                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new CLASSNAME());
                 return null;
             } catch (Throwable e) {
-                Utilities.stageQueue.postRunnable(new C06992());
+                Utilities.stageQueue.postRunnable(new CLASSNAME());
                 FileLog.m14e(e);
             }
         }
@@ -648,8 +648,8 @@ public class ConnectionsManager {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.tgnet.ConnectionsManager$2$1 */
-            class C06851 implements RequestDelegateInternal {
-                C06851() {
+            class CLASSNAME implements RequestDelegateInternal {
+                CLASSNAME() {
                 }
 
                 public void run(long response, int errorCode, String errorText, int networkType) {
@@ -709,7 +709,7 @@ public class ConnectionsManager {
                     NativeByteBuffer buffer = new NativeByteBuffer(tLObject.getObjectSize());
                     tLObject.serializeToStream(buffer);
                     tLObject.freeResources();
-                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C06851(), quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
+                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new CLASSNAME(), quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
                 } catch (Throwable e) {
                     FileLog.m14e(e);
                 }
@@ -770,7 +770,7 @@ public class ConnectionsManager {
         }
         native_init(this.currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
         checkConnection();
-        ApplicationLoader.applicationContext.registerReceiver(new C06873(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        ApplicationLoader.applicationContext.registerReceiver(new CLASSNAME(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     public static void setLangCode(String langCode) {
@@ -968,7 +968,7 @@ public class ConnectionsManager {
     }
 
     public static void onProxyError() {
-        AndroidUtilities.runOnUIThread(new C068010());
+        AndroidUtilities.runOnUIThread(new CLASSNAME());
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:20:0x00a6 A:{SYNTHETIC, Splitter: B:20:0x00a6} */

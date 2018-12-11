@@ -1,14 +1,14 @@
 package org.telegram.p005ui.Adapters;
 
-import org.telegram.p005ui.Adapters.DialogsSearchAdapter.C07462;
+import org.telegram.p005ui.Adapters.DialogsSearchAdapter.CLASSNAME;
 
 /* renamed from: org.telegram.ui.Adapters.DialogsSearchAdapter$2$$Lambda$0 */
 final /* synthetic */ class DialogsSearchAdapter$2$$Lambda$0 implements Runnable {
-    private final C07462 arg$1;
+    private final CLASSNAME arg$1;
     private final String arg$2;
 
-    DialogsSearchAdapter$2$$Lambda$0(C07462 c07462, String str) {
-        this.arg$1 = c07462;
+    DialogsSearchAdapter$2$$Lambda$0(CLASSNAME CLASSNAME, String str) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = str;
     }
 

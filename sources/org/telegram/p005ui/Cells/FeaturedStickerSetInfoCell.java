@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
@@ -34,7 +34,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private Drawable delDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.m10dp(4.0f), Theme.getColor(Theme.key_featuredStickers_delButton), Theme.getColor(Theme.key_featuredStickers_delButtonPressed));
     private boolean drawProgress;
-    Drawable drawable = new C09121();
+    Drawable drawable = new CLASSNAME();
     private boolean hasOnClick;
     private TextView infoTextView;
     private boolean isInstalled;
@@ -45,10 +45,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private StickerSetCovered set;
 
     /* renamed from: org.telegram.ui.Cells.FeaturedStickerSetInfoCell$1 */
-    class C09121 extends Drawable {
+    class CLASSNAME extends Drawable {
         Paint paint = new Paint(1);
 
-        C09121() {
+        CLASSNAME() {
         }
 
         public void draw(Canvas canvas) {
@@ -167,14 +167,14 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         }
         if (this.hasOnClick) {
             this.addButton.setVisibility(0);
-            boolean isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSet.set.f146id);
+            boolean isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSet.set.var_id);
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
                 this.addButton.setBackgroundDrawable(this.delDrawable);
-                this.addButton.setText(LocaleController.getString("StickersRemove", C0541R.string.StickersRemove).toUpperCase());
+                this.addButton.setText(LocaleController.getString("StickersRemove", CLASSNAMER.string.StickersRemove).toUpperCase());
             } else {
                 this.addButton.setBackgroundDrawable(this.addDrawable);
-                this.addButton.setText(LocaleController.getString("Add", C0541R.string.Add).toUpperCase());
+                this.addButton.setText(LocaleController.getString("Add", CLASSNAMER.string.Add).toUpperCase());
             }
             this.addButton.setPadding(AndroidUtilities.m10dp(17.0f), 0, AndroidUtilities.m10dp(17.0f), 0);
         } else {

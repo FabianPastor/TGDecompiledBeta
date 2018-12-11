@@ -43,7 +43,7 @@ public abstract class OrientationHelper {
 
     public abstract void offsetChildren(int i);
 
-    /* synthetic */ OrientationHelper(LayoutManager x0, C06161 x1) {
+    /* synthetic */ OrientationHelper(LayoutManager x0, CLASSNAME x1) {
         this(x0);
     }
 

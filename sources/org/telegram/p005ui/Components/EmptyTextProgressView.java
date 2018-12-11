@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.Theme;
 
@@ -27,7 +27,7 @@ public class EmptyTextProgressView extends FrameLayout {
         this.textView.setGravity(17);
         this.textView.setVisibility(4);
         this.textView.setPadding(AndroidUtilities.m10dp(20.0f), 0, AndroidUtilities.m10dp(20.0f), 0);
-        this.textView.setText(LocaleController.getString("NoResult", C0541R.string.NoResult));
+        this.textView.setText(LocaleController.getString("NoResult", CLASSNAMER.string.NoResult));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
         setOnTouchListener(EmptyTextProgressView$$Lambda$0.$instance);
     }

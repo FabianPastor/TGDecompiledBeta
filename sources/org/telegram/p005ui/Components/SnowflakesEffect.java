@@ -29,13 +29,13 @@ public class SnowflakesEffect {
         int type;
         float velocity;
         /* renamed from: vx */
-        float f268vx;
+        float var_vx;
         /* renamed from: vy */
-        float f269vy;
+        float var_vy;
         /* renamed from: x */
-        float f270x;
+        float var_x;
         /* renamed from: y */
-        float f271y;
+        float var_y;
 
         private Particle() {
         }
@@ -44,7 +44,7 @@ public class SnowflakesEffect {
             switch (this.type) {
                 case 0:
                     SnowflakesEffect.this.particlePaint.setAlpha((int) (255.0f * this.alpha));
-                    canvas.drawPoint(this.f270x, this.f271y, SnowflakesEffect.this.particlePaint);
+                    canvas.drawPoint(this.var_x, this.var_y, SnowflakesEffect.this.particlePaint);
                     return;
                 default:
                     SnowflakesEffect.this.particleThinPaint.setAlpha((int) (255.0f * this.alpha));
@@ -57,10 +57,10 @@ public class SnowflakesEffect {
                         float y1 = ((float) Math.sin((double) angle)) * px;
                         float cx = x1 * 0.66f;
                         float cy = y1 * 0.66f;
-                        canvas.drawLine(this.f270x, this.f271y, this.f270x + x1, this.f271y + y1, SnowflakesEffect.this.particleThinPaint);
+                        canvas.drawLine(this.var_x, this.var_y, this.var_x + x1, this.var_y + y1, SnowflakesEffect.this.particleThinPaint);
                         float angle2 = (float) (((double) angle) - 1.5707963267948966d);
-                        canvas.drawLine(this.f270x + cx, this.f271y + cy, this.f270x + ((float) ((Math.cos((double) angle2) * ((double) px1)) - (Math.sin((double) angle2) * ((double) py1)))), this.f271y + ((float) ((Math.sin((double) angle2) * ((double) px1)) + (Math.cos((double) angle2) * ((double) py1)))), SnowflakesEffect.this.particleThinPaint);
-                        canvas.drawLine(this.f270x + cx, this.f271y + cy, this.f270x + ((float) (((-Math.cos((double) angle2)) * ((double) px1)) - (Math.sin((double) angle2) * ((double) py1)))), this.f271y + ((float) (((-Math.sin((double) angle2)) * ((double) px1)) + (Math.cos((double) angle2) * ((double) py1)))), SnowflakesEffect.this.particleThinPaint);
+                        canvas.drawLine(this.var_x + cx, this.var_y + cy, this.var_x + ((float) ((Math.cos((double) angle2) * ((double) px1)) - (Math.sin((double) angle2) * ((double) py1)))), this.var_y + ((float) ((Math.sin((double) angle2) * ((double) px1)) + (Math.cos((double) angle2) * ((double) py1)))), SnowflakesEffect.this.particleThinPaint);
+                        canvas.drawLine(this.var_x + cx, this.var_y + cy, this.var_x + ((float) (((-Math.cos((double) angle2)) * ((double) px1)) - (Math.sin((double) angle2) * ((double) py1)))), this.var_y + ((float) (((-Math.sin((double) angle2)) * ((double) px1)) + (Math.cos((double) angle2) * ((double) py1)))), SnowflakesEffect.this.particleThinPaint);
                         angle += 1.0471976f;
                     }
                     return;
@@ -101,8 +101,8 @@ public class SnowflakesEffect {
                 } else {
                     particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation((particle.currentTime - 200.0f) / (particle.lifeTime - 200.0f));
                 }
-                particle.f270x += ((particle.f268vx * particle.velocity) * ((float) dt)) / 500.0f;
-                particle.f271y += ((particle.f269vy * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.var_x += ((particle.var_vx * particle.velocity) * ((float) dt)) / 500.0f;
+                particle.var_y += ((particle.var_vy * particle.velocity) * ((float) dt)) / 500.0f;
                 particle.currentTime += (float) dt;
             }
             a++;
@@ -129,10 +129,10 @@ public class SnowflakesEffect {
                     newParticle = (Particle) this.freeParticles.get(0);
                     this.freeParticles.remove(0);
                 }
-                newParticle.f270x = cx;
-                newParticle.f271y = cy;
-                newParticle.f268vx = vx;
-                newParticle.f269vy = vy;
+                newParticle.var_x = cx;
+                newParticle.var_y = cy;
+                newParticle.var_vx = vx;
+                newParticle.var_vy = vy;
                 newParticle.alpha = 0.0f;
                 newParticle.currentTime = 0.0f;
                 newParticle.scale = Utilities.random.nextFloat() * 1.2f;

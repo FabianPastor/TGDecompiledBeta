@@ -6,22 +6,22 @@ import android.graphics.PointF;
 public class Point {
     public boolean edge;
     /* renamed from: x */
-    public double f255x;
+    public double var_x;
     /* renamed from: y */
-    public double f256y;
+    public double var_y;
     /* renamed from: z */
-    public double f257z;
+    public double var_z;
 
     public Point(double x, double y, double z) {
-        this.f255x = x;
-        this.f256y = y;
-        this.f257z = z;
+        this.var_x = x;
+        this.var_y = y;
+        this.var_z = z;
     }
 
     public Point(Point point) {
-        this.f255x = point.f255x;
-        this.f256y = point.f256y;
-        this.f257z = point.f257z;
+        this.var_x = point.var_x;
+        this.var_y = point.var_y;
+        this.var_z = point.var_z;
     }
 
     public boolean equals(Object obj) {
@@ -36,36 +36,36 @@ public class Point {
             return false;
         }
         Point other = (Point) obj;
-        if (!(this.f255x == other.f255x && this.f256y == other.f256y && this.f257z == other.f257z)) {
+        if (!(this.var_x == other.var_x && this.var_y == other.var_y && this.var_z == other.var_z)) {
             z = false;
         }
         return z;
     }
 
     Point multiplySum(Point point, double scalar) {
-        return new Point((this.f255x + point.f255x) * scalar, (this.f256y + point.f256y) * scalar, (this.f257z + point.f257z) * scalar);
+        return new Point((this.var_x + point.var_x) * scalar, (this.var_y + point.var_y) * scalar, (this.var_z + point.var_z) * scalar);
     }
 
     Point multiplyAndAdd(double scalar, Point point) {
-        return new Point((this.f255x * scalar) + point.f255x, (this.f256y * scalar) + point.f256y, (this.f257z * scalar) + point.f257z);
+        return new Point((this.var_x * scalar) + point.var_x, (this.var_y * scalar) + point.var_y, (this.var_z * scalar) + point.var_z);
     }
 
     void alteringAddMultiplication(Point point, double scalar) {
-        this.f255x += point.f255x * scalar;
-        this.f256y += point.f256y * scalar;
-        this.f257z += point.f257z * scalar;
+        this.var_x += point.var_x * scalar;
+        this.var_y += point.var_y * scalar;
+        this.var_z += point.var_z * scalar;
     }
 
     Point add(Point point) {
-        return new Point(this.f255x + point.f255x, this.f256y + point.f256y, this.f257z + point.f257z);
+        return new Point(this.var_x + point.var_x, this.var_y + point.var_y, this.var_z + point.var_z);
     }
 
     Point substract(Point point) {
-        return new Point(this.f255x - point.f255x, this.f256y - point.f256y, this.f257z - point.f257z);
+        return new Point(this.var_x - point.var_x, this.var_y - point.var_y, this.var_z - point.var_z);
     }
 
     Point multiplyByScalar(double scalar) {
-        return new Point(this.f255x * scalar, this.f256y * scalar, this.f257z * scalar);
+        return new Point(this.var_x * scalar, this.var_y * scalar, this.var_z * scalar);
     }
 
     Point getNormalized() {
@@ -73,14 +73,14 @@ public class Point {
     }
 
     private double getMagnitude() {
-        return Math.sqrt(((this.f255x * this.f255x) + (this.f256y * this.f256y)) + (this.f257z * this.f257z));
+        return Math.sqrt(((this.var_x * this.var_x) + (this.var_y * this.var_y)) + (this.var_z * this.var_z));
     }
 
     float getDistanceTo(Point point) {
-        return (float) Math.sqrt((Math.pow(this.f255x - point.f255x, 2.0d) + Math.pow(this.f256y - point.f256y, 2.0d)) + Math.pow(this.f257z - point.f257z, 2.0d));
+        return (float) Math.sqrt((Math.pow(this.var_x - point.var_x, 2.0d) + Math.pow(this.var_y - point.var_y, 2.0d)) + Math.pow(this.var_z - point.var_z, 2.0d));
     }
 
     PointF toPointF() {
-        return new PointF((float) this.f255x, (float) this.f256y);
+        return new PointF((float) this.var_x, (float) this.var_y);
     }
 }

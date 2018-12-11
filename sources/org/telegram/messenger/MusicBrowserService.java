@@ -75,7 +75,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     private static class DelayedStopHandler extends Handler {
         private final WeakReference<MusicBrowserService> mWeakReference;
 
-        /* synthetic */ DelayedStopHandler(MusicBrowserService x0, C05231 x1) {
+        /* synthetic */ DelayedStopHandler(MusicBrowserService x0, CLASSNAME x1) {
             this(x0);
         }
 
@@ -99,7 +99,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         private MediaSessionCallback() {
         }
 
-        /* synthetic */ MediaSessionCallback(MusicBrowserService x0, C05231 x1) {
+        /* synthetic */ MediaSessionCallback(MusicBrowserService x0, CLASSNAME x1) {
             this();
         }
 
@@ -207,7 +207,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         this.mediaSession.setCallback(new MediaSessionCallback(this, null));
         this.mediaSession.setFlags(3);
         Context context = getApplicationContext();
-        this.mediaSession.setSessionActivity(PendingIntent.getActivity(context, 99, new Intent(context, LaunchActivity.class), 134217728));
+        this.mediaSession.setSessionActivity(PendingIntent.getActivity(context, 99, new Intent(context, LaunchActivity.class), NUM));
         Bundle extras = new Bundle();
         extras.putBoolean(SLOT_RESERVATION_QUEUE, true);
         extras.putBoolean(SLOT_RESERVATION_SKIP_TO_PREV, true);
@@ -248,8 +248,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             messagesStorage.getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.MusicBrowserService$1$1 */
-                class C05221 implements Runnable {
-                    C05221() {
+                class CLASSNAME implements Runnable {
+                    CLASSNAME() {
                     }
 
                     public void run() {
@@ -320,7 +320,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                     data.reuse();
                                     if (MessageObject.isMusicMessage(message)) {
                                         int did = cursor.intValue(0);
-                                        message.f139id = cursor.intValue(2);
+                                        message.var_id = cursor.intValue(2);
                                         message.dialog_id = (long) did;
                                         ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(did);
                                         ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(did);
@@ -345,7 +345,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                 messagesStorage.getUsersInternal(TextUtils.join(",", usersToLoad), usersArrayList);
                                 for (a = 0; a < usersArrayList.size(); a++) {
                                     User user = (User) usersArrayList.get(a);
-                                    MusicBrowserService.this.users.put(user.f228id, user);
+                                    MusicBrowserService.this.users.put(user.var_id, user);
                                 }
                             }
                             if (!chatsToLoad.isEmpty()) {
@@ -353,14 +353,14 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                 messagesStorage.getChatsInternal(TextUtils.join(",", chatsToLoad), chatsArrayList);
                                 for (a = 0; a < chatsArrayList.size(); a++) {
                                     Chat chat = (Chat) chatsArrayList.get(a);
-                                    MusicBrowserService.this.chats.put(chat.f113id, chat);
+                                    MusicBrowserService.this.chats.put(chat.var_id, chat);
                                 }
                             }
                         }
                     } catch (Throwable e) {
                         FileLog.m14e(e);
                     }
-                    AndroidUtilities.runOnUIThread(new C05221());
+                    AndroidUtilities.runOnUIThread(new CLASSNAME());
                 }
             });
         }

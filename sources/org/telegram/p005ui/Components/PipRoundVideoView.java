@@ -41,7 +41,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.p005ui.ActionBar.C0704ActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
 import org.telegram.p005ui.ActionBar.Theme;
 
 /* renamed from: org.telegram.ui.Components.PipRoundVideoView */
@@ -66,8 +66,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$3 */
-    class C15033 extends ViewOutlineProvider {
-        C15033() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @TargetApi(21)
@@ -77,8 +77,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$5 */
-    class C15055 extends AnimatorListenerAdapter {
-        C15055() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -89,8 +89,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.ui.Components.PipRoundVideoView$7 */
-    class C15077 extends AnimatorListenerAdapter {
-        C15077() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -210,7 +210,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                         return result;
                     }
                 };
-                this.aspectRatioFrameLayout.setOutlineProvider(new C15033());
+                this.aspectRatioFrameLayout.setOutlineProvider(new CLASSNAME());
                 this.aspectRatioFrameLayout.setClipToOutline(true);
             } else {
                 final Paint aspectPaint = new Paint(1);
@@ -293,7 +293,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         if (isX) {
             total = AndroidUtilities.displaySize.x - sideSize;
         } else {
-            total = (AndroidUtilities.displaySize.y - sideSize) - C0704ActionBar.getCurrentActionBarHeight();
+            total = (AndroidUtilities.displaySize.y - sideSize) - CLASSNAMEActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
             result = AndroidUtilities.m10dp(10.0f);
@@ -305,7 +305,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         if (isX) {
             return result;
         }
-        return result + C0704ActionBar.getCurrentActionBarHeight();
+        return result + CLASSNAMEActionBar.getCurrentActionBarHeight();
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -400,7 +400,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         if (this.decelerateInterpolator == null) {
             this.decelerateInterpolator = new DecelerateInterpolator();
         }
-        this.hideShowAnimation.addListener(new C15055());
+        this.hideShowAnimation.addListener(new CLASSNAME());
         this.hideShowAnimation.setInterpolator(this.decelerateInterpolator);
         this.hideShowAnimation.start();
     }
@@ -504,7 +504,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             editor.putInt("sidex", 2);
         }
         if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= C0704ActionBar.getCurrentActionBarHeight()) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= CLASSNAMEActionBar.getCurrentActionBarHeight()) {
                 if (animators == null) {
                     animators = new ArrayList();
                 }
@@ -531,7 +531,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             animatorSet.setDuration(150);
             if (slideOut) {
                 animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C15077());
+                animatorSet.addListener(new CLASSNAME());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

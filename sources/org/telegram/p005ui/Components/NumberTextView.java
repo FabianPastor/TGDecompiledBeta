@@ -24,8 +24,8 @@ public class NumberTextView extends View {
     private TextPaint textPaint = new TextPaint(1);
 
     /* renamed from: org.telegram.ui.Components.NumberTextView$1 */
-    class C13931 extends AnimatorListenerAdapter {
-        C13931() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -82,7 +82,7 @@ public class NumberTextView extends View {
                 fArr[1] = 0.0f;
                 this.animator = ObjectAnimator.ofFloat(this, str, fArr);
                 this.animator.setDuration(150);
-                this.animator.addListener(new C13931());
+                this.animator.addListener(new CLASSNAME());
                 this.animator.start();
             }
             invalidate();

@@ -12,6 +12,6 @@ final /* synthetic */ class NotificationsSettingsActivity$$Lambda$2 implements R
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        NotificationsSettingsActivity.m26xafa3bc98(tLObject, tL_error);
+        NotificationsSettingsActivity.m26xafa3bCLASSNAME(tLObject, tL_error);
     }
 }

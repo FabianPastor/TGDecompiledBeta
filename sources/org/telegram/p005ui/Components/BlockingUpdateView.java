@@ -26,7 +26,7 @@ import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -62,7 +62,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         view.setBackgroundColor(-11556378);
         addView(view, new LayoutParams(-1, (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.m10dp(176.0f)));
         ImageView imageView = new ImageView(context);
-        imageView.setImageResource(C0541R.drawable.intro_tg_plane);
+        imageView.setImageResource(CLASSNAMER.drawable.intro_tg_plane);
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setPadding(0, 0, 0, AndroidUtilities.m10dp(14.0f));
         view.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) top, 0.0f, 0.0f));
@@ -77,7 +77,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         titleTextView.setTextSize(1, 20.0f);
         titleTextView.setGravity(49);
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleTextView.setText(LocaleController.getString("UpdateTelegram", C0541R.string.UpdateTelegram));
+        titleTextView.setText(LocaleController.getString("UpdateTelegram", CLASSNAMER.string.UpdateTelegram));
         container.addView(titleTextView, LayoutHelper.createFrame(-2, -2, 49));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -88,7 +88,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.textView.setLineSpacing((float) AndroidUtilities.m10dp(2.0f), 1.0f);
         container.addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 44.0f, 0.0f, 0.0f));
         this.acceptButton = new FrameLayout(context);
-        this.acceptButton.setBackgroundResource(C0541R.drawable.regbtn_states);
+        this.acceptButton.setBackgroundResource(CLASSNAMER.drawable.regbtn_states);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.acceptButton, "translationZ", new float[]{(float) AndroidUtilities.m10dp(2.0f), (float) AndroidUtilities.m10dp(4.0f)}).setDuration(200));
@@ -188,10 +188,10 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             return true;
         }
         Builder builder = new Builder(context);
-        builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-        builder.setMessage(LocaleController.getString("ApkRestricted", C0541R.string.ApkRestricted));
-        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", C0541R.string.PermissionOpenSettings), new BlockingUpdateView$$Lambda$2(context));
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+        builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+        builder.setMessage(LocaleController.getString("ApkRestricted", CLASSNAMER.string.ApkRestricted));
+        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", CLASSNAMER.string.PermissionOpenSettings), new BlockingUpdateView$$Lambda$2(context));
+        builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
         builder.show();
         return false;
     }
@@ -297,9 +297,9 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         MessageObject.addEntitiesToText(builder, update.entities, false, 0, false, false, false);
         this.textView.setText(builder);
         if (update.document instanceof TL_document) {
-            this.acceptTextView.setText(LocaleController.getString("Update", C0541R.string.Update).toUpperCase() + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) update.document.size)}));
+            this.acceptTextView.setText(LocaleController.getString("Update", CLASSNAMER.string.Update).toUpperCase() + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) update.document.size)}));
         } else {
-            this.acceptTextView.setText(LocaleController.getString("Update", C0541R.string.Update).toUpperCase());
+            this.acceptTextView.setText(LocaleController.getString("Update", CLASSNAMER.string.Update).toUpperCase());
         }
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileDidLoaded);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileDidFailedLoad);

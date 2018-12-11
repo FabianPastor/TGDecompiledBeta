@@ -9,9 +9,9 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
-import org.telegram.PhoneFormat.C0216PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -124,7 +124,7 @@ public class ProfileSearchCell extends BaseCell {
         this.drawNameBot = false;
         if (this.encryptedChat != null) {
             this.drawNameLock = true;
-            this.dialog_id = ((long) this.encryptedChat.f123id) << 32;
+            this.dialog_id = ((long) this.encryptedChat.var_id) << 32;
             if (LocaleController.isRTL) {
                 this.nameLockLeft = (getMeasuredWidth() - AndroidUtilities.m10dp((float) (AndroidUtilities.leftBaseline + 2))) - Theme.dialogs_lockDrawable.getIntrinsicWidth();
                 this.nameLeft = AndroidUtilities.m10dp(11.0f);
@@ -134,12 +134,12 @@ public class ProfileSearchCell extends BaseCell {
             }
             this.nameLockTop = AndroidUtilities.m10dp(16.5f);
         } else if (this.chat != null) {
-            if (this.chat.f113id < 0) {
-                this.dialog_id = AndroidUtilities.makeBroadcastId(this.chat.f113id);
+            if (this.chat.var_id < 0) {
+                this.dialog_id = AndroidUtilities.makeBroadcastId(this.chat.var_id);
                 this.drawNameBroadcast = true;
                 this.nameLockTop = AndroidUtilities.m10dp(28.5f);
             } else {
-                this.dialog_id = (long) (-this.chat.f113id);
+                this.dialog_id = (long) (-this.chat.var_id);
                 if (!ChatObject.isChannel(this.chat) || this.chat.megagroup) {
                     this.drawNameGroup = true;
                     this.nameLockTop = AndroidUtilities.m10dp(30.0f);
@@ -164,7 +164,7 @@ public class ProfileSearchCell extends BaseCell {
                 this.nameLeft = intrinsicWidth + dp;
             }
         } else if (this.user != null) {
-            this.dialog_id = (long) this.user.f228id;
+            this.dialog_id = (long) this.user.var_id;
             if (LocaleController.isRTL) {
                 this.nameLeft = AndroidUtilities.m10dp(11.0f);
             } else {
@@ -198,9 +198,9 @@ public class ProfileSearchCell extends BaseCell {
         }
         if (nameString.length() == 0) {
             if (this.user == null || this.user.phone == null || this.user.phone.length() == 0) {
-                nameString = LocaleController.getString("HiddenName", C0541R.string.HiddenName);
+                nameString = LocaleController.getString("HiddenName", CLASSNAMER.string.HiddenName);
             } else {
-                nameString = C0216PhoneFormat.getInstance().format("+" + this.user.phone);
+                nameString = CLASSNAMEPhoneFormat.getInstance().format("+" + this.user.phone);
             }
         }
         if (this.encryptedChat != null) {
@@ -262,14 +262,14 @@ public class ProfileSearchCell extends BaseCell {
                 onlineString = this.subLabel;
             } else if (this.user != null) {
                 if (this.user.bot) {
-                    onlineString = LocaleController.getString("Bot", C0541R.string.Bot);
-                } else if (this.user.f228id == 333000 || this.user.f228id == 777000) {
-                    onlineString = LocaleController.getString("ServiceNotifications", C0541R.string.ServiceNotifications);
+                    onlineString = LocaleController.getString("Bot", CLASSNAMER.string.Bot);
+                } else if (this.user.var_id == 333000 || this.user.var_id == 777000) {
+                    onlineString = LocaleController.getString("ServiceNotifications", CLASSNAMER.string.ServiceNotifications);
                 } else {
                     onlineString = LocaleController.formatUserStatus(this.currentAccount, this.user);
-                    if (this.user != null && (this.user.f228id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
+                    if (this.user != null && (this.user.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
                         currentOnlinePaint = Theme.dialogs_onlinePaint;
-                        onlineString = LocaleController.getString("Online", C0541R.string.Online);
+                        onlineString = LocaleController.getString("Online", CLASSNAMER.string.Online);
                     }
                 }
             }

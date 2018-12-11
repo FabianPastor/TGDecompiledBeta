@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -16,7 +16,7 @@ import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.FeaturedStickerSetCell;
@@ -46,8 +46,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
     private ArrayList<Long> unreadStickers = null;
 
     /* renamed from: org.telegram.ui.FeaturedStickersActivity$1 */
-    class C16961 extends ActionBarMenuOnItemClick {
-        C16961() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -58,17 +58,17 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.FeaturedStickersActivity$3 */
-    class C16993 implements OnItemClickListener {
-        C16993() {
+    class CLASSNAME implements OnItemClickListener {
+        CLASSNAME() {
         }
 
         public void onItemClick(final View view, int position) {
             if (position >= FeaturedStickersActivity.this.stickersStartRow && position < FeaturedStickersActivity.this.stickersEndRow && FeaturedStickersActivity.this.getParentActivity() != null) {
                 InputStickerSet inputStickerSet;
                 final StickerSetCovered stickerSet = (StickerSetCovered) DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).getFeaturedStickerSets().get(position);
-                if (stickerSet.set.f146id != 0) {
+                if (stickerSet.set.var_id != 0) {
                     inputStickerSet = new TL_inputStickerSetID();
-                    inputStickerSet.f138id = stickerSet.set.f146id;
+                    inputStickerSet.var_id = stickerSet.set.var_id;
                 } else {
                     inputStickerSet = new TL_inputStickerSetShortName();
                     inputStickerSet.short_name = stickerSet.set.short_name;
@@ -78,7 +78,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                 stickersAlert.setInstallDelegate(new StickersAlertInstallDelegate() {
                     public void onStickerSetInstalled() {
                         view.setDrawProgress(true);
-                        FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.f146id, stickerSet);
+                        FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.var_id, stickerSet);
                     }
 
                     public void onStickerSetUninstalled() {
@@ -94,15 +94,15 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         private Context mContext;
 
         /* renamed from: org.telegram.ui.FeaturedStickersActivity$ListAdapter$1 */
-        class C17001 implements OnClickListener {
-            C17001() {
+        class CLASSNAME implements OnClickListener {
+            CLASSNAME() {
             }
 
             public void onClick(View v) {
                 FeaturedStickerSetCell parent = (FeaturedStickerSetCell) v.getParent();
                 StickerSetCovered pack = parent.getStickerSet();
-                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.f146id) < 0) {
-                    FeaturedStickersActivity.this.installingStickerSets.put(pack.set.f146id, pack);
+                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.var_id) < 0) {
+                    FeaturedStickersActivity.this.installingStickerSets.put(pack.set.var_id, pack);
                     DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), pack.set, 2, FeaturedStickersActivity.this, false);
                     parent.setDrawProgress(true);
                 }
@@ -130,15 +130,15 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                 } else {
                     z = false;
                 }
-                boolean z2 = FeaturedStickersActivity.this.unreadStickers != null && FeaturedStickersActivity.this.unreadStickers.contains(Long.valueOf(stickerSet.set.f146id));
+                boolean z2 = FeaturedStickersActivity.this.unreadStickers != null && FeaturedStickersActivity.this.unreadStickers.contains(Long.valueOf(stickerSet.set.var_id));
                 cell.setStickersSet(stickerSet, z, z2);
-                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSet.set.f146id) >= 0) {
+                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSet.set.var_id) >= 0) {
                     installing = true;
                 } else {
                     installing = false;
                 }
                 if (installing && cell.isInstalled()) {
-                    FeaturedStickersActivity.this.installingStickerSets.remove(stickerSet.set.f146id);
+                    FeaturedStickersActivity.this.installingStickerSets.remove(stickerSet.set.var_id);
                     installing = false;
                     cell.setDrawProgress(false);
                 }
@@ -156,11 +156,11 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                 case 0:
                     view = new FeaturedStickerSetCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((FeaturedStickerSetCell) view).setAddOnClickListener(new C17001());
+                    ((FeaturedStickerSetCell) view).setAddOnClickListener(new CLASSNAME());
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0541R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -195,10 +195,10 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("FeaturedStickers", C0541R.string.FeaturedStickers));
-        this.actionBar.setActionBarMenuOnItemClick(new C16961());
+        this.actionBar.setTitle(LocaleController.getString("FeaturedStickers", CLASSNAMER.string.FeaturedStickers));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -217,7 +217,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C16993());
+        this.listView.setOnItemClickListener(new CLASSNAME());
         return this.fragmentView;
     }
 

@@ -6,13 +6,13 @@ import org.telegram.messenger.support.JobIntentService;
 
 public class KeepAliveJob extends JobIntentService {
     private static volatile CountDownLatch countDownLatch;
-    private static Runnable finishJobByTimeoutRunnable = new C04503();
+    private static Runnable finishJobByTimeoutRunnable = new CLASSNAME();
     private static volatile boolean startingJob;
     private static final Object sync = new Object();
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$1 */
-    static class C04481 implements Runnable {
-        C04481() {
+    static class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -32,8 +32,8 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$2 */
-    static class C04492 implements Runnable {
-        C04492() {
+    static class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -42,8 +42,8 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     /* renamed from: org.telegram.messenger.KeepAliveJob$3 */
-    static class C04503 implements Runnable {
-        C04503() {
+    static class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -52,7 +52,7 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     public static void startJob() {
-        Utilities.globalQueue.postRunnable(new C04481());
+        Utilities.globalQueue.postRunnable(new CLASSNAME());
     }
 
     private static void finishJobInternal() {
@@ -73,7 +73,7 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     public static void finishJob() {
-        Utilities.globalQueue.postRunnable(new C04492());
+        Utilities.globalQueue.postRunnable(new CLASSNAME());
     }
 
     /* JADX WARNING: Missing block: B:9:0x0014, code:

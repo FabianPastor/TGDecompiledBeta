@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="ActionBar.Transparent.TMessages.Start">
-        <item name="android:background">#ff527da3</item>
+        <item name="android:background">#fvar_da3</item>
         <item name="android:title" />
         <item name="android:logo">@drawable/transparent</item>
     </style>

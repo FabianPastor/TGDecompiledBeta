@@ -37,7 +37,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int tabCount;
     private int tabPadding = AndroidUtilities.m10dp(24.0f);
     private LinearLayout tabsContainer;
-    private int underlineColor = 436207616;
+    private int underlineColor = NUM;
     private int underlineHeight = AndroidUtilities.m10dp(2.0f);
 
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$IconTabProvider */
@@ -50,8 +50,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$1 */
-    class C13941 implements OnGlobalLayoutListener {
-        C13941() {
+    class CLASSNAME implements OnGlobalLayoutListener {
+        CLASSNAME() {
         }
 
         public void onGlobalLayout() {
@@ -62,8 +62,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     /* renamed from: org.telegram.ui.Components.PagerSlidingTabStrip$4 */
-    class C13974 implements Runnable {
-        C13974() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -76,7 +76,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         private PageListener() {
         }
 
-        /* synthetic */ PageListener(PagerSlidingTabStrip x0, C13941 x1) {
+        /* synthetic */ PageListener(PagerSlidingTabStrip x0, CLASSNAME x1) {
             this();
         }
 
@@ -147,7 +147,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             }
         }
         updateTabStyles();
-        getViewTreeObserver().addOnGlobalLayoutListener(new C13941());
+        getViewTreeObserver().addOnGlobalLayoutListener(new CLASSNAME());
     }
 
     public View getTab(int position) {
@@ -241,7 +241,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public void onSizeChanged(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         if (!this.shouldExpand) {
-            post(new C13974());
+            post(new CLASSNAME());
         }
     }
 

@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 
 /* renamed from: org.telegram.ui.Components.Paint.Brush */
 public interface Brush {
@@ -34,7 +34,7 @@ public interface Brush {
         public Bitmap getStamp() {
             Options options = new Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0541R.drawable.paint_elliptical_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), CLASSNAMER.drawable.paint_elliptical_brush, options);
         }
     }
 
@@ -63,7 +63,7 @@ public interface Brush {
         public Bitmap getStamp() {
             Options options = new Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0541R.drawable.paint_neon_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), CLASSNAMER.drawable.paint_neon_brush, options);
         }
     }
 
@@ -92,7 +92,7 @@ public interface Brush {
         public Bitmap getStamp() {
             Options options = new Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), C0541R.drawable.paint_radial_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), CLASSNAMER.drawable.paint_radial_brush, options);
         }
     }
 

@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.telegram.PhoneFormat.C0216PhoneFormat;
-import org.telegram.messenger.C0541R;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -21,7 +21,7 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -55,11 +55,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$1 */
-    class C21261 extends ActionBarMenuOnItemClick {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.PrivacyUsersActivity$1$1 */
-        class C21251 implements GroupCreateActivityDelegate {
-            C21251() {
+        class CLASSNAME implements GroupCreateActivityDelegate {
+            CLASSNAME() {
             }
 
             public void didSelectUsers(ArrayList<Integer> ids) {
@@ -77,7 +77,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C21261() {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -88,15 +88,15 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 args.putBoolean(PrivacyUsersActivity.this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
                 args.putBoolean("isGroup", PrivacyUsersActivity.this.isGroup);
                 GroupCreateActivity fragment = new GroupCreateActivity(args);
-                fragment.setDelegate(new C21251());
+                fragment.setDelegate(new CLASSNAME());
                 PrivacyUsersActivity.this.presentFragment(fragment);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$2 */
-    class C21272 implements OnItemClickListener {
-        C21272() {
+    class CLASSNAME implements OnItemClickListener {
+        CLASSNAME() {
         }
 
         public void onItemClick(View view, int position) {
@@ -109,11 +109,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$3 */
-    class C21293 implements OnItemLongClickListener {
+    class CLASSNAME implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.PrivacyUsersActivity$3$1 */
-        class C21281 implements OnClickListener {
-            C21281() {
+        class CLASSNAME implements OnClickListener {
+            CLASSNAME() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -127,7 +127,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C21293() {
+        CLASSNAME() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -136,15 +136,15 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
             PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
             Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Delete", C0541R.string.Delete)}, new C21281());
+            builder.setItems(new CharSequence[]{LocaleController.getString("Delete", CLASSNAMER.string.Delete)}, new CLASSNAME());
             PrivacyUsersActivity.this.showDialog(builder.create());
             return true;
         }
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$4 */
-    class C21304 implements ThemeDescriptionDelegate {
-        C21304() {
+    class CLASSNAME implements ThemeDescriptionDelegate {
+        CLASSNAME() {
         }
 
         public void didSetColor() {
@@ -187,7 +187,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     break;
                 default:
                     view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", C0541R.string.RemoveFromListText));
+                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", CLASSNAMER.string.RemoveFromListText));
                     break;
             }
             return new Holder(view);
@@ -197,7 +197,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             if (holder.getItemViewType() == 0) {
                 User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
                 UserCell userCell = (UserCell) holder.itemView;
-                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", C0541R.string.NumberUnknown) : C0216PhoneFormat.getInstance().format("+" + user.phone);
+                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", CLASSNAMER.string.NumberUnknown) : CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
                 userCell.setData(user, null, string, 0);
             }
         }
@@ -229,26 +229,26 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.isGroup) {
             if (this.isAlwaysShare) {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", C0541R.string.AlwaysAllow));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", CLASSNAMER.string.AlwaysAllow));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("NeverAllow", C0541R.string.NeverAllow));
+                this.actionBar.setTitle(LocaleController.getString("NeverAllow", CLASSNAMER.string.NeverAllow));
             }
         } else if (this.isAlwaysShare) {
-            this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", C0541R.string.AlwaysShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", CLASSNAMER.string.AlwaysShareWithTitle));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", C0541R.string.NeverShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", CLASSNAMER.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21261());
-        this.actionBar.createMenu().addItem(1, (int) C0541R.drawable.plus);
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
+        this.actionBar.createMenu().addItem(1, (int) CLASSNAMER.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
-        this.emptyView.setText(LocaleController.getString("NoContacts", C0541R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", CLASSNAMER.string.NoContacts));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -264,8 +264,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C21272());
-        this.listView.setOnItemLongClickListener(new C21293());
+        this.listView.setOnItemClickListener(new CLASSNAME());
+        this.listView.setOnItemLongClickListener(new CLASSNAME());
         return this.fragmentView;
     }
 
@@ -302,7 +302,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new C21304();
+        ThemeDescriptionDelegate cellDelegate = new CLASSNAME();
         r10 = new ThemeDescription[19];
         r10[8] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
         r10[9] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);

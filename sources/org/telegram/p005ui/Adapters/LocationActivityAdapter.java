@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
@@ -80,7 +80,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         this.currentLiveLocations = new ArrayList(liveLocations);
         int uid = UserConfig.getInstance(this.currentAccount).getClientUserId();
         for (int a = 0; a < this.currentLiveLocations.size(); a++) {
-            if (((LiveLocation) this.currentLiveLocations.get(a)).f273id == uid) {
+            if (((LiveLocation) this.currentLiveLocations.get(a)).var_id == uid) {
                 this.currentLiveLocations.remove(a);
                 break;
             }
@@ -98,11 +98,11 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
             return;
         }
         if (this.customLocation != null) {
-            this.sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", C0541R.string.SendSelectedLocation), String.format(Locale.US, "(%f,%f)", new Object[]{Double.valueOf(this.customLocation.getLatitude()), Double.valueOf(this.customLocation.getLongitude())}));
+            this.sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", CLASSNAMER.string.SendSelectedLocation), String.format(Locale.US, "(%f,%f)", new Object[]{Double.valueOf(this.customLocation.getLatitude()), Double.valueOf(this.customLocation.getLongitude())}));
         } else if (this.gpsLocation != null) {
-            this.sendLocationCell.setText(LocaleController.getString("SendLocation", C0541R.string.SendLocation), LocaleController.formatString("AccurateTo", C0541R.string.AccurateTo, LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy())));
+            this.sendLocationCell.setText(LocaleController.getString("SendLocation", CLASSNAMER.string.SendLocation), LocaleController.formatString("AccurateTo", CLASSNAMER.string.AccurateTo, LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy())));
         } else {
-            this.sendLocationCell.setText(LocaleController.getString("SendLocation", C0541R.string.SendLocation), LocaleController.getString("Loading", C0541R.string.Loading));
+            this.sendLocationCell.setText(LocaleController.getString("SendLocation", CLASSNAMER.string.SendLocation), LocaleController.getString("Loading", CLASSNAMER.string.Loading));
         }
     }
 
@@ -195,13 +195,13 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
                 return;
             case 2:
                 if (this.currentMessageObject != null) {
-                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("LiveLocations", C0541R.string.LiveLocations));
+                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("LiveLocations", CLASSNAMER.string.LiveLocations));
                     return;
                 } else if (this.pulledUp) {
-                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("NearbyPlaces", C0541R.string.NearbyPlaces));
+                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("NearbyPlaces", CLASSNAMER.string.NearbyPlaces));
                     return;
                 } else {
-                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("ShowNearbyPlaces", C0541R.string.ShowNearbyPlaces));
+                    ((GraySectionCell) holder.itemView).setText(LocaleController.getString("ShowNearbyPlaces", CLASSNAMER.string.ShowNearbyPlaces));
                     return;
                 }
             case 3:

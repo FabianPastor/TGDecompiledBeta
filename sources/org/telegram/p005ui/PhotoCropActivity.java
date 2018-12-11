@@ -16,12 +16,12 @@ import android.widget.FrameLayout.LayoutParams;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Bitmaps;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 
 /* renamed from: org.telegram.ui.PhotoCropActivity */
@@ -41,8 +41,8 @@ public class PhotoCropActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.PhotoCropActivity$1 */
-    class C19681 extends ActionBarMenuOnItemClick {
-        C19681() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -83,8 +83,8 @@ public class PhotoCropActivity extends BaseFragment {
         int viewWidth;
 
         /* renamed from: org.telegram.ui.PhotoCropActivity$PhotoCropView$1 */
-        class C19691 implements OnTouchListener {
-            C19691() {
+        class CLASSNAME implements OnTouchListener {
+            CLASSNAME() {
             }
 
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -277,9 +277,9 @@ public class PhotoCropActivity extends BaseFragment {
             this.circlePaint = new Paint();
             this.circlePaint.setColor(-1);
             this.halfPaint = new Paint();
-            this.halfPaint.setColor(-939524096);
+            this.halfPaint.setColor(-NUM);
             setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
-            setOnTouchListener(new C19691());
+            setOnTouchListener(new CLASSNAME());
         }
 
         private void updateBitmapSize() {
@@ -447,11 +447,11 @@ public class PhotoCropActivity extends BaseFragment {
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         this.actionBar.setTitleColor(-1);
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("CropImage", C0541R.string.CropImage));
-        this.actionBar.setActionBarMenuOnItemClick(new C19681());
-        this.actionBar.createMenu().addItemWithWidth(1, C0541R.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
+        this.actionBar.setTitle(LocaleController.getString("CropImage", CLASSNAMER.string.CropImage));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
+        this.actionBar.createMenu().addItemWithWidth(1, CLASSNAMER.drawable.ic_done, AndroidUtilities.m10dp(56.0f));
         View photoCropView = new PhotoCropView(context);
         this.view = photoCropView;
         this.fragmentView = photoCropView;

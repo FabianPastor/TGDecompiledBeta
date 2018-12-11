@@ -14,7 +14,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.FileLoader;
@@ -55,7 +55,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         float f = 40.0f;
         super(context);
         setWillNotDraw(false);
-        this.checkBox = new CheckBox(context, C0541R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, CLASSNAMER.drawable.round_check2);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         View view = this.checkBox;

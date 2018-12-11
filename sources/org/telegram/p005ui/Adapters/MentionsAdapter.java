@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -88,7 +88,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int lastPosition;
     private String lastText;
     private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new C07541()) {
+    private LocationProvider locationProvider = new LocationProvider(new CLASSNAME()) {
         public void stop() {
             super.stop();
             MentionsAdapter.this.lastKnownLocation = null;
@@ -118,8 +118,8 @@ public class MentionsAdapter extends SelectionAdapter {
     private String searchingContextUsername;
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
-    class C07541 implements LocationProviderDelegate {
-        C07541() {
+    class CLASSNAME implements LocationProviderDelegate {
+        CLASSNAME() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -135,8 +135,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
-    class C07563 implements SearchAdapterHelperDelegate {
-        C07563() {
+    class CLASSNAME implements SearchAdapterHelperDelegate {
+        CLASSNAME() {
         }
 
         public void onDataSetChanged() {
@@ -171,7 +171,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C07563());
+        this.searchAdapterHelper.setDelegate(new CLASSNAME());
     }
 
     public void onDestroy() {
@@ -251,7 +251,7 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public int getContextBotId() {
-        return this.foundContextBot != null ? this.foundContextBot.f228id : 0;
+        return this.foundContextBot != null ? this.foundContextBot.var_id : 0;
     }
 
     public User getContextBotUser() {
@@ -282,16 +282,16 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
             }
             if (this.foundContextBot.bot_inline_geo) {
-                if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("inlinegeo_" + this.foundContextBot.f228id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
+                if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("inlinegeo_" + this.foundContextBot.var_id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
                     checkLocationPermissionsOrStart();
                 } else {
                     User foundContextBotFinal = this.foundContextBot;
                     Builder builder = new Builder(this.parentFragment.getParentActivity());
-                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", C0541R.string.ShareYouLocationTitle));
-                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", C0541R.string.ShareYouLocationInline));
+                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", CLASSNAMER.string.ShareYouLocationTitle));
+                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", CLASSNAMER.string.ShareYouLocationInline));
                     boolean[] buttonClicked = new boolean[1];
-                    builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), new MentionsAdapter$$Lambda$0(this, buttonClicked, foundContextBotFinal));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), new MentionsAdapter$$Lambda$1(this, buttonClicked));
+                    builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new MentionsAdapter$$Lambda$0(this, buttonClicked, foundContextBotFinal));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), new MentionsAdapter$$Lambda$1(this, buttonClicked));
                     this.parentFragment.showDialog(builder.create(), new MentionsAdapter$$Lambda$2(this, buttonClicked));
                 }
             }
@@ -309,7 +309,7 @@ public class MentionsAdapter extends SelectionAdapter {
     final /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] buttonClicked, User foundContextBotFinal, DialogInterface dialogInterface, int i) {
         buttonClicked[0] = true;
         if (foundContextBotFinal != null) {
-            MessagesController.getNotificationsSettings(this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.f228id, true).commit();
+            MessagesController.getNotificationsSettings(this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.var_id, true).commit();
             checkLocationPermissionsOrStart();
         }
     }
@@ -479,7 +479,7 @@ public class MentionsAdapter extends SelectionAdapter {
             if (query == null || user == null) {
                 this.searchingContextQuery = null;
             } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
-                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.f228id).append("_");
+                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.var_id).append("_");
                 Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? TtmlNode.ANONYMOUS_REGION_ID : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
                 String key = append.append(valueOf).toString();
                 MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
@@ -724,7 +724,7 @@ public class MentionsAdapter extends SelectionAdapter {
                         if (user != null) {
                             if (user.username != null && user.username.length() > 0 && ((usernameString.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) || usernameString.length() == 0)) {
                                 newResult2.add(user);
-                                newResultsHashMap.put(user.f228id, user);
+                                newResultsHashMap.put(user.var_id, user);
                                 count++;
                             }
                             if (count == 5) {
@@ -736,7 +736,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (this.parentFragment != null) {
                     chat = this.parentFragment.getCurrentChat();
                 } else if (this.info != null) {
-                    chat = messagesController.getChat(Integer.valueOf(this.info.f114id));
+                    chat = messagesController.getChat(Integer.valueOf(this.info.var_id));
                 } else {
                     chat = null;
                 }
@@ -744,23 +744,23 @@ public class MentionsAdapter extends SelectionAdapter {
                     for (a = 0; a < this.info.participants.participants.size(); a++) {
                         user = messagesController.getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));
                         if (user != null && (usernameOnly || !UserObject.isUserSelf(user))) {
-                            if (newResultsHashMap.indexOfKey(user.f228id) < 0) {
+                            if (newResultsHashMap.indexOfKey(user.var_id) < 0) {
                                 if (usernameString.length() == 0) {
                                     if (!user.deleted) {
                                         newResult2.add(user);
                                     }
                                 } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f228id, user);
+                                    newMap.put(user.var_id, user);
                                 } else if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f228id, user);
+                                    newMap.put(user.var_id, user);
                                 } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f228id, user);
+                                    newMap.put(user.var_id, user);
                                 } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
                                     newResult2.add(user);
-                                    newMap.put(user.f228id, user);
+                                    newMap.put(user.var_id, user);
                                 }
                             }
                         }
@@ -776,7 +776,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
                     final String str = usernameString;
                     final MessagesController messagesController2 = messagesController;
-                    C07585 c07585 = new Runnable() {
+                    CLASSNAME CLASSNAME = new Runnable() {
                         public void run() {
                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -784,7 +784,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                 req.limit = 20;
                                 req.offset = 0;
                                 req.filter = new TL_channelParticipantsSearch();
-                                req.filter.f112q = str;
+                                req.filter.var_q = str;
                                 MentionsAdapter.this.channelReqId = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new MentionsAdapter$5$$Lambda$0(this, MentionsAdapter.access$1604(MentionsAdapter.this), messagesController2));
                             }
                         }
@@ -816,8 +816,8 @@ public class MentionsAdapter extends SelectionAdapter {
                             MentionsAdapter.this.channelReqId = 0;
                         }
                     };
-                    this.searchGlobalRunnable = c07585;
-                    AndroidUtilities.runOnUIThread(c07585, 200);
+                    this.searchGlobalRunnable = CLASSNAME;
+                    AndroidUtilities.runOnUIThread(CLASSNAME, 200);
                 }
                 Collections.sort(this.searchResultUsernames, new MentionsAdapter$$Lambda$4(newResultsHashMap, users));
                 notifyDataSetChanged();
@@ -895,17 +895,17 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     static final /* synthetic */ int lambda$searchUsernameOrHashtag$5$MentionsAdapter(SparseArray newResultsHashMap, ArrayList users, User lhs, User rhs) {
-        if (newResultsHashMap.indexOfKey(lhs.f228id) >= 0 && newResultsHashMap.indexOfKey(rhs.f228id) >= 0) {
+        if (newResultsHashMap.indexOfKey(lhs.var_id) >= 0 && newResultsHashMap.indexOfKey(rhs.var_id) >= 0) {
             return 0;
         }
-        if (newResultsHashMap.indexOfKey(lhs.f228id) >= 0) {
+        if (newResultsHashMap.indexOfKey(lhs.var_id) >= 0) {
             return -1;
         }
-        if (newResultsHashMap.indexOfKey(rhs.f228id) >= 0) {
+        if (newResultsHashMap.indexOfKey(rhs.var_id) >= 0) {
             return 1;
         }
-        int lhsNum = users.indexOf(Integer.valueOf(lhs.f228id));
-        int rhsNum = users.indexOf(Integer.valueOf(rhs.f228id));
+        int lhsNum = users.indexOf(Integer.valueOf(lhs.var_id));
+        int rhsNum = users.indexOf(Integer.valueOf(rhs.var_id));
         if (lhsNum == -1 || rhsNum == -1) {
             if (lhsNum != -1 && rhsNum == -1) {
                 return -1;
@@ -1099,9 +1099,9 @@ public class MentionsAdapter extends SelectionAdapter {
                 return;
             }
             if (AndroidUtilities.isBannedForever(chat.banned_rights.until_date)) {
-                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", C0541R.string.AttachInlineRestrictedForever));
+                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", CLASSNAMER.string.AttachInlineRestrictedForever));
             } else {
-                textView.setText(LocaleController.formatString("AttachInlineRestricted", C0541R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
+                textView.setText(LocaleController.formatString("AttachInlineRestricted", CLASSNAMER.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
             }
         } else if (this.searchResultBotContext != null) {
             boolean hasTop;

@@ -15,7 +15,7 @@ import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory;
 import java.io.File;
 import java.util.Date;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.FileLoader;
@@ -42,7 +42,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     private int currentAccount = UserConfig.selectedAccount;
     private TextView dateTextView;
     private TextView extTextView;
-    private int[] icons = new int[]{C0541R.drawable.media_doc_blue, C0541R.drawable.media_doc_green, C0541R.drawable.media_doc_red, C0541R.drawable.media_doc_yellow};
+    private int[] icons = new int[]{CLASSNAMER.drawable.media_doc_blue, CLASSNAMER.drawable.media_doc_green, CLASSNAMER.drawable.media_doc_red, CLASSNAMER.drawable.media_doc_yellow};
     private boolean loaded;
     private boolean loading;
     private MessageObject message;
@@ -54,8 +54,8 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     private BackupImageView thumbImageView;
 
     /* renamed from: org.telegram.ui.Cells.SharedDocumentCell$1 */
-    class C09281 implements ImageReceiverDelegate {
-        C09281() {
+    class CLASSNAME implements ImageReceiverDelegate {
+        CLASSNAME() {
         }
 
         public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
@@ -118,7 +118,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             f2 = 0.0f;
         }
         addView(view, LayoutHelper.createFrame(40, 40.0f, i, f, 8.0f, f2, 0.0f));
-        this.thumbImageView.getImageReceiver().setDelegate(new C09281());
+        this.thumbImageView.getImageReceiver().setDelegate(new CLASSNAME());
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 16.0f);
@@ -145,7 +145,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         this.progressView = new LineProgressView(context);
         this.progressView.setProgressColor(Theme.getColor(Theme.key_sharedMedia_startStopLoadIcon));
         addView(this.progressView, LayoutHelper.createFrame(-1, 2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 72.0f, 54.0f, LocaleController.isRTL ? 72.0f : 0.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0541R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, CLASSNAMER.drawable.round_check2);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         view = this.checkBox;
@@ -290,7 +290,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             TextView textView2 = this.dateTextView;
             Object[] objArr = new Object[2];
             objArr[0] = AndroidUtilities.formatFileSize((long) messageObject.getDocument().size);
-            objArr[1] = LocaleController.formatString("formatDateAtTime", C0541R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
+            objArr[1] = LocaleController.formatString("formatDateAtTime", CLASSNAMER.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
             textView2.setText(String.format("%s, %s", objArr));
         }
         setWillNotDraw(!this.needDivider);
@@ -326,7 +326,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
         this.loading = FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName);
         this.statusImageView.setVisibility(0);
-        this.statusImageView.setImageResource(this.loading ? C0541R.drawable.media_doc_pause : C0541R.drawable.media_doc_load);
+        this.statusImageView.setImageResource(this.loading ? CLASSNAMER.drawable.media_doc_pause : CLASSNAMER.drawable.media_doc_load);
         this.dateTextView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.m10dp(14.0f), 0, LocaleController.isRTL ? AndroidUtilities.m10dp(14.0f) : 0, 0);
         if (this.loading) {
             this.progressView.setVisibility(0);

@@ -48,7 +48,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.exoplayer2.C0021C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.extractor.p003ts.PsExtractor;
 import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import com.google.android.exoplayer2.p004ui.AspectRatioFrameLayout;
@@ -61,7 +61,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
@@ -92,8 +92,8 @@ import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
-import org.telegram.p005ui.ActionBar.C0704ActionBar;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.Theme.ThemeInfo;
@@ -190,7 +190,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private RadialProgressView progressBar;
     private FrameLayout progressView;
     private View progressView2;
-    private PhotoViewerProvider provider = new C10161();
+    private PhotoViewerProvider provider = new CLASSNAME();
     private FrameLayout roundVideoContainer;
     private MessageObject scrollToMessage;
     private int scrollToOffsetOnRecreate = 0;
@@ -210,13 +210,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private boolean wasPaused = false;
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$10 */
-    class C100210 extends OnScrollListener {
+    class CLASSNAME extends OnScrollListener {
         private final int scrollValue = AndroidUtilities.m10dp(100.0f);
         private float totalDy = 0.0f;
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$10$1 */
-        class C10011 extends AnimatorListenerAdapter {
-            C10011() {
+        class CLASSNAME extends AnimatorListenerAdapter {
+            CLASSNAME() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -226,7 +226,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
         }
 
-        C100210() {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -253,7 +253,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 Animator[] animatorArr = new Animator[1];
                 animatorArr[0] = ObjectAnimator.ofFloat(ChannelAdminLogActivity.this.floatingDateView, "alpha", new float[]{1.0f});
                 access$4500.playTogether(animatorArr);
-                ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new C10011());
+                ChannelAdminLogActivity.this.floatingDateAnimation.addListener(new CLASSNAME());
                 ChannelAdminLogActivity.this.floatingDateAnimation.start();
             }
             ChannelAdminLogActivity.this.checkScrollForLoad(true);
@@ -262,62 +262,62 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$12 */
-    class C100512 implements OnClickListener {
+    class CLASSNAME implements OnClickListener {
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$12$1 */
-        class C10041 implements AdminLogFilterAlertDelegate {
-            C10041() {
+        class CLASSNAME implements AdminLogFilterAlertDelegate {
+            CLASSNAME() {
             }
 
             public void didSelectRights(TL_channelAdminLogEventsFilter filter, SparseArray<User> admins) {
                 ChannelAdminLogActivity.this.currentFilter = filter;
                 ChannelAdminLogActivity.this.selectedAdmins = admins;
                 if (ChannelAdminLogActivity.this.currentFilter == null && ChannelAdminLogActivity.this.selectedAdmins == null) {
-                    ChannelAdminLogActivity.this.avatarContainer.setSubtitle(LocaleController.getString("EventLogAllEvents", C0541R.string.EventLogAllEvents));
+                    ChannelAdminLogActivity.this.avatarContainer.setSubtitle(LocaleController.getString("EventLogAllEvents", CLASSNAMER.string.EventLogAllEvents));
                 } else {
-                    ChannelAdminLogActivity.this.avatarContainer.setSubtitle(LocaleController.getString("EventLogSelectedEvents", C0541R.string.EventLogSelectedEvents));
+                    ChannelAdminLogActivity.this.avatarContainer.setSubtitle(LocaleController.getString("EventLogSelectedEvents", CLASSNAMER.string.EventLogSelectedEvents));
                 }
                 ChannelAdminLogActivity.this.loadMessages(true);
             }
         }
 
-        C100512() {
+        CLASSNAME() {
         }
 
         public void onClick(View view) {
             if (ChannelAdminLogActivity.this.getParentActivity() != null) {
                 AdminLogFilterAlert adminLogFilterAlert = new AdminLogFilterAlert(ChannelAdminLogActivity.this.getParentActivity(), ChannelAdminLogActivity.this.currentFilter, ChannelAdminLogActivity.this.selectedAdmins, ChannelAdminLogActivity.this.currentChat.megagroup);
                 adminLogFilterAlert.setCurrentAdmins(ChannelAdminLogActivity.this.admins);
-                adminLogFilterAlert.setAdminLogFilterAlertDelegate(new C10041());
+                adminLogFilterAlert.setAdminLogFilterAlertDelegate(new CLASSNAME());
                 ChannelAdminLogActivity.this.showDialog(adminLogFilterAlert);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$13 */
-    class C100613 implements OnClickListener {
-        C100613() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
             Builder builder = new Builder(ChannelAdminLogActivity.this.getParentActivity());
             if (ChannelAdminLogActivity.this.currentChat.megagroup) {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("EventLogInfoDetail", C0541R.string.EventLogInfoDetail)));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("EventLogInfoDetail", CLASSNAMER.string.EventLogInfoDetail)));
             } else {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("EventLogInfoDetailChannel", C0541R.string.EventLogInfoDetailChannel)));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("EventLogInfoDetailChannel", CLASSNAMER.string.EventLogInfoDetailChannel)));
             }
-            builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
-            builder.setTitle(LocaleController.getString("EventLogInfoTitle", C0541R.string.EventLogInfoTitle));
+            builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
+            builder.setTitle(LocaleController.getString("EventLogInfoTitle", CLASSNAMER.string.EventLogInfoTitle));
             ChannelAdminLogActivity.this.showDialog(builder.create());
         }
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$15 */
-    class C101115 implements OnClickListener {
+    class CLASSNAME implements OnClickListener {
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$15$1 */
-        class C10081 implements OnDateSetListener {
-            C10081() {
+        class CLASSNAME implements OnDateSetListener {
+            CLASSNAME() {
             }
 
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -330,15 +330,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$15$2 */
-        class C10092 implements DialogInterface.OnClickListener {
-            C10092() {
+        class CLASSNAME implements DialogInterface.OnClickListener {
+            CLASSNAME() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
             }
         }
 
-        C101115() {
+        CLASSNAME() {
         }
 
         public void onClick(View view) {
@@ -346,12 +346,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 AndroidUtilities.hideKeyboard(ChannelAdminLogActivity.this.searchItem.getSearchField());
                 Calendar calendar = Calendar.getInstance();
                 try {
-                    DatePickerDialog dialog = new DatePickerDialog(ChannelAdminLogActivity.this.getParentActivity(), new C10081(), calendar.get(1), calendar.get(2), calendar.get(5));
+                    DatePickerDialog dialog = new DatePickerDialog(ChannelAdminLogActivity.this.getParentActivity(), new CLASSNAME(), calendar.get(1), calendar.get(2), calendar.get(5));
                     final DatePicker datePicker = dialog.getDatePicker();
                     datePicker.setMinDate(1375315200000L);
                     datePicker.setMaxDate(System.currentTimeMillis());
-                    dialog.setButton(-1, LocaleController.getString("JumpToDate", C0541R.string.JumpToDate), dialog);
-                    dialog.setButton(-2, LocaleController.getString("Cancel", C0541R.string.Cancel), new C10092());
+                    dialog.setButton(-1, LocaleController.getString("JumpToDate", CLASSNAMER.string.JumpToDate), dialog);
+                    dialog.setButton(-2, LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), new CLASSNAME());
                     if (VERSION.SDK_INT >= 21) {
                         dialog.setOnShowListener(new OnShowListener() {
                             public void onShow(DialogInterface dialog) {
@@ -374,8 +374,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$18 */
-    class C101418 extends ViewOutlineProvider {
-        C101418() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @TargetApi(21)
@@ -385,8 +385,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$1 */
-    class C10161 extends EmptyPhotoViewerProvider {
-        C10161() {
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -441,8 +441,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$20 */
-    class C101920 implements RequestDelegate {
-        C101920() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -462,8 +462,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$21 */
-    class C102021 extends AnimatorListenerAdapter {
-        C102021() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -474,8 +474,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$22 */
-    class C102122 implements OnPreDrawListener {
-        C102122() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -487,8 +487,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$2 */
-    class C10232 implements RequestDelegate {
-        C10232() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -502,12 +502,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         int oldRowsCount = ChannelAdminLogActivity.this.messages.size();
                         for (int a = 0; a < res.events.size(); a++) {
                             TL_channelAdminLogEvent event = (TL_channelAdminLogEvent) res.events.get(a);
-                            if (ChannelAdminLogActivity.this.messagesDict.indexOfKey(event.f150id) < 0) {
-                                ChannelAdminLogActivity.this.minEventId = Math.min(ChannelAdminLogActivity.this.minEventId, event.f150id);
+                            if (ChannelAdminLogActivity.this.messagesDict.indexOfKey(event.var_id) < 0) {
+                                ChannelAdminLogActivity.this.minEventId = Math.min(ChannelAdminLogActivity.this.minEventId, event.var_id);
                                 added = true;
                                 MessageObject messageObject = new MessageObject(ChannelAdminLogActivity.this.currentAccount, event, ChannelAdminLogActivity.this.messages, ChannelAdminLogActivity.this.messagesByDays, ChannelAdminLogActivity.this.currentChat, ChannelAdminLogActivity.this.mid);
                                 if (messageObject.contentType >= 0) {
-                                    ChannelAdminLogActivity.this.messagesDict.put(event.f150id, messageObject);
+                                    ChannelAdminLogActivity.this.messagesDict.put(event.var_id, messageObject);
                                 }
                             }
                         }
@@ -545,8 +545,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$3 */
-    class C10243 extends ActionBarMenuOnItemClick {
-        C10243() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -557,8 +557,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$4 */
-    class C10254 extends ActionBarMenuItemSearchListener {
-        C10254() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchCollapse() {
@@ -584,8 +584,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$6 */
-    class C10286 implements OnTouchListener {
-        C10286() {
+    class CLASSNAME implements OnTouchListener {
+        CLASSNAME() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -594,8 +594,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.ChannelAdminLogActivity$8 */
-    class C10308 implements OnItemClickListener {
-        C10308() {
+    class CLASSNAME implements OnItemClickListener {
+        CLASSNAME() {
         }
 
         public void onItemClick(View view, int position) {
@@ -612,8 +612,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         private int rowCount;
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$1 */
-        class C10331 implements ChatMessageCellDelegate {
-            C10331() {
+        class CLASSNAME implements ChatMessageCellDelegate {
+            CLASSNAME() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -639,7 +639,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             public void didPressedChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
                 if (chat != null && chat != ChannelAdminLogActivity.this.currentChat) {
                     Bundle args = new Bundle();
-                    args.putInt("chat_id", chat.f113id);
+                    args.putInt("chat_id", chat.var_id);
                     if (postId != 0) {
                         args.putInt("message_id", postId);
                     }
@@ -654,10 +654,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             public void didPressedUserAvatar(ChatMessageCell cell, User user) {
-                if (user != null && user.f228id != UserConfig.getInstance(ChannelAdminLogActivity.this.currentAccount).getClientUserId()) {
+                if (user != null && user.var_id != UserConfig.getInstance(ChannelAdminLogActivity.this.currentAccount).getClientUserId()) {
                     Bundle args = new Bundle();
-                    args.putInt("user_id", user.f228id);
-                    ChannelAdminLogActivity.this.addCanBanUser(args, user.f228id);
+                    args.putInt("user_id", user.var_id);
+                    ChannelAdminLogActivity.this.addCanBanUser(args, user.var_id);
                     ProfileActivity fragment = new ProfileActivity(args);
                     fragment.setPlayProfileAnimation(false);
                     ChannelAdminLogActivity.this.presentFragment(fragment);
@@ -682,7 +682,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 if (url != null) {
                     if (url instanceof URLSpanMono) {
                         ((URLSpanMono) url).copyToClipboard();
-                        Toast.makeText(ChannelAdminLogActivity.this.getParentActivity(), LocaleController.getString("TextCopied", C0541R.string.TextCopied), 0).show();
+                        Toast.makeText(ChannelAdminLogActivity.this.getParentActivity(), LocaleController.getString("TextCopied", CLASSNAMER.string.TextCopied), 0).show();
                     } else if (url instanceof URLSpanUserMention) {
                         User user = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getUser(Utilities.parseInt(((URLSpanUserMention) url).getURL()));
                         if (user != null) {
@@ -702,7 +702,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         if (longPress) {
                             BottomSheet.Builder builder = new BottomSheet.Builder(ChannelAdminLogActivity.this.getParentActivity());
                             builder.setTitle(urlFinal);
-                            builder.setItems(new CharSequence[]{LocaleController.getString("Open", C0541R.string.Open), LocaleController.getString("Copy", C0541R.string.Copy)}, new DialogInterface.OnClickListener() {
+                            builder.setItems(new CharSequence[]{LocaleController.getString("Open", CLASSNAMER.string.Open), LocaleController.getString("Copy", CLASSNAMER.string.Copy)}, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (which == 0) {
                                         Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), urlFinal, true);
@@ -845,8 +845,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$2 */
-        class C10342 implements ChatActionCellDelegate {
-            C10342() {
+        class CLASSNAME implements ChatActionCellDelegate {
+            CLASSNAME() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -890,8 +890,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3 */
-        class C10353 implements BotHelpCellDelegate {
-            C10353() {
+        class CLASSNAME implements BotHelpCellDelegate {
+            CLASSNAME() {
             }
 
             public void didPressUrl(String url) {
@@ -947,16 +947,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     ChannelAdminLogActivity.this.chatMessageCellsCache.remove(0);
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                chatMessageCell.setDelegate(new C10331());
+                chatMessageCell.setDelegate(new CLASSNAME());
                 chatMessageCell.setAllowAssistant(true);
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C10342());
+                ((ChatActionCell) view).setDelegate(new CLASSNAME());
             } else if (viewType == 2) {
                 view = new ChatUnreadCell(this.mContext);
             } else if (viewType == 3) {
                 view = new BotHelpCell(this.mContext);
-                ((BotHelpCell) view).setDelegate(new C10353());
+                ((BotHelpCell) view).setDelegate(new CLASSNAME());
             } else if (viewType == 4) {
                 view = new ChatLoadingCell(this.mContext);
             }
@@ -1163,17 +1163,17 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         if (this.emptyView != null) {
             if (!TextUtils.isEmpty(this.searchQuery)) {
                 this.emptyView.setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(5.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(5.0f));
-                this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EventLogEmptyTextSearch", C0541R.string.EventLogEmptyTextSearch, this.searchQuery)));
+                this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EventLogEmptyTextSearch", CLASSNAMER.string.EventLogEmptyTextSearch, this.searchQuery)));
             } else if (this.selectedAdmins == null && this.currentFilter == null) {
                 this.emptyView.setPadding(AndroidUtilities.m10dp(16.0f), AndroidUtilities.m10dp(16.0f), AndroidUtilities.m10dp(16.0f), AndroidUtilities.m10dp(16.0f));
                 if (this.currentChat.megagroup) {
-                    this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmpty", C0541R.string.EventLogEmpty)));
+                    this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmpty", CLASSNAMER.string.EventLogEmpty)));
                 } else {
-                    this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmptyChannel", C0541R.string.EventLogEmptyChannel)));
+                    this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmptyChannel", CLASSNAMER.string.EventLogEmptyChannel)));
                 }
             } else {
                 this.emptyView.setPadding(AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(5.0f), AndroidUtilities.m10dp(8.0f), AndroidUtilities.m10dp(5.0f));
-                this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmptySearch", C0541R.string.EventLogEmptySearch)));
+                this.emptyView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EventLogEmptySearch", CLASSNAMER.string.EventLogEmptySearch)));
             }
         }
     }
@@ -1194,7 +1194,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             this.loading = true;
             TL_channels_getAdminLog req = new TL_channels_getAdminLog();
             req.channel = MessagesController.getInputChannel(this.currentChat);
-            req.f153q = this.searchQuery;
+            req.var_q = this.searchQuery;
             req.limit = 50;
             if (reset || this.messages.isEmpty()) {
                 req.max_id = 0;
@@ -1213,7 +1213,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
             }
             updateEmptyPlaceholder();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C10232());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
             if (reset && this.chatAdapter != null) {
                 this.chatAdapter.notifyDataSetChanged();
             }
@@ -1319,25 +1319,25 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.hasOwnBackground = true;
         Theme.createChatResources(context, false);
         this.actionBar.setAddToContainer(false);
-        C0704ActionBar c0704ActionBar = this.actionBar;
+        CLASSNAMEActionBar CLASSNAMEActionBar = this.actionBar;
         boolean z = VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet();
-        c0704ActionBar.setOccupyStatusBar(z);
+        CLASSNAMEActionBar.setOccupyStatusBar(z);
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
-        this.actionBar.setActionBarMenuOnItemClick(new C10243());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.avatarContainer = new ChatAvatarContainer(context, null, false);
         this.avatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet());
         this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0541R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C10254());
-        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0541R.string.Search));
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) CLASSNAMER.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME());
+        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", CLASSNAMER.string.Search));
         this.avatarContainer.setEnabled(false);
         this.avatarContainer.setTitle(this.currentChat.title);
-        this.avatarContainer.setSubtitle(LocaleController.getString("EventLogAllEvents", C0541R.string.EventLogAllEvents));
+        this.avatarContainer.setSubtitle(LocaleController.getString("EventLogAllEvents", CLASSNAMER.string.EventLogAllEvents));
         this.avatarContainer.setChatAvatar(this.currentChat);
         this.fragmentView = new SizeNotifierFrameLayout(context) {
             protected void onAttachedToWindow() {
                 super.onAttachedToWindow();
                 MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
-                if (messageObject != null && messageObject.isRoundVideo() && messageObject.eventId != 0 && messageObject.getDialogId() == ((long) (-ChannelAdminLogActivity.this.currentChat.f113id))) {
+                if (messageObject != null && messageObject.isRoundVideo() && messageObject.eventId != 0 && messageObject.getDialogId() == ((long) (-ChannelAdminLogActivity.this.currentChat.var_id))) {
                     MediaController.getInstance().setTextureView(ChannelAdminLogActivity.this.createTextureView(false), ChannelAdminLogActivity.this.aspectRatioFrameLayout, ChannelAdminLogActivity.this.roundVideoContainer, true);
                 }
             }
@@ -1441,7 +1441,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.emptyViewContainer = new FrameLayout(context);
         this.emptyViewContainer.setVisibility(4);
         this.contentView.addView(this.emptyViewContainer, LayoutHelper.createFrame(-1, -2, 17));
-        this.emptyViewContainer.setOnTouchListener(new C10286());
+        this.emptyViewContainer.setOnTouchListener(new CLASSNAME());
         this.emptyView = new TextView(context);
         this.emptyView.setTextSize(1, 14.0f);
         this.emptyView.setGravity(17);
@@ -1495,7 +1495,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 return result;
             }
         };
-        this.chatListView.setOnItemClickListener(new C10308());
+        this.chatListView.setOnItemClickListener(new CLASSNAME());
         this.chatListView.setTag(Integer.valueOf(1));
         this.chatListView.setVerticalScrollBarEnabled(true);
         RecyclerListView recyclerListView = this.chatListView;
@@ -1521,7 +1521,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.chatLayoutManager.setStackFromEnd(true);
         this.chatListView.setLayoutManager(this.chatLayoutManager);
         this.contentView.addView(this.chatListView, LayoutHelper.createFrame(-1, -1.0f));
-        this.chatListView.setOnScrollListener(new C100210());
+        this.chatListView.setOnScrollListener(new CLASSNAME());
         if (this.scrollToPositionOnRecreate != -1) {
             this.chatLayoutManager.scrollToPositionWithOffset(this.scrollToPositionOnRecreate, this.scrollToOffsetOnRecreate);
             this.scrollToPositionOnRecreate = -1;
@@ -1530,7 +1530,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.progressView.setVisibility(4);
         this.contentView.addView(this.progressView, LayoutHelper.createFrame(-1, -1, 51));
         this.progressView2 = new View(context);
-        this.progressView2.setBackgroundResource(C0541R.drawable.system_loader);
+        this.progressView2.setBackgroundResource(CLASSNAMER.drawable.system_loader);
         this.progressView2.getBackground().setColorFilter(Theme.colorFilter);
         this.progressView.addView(this.progressView2, LayoutHelper.createFrame(36, 36, 17));
         this.progressBar = new RadialProgressView(context);
@@ -1552,19 +1552,19 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.bottomOverlayChat.setWillNotDraw(false);
         this.bottomOverlayChat.setPadding(0, AndroidUtilities.m10dp(3.0f), 0, 0);
         this.contentView.addView(this.bottomOverlayChat, LayoutHelper.createFrame(-1, 51, 80));
-        this.bottomOverlayChat.setOnClickListener(new C100512());
+        this.bottomOverlayChat.setOnClickListener(new CLASSNAME());
         this.bottomOverlayChatText = new TextView(context);
         this.bottomOverlayChatText.setTextSize(1, 15.0f);
         this.bottomOverlayChatText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.bottomOverlayChatText.setTextColor(Theme.getColor(Theme.key_chat_fieldOverlayText));
-        this.bottomOverlayChatText.setText(LocaleController.getString("SETTINGS", C0541R.string.SETTINGS).toUpperCase());
+        this.bottomOverlayChatText.setText(LocaleController.getString("SETTINGS", CLASSNAMER.string.SETTINGS).toUpperCase());
         this.bottomOverlayChat.addView(this.bottomOverlayChatText, LayoutHelper.createFrame(-2, -2, 17));
         this.bottomOverlayImage = new ImageView(context);
-        this.bottomOverlayImage.setImageResource(C0541R.drawable.log_info);
+        this.bottomOverlayImage.setImageResource(CLASSNAMER.drawable.log_info);
         this.bottomOverlayImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_fieldOverlayText), Mode.MULTIPLY));
         this.bottomOverlayImage.setScaleType(ScaleType.CENTER);
         this.bottomOverlayChat.addView(this.bottomOverlayImage, LayoutHelper.createFrame(48, 48.0f, 53, 3.0f, 0.0f, 0.0f, 0.0f));
-        this.bottomOverlayImage.setOnClickListener(new C100613());
+        this.bottomOverlayImage.setOnClickListener(new CLASSNAME());
         this.searchContainer = new FrameLayout(context) {
             public void onDraw(Canvas canvas) {
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
@@ -1582,10 +1582,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.contentView.addView(this.searchContainer, LayoutHelper.createFrame(-1, 51, 80));
         this.searchCalendarButton = new ImageView(context);
         this.searchCalendarButton.setScaleType(ScaleType.CENTER);
-        this.searchCalendarButton.setImageResource(C0541R.drawable.search_calendar);
+        this.searchCalendarButton.setImageResource(CLASSNAMER.drawable.search_calendar);
         this.searchCalendarButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), Mode.MULTIPLY));
         this.searchContainer.addView(this.searchCalendarButton, LayoutHelper.createFrame(48, 48, 53));
-        this.searchCalendarButton.setOnClickListener(new C101115());
+        this.searchCalendarButton.setOnClickListener(new CLASSNAME());
         this.searchCountText = new SimpleTextView(context);
         this.searchCountText.setTextColor(Theme.getColor(Theme.key_chat_searchPanelText));
         this.searchCountText.setTextSize(15);
@@ -1618,7 +1618,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 ArrayList<CharSequence> items = new ArrayList();
                 final ArrayList<Integer> options = new ArrayList();
                 if (this.selectedObject.type == 0 || this.selectedObject.caption != null) {
-                    items.add(LocaleController.getString("Copy", C0541R.string.Copy));
+                    items.add(LocaleController.getString("Copy", CLASSNAMER.string.Copy));
                     options.add(Integer.valueOf(3));
                 }
                 if (type == 1) {
@@ -1634,71 +1634,71 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
                 } else if (type == 3) {
                     if ((this.selectedObject.messageOwner.media instanceof TL_messageMediaWebPage) && MessageObject.isNewGifDocument(this.selectedObject.messageOwner.media.webpage.document)) {
-                        items.add(LocaleController.getString("SaveToGIFs", C0541R.string.SaveToGIFs));
+                        items.add(LocaleController.getString("SaveToGIFs", CLASSNAMER.string.SaveToGIFs));
                         options.add(Integer.valueOf(11));
                     }
                 } else if (type == 4) {
                     if (this.selectedObject.isVideo()) {
-                        items.add(LocaleController.getString("SaveToGallery", C0541R.string.SaveToGallery));
+                        items.add(LocaleController.getString("SaveToGallery", CLASSNAMER.string.SaveToGallery));
                         options.add(Integer.valueOf(4));
-                        items.add(LocaleController.getString("ShareFile", C0541R.string.ShareFile));
+                        items.add(LocaleController.getString("ShareFile", CLASSNAMER.string.ShareFile));
                         options.add(Integer.valueOf(6));
                     } else if (this.selectedObject.isMusic()) {
-                        items.add(LocaleController.getString("SaveToMusic", C0541R.string.SaveToMusic));
+                        items.add(LocaleController.getString("SaveToMusic", CLASSNAMER.string.SaveToMusic));
                         options.add(Integer.valueOf(10));
-                        items.add(LocaleController.getString("ShareFile", C0541R.string.ShareFile));
+                        items.add(LocaleController.getString("ShareFile", CLASSNAMER.string.ShareFile));
                         options.add(Integer.valueOf(6));
                     } else if (this.selectedObject.getDocument() != null) {
                         if (MessageObject.isNewGifDocument(this.selectedObject.getDocument())) {
-                            items.add(LocaleController.getString("SaveToGIFs", C0541R.string.SaveToGIFs));
+                            items.add(LocaleController.getString("SaveToGIFs", CLASSNAMER.string.SaveToGIFs));
                             options.add(Integer.valueOf(11));
                         }
-                        items.add(LocaleController.getString("SaveToDownloads", C0541R.string.SaveToDownloads));
+                        items.add(LocaleController.getString("SaveToDownloads", CLASSNAMER.string.SaveToDownloads));
                         options.add(Integer.valueOf(10));
-                        items.add(LocaleController.getString("ShareFile", C0541R.string.ShareFile));
+                        items.add(LocaleController.getString("ShareFile", CLASSNAMER.string.ShareFile));
                         options.add(Integer.valueOf(6));
                     } else {
-                        items.add(LocaleController.getString("SaveToGallery", C0541R.string.SaveToGallery));
+                        items.add(LocaleController.getString("SaveToGallery", CLASSNAMER.string.SaveToGallery));
                         options.add(Integer.valueOf(4));
                     }
                 } else if (type == 5) {
-                    items.add(LocaleController.getString("ApplyLocalizationFile", C0541R.string.ApplyLocalizationFile));
+                    items.add(LocaleController.getString("ApplyLocalizationFile", CLASSNAMER.string.ApplyLocalizationFile));
                     options.add(Integer.valueOf(5));
-                    items.add(LocaleController.getString("SaveToDownloads", C0541R.string.SaveToDownloads));
+                    items.add(LocaleController.getString("SaveToDownloads", CLASSNAMER.string.SaveToDownloads));
                     options.add(Integer.valueOf(10));
-                    items.add(LocaleController.getString("ShareFile", C0541R.string.ShareFile));
+                    items.add(LocaleController.getString("ShareFile", CLASSNAMER.string.ShareFile));
                     options.add(Integer.valueOf(6));
                 } else if (type == 10) {
-                    items.add(LocaleController.getString("ApplyThemeFile", C0541R.string.ApplyThemeFile));
+                    items.add(LocaleController.getString("ApplyThemeFile", CLASSNAMER.string.ApplyThemeFile));
                     options.add(Integer.valueOf(5));
-                    items.add(LocaleController.getString("SaveToDownloads", C0541R.string.SaveToDownloads));
+                    items.add(LocaleController.getString("SaveToDownloads", CLASSNAMER.string.SaveToDownloads));
                     options.add(Integer.valueOf(10));
-                    items.add(LocaleController.getString("ShareFile", C0541R.string.ShareFile));
+                    items.add(LocaleController.getString("ShareFile", CLASSNAMER.string.ShareFile));
                     options.add(Integer.valueOf(6));
                 } else if (type == 6) {
-                    items.add(LocaleController.getString("SaveToGallery", C0541R.string.SaveToGallery));
+                    items.add(LocaleController.getString("SaveToGallery", CLASSNAMER.string.SaveToGallery));
                     options.add(Integer.valueOf(7));
-                    items.add(LocaleController.getString("SaveToDownloads", C0541R.string.SaveToDownloads));
+                    items.add(LocaleController.getString("SaveToDownloads", CLASSNAMER.string.SaveToDownloads));
                     options.add(Integer.valueOf(10));
-                    items.add(LocaleController.getString("ShareFile", C0541R.string.ShareFile));
+                    items.add(LocaleController.getString("ShareFile", CLASSNAMER.string.ShareFile));
                     options.add(Integer.valueOf(6));
                 } else if (type == 7) {
                     if (this.selectedObject.isMask()) {
-                        items.add(LocaleController.getString("AddToMasks", C0541R.string.AddToMasks));
+                        items.add(LocaleController.getString("AddToMasks", CLASSNAMER.string.AddToMasks));
                     } else {
-                        items.add(LocaleController.getString("AddToStickers", C0541R.string.AddToStickers));
+                        items.add(LocaleController.getString("AddToStickers", CLASSNAMER.string.AddToStickers));
                     }
                     options.add(Integer.valueOf(9));
                 } else if (type == 8) {
                     User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedObject.messageOwner.media.user_id));
-                    if (!(user == null || user.f228id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.f228id)) != null)) {
-                        items.add(LocaleController.getString("AddContactTitle", C0541R.string.AddContactTitle));
+                    if (!(user == null || user.var_id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(user.var_id)) != null)) {
+                        items.add(LocaleController.getString("AddContactTitle", CLASSNAMER.string.AddContactTitle));
                         options.add(Integer.valueOf(15));
                     }
                     if (!(this.selectedObject.messageOwner.media.phone_number == null && this.selectedObject.messageOwner.media.phone_number.length() == 0)) {
-                        items.add(LocaleController.getString("Copy", C0541R.string.Copy));
+                        items.add(LocaleController.getString("Copy", CLASSNAMER.string.Copy));
                         options.add(Integer.valueOf(16));
-                        items.add(LocaleController.getString("Call", C0541R.string.Call));
+                        items.add(LocaleController.getString("Call", CLASSNAMER.string.Call));
                         options.add(Integer.valueOf(17));
                     }
                 }
@@ -1710,7 +1710,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             }
                         }
                     });
-                    builder.setTitle(LocaleController.getString("Message", C0541R.string.Message));
+                    builder.setTitle(LocaleController.getString("Message", CLASSNAMER.string.Message));
                     showDialog(builder.create());
                 }
             }
@@ -1753,7 +1753,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         ChannelAdminLogActivity.this.contentView.invalidate();
                     }
                 };
-                this.roundVideoContainer.setOutlineProvider(new C101418());
+                this.roundVideoContainer.setOutlineProvider(new CLASSNAME());
                 this.roundVideoContainer.setClipToOutline(true);
             } else {
                 this.roundVideoContainer = new FrameLayout(getParentActivity()) {
@@ -1863,9 +1863,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             if (!LocaleController.getInstance().applyLanguageFile(locFile, this.currentAccount)) {
                                 if (getParentActivity() != null) {
                                     builder = new Builder(getParentActivity());
-                                    builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-                                    builder.setMessage(LocaleController.getString("IncorrectLocalization", C0541R.string.IncorrectLocalization));
-                                    builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                                    builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+                                    builder.setMessage(LocaleController.getString("IncorrectLocalization", CLASSNAMER.string.IncorrectLocalization));
+                                    builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                                     showDialog(builder.create());
                                     break;
                                 }
@@ -1893,9 +1893,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             this.scrollToPositionOnRecreate = -1;
                             if (getParentActivity() != null) {
                                 builder = new Builder(getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-                                builder.setMessage(LocaleController.getString("IncorrectTheme", C0541R.string.IncorrectTheme));
-                                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                                builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+                                builder.setMessage(LocaleController.getString("IncorrectTheme", CLASSNAMER.string.IncorrectTheme));
+                                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                                 showDialog(builder.create());
                                 break;
                             }
@@ -1926,7 +1926,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     } else {
                         intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(new File(path)));
                     }
-                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", C0541R.string.ShareFile)), 500);
+                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", CLASSNAMER.string.ShareFile)), 500);
                     break;
                 case 7:
                     path = this.selectedObject.messageOwner.attachPath;
@@ -1982,7 +1982,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 case 17:
                     try {
                         intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:" + this.selectedObject.messageOwner.media.phone_number));
-                        intent.addFlags(C0021C.ENCODING_PCM_MU_LAW);
+                        intent.addFlags(CLASSNAMEC.ENCODING_PCM_MU_LAW);
                         getParentActivity().startActivityForResult(intent, 500);
                         break;
                     } catch (Throwable e2) {
@@ -2009,7 +2009,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             if (messageObject.isSticker()) {
                 InputStickerSet inputStickerSet = messageObject.getInputStickerSet();
                 if (inputStickerSet instanceof TL_inputStickerSetID) {
-                    if (!DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.f138id)) {
+                    if (!DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.var_id)) {
                         return 7;
                     }
                 } else if ((inputStickerSet instanceof TL_inputStickerSetShortName) && !DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.short_name)) {
@@ -2057,7 +2057,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         req.filter = new TL_channelParticipantsAdmins();
         req.offset = 0;
         req.limit = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C101920()), this.classGuid);
+        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME()), this.classGuid);
     }
 
     protected void onRemoveFromParent() {
@@ -2075,7 +2075,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(this.floatingDateView, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
-                    this.floatingDateAnimation.addListener(new C102021());
+                    this.floatingDateAnimation.addListener(new CLASSNAME());
                     this.floatingDateAnimation.setStartDelay(500);
                     this.floatingDateAnimation.start();
                     return;
@@ -2321,7 +2321,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
     private void fixLayout() {
         if (this.avatarContainer != null) {
-            this.avatarContainer.getViewTreeObserver().addOnPreDrawListener(new C102122());
+            this.avatarContainer.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 
@@ -2335,12 +2335,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private void alertUserOpenError(MessageObject message) {
         if (getParentActivity() != null) {
             Builder builder = new Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
             if (message.type == 3) {
-                builder.setMessage(LocaleController.getString("NoPlayerInstalled", C0541R.string.NoPlayerInstalled));
+                builder.setMessage(LocaleController.getString("NoPlayerInstalled", CLASSNAMER.string.NoPlayerInstalled));
             } else {
-                builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", C0541R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+                builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", CLASSNAMER.string.NoHandleAppInstalled, message.getDocument().mime_type));
             }
             showDialog(builder.create());
         }
@@ -2358,10 +2358,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     if (!channelParticipant.can_edit) {
                         return;
                     }
-                    bundle.putInt("ban_chat_id", this.currentChat.f113id);
+                    bundle.putInt("ban_chat_id", this.currentChat.var_id);
                 }
             }
-            bundle.putInt("ban_chat_id", this.currentChat.f113id);
+            bundle.putInt("ban_chat_id", this.currentChat.var_id);
         }
     }
 
@@ -2371,14 +2371,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             return;
         }
         Builder builder = new Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-        builder.setMessage(LocaleController.formatString("OpenUrlAlert", C0541R.string.OpenUrlAlert, url));
-        builder.setPositiveButton(LocaleController.getString("Open", C0541R.string.Open), new DialogInterface.OnClickListener() {
+        builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+        builder.setMessage(LocaleController.formatString("OpenUrlAlert", CLASSNAMER.string.OpenUrlAlert, url));
+        builder.setPositiveButton(LocaleController.getString("Open", CLASSNAMER.string.Open), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), url, true);
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
         showDialog(builder.create());
     }
 

@@ -2,14 +2,14 @@ package org.telegram.p005ui.Components;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.p005ui.Components.ChatActivityEnterView.C120924;
+import org.telegram.p005ui.Components.ChatActivityEnterView.CLASSNAME;
 
 /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$24$$Lambda$0 */
 final /* synthetic */ class ChatActivityEnterView$24$$Lambda$0 implements OnClickListener {
-    private final C120924 arg$1;
+    private final CLASSNAME arg$1;
 
-    ChatActivityEnterView$24$$Lambda$0(C120924 c120924) {
-        this.arg$1 = c120924;
+    ChatActivityEnterView$24$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {

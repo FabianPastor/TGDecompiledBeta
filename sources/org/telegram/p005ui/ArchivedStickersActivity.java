@@ -8,7 +8,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -20,7 +20,7 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.ArchivedStickerSetCell;
@@ -63,8 +63,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     private int stickersStartRow;
 
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$1 */
-    class C07631 extends ActionBarMenuOnItemClick {
-        C07631() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -75,17 +75,17 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$2 */
-    class C07652 implements OnItemClickListener {
-        C07652() {
+    class CLASSNAME implements OnItemClickListener {
+        CLASSNAME() {
         }
 
         public void onItemClick(final View view, int position) {
             if (position >= ArchivedStickersActivity.this.stickersStartRow && position < ArchivedStickersActivity.this.stickersEndRow && ArchivedStickersActivity.this.getParentActivity() != null) {
                 InputStickerSet inputStickerSet;
                 StickerSetCovered stickerSet = (StickerSetCovered) ArchivedStickersActivity.this.sets.get(position);
-                if (stickerSet.set.f146id != 0) {
+                if (stickerSet.set.var_id != 0) {
                     inputStickerSet = new TL_inputStickerSetID();
-                    inputStickerSet.f138id = stickerSet.set.f146id;
+                    inputStickerSet.var_id = stickerSet.set.var_id;
                 } else {
                     inputStickerSet = new TL_inputStickerSetShortName();
                     inputStickerSet.short_name = stickerSet.set.short_name;
@@ -107,8 +107,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$3 */
-    class C07663 extends OnScrollListener {
-        C07663() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -119,8 +119,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$4 */
-    class C07684 implements RequestDelegate {
-        C07684() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -154,8 +154,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ArchivedStickersActivity$ListAdapter$1 */
-        class C07691 implements OnCheckedChangeListener {
-            C07691() {
+        class CLASSNAME implements OnCheckedChangeListener {
+            CLASSNAME() {
             }
 
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -180,7 +180,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 cell.setTag(Integer.valueOf(position));
                 StickerSetCovered stickerSet = (StickerSetCovered) ArchivedStickersActivity.this.sets.get(position);
                 cell.setStickersSet(stickerSet, position != ArchivedStickersActivity.this.sets.size() + -1);
-                cell.setChecked(DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).isStickerPackInstalled(stickerSet.set.f146id));
+                cell.setChecked(DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).isStickerPackInstalled(stickerSet.set.var_id));
             }
         }
 
@@ -194,15 +194,15 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 case 0:
                     view = new ArchivedStickerSetCell(this.mContext, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ArchivedStickerSetCell) view).setOnCheckClick(new C07691());
+                    ((ArchivedStickerSetCell) view).setOnCheckClick(new CLASSNAME());
                     break;
                 case 1:
                     view = new LoadingCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0541R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0541R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -241,23 +241,23 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.currentType == 0) {
-            this.actionBar.setTitle(LocaleController.getString("ArchivedStickers", C0541R.string.ArchivedStickers));
+            this.actionBar.setTitle(LocaleController.getString("ArchivedStickers", CLASSNAMER.string.ArchivedStickers));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("ArchivedMasks", C0541R.string.ArchivedMasks));
+            this.actionBar.setTitle(LocaleController.getString("ArchivedMasks", CLASSNAMER.string.ArchivedMasks));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C07631());
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.emptyView = new EmptyTextProgressView(context);
         if (this.currentType == 0) {
-            this.emptyView.setText(LocaleController.getString("ArchivedStickersEmpty", C0541R.string.ArchivedStickersEmpty));
+            this.emptyView.setText(LocaleController.getString("ArchivedStickersEmpty", CLASSNAMER.string.ArchivedStickersEmpty));
         } else {
-            this.emptyView.setText(LocaleController.getString("ArchivedMasksEmpty", C0541R.string.ArchivedMasksEmpty));
+            this.emptyView.setText(LocaleController.getString("ArchivedMasksEmpty", CLASSNAMER.string.ArchivedMasksEmpty));
         }
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         if (this.loadingStickers) {
@@ -274,8 +274,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         recyclerListView.setLayoutManager(linearLayoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C07652());
-        this.listView.setOnScrollListener(new C07663());
+        this.listView.setOnItemClickListener(new CLASSNAME());
+        this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
     }
 
@@ -318,10 +318,10 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 this.listAdapter.notifyDataSetChanged();
             }
             TL_messages_getArchivedStickers req = new TL_messages_getArchivedStickers();
-            req.offset_id = this.sets.isEmpty() ? 0 : ((StickerSetCovered) this.sets.get(this.sets.size() - 1)).set.f146id;
+            req.offset_id = this.sets.isEmpty() ? 0 : ((StickerSetCovered) this.sets.get(this.sets.size() - 1)).set.var_id;
             req.limit = 15;
             req.masks = this.currentType == 1;
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C07684()), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME()), this.classGuid);
         }
     }
 

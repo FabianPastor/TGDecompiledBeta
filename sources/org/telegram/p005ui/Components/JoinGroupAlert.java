@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -40,8 +40,8 @@ public class JoinGroupAlert extends BottomSheet {
     private String hash;
 
     /* renamed from: org.telegram.ui.Components.JoinGroupAlert$1 */
-    class C13891 implements OnClickListener {
-        C13891() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View view) {
@@ -50,8 +50,8 @@ public class JoinGroupAlert extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.JoinGroupAlert$2 */
-    class C13922 implements OnClickListener {
-        C13922() {
+    class CLASSNAME implements OnClickListener {
+        CLASSNAME() {
         }
 
         public void onClick(View v) {
@@ -75,7 +75,7 @@ public class JoinGroupAlert extends BottomSheet {
                                         MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putUsers(updates.users, false);
                                         MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putChats(updates.chats, false);
                                         Bundle args = new Bundle();
-                                        args.putInt("chat_id", chat.f113id);
+                                        args.putInt("chat_id", chat.var_id);
                                         if (MessagesController.getInstance(JoinGroupAlert.this.currentAccount).checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
                                             JoinGroupAlert.this.fragment.presentFragment(new ChatActivity(args), JoinGroupAlert.this.fragment instanceof ChatActivity);
                                             return;
@@ -214,19 +214,19 @@ public class JoinGroupAlert extends BottomSheet {
             linearLayout.addView(listView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 0));
         }
         textView = new View(context);
-        textView.setBackgroundResource(C0541R.drawable.header_shadow_reverse);
+        textView.setBackgroundResource(CLASSNAMER.drawable.header_shadow_reverse);
         linearLayout.addView(textView, LayoutHelper.createLinear(-1, 3));
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", C0541R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new C13891());
+        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel).toUpperCase());
+        pickerBottomLayout.cancelButton.setOnClickListener(new CLASSNAME());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.m10dp(18.0f), 0, AndroidUtilities.m10dp(18.0f), 0);
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", C0541R.string.JoinGroup));
-        pickerBottomLayout.doneButton.setOnClickListener(new C13922());
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", CLASSNAMER.string.JoinGroup));
+        pickerBottomLayout.doneButton.setOnClickListener(new CLASSNAME());
     }
 }

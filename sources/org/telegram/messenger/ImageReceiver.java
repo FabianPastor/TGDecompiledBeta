@@ -214,7 +214,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             if (fileLocation != null) {
                 if (fileLocation instanceof SecureDocument) {
                     SecureDocument document = (SecureDocument) fileLocation;
-                    key = document.secureFile.dc_id + "_" + document.secureFile.f223id;
+                    key = document.secureFile.dc_id + "_" + document.secureFile.var_id;
                 } else if (fileLocation instanceof FileLocation) {
                     FileLocation location = (FileLocation) fileLocation;
                     key = location.volume_id + "_" + location.local_id;
@@ -223,7 +223,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 } else {
                     Document location2 = (Document) fileLocation;
                     if (location2.dc_id != 0) {
-                        key = location2.version == 0 ? location2.dc_id + "_" + location2.f119id : location2.dc_id + "_" + location2.f119id + "_" + location2.version;
+                        key = location2.version == 0 ? location2.dc_id + "_" + location2.var_id : location2.dc_id + "_" + location2.var_id + "_" + location2.version;
                     } else {
                         fileLocation = null;
                     }

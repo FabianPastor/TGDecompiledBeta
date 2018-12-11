@@ -54,8 +54,8 @@ public class CropAreaView extends View {
     private RectF topRightCorner = new RectF();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropAreaView$1 */
-    class C12591 extends AnimatorListenerAdapter {
-        C12591() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -94,10 +94,10 @@ public class CropAreaView extends View {
 
     public CropAreaView(Context context) {
         super(context);
-        this.dimPaint.setColor(-872415232);
+        this.dimPaint.setColor(-NUM);
         this.shadowPaint = new Paint();
         this.shadowPaint.setStyle(Style.FILL);
-        this.shadowPaint.setColor(436207616);
+        this.shadowPaint.setColor(NUM);
         this.shadowPaint.setStrokeWidth((float) AndroidUtilities.m10dp(2.0f));
         this.linePaint = new Paint();
         this.linePaint.setStyle(Style.FILL);
@@ -255,7 +255,7 @@ public class CropAreaView extends View {
             if (animated) {
                 this.gridAnimator = ObjectAnimator.ofFloat(this, "gridProgress", new float[]{this.gridProgress, targetProgress});
                 this.gridAnimator.setDuration(200);
-                this.gridAnimator.addListener(new C12591());
+                this.gridAnimator.addListener(new CLASSNAME());
                 if (type == GridType.NONE) {
                     this.gridAnimator.setStartDelay(200);
                 }

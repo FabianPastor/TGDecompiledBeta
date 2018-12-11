@@ -208,8 +208,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             for (int b = 0; b < this.documentAttach.attributes.size(); b++) {
                 DocumentAttribute attribute = (DocumentAttribute) this.documentAttach.attributes.get(b);
                 if ((attribute instanceof TL_documentAttributeImageSize) || (attribute instanceof TL_documentAttributeVideo)) {
-                    w = attribute.f122w;
-                    h = attribute.f121h;
+                    w = attribute.var_w;
+                    h = attribute.var_h;
                     break;
                 }
             }
@@ -219,8 +219,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 if (currentPhotoObjectThumb != null) {
                     currentPhotoObjectThumb.size = -1;
                 }
-                w = this.currentPhotoObject.f145w;
-                h = this.currentPhotoObject.f144h;
+                w = this.currentPhotoObject.var_w;
+                h = this.currentPhotoObject.var_h;
             } else if (this.inlineResult != null) {
                 int[] result = MessageObject.getInlineResultWidthAndHeight(this.inlineResult);
                 w = result[0];
@@ -328,7 +328,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
             TL_message message = new TL_message();
             message.out = true;
-            message.f139id = -Utilities.random.nextInt();
+            message.var_id = -Utilities.random.nextInt();
             message.to_id = new TL_peerUser();
             Peer peer = message.to_id;
             int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
@@ -347,7 +347,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             } else {
                 String str;
                 String ext = ImageLoader.getHttpUrlExtension(this.inlineResult.content.url, this.documentAttachType == 5 ? "mp3" : "ogg");
-                message.media.document.f119id = 0;
+                message.media.document.var_id = 0;
                 message.media.document.access_hash = 0;
                 message.media.document.date = message.date;
                 message.media.document.mime_type = "audio/" + ext;

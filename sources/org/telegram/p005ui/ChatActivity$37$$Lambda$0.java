@@ -1,13 +1,13 @@
 package org.telegram.p005ui;
 
-import org.telegram.p005ui.ChatActivity.C113437;
+import org.telegram.p005ui.ChatActivity.CLASSNAME;
 
 /* renamed from: org.telegram.ui.ChatActivity$37$$Lambda$0 */
 final /* synthetic */ class ChatActivity$37$$Lambda$0 implements Runnable {
-    private final C113437 arg$1;
+    private final CLASSNAME arg$1;
 
-    ChatActivity$37$$Lambda$0(C113437 c113437) {
-        this.arg$1 = c113437;
+    ChatActivity$37$$Lambda$0(CLASSNAME CLASSNAME) {
+        this.arg$1 = CLASSNAME;
     }
 
     public void run() {

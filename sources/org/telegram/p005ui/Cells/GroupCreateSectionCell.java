@@ -10,14 +10,14 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
 
 /* renamed from: org.telegram.ui.Cells.GroupCreateSectionCell */
 public class GroupCreateSectionCell extends FrameLayout {
-    private Drawable drawable = getResources().getDrawable(C0541R.drawable.shadowdown);
+    private Drawable drawable = getResources().getDrawable(CLASSNAMER.drawable.shadowdown);
     private TextView textView;
 
     public GroupCreateSectionCell(Context context) {

@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 /* renamed from: org.telegram.messenger.R */
-public final class C0541R {
+public final class CLASSNAMER {
 
     /* renamed from: org.telegram.messenger.R$anim */
     public static final class anim {
@@ -164,7 +164,7 @@ public final class C0541R {
     }
 
     /* renamed from: org.telegram.messenger.R$drawable */
-    public static final class C0539drawable {
+    public static final class CLASSNAMEdrawable {
         public static final int ab_progress = NUM;
         public static final int abc_ic_menu_share_mtrl_alpha = NUM;
         public static final int account_add = NUM;
@@ -677,7 +677,7 @@ public final class C0541R {
     }
 
     /* renamed from: org.telegram.messenger.R$id */
-    public static final class C0540id {
+    public static final class CLASSNAMEid {
         public static final int action_container = NUM;
         public static final int action_divider = NUM;
         public static final int action_image = NUM;
@@ -2087,9 +2087,9 @@ public final class C0541R {
         public static final int NotificationsUnmuted = NUM;
         public static final int NumberUnknown = NUM;
         /* renamed from: OK */
-        public static final int f87OK = NUM;
+        public static final int var_OK = NUM;
         /* renamed from: Of */
-        public static final int f88Of = NUM;
+        public static final int var_Of = NUM;
         public static final int Online = NUM;
         public static final int OnlineCount_few = NUM;
         public static final int OnlineCount_many = NUM;
@@ -3151,12 +3151,12 @@ public final class C0541R {
 
     /* renamed from: org.telegram.messenger.R$styleable */
     public static final class styleable {
-        public static final int[] ColorStateListItem = new int[]{16843173, 16843551, C0541R.attr.alpha};
+        public static final int[] ColorStateListItem = new int[]{16843173, 16843551, CLASSNAMER.attr.alpha};
         public static final int ColorStateListItem_alpha = 2;
         public static final int ColorStateListItem_android_alpha = 1;
         public static final int ColorStateListItem_android_color = 0;
-        public static final int[] CoordinatorLayout = new int[]{C0541R.attr.keylines, C0541R.attr.statusBarBackground};
-        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, C0541R.attr.layout_anchor, C0541R.attr.layout_anchorGravity, C0541R.attr.layout_behavior, C0541R.attr.layout_dodgeInsetEdges, C0541R.attr.layout_insetEdge, C0541R.attr.layout_keyline};
+        public static final int[] CoordinatorLayout = new int[]{CLASSNAMER.attr.keylines, CLASSNAMER.attr.statusBarBackground};
+        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, CLASSNAMER.attr.layout_anchor, CLASSNAMER.attr.layout_anchorGravity, CLASSNAMER.attr.layout_behavior, CLASSNAMER.attr.layout_dodgeInsetEdges, CLASSNAMER.attr.layout_insetEdge, CLASSNAMER.attr.layout_keyline};
         public static final int CoordinatorLayout_Layout_android_layout_gravity = 0;
         public static final int CoordinatorLayout_Layout_layout_anchor = 1;
         public static final int CoordinatorLayout_Layout_layout_anchorGravity = 2;
@@ -3166,12 +3166,12 @@ public final class C0541R {
         public static final int CoordinatorLayout_Layout_layout_keyline = 6;
         public static final int CoordinatorLayout_keylines = 0;
         public static final int CoordinatorLayout_statusBarBackground = 1;
-        public static final int[] CustomWalletTheme = new int[]{C0541R.attr.customThemeStyle, C0541R.attr.toolbarTextColorStyle, C0541R.attr.windowTransitionStyle};
+        public static final int[] CustomWalletTheme = new int[]{CLASSNAMER.attr.customThemeStyle, CLASSNAMER.attr.toolbarTextColorStyle, CLASSNAMER.attr.windowTransitionStyle};
         public static final int CustomWalletTheme_customThemeStyle = 0;
         public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
         public static final int CustomWalletTheme_windowTransitionStyle = 2;
-        public static final int[] FontFamily = new int[]{C0541R.attr.fontProviderAuthority, C0541R.attr.fontProviderCerts, C0541R.attr.fontProviderFetchStrategy, C0541R.attr.fontProviderFetchTimeout, C0541R.attr.fontProviderPackage, C0541R.attr.fontProviderQuery};
-        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, 16844143, 16844144, C0541R.attr.font, C0541R.attr.fontStyle, C0541R.attr.fontVariationSettings, C0541R.attr.fontWeight, C0541R.attr.ttcIndex};
+        public static final int[] FontFamily = new int[]{CLASSNAMER.attr.fontProviderAuthority, CLASSNAMER.attr.fontProviderCerts, CLASSNAMER.attr.fontProviderFetchStrategy, CLASSNAMER.attr.fontProviderFetchTimeout, CLASSNAMER.attr.fontProviderPackage, CLASSNAMER.attr.fontProviderQuery};
+        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, 16844143, 16844144, CLASSNAMER.attr.font, CLASSNAMER.attr.fontStyle, CLASSNAMER.attr.fontVariationSettings, CLASSNAMER.attr.fontWeight, CLASSNAMER.attr.ttcIndex};
         public static final int FontFamilyFont_android_font = 0;
         public static final int FontFamilyFont_android_fontStyle = 2;
         public static final int FontFamilyFont_android_fontVariationSettings = 4;
@@ -3204,11 +3204,11 @@ public final class C0541R {
         public static final int GradientColor_android_startY = 9;
         public static final int GradientColor_android_tileMode = 6;
         public static final int GradientColor_android_type = 2;
-        public static final int[] LoadingImageView = new int[]{C0541R.attr.circleCrop, C0541R.attr.imageAspectRatio, C0541R.attr.imageAspectRatioAdjust};
+        public static final int[] LoadingImageView = new int[]{CLASSNAMER.attr.circleCrop, CLASSNAMER.attr.imageAspectRatio, CLASSNAMER.attr.imageAspectRatioAdjust};
         public static final int LoadingImageView_circleCrop = 0;
         public static final int LoadingImageView_imageAspectRatio = 1;
         public static final int LoadingImageView_imageAspectRatioAdjust = 2;
-        public static final int[] MapAttrs = new int[]{C0541R.attr.ambientEnabled, C0541R.attr.cameraBearing, C0541R.attr.cameraMaxZoomPreference, C0541R.attr.cameraMinZoomPreference, C0541R.attr.cameraTargetLat, C0541R.attr.cameraTargetLng, C0541R.attr.cameraTilt, C0541R.attr.cameraZoom, C0541R.attr.latLngBoundsNorthEastLatitude, C0541R.attr.latLngBoundsNorthEastLongitude, C0541R.attr.latLngBoundsSouthWestLatitude, C0541R.attr.latLngBoundsSouthWestLongitude, C0541R.attr.liteMode, C0541R.attr.mapType, C0541R.attr.uiCompass, C0541R.attr.uiMapToolbar, C0541R.attr.uiRotateGestures, C0541R.attr.uiScrollGestures, C0541R.attr.uiTiltGestures, C0541R.attr.uiZoomControls, C0541R.attr.uiZoomGestures, C0541R.attr.useViewLifecycle, C0541R.attr.zOrderOnTop};
+        public static final int[] MapAttrs = new int[]{CLASSNAMER.attr.ambientEnabled, CLASSNAMER.attr.cameraBearing, CLASSNAMER.attr.cameraMaxZoomPreference, CLASSNAMER.attr.cameraMinZoomPreference, CLASSNAMER.attr.cameraTargetLat, CLASSNAMER.attr.cameraTargetLng, CLASSNAMER.attr.cameraTilt, CLASSNAMER.attr.cameraZoom, CLASSNAMER.attr.latLngBoundsNorthEastLatitude, CLASSNAMER.attr.latLngBoundsNorthEastLongitude, CLASSNAMER.attr.latLngBoundsSouthWestLatitude, CLASSNAMER.attr.latLngBoundsSouthWestLongitude, CLASSNAMER.attr.liteMode, CLASSNAMER.attr.mapType, CLASSNAMER.attr.uiCompass, CLASSNAMER.attr.uiMapToolbar, CLASSNAMER.attr.uiRotateGestures, CLASSNAMER.attr.uiScrollGestures, CLASSNAMER.attr.uiTiltGestures, CLASSNAMER.attr.uiZoomControls, CLASSNAMER.attr.uiZoomGestures, CLASSNAMER.attr.useViewLifecycle, CLASSNAMER.attr.zOrderOnTop};
         public static final int MapAttrs_ambientEnabled = 0;
         public static final int MapAttrs_cameraBearing = 1;
         public static final int MapAttrs_cameraMaxZoomPreference = 2;
@@ -3232,16 +3232,16 @@ public final class C0541R {
         public static final int MapAttrs_uiZoomGestures = 20;
         public static final int MapAttrs_useViewLifecycle = 21;
         public static final int MapAttrs_zOrderOnTop = 22;
-        public static final int[] SignInButton = new int[]{C0541R.attr.buttonSize, C0541R.attr.colorScheme, C0541R.attr.scopeUris};
+        public static final int[] SignInButton = new int[]{CLASSNAMER.attr.buttonSize, CLASSNAMER.attr.colorScheme, CLASSNAMER.attr.scopeUris};
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] WalletFragmentOptions = new int[]{C0541R.attr.appTheme, C0541R.attr.environment, C0541R.attr.fragmentMode, C0541R.attr.fragmentStyle};
+        public static final int[] WalletFragmentOptions = new int[]{CLASSNAMER.attr.appTheme, CLASSNAMER.attr.environment, CLASSNAMER.attr.fragmentMode, CLASSNAMER.attr.fragmentStyle};
         public static final int WalletFragmentOptions_appTheme = 0;
         public static final int WalletFragmentOptions_environment = 1;
         public static final int WalletFragmentOptions_fragmentMode = 2;
         public static final int WalletFragmentOptions_fragmentStyle = 3;
-        public static final int[] WalletFragmentStyle = new int[]{C0541R.attr.buyButtonAppearance, C0541R.attr.buyButtonHeight, C0541R.attr.buyButtonText, C0541R.attr.buyButtonWidth, C0541R.attr.maskedWalletDetailsBackground, C0541R.attr.maskedWalletDetailsButtonBackground, C0541R.attr.maskedWalletDetailsButtonTextAppearance, C0541R.attr.maskedWalletDetailsHeaderTextAppearance, C0541R.attr.maskedWalletDetailsLogoImageType, C0541R.attr.maskedWalletDetailsLogoTextColor, C0541R.attr.maskedWalletDetailsTextAppearance};
+        public static final int[] WalletFragmentStyle = new int[]{CLASSNAMER.attr.buyButtonAppearance, CLASSNAMER.attr.buyButtonHeight, CLASSNAMER.attr.buyButtonText, CLASSNAMER.attr.buyButtonWidth, CLASSNAMER.attr.maskedWalletDetailsBackground, CLASSNAMER.attr.maskedWalletDetailsButtonBackground, CLASSNAMER.attr.maskedWalletDetailsButtonTextAppearance, CLASSNAMER.attr.maskedWalletDetailsHeaderTextAppearance, CLASSNAMER.attr.maskedWalletDetailsLogoImageType, CLASSNAMER.attr.maskedWalletDetailsLogoTextColor, CLASSNAMER.attr.maskedWalletDetailsTextAppearance};
         public static final int WalletFragmentStyle_buyButtonAppearance = 0;
         public static final int WalletFragmentStyle_buyButtonHeight = 1;
         public static final int WalletFragmentStyle_buyButtonText = 2;

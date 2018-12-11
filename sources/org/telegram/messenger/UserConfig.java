@@ -64,8 +64,8 @@ public class UserConfig {
     public boolean unreadDialogsLoaded = true;
 
     /* renamed from: org.telegram.messenger.UserConfig$1 */
-    class C05481 implements Runnable {
-        C05481() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -240,7 +240,7 @@ public class UserConfig {
     public int getClientUserId() {
         int i;
         synchronized (this.sync) {
-            i = this.currentUser != null ? this.currentUser.f228id : 0;
+            i = this.currentUser != null ? this.currentUser.var_id : 0;
         }
         return i;
     }
@@ -264,7 +264,7 @@ public class UserConfig {
     public void setCurrentUser(User user) {
         synchronized (this.sync) {
             this.currentUser = user;
-            this.clientUserId = user.f228id;
+            this.clientUserId = user.var_id;
         }
     }
 
@@ -338,7 +338,7 @@ public class UserConfig {
                         }
                         if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
                             this.pendingAppUpdate = null;
-                            AndroidUtilities.runOnUIThread(new C05481());
+                            AndroidUtilities.runOnUIThread(new CLASSNAME());
                         }
                     }
                 } catch (Throwable e22) {
@@ -379,7 +379,7 @@ public class UserConfig {
                 }
             }
             if (this.currentUser != null) {
-                this.clientUserId = this.currentUser.f228id;
+                this.clientUserId = this.currentUser.var_id;
             }
             this.configLoaded = true;
             return;

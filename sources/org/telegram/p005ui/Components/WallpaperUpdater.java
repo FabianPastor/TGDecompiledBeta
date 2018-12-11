@@ -12,7 +12,7 @@ import android.support.p000v4.content.FileProvider;
 import java.io.File;
 import java.io.FileOutputStream;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -43,7 +43,7 @@ public class WallpaperUpdater {
 
     public void showAlert(boolean fromTheme) {
         Builder builder = new Builder(this.parentActivity);
-        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", C0541R.string.FromCamera), LocaleController.getString("FromGalley", C0541R.string.FromGalley), LocaleController.getString("SelectColor", C0541R.string.SelectColor), LocaleController.getString("Default", C0541R.string.Default), LocaleController.getString("Cancel", C0541R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", C0541R.string.FromCamera), LocaleController.getString("FromGalley", C0541R.string.FromGalley), LocaleController.getString("Cancel", C0541R.string.Cancel)}, new WallpaperUpdater$$Lambda$0(this, fromTheme));
+        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", CLASSNAMER.string.FromCamera), LocaleController.getString("FromGalley", CLASSNAMER.string.FromGalley), LocaleController.getString("SelectColor", CLASSNAMER.string.SelectColor), LocaleController.getString("Default", CLASSNAMER.string.Default), LocaleController.getString("Cancel", CLASSNAMER.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", CLASSNAMER.string.FromCamera), LocaleController.getString("FromGalley", CLASSNAMER.string.FromGalley), LocaleController.getString("Cancel", CLASSNAMER.string.Cancel)}, new WallpaperUpdater$$Lambda$0(this, fromTheme));
         builder.show();
     }
 

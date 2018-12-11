@@ -221,15 +221,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     private int currentAccount;
     private ChatFull currentChatInfo = null;
     private HashMap<String, ArrayList<DelayedMessage>> delayedMessages = new HashMap();
-    private LocationProvider locationProvider = new LocationProvider(new C05421());
+    private LocationProvider locationProvider = new LocationProvider(new CLASSNAME());
     private SparseArray<Message> sendingMessages = new SparseArray();
     private SparseArray<MessageObject> unsentMessages = new SparseArray();
     private HashMap<String, Boolean> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
 
     /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
-    class C05421 implements LocationProviderDelegate {
-        C05421() {
+    class CLASSNAME implements LocationProviderDelegate {
+        CLASSNAME() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -356,8 +356,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
 
         /* renamed from: org.telegram.messenger.SendMessagesHelper$LocationProvider$1 */
-        class C05431 implements Runnable {
-            C05431() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -378,7 +378,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             private GpsLocationListener() {
             }
 
-            /* synthetic */ GpsLocationListener(LocationProvider x0, C05421 x1) {
+            /* synthetic */ GpsLocationListener(LocationProvider x0, CLASSNAME x1) {
                 this();
             }
 
@@ -450,7 +450,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (this.locationQueryCancelRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.locationQueryCancelRunnable);
             }
-            this.locationQueryCancelRunnable = new C05431();
+            this.locationQueryCancelRunnable = new CLASSNAME();
             AndroidUtilities.runOnUIThread(this.locationQueryCancelRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         }
 
@@ -471,7 +471,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         private MediaSendPrepareWorker() {
         }
 
-        /* synthetic */ MediaSendPrepareWorker(C05421 x0) {
+        /* synthetic */ MediaSendPrepareWorker(CLASSNAME x0) {
             this();
         }
     }
@@ -649,7 +649,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             index = req.files.indexOf(inputEncryptedFile);
                             if (index >= 0) {
                                 req.files.set(index, encryptedFile);
-                                if (inputEncryptedFile.f131id == 1) {
+                                if (inputEncryptedFile.var_id == 1) {
                                     messageObject = (MessageObject) message.extraHashMap.get(location + "_i");
                                     message.location = (FileLocation) message.extraHashMap.get(location + "_t");
                                     stopVideoService(((MessageObject) message.messageObjects.get(index)).messageOwner.attachPath);
@@ -664,7 +664,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 decryptedMessage.media.size = (int) ((Long) args[5]).longValue();
                             }
                             decryptedMessage.media.key = (byte[]) args[3];
-                            decryptedMessage.media.f117iv = (byte[]) args[4];
+                            decryptedMessage.media.var_iv = (byte[]) args[4];
                             if (message.type == 4) {
                                 uploadMultiMedia(message, null, encryptedFile, location);
                             } else {
@@ -1140,7 +1140,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 user.phone = messageObject.messageOwner.media.phone_number;
                 user.first_name = messageObject.messageOwner.media.first_name;
                 user.last_name = messageObject.messageOwner.media.last_name;
-                user.f228id = messageObject.messageOwner.media.user_id;
+                user.var_id = messageObject.messageOwner.media.user_id;
                 sendMessage(user, did, messageObject.replyMessageObject, null, null);
             } else if (((int) did) != 0) {
                 arrayList = new ArrayList();
@@ -1151,12 +1151,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     public void sendScreenshotMessage(User user, int messageId, Message resendMessage) {
-        if (user != null && messageId != 0 && user.f228id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+        if (user != null && messageId != 0 && user.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
             Message message;
             TL_messages_sendScreenshotNotification req = new TL_messages_sendScreenshotNotification();
             req.peer = new TL_inputPeerUser();
             req.peer.access_hash = user.access_hash;
-            req.peer.user_id = user.f228id;
+            req.peer.user_id = user.var_id;
             if (resendMessage != null) {
                 message = resendMessage;
                 req.reply_to_msg_id = messageId;
@@ -1164,18 +1164,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             } else {
                 message = new TL_messageService();
                 message.random_id = getNextRandomId();
-                message.dialog_id = (long) user.f228id;
+                message.dialog_id = (long) user.var_id;
                 message.unread = true;
                 message.out = true;
                 int newMessageId = UserConfig.getInstance(this.currentAccount).getNewMessageId();
-                message.f139id = newMessageId;
+                message.var_id = newMessageId;
                 message.local_id = newMessageId;
                 message.from_id = UserConfig.getInstance(this.currentAccount).getClientUserId();
                 message.flags |= 256;
                 message.flags |= 8;
                 message.reply_to_msg_id = messageId;
                 message.to_id = new TL_peerUser();
-                message.to_id.user_id = user.f228id;
+                message.to_id.user_id = user.var_id;
                 message.date = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                 message.action = new TL_messageActionScreenshotTaken();
                 UserConfig.getInstance(this.currentAccount).saveConfig(false);
@@ -1199,7 +1199,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (((int) peer) == 0) {
                 if (MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf((int) (peer >> 32))) != null) {
                     Document newDocument = new TL_document();
-                    newDocument.f119id = document.f119id;
+                    newDocument.var_id = document.var_id;
                     newDocument.access_hash = document.access_hash;
                     newDocument.date = document.date;
                     newDocument.mime_type = document.mime_type;
@@ -1219,8 +1219,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 newDocument.thumb = new TL_photoCachedSize();
                                 newDocument.thumb.location = document.thumb.location;
                                 newDocument.thumb.size = document.thumb.size;
-                                newDocument.thumb.f145w = document.thumb.f145w;
-                                newDocument.thumb.f144h = document.thumb.f144h;
+                                newDocument.thumb.var_w = document.thumb.var_w;
+                                newDocument.thumb.var_h = document.thumb.var_h;
                                 newDocument.thumb.type = document.thumb.type;
                                 newDocument.thumb.bytes = arr;
                             } catch (Throwable e) {
@@ -1366,7 +1366,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 newMsg.attachPath = TtmlNode.ANONYMOUS_REGION_ID;
                             }
                             int newMessageId = UserConfig.getInstance(this.currentAccount).getNewMessageId();
-                            newMsg.f139id = newMessageId;
+                            newMsg.var_id = newMessageId;
                             newMsg.local_id = newMessageId;
                             newMsg.out = true;
                             long lastGroupedId = msgObj.messageOwner.grouped_id;
@@ -1455,7 +1455,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 req.from_peer = new TL_inputPeerEmpty();
                             }
                             req.random_id = randomIds;
-                            req.f195id = ids;
+                            req.var_id = ids;
                             boolean z = messages.size() == 1 && ((MessageObject) messages.get(0)).messageOwner.with_my_score;
                             req.with_my_score = z;
                             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$3(this, peer, isMegagroup, toMyself, messagesByRandomIds, arr, objArr, to_id, req), 68);
@@ -1495,7 +1495,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 update = (Update) updates.updates.get(a1);
                 if (update instanceof TL_updateMessageID) {
                     TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
-                    newMessagesByIds.put(updateMessageID.f227id, updateMessageID.random_id);
+                    newMessagesByIds.put(updateMessageID.var_id, updateMessageID.random_id);
                     updates.updates.remove(a1);
                     a1--;
                 }
@@ -1527,13 +1527,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                     }
                     ImageLoader.saveMessageThumbs(message);
-                    message.unread = value.intValue() < message.f139id;
+                    message.unread = value.intValue() < message.var_id;
                     if (toMyself) {
                         message.out = true;
                         message.unread = false;
                         message.media_unread = false;
                     }
-                    long random_id = newMessagesByIds.get(message.f139id);
+                    long random_id = newMessagesByIds.get(message.var_id);
                     if (random_id != 0) {
                         newMsgObj1 = (Message) messagesByRandomIdsFinal.get(random_id);
                         if (newMsgObj1 != null) {
@@ -1542,10 +1542,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 MessageObject msgObj1 = (MessageObject) newMsgArr.get(index);
                                 newMsgObjArr.remove(index);
                                 newMsgArr.remove(index);
-                                int oldId = newMsgObj1.f139id;
+                                int oldId = newMsgObj1.var_id;
                                 ArrayList<Message> sentMessages = new ArrayList();
                                 sentMessages.add(message);
-                                newMsgObj1.f139id = message.f139id;
+                                newMsgObj1.var_id = message.var_id;
                                 sentCount++;
                                 updateMediaPaths(msgObj1, message, null, true);
                                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$56(this, newMsgObj1, oldId, to_id, sentMessages, peer, message));
@@ -1570,7 +1570,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$null$6$SendMessagesHelper(Message newMsgObj1, int oldId, Peer to_id, ArrayList sentMessages, long peer, Message message) {
-        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj1.random_id, Integer.valueOf(oldId), newMsgObj1.f139id, 0, false, to_id.channel_id);
+        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj1.random_id, Integer.valueOf(oldId), newMsgObj1.var_id, 0, false, to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, false, 0);
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$59(this, newMsgObj1, peer, oldId, message));
     }
@@ -1578,7 +1578,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     final /* synthetic */ void lambda$null$5$SendMessagesHelper(Message newMsgObj1, long peer, int oldId, Message message) {
         newMsgObj1.send_state = 0;
         DataQuery.getInstance(this.currentAccount).increasePeerRaiting(peer);
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(message.f139id), message, Long.valueOf(peer), Long.valueOf(0));
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(message.var_id), message, Long.valueOf(peer), Long.valueOf(0));
         processSentMessage(oldId);
         removeFromSendingMessages(oldId);
     }
@@ -1589,9 +1589,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     final /* synthetic */ void lambda$null$8$SendMessagesHelper(Message newMsgObj1) {
         newMsgObj1.send_state = 2;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj1.f139id));
-        processSentMessage(newMsgObj1.f139id);
-        removeFromSendingMessages(newMsgObj1.f139id);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj1.var_id));
+        processSentMessage(newMsgObj1.var_id);
+        removeFromSendingMessages(newMsgObj1.var_id);
     }
 
     private void writePreviousMessageData(Message message, SerializedData data) {
@@ -1766,9 +1766,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         delayedMessage.location = ((PhotoSize) photo.sizes.get(photo.sizes.size() - 1)).location;
                     } else {
                         media = new TL_inputMediaPhoto();
-                        media.f178id = new TL_inputPhoto();
-                        media.f178id.f137id = photo.f143id;
-                        media.f178id.access_hash = photo.access_hash;
+                        media.var_id = new TL_inputPhoto();
+                        media.var_id.var_id = photo.var_id;
+                        media.var_id.access_hash = photo.access_hash;
                         inputMedia = media;
                     }
                 } else if (type == 3) {
@@ -1790,9 +1790,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         delayedMessage.videoEditedInfo = videoEditedInfo;
                     } else {
                         media = new TL_inputMediaDocument();
-                        media.f176id = new TL_inputDocument();
-                        media.f176id.f130id = document.f119id;
-                        media.f176id.access_hash = document.access_hash;
+                        media.var_id = new TL_inputDocument();
+                        media.var_id.var_id = document.var_id;
+                        media.var_id.access_hash = document.access_hash;
                         inputMedia = media;
                     }
                 } else if (type == 7) {
@@ -1803,7 +1803,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 String[] args = ((String) params.get(UpdateFragment.FRAGMENT_URL)).split("\\|");
                                 if (args.length == 2) {
                                     ((TL_inputMediaGifExternal) inputMedia).url = args[0];
-                                    inputMedia.f135q = args[1];
+                                    inputMedia.var_q = args[1];
                                 }
                                 inputMedia.mime_type = document.mime_type;
                                 inputMedia.attributes = document.attributes;
@@ -1820,14 +1820,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         inputMedia.attributes = document.attributes;
                     } else {
                         media = new TL_inputMediaDocument();
-                        media.f176id = new TL_inputDocument();
-                        media.f176id.f130id = document.f119id;
-                        media.f176id.access_hash = document.access_hash;
+                        media.var_id = new TL_inputDocument();
+                        media.var_id.var_id = document.var_id;
+                        media.var_id.access_hash = document.access_hash;
                         inputMedia = media;
                     }
                 }
                 TLObject request = new TL_messages_editMessage();
-                request.f192id = messageObject.getId();
+                request.var_id = messageObject.getId();
                 request.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) peer);
                 request.flags |= MessagesController.UPDATE_MASK_CHAT_ADMINS;
                 request.media = inputMedia;
@@ -1894,7 +1894,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) messageObject.getDialogId());
         req.message = message;
         req.flags |= 2048;
-        req.f192id = messageObject.getId();
+        req.var_id = messageObject.getId();
         if (!searchLinks) {
             z = true;
         }
@@ -2068,8 +2068,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         parentFragment.showAlert(name, res.message);
                     } else if (parentFragment.getParentActivity() != null) {
                         Builder builder = new Builder(parentFragment.getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), null);
+                        builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+                        builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), null);
                         builder.setMessage(res.message);
                         parentFragment.showDialog(builder.create());
                     }
@@ -2282,7 +2282,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 user2.first_name = newMsg.media.first_name;
                                 user2.last_name = newMsg.media.last_name;
                                 user2.restriction_reason = newMsg.media.vcard;
-                                user2.f228id = newMsg.media.user_id;
+                                user2.var_id = newMsg.media.user_id;
                                 type = 6;
                                 user = user2;
                             } catch (Exception e2) {
@@ -2294,8 +2294,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 if (newMsgObj != null) {
                                     newMsgObj.messageOwner.send_state = 2;
                                 }
-                                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.f139id));
-                                processSentMessage(newMsg.f139id);
+                                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.var_id));
+                                processSentMessage(newMsg.var_id);
                                 return;
                             }
                         } else if (retryMessageObject.type == 8 || retryMessageObject.type == 9 || retryMessageObject.type == 13 || retryMessageObject.type == 14) {
@@ -2318,8 +2318,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
                     if (newMsgObj != null) {
                     }
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.f139id));
-                    processSentMessage(newMsg.f139id);
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.var_id));
+                    processSentMessage(newMsg.var_id);
                     return;
                 }
             }
@@ -2419,8 +2419,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
                     if (newMsgObj != null) {
                     }
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.f139id));
-                    processSentMessage(newMsg.f139id);
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.var_id));
+                    processSentMessage(newMsg.var_id);
                     return;
                 }
             } else if (user != null) {
@@ -2434,7 +2434,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 newMsg.media.phone_number = user.phone;
                 newMsg.media.first_name = user.first_name;
                 newMsg.media.last_name = user.last_name;
-                newMsg.media.user_id = user.f228id;
+                newMsg.media.user_id = user.var_id;
                 if (user.restriction_reason == null || !user.restriction_reason.startsWith("BEGIN:VCARD")) {
                     newMsg.media.vcard = TtmlNode.ANONYMOUS_REGION_ID;
                 } else {
@@ -2503,7 +2503,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         if (attribute.stickerset instanceof TL_inputStickerSetShortName) {
                                             name = attribute.stickerset.short_name;
                                         } else {
-                                            name = DataQuery.getInstance(this.currentAccount).getStickerSetName(attribute.stickerset.f138id);
+                                            name = DataQuery.getInstance(this.currentAccount).getStickerSetName(attribute.stickerset.var_id);
                                         }
                                         if (TextUtils.isEmpty(name)) {
                                             attributeSticker.stickerset = new TL_inputStickerSetEmpty();
@@ -2560,7 +2560,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 newMsg.attachPath = TtmlNode.ANONYMOUS_REGION_ID;
             }
             int newMessageId = UserConfig.getInstance(this.currentAccount).getNewMessageId();
-            newMsg.f139id = newMessageId;
+            newMsg.var_id = newMessageId;
             newMsg.local_id = newMessageId;
             newMsg.out = true;
             if (!isChannel || sendToPeer == null) {
@@ -2671,7 +2671,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 if (lower_id > 0) {
                     User sendToUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
                     if (sendToUser == null) {
-                        processSentMessage(newMsg.f139id);
+                        processSentMessage(newMsg.var_id);
                         return;
                     } else if (sendToUser.bot) {
                         newMsg.unread = false;
@@ -2679,8 +2679,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
             } else if (this.currentChatInfo == null) {
                 MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.f139id));
-                processSentMessage(newMsg.f139id);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.var_id));
+                processSentMessage(newMsg.var_id);
                 return;
             } else {
                 ArrayList<InputUser> sendToPeers2 = new ArrayList();
@@ -2703,8 +2703,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
                     if (newMsgObj != null) {
                     }
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.f139id));
-                    processSentMessage(newMsg.f139id);
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.var_id));
+                    processSentMessage(newMsg.var_id);
                     return;
                 }
             }
@@ -2766,7 +2766,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         delayedMessage3 = delayedMessage;
                     }
                     if (isFinalGroupMedia) {
-                        delayedMessage3.finalGroupMessage = newMsg.f139id;
+                        delayedMessage3.finalGroupMessage = newMsg.var_id;
                     }
                     delayedMessage = delayedMessage3;
                 }
@@ -2871,11 +2871,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                             reqSend4.random_id.add(Long.valueOf(newMsg.random_id));
                             if (retryMessageObject.getId() >= 0) {
-                                reqSend4.f195id.add(Integer.valueOf(retryMessageObject.getId()));
+                                reqSend4.var_id.add(Integer.valueOf(retryMessageObject.getId()));
                             } else if (retryMessageObject.messageOwner.fwd_msg_id != 0) {
-                                reqSend4.f195id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_msg_id));
+                                reqSend4.var_id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_msg_id));
                             } else if (retryMessageObject.messageOwner.fwd_from != null) {
-                                reqSend4.f195id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_from.channel_post));
+                                reqSend4.var_id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_from.channel_post));
                             }
                             performSendMessageRequest(reqSend4, newMsgObj, null);
                             delayedMessage3 = delayedMessage;
@@ -2893,7 +2893,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 reqSend.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
                             }
                             reqSend.query_id = Utilities.parseLong((String) params.get("query_id")).longValue();
-                            reqSend.f211id = (String) params.get(TtmlNode.ATTR_ID);
+                            reqSend.var_id = (String) params.get(TtmlNode.ATTR_ID);
                             if (retryMessageObject == null) {
                                 reqSend.clear_draft = true;
                                 DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
@@ -2959,9 +2959,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 delayedMessage3.location = ((PhotoSize) photo.sizes.get(photo.sizes.size() - 1)).location;
                             } else {
                                 media = new TL_inputMediaPhoto();
-                                media.f178id = new TL_inputPhoto();
-                                media.f178id.f137id = photo.f143id;
-                                media.f178id.access_hash = photo.access_hash;
+                                media.var_id = new TL_inputPhoto();
+                                media.var_id.var_id = photo.var_id;
+                                media.var_id.access_hash = photo.access_hash;
                                 inputMedia = media;
                                 delayedMessage3 = delayedMessage;
                             }
@@ -2990,9 +2990,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 delayedMessage3.videoEditedInfo = videoEditedInfo;
                             } else {
                                 media = new TL_inputMediaDocument();
-                                media.f176id = new TL_inputDocument();
-                                media.f176id.f130id = document2.f119id;
-                                media.f176id.access_hash = document2.access_hash;
+                                media.var_id = new TL_inputDocument();
+                                media.var_id.var_id = document2.var_id;
+                                media.var_id.access_hash = document2.access_hash;
                                 inputMedia = media;
                                 delayedMessage3 = delayedMessage;
                             }
@@ -3016,7 +3016,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         String[] args = ((String) params.get(UpdateFragment.FRAGMENT_URL)).split("\\|");
                                         if (args.length == 2) {
                                             ((TL_inputMediaGifExternal) inputMedia).url = args[0];
-                                            inputMedia.f135q = args[1];
+                                            inputMedia.var_q = args[1];
                                         }
                                         delayedMessage3 = delayedMessage;
                                         inputMedia.mime_type = document2.mime_type;
@@ -3038,9 +3038,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 inputMedia.attributes = document2.attributes;
                             } else {
                                 media = new TL_inputMediaDocument();
-                                media.f176id = new TL_inputDocument();
-                                media.f176id.f130id = document2.f119id;
-                                media.f176id.access_hash = document2.access_hash;
+                                media.var_id = new TL_inputDocument();
+                                media.var_id.var_id = document2.var_id;
+                                media.var_id.access_hash = document2.access_hash;
                                 inputMedia = media;
                                 delayedMessage3 = delayedMessage;
                             }
@@ -3060,9 +3060,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             delayedMessage2.obj = newMsgObj;
                         } else {
                             media = new TL_inputMediaDocument();
-                            media.f176id = new TL_inputDocument();
-                            media.f176id.f130id = document2.f119id;
-                            media.f176id.access_hash = document2.access_hash;
+                            media.var_id = new TL_inputDocument();
+                            media.var_id.var_id = document2.var_id;
+                            media.var_id.access_hash = document2.access_hash;
                             inputMedia = media;
                             delayedMessage3 = delayedMessage;
                         }
@@ -3221,10 +3221,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 } else {
                                     ((TL_decryptedMessageMediaPhoto) reqSend6.media).thumb = new byte[0];
                                 }
-                                reqSend6.media.thumb_h = small.f144h;
-                                reqSend6.media.thumb_w = small.f145w;
-                                reqSend6.media.f118w = big.f145w;
-                                reqSend6.media.f115h = big.f144h;
+                                reqSend6.media.thumb_h = small.var_h;
+                                reqSend6.media.thumb_w = small.var_w;
+                                reqSend6.media.var_w = big.var_w;
+                                reqSend6.media.var_h = big.var_h;
                                 reqSend6.media.size = big.size;
                                 if (big.location.key == null || groupId != 0) {
                                     if (delayedMessage == null) {
@@ -3250,10 +3250,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     }
                                 } else {
                                     encryptedFile = new TL_inputEncryptedFile();
-                                    encryptedFile.f131id = big.location.volume_id;
+                                    encryptedFile.var_id = big.location.volume_id;
                                     encryptedFile.access_hash = big.location.secret;
                                     reqSend6.media.key = big.location.key;
-                                    reqSend6.media.f117iv = big.location.f125iv;
+                                    reqSend6.media.var_iv = big.location.var_iv;
                                     SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
                                 }
                             } else if (type == 3) {
@@ -3280,14 +3280,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 for (a = 0; a < document2.attributes.size(); a++) {
                                     attribute = (DocumentAttribute) document2.attributes.get(a);
                                     if (attribute instanceof TL_documentAttributeVideo) {
-                                        reqSend6.media.f118w = attribute.f122w;
-                                        reqSend6.media.f115h = attribute.f121h;
+                                        reqSend6.media.var_w = attribute.var_w;
+                                        reqSend6.media.var_h = attribute.var_h;
                                         reqSend6.media.duration = attribute.duration;
                                         break;
                                     }
                                 }
-                                reqSend6.media.thumb_h = document2.thumb.f144h;
-                                reqSend6.media.thumb_w = document2.thumb.f145w;
+                                reqSend6.media.thumb_h = document2.thumb.var_h;
+                                reqSend6.media.thumb_w = document2.thumb.var_w;
                                 if (document2.key == null || groupId != 0) {
                                     if (delayedMessage == null) {
                                         delayedMessage2 = new DelayedMessage(peer);
@@ -3305,10 +3305,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     }
                                 } else {
                                     encryptedFile = new TL_inputEncryptedFile();
-                                    encryptedFile.f131id = document2.f119id;
+                                    encryptedFile.var_id = document2.var_id;
                                     encryptedFile.access_hash = document2.access_hash;
                                     reqSend6.media.key = document2.key;
-                                    reqSend6.media.f117iv = document2.f120iv;
+                                    reqSend6.media.var_iv = document2.var_iv;
                                     SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
                                     delayedMessage3 = delayedMessage;
                                 }
@@ -3317,13 +3317,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 reqSend6.media.phone_number = user.phone;
                                 reqSend6.media.first_name = user.first_name;
                                 reqSend6.media.last_name = user.last_name;
-                                reqSend6.media.user_id = user.f228id;
+                                reqSend6.media.user_id = user.var_id;
                                 SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
                                 delayedMessage3 = delayedMessage;
                             } else if (type == 7 || (type == 9 && document2 != null)) {
                                 if (MessageObject.isStickerDocument(document2)) {
                                     reqSend6.media = new TL_decryptedMessageMediaExternalDocument();
-                                    reqSend6.media.f116id = document2.f119id;
+                                    reqSend6.media.var_id = document2.var_id;
                                     reqSend6.media.date = document2.date;
                                     reqSend6.media.access_hash = document2.access_hash;
                                     reqSend6.media.mime_type = document2.mime_type;
@@ -3349,8 +3349,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         reqSend6.media.thumb_w = 0;
                                     } else {
                                         ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = document2.thumb.bytes;
-                                        reqSend6.media.thumb_h = document2.thumb.f144h;
-                                        reqSend6.media.thumb_w = document2.thumb.f145w;
+                                        reqSend6.media.thumb_h = document2.thumb.var_h;
+                                        reqSend6.media.thumb_w = document2.thumb.var_w;
                                     }
                                     reqSend6.media.size = document2.size;
                                     reqSend6.media.mime_type = document2.mime_type;
@@ -3369,10 +3369,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         performSendDelayedMessage(delayedMessage2);
                                     } else {
                                         encryptedFile = new TL_inputEncryptedFile();
-                                        encryptedFile.f131id = document2.f119id;
+                                        encryptedFile.var_id = document2.var_id;
                                         encryptedFile.access_hash = document2.access_hash;
                                         reqSend6.media.key = document2.key;
-                                        reqSend6.media.f117iv = document2.f120iv;
+                                        reqSend6.media.var_iv = document2.var_iv;
                                         SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
                                         delayedMessage3 = delayedMessage;
                                     }
@@ -3392,8 +3392,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     reqSend6.media.thumb_w = 0;
                                 } else {
                                     ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = document2.thumb.bytes;
-                                    reqSend6.media.thumb_h = document2.thumb.f144h;
-                                    reqSend6.media.thumb_w = document2.thumb.f145w;
+                                    reqSend6.media.thumb_h = document2.thumb.var_h;
+                                    reqSend6.media.thumb_w = document2.thumb.var_w;
                                 }
                                 reqSend6.media.mime_type = document2.mime_type;
                                 reqSend6.media.size = document2.size;
@@ -3416,7 +3416,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             delayedMessage3.upload = true;
                             request2.messages.add(reqSend6);
                             encryptedFile = new TL_inputEncryptedFile();
-                            encryptedFile.f131id = type == 3 ? 1 : 0;
+                            encryptedFile.var_id = type == 3 ? 1 : 0;
                             request2.files.add(encryptedFile);
                             performSendDelayedMessage(delayedMessage3);
                         }
@@ -3484,7 +3484,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         TL_decryptedMessage decryptedMessage = message.sendEncryptedRequest;
                         decryptedMessage.media.size = (int) message.videoEditedInfo.estimatedSize;
                         decryptedMessage.media.key = message.videoEditedInfo.key;
-                        decryptedMessage.media.f117iv = message.videoEditedInfo.f89iv;
+                        decryptedMessage.media.var_iv = message.videoEditedInfo.var_iv;
                         SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(decryptedMessage, message.obj.messageOwner, message.encryptedChat, message.videoEditedInfo.encryptedFile, message.originalPath, message.obj);
                         message.videoEditedInfo.encryptedFile = null;
                         return;
@@ -3502,7 +3502,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         location = message.obj.messageOwner.attachPath;
                         document = message.obj.getDocument();
                         if (location == null) {
-                            location = FileLoader.getDirectory(4) + "/" + document.f119id + ".mp4";
+                            location = FileLoader.getDirectory(4) + "/" + document.var_id + ".mp4";
                         }
                         putToDelayedMessages(location, message);
                         if (message.obj.videoEditedInfo == null || !message.obj.videoEditedInfo.needConvert()) {
@@ -3521,7 +3521,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 location = message.obj.messageOwner.attachPath;
                 document = message.obj.getDocument();
                 if (location == null) {
-                    location = FileLoader.getDirectory(4) + "/" + document.f119id + ".mp4";
+                    location = FileLoader.getDirectory(4) + "/" + document.var_id + ".mp4";
                 }
                 if (message.sendEncryptedRequest == null || document.dc_id == 0 || new File(location).exists()) {
                     putToDelayedMessages(location, message);
@@ -3540,7 +3540,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             location = message.obj.messageOwner.attachPath;
             document = message.obj.getDocument();
             if (location == null) {
-                location = FileLoader.getDirectory(4) + "/" + document.f119id + ".mp4";
+                location = FileLoader.getDirectory(4) + "/" + document.var_id + ".mp4";
             }
             putToDelayedMessages(location, message);
             MediaController.getInstance().scheduleVideoConvert(message.obj);
@@ -3599,7 +3599,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         location = messageObject.messageOwner.attachPath;
                         document = messageObject.getDocument();
                         if (location == null) {
-                            location = FileLoader.getDirectory(4) + "/" + document.f119id + ".mp4";
+                            location = FileLoader.getDirectory(4) + "/" + document.var_id + ".mp4";
                         }
                         putToDelayedMessages(location, message);
                         message.extraHashMap.put(messageObject, location);
@@ -3612,7 +3612,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         document = messageObject.getDocument();
                         String documentLocation = messageObject.messageOwner.attachPath;
                         if (documentLocation == null) {
-                            documentLocation = FileLoader.getDirectory(4) + "/" + document.f119id + ".mp4";
+                            documentLocation = FileLoader.getDirectory(4) + "/" + document.var_id + ".mp4";
                         }
                         if (message.sendRequest != null) {
                             media = ((TL_inputSingleMedia) ((TL_messages_sendMultiMedia) message.sendRequest).multi_media.get(index)).media;
@@ -3721,15 +3721,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             MessageMedia messageMedia = (MessageMedia) response;
             if ((inputMedia instanceof TL_inputMediaUploadedPhoto) && (messageMedia instanceof TL_messageMediaPhoto)) {
                 InputMedia inputMediaPhoto = new TL_inputMediaPhoto();
-                inputMediaPhoto.f178id = new TL_inputPhoto();
-                inputMediaPhoto.f178id.f137id = messageMedia.photo.f143id;
-                inputMediaPhoto.f178id.access_hash = messageMedia.photo.access_hash;
+                inputMediaPhoto.var_id = new TL_inputPhoto();
+                inputMediaPhoto.var_id.var_id = messageMedia.photo.var_id;
+                inputMediaPhoto.var_id.access_hash = messageMedia.photo.access_hash;
                 newInputMedia = inputMediaPhoto;
             } else if ((inputMedia instanceof TL_inputMediaUploadedDocument) && (messageMedia instanceof TL_messageMediaDocument)) {
                 InputMedia inputMediaDocument = new TL_inputMediaDocument();
-                inputMediaDocument.f176id = new TL_inputDocument();
-                inputMediaDocument.f176id.f130id = messageMedia.document.f119id;
-                inputMediaDocument.f176id.access_hash = messageMedia.document.access_hash;
+                inputMediaDocument.var_id = new TL_inputDocument();
+                inputMediaDocument.var_id.var_id = messageMedia.document.var_id;
+                inputMediaDocument.var_id.access_hash = messageMedia.document.access_hash;
                 newInputMedia = inputMediaDocument;
             }
         }
@@ -3821,7 +3821,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     protected void putToSendingMessages(Message message) {
-        this.sendingMessages.put(message.f139id, message);
+        this.sendingMessages.put(message.var_id, message);
     }
 
     protected Message removeFromSendingMessages(int mid) {
@@ -3861,18 +3861,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 Update update = (Update) updatesArr.get(a);
                 if (update instanceof TL_updateMessageID) {
                     TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
-                    newIds.put(updateMessageID.random_id, Integer.valueOf(updateMessageID.f227id));
+                    newIds.put(updateMessageID.random_id, Integer.valueOf(updateMessageID.var_id));
                     updatesArr.remove(a);
                     a--;
                 } else if (update instanceof TL_updateNewMessage) {
                     TL_updateNewMessage newMessage = (TL_updateNewMessage) update;
-                    newMessages.put(newMessage.message.f139id, newMessage.message);
+                    newMessages.put(newMessage.message.var_id, newMessage.message);
                     Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$45(this, newMessage));
                     updatesArr.remove(a);
                     a--;
                 } else if (update instanceof TL_updateNewChannelMessage) {
                     TL_updateNewChannelMessage newMessage2 = (TL_updateNewChannelMessage) update;
-                    newMessages.put(newMessage2.message.f139id, newMessage2.message);
+                    newMessages.put(newMessage2.message.var_id, newMessage2.message);
                     Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$46(this, newMessage2));
                     updatesArr.remove(a);
                     a--;
@@ -3883,7 +3883,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 MessageObject msgObj = (MessageObject) msgObjs.get(i);
                 String originalPath = (String) originalPaths.get(i);
                 newMsgObj = msgObj.messageOwner;
-                int oldId = newMsgObj.f139id;
+                int oldId = newMsgObj.var_id;
                 ArrayList<Message> sentMessages = new ArrayList();
                 String attachPath = newMsgObj.attachPath;
                 Integer id = (Integer) newIds.get(newMsgObj.random_id);
@@ -3897,7 +3897,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     break;
                 }
                 sentMessages.add(message);
-                newMsgObj.f139id = message.f139id;
+                newMsgObj.var_id = message.var_id;
                 if ((newMsgObj.flags & Integer.MIN_VALUE) != 0) {
                     message.flags |= Integer.MIN_VALUE;
                 }
@@ -3907,12 +3907,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(message.out, message.dialog_id));
                     MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max.put(Long.valueOf(message.dialog_id), value);
                 }
-                message.unread = value.intValue() < message.f139id;
+                message.unread = value.intValue() < message.var_id;
                 updateMediaPaths(msgObj, message, originalPath, false);
                 if (null == null) {
                     StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
                     newMsgObj.send_state = 0;
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.f139id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.var_id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
                     MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$47(this, newMsgObj, oldId, sentMessages, grouped_id));
                 }
             }
@@ -3926,9 +3926,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 newMsgObj = ((MessageObject) msgObjs.get(i)).messageOwner;
                 MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsgObj);
                 newMsgObj.send_state = 2;
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.f139id));
-                processSentMessage(newMsgObj.f139id);
-                removeFromSendingMessages(newMsgObj.f139id);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.var_id));
+                processSentMessage(newMsgObj.var_id);
+                removeFromSendingMessages(newMsgObj.var_id);
             }
         }
     }
@@ -3942,14 +3942,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$null$25$SendMessagesHelper(Message newMsgObj, int oldId, ArrayList sentMessages, long grouped_id) {
-        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.f139id, 0, false, newMsgObj.to_id.channel_id);
+        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.var_id, 0, false, newMsgObj.to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, false, 0);
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$49(this, newMsgObj, oldId, grouped_id));
     }
 
     final /* synthetic */ void lambda$null$24$SendMessagesHelper(Message newMsgObj, int oldId, long grouped_id) {
         DataQuery.getInstance(this.currentAccount).increasePeerRaiting(newMsgObj.dialog_id);
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.f139id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.var_id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
         processSentMessage(oldId);
         removeFromSendingMessages(oldId);
     }
@@ -4058,7 +4058,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
             stopVideoService(newMsgObj.attachPath);
         }
-        removeFromSendingMessages(newMsgObj.f139id);
+        removeFromSendingMessages(newMsgObj.var_id);
         revertEditingMessageObject(msgObj);
     }
 
@@ -4068,22 +4068,22 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$null$29$SendMessagesHelper(Message newMsgObj) {
-        processSentMessage(newMsgObj.f139id);
-        removeFromSendingMessages(newMsgObj.f139id);
+        processSentMessage(newMsgObj.var_id);
+        removeFromSendingMessages(newMsgObj.var_id);
     }
 
     final /* synthetic */ void lambda$null$38$SendMessagesHelper(TL_error error, Message newMsgObj, TLObject req, TLObject response, MessageObject msgObj, String originalPath) {
         boolean isSentError = false;
         if (error == null) {
             int i;
-            int oldId = newMsgObj.f139id;
+            int oldId = newMsgObj.var_id;
             boolean isBroadcast = req instanceof TL_messages_sendBroadcast;
             ArrayList<Message> sentMessages = new ArrayList();
             String attachPath = newMsgObj.attachPath;
             if (response instanceof TL_updateShortSentMessage) {
                 TL_updateShortSentMessage res = (TL_updateShortSentMessage) response;
-                i = res.f84id;
-                newMsgObj.f139id = i;
+                i = res.var_id;
+                newMsgObj.var_id = i;
                 newMsgObj.local_id = i;
                 newMsgObj.date = res.date;
                 newMsgObj.entities = res.entities;
@@ -4136,8 +4136,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(message.out, message.dialog_id));
                         MessagesController.getInstance(this.currentAccount).dialogs_read_outbox_max.put(Long.valueOf(message.dialog_id), value);
                     }
-                    message.unread = value.intValue() < message.f139id;
-                    newMsgObj.f139id = message.f139id;
+                    message.unread = value.intValue() < message.var_id;
+                    newMsgObj.var_id = message.var_id;
                     updateMediaPaths(msgObj, message, originalPath, false);
                 } else {
                     isSentError = true;
@@ -4145,7 +4145,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$39(this, updates));
             }
             if (MessageObject.isLiveLocationMessage(newMsgObj)) {
-                LocationController.getInstance(this.currentAccount).addSharingLocation(newMsgObj.dialog_id, newMsgObj.f139id, newMsgObj.media.period, newMsgObj);
+                LocationController.getInstance(this.currentAccount).addSharingLocation(newMsgObj.dialog_id, newMsgObj.var_id, newMsgObj.media.period, newMsgObj);
             }
             if (!isSentError) {
                 StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
@@ -4157,7 +4157,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 if (isBroadcast) {
                     i = oldId;
                 } else {
-                    i = newMsgObj.f139id;
+                    i = newMsgObj.var_id;
                 }
                 objArr[1] = Integer.valueOf(i);
                 objArr[2] = newMsgObj;
@@ -4173,12 +4173,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (isSentError) {
             MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsgObj);
             newMsgObj.send_state = 2;
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.f139id));
-            processSentMessage(newMsgObj.f139id);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.var_id));
+            processSentMessage(newMsgObj.var_id);
             if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
                 stopVideoService(newMsgObj.attachPath);
             }
-            removeFromSendingMessages(newMsgObj.f139id);
+            removeFromSendingMessages(newMsgObj.var_id);
         }
     }
 
@@ -4199,7 +4199,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$null$37$SendMessagesHelper(Message newMsgObj, int oldId, boolean isBroadcast, ArrayList sentMessages, String attachPath) {
-        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), isBroadcast ? oldId : newMsgObj.f139id, 0, false, newMsgObj.to_id.channel_id);
+        MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), isBroadcast ? oldId : newMsgObj.var_id, 0, false, newMsgObj.to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, isBroadcast, 0);
         if (isBroadcast) {
             ArrayList currentMessage = new ArrayList();
@@ -4228,7 +4228,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         int i = NotificationCenter.messageReceivedByServer;
         Object[] objArr = new Object[5];
         objArr[0] = Integer.valueOf(oldId);
-        objArr[1] = Integer.valueOf(isBroadcast ? oldId : newMsgObj.f139id);
+        objArr[1] = Integer.valueOf(isBroadcast ? oldId : newMsgObj.var_id);
         objArr[2] = newMsgObj;
         objArr[3] = Long.valueOf(newMsgObj.dialog_id);
         objArr[4] = Long.valueOf(0);
@@ -4238,7 +4238,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$performSendMessageRequest$41$SendMessagesHelper(Message newMsgObj) {
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$33(this, newMsgObj, newMsgObj.f139id));
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$33(this, newMsgObj, newMsgObj.var_id));
     }
 
     final /* synthetic */ void lambda$null$40$SendMessagesHelper(Message newMsgObj, int msg_id) {
@@ -4269,14 +4269,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             int b = 0;
                             while (b < newMsg.media.photo.sizes.size()) {
                                 size2 = (PhotoSize) newMsg.media.photo.sizes.get(b);
-                                if (size2 == null || size2.location == null || size2.type == null || !((size2.location.volume_id == -2147483648L && size.type.equals(size2.type)) || (size.f145w == size2.f145w && size.f144h == size2.f144h))) {
+                                if (size2 == null || size2.location == null || size2.type == null || !((size2.location.volume_id == -2147483648L && size.type.equals(size2.type)) || (size.var_w == size2.var_w && size.var_h == size2.var_h))) {
                                     b++;
                                 } else {
                                     fileName = size2.location.volume_id + "_" + size2.location.local_id;
                                     fileName2 = size.location.volume_id + "_" + size.location.local_id;
                                     if (!fileName.equals(fileName2)) {
                                         cacheFile = new File(FileLoader.getDirectory(4), fileName + ".jpg");
-                                        if (sentMessage.media.ttl_seconds != 0 || (sentMessage.media.photo.sizes.size() != 1 && size.f145w <= 90 && size.f144h <= 90)) {
+                                        if (sentMessage.media.ttl_seconds != 0 || (sentMessage.media.photo.sizes.size() != 1 && size.var_w <= 90 && size.var_h <= 90)) {
                                             cacheFile2 = new File(FileLoader.getDirectory(4), fileName2 + ".jpg");
                                         } else {
                                             cacheFile2 = FileLoader.getPathToAttach(size);
@@ -4293,7 +4293,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
                 sentMessage.message = newMsg.message;
                 sentMessage.attachPath = newMsg.attachPath;
-                newMsg.media.photo.f143id = sentMessage.media.photo.f143id;
+                newMsg.media.photo.var_id = sentMessage.media.photo.var_id;
                 newMsg.media.photo.access_hash = sentMessage.media.photo.access_hash;
             } else if ((sentMessage.media instanceof TL_messageMediaDocument) && sentMessage.media.document != null && (newMsg.media instanceof TL_messageMediaDocument) && newMsg.media.document != null) {
                 DocumentAttribute attribute;
@@ -4322,7 +4322,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     newMsg.media.document.thumb = sentMessage.media.document.thumb;
                 }
                 newMsg.media.document.dc_id = sentMessage.media.document.dc_id;
-                newMsg.media.document.f119id = sentMessage.media.document.f119id;
+                newMsg.media.document.var_id = sentMessage.media.document.var_id;
                 newMsg.media.document.access_hash = sentMessage.media.document.access_hash;
                 byte[] oldWaveform = null;
                 for (a = 0; a < newMsg.media.document.attributes.size(); a++) {
@@ -4692,7 +4692,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
                 if (document == null) {
                     document = new TL_document();
-                    document.f119id = 0;
+                    document.var_id = 0;
                     document.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
                     TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
                     fileName.file_name = name;
@@ -4784,8 +4784,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             attributeSticker.stickerset = new TL_inputStickerSetEmpty();
                             document.attributes.add(attributeSticker);
                             TL_documentAttributeImageSize attributeImageSize = new TL_documentAttributeImageSize();
-                            attributeImageSize.f122w = bmOptions.outWidth;
-                            attributeImageSize.f121h = bmOptions.outHeight;
+                            attributeImageSize.var_w = bmOptions.outWidth;
+                            attributeImageSize.var_h = bmOptions.outHeight;
                             document.attributes.add(attributeImageSize);
                         }
                     }
@@ -4933,7 +4933,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     static final /* synthetic */ void lambda$null$46$SendMessagesHelper() {
         try {
-            Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("UnsupportedAttachment", C0541R.string.UnsupportedAttachment), 0).show();
+            Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("UnsupportedAttachment", CLASSNAMER.string.UnsupportedAttachment), 0).show();
         } catch (Throwable e) {
             FileLog.m14e(e);
         }
@@ -5086,7 +5086,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     case 4:
                     case 5:
                         document = new TL_document();
-                        document.f119id = 0;
+                        document.var_id = 0;
                         document.size = 0;
                         document.dc_id = 0;
                         document.mime_type = result.content.mime_type;
@@ -5196,8 +5196,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 fileName.file_name = "video.mp4";
                                 TL_documentAttributeVideo attributeVideo = new TL_documentAttributeVideo();
                                 wh = MessageObject.getInlineResultWidthAndHeight(result);
-                                attributeVideo.f122w = wh[0];
-                                attributeVideo.f121h = wh[1];
+                                attributeVideo.var_w = wh[0];
+                                attributeVideo.var_h = wh[1];
                                 attributeVideo.duration = MessageObject.getInlineResultDuration(result);
                                 attributeVideo.supports_streaming = true;
                                 document.attributes.add(attributeVideo);
@@ -5222,8 +5222,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 document.attributes.add(attributeSticker);
                                 TL_documentAttributeImageSize attributeImageSize = new TL_documentAttributeImageSize();
                                 wh = MessageObject.getInlineResultWidthAndHeight(result);
-                                attributeImageSize.f122w = wh[0];
-                                attributeImageSize.f121h = wh[1];
+                                attributeImageSize.var_w = wh[0];
+                                attributeImageSize.var_h = wh[1];
                                 document.attributes.add(attributeImageSize);
                                 fileName.file_name = "sticker.webp";
                                 try {
@@ -5250,8 +5250,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         if (document.thumb == null) {
                             document.thumb = new TL_photoSize();
                             wh = MessageObject.getInlineResultWidthAndHeight(result);
-                            document.thumb.f145w = wh[0];
-                            document.thumb.f144h = wh[1];
+                            document.thumb.var_w = wh[0];
+                            document.thumb.var_h = wh[1];
                             document.thumb.size = 0;
                             document.thumb.location = new TL_fileLocationUnavailable();
                             document.thumb.type = "x";
@@ -5267,8 +5267,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             photo.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
                             TL_photoSize photoSize = new TL_photoSize();
                             wh = MessageObject.getInlineResultWidthAndHeight(result);
-                            photoSize.f145w = wh[0];
-                            photoSize.f144h = wh[1];
+                            photoSize.var_w = wh[0];
+                            photoSize.var_h = wh[1];
                             photoSize.size = 1;
                             photoSize.location = new TL_fileLocationUnavailable();
                             photoSize.type = "x";
@@ -5283,7 +5283,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 game = new TL_game();
                 game.title = result.title;
                 game.description = result.description;
-                game.short_name = result.f111id;
+                game.short_name = result.var_id;
                 game.photo = result.photo;
                 if (result.document instanceof TL_document) {
                     game.document = result.document;
@@ -5465,7 +5465,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                         File thumbFile = null;
                         document = new TL_document();
-                        document.f119id = 0;
+                        document.var_id = 0;
                         document.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
                         TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
                         fileName.file_name = "animation.gif";
@@ -5507,8 +5507,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                         if (document.thumb == null) {
                             document.thumb = new TL_photoSize();
-                            document.thumb.f145w = info.searchImage.width;
-                            document.thumb.f144h = info.searchImage.height;
+                            document.thumb.var_w = info.searchImage.width;
+                            document.thumb.var_h = info.searchImage.height;
                             document.thumb.size = 0;
                             document.thumb.location = new TL_fileLocationUnavailable();
                             document.thumb.type = "x";
@@ -5554,8 +5554,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 photo = new TL_photo();
                                 photo.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
                                 TL_photoSize photoSize = new TL_photoSize();
-                                photoSize.f145w = info.searchImage.width;
-                                photoSize.f144h = info.searchImage.height;
+                                photoSize.var_w = info.searchImage.width;
+                                photoSize.var_h = info.searchImage.height;
                                 photoSize.size = 0;
                                 photoSize.location = new TL_fileLocationUnavailable();
                                 photoSize.type = "x";
@@ -5650,18 +5650,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             if (videoEditedInfo.muted) {
                                 document.attributes.add(new TL_documentAttributeAnimated());
                                 fillVideoAttribute(info.path, attributeVideo, videoEditedInfo);
-                                videoEditedInfo.originalWidth = attributeVideo.f122w;
-                                videoEditedInfo.originalHeight = attributeVideo.f121h;
-                                attributeVideo.f122w = videoEditedInfo.resultWidth;
-                                attributeVideo.f121h = videoEditedInfo.resultHeight;
+                                videoEditedInfo.originalWidth = attributeVideo.var_w;
+                                videoEditedInfo.originalHeight = attributeVideo.var_h;
+                                attributeVideo.var_w = videoEditedInfo.resultWidth;
+                                attributeVideo.var_h = videoEditedInfo.resultHeight;
                             } else {
                                 attributeVideo.duration = (int) (videoEditedInfo.estimatedDuration / 1000);
                                 if (videoEditedInfo.rotationValue == 90 || videoEditedInfo.rotationValue == 270) {
-                                    attributeVideo.f122w = videoEditedInfo.resultHeight;
-                                    attributeVideo.f121h = videoEditedInfo.resultWidth;
+                                    attributeVideo.var_w = videoEditedInfo.resultHeight;
+                                    attributeVideo.var_h = videoEditedInfo.resultWidth;
                                 } else {
-                                    attributeVideo.f122w = videoEditedInfo.resultWidth;
-                                    attributeVideo.f121h = videoEditedInfo.resultHeight;
+                                    attributeVideo.var_w = videoEditedInfo.resultWidth;
+                                    attributeVideo.var_h = videoEditedInfo.resultHeight;
                                 }
                             }
                             document.size = (int) videoEditedInfo.estimatedSize;
@@ -5894,11 +5894,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 mediaMetadataRetriever2.setDataSource(videoPath);
                 String width = mediaMetadataRetriever2.extractMetadata(18);
                 if (width != null) {
-                    attributeVideo.f122w = Integer.parseInt(width);
+                    attributeVideo.var_w = Integer.parseInt(width);
                 }
                 String height = mediaMetadataRetriever2.extractMetadata(19);
                 if (height != null) {
-                    attributeVideo.f121h = Integer.parseInt(height);
+                    attributeVideo.var_h = Integer.parseInt(height);
                 }
                 String duration = mediaMetadataRetriever2.extractMetadata(9);
                 if (duration != null) {
@@ -5911,9 +5911,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         if (videoEditedInfo != null) {
                             videoEditedInfo.rotationValue = val;
                         } else if (val == 90 || val == 270) {
-                            int temp = attributeVideo.f122w;
-                            attributeVideo.f122w = attributeVideo.f121h;
-                            attributeVideo.f121h = temp;
+                            int temp = attributeVideo.var_w;
+                            attributeVideo.var_w = attributeVideo.var_h;
+                            attributeVideo.var_h = temp;
                         }
                     }
                 }
@@ -5967,8 +5967,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 MediaPlayer mp = MediaPlayer.create(ApplicationLoader.applicationContext, Uri.fromFile(new File(videoPath)));
                 if (mp != null) {
                     attributeVideo.duration = (int) Math.ceil((double) (((float) mp.getDuration()) / 1000.0f));
-                    attributeVideo.f122w = mp.getVideoWidth();
-                    attributeVideo.f121h = mp.getVideoHeight();
+                    attributeVideo.var_w = mp.getVideoWidth();
+                    attributeVideo.var_h = mp.getVideoHeight();
                     mp.release();
                 }
             } catch (Throwable e2222) {
@@ -6297,18 +6297,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 if (videoEditedInfo.muted) {
                     document.attributes.add(new TL_documentAttributeAnimated());
                     fillVideoAttribute(videoPath, attributeVideo, videoEditedInfo);
-                    videoEditedInfo.originalWidth = attributeVideo.f122w;
-                    videoEditedInfo.originalHeight = attributeVideo.f121h;
-                    attributeVideo.f122w = videoEditedInfo.resultWidth;
-                    attributeVideo.f121h = videoEditedInfo.resultHeight;
+                    videoEditedInfo.originalWidth = attributeVideo.var_w;
+                    videoEditedInfo.originalHeight = attributeVideo.var_h;
+                    attributeVideo.var_w = videoEditedInfo.resultWidth;
+                    attributeVideo.var_h = videoEditedInfo.resultHeight;
                 } else {
                     attributeVideo.duration = (int) (duration / 1000);
                     if (videoEditedInfo.rotationValue == 90 || videoEditedInfo.rotationValue == 270) {
-                        attributeVideo.f122w = height;
-                        attributeVideo.f121h = width;
+                        attributeVideo.var_w = height;
+                        attributeVideo.var_h = width;
                     } else {
-                        attributeVideo.f122w = width;
-                        attributeVideo.f121h = height;
+                        attributeVideo.var_w = width;
+                        attributeVideo.var_h = height;
                     }
                 }
                 document.size = (int) estimatedSize;

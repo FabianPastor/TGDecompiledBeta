@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.google.android.exoplayer2.C0021C;
+import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class ThemeDescription {
     public static int FLAG_AB_AM_SELECTORCOLOR = 4194304;
     public static int FLAG_AB_AM_TOPBACKGROUND = 2097152;
     public static int FLAG_AB_ITEMSCOLOR = 64;
-    public static int FLAG_AB_SEARCH = 134217728;
+    public static int FLAG_AB_SEARCH = NUM;
     public static int FLAG_AB_SEARCHPLACEHOLDER = ConnectionsManager.FileTypeFile;
     public static int FLAG_AB_SELECTORCOLOR = 256;
     public static int FLAG_AB_SUBMENUBACKGROUND = Integer.MIN_VALUE;
@@ -68,7 +68,7 @@ public class ThemeDescription {
     public static int FLAG_CHECKBOXCHECK = MessagesController.UPDATE_MASK_CHAT_ADMINS;
     public static int FLAG_CHECKTAG = 262144;
     public static int FLAG_CURSORCOLOR = 16777216;
-    public static int FLAG_DRAWABLESELECTEDSTATE = C0021C.DEFAULT_BUFFER_SEGMENT_SIZE;
+    public static int FLAG_DRAWABLESELECTEDSTATE = CLASSNAMEC.DEFAULT_BUFFER_SEGMENT_SIZE;
     public static int FLAG_FASTSCROLL = ConnectionsManager.FileTypeVideo;
     public static int FLAG_HINTTEXTCOLOR = 8388608;
     public static int FLAG_IMAGECOLOR = 8;
@@ -77,8 +77,8 @@ public class ThemeDescription {
     public static int FLAG_PROGRESSBAR = 2048;
     public static int FLAG_SECTIONS = 524288;
     public static int FLAG_SELECTOR = 4096;
-    public static int FLAG_SELECTORWHITE = C0021C.ENCODING_PCM_MU_LAW;
-    public static int FLAG_SERVICEBACKGROUND = C0021C.ENCODING_PCM_A_LAW;
+    public static int FLAG_SELECTORWHITE = CLASSNAMEC.ENCODING_PCM_MU_LAW;
+    public static int FLAG_SERVICEBACKGROUND = CLASSNAMEC.ENCODING_PCM_A_LAW;
     public static int FLAG_TEXTCOLOR = 4;
     public static int FLAG_USEBACKGROUNDDRAWABLE = 131072;
     private HashMap<String, Field> cachedFields;
@@ -229,42 +229,42 @@ public class ThemeDescription {
                 }
             }
         }
-        if (this.viewToInvalidate instanceof C0704ActionBar) {
+        if (this.viewToInvalidate instanceof CLASSNAMEActionBar) {
             if ((this.changeFlags & FLAG_AB_ITEMSCOLOR) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setItemsColor(color, false);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setItemsColor(color, false);
             }
             if ((this.changeFlags & FLAG_AB_TITLECOLOR) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setTitleColor(color);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setTitleColor(color);
             }
             if ((this.changeFlags & FLAG_AB_SELECTORCOLOR) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setItemsBackgroundColor(color, false);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setItemsBackgroundColor(color, false);
             }
             if ((this.changeFlags & FLAG_AB_AM_SELECTORCOLOR) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setItemsBackgroundColor(color, true);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setItemsBackgroundColor(color, true);
             }
             if ((this.changeFlags & FLAG_AB_AM_ITEMSCOLOR) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setItemsColor(color, true);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setItemsColor(color, true);
             }
             if ((this.changeFlags & FLAG_AB_SUBTITLECOLOR) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setSubtitleColor(color);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setSubtitleColor(color);
             }
             if ((this.changeFlags & FLAG_AB_AM_BACKGROUND) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setActionModeColor(color);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setActionModeColor(color);
             }
             if ((this.changeFlags & FLAG_AB_AM_TOPBACKGROUND) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setActionModeTopColor(color);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setActionModeTopColor(color);
             }
             if ((this.changeFlags & FLAG_AB_SEARCHPLACEHOLDER) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setSearchTextColor(color, true);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setSearchTextColor(color, true);
             }
             if ((this.changeFlags & FLAG_AB_SEARCH) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setSearchTextColor(color, false);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setSearchTextColor(color, false);
             }
             if ((this.changeFlags & FLAG_AB_SUBMENUITEM) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setPopupItemsColor(color);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setPopupItemsColor(color);
             }
             if ((this.changeFlags & FLAG_AB_SUBMENUBACKGROUND) != 0) {
-                ((C0704ActionBar) this.viewToInvalidate).setPopupBackgroundColor(color);
+                ((CLASSNAMEActionBar) this.viewToInvalidate).setPopupBackgroundColor(color);
             }
         }
         if (this.viewToInvalidate instanceof EmptyTextProgressView) {

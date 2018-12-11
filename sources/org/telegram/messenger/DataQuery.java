@@ -156,7 +156,7 @@ public class DataQuery {
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_MASK = 1;
     private static RectF bitmapRect;
-    private static Comparator<MessageEntity> entityComparator = new C036452();
+    private static Comparator<MessageEntity> entityComparator = new CLASSNAME();
     private static Paint erasePaint;
     private static Paint roundPaint;
     private static Path roundPath;
@@ -212,8 +212,8 @@ public class DataQuery {
     private ArrayList<Long> unreadStickerSets = new ArrayList();
 
     /* renamed from: org.telegram.messenger.DataQuery$14 */
-    class C029814 implements Runnable {
-        C029814() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:31:0x0093  */
@@ -277,8 +277,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$16 */
-    class C030116 implements Runnable {
-        C030116() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -288,8 +288,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$19 */
-    class C030719 implements RequestDelegate {
-        C030719() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -297,8 +297,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$1 */
-    class C03081 implements RequestDelegate {
-        C03081() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -306,8 +306,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$20 */
-    class C030920 implements RequestDelegate {
-        C030920() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -315,8 +315,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$3 */
-    class C03423 implements RequestDelegate {
-        C03423() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -324,8 +324,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$43 */
-    class C034843 implements Runnable {
-        C034843() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -390,11 +390,11 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$44 */
-    class C035344 implements RequestDelegate {
+    class CLASSNAME implements RequestDelegate {
 
         /* renamed from: org.telegram.messenger.DataQuery$44$2 */
-        class C03522 implements Runnable {
-            C03522() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -405,7 +405,7 @@ public class DataQuery {
             }
         }
 
-        C035344() {
+        CLASSNAME() {
         }
 
         public void run(final TLObject response, TL_error error) {
@@ -439,8 +439,8 @@ public class DataQuery {
                         MessagesStorage.getInstance(DataQuery.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                             /* renamed from: org.telegram.messenger.DataQuery$44$1$1$1 */
-                            class C03491 implements Runnable {
-                                C03491() {
+                            class CLASSNAME implements Runnable {
+                                CLASSNAME() {
                                 }
 
                                 public void run() {
@@ -484,7 +484,7 @@ public class DataQuery {
                                     }
                                     state.dispose();
                                     MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().commitTransaction();
-                                    AndroidUtilities.runOnUIThread(new C03491());
+                                    AndroidUtilities.runOnUIThread(new CLASSNAME());
                                 } catch (Throwable e) {
                                     FileLog.m14e(e);
                                 }
@@ -493,14 +493,14 @@ public class DataQuery {
                     }
                 });
             } else if (response instanceof TL_contacts_topPeersDisabled) {
-                AndroidUtilities.runOnUIThread(new C03522());
+                AndroidUtilities.runOnUIThread(new CLASSNAME());
             }
         }
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$45 */
-    class C035445 implements Runnable {
-        C035445() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -512,8 +512,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$46 */
-    class C035546 implements Comparator<TL_topPeer> {
-        C035546() {
+    class CLASSNAME implements Comparator<TL_topPeer> {
+        CLASSNAME() {
         }
 
         public int compare(TL_topPeer lhs, TL_topPeer rhs) {
@@ -528,8 +528,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$47 */
-    class C035647 implements RequestDelegate {
-        C035647() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -537,8 +537,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$48 */
-    class C035748 implements RequestDelegate {
-        C035748() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -546,8 +546,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$52 */
-    static class C036452 implements Comparator<MessageEntity> {
-        C036452() {
+    static class CLASSNAME implements Comparator<MessageEntity> {
+        CLASSNAME() {
         }
 
         public int compare(MessageEntity entity1, MessageEntity entity2) {
@@ -562,11 +562,11 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$61 */
-    class C037961 implements RequestDelegate {
+    class CLASSNAME implements RequestDelegate {
 
         /* renamed from: org.telegram.messenger.DataQuery$61$1 */
-        class C03781 implements Runnable {
-            C03781() {
+        class CLASSNAME implements Runnable {
+            CLASSNAME() {
             }
 
             public void run() {
@@ -576,20 +576,20 @@ public class DataQuery {
             }
         }
 
-        C037961() {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
             if (error == null) {
                 MessagesController.getInstance(DataQuery.this.currentAccount).processUpdates((Updates) response, false);
-                AndroidUtilities.runOnUIThread(new C03781());
+                AndroidUtilities.runOnUIThread(new CLASSNAME());
             }
         }
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$62 */
-    class C038062 implements RequestDelegate {
-        C038062() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -597,8 +597,8 @@ public class DataQuery {
     }
 
     /* renamed from: org.telegram.messenger.DataQuery$7 */
-    class C03957 implements RequestDelegate {
-        C03957() {
+    class CLASSNAME implements RequestDelegate {
+        CLASSNAME() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -609,7 +609,7 @@ public class DataQuery {
                         try {
                             SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             state.requery();
-                            state.bindString(1, "s_" + set.set.f146id);
+                            state.bindString(1, "s_" + set.set.var_id);
                             state.bindInteger(2, 6);
                             state.bindString(3, TtmlNode.ANONYMOUS_REGION_ID);
                             state.bindString(4, TtmlNode.ANONYMOUS_REGION_ID);
@@ -631,8 +631,8 @@ public class DataQuery {
                 });
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        DataQuery.this.groupStickerSets.put(set.set.f146id, set);
-                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.f146id));
+                        DataQuery.this.groupStickerSets.put(set.set.var_id, set);
+                        NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.var_id));
                     }
                 });
             }
@@ -770,7 +770,7 @@ public class DataQuery {
     public boolean isStickerInFavorites(Document document) {
         for (int a = 0; a < this.recentStickers[2].size(); a++) {
             Document d = (Document) this.recentStickers[2].get(a);
-            if (d.f119id == document.f119id && d.dc_id == document.dc_id) {
+            if (d.var_id == document.var_id && d.dc_id == document.dc_id) {
                 return true;
             }
         }
@@ -782,7 +782,7 @@ public class DataQuery {
         boolean found = false;
         for (int a = 0; a < this.recentStickers[type].size(); a++) {
             Document image = (Document) this.recentStickers[type].get(a);
-            if (image.f119id == document.f119id) {
+            if (image.var_id == document.var_id) {
                 this.recentStickers[type].remove(a);
                 if (!remove) {
                     this.recentStickers[type].add(0, image);
@@ -795,16 +795,16 @@ public class DataQuery {
         }
         if (type == 2) {
             if (remove) {
-                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("RemovedFromFavorites", C0541R.string.RemovedFromFavorites), 0).show();
+                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("RemovedFromFavorites", CLASSNAMER.string.RemovedFromFavorites), 0).show();
             } else {
-                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("AddedToFavorites", C0541R.string.AddedToFavorites), 0).show();
+                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("AddedToFavorites", CLASSNAMER.string.AddedToFavorites), 0).show();
             }
             TL_messages_faveSticker req = new TL_messages_faveSticker();
-            req.f193id = new TL_inputDocument();
-            req.f193id.f130id = document.f119id;
-            req.f193id.access_hash = document.access_hash;
+            req.var_id = new TL_inputDocument();
+            req.var_id.var_id = document.var_id;
+            req.var_id.access_hash = document.access_hash;
             req.unfave = remove;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C03081());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
             maxCount = MessagesController.getInstance(this.currentAccount).maxFaveStickersCount;
         } else {
             maxCount = MessagesController.getInstance(this.currentAccount).maxRecentStickersCount;
@@ -822,7 +822,7 @@ public class DataQuery {
                         cacheType = 5;
                     }
                     try {
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.f119id + "' AND type = " + cacheType).stepThis().dispose();
+                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.var_id + "' AND type = " + cacheType).stepThis().dispose();
                     } catch (Throwable e) {
                         FileLog.m14e(e);
                     }
@@ -846,15 +846,15 @@ public class DataQuery {
     public void removeRecentGif(final Document document) {
         this.recentGifs.remove(document);
         TL_messages_saveGif req = new TL_messages_saveGif();
-        req.f205id = new TL_inputDocument();
-        req.f205id.f130id = document.f119id;
-        req.f205id.access_hash = document.access_hash;
+        req.var_id = new TL_inputDocument();
+        req.var_id.var_id = document.var_id;
+        req.var_id.access_hash = document.access_hash;
         req.unsave = true;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C03423());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
-                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + document.f119id + "' AND type = 2").stepThis().dispose();
+                    MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + document.var_id + "' AND type = 2").stepThis().dispose();
                 } catch (Throwable e) {
                     FileLog.m14e(e);
                 }
@@ -866,7 +866,7 @@ public class DataQuery {
         boolean found = false;
         for (int a = 0; a < this.recentGifs.size(); a++) {
             Document image = (Document) this.recentGifs.get(a);
-            if (image.f119id == document.f119id) {
+            if (image.var_id == document.var_id) {
                 this.recentGifs.remove(a);
                 this.recentGifs.add(0, image);
                 found = true;
@@ -880,7 +880,7 @@ public class DataQuery {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     try {
-                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.f119id + "' AND type = 2").stepThis().dispose();
+                        MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.var_id + "' AND type = 2").stepThis().dispose();
                     } catch (Throwable e) {
                         FileLog.m14e(e);
                     }
@@ -905,9 +905,9 @@ public class DataQuery {
     }
 
     public TL_messages_stickerSet getGroupStickerSetById(StickerSet stickerSet) {
-        TL_messages_stickerSet set = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.f146id);
+        TL_messages_stickerSet set = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.var_id);
         if (set == null) {
-            set = (TL_messages_stickerSet) this.groupStickerSets.get(stickerSet.f146id);
+            set = (TL_messages_stickerSet) this.groupStickerSets.get(stickerSet.var_id);
             if (set == null || set.set == null) {
                 loadGroupStickerSet(stickerSet, true);
             } else if (set.set.hash != stickerSet.hash) {
@@ -918,7 +918,7 @@ public class DataQuery {
     }
 
     public void putGroupStickerSet(TL_messages_stickerSet stickerSet) {
-        this.groupStickerSets.put(stickerSet.set.f146id, stickerSet);
+        this.groupStickerSets.put(stickerSet.set.var_id, stickerSet);
     }
 
     private void loadGroupStickerSet(final StickerSet stickerSet, boolean cache) {
@@ -927,7 +927,7 @@ public class DataQuery {
                 public void run() {
                     try {
                         TL_messages_stickerSet set;
-                        SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized("SELECT document FROM web_recent_v3 WHERE id = 's_" + stickerSet.f146id + "'", new Object[0]);
+                        SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized("SELECT document FROM web_recent_v3 WHERE id = 's_" + stickerSet.var_id + "'", new Object[0]);
                         if (!cursor.next() || cursor.isNull(0)) {
                             set = null;
                         } else {
@@ -946,8 +946,8 @@ public class DataQuery {
                         if (set != null && set.set != null) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    DataQuery.this.groupStickerSets.put(set.set.f146id, set);
-                                    NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.f146id));
+                                    DataQuery.this.groupStickerSets.put(set.set.var_id, set);
+                                    NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.var_id));
                                 }
                             });
                         }
@@ -960,9 +960,9 @@ public class DataQuery {
         }
         TL_messages_getStickerSet req = new TL_messages_getStickerSet();
         req.stickerset = new TL_inputStickerSetID();
-        req.stickerset.f138id = stickerSet.f146id;
+        req.stickerset.var_id = stickerSet.var_id;
         req.stickerset.access_hash = stickerSet.access_hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C03957());
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
     }
 
     public HashMap<String, ArrayList<Document>> getAllStickers() {
@@ -1017,7 +1017,7 @@ public class DataQuery {
         for (int a = 0; a < Math.min(Callback.DEFAULT_DRAG_ANIMATION_DURATION, arrayList.size()); a++) {
             Document document = (Document) arrayList.get(a);
             if (document != null) {
-                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (document.f119id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) document.f119id))) % 2147483648L;
+                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (document.var_id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) document.var_id))) % 2147483648L;
             }
         }
         return (int) acc;
@@ -1190,7 +1190,7 @@ public class DataQuery {
                         while (a < count && a != maxCount) {
                             Document document = (Document) arrayList.get(a);
                             state.requery();
-                            state.bindString(1, TtmlNode.ANONYMOUS_REGION_ID + document.f119id);
+                            state.bindString(1, TtmlNode.ANONYMOUS_REGION_ID + document.var_id);
                             state.bindInteger(2, cacheType);
                             state.bindString(3, TtmlNode.ANONYMOUS_REGION_ID);
                             state.bindString(4, TtmlNode.ANONYMOUS_REGION_ID);
@@ -1213,7 +1213,7 @@ public class DataQuery {
                         if (arrayList.size() >= maxCount) {
                             database.beginTransaction();
                             for (a = maxCount; a < arrayList.size(); a++) {
-                                database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((Document) arrayList.get(a)).f119id + "' AND type = " + cacheType).stepThis().dispose();
+                                database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((Document) arrayList.get(a)).var_id + "' AND type = " + cacheType).stepThis().dispose();
                             }
                             database.commitTransaction();
                         }
@@ -1258,8 +1258,8 @@ public class DataQuery {
     public void reorderStickers(int type, final ArrayList<Long> order) {
         Collections.sort(this.stickerSets[type], new Comparator<TL_messages_stickerSet>() {
             public int compare(TL_messages_stickerSet lhs, TL_messages_stickerSet rhs) {
-                int index1 = order.indexOf(Long.valueOf(lhs.set.f146id));
-                int index2 = order.indexOf(Long.valueOf(rhs.set.f146id));
+                int index1 = order.indexOf(Long.valueOf(lhs.set.var_id));
+                int index2 = order.indexOf(Long.valueOf(rhs.set.var_id));
                 if (index1 > index2) {
                     return 1;
                 }
@@ -1279,17 +1279,17 @@ public class DataQuery {
     }
 
     public void addNewStickerSet(TL_messages_stickerSet set) {
-        if (this.stickerSetsById.indexOfKey(set.set.f146id) < 0 && !this.stickerSetsByName.containsKey(set.set.short_name)) {
+        if (this.stickerSetsById.indexOfKey(set.set.var_id) < 0 && !this.stickerSetsByName.containsKey(set.set.short_name)) {
             int a;
             int type = set.set.masks ? 1 : 0;
             this.stickerSets[type].add(0, set);
-            this.stickerSetsById.put(set.set.f146id, set);
-            this.installedStickerSetsById.put(set.set.f146id, set);
+            this.stickerSetsById.put(set.set.var_id, set);
+            this.installedStickerSetsById.put(set.set.var_id, set);
             this.stickerSetsByName.put(set.set.short_name, set);
             LongSparseArray<Document> stickersById = new LongSparseArray();
             for (a = 0; a < set.documents.size(); a++) {
                 Document document = (Document) set.documents.get(a);
-                stickersById.put(document.f119id, document);
+                stickersById.put(document.var_id, document);
             }
             for (a = 0; a < set.packs.size(); a++) {
                 TL_stickerPack stickerPack = (TL_stickerPack) set.packs.get(a);
@@ -1320,7 +1320,7 @@ public class DataQuery {
         if (!this.loadingFeaturedStickers) {
             this.loadingFeaturedStickers = true;
             if (cache) {
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C029814());
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new CLASSNAME());
                 return;
             }
             final TL_messages_getFeaturedStickers req = new TL_messages_getFeaturedStickers();
@@ -1343,7 +1343,7 @@ public class DataQuery {
     }
 
     private void processLoadedFeaturedStickers(ArrayList<StickerSetCovered> res, ArrayList<Long> unreadStickers, boolean cache, int date, int hash) {
-        AndroidUtilities.runOnUIThread(new C030116());
+        AndroidUtilities.runOnUIThread(new CLASSNAME());
         final boolean z = cache;
         final ArrayList<StickerSetCovered> arrayList = res;
         final int i = date;
@@ -1352,8 +1352,8 @@ public class DataQuery {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.DataQuery$17$1 */
-            class C03021 implements Runnable {
-                C03021() {
+            class CLASSNAME implements Runnable {
+                CLASSNAME() {
                 }
 
                 public void run() {
@@ -1365,8 +1365,8 @@ public class DataQuery {
             }
 
             /* renamed from: org.telegram.messenger.DataQuery$17$3 */
-            class C03043 implements Runnable {
-                C03043() {
+            class CLASSNAME implements Runnable {
+                CLASSNAME() {
                 }
 
                 public void run() {
@@ -1377,11 +1377,11 @@ public class DataQuery {
             public void run() {
                 long j = 1000;
                 if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    Runnable c03021 = new C03021();
+                    Runnable CLASSNAME = new CLASSNAME();
                     if (arrayList != null || z) {
                         j = 0;
                     }
-                    AndroidUtilities.runOnUIThread(c03021, j);
+                    AndroidUtilities.runOnUIThread(CLASSNAME, j);
                     if (arrayList == null) {
                         return;
                     }
@@ -1393,7 +1393,7 @@ public class DataQuery {
                         for (int a = 0; a < arrayList.size(); a++) {
                             StickerSetCovered stickerSet = (StickerSetCovered) arrayList.get(a);
                             stickerSetsNew.add(stickerSet);
-                            stickerSetsByIdNew.put(stickerSet.set.f146id, stickerSet);
+                            stickerSetsByIdNew.put(stickerSet.set.var_id, stickerSet);
                         }
                         if (!z) {
                             DataQuery.this.putFeaturedStickersToCache(stickerSetsNew, arrayList2, i, i2);
@@ -1413,7 +1413,7 @@ public class DataQuery {
                         FileLog.m14e(e);
                     }
                 } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C03043());
+                    AndroidUtilities.runOnUIThread(new CLASSNAME());
                     DataQuery.this.putFeaturedStickersToCache(null, null, i, 0);
                 }
             }
@@ -1475,8 +1475,8 @@ public class DataQuery {
         for (int a = 0; a < sets.size(); a++) {
             StickerSet set = ((StickerSetCovered) sets.get(a)).set;
             if (!set.archived) {
-                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.f146id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.f146id))) % 2147483648L;
-                if (this.unreadStickerSets.contains(Long.valueOf(set.f146id))) {
+                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.var_id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.var_id))) % 2147483648L;
+                if (this.unreadStickerSets.contains(Long.valueOf(set.var_id))) {
                     acc = (((acc * 20261) + 2147483648L) + 1) % 2147483648L;
                 }
             }
@@ -1491,7 +1491,7 @@ public class DataQuery {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.featuredStickersDidLoaded, new Object[0]);
             putFeaturedStickersToCache(this.featuredStickerSets, this.unreadStickerSets, this.loadFeaturedDate, this.loadFeaturedHash);
             if (query) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_readFeaturedStickers(), new C030719());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_readFeaturedStickers(), new CLASSNAME());
             }
         }
     }
@@ -1501,7 +1501,7 @@ public class DataQuery {
         for (int a = 0; a < this.featuredStickerSets.size(); a++) {
             StickerSet set = ((StickerSetCovered) this.featuredStickerSets.get(a)).set;
             if (!set.archived) {
-                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.f146id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.f146id))) % 2147483648L;
+                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.var_id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.var_id))) % 2147483648L;
             }
         }
         return (int) acc;
@@ -1511,8 +1511,8 @@ public class DataQuery {
         if (this.unreadStickerSets.contains(Long.valueOf(id)) && !this.readingStickerSets.contains(Long.valueOf(id))) {
             this.readingStickerSets.add(Long.valueOf(id));
             TL_messages_readFeaturedStickers req = new TL_messages_readFeaturedStickers();
-            req.f202id.add(Long.valueOf(id));
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C030920());
+            req.var_id.add(Long.valueOf(id));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     DataQuery.this.unreadStickerSets.remove(Long.valueOf(id));
@@ -1572,13 +1572,13 @@ public class DataQuery {
         LongSparseArray<TL_messages_stickerSet> newStickerSets = new LongSparseArray();
         for (int a = 0; a < res.sets.size(); a++) {
             final StickerSet stickerSet = (StickerSet) res.sets.get(a);
-            TL_messages_stickerSet oldSet = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.f146id);
+            TL_messages_stickerSet oldSet = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.var_id);
             if (oldSet == null || oldSet.set.hash != stickerSet.hash) {
                 newStickerArray.add(null);
                 final int index = a;
                 TL_messages_getStickerSet req = new TL_messages_getStickerSet();
                 req.stickerset = new TL_inputStickerSetID();
-                req.stickerset.f138id = stickerSet.f146id;
+                req.stickerset.var_id = stickerSet.var_id;
                 req.stickerset.access_hash = stickerSet.access_hash;
                 final LongSparseArray<TL_messages_stickerSet> longSparseArray = newStickerSets;
                 final TL_messages_allStickers tL_messages_allStickers = res;
@@ -1589,7 +1589,7 @@ public class DataQuery {
                             public void run() {
                                 TL_messages_stickerSet res1 = response;
                                 newStickerArray.set(index, res1);
-                                longSparseArray.put(stickerSet.f146id, res1);
+                                longSparseArray.put(stickerSet.var_id, res1);
                                 if (longSparseArray.size() == tL_messages_allStickers.sets.size()) {
                                     for (int a = 0; a < newStickerArray.size(); a++) {
                                         if (newStickerArray.get(a) == null) {
@@ -1606,7 +1606,7 @@ public class DataQuery {
                 oldSet.set.archived = stickerSet.archived;
                 oldSet.set.installed = stickerSet.installed;
                 oldSet.set.official = stickerSet.official;
-                newStickerSets.put(oldSet.set.f146id, oldSet);
+                newStickerSets.put(oldSet.set.var_id, oldSet);
                 newStickerArray.add(oldSet);
                 if (newStickerSets.size() == res.sets.size()) {
                     processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
@@ -1771,7 +1771,7 @@ public class DataQuery {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeSticker) {
                 if (attribute.stickerset instanceof TL_inputStickerSetID) {
-                    return attribute.stickerset.f138id;
+                    return attribute.stickerset.var_id;
                 }
                 return -1;
             }
@@ -1805,8 +1805,8 @@ public class DataQuery {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.DataQuery$28$1 */
-            class C03201 implements Runnable {
-                C03201() {
+            class CLASSNAME implements Runnable {
+                CLASSNAME() {
                 }
 
                 public void run() {
@@ -1818,8 +1818,8 @@ public class DataQuery {
             }
 
             /* renamed from: org.telegram.messenger.DataQuery$28$3 */
-            class C03223 implements Runnable {
-                C03223() {
+            class CLASSNAME implements Runnable {
+                CLASSNAME() {
                 }
 
                 public void run() {
@@ -1829,9 +1829,9 @@ public class DataQuery {
 
             public void run() {
                 if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
-                    C03201 c03201 = new C03201();
+                    CLASSNAME CLASSNAME = new CLASSNAME();
                     long j = (arrayList != null || z) ? 0 : 1000;
-                    AndroidUtilities.runOnUIThread(c03201, j);
+                    AndroidUtilities.runOnUIThread(CLASSNAME, j);
                     if (arrayList == null) {
                         return;
                     }
@@ -1849,12 +1849,12 @@ public class DataQuery {
                             if (stickerSet != null) {
                                 int b;
                                 stickerSetsNew.add(stickerSet);
-                                stickerSetsByIdNew.put(stickerSet.set.f146id, stickerSet);
+                                stickerSetsByIdNew.put(stickerSet.set.var_id, stickerSet);
                                 stickerSetsByNameNew.put(stickerSet.set.short_name, stickerSet);
                                 for (b = 0; b < stickerSet.documents.size(); b++) {
                                     Document document = (Document) stickerSet.documents.get(b);
                                     if (!(document == null || (document instanceof TL_documentEmpty))) {
-                                        stickersByIdNew.put(document.f119id, document);
+                                        stickersByIdNew.put(document.var_id, document);
                                     }
                                 }
                                 if (!stickerSet.set.archived) {
@@ -1890,8 +1890,8 @@ public class DataQuery {
                                 int a;
                                 for (a = 0; a < DataQuery.this.stickerSets[i3].size(); a++) {
                                     StickerSet set = ((TL_messages_stickerSet) DataQuery.this.stickerSets[i3].get(a)).set;
-                                    DataQuery.this.stickerSetsById.remove(set.f146id);
-                                    DataQuery.this.installedStickerSetsById.remove(set.f146id);
+                                    DataQuery.this.stickerSetsById.remove(set.var_id);
+                                    DataQuery.this.installedStickerSetsById.remove(set.var_id);
                                     DataQuery.this.stickerSetsByName.remove(set.short_name);
                                 }
                                 for (a = 0; a < stickerSetsByIdNew.size(); a++) {
@@ -1917,7 +1917,7 @@ public class DataQuery {
                         FileLog.m14e(e);
                     }
                 } else if (!z) {
-                    AndroidUtilities.runOnUIThread(new C03223());
+                    AndroidUtilities.runOnUIThread(new CLASSNAME());
                     DataQuery.this.putStickersToCache(i3, null, i, 0);
                 }
             }
@@ -1931,7 +1931,7 @@ public class DataQuery {
         final int type = stickerSet.masks ? 1 : 0;
         TL_inputStickerSetID stickerSetID = new TL_inputStickerSetID();
         stickerSetID.access_hash = stickerSet.access_hash;
-        stickerSetID.f138id = stickerSet.f146id;
+        stickerSetID.var_id = stickerSet.var_id;
         if (hide != 0) {
             TL_messages_installStickerSet req;
             final int i;
@@ -1940,13 +1940,13 @@ public class DataQuery {
             stickerSet.archived = hide == 1;
             for (int a = 0; a < this.stickerSets[type].size(); a++) {
                 TL_messages_stickerSet set = (TL_messages_stickerSet) this.stickerSets[type].get(a);
-                if (set.set.f146id == stickerSet.f146id) {
+                if (set.set.var_id == stickerSet.var_id) {
                     this.stickerSets[type].remove(a);
                     if (hide == 2) {
                         this.stickerSets[type].add(0, set);
                     } else {
-                        this.stickerSetsById.remove(set.set.f146id);
-                        this.installedStickerSetsById.remove(set.set.f146id);
+                        this.stickerSetsById.remove(set.set.var_id);
+                        this.installedStickerSetsById.remove(set.set.var_id);
                         this.stickerSetsByName.remove(set.set.short_name);
                     }
                     this.loadHash[type] = calcStickersHash(this.stickerSets[type]);
@@ -1961,8 +1961,8 @@ public class DataQuery {
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                         /* renamed from: org.telegram.messenger.DataQuery$29$2 */
-                        class C03252 implements Runnable {
-                            C03252() {
+                        class CLASSNAME implements Runnable {
+                            CLASSNAME() {
                             }
 
                             public void run() {
@@ -1981,7 +1981,7 @@ public class DataQuery {
                                     }
                                 }
                             });
-                            AndroidUtilities.runOnUIThread(new C03252(), 1000);
+                            AndroidUtilities.runOnUIThread(new CLASSNAME(), 1000);
                         }
                     });
                     return;
@@ -2010,13 +2010,13 @@ public class DataQuery {
                         try {
                             if (error == null) {
                                 if (stickerSet.masks) {
-                                    Toast.makeText(context, LocaleController.getString("MasksRemoved", C0541R.string.MasksRemoved), 0).show();
+                                    Toast.makeText(context, LocaleController.getString("MasksRemoved", CLASSNAMER.string.MasksRemoved), 0).show();
                                 } else {
-                                    Toast.makeText(context, LocaleController.getString("StickersRemoved", C0541R.string.StickersRemoved), 0).show();
+                                    Toast.makeText(context, LocaleController.getString("StickersRemoved", CLASSNAMER.string.StickersRemoved), 0).show();
                                 }
                                 DataQuery.this.loadStickers(type, false, true);
                             }
-                            Toast.makeText(context, LocaleController.getString("ErrorOccurred", C0541R.string.ErrorOccurred), 0).show();
+                            Toast.makeText(context, LocaleController.getString("ErrorOccurred", CLASSNAMER.string.ErrorOccurred), 0).show();
                             DataQuery.this.loadStickers(type, false, true);
                         } catch (Throwable e) {
                             FileLog.m14e(e);
@@ -2127,7 +2127,7 @@ public class DataQuery {
                     req.peer = inputPeer;
                     this.lastMergeDialogId = mergeDialogId;
                     req.limit = 1;
-                    req.f207q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+                    req.var_q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
                     if (user != null) {
                         req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
                         req.flags |= 1;
@@ -2148,7 +2148,7 @@ public class DataQuery {
                                             messages_Messages res = response;
                                             DataQuery.this.messagesSearchEndReached[1] = res.messages.isEmpty();
                                             DataQuery.this.messagesSearchCount[1] = res instanceof TL_messages_messagesSlice ? res.count : res.messages.size();
-                                            DataQuery.this.searchMessagesInChat(req.f207q, j, j2, i, i2, true, user2);
+                                            DataQuery.this.searchMessagesInChat(req.var_q, j, j2, i, i2, true, user2);
                                         }
                                     }
                                 }
@@ -2167,7 +2167,7 @@ public class DataQuery {
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) queryWithDialog);
         if (req.peer != null) {
             req.limit = 21;
-            req.f207q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
+            req.var_q = query != null ? query : TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
             if (user != null) {
                 req.from_id = MessagesController.getInstance(this.currentAccount).getInputUser(user);
@@ -2275,7 +2275,7 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f207q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.var_q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
             final int i = count;
@@ -2321,7 +2321,7 @@ public class DataQuery {
         } else if (type == 4) {
             req.filter = new TL_inputMessagesFilterMusic();
         }
-        req.f207q = TtmlNode.ANONYMOUS_REGION_ID;
+        req.var_q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
             final long j = uid;
@@ -2422,7 +2422,7 @@ public class DataQuery {
         SparseArray<User> usersDict = new SparseArray();
         for (a = 0; a < res.users.size(); a++) {
             User u = (User) res.users.get(a);
-            usersDict.put(u.f228id, u);
+            usersDict.put(u.var_id, u);
         }
         final ArrayList<MessageObject> objects = new ArrayList();
         for (a = 0; a < res.messages.size(); a++) {
@@ -2624,7 +2624,7 @@ public class DataQuery {
                             Message message = Message.TLdeserialize(data, data.readInt32(false), false);
                             message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                             data.reuse();
-                            message.f139id = cursor.intValue(1);
+                            message.var_id = cursor.intValue(1);
                             message.dialog_id = j;
                             if (((int) j) == 0) {
                                 message.random_id = cursor.longValue(2);
@@ -2683,7 +2683,7 @@ public class DataQuery {
                     while (it.hasNext()) {
                         Message message = (Message) it.next();
                         if (DataQuery.canAddMessageToMedia(message)) {
-                            long messageId = (long) message.f139id;
+                            long messageId = (long) message.var_id;
                             if (message.to_id.channel_id != 0) {
                                 messageId |= ((long) message.to_id.channel_id) << 32;
                             }
@@ -2702,7 +2702,7 @@ public class DataQuery {
                     state2.dispose();
                     if (!(z && i == 0)) {
                         if (!z) {
-                            minId = ((Message) arrayList.get(arrayList.size() - 1)).f139id;
+                            minId = ((Message) arrayList.get(arrayList.size() - 1)).var_id;
                         }
                         if (i != 0) {
                             MessagesStorage.getInstance(DataQuery.this.currentAccount).closeHolesInMedia(j, minId, i, i2);
@@ -2738,7 +2738,7 @@ public class DataQuery {
                             message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                             data.reuse();
                             if (MessageObject.isMusicMessage(message)) {
-                                message.f139id = cursor.intValue(1);
+                                message.var_id = cursor.intValue(1);
                                 message.dialog_id = j;
                                 arrayList.add(0, new MessageObject(DataQuery.this.currentAccount, message, false));
                             }
@@ -2807,7 +2807,7 @@ public class DataQuery {
                         Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
                         intent.setAction("new_dialog");
                         ArrayList<ShortcutInfo> arrayList = new ArrayList();
-                        arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", C0541R.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", C0541R.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0541R.drawable.shortcut_compose)).setIntent(intent).build());
+                        arrayList.add(new Builder(ApplicationLoader.applicationContext, "compose").setShortLabel(LocaleController.getString("NewConversationShortcut", CLASSNAMER.string.NewConversationShortcut)).setLongLabel(LocaleController.getString("NewConversationShortcut", CLASSNAMER.string.NewConversationShortcut)).setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, CLASSNAMER.drawable.shortcut_compose)).setIntent(intent).build());
                         if (shortcutsToUpdate.contains("compose")) {
                             shortcutManager.updateShortcuts(arrayList);
                         } else {
@@ -2886,7 +2886,7 @@ public class DataQuery {
                                 if (bitmap != null) {
                                     builder.setIcon(Icon.createWithBitmap(bitmap));
                                 } else {
-                                    builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0541R.drawable.shortcut_user));
+                                    builder.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, CLASSNAMER.drawable.shortcut_user));
                                 }
                                 arrayList.add(builder.build());
                                 if (shortcutsToUpdate.contains(id)) {
@@ -2917,10 +2917,10 @@ public class DataQuery {
                 req.bots_inline = true;
                 req.offset = 0;
                 req.limit = 20;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C035344());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
             } else if (!this.loaded) {
                 this.loading = true;
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C034843());
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new CLASSNAME());
                 this.loaded = true;
             }
         }
@@ -2931,7 +2931,7 @@ public class DataQuery {
         this.inlineBots.clear();
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C035445());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new CLASSNAME());
         buildShortcuts();
     }
 
@@ -2958,7 +2958,7 @@ public class DataQuery {
                 this.inlineBots.add(peer);
             }
             peer.rating += Math.exp((double) (dt / MessagesController.getInstance(this.currentAccount).ratingDecay));
-            Collections.sort(this.inlineBots, new C035546());
+            Collections.sort(this.inlineBots, new CLASSNAME());
             if (this.inlineBots.size() > 20) {
                 this.inlineBots.remove(this.inlineBots.size() - 1);
             }
@@ -2974,7 +2974,7 @@ public class DataQuery {
                 TL_contacts_resetTopPeerRating req = new TL_contacts_resetTopPeerRating();
                 req.category = new TL_topPeerCategoryBotsInline();
                 req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(uid);
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C035647());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
                 deletePeer(uid, 1);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
                 return;
@@ -2991,7 +2991,7 @@ public class DataQuery {
                 req.category = new TL_topPeerCategoryCorrespondents();
                 req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(uid);
                 deletePeer(uid, 0);
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C035748());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
                 return;
             }
         }
@@ -3025,8 +3025,8 @@ public class DataQuery {
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.DataQuery$49$1$1 */
-                                class C03581 implements Comparator<TL_topPeer> {
-                                    C03581() {
+                                class CLASSNAME implements Comparator<TL_topPeer> {
+                                    CLASSNAME() {
                                     }
 
                                     public int compare(TL_topPeer lhs, TL_topPeer rhs) {
@@ -3061,7 +3061,7 @@ public class DataQuery {
                                         DataQuery.this.hints.add(peer);
                                     }
                                     peer.rating += Math.exp(dtFinal / ((double) MessagesController.getInstance(DataQuery.this.currentAccount).ratingDecay));
-                                    Collections.sort(DataQuery.this.hints, new C03581());
+                                    Collections.sort(DataQuery.this.hints, new CLASSNAME());
                                     DataQuery.this.savePeer((int) did, 0, peer.rating);
                                     NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
                                 }
@@ -3160,7 +3160,7 @@ public class DataQuery {
                         photo = chat.photo.photo_small;
                     }
                 } else if (UserObject.isUserSelf(user)) {
-                    name = LocaleController.getString("SavedMessages", C0541R.string.SavedMessages);
+                    name = LocaleController.getString("SavedMessages", CLASSNAMER.string.SavedMessages);
                     selfUser = true;
                 } else {
                     name = ContactsController.formatName(user.first_name, user.last_name);
@@ -3201,7 +3201,7 @@ public class DataQuery {
                             canvas.drawRoundRect(bitmapRect, (float) bitmap.getWidth(), (float) bitmap.getHeight(), roundPaint);
                             canvas.restore();
                         }
-                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(C0541R.drawable.book_logo);
+                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(CLASSNAMER.drawable.book_logo);
                         int w = AndroidUtilities.m10dp(15.0f);
                         int left = (size - w) - AndroidUtilities.m10dp(2.0f);
                         int top = (size - w) - AndroidUtilities.m10dp(2.0f);
@@ -3220,15 +3220,15 @@ public class DataQuery {
                         pinShortcutInfo.setIcon(Icon.createWithBitmap(bitmap));
                     } else if (user != null) {
                         if (user.bot) {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0541R.drawable.book_bot));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, CLASSNAMER.drawable.book_bot));
                         } else {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0541R.drawable.book_user));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, CLASSNAMER.drawable.book_user));
                         }
                     } else if (chat != null) {
                         if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0541R.drawable.book_group));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, CLASSNAMER.drawable.book_group));
                         } else {
-                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, C0541R.drawable.book_channel));
+                            pinShortcutInfo.setIcon(Icon.createWithResource(ApplicationLoader.applicationContext, CLASSNAMER.drawable.book_channel));
                         }
                     }
                     ((ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class)).requestPinShortcut(pinShortcutInfo.build(), null);
@@ -3239,15 +3239,15 @@ public class DataQuery {
                     addIntent.putExtra("android.intent.extra.shortcut.ICON", bitmap);
                 } else if (user != null) {
                     if (user.bot) {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0541R.drawable.book_bot));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, CLASSNAMER.drawable.book_bot));
                     } else {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0541R.drawable.book_user));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, CLASSNAMER.drawable.book_user));
                     }
                 } else if (chat != null) {
                     if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0541R.drawable.book_group));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, CLASSNAMER.drawable.book_group));
                     } else {
-                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, C0541R.drawable.book_channel));
+                        addIntent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, CLASSNAMER.drawable.book_channel));
                     }
                 }
                 addIntent.putExtra("android.intent.extra.shortcut.INTENT", shortcutIntent);
@@ -3338,7 +3338,7 @@ public class DataQuery {
                     if (result.action instanceof TL_messageActionHistoryClear) {
                         result = null;
                     } else {
-                        result.f139id = cursor.intValue(1);
+                        result.var_id = cursor.intValue(1);
                         result.date = cursor.intValue(2);
                         result.dialog_id = (long) (-channelId);
                         MessagesStorage.addUsersAndChatsFromMessage(result, usersToLoad, chatsToLoad);
@@ -3354,7 +3354,7 @@ public class DataQuery {
                         result = Message.TLdeserialize(data, data.readInt32(false), false);
                         result.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
-                        if (result.f139id != mid || (result.action instanceof TL_messageActionHistoryClear)) {
+                        if (result.var_id != mid || (result.action instanceof TL_messageActionHistoryClear)) {
                             result = null;
                         } else {
                             result.dialog_id = (long) (-channelId);
@@ -3367,7 +3367,7 @@ public class DataQuery {
             if (result == null) {
                 TL_channels_getMessages req = new TL_channels_getMessages();
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-                req.f155id.add(Integer.valueOf(mid));
+                req.var_id.add(Integer.valueOf(mid));
                 final int i = channelId;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
@@ -3415,7 +3415,7 @@ public class DataQuery {
                     result.serializeToStream(data);
                     state.requery();
                     state.bindInteger(1, result.to_id.channel_id);
-                    state.bindInteger(2, result.f139id);
+                    state.bindInteger(2, result.var_id);
                     state.bindByteBuffer(3, data);
                     state.step();
                     data.reuse();
@@ -3433,12 +3433,12 @@ public class DataQuery {
         SparseArray usersDict = new SparseArray();
         for (a = 0; a < users.size(); a++) {
             User user = (User) users.get(a);
-            usersDict.put(user.f228id, user);
+            usersDict.put(user.var_id, user);
         }
         SparseArray chatsDict = new SparseArray();
         for (a = 0; a < chats.size(); a++) {
             Chat chat = (Chat) chats.get(a);
-            chatsDict.put(chat.f113id, chat);
+            chatsDict.put(chat.var_id, chat);
         }
         if (returnValue) {
             return new MessageObject(this.currentAccount, result, usersDict, chatsDict, false);
@@ -3498,8 +3498,8 @@ public class DataQuery {
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.DataQuery$57$1 */
-                    class C03691 implements Runnable {
-                        C03691() {
+                    class CLASSNAME implements Runnable {
+                        CLASSNAME() {
                         }
 
                         public void run() {
@@ -3518,7 +3518,7 @@ public class DataQuery {
                                     Message message = Message.TLdeserialize(data, data.readInt32(false), false);
                                     message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                                     data.reuse();
-                                    message.f139id = cursor.intValue(1);
+                                    message.var_id = cursor.intValue(1);
                                     message.date = cursor.intValue(2);
                                     message.dialog_id = j;
                                     long value = cursor.longValue(3);
@@ -3547,7 +3547,7 @@ public class DataQuery {
                                     }
                                 }
                             }
-                            AndroidUtilities.runOnUIThread(new C03691());
+                            AndroidUtilities.runOnUIThread(new CLASSNAME());
                         } catch (Throwable e) {
                             FileLog.m14e(e);
                         }
@@ -3591,8 +3591,8 @@ public class DataQuery {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.DataQuery$58$1 */
-                class C03711 implements RequestDelegate {
-                    C03711() {
+                class CLASSNAME implements RequestDelegate {
+                    CLASSNAME() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -3608,8 +3608,8 @@ public class DataQuery {
                 }
 
                 /* renamed from: org.telegram.messenger.DataQuery$58$2 */
-                class C03722 implements RequestDelegate {
-                    C03722() {
+                class CLASSNAME implements RequestDelegate {
+                    CLASSNAME() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -3638,12 +3638,12 @@ public class DataQuery {
                                 Message message = Message.TLdeserialize(data, data.readInt32(false), false);
                                 message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                                 data.reuse();
-                                message.f139id = cursor.intValue(1);
+                                message.var_id = cursor.intValue(1);
                                 message.date = cursor.intValue(2);
                                 message.dialog_id = j2;
                                 MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                                 result.add(message);
-                                replyMessages2.remove(Integer.valueOf(message.f139id));
+                                replyMessages2.remove(Integer.valueOf(message.var_id));
                             }
                         }
                         cursor.dispose();
@@ -3658,13 +3658,13 @@ public class DataQuery {
                             if (channelIdFinal != 0) {
                                 TL_channels_getMessages req = new TL_channels_getMessages();
                                 req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
-                                req.f155id = replyMessages2;
-                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C03711());
+                                req.var_id = replyMessages2;
+                                ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new CLASSNAME());
                                 return;
                             }
                             TL_messages_getMessages req2 = new TL_messages_getMessages();
-                            req2.f200id = replyMessages2;
-                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C03722());
+                            req2.var_id = replyMessages2;
+                            ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new CLASSNAME());
                         }
                     } catch (Throwable e) {
                         FileLog.m14e(e);
@@ -3682,7 +3682,7 @@ public class DataQuery {
                     SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("UPDATE messages SET replydata = ? WHERE mid = ?");
                     for (int a = 0; a < result.size(); a++) {
                         Message message = (Message) result.get(a);
-                        ArrayList<MessageObject> messageObjects = (ArrayList) replyMessageOwners.get(message.f139id);
+                        ArrayList<MessageObject> messageObjects = (ArrayList) replyMessageOwners.get(message.var_id);
                         if (messageObjects != null) {
                             NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
                             message.serializeToStream(data);
@@ -3714,12 +3714,12 @@ public class DataQuery {
         final SparseArray<User> usersDict = new SparseArray();
         for (a = 0; a < users.size(); a++) {
             User user = (User) users.get(a);
-            usersDict.put(user.f228id, user);
+            usersDict.put(user.var_id, user);
         }
         final SparseArray<Chat> chatsDict = new SparseArray();
         for (a = 0; a < chats.size(); a++) {
             Chat chat = (Chat) chats.get(a);
-            chatsDict.put(chat.f113id, chat);
+            chatsDict.put(chat.var_id, chat);
         }
         final ArrayList<User> arrayList = users;
         final boolean z = isCache;
@@ -3734,7 +3734,7 @@ public class DataQuery {
                 boolean changed = false;
                 for (int a = 0; a < arrayList3.size(); a++) {
                     Message message = (Message) arrayList3.get(a);
-                    ArrayList<MessageObject> arrayList = (ArrayList) sparseArray.get(message.f139id);
+                    ArrayList<MessageObject> arrayList = (ArrayList) sparseArray.get(message.var_id);
                     if (arrayList != null) {
                         MessageObject messageObject = new MessageObject(DataQuery.this.currentAccount, message, usersDict, chatsDict, false);
                         for (int b = 0; b < arrayList.size(); b++) {
@@ -4024,7 +4024,7 @@ public class DataQuery {
     public void loadDrafts() {
         if (!UserConfig.getInstance(this.currentAccount).draftsLoaded && !this.loadingDrafts) {
             this.loadingDrafts = true;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getAllDrafts(), new C037961());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getAllDrafts(), new CLASSNAME());
         }
     }
 
@@ -4051,7 +4051,7 @@ public class DataQuery {
         draftMessage.message = message == null ? TtmlNode.ANONYMOUS_REGION_ID : message.toString();
         draftMessage.no_webpage = noWebpage;
         if (replyToMessage != null) {
-            draftMessage.reply_to_msg_id = replyToMessage.f139id;
+            draftMessage.reply_to_msg_id = replyToMessage.var_id;
             draftMessage.flags |= 1;
         }
         if (!(entities == null || entities.isEmpty())) {
@@ -4078,7 +4078,7 @@ public class DataQuery {
                 req.reply_to_msg_id = draftMessage.reply_to_msg_id;
                 req.entities = draftMessage.entities;
                 req.flags = draftMessage.flags;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C038062());
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CLASSNAME());
             } else {
                 return;
             }
@@ -4130,8 +4130,8 @@ public class DataQuery {
                     int channelIdFinal;
                     long messageId = (long) draft.reply_to_msg_id;
                     if (ChatObject.isChannel(chat)) {
-                        messageId |= ((long) chat.f113id) << 32;
-                        channelIdFinal = chat.f113id;
+                        messageId |= ((long) chat.var_id) << 32;
+                        channelIdFinal = chat.var_id;
                     } else {
                         channelIdFinal = 0;
                     }
@@ -4140,8 +4140,8 @@ public class DataQuery {
                     MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                         /* renamed from: org.telegram.messenger.DataQuery$63$1 */
-                        class C03811 implements RequestDelegate {
-                            C03811() {
+                        class CLASSNAME implements RequestDelegate {
+                            CLASSNAME() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -4155,8 +4155,8 @@ public class DataQuery {
                         }
 
                         /* renamed from: org.telegram.messenger.DataQuery$63$2 */
-                        class C03822 implements RequestDelegate {
-                            C03822() {
+                        class CLASSNAME implements RequestDelegate {
+                            CLASSNAME() {
                             }
 
                             public void run(TLObject response, TL_error error) {
@@ -4187,12 +4187,12 @@ public class DataQuery {
                                 } else if (channelIdFinal != 0) {
                                     TL_channels_getMessages req = new TL_channels_getMessages();
                                     req.channel = MessagesController.getInstance(DataQuery.this.currentAccount).getInputChannel(channelIdFinal);
-                                    req.f155id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new C03811());
+                                    req.var_id.add(Integer.valueOf((int) messageIdFinal));
+                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new CLASSNAME());
                                 } else {
                                     TL_messages_getMessages req2 = new TL_messages_getMessages();
-                                    req2.f200id.add(Integer.valueOf((int) messageIdFinal));
-                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new C03822());
+                                    req2.var_id.add(Integer.valueOf((int) messageIdFinal));
+                                    ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req2, new CLASSNAME());
                                 }
                             } catch (Throwable e) {
                                 FileLog.m14e(e);
@@ -4210,7 +4210,7 @@ public class DataQuery {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     DraftMessage draftMessage = (DraftMessage) DataQuery.this.drafts.get(did);
-                    if (draftMessage != null && draftMessage.reply_to_msg_id == message.f139id) {
+                    if (draftMessage != null && draftMessage.reply_to_msg_id == message.var_id) {
                         DataQuery.this.draftMessages.put(did, message);
                         SerializedData serializedData = new SerializedData(message.getObjectSize());
                         message.serializeToStream(serializedData);
@@ -4351,13 +4351,13 @@ public class DataQuery {
                     mid = cursor.intValue(0);
                 }
                 cursor.dispose();
-                if (mid < message.f139id) {
+                if (mid < message.var_id) {
                     SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO bot_keyboard VALUES(?, ?, ?)");
                     state.requery();
                     NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
                     message.serializeToStream(data);
                     state.bindLong(1, did);
-                    state.bindInteger(2, message.f139id);
+                    state.bindInteger(2, message.var_id);
                     state.bindByteBuffer(3, data);
                     state.step();
                     data.reuse();
@@ -4367,9 +4367,9 @@ public class DataQuery {
                             Message old = (Message) DataQuery.this.botKeyboards.get(did);
                             DataQuery.this.botKeyboards.put(did, message);
                             if (old != null) {
-                                DataQuery.this.botKeyboardsByMids.delete(old.f139id);
+                                DataQuery.this.botKeyboardsByMids.delete(old.var_id);
                             }
-                            DataQuery.this.botKeyboardsByMids.put(message.f139id, did);
+                            DataQuery.this.botKeyboardsByMids.put(message.var_id, did);
                             NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, message, Long.valueOf(did));
                         }
                     });

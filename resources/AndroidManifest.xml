@@ -70,7 +70,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"/>
-    <application android:theme="@style/Theme_TMessages_Start" android:label="@string/AppName" android:icon="@c0539drawable/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@c0539drawable/ic_launcher" android:appComponentFactory="android.support.v4.app.CoreComponentFactory">
+    <application android:theme="@style/Theme_TMessages_Start" android:label="@string/AppName" android:icon="@CLASSNAMEdrawable/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@CLASSNAMEdrawable/ic_launcher" android:appComponentFactory="android.support.v4.app.CoreComponentFactory">
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"/>
         <service android:name="org.telegram.messenger.GcmPushListenerService">
             <intent-filter>
@@ -143,7 +143,7 @@
                 <data android:scheme="http" android:host="t.me"/>
                 <data android:scheme="https" android:host="t.me"/>
             </intent-filter>
-            <intent-filter android:icon="@c0539drawable/ic_launcher" android:priority="1">
+            <intent-filter android:icon="@CLASSNAMEdrawable/ic_launcher" android:priority="1">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -152,7 +152,7 @@
             <meta-data android:name="android.service.chooser.chooser_target_service" android:value=".TgChooserTargetService"/>
         </activity>
         <activity android:theme="@style/Theme_TMessages_Transparent" android:name="org.telegram.p005ui.ShareActivity" android:stateNotNeeded="true" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
-            <intent-filter android:icon="@c0539drawable/ic_launcher" android:priority="1">
+            <intent-filter android:icon="@CLASSNAMEdrawable/ic_launcher" android:priority="1">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -160,7 +160,7 @@
             </intent-filter>
         </activity>
         <activity android:name="org.telegram.p005ui.ExternalActionActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
-            <intent-filter android:icon="@c0539drawable/ic_launcher">
+            <intent-filter android:icon="@CLASSNAMEdrawable/ic_launcher">
                 <action android:name="org.telegram.passport.AUTHORIZE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
@@ -291,7 +291,7 @@
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H" android:value="598dp"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:value="632dp"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:value="598dp"/>
-        <meta-data android:name="com.google.android.gms.car.notification.SmallIcon" android:resource="@c0539drawable/ic_player"/>
+        <meta-data android:name="com.google.android.gms.car.notification.SmallIcon" android:resource="@CLASSNAMEdrawable/ic_player"/>
         <meta-data android:name="com.google.android.gms.car.application" android:resource="@xml/automotive_app_desc"/>
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="face"/>
         <meta-data android:name="com.samsung.android.icon_container.has_icon_container" android:value="true"/>

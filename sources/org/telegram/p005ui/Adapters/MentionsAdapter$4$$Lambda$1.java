@@ -2,21 +2,21 @@ package org.telegram.p005ui.Adapters;
 
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
-import org.telegram.p005ui.Adapters.MentionsAdapter.C07574;
+import org.telegram.p005ui.Adapters.MentionsAdapter.CLASSNAME;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$4$$Lambda$1 */
 final /* synthetic */ class MentionsAdapter$4$$Lambda$1 implements Runnable {
-    private final C07574 arg$1;
+    private final CLASSNAME arg$1;
     private final String arg$2;
     private final TL_error arg$3;
     private final TLObject arg$4;
     private final MessagesController arg$5;
     private final MessagesStorage arg$6;
 
-    MentionsAdapter$4$$Lambda$1(C07574 c07574, String str, TL_error tL_error, TLObject tLObject, MessagesController messagesController, MessagesStorage messagesStorage) {
-        this.arg$1 = c07574;
+    MentionsAdapter$4$$Lambda$1(CLASSNAME CLASSNAME, String str, TL_error tL_error, TLObject tLObject, MessagesController messagesController, MessagesStorage messagesStorage) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = str;
         this.arg$3 = tL_error;
         this.arg$4 = tLObject;

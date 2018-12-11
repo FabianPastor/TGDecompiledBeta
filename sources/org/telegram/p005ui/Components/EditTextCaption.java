@@ -24,7 +24,7 @@ import android.view.View.MeasureSpec;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.FrameLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
@@ -85,7 +85,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         int start;
         int end;
         Builder builder = new Builder(getContext());
-        builder.setTitle(LocaleController.getString("CreateLink", C0541R.string.CreateLink));
+        builder.setTitle(LocaleController.getString("CreateLink", CLASSNAMER.string.CreateLink));
         final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.m10dp(64.0f), NUM));
@@ -94,7 +94,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         editText.setTextSize(1, 18.0f);
         editText.setText("http://");
         editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        editText.setHintText(LocaleController.getString("URL", C0541R.string.URL));
+        editText.setHintText(LocaleController.getString("URL", CLASSNAMER.string.URL));
         editText.setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
         editText.setSingleLine(true);
         editText.setFocusable(true);
@@ -114,7 +114,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             this.selectionEnd = -1;
             this.selectionStart = -1;
         }
-        builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), new OnClickListener() {
+        builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Editable editable = EditTextCaption.this.getText();
                 CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
@@ -137,7 +137,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 }
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
         builder.show().setOnShowListener(new OnShowListener() {
             public void onShow(DialogInterface dialog) {
                 editText.requestFocus();
@@ -223,23 +223,23 @@ public class EditTextCaption extends EditTextBoldCursor {
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 boolean z = true;
-                if (item.getItemId() == C0541R.id.menu_regular) {
+                if (item.getItemId() == CLASSNAMER.id.menu_regular) {
                     EditTextCaption.this.makeSelectedRegular();
                     mode.finish();
                     return z;
-                } else if (item.getItemId() == C0541R.id.menu_bold) {
+                } else if (item.getItemId() == CLASSNAMER.id.menu_bold) {
                     EditTextCaption.this.makeSelectedBold();
                     mode.finish();
                     return z;
-                } else if (item.getItemId() == C0541R.id.menu_italic) {
+                } else if (item.getItemId() == CLASSNAMER.id.menu_italic) {
                     EditTextCaption.this.makeSelectedItalic();
                     mode.finish();
                     return z;
-                } else if (item.getItemId() == C0541R.id.menu_mono) {
+                } else if (item.getItemId() == CLASSNAMER.id.menu_mono) {
                     EditTextCaption.this.makeSelectedMono();
                     mode.finish();
                     return z;
-                } else if (item.getItemId() == C0541R.id.menu_link) {
+                } else if (item.getItemId() == CLASSNAMER.id.menu_link) {
                     EditTextCaption.this.makeSelectedUrl();
                     mode.finish();
                     return z;

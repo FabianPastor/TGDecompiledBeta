@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.telegram.PhoneFormat.C0216PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
@@ -114,13 +114,13 @@ public class PhonebookAdapter extends SectionsAdapter {
                         user = contact.user;
                     } else {
                         userCell.setCurrentId(contact.contact_id);
-                        userCell.setData(null, ContactsController.formatName(contact.first_name, contact.last_name), contact.phones.isEmpty() ? TtmlNode.ANONYMOUS_REGION_ID : C0216PhoneFormat.getInstance().format((String) contact.phones.get(0)), 0);
+                        userCell.setData(null, ContactsController.formatName(contact.first_name, contact.last_name), contact.phones.isEmpty() ? TtmlNode.ANONYMOUS_REGION_ID : CLASSNAMEPhoneFormat.getInstance().format((String) contact.phones.get(0)), 0);
                     }
                 } else {
                     user = (User) object;
                 }
                 if (user != null) {
-                    userCell.setData(user, null, C0216PhoneFormat.getInstance().format("+" + user.phone), 0);
+                    userCell.setData(user, null, CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone), 0);
                     return;
                 }
                 return;

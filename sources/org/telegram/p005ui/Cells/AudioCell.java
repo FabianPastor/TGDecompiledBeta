@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
@@ -142,7 +142,7 @@ public class AudioCell extends FrameLayout {
             i3 = 5;
         }
         addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
-        this.checkBox = new CheckBox(context, C0541R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, CLASSNAMER.drawable.round_check2);
         this.checkBox.setVisibility(0);
         this.checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
         view2 = this.checkBox;
@@ -175,7 +175,7 @@ public class AudioCell extends FrameLayout {
 
     private void setPlayDrawable(boolean play) {
         Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m10dp(46.0f), Theme.getColor(Theme.key_musicPicker_buttonBackground), Theme.getColor(Theme.key_musicPicker_buttonBackground));
-        Drawable drawable = getResources().getDrawable(play ? C0541R.drawable.audiosend_pause : C0541R.drawable.audiosend_play);
+        Drawable drawable = getResources().getDrawable(play ? CLASSNAMER.drawable.audiosend_pause : CLASSNAMER.drawable.audiosend_play);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_musicPicker_buttonIcon), Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
         combinedDrawable.setCustomSize(AndroidUtilities.m10dp(46.0f), AndroidUtilities.m10dp(46.0f));

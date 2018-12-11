@@ -12,8 +12,8 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 
 /* renamed from: org.telegram.PhoneFormat.PhoneFormat */
-public class C0216PhoneFormat {
-    private static volatile C0216PhoneFormat Instance = null;
+public class CLASSNAMEPhoneFormat {
+    private static volatile CLASSNAMEPhoneFormat Instance = null;
     public ByteBuffer buffer;
     public HashMap<String, ArrayList<String>> callingCodeCountries;
     public HashMap<String, CallingCodeInfo> callingCodeData;
@@ -24,15 +24,15 @@ public class C0216PhoneFormat {
     public String defaultCountry;
     private boolean initialzed = false;
 
-    public static C0216PhoneFormat getInstance() {
+    public static CLASSNAMEPhoneFormat getInstance() {
         Throwable th;
-        C0216PhoneFormat localInstance = Instance;
+        CLASSNAMEPhoneFormat localInstance = Instance;
         if (localInstance == null) {
-            synchronized (C0216PhoneFormat.class) {
+            synchronized (CLASSNAMEPhoneFormat.class) {
                 try {
                     localInstance = Instance;
                     if (localInstance == null) {
-                        C0216PhoneFormat localInstance2 = new C0216PhoneFormat();
+                        CLASSNAMEPhoneFormat localInstance2 = new CLASSNAMEPhoneFormat();
                         try {
                             Instance = localInstance2;
                             localInstance = localInstance2;
@@ -80,14 +80,14 @@ public class C0216PhoneFormat {
     }
 
     public static String stripExceptNumbers(String str) {
-        return C0216PhoneFormat.stripExceptNumbers(str, false);
+        return CLASSNAMEPhoneFormat.stripExceptNumbers(str, false);
     }
 
-    public C0216PhoneFormat() {
+    public CLASSNAMEPhoneFormat() {
         init(null);
     }
 
-    public C0216PhoneFormat(String countryCode) {
+    public CLASSNAMEPhoneFormat(String countryCode) {
         init(countryCode);
     }
 
@@ -233,7 +233,7 @@ public class C0216PhoneFormat {
             return orig;
         }
         try {
-            String str = C0216PhoneFormat.strip(orig);
+            String str = CLASSNAMEPhoneFormat.strip(orig);
             String rest;
             CallingCodeInfo info;
             if (str.startsWith("+")) {
@@ -272,7 +272,7 @@ public class C0216PhoneFormat {
         if (!this.initialzed) {
             return true;
         }
-        String str = C0216PhoneFormat.strip(phoneNumber);
+        String str = CLASSNAMEPhoneFormat.strip(phoneNumber);
         String rest;
         CallingCodeInfo info;
         if (str.startsWith("+")) {

@@ -9,8 +9,8 @@ import org.telegram.p005ui.Components.voip.VoIPHelper;
 public class VoIPFeedbackActivity extends Activity {
 
     /* renamed from: org.telegram.ui.VoIPFeedbackActivity$1 */
-    class C23181 implements Runnable {
-        C23181() {
+    class CLASSNAME implements Runnable {
+        CLASSNAME() {
         }
 
         public void run() {
@@ -23,7 +23,7 @@ public class VoIPFeedbackActivity extends Activity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(0, 0);
         setContentView(new View(this));
-        VoIPHelper.showRateAlert(this, new C23181(), getIntent().getLongExtra("call_id", 0), getIntent().getLongExtra("call_access_hash", 0), getIntent().getIntExtra("account", 0));
+        VoIPHelper.showRateAlert(this, new CLASSNAME(), getIntent().getLongExtra("call_id", 0), getIntent().getLongExtra("call_access_hash", 0), getIntent().getIntExtra("account", 0));
     }
 
     public void finish() {

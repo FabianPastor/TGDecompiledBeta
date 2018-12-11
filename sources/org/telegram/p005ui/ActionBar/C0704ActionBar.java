@@ -30,7 +30,7 @@ import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.SnowflakesEffect;
 
 /* renamed from: org.telegram.ui.ActionBar.ActionBar */
-public class C0704ActionBar extends FrameLayout {
+public class CLASSNAMEActionBar extends FrameLayout {
     public ActionBarMenuOnItemClick actionBarMenuOnItemClick;
     private ActionBarMenu actionMode;
     private AnimatorSet actionModeAnimation;
@@ -67,57 +67,57 @@ public class C0704ActionBar extends FrameLayout {
     private SimpleTextView titleTextView;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$1 */
-    class C07021 extends AnimatorListenerAdapter {
-        C07021() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationStart(Animator animation) {
-            C0704ActionBar.this.actionMode.setVisibility(0);
-            if (C0704ActionBar.this.occupyStatusBar && C0704ActionBar.this.actionModeTop != null) {
-                C0704ActionBar.this.actionModeTop.setVisibility(0);
+            CLASSNAMEActionBar.this.actionMode.setVisibility(0);
+            if (CLASSNAMEActionBar.this.occupyStatusBar && CLASSNAMEActionBar.this.actionModeTop != null) {
+                CLASSNAMEActionBar.this.actionModeTop.setVisibility(0);
             }
         }
 
         public void onAnimationEnd(Animator animation) {
-            if (C0704ActionBar.this.actionModeAnimation != null && C0704ActionBar.this.actionModeAnimation.equals(animation)) {
-                C0704ActionBar.this.actionModeAnimation = null;
-                if (C0704ActionBar.this.titleTextView != null) {
-                    C0704ActionBar.this.titleTextView.setVisibility(4);
+            if (CLASSNAMEActionBar.this.actionModeAnimation != null && CLASSNAMEActionBar.this.actionModeAnimation.equals(animation)) {
+                CLASSNAMEActionBar.this.actionModeAnimation = null;
+                if (CLASSNAMEActionBar.this.titleTextView != null) {
+                    CLASSNAMEActionBar.this.titleTextView.setVisibility(4);
                 }
-                if (!(C0704ActionBar.this.subtitleTextView == null || TextUtils.isEmpty(C0704ActionBar.this.subtitleTextView.getText()))) {
-                    C0704ActionBar.this.subtitleTextView.setVisibility(4);
+                if (!(CLASSNAMEActionBar.this.subtitleTextView == null || TextUtils.isEmpty(CLASSNAMEActionBar.this.subtitleTextView.getText()))) {
+                    CLASSNAMEActionBar.this.subtitleTextView.setVisibility(4);
                 }
-                if (C0704ActionBar.this.menu != null) {
-                    C0704ActionBar.this.menu.setVisibility(4);
+                if (CLASSNAMEActionBar.this.menu != null) {
+                    CLASSNAMEActionBar.this.menu.setVisibility(4);
                 }
             }
         }
 
         public void onAnimationCancel(Animator animation) {
-            if (C0704ActionBar.this.actionModeAnimation != null && C0704ActionBar.this.actionModeAnimation.equals(animation)) {
-                C0704ActionBar.this.actionModeAnimation = null;
+            if (CLASSNAMEActionBar.this.actionModeAnimation != null && CLASSNAMEActionBar.this.actionModeAnimation.equals(animation)) {
+                CLASSNAMEActionBar.this.actionModeAnimation = null;
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBar$2 */
-    class C07032 extends AnimatorListenerAdapter {
-        C07032() {
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
         }
 
         public void onAnimationEnd(Animator animation) {
-            if (C0704ActionBar.this.actionModeAnimation != null && C0704ActionBar.this.actionModeAnimation.equals(animation)) {
-                C0704ActionBar.this.actionModeAnimation = null;
-                C0704ActionBar.this.actionMode.setVisibility(4);
-                if (C0704ActionBar.this.occupyStatusBar && C0704ActionBar.this.actionModeTop != null) {
-                    C0704ActionBar.this.actionModeTop.setVisibility(4);
+            if (CLASSNAMEActionBar.this.actionModeAnimation != null && CLASSNAMEActionBar.this.actionModeAnimation.equals(animation)) {
+                CLASSNAMEActionBar.this.actionModeAnimation = null;
+                CLASSNAMEActionBar.this.actionMode.setVisibility(4);
+                if (CLASSNAMEActionBar.this.occupyStatusBar && CLASSNAMEActionBar.this.actionModeTop != null) {
+                    CLASSNAMEActionBar.this.actionModeTop.setVisibility(4);
                 }
             }
         }
 
         public void onAnimationCancel(Animator animation) {
-            if (C0704ActionBar.this.actionModeAnimation != null && C0704ActionBar.this.actionModeAnimation.equals(animation)) {
-                C0704ActionBar.this.actionModeAnimation = null;
+            if (CLASSNAMEActionBar.this.actionModeAnimation != null && CLASSNAMEActionBar.this.actionModeAnimation.equals(animation)) {
+                CLASSNAMEActionBar.this.actionModeAnimation = null;
             }
         }
     }
@@ -132,7 +132,7 @@ public class C0704ActionBar extends FrameLayout {
         }
     }
 
-    public C0704ActionBar(Context context) {
+    public CLASSNAMEActionBar(Context context) {
         super(context);
         this.occupyStatusBar = VERSION.SDK_INT >= 21;
         this.addToContainer = true;
@@ -432,7 +432,7 @@ public class C0704ActionBar extends FrameLayout {
             this.actionModeAnimation = new AnimatorSet();
             this.actionModeAnimation.playTogether(animators);
             this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new C07021());
+            this.actionModeAnimation.addListener(new CLASSNAME());
             this.actionModeAnimation.start();
             if (this.backButtonImageView != null) {
                 Drawable drawable = this.backButtonImageView.getDrawable();
@@ -458,7 +458,7 @@ public class C0704ActionBar extends FrameLayout {
             this.actionModeAnimation = new AnimatorSet();
             this.actionModeAnimation.playTogether(animators);
             this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new C07032());
+            this.actionModeAnimation.addListener(new CLASSNAME());
             this.actionModeAnimation.start();
             if (this.titleTextView != null) {
                 this.titleTextView.setVisibility(0);
@@ -579,7 +579,7 @@ public class C0704ActionBar extends FrameLayout {
         int textLeft;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        int actionBarHeight = C0704ActionBar.getCurrentActionBarHeight();
+        int actionBarHeight = CLASSNAMEActionBar.getCurrentActionBarHeight();
         int actionBarHeightSpec = MeasureSpec.makeMeasureSpec(actionBarHeight, NUM);
         setMeasuredDimension(width, ((this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0) + actionBarHeight) + this.extraHeight);
         if (this.backButtonImageView == null || this.backButtonImageView.getVisibility() == 8) {
@@ -646,16 +646,16 @@ public class C0704ActionBar extends FrameLayout {
         }
         if (!(this.titleTextView == null || this.titleTextView.getVisibility() == 8)) {
             if (this.subtitleTextView == null || this.subtitleTextView.getVisibility() == 8) {
-                textTop = (C0704ActionBar.getCurrentActionBarHeight() - this.titleTextView.getTextHeight()) / 2;
+                textTop = (CLASSNAMEActionBar.getCurrentActionBarHeight() - this.titleTextView.getTextHeight()) / 2;
             } else {
-                currentActionBarHeight = ((C0704ActionBar.getCurrentActionBarHeight() / 2) - this.titleTextView.getTextHeight()) / 2;
+                currentActionBarHeight = ((CLASSNAMEActionBar.getCurrentActionBarHeight() / 2) - this.titleTextView.getTextHeight()) / 2;
                 f = (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) ? 3.0f : 2.0f;
                 textTop = currentActionBarHeight + AndroidUtilities.m10dp(f);
             }
             this.titleTextView.layout(textLeft, additionalTop + textTop, this.titleTextView.getMeasuredWidth() + textLeft, (additionalTop + textTop) + this.titleTextView.getTextHeight());
         }
         if (!(this.subtitleTextView == null || this.subtitleTextView.getVisibility() == 8)) {
-            currentActionBarHeight = (((C0704ActionBar.getCurrentActionBarHeight() / 2) - this.subtitleTextView.getTextHeight()) / 2) + (C0704ActionBar.getCurrentActionBarHeight() / 2);
+            currentActionBarHeight = (((CLASSNAMEActionBar.getCurrentActionBarHeight() / 2) - this.subtitleTextView.getTextHeight()) / 2) + (CLASSNAMEActionBar.getCurrentActionBarHeight() / 2);
             f = (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) ? 1.0f : 1.0f;
             textTop = currentActionBarHeight - AndroidUtilities.m10dp(f);
             this.subtitleTextView.layout(textLeft, additionalTop + textTop, this.subtitleTextView.getMeasuredWidth() + textLeft, (additionalTop + textTop) + this.subtitleTextView.getTextHeight());

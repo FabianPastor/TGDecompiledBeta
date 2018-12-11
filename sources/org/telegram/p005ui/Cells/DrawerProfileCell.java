@@ -19,9 +19,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import org.telegram.PhoneFormat.C0216PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
 import org.telegram.p005ui.ActionBar.Theme;
@@ -49,7 +49,7 @@ public class DrawerProfileCell extends FrameLayout {
         this.shadowView = new ImageView(context);
         this.shadowView.setVisibility(4);
         this.shadowView.setScaleType(ScaleType.FIT_XY);
-        this.shadowView.setImageResource(C0541R.drawable.bottom_shadow);
+        this.shadowView.setImageResource(CLASSNAMER.drawable.bottom_shadow);
         addView(this.shadowView, LayoutHelper.createFrame(-1, 70, 83));
         this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.m10dp(32.0f));
@@ -143,7 +143,7 @@ public class DrawerProfileCell extends FrameLayout {
     public void setAccountsShowed(boolean value) {
         if (this.accountsShowed != value) {
             this.accountsShowed = value;
-            this.arrowView.setImageResource(this.accountsShowed ? C0541R.drawable.collapse_up : C0541R.drawable.collapse_down);
+            this.arrowView.setImageResource(this.accountsShowed ? CLASSNAMER.drawable.collapse_up : CLASSNAMER.drawable.collapse_down);
         }
     }
 
@@ -151,7 +151,7 @@ public class DrawerProfileCell extends FrameLayout {
         this.arrowView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 DrawerProfileCell.this.accountsShowed = !DrawerProfileCell.this.accountsShowed;
-                DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? C0541R.drawable.collapse_up : C0541R.drawable.collapse_down);
+                DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? CLASSNAMER.drawable.collapse_up : CLASSNAMER.drawable.collapse_down);
                 onClickListener.onClick(DrawerProfileCell.this);
             }
         });
@@ -164,9 +164,9 @@ public class DrawerProfileCell extends FrameLayout {
                 photo = user.photo.photo_small;
             }
             this.accountsShowed = accounts;
-            this.arrowView.setImageResource(this.accountsShowed ? C0541R.drawable.collapse_up : C0541R.drawable.collapse_down);
+            this.arrowView.setImageResource(this.accountsShowed ? CLASSNAMER.drawable.collapse_up : CLASSNAMER.drawable.collapse_down);
             this.nameTextView.setText(UserObject.getUserName(user));
-            this.phoneTextView.setText(C0216PhoneFormat.getInstance().format("+" + user.phone));
+            this.phoneTextView.setText(CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone));
             Drawable avatarDrawable = new AvatarDrawable(user);
             avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
             this.avatarImageView.setImage(photo, "50_50", avatarDrawable);

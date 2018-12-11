@@ -1,20 +1,20 @@
 package org.telegram.p005ui.Adapters;
 
 import org.telegram.messenger.MessagesController;
-import org.telegram.p005ui.Adapters.MentionsAdapter.C07585;
+import org.telegram.p005ui.Adapters.MentionsAdapter.CLASSNAME;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$5$$Lambda$1 */
 final /* synthetic */ class MentionsAdapter$5$$Lambda$1 implements Runnable {
-    private final C07585 arg$1;
+    private final CLASSNAME arg$1;
     private final int arg$2;
     private final TL_error arg$3;
     private final TLObject arg$4;
     private final MessagesController arg$5;
 
-    MentionsAdapter$5$$Lambda$1(C07585 c07585, int i, TL_error tL_error, TLObject tLObject, MessagesController messagesController) {
-        this.arg$1 = c07585;
+    MentionsAdapter$5$$Lambda$1(CLASSNAME CLASSNAME, int i, TL_error tL_error, TLObject tLObject, MessagesController messagesController) {
+        this.arg$1 = CLASSNAME;
         this.arg$2 = i;
         this.arg$3 = tL_error;
         this.arg$4 = tLObject;

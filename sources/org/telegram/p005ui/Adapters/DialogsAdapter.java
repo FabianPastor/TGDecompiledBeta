@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -186,12 +186,12 @@ public class DialogsAdapter extends SelectionAdapter {
                 break;
             case 2:
                 headerCell = new HeaderCell(this.mContext);
-                headerCell.setText(LocaleController.getString("RecentlyViewed", C0541R.string.RecentlyViewed));
+                headerCell.setText(LocaleController.getString("RecentlyViewed", CLASSNAMER.string.RecentlyViewed));
                 TextView textView = new TextView(this.mContext);
                 textView.setTextSize(1, 15.0f);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
-                textView.setText(LocaleController.getString("RecentlyViewedHide", C0541R.string.RecentlyViewedHide));
+                textView.setText(LocaleController.getString("RecentlyViewedHide", CLASSNAMER.string.RecentlyViewedHide));
                 textView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
                 headerCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 17.0f, 15.0f, 17.0f, 0.0f));
                 textView.setOnClickListener(new DialogsAdapter$$Lambda$0(this));
@@ -205,7 +205,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 };
                 frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
                 View v = new View(this.mContext);
-                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0541R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 frameLayout.addView(v, LayoutHelper.createFrame(-1, -1.0f));
                 view = frameLayout;
                 break;
@@ -220,12 +220,12 @@ public class DialogsAdapter extends SelectionAdapter {
                 break;
             case 7:
                 headerCell = new HeaderCell(this.mContext);
-                headerCell.setText(LocaleController.getString("YourContacts", C0541R.string.YourContacts));
+                headerCell.setText(LocaleController.getString("YourContacts", CLASSNAMER.string.YourContacts));
                 view = headerCell;
                 break;
             default:
                 view = new ShadowSectionCell(this.mContext);
-                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(this.mContext, C0541R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 combinedDrawable.setFullsize(true);
                 view.setBackgroundDrawable(combinedDrawable);
                 break;
@@ -252,13 +252,13 @@ public class DialogsAdapter extends SelectionAdapter {
                 cell.useSeparator = i != getItemCount() + -1;
                 if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
                     boolean z;
-                    if (dialog.f165id != this.openedDialogId) {
+                    if (dialog.var_id != this.openedDialogId) {
                         z = false;
                     }
                     cell.setDialogSelected(z);
                 }
                 if (this.selectedDialogs != null) {
-                    cell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialog.f165id)), false);
+                    cell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialog.var_id)), false);
                 }
                 cell.setDialog(dialog, i, this.dialogsType);
                 return;

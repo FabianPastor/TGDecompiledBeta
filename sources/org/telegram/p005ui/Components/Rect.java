@@ -5,13 +5,13 @@ public class Rect {
     public float height;
     public float width;
     /* renamed from: x */
-    public float f266x;
+    public float var_x;
     /* renamed from: y */
-    public float f267y;
+    public float var_y;
 
     public Rect(float x, float y, float width, float height) {
-        this.f266x = x;
-        this.f267y = y;
+        this.var_x = x;
+        this.var_y = y;
         this.width = width;
         this.height = height;
     }

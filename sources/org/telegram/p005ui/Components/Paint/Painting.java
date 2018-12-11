@@ -191,8 +191,8 @@ public class Painting {
         this.renderView.performInContext(new Runnable() {
 
             /* renamed from: org.telegram.ui.Components.Paint.Painting$2$1 */
-            class C14011 implements Runnable {
-                C14011() {
+            class CLASSNAME implements Runnable {
+                CLASSNAME() {
                 }
 
                 public void run() {
@@ -219,7 +219,7 @@ public class Painting {
             public void run() {
                 Painting.this.registerUndo(Painting.this.activeStrokeBounds);
                 Painting.this.beginSuppressingChanges();
-                Painting.this.update(null, new C14011());
+                Painting.this.update(null, new CLASSNAME());
                 Painting.this.endSuppressingChanges();
                 Painting.this.renderState.reset();
                 Painting.this.activeStrokeBounds = null;

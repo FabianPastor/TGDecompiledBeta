@@ -199,11 +199,11 @@ public class FileLoader {
             fileLoaderQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.FileLoader$4$1 */
-                class C04211 implements FileUploadOperationDelegate {
+                class CLASSNAME implements FileUploadOperationDelegate {
 
                     /* renamed from: org.telegram.messenger.FileLoader$4$1$2 */
-                    class C04202 implements Runnable {
-                        C04202() {
+                    class CLASSNAME implements Runnable {
+                        CLASSNAME() {
                         }
 
                         public void run() {
@@ -240,7 +240,7 @@ public class FileLoader {
                         }
                     }
 
-                    C04211() {
+                    CLASSNAME() {
                     }
 
                     public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
@@ -284,7 +284,7 @@ public class FileLoader {
                     }
 
                     public void didFailedUploadingFile(FileUploadOperation operation) {
-                        FileLoader.fileLoaderQueue.postRunnable(new C04202());
+                        FileLoader.fileLoaderQueue.postRunnable(new CLASSNAME());
                     }
 
                     public void didChangedUploadProgress(FileUploadOperation operation, float progress) {
@@ -313,7 +313,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, operation);
                     }
-                    operation.setDelegate(new C04211());
+                    operation.setDelegate(new CLASSNAME());
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;
@@ -1040,13 +1040,13 @@ public class FileLoader {
             if (obj != null) {
                 int currentSide;
                 if (byMinSide) {
-                    currentSide = obj.f144h >= obj.f145w ? obj.f145w : obj.f144h;
+                    currentSide = obj.var_h >= obj.var_w ? obj.var_w : obj.var_h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (side > lastSide && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
                     }
                 } else {
-                    currentSide = obj.f145w >= obj.f144h ? obj.f145w : obj.f144h;
+                    currentSide = obj.var_w >= obj.var_h ? obj.var_w : obj.var_h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (currentSide <= side && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
@@ -1173,20 +1173,20 @@ public class FileLoader {
             }
             if (document.version == 0) {
                 if (docExt.length() > 1) {
-                    return document.dc_id + "_" + document.f119id + docExt;
+                    return document.dc_id + "_" + document.var_id + docExt;
                 }
-                return document.dc_id + "_" + document.f119id;
+                return document.dc_id + "_" + document.var_id;
             } else if (docExt.length() > 1) {
-                return document.dc_id + "_" + document.f119id + "_" + document.version + docExt;
+                return document.dc_id + "_" + document.var_id + "_" + document.version + docExt;
             } else {
-                return document.dc_id + "_" + document.f119id + "_" + document.version;
+                return document.dc_id + "_" + document.var_id + "_" + document.version;
             }
         } else if (attach instanceof SecureDocument) {
             SecureDocument secureDocument = (SecureDocument) attach;
-            return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.f223id + ".jpg";
+            return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.var_id + ".jpg";
         } else if (attach instanceof TL_secureFile) {
             TL_secureFile secureFile = (TL_secureFile) attach;
-            return secureFile.dc_id + "_" + secureFile.f223id + ".jpg";
+            return secureFile.dc_id + "_" + secureFile.var_id + ".jpg";
         } else if (attach instanceof WebFile) {
             WebFile document2 = (WebFile) attach;
             return Utilities.MD5(document2.url) + "." + ImageLoader.getHttpUrlExtension(document2.url, getExtensionByMime(document2.mime_type));

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -49,8 +49,8 @@ public class SearchAdapter extends SelectionAdapter {
     private boolean useUserCell;
 
     /* renamed from: org.telegram.ui.Adapters.SearchAdapter$1 */
-    class C07601 implements SearchAdapterHelperDelegate {
-        C07601() {
+    class CLASSNAME implements SearchAdapterHelperDelegate {
+        CLASSNAME() {
         }
 
         public void onDataSetChanged() {
@@ -70,7 +70,7 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowBots = bots;
         this.channelId = searchChannelId;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C07601());
+        this.searchAdapterHelper.setDelegate(new CLASSNAME());
     }
 
     public void setCheckedMap(SparseArray<?> map) {
@@ -143,7 +143,7 @@ public class SearchAdapter extends SelectionAdapter {
         ArrayList<CharSequence> resultArrayNames = new ArrayList();
         for (int a = 0; a < contactsCopy.size(); a++) {
             User user = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
-            if (user.f228id != UserConfig.getInstance(currentAccount).getClientUserId() && (!this.onlyMutual || user.mutual_contact)) {
+            if (user.var_id != UserConfig.getInstance(currentAccount).getClientUserId() && (!this.onlyMutual || user.mutual_contact)) {
                 String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                 String tName = LocaleController.getInstance().getTranslitString(name);
                 if (name.equals(tName)) {
@@ -235,7 +235,7 @@ public class SearchAdapter extends SelectionAdapter {
                 break;
             default:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", C0541R.string.GlobalSearch));
+                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", CLASSNAMER.string.GlobalSearch));
                 break;
         }
         return new Holder(view);
@@ -249,10 +249,10 @@ public class SearchAdapter extends SelectionAdapter {
                 String un = null;
                 if (object instanceof User) {
                     un = ((User) object).username;
-                    id = ((User) object).f228id;
+                    id = ((User) object).var_id;
                 } else if (object instanceof Chat) {
                     un = ((Chat) object).username;
-                    id = ((Chat) object).f113id;
+                    id = ((Chat) object).var_id;
                 }
                 CharSequence username = null;
                 CharSequence name = null;

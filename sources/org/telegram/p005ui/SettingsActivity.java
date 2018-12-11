@@ -48,11 +48,11 @@ import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
-import org.telegram.PhoneFormat.C0216PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
@@ -80,8 +80,8 @@ import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.p005ui.ActionBar.BottomSheet;
 import org.telegram.p005ui.ActionBar.BottomSheet.BottomSheetCell;
-import org.telegram.p005ui.ActionBar.C0704ActionBar;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.Cells.CheckBoxCell;
@@ -162,7 +162,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int overscrollRow;
     private int privacyPolicyRow;
     private int privacyRow;
-    private PhotoViewerProvider provider = new C22121();
+    private PhotoViewerProvider provider = new CLASSNAME();
     private int raiseToSpeakRow;
     private int rowCount;
     private int saveToGalleryRow;
@@ -184,8 +184,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private AnimatorSet writeButtonAnimation;
 
     /* renamed from: org.telegram.ui.SettingsActivity$10 */
-    class C221110 implements OnPreDrawListener {
-        C221110() {
+    class CLASSNAME implements OnPreDrawListener {
+        CLASSNAME() {
         }
 
         public boolean onPreDraw() {
@@ -198,8 +198,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$1 */
-    class C22121 extends EmptyPhotoViewerProvider {
-        C22121() {
+    class CLASSNAME extends EmptyPhotoViewerProvider {
+        CLASSNAME() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -238,8 +238,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$2 */
-    class C22132 extends ActionBarMenuOnItemClick {
-        C22132() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -249,10 +249,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 SettingsActivity.this.presentFragment(new ChangeNameActivity());
             } else if (id == 2 && SettingsActivity.this.getParentActivity() != null) {
                 Builder builder = new Builder(SettingsActivity.this.getParentActivity());
-                builder.setMessage(LocaleController.getString("AreYouSureLogout", C0541R.string.AreYouSureLogout));
-                builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), new SettingsActivity$2$$Lambda$0(this));
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+                builder.setMessage(LocaleController.getString("AreYouSureLogout", CLASSNAMER.string.AreYouSureLogout));
+                builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+                builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new SettingsActivity$2$$Lambda$0(this));
+                builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
                 SettingsActivity.this.showDialog(builder.create());
             }
         }
@@ -263,8 +263,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$5 */
-    class C22175 implements OnItemClickListener {
-        C22175() {
+    class CLASSNAME implements OnItemClickListener {
+        CLASSNAME() {
         }
 
         public void onItemClick(View view, int position) {
@@ -275,13 +275,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (position == SettingsActivity.this.textSizeRow) {
                 if (SettingsActivity.this.getParentActivity() != null) {
                     builder = new Builder(SettingsActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("TextSize", C0541R.string.TextSize));
+                    builder.setTitle(LocaleController.getString("TextSize", CLASSNAMER.string.TextSize));
                     NumberPicker numberPicker = new NumberPicker(SettingsActivity.this.getParentActivity());
                     numberPicker.setMinValue(12);
                     numberPicker.setMaxValue(30);
                     numberPicker.setValue(SharedConfig.fontSize);
                     builder.setView(numberPicker);
-                    builder.setNegativeButton(LocaleController.getString("Done", C0541R.string.Done), new SettingsActivity$5$$Lambda$0(this, numberPicker, position));
+                    builder.setNegativeButton(LocaleController.getString("Done", CLASSNAMER.string.Done), new SettingsActivity$5$$Lambda$0(this, numberPicker, position));
                     SettingsActivity.this.showDialog(builder.create());
                 }
             } else if (position == SettingsActivity.this.enableAnimationsRow) {
@@ -300,7 +300,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             } else if (position == SettingsActivity.this.askQuestionRow) {
                 if (SettingsActivity.this.getParentActivity() != null) {
                     TextView message = new TextView(SettingsActivity.this.getParentActivity());
-                    Spannable spannableString = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", C0541R.string.AskAQuestionInfo).replace("\n", "<br>")));
+                    Spannable spannableString = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", CLASSNAMER.string.AskAQuestionInfo).replace("\n", "<br>")));
                     URLSpan[] spans = (URLSpan[]) spannableString.getSpans(0, spannableString.length(), URLSpan.class);
                     for (URLSpan span : spans) {
                         int start = spannableString.getSpanStart(span);
@@ -322,9 +322,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     message.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     builder = new Builder(SettingsActivity.this.getParentActivity());
                     builder.setView(message);
-                    builder.setTitle(LocaleController.getString("AskAQuestion", C0541R.string.AskAQuestion));
-                    builder.setPositiveButton(LocaleController.getString("AskButton", C0541R.string.AskButton), new SettingsActivity$5$$Lambda$1(this));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AskAQuestion", CLASSNAMER.string.AskAQuestion));
+                    builder.setPositiveButton(LocaleController.getString("AskButton", CLASSNAMER.string.AskButton), new SettingsActivity$5$$Lambda$1(this));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
                     SettingsActivity.this.showDialog(builder.create());
                 }
             } else if (position == SettingsActivity.this.sendLogsRow) {
@@ -376,24 +376,24 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             } else if (position == SettingsActivity.this.switchBackendButtonRow) {
                 if (SettingsActivity.this.getParentActivity() != null) {
                     builder = new Builder(SettingsActivity.this.getParentActivity());
-                    builder.setMessage(LocaleController.getString("AreYouSure", C0541R.string.AreYouSure));
-                    builder.setTitle(LocaleController.getString("AppName", C0541R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", C0541R.string.OK), new SettingsActivity$5$$Lambda$2(this));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+                    builder.setMessage(LocaleController.getString("AreYouSure", CLASSNAMER.string.AreYouSure));
+                    builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new SettingsActivity$5$$Lambda$2(this));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
                     SettingsActivity.this.showDialog(builder.create());
                 }
             } else if (position == SettingsActivity.this.telegramFaqRow) {
-                Browser.openUrl(SettingsActivity.this.getParentActivity(), LocaleController.getString("TelegramFaqUrl", C0541R.string.TelegramFaqUrl));
+                Browser.openUrl(SettingsActivity.this.getParentActivity(), LocaleController.getString("TelegramFaqUrl", CLASSNAMER.string.TelegramFaqUrl));
             } else if (position == SettingsActivity.this.privacyPolicyRow) {
-                Browser.openUrl(SettingsActivity.this.getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", C0541R.string.PrivacyPolicyUrl));
+                Browser.openUrl(SettingsActivity.this.getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", CLASSNAMER.string.PrivacyPolicyUrl));
             } else if (position == SettingsActivity.this.contactsReimportRow) {
             } else {
                 if (position == SettingsActivity.this.contactsSortRow) {
                     if (SettingsActivity.this.getParentActivity() != null) {
                         builder = new Builder(SettingsActivity.this.getParentActivity());
-                        builder.setTitle(LocaleController.getString("SortBy", C0541R.string.SortBy));
-                        builder.setItems(new CharSequence[]{LocaleController.getString("Default", C0541R.string.Default), LocaleController.getString("SortFirstName", C0541R.string.SortFirstName), LocaleController.getString("SortLastName", C0541R.string.SortLastName)}, new SettingsActivity$5$$Lambda$3(this, position));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+                        builder.setTitle(LocaleController.getString("SortBy", CLASSNAMER.string.SortBy));
+                        builder.setItems(new CharSequence[]{LocaleController.getString("Default", CLASSNAMER.string.Default), LocaleController.getString("SortFirstName", CLASSNAMER.string.SortFirstName), LocaleController.getString("SortLastName", CLASSNAMER.string.SortLastName)}, new SettingsActivity$5$$Lambda$3(this, position));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
                         SettingsActivity.this.showDialog(builder.create());
                     }
                 } else if (position == SettingsActivity.this.usernameRow) {
@@ -419,10 +419,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             String name = null;
                             if (a == 0) {
                                 maskValues[a] = SharedConfig.allowBigEmoji;
-                                name = LocaleController.getString("EmojiBigSize", C0541R.string.EmojiBigSize);
+                                name = LocaleController.getString("EmojiBigSize", CLASSNAMER.string.EmojiBigSize);
                             } else if (a == 1) {
                                 maskValues[a] = SharedConfig.useSystemEmoji;
-                                name = LocaleController.getString("EmojiUseDefault", C0541R.string.EmojiUseDefault);
+                                name = LocaleController.getString("EmojiUseDefault", CLASSNAMER.string.EmojiUseDefault);
                             }
                             CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity(), 1);
                             checkBoxCell.setTag(Integer.valueOf(a));
@@ -435,7 +435,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         } else {
                             BottomSheetCell cell = new BottomSheetCell(SettingsActivity.this.getParentActivity(), 1);
                             cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                            cell.setTextAndIcon(LocaleController.getString("Save", C0541R.string.Save).toUpperCase(), 0);
+                            cell.setTextAndIcon(LocaleController.getString("Save", CLASSNAMER.string.Save).toUpperCase(), 0);
                             cell.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
                             cell.setOnClickListener(new SettingsActivity$5$$Lambda$5(this, maskValues, position));
                             linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
@@ -508,10 +508,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$6 */
-    class C22186 implements OnItemLongClickListener {
+    class CLASSNAME implements OnItemLongClickListener {
         private int pressCount = 0;
 
-        C22186() {
+        CLASSNAME() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -522,16 +522,16 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (this.pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
                 String str;
                 Builder builder = new Builder(SettingsActivity.this.getParentActivity());
-                builder.setTitle(LocaleController.getString("DebugMenu", C0541R.string.DebugMenu));
+                builder.setTitle(LocaleController.getString("DebugMenu", CLASSNAMER.string.DebugMenu));
                 CharSequence[] items = new CharSequence[10];
-                items[0] = LocaleController.getString("DebugMenuImportContacts", C0541R.string.DebugMenuImportContacts);
-                items[1] = LocaleController.getString("DebugMenuReloadContacts", C0541R.string.DebugMenuReloadContacts);
-                items[2] = LocaleController.getString("DebugMenuResetContacts", C0541R.string.DebugMenuResetContacts);
-                items[3] = LocaleController.getString("DebugMenuResetDialogs", C0541R.string.DebugMenuResetDialogs);
-                items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", C0541R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", C0541R.string.DebugMenuEnableLogs);
-                items[5] = SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", C0541R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", C0541R.string.DebugMenuEnableCamera);
-                items[6] = LocaleController.getString("DebugMenuClearMediaCache", C0541R.string.DebugMenuClearMediaCache);
-                items[7] = LocaleController.getString("DebugMenuCallSettings", C0541R.string.DebugMenuCallSettings);
+                items[0] = LocaleController.getString("DebugMenuImportContacts", CLASSNAMER.string.DebugMenuImportContacts);
+                items[1] = LocaleController.getString("DebugMenuReloadContacts", CLASSNAMER.string.DebugMenuReloadContacts);
+                items[2] = LocaleController.getString("DebugMenuResetContacts", CLASSNAMER.string.DebugMenuResetContacts);
+                items[3] = LocaleController.getString("DebugMenuResetDialogs", CLASSNAMER.string.DebugMenuResetDialogs);
+                items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", CLASSNAMER.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", CLASSNAMER.string.DebugMenuEnableLogs);
+                items[5] = SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", CLASSNAMER.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", CLASSNAMER.string.DebugMenuEnableCamera);
+                items[6] = LocaleController.getString("DebugMenuClearMediaCache", CLASSNAMER.string.DebugMenuClearMediaCache);
+                items[7] = LocaleController.getString("DebugMenuCallSettings", CLASSNAMER.string.DebugMenuCallSettings);
                 items[8] = null;
                 if (BuildVars.DEBUG_PRIVATE_VERSION) {
                     str = "Check for app updates";
@@ -540,7 +540,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 items[9] = str;
                 builder.setItems(items, new SettingsActivity$6$$Lambda$0(this));
-                builder.setNegativeButton(LocaleController.getString("Cancel", C0541R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
                 SettingsActivity.this.showDialog(builder.create());
             } else {
                 try {
@@ -587,8 +587,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$7 */
-    class C22197 extends ViewOutlineProvider {
-        C22197() {
+    class CLASSNAME extends ViewOutlineProvider {
+        CLASSNAME() {
         }
 
         @SuppressLint({"NewApi"})
@@ -598,8 +598,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.SettingsActivity$8 */
-    class C22208 extends OnScrollListener {
-        C22208() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -629,7 +629,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         private LinkMovementMethodMy() {
         }
 
-        /* synthetic */ LinkMovementMethodMy(C22121 x0) {
+        /* synthetic */ LinkMovementMethodMy(CLASSNAME x0) {
             this();
         }
 
@@ -670,63 +670,63 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     TextSettingsCell textCell = holder.itemView;
                     if (position == SettingsActivity.this.textSizeRow) {
                         int size = MessagesController.getGlobalMainSettings().getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
-                        textCell.setTextAndValue(LocaleController.getString("TextSize", C0541R.string.TextSize), String.format("%d", new Object[]{Integer.valueOf(size)}), true);
+                        textCell.setTextAndValue(LocaleController.getString("TextSize", CLASSNAMER.string.TextSize), String.format("%d", new Object[]{Integer.valueOf(size)}), true);
                         return;
                     } else if (position == SettingsActivity.this.languageRow) {
-                        textCell.setTextAndValue(LocaleController.getString("Language", C0541R.string.Language), LocaleController.getCurrentLanguageName(), true);
+                        textCell.setTextAndValue(LocaleController.getString("Language", CLASSNAMER.string.Language), LocaleController.getCurrentLanguageName(), true);
                         return;
                     } else if (position == SettingsActivity.this.themeRow) {
-                        textCell.setTextAndValue(LocaleController.getString("Theme", C0541R.string.Theme), Theme.getCurrentThemeName(), true);
+                        textCell.setTextAndValue(LocaleController.getString("Theme", CLASSNAMER.string.Theme), Theme.getCurrentThemeName(), true);
                         return;
                     } else if (position == SettingsActivity.this.contactsSortRow) {
                         int sort = MessagesController.getGlobalMainSettings().getInt("sortContactsBy", 0);
                         if (sort == 0) {
-                            value = LocaleController.getString("Default", C0541R.string.Default);
+                            value = LocaleController.getString("Default", CLASSNAMER.string.Default);
                         } else if (sort == 1) {
-                            value = LocaleController.getString("FirstName", C0541R.string.SortFirstName);
+                            value = LocaleController.getString("FirstName", CLASSNAMER.string.SortFirstName);
                         } else {
-                            value = LocaleController.getString("LastName", C0541R.string.SortLastName);
+                            value = LocaleController.getString("LastName", CLASSNAMER.string.SortLastName);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("SortBy", C0541R.string.SortBy), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("SortBy", CLASSNAMER.string.SortBy), value, true);
                         return;
                     } else if (position == SettingsActivity.this.notificationRow) {
-                        textCell.setText(LocaleController.getString("NotificationsAndSounds", C0541R.string.NotificationsAndSounds), true);
+                        textCell.setText(LocaleController.getString("NotificationsAndSounds", CLASSNAMER.string.NotificationsAndSounds), true);
                         return;
                     } else if (position == SettingsActivity.this.backgroundRow) {
-                        textCell.setText(LocaleController.getString("ChatBackground", C0541R.string.ChatBackground), true);
+                        textCell.setText(LocaleController.getString("ChatBackground", CLASSNAMER.string.ChatBackground), true);
                         return;
                     } else if (position == SettingsActivity.this.sendLogsRow) {
-                        textCell.setText(LocaleController.getString("DebugSendLogs", C0541R.string.DebugSendLogs), true);
+                        textCell.setText(LocaleController.getString("DebugSendLogs", CLASSNAMER.string.DebugSendLogs), true);
                         return;
                     } else if (position == SettingsActivity.this.clearLogsRow) {
-                        textCell.setText(LocaleController.getString("DebugClearLogs", C0541R.string.DebugClearLogs), true);
+                        textCell.setText(LocaleController.getString("DebugClearLogs", CLASSNAMER.string.DebugClearLogs), true);
                         return;
                     } else if (position == SettingsActivity.this.askQuestionRow) {
-                        textCell.setText(LocaleController.getString("AskAQuestion", C0541R.string.AskAQuestion), true);
+                        textCell.setText(LocaleController.getString("AskAQuestion", CLASSNAMER.string.AskAQuestion), true);
                         return;
                     } else if (position == SettingsActivity.this.privacyRow) {
-                        textCell.setText(LocaleController.getString("PrivacySettings", C0541R.string.PrivacySettings), true);
+                        textCell.setText(LocaleController.getString("PrivacySettings", CLASSNAMER.string.PrivacySettings), true);
                         return;
                     } else if (position == SettingsActivity.this.dataRow) {
-                        textCell.setText(LocaleController.getString("DataSettings", C0541R.string.DataSettings), true);
+                        textCell.setText(LocaleController.getString("DataSettings", CLASSNAMER.string.DataSettings), true);
                         return;
                     } else if (position == SettingsActivity.this.switchBackendButtonRow) {
                         textCell.setText("Switch Backend", true);
                         return;
                     } else if (position == SettingsActivity.this.telegramFaqRow) {
-                        textCell.setText(LocaleController.getString("TelegramFAQ", C0541R.string.TelegramFAQ), true);
+                        textCell.setText(LocaleController.getString("TelegramFAQ", CLASSNAMER.string.TelegramFAQ), true);
                         return;
                     } else if (position == SettingsActivity.this.contactsReimportRow) {
-                        textCell.setText(LocaleController.getString("ImportContacts", C0541R.string.ImportContacts), true);
+                        textCell.setText(LocaleController.getString("ImportContacts", CLASSNAMER.string.ImportContacts), true);
                         return;
                     } else if (position == SettingsActivity.this.stickersRow) {
-                        textCell.setTextAndValue(LocaleController.getString("StickersName", C0541R.string.StickersName), DataQuery.getInstance(SettingsActivity.this.currentAccount).getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(DataQuery.getInstance(SettingsActivity.this.currentAccount).getUnreadStickerSets().size())}) : TtmlNode.ANONYMOUS_REGION_ID, true);
+                        textCell.setTextAndValue(LocaleController.getString("StickersName", CLASSNAMER.string.StickersName), DataQuery.getInstance(SettingsActivity.this.currentAccount).getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(DataQuery.getInstance(SettingsActivity.this.currentAccount).getUnreadStickerSets().size())}) : TtmlNode.ANONYMOUS_REGION_ID, true);
                         return;
                     } else if (position == SettingsActivity.this.privacyPolicyRow) {
-                        textCell.setText(LocaleController.getString("PrivacyPolicy", C0541R.string.PrivacyPolicy), true);
+                        textCell.setText(LocaleController.getString("PrivacyPolicy", CLASSNAMER.string.PrivacyPolicy), true);
                         return;
                     } else if (position == SettingsActivity.this.emojiRow) {
-                        textCell.setText(LocaleController.getString("Emoji", C0541R.string.Emoji), true);
+                        textCell.setText(LocaleController.getString("Emoji", CLASSNAMER.string.Emoji), true);
                         return;
                     } else {
                         return;
@@ -735,41 +735,41 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     TextCheckCell textCell2 = holder.itemView;
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     if (position == SettingsActivity.this.enableAnimationsRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("EnableAnimations", C0541R.string.EnableAnimations), preferences.getBoolean("view_animations", true), false);
+                        textCell2.setTextAndCheck(LocaleController.getString("EnableAnimations", CLASSNAMER.string.EnableAnimations), preferences.getBoolean("view_animations", true), false);
                         return;
                     } else if (position == SettingsActivity.this.sendByEnterRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("SendByEnter", C0541R.string.SendByEnter), preferences.getBoolean("send_by_enter", false), true);
+                        textCell2.setTextAndCheck(LocaleController.getString("SendByEnter", CLASSNAMER.string.SendByEnter), preferences.getBoolean("send_by_enter", false), true);
                         return;
                     } else if (position == SettingsActivity.this.saveToGalleryRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", C0541R.string.SaveToGallerySettings), SharedConfig.saveToGallery, false);
+                        textCell2.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", CLASSNAMER.string.SaveToGallerySettings), SharedConfig.saveToGallery, false);
                         return;
                     } else if (position == SettingsActivity.this.autoplayGifsRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("AutoplayGifs", C0541R.string.AutoplayGifs), SharedConfig.autoplayGifs, true);
+                        textCell2.setTextAndCheck(LocaleController.getString("AutoplayGifs", CLASSNAMER.string.AutoplayGifs), SharedConfig.autoplayGifs, true);
                         return;
                     } else if (position == SettingsActivity.this.raiseToSpeakRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("RaiseToSpeak", C0541R.string.RaiseToSpeak), SharedConfig.raiseToSpeak, true);
+                        textCell2.setTextAndCheck(LocaleController.getString("RaiseToSpeak", CLASSNAMER.string.RaiseToSpeak), SharedConfig.raiseToSpeak, true);
                         return;
                     } else if (position == SettingsActivity.this.customTabsRow) {
-                        textCell2.setTextAndValueAndCheck(LocaleController.getString("ChromeCustomTabs", C0541R.string.ChromeCustomTabs), LocaleController.getString("ChromeCustomTabsInfo", C0541R.string.ChromeCustomTabsInfo), SharedConfig.customTabs, false, true);
+                        textCell2.setTextAndValueAndCheck(LocaleController.getString("ChromeCustomTabs", CLASSNAMER.string.ChromeCustomTabs), LocaleController.getString("ChromeCustomTabsInfo", CLASSNAMER.string.ChromeCustomTabsInfo), SharedConfig.customTabs, false, true);
                         return;
                     } else if (position == SettingsActivity.this.directShareRow) {
-                        textCell2.setTextAndValueAndCheck(LocaleController.getString("DirectShare", C0541R.string.DirectShare), LocaleController.getString("DirectShareInfo", C0541R.string.DirectShareInfo), SharedConfig.directShare, false, true);
+                        textCell2.setTextAndValueAndCheck(LocaleController.getString("DirectShare", CLASSNAMER.string.DirectShare), LocaleController.getString("DirectShareInfo", CLASSNAMER.string.DirectShareInfo), SharedConfig.directShare, false, true);
                         return;
                     } else {
                         return;
                     }
                 case 4:
                     if (position == SettingsActivity.this.settingsSectionRow2) {
-                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("SETTINGS", C0541R.string.SETTINGS));
+                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("SETTINGS", CLASSNAMER.string.SETTINGS));
                         return;
                     } else if (position == SettingsActivity.this.supportSectionRow2) {
-                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("Support", C0541R.string.Support));
+                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("Support", CLASSNAMER.string.Support));
                         return;
                     } else if (position == SettingsActivity.this.messagesSectionRow2) {
-                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("MessagesSettings", C0541R.string.MessagesSettings));
+                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("MessagesSettings", CLASSNAMER.string.MessagesSettings));
                         return;
                     } else if (position == SettingsActivity.this.numberSectionRow) {
-                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("Info", C0541R.string.Info));
+                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("Info", CLASSNAMER.string.Info));
                         return;
                     } else {
                         return;
@@ -780,31 +780,31 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     if (position == SettingsActivity.this.numberRow) {
                         user = UserConfig.getInstance(SettingsActivity.this.currentAccount).getCurrentUser();
                         if (user == null || user.phone == null || user.phone.length() == 0) {
-                            value = LocaleController.getString("NumberUnknown", C0541R.string.NumberUnknown);
+                            value = LocaleController.getString("NumberUnknown", CLASSNAMER.string.NumberUnknown);
                         } else {
-                            value = C0216PhoneFormat.getInstance().format("+" + user.phone);
+                            value = CLASSNAMEPhoneFormat.getInstance().format("+" + user.phone);
                         }
-                        textCell3.setTextAndValue(value, LocaleController.getString("TapToChangePhone", C0541R.string.TapToChangePhone), true);
+                        textCell3.setTextAndValue(value, LocaleController.getString("TapToChangePhone", CLASSNAMER.string.TapToChangePhone), true);
                         return;
                     } else if (position == SettingsActivity.this.usernameRow) {
                         user = UserConfig.getInstance(SettingsActivity.this.currentAccount).getCurrentUser();
                         if (user == null || TextUtils.isEmpty(user.username)) {
-                            value = LocaleController.getString("UsernameEmpty", C0541R.string.UsernameEmpty);
+                            value = LocaleController.getString("UsernameEmpty", CLASSNAMER.string.UsernameEmpty);
                         } else {
                             value = "@" + user.username;
                         }
-                        textCell3.setTextAndValue(value, LocaleController.getString("Username", C0541R.string.Username), true);
+                        textCell3.setTextAndValue(value, LocaleController.getString("Username", CLASSNAMER.string.Username), true);
                         return;
                     } else if (position == SettingsActivity.this.bioRow) {
                         TL_userFull userFull = MessagesController.getInstance(SettingsActivity.this.currentAccount).getUserFull(UserConfig.getInstance(SettingsActivity.this.currentAccount).getClientUserId());
                         if (userFull == null) {
-                            value = LocaleController.getString("Loading", C0541R.string.Loading);
+                            value = LocaleController.getString("Loading", CLASSNAMER.string.Loading);
                         } else if (TextUtils.isEmpty(userFull.about)) {
-                            value = LocaleController.getString("UserBioEmpty", C0541R.string.UserBioEmpty);
+                            value = LocaleController.getString("UserBioEmpty", CLASSNAMER.string.UserBioEmpty);
                         } else {
                             value = userFull.about;
                         }
-                        textCell3.setTextWithEmojiAndValue(value, LocaleController.getString("UserBio", C0541R.string.UserBio), false);
+                        textCell3.setTextWithEmojiAndValue(value, LocaleController.getString("UserBio", CLASSNAMER.string.UserBio), false);
                         return;
                     } else {
                         return;
@@ -876,7 +876,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         TextInfoCell textInfoCell = (TextInfoCell) view;
                         Object[] objArr = new Object[1];
                         objArr[0] = String.format(Locale.US, "v%s (%d) %s", new Object[]{pInfo.versionName, Integer.valueOf(code), abi});
-                        textInfoCell.setText(LocaleController.formatString("TelegramVersion", C0541R.string.TelegramVersion, objArr));
+                        textInfoCell.setText(LocaleController.formatString("TelegramVersion", CLASSNAMER.string.TelegramVersion, objArr));
                         break;
                     } catch (Throwable e) {
                         FileLog.m14e(e);
@@ -1067,7 +1067,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             PhotoSize smallSize = FileLoader.getClosestPhotoSizeWithSize(sizes, 100);
             PhotoSize bigSize = FileLoader.getClosestPhotoSizeWithSize(sizes, 1000);
             user.photo = new TL_userProfilePhoto();
-            user.photo.photo_id = photo.photo.f143id;
+            user.photo.photo_id = photo.photo.var_id;
             if (smallSize != null) {
                 user.photo.photo_small = smallSize.location;
             }
@@ -1076,7 +1076,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             } else if (smallSize != null) {
                 user.photo.photo_small = smallSize.location;
             }
-            MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user.f228id);
+            MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user.var_id);
             ArrayList<User> users = new ArrayList();
             users.add(user);
             MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, false, true);
@@ -1107,16 +1107,16 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_avatar_actionBarSelectorBlue), false);
         this.actionBar.setItemsColor(Theme.getColor(Theme.key_avatar_actionBarIconBlue), false);
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAddToContainer(false);
         this.extraHeight = 88;
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22132());
-        ActionBarMenuItem item = this.actionBar.createMenu().addItem(0, (int) C0541R.drawable.ic_ab_other);
-        item.addSubItem(1, LocaleController.getString("EditName", C0541R.string.EditName));
-        item.addSubItem(2, LocaleController.getString("LogOut", C0541R.string.LogOut));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
+        ActionBarMenuItem item = this.actionBar.createMenu().addItem(0, (int) CLASSNAMER.drawable.ic_ab_other);
+        item.addSubItem(1, LocaleController.getString("EditName", CLASSNAMER.string.EditName));
+        item.addSubItem(2, LocaleController.getString("LogOut", CLASSNAMER.string.LogOut));
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context) {
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
@@ -1131,8 +1131,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 int childCount = getChildCount();
                 for (int a = 0; a < childCount; a++) {
                     View view = getChildAt(a);
-                    if (view != child && (view instanceof C0704ActionBar) && view.getVisibility() == 0) {
-                        if (((C0704ActionBar) view).getCastShadows()) {
+                    if (view != child && (view instanceof CLASSNAMEActionBar) && view.getVisibility() == 0) {
+                        if (((CLASSNAMEActionBar) view).getCastShadows()) {
                             actionBarHeight = view.getMeasuredHeight();
                         }
                         SettingsActivity.this.parentLayout.drawHeaderShadow(canvas, actionBarHeight);
@@ -1148,27 +1148,27 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager c22154 = new LinearLayoutManager(context, 1, false) {
+        LayoutManager CLASSNAME = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = c22154;
-        recyclerListView.setLayoutManager(c22154);
+        this.layoutManager = CLASSNAME;
+        recyclerListView.setLayoutManager(CLASSNAME);
         this.listView.setGlowColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
-        this.listView.setOnItemClickListener(new C22175());
-        this.listView.setOnItemLongClickListener(new C22186());
+        this.listView.setOnItemClickListener(new CLASSNAME());
+        this.listView.setOnItemLongClickListener(new CLASSNAME());
         frameLayout.addView(this.actionBar);
         this.extraHeightView = new View(context);
         this.extraHeightView.setPivotY(0.0f);
         this.extraHeightView.setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         frameLayout.addView(this.extraHeightView, LayoutHelper.createFrame(-1, 88.0f));
         this.shadowView = new View(context);
-        this.shadowView.setBackgroundResource(C0541R.drawable.header_shadow);
+        this.shadowView.setBackgroundResource(CLASSNAMER.drawable.header_shadow);
         frameLayout.addView(this.shadowView, LayoutHelper.createFrame(-1, 3.0f));
         this.avatarImage = new BackupImageView(context);
         this.avatarImage.setRoundRadius(AndroidUtilities.m10dp(21.0f));
@@ -1200,14 +1200,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.writeButton = new ImageView(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.m10dp(56.0f), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(C0541R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(CLASSNAMER.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.m10dp(56.0f), AndroidUtilities.m10dp(56.0f));
             drawable = combinedDrawable;
         }
         this.writeButton.setBackgroundDrawable(drawable);
-        this.writeButton.setImageResource(C0541R.drawable.floating_camera);
+        this.writeButton.setImageResource(CLASSNAMER.drawable.floating_camera);
         this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), Mode.MULTIPLY));
         this.writeButton.setScaleType(ScaleType.CENTER);
         if (VERSION.SDK_INT >= 21) {
@@ -1215,12 +1215,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.writeButton, "translationZ", new float[]{(float) AndroidUtilities.m10dp(2.0f), (float) AndroidUtilities.m10dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(this.writeButton, "translationZ", new float[]{(float) AndroidUtilities.m10dp(4.0f), (float) AndroidUtilities.m10dp(2.0f)}).setDuration(200));
             this.writeButton.setStateListAnimator(animator);
-            this.writeButton.setOutlineProvider(new C22197());
+            this.writeButton.setOutlineProvider(new CLASSNAME());
         }
         frameLayout.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f));
         this.writeButton.setOnClickListener(new SettingsActivity$$Lambda$2(this));
         needLayout();
-        this.listView.setOnScrollListener(new C22208());
+        this.listView.setOnScrollListener(new CLASSNAME());
         return this.fragmentView;
     }
 
@@ -1243,9 +1243,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 CharSequence[] items;
                 boolean fullMenu = false;
                 if (user.photo == null || user.photo.photo_big == null || (user.photo instanceof TL_userProfilePhotoEmpty)) {
-                    items = new CharSequence[]{LocaleController.getString("FromCamera", C0541R.string.FromCamera), LocaleController.getString("FromGalley", C0541R.string.FromGalley)};
+                    items = new CharSequence[]{LocaleController.getString("FromCamera", CLASSNAMER.string.FromCamera), LocaleController.getString("FromGalley", CLASSNAMER.string.FromGalley)};
                 } else {
-                    items = new CharSequence[]{LocaleController.getString("FromCamera", C0541R.string.FromCamera), LocaleController.getString("FromGalley", C0541R.string.FromGalley), LocaleController.getString("DeletePhoto", C0541R.string.DeletePhoto)};
+                    items = new CharSequence[]{LocaleController.getString("FromCamera", CLASSNAMER.string.FromCamera), LocaleController.getString("FromGalley", CLASSNAMER.string.FromGalley), LocaleController.getString("DeletePhoto", CLASSNAMER.string.DeletePhoto)};
                     fullMenu = true;
                 }
                 boolean full = fullMenu;
@@ -1279,7 +1279,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         if (datacentersBytes != null) {
                             SerializedData data = new SerializedData(datacentersBytes);
                             supportUser = User.TLdeserialize(data, data.readInt32(false), false);
-                            if (supportUser != null && supportUser.f228id == 333000) {
+                            if (supportUser != null && supportUser.var_id == 333000) {
                                 supportUser = null;
                             }
                             data.cleanup();
@@ -1293,7 +1293,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         if (supportUser == null) {
             AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-            progressDialog.setMessage(LocaleController.getString("Loading", C0541R.string.Loading));
+            progressDialog.setMessage(LocaleController.getString("Loading", CLASSNAMER.string.Loading));
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -1302,7 +1302,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         MessagesController.getInstance(this.currentAccount).putUser(supportUser, true);
         Bundle args = new Bundle();
-        args.putInt("user_id", supportUser.f228id);
+        args.putInt("user_id", supportUser.var_id);
         presentFragment(new ChatActivity(args));
     }
 
@@ -1316,7 +1316,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     final /* synthetic */ void lambda$null$6$SettingsActivity(SharedPreferences preferences, TL_help_support res, AlertDialog progressDialog) {
         Editor editor = preferences.edit();
-        editor.putInt("support_id", res.user.f228id);
+        editor.putInt("support_id", res.user.var_id);
         SerializedData data = new SerializedData();
         res.user.serializeToStream(data);
         editor.putString("support_user", Base64.encodeToString(data.toByteArray(), 0));
@@ -1332,7 +1332,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(users, null, true, true);
         MessagesController.getInstance(this.currentAccount).putUser(res.user, false);
         Bundle args = new Bundle();
-        args.putInt("user_id", res.user.f228id);
+        args.putInt("user_id", res.user.var_id);
         presentFragment(new ChatActivity(args));
     }
 
@@ -1394,7 +1394,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     private void needLayout() {
-        int newTop = (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + C0704ActionBar.getCurrentActionBarHeight();
+        int newTop = (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight();
         if (this.listView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
             if (layoutParams.topMargin != newTop) {
@@ -1407,7 +1407,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             float diff = ((float) this.extraHeight) / ((float) AndroidUtilities.m10dp(88.0f));
             this.extraHeightView.setScaleY(diff);
             this.shadowView.setTranslationY((float) (this.extraHeight + newTop));
-            this.writeButton.setTranslationY((float) ((((this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + C0704ActionBar.getCurrentActionBarHeight()) + this.extraHeight) - AndroidUtilities.m10dp(29.5f)));
+            this.writeButton.setTranslationY((float) ((((this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + CLASSNAMEActionBar.getCurrentActionBarHeight()) + this.extraHeight) - AndroidUtilities.m10dp(29.5f)));
             final boolean setVisible = diff > 0.2f;
             if (setVisible != (this.writeButton.getTag() == null)) {
                 if (setVisible) {
@@ -1454,7 +1454,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
             this.avatarImage.setScaleX((42.0f + (18.0f * diff)) / 42.0f);
             this.avatarImage.setScaleY((42.0f + (18.0f * diff)) / 42.0f);
-            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) C0704ActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
+            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) CLASSNAMEActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
             this.avatarImage.setTranslationX(((float) (-AndroidUtilities.m10dp(47.0f))) * diff);
             this.avatarImage.setTranslationY((float) Math.ceil((double) avatarY));
             this.nameTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
@@ -1468,7 +1468,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     private void fixLayout() {
         if (this.fragmentView != null) {
-            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C221110());
+            this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new CLASSNAME());
         }
     }
 
@@ -1487,7 +1487,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             this.avatarImage.setImage(photo, "50_50", this.avatarDrawable);
             this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
             this.nameTextView.setText(UserObject.getUserName(user));
-            this.onlineTextView.setText(LocaleController.getString("Online", C0541R.string.Online));
+            this.onlineTextView.setText(LocaleController.getString("Online", CLASSNAMER.string.Online));
             ImageReceiver imageReceiver = this.avatarImage.getImageReceiver();
             if (PhotoViewer.isShowingImage(photoBig)) {
                 z = false;
@@ -1511,7 +1511,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 if (VERSION.SDK_INT >= 24) {
                     i.addFlags(1);
                 }
-                i.setType("message/rfc822");
+                i.setType("message/rfCLASSNAME");
                 i.putExtra("android.intent.extra.EMAIL", TtmlNode.ANONYMOUS_REGION_ID);
                 i.putExtra("android.intent.extra.SUBJECT", "last logs");
                 i.putParcelableArrayListExtra("android.intent.extra.STREAM", uris);

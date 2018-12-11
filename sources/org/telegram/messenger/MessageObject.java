@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.PhoneFormat.C0216PhoneFormat;
+import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
 import org.telegram.messenger.Emoji.EmojiSpan;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -265,9 +265,9 @@ public class MessageObject {
         public byte minX;
         public byte minY;
         /* renamed from: ph */
-        public float f82ph;
+        public float var_ph;
         /* renamed from: pw */
-        public int f83pw;
+        public int var_pw;
         public float[] siblingHeights;
         public int spanSize;
 
@@ -276,9 +276,9 @@ public class MessageObject {
             this.maxX = (byte) maxX;
             this.minY = (byte) minY;
             this.maxY = (byte) maxY;
-            this.f83pw = w;
+            this.var_pw = w;
             this.spanSize = w;
-            this.f82ph = h;
+            this.var_ph = h;
             this.flags = (byte) flags;
         }
     }
@@ -344,7 +344,7 @@ public class MessageObject {
                     PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
                     GroupedMessagePosition position = new GroupedMessagePosition();
                     position.last = a == count + -1;
-                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.f145w) / ((float) photoSize.f144h);
+                    position.aspectRatio = photoSize == null ? 1.0f : ((float) photoSize.var_w) / ((float) photoSize.var_h);
                     if (position.aspectRatio > 1.2f) {
                         proportions.append("w");
                     } else if (position.aspectRatio < 0.8f) {
@@ -478,7 +478,7 @@ public class MessageObject {
                                 pos.set(k, k, i, i, width, lineHeight / 814.0f, flags);
                                 index++;
                             }
-                            posToFix.f83pw += spanLeft;
+                            posToFix.var_pw += spanLeft;
                             posToFix.spanSize += spanLeft;
                             y += lineHeight;
                         }
@@ -613,7 +613,7 @@ public class MessageObject {
                             if (pos.spanSize != 1000) {
                                 pos.spanSize += 108;
                             }
-                            pos.f83pw += 108;
+                            pos.var_pw += 108;
                         } else if ((pos.flags & 2) != 0) {
                             if (pos.spanSize != 1000) {
                                 pos.spanSize -= 108;
@@ -769,14 +769,14 @@ public class MessageObject {
                     if (phone.contains("#") || phone.contains("*")) {
                         result.append(phone);
                     } else {
-                        result.append(C0216PhoneFormat.getInstance().format(phone));
+                        result.append(CLASSNAMEPhoneFormat.getInstance().format(phone));
                     }
                 }
                 for (a = 0; a < currentData.emails.size(); a++) {
                     if (result.length() > 0) {
                         result.append(10);
                     }
-                    result.append(C0216PhoneFormat.getInstance().format((String) currentData.emails.get(a)));
+                    result.append(CLASSNAMEPhoneFormat.getInstance().format((String) currentData.emails.get(a)));
                 }
                 if (TextUtils.isEmpty(currentData.company)) {
                     return result;
@@ -859,9 +859,9 @@ public class MessageObject {
                     this.messageText = message.action.message;
                 } else if (message.action instanceof TL_messageActionChatCreate) {
                     if (isOut()) {
-                        this.messageText = LocaleController.getString("ActionYouCreateGroup", C0541R.string.ActionYouCreateGroup);
+                        this.messageText = LocaleController.getString("ActionYouCreateGroup", CLASSNAMER.string.ActionYouCreateGroup);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionCreateGroup", C0541R.string.ActionCreateGroup), "un1", fromUser);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionCreateGroup", CLASSNAMER.string.ActionCreateGroup), "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionChatDeleteUser) {
                     if (message.action.user_id != message.from_id) {
@@ -875,17 +875,17 @@ public class MessageObject {
                             whoUser2 = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(message.action.user_id));
                         }
                         if (isOut()) {
-                            this.messageText = replaceWithLink(LocaleController.getString("ActionYouKickUser", C0541R.string.ActionYouKickUser), "un2", whoUser2);
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionYouKickUser", CLASSNAMER.string.ActionYouKickUser), "un2", whoUser2);
                         } else if (message.action.user_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                            this.messageText = replaceWithLink(LocaleController.getString("ActionKickUserYou", C0541R.string.ActionKickUserYou), "un1", fromUser);
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionKickUserYou", CLASSNAMER.string.ActionKickUserYou), "un1", fromUser);
                         } else {
-                            this.messageText = replaceWithLink(LocaleController.getString("ActionKickUser", C0541R.string.ActionKickUser), "un2", whoUser2);
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionKickUser", CLASSNAMER.string.ActionKickUser), "un2", whoUser2);
                             this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
                         }
                     } else if (isOut()) {
-                        this.messageText = LocaleController.getString("ActionYouLeftUser", C0541R.string.ActionYouLeftUser);
+                        this.messageText = LocaleController.getString("ActionYouLeftUser", CLASSNAMER.string.ActionYouLeftUser);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionLeftUser", C0541R.string.ActionLeftUser), "un1", fromUser);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionLeftUser", CLASSNAMER.string.ActionLeftUser), "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionChatAddUser) {
                     int singleUserId = this.messageOwner.action.user_id;
@@ -904,77 +904,77 @@ public class MessageObject {
                         }
                         if (singleUserId == message.from_id) {
                             if (message.to_id.channel_id != 0 && !isMegagroup()) {
-                                this.messageText = LocaleController.getString("ChannelJoined", C0541R.string.ChannelJoined);
+                                this.messageText = LocaleController.getString("ChannelJoined", CLASSNAMER.string.ChannelJoined);
                             } else if (message.to_id.channel_id == 0 || !isMegagroup()) {
                                 if (isOut()) {
-                                    this.messageText = LocaleController.getString("ActionAddUserSelfYou", C0541R.string.ActionAddUserSelfYou);
+                                    this.messageText = LocaleController.getString("ActionAddUserSelfYou", CLASSNAMER.string.ActionAddUserSelfYou);
                                 } else {
-                                    this.messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelf", C0541R.string.ActionAddUserSelf), "un1", fromUser);
+                                    this.messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelf", CLASSNAMER.string.ActionAddUserSelf), "un1", fromUser);
                                 }
                             } else if (singleUserId == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                                this.messageText = LocaleController.getString("ChannelMegaJoined", C0541R.string.ChannelMegaJoined);
+                                this.messageText = LocaleController.getString("ChannelMegaJoined", CLASSNAMER.string.ChannelMegaJoined);
                             } else {
-                                this.messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelfMega", C0541R.string.ActionAddUserSelfMega), "un1", fromUser);
+                                this.messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelfMega", CLASSNAMER.string.ActionAddUserSelfMega), "un1", fromUser);
                             }
                         } else if (isOut()) {
-                            this.messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", C0541R.string.ActionYouAddUser), "un2", whoUser2);
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", CLASSNAMER.string.ActionYouAddUser), "un2", whoUser2);
                         } else if (singleUserId != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                            this.messageText = replaceWithLink(LocaleController.getString("ActionAddUser", C0541R.string.ActionAddUser), "un2", whoUser2);
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionAddUser", CLASSNAMER.string.ActionAddUser), "un2", whoUser2);
                             this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
                         } else if (message.to_id.channel_id == 0) {
-                            this.messageText = replaceWithLink(LocaleController.getString("ActionAddUserYou", C0541R.string.ActionAddUserYou), "un1", fromUser);
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionAddUserYou", CLASSNAMER.string.ActionAddUserYou), "un1", fromUser);
                         } else if (isMegagroup()) {
-                            this.messageText = replaceWithLink(LocaleController.getString("MegaAddedBy", C0541R.string.MegaAddedBy), "un1", fromUser);
+                            this.messageText = replaceWithLink(LocaleController.getString("MegaAddedBy", CLASSNAMER.string.MegaAddedBy), "un1", fromUser);
                         } else {
-                            this.messageText = replaceWithLink(LocaleController.getString("ChannelAddedBy", C0541R.string.ChannelAddedBy), "un1", fromUser);
+                            this.messageText = replaceWithLink(LocaleController.getString("ChannelAddedBy", CLASSNAMER.string.ChannelAddedBy), "un1", fromUser);
                         }
                     } else if (isOut()) {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", C0541R.string.ActionYouAddUser), "un2", message.action.users, users, sUsers);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", CLASSNAMER.string.ActionYouAddUser), "un2", message.action.users, users, sUsers);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionAddUser", C0541R.string.ActionAddUser), "un2", message.action.users, users, sUsers);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionAddUser", CLASSNAMER.string.ActionAddUser), "un2", message.action.users, users, sUsers);
                         this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionChatJoinedByLink) {
                     if (isOut()) {
-                        this.messageText = LocaleController.getString("ActionInviteYou", C0541R.string.ActionInviteYou);
+                        this.messageText = LocaleController.getString("ActionInviteYou", CLASSNAMER.string.ActionInviteYou);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionInviteUser", C0541R.string.ActionInviteUser), "un1", fromUser);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionInviteUser", CLASSNAMER.string.ActionInviteUser), "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionChatEditPhoto) {
                     if (message.to_id.channel_id != 0 && !isMegagroup()) {
-                        this.messageText = LocaleController.getString("ActionChannelChangedPhoto", C0541R.string.ActionChannelChangedPhoto);
+                        this.messageText = LocaleController.getString("ActionChannelChangedPhoto", CLASSNAMER.string.ActionChannelChangedPhoto);
                     } else if (isOut()) {
-                        this.messageText = LocaleController.getString("ActionYouChangedPhoto", C0541R.string.ActionYouChangedPhoto);
+                        this.messageText = LocaleController.getString("ActionYouChangedPhoto", CLASSNAMER.string.ActionYouChangedPhoto);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionChangedPhoto", C0541R.string.ActionChangedPhoto), "un1", fromUser);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionChangedPhoto", CLASSNAMER.string.ActionChangedPhoto), "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionChatEditTitle) {
                     if (message.to_id.channel_id != 0 && !isMegagroup()) {
-                        this.messageText = LocaleController.getString("ActionChannelChangedTitle", C0541R.string.ActionChannelChangedTitle).replace("un2", message.action.title);
+                        this.messageText = LocaleController.getString("ActionChannelChangedTitle", CLASSNAMER.string.ActionChannelChangedTitle).replace("un2", message.action.title);
                     } else if (isOut()) {
-                        this.messageText = LocaleController.getString("ActionYouChangedTitle", C0541R.string.ActionYouChangedTitle).replace("un2", message.action.title);
+                        this.messageText = LocaleController.getString("ActionYouChangedTitle", CLASSNAMER.string.ActionYouChangedTitle).replace("un2", message.action.title);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionChangedTitle", C0541R.string.ActionChangedTitle).replace("un2", message.action.title), "un1", fromUser);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionChangedTitle", CLASSNAMER.string.ActionChangedTitle).replace("un2", message.action.title), "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionChatDeletePhoto) {
                     if (message.to_id.channel_id != 0 && !isMegagroup()) {
-                        this.messageText = LocaleController.getString("ActionChannelRemovedPhoto", C0541R.string.ActionChannelRemovedPhoto);
+                        this.messageText = LocaleController.getString("ActionChannelRemovedPhoto", CLASSNAMER.string.ActionChannelRemovedPhoto);
                     } else if (isOut()) {
-                        this.messageText = LocaleController.getString("ActionYouRemovedPhoto", C0541R.string.ActionYouRemovedPhoto);
+                        this.messageText = LocaleController.getString("ActionYouRemovedPhoto", CLASSNAMER.string.ActionYouRemovedPhoto);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionRemovedPhoto", C0541R.string.ActionRemovedPhoto), "un1", fromUser);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionRemovedPhoto", CLASSNAMER.string.ActionRemovedPhoto), "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionTTLChange) {
                     if (message.action.ttl != 0) {
                         if (isOut()) {
-                            this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", C0541R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(message.action.ttl));
+                            this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", CLASSNAMER.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(message.action.ttl));
                         } else {
-                            this.messageText = LocaleController.formatString("MessageLifetimeChanged", C0541R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(message.action.ttl));
+                            this.messageText = LocaleController.formatString("MessageLifetimeChanged", CLASSNAMER.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(message.action.ttl));
                         }
                     } else if (isOut()) {
-                        this.messageText = LocaleController.getString("MessageLifetimeYouRemoved", C0541R.string.MessageLifetimeYouRemoved);
+                        this.messageText = LocaleController.getString("MessageLifetimeYouRemoved", CLASSNAMER.string.MessageLifetimeYouRemoved);
                     } else {
-                        this.messageText = LocaleController.formatString("MessageLifetimeRemoved", C0541R.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
+                        this.messageText = LocaleController.formatString("MessageLifetimeRemoved", CLASSNAMER.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
                     }
                 } else if (message.action instanceof TL_messageActionLoginUnknownLocation) {
                     String date;
@@ -982,7 +982,7 @@ public class MessageObject {
                     if (LocaleController.getInstance().formatterDay == null || LocaleController.getInstance().formatterYear == null) {
                         date = TtmlNode.ANONYMOUS_REGION_ID + message.date;
                     } else {
-                        date = LocaleController.formatString("formatDateAtTime", C0541R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(time), LocaleController.getInstance().formatterDay.format(time));
+                        date = LocaleController.formatString("formatDateAtTime", CLASSNAMER.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(time), LocaleController.getInstance().formatterDay.format(time));
                     }
                     User to_user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
                     if (to_user == null) {
@@ -996,49 +996,49 @@ public class MessageObject {
                         }
                     }
                     name = to_user != null ? UserObject.getFirstName(to_user) : TtmlNode.ANONYMOUS_REGION_ID;
-                    this.messageText = LocaleController.formatString("NotificationUnrecognizedDevice", C0541R.string.NotificationUnrecognizedDevice, name, date, message.action.title, message.action.address);
+                    this.messageText = LocaleController.formatString("NotificationUnrecognizedDevice", CLASSNAMER.string.NotificationUnrecognizedDevice, name, date, message.action.title, message.action.address);
                 } else if (message.action instanceof TL_messageActionUserJoined) {
-                    this.messageText = LocaleController.formatString("NotificationContactJoined", C0541R.string.NotificationContactJoined, UserObject.getUserName(fromUser));
+                    this.messageText = LocaleController.formatString("NotificationContactJoined", CLASSNAMER.string.NotificationContactJoined, UserObject.getUserName(fromUser));
                 } else if (message.action instanceof TL_messageActionUserUpdatedPhoto) {
-                    this.messageText = LocaleController.formatString("NotificationContactNewPhoto", C0541R.string.NotificationContactNewPhoto, UserObject.getUserName(fromUser));
+                    this.messageText = LocaleController.formatString("NotificationContactNewPhoto", CLASSNAMER.string.NotificationContactNewPhoto, UserObject.getUserName(fromUser));
                 } else if (message.action instanceof TL_messageEncryptedAction) {
                     if (message.action.encryptedAction instanceof TL_decryptedMessageActionScreenshotMessages) {
                         if (isOut()) {
-                            this.messageText = LocaleController.formatString("ActionTakeScreenshootYou", C0541R.string.ActionTakeScreenshootYou, new Object[0]);
+                            this.messageText = LocaleController.formatString("ActionTakeScreenshootYou", CLASSNAMER.string.ActionTakeScreenshootYou, new Object[0]);
                         } else {
-                            this.messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", C0541R.string.ActionTakeScreenshoot), "un1", fromUser);
+                            this.messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", CLASSNAMER.string.ActionTakeScreenshoot), "un1", fromUser);
                         }
                     } else if (message.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL) {
                         if (((TL_decryptedMessageActionSetMessageTTL) message.action.encryptedAction).ttl_seconds != 0) {
                             if (isOut()) {
-                                this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", C0541R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(action.ttl_seconds));
+                                this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", CLASSNAMER.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(action.ttl_seconds));
                             } else {
-                                this.messageText = LocaleController.formatString("MessageLifetimeChanged", C0541R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(action.ttl_seconds));
+                                this.messageText = LocaleController.formatString("MessageLifetimeChanged", CLASSNAMER.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(action.ttl_seconds));
                             }
                         } else if (isOut()) {
-                            this.messageText = LocaleController.getString("MessageLifetimeYouRemoved", C0541R.string.MessageLifetimeYouRemoved);
+                            this.messageText = LocaleController.getString("MessageLifetimeYouRemoved", CLASSNAMER.string.MessageLifetimeYouRemoved);
                         } else {
-                            this.messageText = LocaleController.formatString("MessageLifetimeRemoved", C0541R.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
+                            this.messageText = LocaleController.formatString("MessageLifetimeRemoved", CLASSNAMER.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
                         }
                     }
                 } else if (message.action instanceof TL_messageActionScreenshotTaken) {
                     if (isOut()) {
-                        this.messageText = LocaleController.formatString("ActionTakeScreenshootYou", C0541R.string.ActionTakeScreenshootYou, new Object[0]);
+                        this.messageText = LocaleController.formatString("ActionTakeScreenshootYou", CLASSNAMER.string.ActionTakeScreenshootYou, new Object[0]);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", C0541R.string.ActionTakeScreenshoot), "un1", fromUser);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", CLASSNAMER.string.ActionTakeScreenshoot), "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionCreatedBroadcastList) {
-                    this.messageText = LocaleController.formatString("YouCreatedBroadcastList", C0541R.string.YouCreatedBroadcastList, new Object[0]);
+                    this.messageText = LocaleController.formatString("YouCreatedBroadcastList", CLASSNAMER.string.YouCreatedBroadcastList, new Object[0]);
                 } else if (message.action instanceof TL_messageActionChannelCreate) {
                     if (isMegagroup()) {
-                        this.messageText = LocaleController.getString("ActionCreateMega", C0541R.string.ActionCreateMega);
+                        this.messageText = LocaleController.getString("ActionCreateMega", CLASSNAMER.string.ActionCreateMega);
                     } else {
-                        this.messageText = LocaleController.getString("ActionCreateChannel", C0541R.string.ActionCreateChannel);
+                        this.messageText = LocaleController.getString("ActionCreateChannel", CLASSNAMER.string.ActionCreateChannel);
                     }
                 } else if (message.action instanceof TL_messageActionChatMigrateTo) {
-                    this.messageText = LocaleController.getString("ActionMigrateFromGroup", C0541R.string.ActionMigrateFromGroup);
+                    this.messageText = LocaleController.getString("ActionMigrateFromGroup", CLASSNAMER.string.ActionMigrateFromGroup);
                 } else if (message.action instanceof TL_messageActionChannelMigrateFrom) {
-                    this.messageText = LocaleController.getString("ActionMigrateFromGroup", C0541R.string.ActionMigrateFromGroup);
+                    this.messageText = LocaleController.getString("ActionMigrateFromGroup", CLASSNAMER.string.ActionMigrateFromGroup);
                 } else if (message.action instanceof TL_messageActionPinMessage) {
                     Chat chat;
                     if (fromUser != null) {
@@ -1052,7 +1052,7 @@ public class MessageObject {
                     }
                     generatePinMessageText(fromUser, chat);
                 } else if (message.action instanceof TL_messageActionHistoryClear) {
-                    this.messageText = LocaleController.getString("HistoryCleared", C0541R.string.HistoryCleared);
+                    this.messageText = LocaleController.getString("HistoryCleared", CLASSNAMER.string.HistoryCleared);
                 } else if (message.action instanceof TL_messageActionGameScore) {
                     generateGameMessageText(fromUser);
                 } else if (message.action instanceof TL_messageActionPhoneCall) {
@@ -1060,20 +1060,20 @@ public class MessageObject {
                     boolean isMissed = call.reason instanceof TL_phoneCallDiscardReasonMissed;
                     if (this.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                         if (isMissed) {
-                            this.messageText = LocaleController.getString("CallMessageOutgoingMissed", C0541R.string.CallMessageOutgoingMissed);
+                            this.messageText = LocaleController.getString("CallMessageOutgoingMissed", CLASSNAMER.string.CallMessageOutgoingMissed);
                         } else {
-                            this.messageText = LocaleController.getString("CallMessageOutgoing", C0541R.string.CallMessageOutgoing);
+                            this.messageText = LocaleController.getString("CallMessageOutgoing", CLASSNAMER.string.CallMessageOutgoing);
                         }
                     } else if (isMissed) {
-                        this.messageText = LocaleController.getString("CallMessageIncomingMissed", C0541R.string.CallMessageIncomingMissed);
+                        this.messageText = LocaleController.getString("CallMessageIncomingMissed", CLASSNAMER.string.CallMessageIncomingMissed);
                     } else if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
-                        this.messageText = LocaleController.getString("CallMessageIncomingDeclined", C0541R.string.CallMessageIncomingDeclined);
+                        this.messageText = LocaleController.getString("CallMessageIncomingDeclined", CLASSNAMER.string.CallMessageIncomingDeclined);
                     } else {
-                        this.messageText = LocaleController.getString("CallMessageIncoming", C0541R.string.CallMessageIncoming);
+                        this.messageText = LocaleController.getString("CallMessageIncoming", CLASSNAMER.string.CallMessageIncoming);
                     }
                     if (call.duration > 0) {
                         String duration = LocaleController.formatCallDuration(call.duration);
-                        this.messageText = LocaleController.formatString("CallMessageWithDuration", C0541R.string.CallMessageWithDuration, this.messageText, duration);
+                        this.messageText = LocaleController.formatString("CallMessageWithDuration", CLASSNAMER.string.CallMessageWithDuration, this.messageText, duration);
                         String _messageText = this.messageText.toString();
                         start = _messageText.indexOf(duration);
                         if (start != -1) {
@@ -1102,7 +1102,7 @@ public class MessageObject {
                     generatePaymentSentMessageText(null);
                 } else if (message.action instanceof TL_messageActionBotAllowed) {
                     String domain = ((TL_messageActionBotAllowed) message.action).domain;
-                    String text = LocaleController.getString("ActionBotAllowed", C0541R.string.ActionBotAllowed);
+                    String text = LocaleController.getString("ActionBotAllowed", CLASSNAMER.string.ActionBotAllowed);
                     start = text.indexOf("%1$s");
                     spannableString = new SpannableString(String.format(text, new Object[]{domain}));
                     if (start >= 0) {
@@ -1119,31 +1119,31 @@ public class MessageObject {
                             str.append(", ");
                         }
                         if (type instanceof TL_secureValueTypePhone) {
-                            str.append(LocaleController.getString("ActionBotDocumentPhone", C0541R.string.ActionBotDocumentPhone));
+                            str.append(LocaleController.getString("ActionBotDocumentPhone", CLASSNAMER.string.ActionBotDocumentPhone));
                         } else if (type instanceof TL_secureValueTypeEmail) {
-                            str.append(LocaleController.getString("ActionBotDocumentEmail", C0541R.string.ActionBotDocumentEmail));
+                            str.append(LocaleController.getString("ActionBotDocumentEmail", CLASSNAMER.string.ActionBotDocumentEmail));
                         } else if (type instanceof TL_secureValueTypeAddress) {
-                            str.append(LocaleController.getString("ActionBotDocumentAddress", C0541R.string.ActionBotDocumentAddress));
+                            str.append(LocaleController.getString("ActionBotDocumentAddress", CLASSNAMER.string.ActionBotDocumentAddress));
                         } else if (type instanceof TL_secureValueTypePersonalDetails) {
-                            str.append(LocaleController.getString("ActionBotDocumentIdentity", C0541R.string.ActionBotDocumentIdentity));
+                            str.append(LocaleController.getString("ActionBotDocumentIdentity", CLASSNAMER.string.ActionBotDocumentIdentity));
                         } else if (type instanceof TL_secureValueTypePassport) {
-                            str.append(LocaleController.getString("ActionBotDocumentPassport", C0541R.string.ActionBotDocumentPassport));
+                            str.append(LocaleController.getString("ActionBotDocumentPassport", CLASSNAMER.string.ActionBotDocumentPassport));
                         } else if (type instanceof TL_secureValueTypeDriverLicense) {
-                            str.append(LocaleController.getString("ActionBotDocumentDriverLicence", C0541R.string.ActionBotDocumentDriverLicence));
+                            str.append(LocaleController.getString("ActionBotDocumentDriverLicence", CLASSNAMER.string.ActionBotDocumentDriverLicence));
                         } else if (type instanceof TL_secureValueTypeIdentityCard) {
-                            str.append(LocaleController.getString("ActionBotDocumentIdentityCard", C0541R.string.ActionBotDocumentIdentityCard));
+                            str.append(LocaleController.getString("ActionBotDocumentIdentityCard", CLASSNAMER.string.ActionBotDocumentIdentityCard));
                         } else if (type instanceof TL_secureValueTypeUtilityBill) {
-                            str.append(LocaleController.getString("ActionBotDocumentUtilityBill", C0541R.string.ActionBotDocumentUtilityBill));
+                            str.append(LocaleController.getString("ActionBotDocumentUtilityBill", CLASSNAMER.string.ActionBotDocumentUtilityBill));
                         } else if (type instanceof TL_secureValueTypeBankStatement) {
-                            str.append(LocaleController.getString("ActionBotDocumentBankStatement", C0541R.string.ActionBotDocumentBankStatement));
+                            str.append(LocaleController.getString("ActionBotDocumentBankStatement", CLASSNAMER.string.ActionBotDocumentBankStatement));
                         } else if (type instanceof TL_secureValueTypeRentalAgreement) {
-                            str.append(LocaleController.getString("ActionBotDocumentRentalAgreement", C0541R.string.ActionBotDocumentRentalAgreement));
+                            str.append(LocaleController.getString("ActionBotDocumentRentalAgreement", CLASSNAMER.string.ActionBotDocumentRentalAgreement));
                         } else if (type instanceof TL_secureValueTypeInternalPassport) {
-                            str.append(LocaleController.getString("ActionBotDocumentInternalPassport", C0541R.string.ActionBotDocumentInternalPassport));
+                            str.append(LocaleController.getString("ActionBotDocumentInternalPassport", CLASSNAMER.string.ActionBotDocumentInternalPassport));
                         } else if (type instanceof TL_secureValueTypePassportRegistration) {
-                            str.append(LocaleController.getString("ActionBotDocumentPassportRegistration", C0541R.string.ActionBotDocumentPassportRegistration));
+                            str.append(LocaleController.getString("ActionBotDocumentPassportRegistration", CLASSNAMER.string.ActionBotDocumentPassportRegistration));
                         } else if (type instanceof TL_secureValueTypeTemporaryRegistration) {
-                            str.append(LocaleController.getString("ActionBotDocumentTemporaryRegistration", C0541R.string.ActionBotDocumentTemporaryRegistration));
+                            str.append(LocaleController.getString("ActionBotDocumentTemporaryRegistration", CLASSNAMER.string.ActionBotDocumentTemporaryRegistration));
                         }
                     }
                     User user = null;
@@ -1157,25 +1157,25 @@ public class MessageObject {
                             user = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(message.to_id.user_id));
                         }
                     }
-                    this.messageText = LocaleController.formatString("ActionBotDocuments", C0541R.string.ActionBotDocuments, UserObject.getFirstName(user), str.toString());
+                    this.messageText = LocaleController.formatString("ActionBotDocuments", CLASSNAMER.string.ActionBotDocuments, UserObject.getFirstName(user), str.toString());
                 }
             }
         } else if (isMediaEmpty()) {
             this.messageText = message.message;
         } else if (message.media instanceof TL_messageMediaPhoto) {
-            this.messageText = LocaleController.getString("AttachPhoto", C0541R.string.AttachPhoto);
+            this.messageText = LocaleController.getString("AttachPhoto", CLASSNAMER.string.AttachPhoto);
         } else if (isVideo() || ((message.media instanceof TL_messageMediaDocument) && (message.media.document instanceof TL_documentEmpty) && message.media.ttl_seconds != 0)) {
-            this.messageText = LocaleController.getString("AttachVideo", C0541R.string.AttachVideo);
+            this.messageText = LocaleController.getString("AttachVideo", CLASSNAMER.string.AttachVideo);
         } else if (isVoice()) {
-            this.messageText = LocaleController.getString("AttachAudio", C0541R.string.AttachAudio);
+            this.messageText = LocaleController.getString("AttachAudio", CLASSNAMER.string.AttachAudio);
         } else if (isRoundVideo()) {
-            this.messageText = LocaleController.getString("AttachRound", C0541R.string.AttachRound);
+            this.messageText = LocaleController.getString("AttachRound", CLASSNAMER.string.AttachRound);
         } else if ((message.media instanceof TL_messageMediaGeo) || (message.media instanceof TL_messageMediaVenue)) {
-            this.messageText = LocaleController.getString("AttachLocation", C0541R.string.AttachLocation);
+            this.messageText = LocaleController.getString("AttachLocation", CLASSNAMER.string.AttachLocation);
         } else if (message.media instanceof TL_messageMediaGeoLive) {
-            this.messageText = LocaleController.getString("AttachLiveLocation", C0541R.string.AttachLiveLocation);
+            this.messageText = LocaleController.getString("AttachLiveLocation", CLASSNAMER.string.AttachLiveLocation);
         } else if (message.media instanceof TL_messageMediaContact) {
-            this.messageText = LocaleController.getString("AttachContact", C0541R.string.AttachContact);
+            this.messageText = LocaleController.getString("AttachContact", CLASSNAMER.string.AttachContact);
             if (!TextUtils.isEmpty(message.media.vcard)) {
                 this.vCardData = VCardData.parse(message.media.vcard);
             }
@@ -1184,23 +1184,23 @@ public class MessageObject {
         } else if (message.media instanceof TL_messageMediaInvoice) {
             this.messageText = message.media.description;
         } else if (message.media instanceof TL_messageMediaUnsupported) {
-            this.messageText = LocaleController.getString("UnsupportedMedia", C0541R.string.UnsupportedMedia);
+            this.messageText = LocaleController.getString("UnsupportedMedia", CLASSNAMER.string.UnsupportedMedia);
         } else if (message.media instanceof TL_messageMediaDocument) {
             if (isSticker()) {
                 String sch = getStrickerChar();
                 if (sch == null || sch.length() <= 0) {
-                    this.messageText = LocaleController.getString("AttachSticker", C0541R.string.AttachSticker);
+                    this.messageText = LocaleController.getString("AttachSticker", CLASSNAMER.string.AttachSticker);
                 } else {
-                    this.messageText = String.format("%s %s", new Object[]{sch, LocaleController.getString("AttachSticker", C0541R.string.AttachSticker)});
+                    this.messageText = String.format("%s %s", new Object[]{sch, LocaleController.getString("AttachSticker", CLASSNAMER.string.AttachSticker)});
                 }
             } else if (isMusic()) {
-                this.messageText = LocaleController.getString("AttachMusic", C0541R.string.AttachMusic);
+                this.messageText = LocaleController.getString("AttachMusic", CLASSNAMER.string.AttachMusic);
             } else if (isGif()) {
-                this.messageText = LocaleController.getString("AttachGif", C0541R.string.AttachGif);
+                this.messageText = LocaleController.getString("AttachGif", CLASSNAMER.string.AttachGif);
             } else {
                 name = FileLoader.getDocumentFileName(message.media.document);
                 if (name == null || name.length() <= 0) {
-                    this.messageText = LocaleController.getString("AttachDocument", C0541R.string.AttachDocument);
+                    this.messageText = LocaleController.getString("AttachDocument", CLASSNAMER.string.AttachDocument);
                 } else {
                     this.messageText = name;
                 }
@@ -1264,7 +1264,7 @@ public class MessageObject {
             messagesByDays.put(this.dateKey, new ArrayList());
             TL_message dateMsg = new TL_message();
             dateMsg.message = LocaleController.formatDateChat((long) event.date);
-            dateMsg.f139id = 0;
+            dateMsg.var_id = 0;
             dateMsg.date = event.date;
             MessageObject dateObj = new MessageObject(accountNum, dateMsg, false);
             dateObj.type = 10;
@@ -1291,7 +1291,7 @@ public class MessageObject {
         this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth), Integer.valueOf(dateDay)});
         this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth)});
         Peer to_id = new TL_peerChannel();
-        to_id.channel_id = chat.f113id;
+        to_id.channel_id = chat.var_id;
         Message message = null;
         User whoUser;
         String str;
@@ -1300,18 +1300,18 @@ public class MessageObject {
         if (event.action instanceof TL_channelAdminLogEventActionChangeTitle) {
             String title = ((TL_channelAdminLogEventActionChangeTitle) event.action).new_value;
             if (chat.megagroup) {
-                this.messageText = replaceWithLink(LocaleController.formatString("EventLogEditedGroupTitle", C0541R.string.EventLogEditedGroupTitle, title), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.formatString("EventLogEditedGroupTitle", CLASSNAMER.string.EventLogEditedGroupTitle, title), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.formatString("EventLogEditedChannelTitle", C0541R.string.EventLogEditedChannelTitle, title), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.formatString("EventLogEditedChannelTitle", CLASSNAMER.string.EventLogEditedChannelTitle, title), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionChangePhoto) {
             this.messageOwner = new TL_messageService();
             if (event.action.new_photo instanceof TL_chatPhotoEmpty) {
                 this.messageOwner.action = new TL_messageActionChatDeletePhoto();
                 if (chat.megagroup) {
-                    this.messageText = replaceWithLink(LocaleController.getString("EventLogRemovedWGroupPhoto", C0541R.string.EventLogRemovedWGroupPhoto), "un1", fromUser);
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogRemovedWGroupPhoto", CLASSNAMER.string.EventLogRemovedWGroupPhoto), "un1", fromUser);
                 } else {
-                    this.messageText = replaceWithLink(LocaleController.getString("EventLogRemovedChannelPhoto", C0541R.string.EventLogRemovedChannelPhoto), "un1", fromUser);
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogRemovedChannelPhoto", CLASSNAMER.string.EventLogRemovedChannelPhoto), "un1", fromUser);
                 }
             } else {
                 this.messageOwner.action = new TL_messageActionChatEditPhoto();
@@ -1319,52 +1319,52 @@ public class MessageObject {
                 TL_photoSize photoSize = new TL_photoSize();
                 photoSize.location = event.action.new_photo.photo_small;
                 photoSize.type = "s";
-                photoSize.f144h = 80;
-                photoSize.f145w = 80;
+                photoSize.var_h = 80;
+                photoSize.var_w = 80;
                 this.messageOwner.action.photo.sizes.add(photoSize);
                 photoSize = new TL_photoSize();
                 photoSize.location = event.action.new_photo.photo_big;
                 photoSize.type = "m";
-                photoSize.f144h = 640;
-                photoSize.f145w = 640;
+                photoSize.var_h = 640;
+                photoSize.var_w = 640;
                 this.messageOwner.action.photo.sizes.add(photoSize);
                 if (chat.megagroup) {
-                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedGroupPhoto", C0541R.string.EventLogEditedGroupPhoto), "un1", fromUser);
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedGroupPhoto", CLASSNAMER.string.EventLogEditedGroupPhoto), "un1", fromUser);
                 } else {
-                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedChannelPhoto", C0541R.string.EventLogEditedChannelPhoto), "un1", fromUser);
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedChannelPhoto", CLASSNAMER.string.EventLogEditedChannelPhoto), "un1", fromUser);
                 }
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantJoin) {
             if (chat.megagroup) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogGroupJoined", C0541R.string.EventLogGroupJoined), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogGroupJoined", CLASSNAMER.string.EventLogGroupJoined), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogChannelJoined", C0541R.string.EventLogChannelJoined), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogChannelJoined", CLASSNAMER.string.EventLogChannelJoined), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantLeave) {
             this.messageOwner = new TL_messageService();
             this.messageOwner.action = new TL_messageActionChatDeleteUser();
             this.messageOwner.action.user_id = event.user_id;
             if (chat.megagroup) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogLeftGroup", C0541R.string.EventLogLeftGroup), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogLeftGroup", CLASSNAMER.string.EventLogLeftGroup), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogLeftChannel", C0541R.string.EventLogLeftChannel), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogLeftChannel", CLASSNAMER.string.EventLogLeftChannel), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantInvite) {
             this.messageOwner = new TL_messageService();
             this.messageOwner.action = new TL_messageActionChatAddUser();
             TLObject whoUser2 = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(event.action.participant.user_id));
             if (event.action.participant.user_id != this.messageOwner.from_id) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogAdded", C0541R.string.EventLogAdded), "un2", whoUser2);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogAdded", CLASSNAMER.string.EventLogAdded), "un2", whoUser2);
                 this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
             } else if (chat.megagroup) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogGroupJoined", C0541R.string.EventLogGroupJoined), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogGroupJoined", CLASSNAMER.string.EventLogGroupJoined), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogChannelJoined", C0541R.string.EventLogChannelJoined), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogChannelJoined", CLASSNAMER.string.EventLogChannelJoined), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantToggleAdmin) {
             this.messageOwner = new TL_message();
             whoUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(event.action.prev_participant.user_id));
-            str = LocaleController.getString("EventLogPromoted", C0541R.string.EventLogPromoted);
+            str = LocaleController.getString("EventLogPromoted", CLASSNAMER.string.EventLogPromoted);
             objArr = new Object[1];
             objArr[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
             stringBuilder = new StringBuilder(String.format(str, objArr));
@@ -1379,37 +1379,37 @@ public class MessageObject {
             }
             if (o.change_info != n.change_info) {
                 stringBuilder.append(10).append(n.change_info ? '+' : '-').append(' ');
-                stringBuilder.append(chat.megagroup ? LocaleController.getString("EventLogPromotedChangeGroupInfo", C0541R.string.EventLogPromotedChangeGroupInfo) : LocaleController.getString("EventLogPromotedChangeChannelInfo", C0541R.string.EventLogPromotedChangeChannelInfo));
+                stringBuilder.append(chat.megagroup ? LocaleController.getString("EventLogPromotedChangeGroupInfo", CLASSNAMER.string.EventLogPromotedChangeGroupInfo) : LocaleController.getString("EventLogPromotedChangeChannelInfo", CLASSNAMER.string.EventLogPromotedChangeChannelInfo));
             }
             if (!chat.megagroup) {
                 if (o.post_messages != n.post_messages) {
                     stringBuilder.append(10).append(n.post_messages ? '+' : '-').append(' ');
-                    stringBuilder.append(LocaleController.getString("EventLogPromotedPostMessages", C0541R.string.EventLogPromotedPostMessages));
+                    stringBuilder.append(LocaleController.getString("EventLogPromotedPostMessages", CLASSNAMER.string.EventLogPromotedPostMessages));
                 }
                 if (o.edit_messages != n.edit_messages) {
                     stringBuilder.append(10).append(n.edit_messages ? '+' : '-').append(' ');
-                    stringBuilder.append(LocaleController.getString("EventLogPromotedEditMessages", C0541R.string.EventLogPromotedEditMessages));
+                    stringBuilder.append(LocaleController.getString("EventLogPromotedEditMessages", CLASSNAMER.string.EventLogPromotedEditMessages));
                 }
             }
             if (o.delete_messages != n.delete_messages) {
                 stringBuilder.append(10).append(n.delete_messages ? '+' : '-').append(' ');
-                stringBuilder.append(LocaleController.getString("EventLogPromotedDeleteMessages", C0541R.string.EventLogPromotedDeleteMessages));
+                stringBuilder.append(LocaleController.getString("EventLogPromotedDeleteMessages", CLASSNAMER.string.EventLogPromotedDeleteMessages));
             }
             if (o.add_admins != n.add_admins) {
                 stringBuilder.append(10).append(n.add_admins ? '+' : '-').append(' ');
-                stringBuilder.append(LocaleController.getString("EventLogPromotedAddAdmins", C0541R.string.EventLogPromotedAddAdmins));
+                stringBuilder.append(LocaleController.getString("EventLogPromotedAddAdmins", CLASSNAMER.string.EventLogPromotedAddAdmins));
             }
             if (chat.megagroup && o.ban_users != n.ban_users) {
                 stringBuilder.append(10).append(n.ban_users ? '+' : '-').append(' ');
-                stringBuilder.append(LocaleController.getString("EventLogPromotedBanUsers", C0541R.string.EventLogPromotedBanUsers));
+                stringBuilder.append(LocaleController.getString("EventLogPromotedBanUsers", CLASSNAMER.string.EventLogPromotedBanUsers));
             }
             if (o.invite_users != n.invite_users) {
                 stringBuilder.append(10).append(n.invite_users ? '+' : '-').append(' ');
-                stringBuilder.append(LocaleController.getString("EventLogPromotedAddUsers", C0541R.string.EventLogPromotedAddUsers));
+                stringBuilder.append(LocaleController.getString("EventLogPromotedAddUsers", CLASSNAMER.string.EventLogPromotedAddUsers));
             }
             if (chat.megagroup && o.pin_messages != n.pin_messages) {
                 stringBuilder.append(10).append(n.pin_messages ? '+' : '-').append(' ');
-                stringBuilder.append(LocaleController.getString("EventLogPromotedPinMessages", C0541R.string.EventLogPromotedPinMessages));
+                stringBuilder.append(LocaleController.getString("EventLogPromotedPinMessages", CLASSNAMER.string.EventLogPromotedPinMessages));
             }
             this.messageText = stringBuilder.toString();
         } else if (event.action instanceof TL_channelAdminLogEventActionParticipantToggleBan) {
@@ -1419,9 +1419,9 @@ public class MessageObject {
             TL_channelBannedRights n2 = event.action.new_participant.banned_rights;
             if (!chat.megagroup || (n2 != null && n2.view_messages && (n2 == null || o2 == null || n2.until_date == o2.until_date))) {
                 if (n2 == null || !(o2 == null || n2.view_messages)) {
-                    str = LocaleController.getString("EventLogChannelUnrestricted", C0541R.string.EventLogChannelUnrestricted);
+                    str = LocaleController.getString("EventLogChannelUnrestricted", CLASSNAMER.string.EventLogChannelUnrestricted);
                 } else {
-                    str = LocaleController.getString("EventLogChannelRestricted", C0541R.string.EventLogChannelRestricted);
+                    str = LocaleController.getString("EventLogChannelRestricted", CLASSNAMER.string.EventLogChannelRestricted);
                 }
                 objArr = new Object[1];
                 objArr[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
@@ -1429,7 +1429,7 @@ public class MessageObject {
             } else {
                 StringBuilder bannedDuration;
                 if (n2 == null || AndroidUtilities.isBannedForever(n2.until_date)) {
-                    bannedDuration = new StringBuilder(LocaleController.getString("UserRestrictionsUntilForever", C0541R.string.UserRestrictionsUntilForever));
+                    bannedDuration = new StringBuilder(LocaleController.getString("UserRestrictionsUntilForever", CLASSNAMER.string.UserRestrictionsUntilForever));
                 } else {
                     bannedDuration = new StringBuilder();
                     int duration = n2.until_date - event.date;
@@ -1465,7 +1465,7 @@ public class MessageObject {
                         }
                     }
                 }
-                str = LocaleController.getString("EventLogRestrictedUntil", C0541R.string.EventLogRestrictedUntil);
+                str = LocaleController.getString("EventLogRestrictedUntil", CLASSNAMER.string.EventLogRestrictedUntil);
                 objArr = new Object[2];
                 objArr[0] = getUserName(whoUser, this.messageOwner.entities, str.indexOf("%1$s"));
                 objArr[1] = bannedDuration.toString();
@@ -1483,7 +1483,7 @@ public class MessageObject {
                         added = true;
                     }
                     stringBuilder.append(10).append(!n2.view_messages ? '+' : '-').append(' ');
-                    stringBuilder.append(LocaleController.getString("EventLogRestrictedReadMessages", C0541R.string.EventLogRestrictedReadMessages));
+                    stringBuilder.append(LocaleController.getString("EventLogRestrictedReadMessages", CLASSNAMER.string.EventLogRestrictedReadMessages));
                 }
                 if (o2.send_messages != n2.send_messages) {
                     if (!added) {
@@ -1491,7 +1491,7 @@ public class MessageObject {
                         added = true;
                     }
                     stringBuilder.append(10).append(!n2.send_messages ? '+' : '-').append(' ');
-                    stringBuilder.append(LocaleController.getString("EventLogRestrictedSendMessages", C0541R.string.EventLogRestrictedSendMessages));
+                    stringBuilder.append(LocaleController.getString("EventLogRestrictedSendMessages", CLASSNAMER.string.EventLogRestrictedSendMessages));
                 }
                 if (!(o2.send_stickers == n2.send_stickers && o2.send_inline == n2.send_inline && o2.send_gifs == n2.send_gifs && o2.send_games == n2.send_games)) {
                     if (!added) {
@@ -1499,7 +1499,7 @@ public class MessageObject {
                         added = true;
                     }
                     stringBuilder.append(10).append(!n2.send_stickers ? '+' : '-').append(' ');
-                    stringBuilder.append(LocaleController.getString("EventLogRestrictedSendStickers", C0541R.string.EventLogRestrictedSendStickers));
+                    stringBuilder.append(LocaleController.getString("EventLogRestrictedSendStickers", CLASSNAMER.string.EventLogRestrictedSendStickers));
                 }
                 if (o2.send_media != n2.send_media) {
                     if (!added) {
@@ -1507,49 +1507,49 @@ public class MessageObject {
                         added = true;
                     }
                     stringBuilder.append(10).append(!n2.send_media ? '+' : '-').append(' ');
-                    stringBuilder.append(LocaleController.getString("EventLogRestrictedSendMedia", C0541R.string.EventLogRestrictedSendMedia));
+                    stringBuilder.append(LocaleController.getString("EventLogRestrictedSendMedia", CLASSNAMER.string.EventLogRestrictedSendMedia));
                 }
                 if (o2.embed_links != n2.embed_links) {
                     if (!added) {
                         stringBuilder.append(10);
                     }
                     stringBuilder.append(10).append(!n2.embed_links ? '+' : '-').append(' ');
-                    stringBuilder.append(LocaleController.getString("EventLogRestrictedSendEmbed", C0541R.string.EventLogRestrictedSendEmbed));
+                    stringBuilder.append(LocaleController.getString("EventLogRestrictedSendEmbed", CLASSNAMER.string.EventLogRestrictedSendEmbed));
                 }
                 this.messageText = stringBuilder.toString();
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionUpdatePinned) {
             if (event.action.message instanceof TL_messageEmpty) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogUnpinnedMessages", C0541R.string.EventLogUnpinnedMessages), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogUnpinnedMessages", CLASSNAMER.string.EventLogUnpinnedMessages), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogPinnedMessages", C0541R.string.EventLogPinnedMessages), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogPinnedMessages", CLASSNAMER.string.EventLogPinnedMessages), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionToggleSignatures) {
             if (((TL_channelAdminLogEventActionToggleSignatures) event.action).new_value) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledSignaturesOn", C0541R.string.EventLogToggledSignaturesOn), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledSignaturesOn", CLASSNAMER.string.EventLogToggledSignaturesOn), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledSignaturesOff", C0541R.string.EventLogToggledSignaturesOff), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledSignaturesOff", CLASSNAMER.string.EventLogToggledSignaturesOff), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionToggleInvites) {
             if (((TL_channelAdminLogEventActionToggleInvites) event.action).new_value) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesOn", C0541R.string.EventLogToggledInvitesOn), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesOn", CLASSNAMER.string.EventLogToggledInvitesOn), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesOff", C0541R.string.EventLogToggledInvitesOff), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesOff", CLASSNAMER.string.EventLogToggledInvitesOff), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionDeleteMessage) {
-            this.messageText = replaceWithLink(LocaleController.getString("EventLogDeletedMessages", C0541R.string.EventLogDeletedMessages), "un1", fromUser);
+            this.messageText = replaceWithLink(LocaleController.getString("EventLogDeletedMessages", CLASSNAMER.string.EventLogDeletedMessages), "un1", fromUser);
         } else if (event.action instanceof TL_channelAdminLogEventActionTogglePreHistoryHidden) {
             if (((TL_channelAdminLogEventActionTogglePreHistoryHidden) event.action).new_value) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOff", C0541R.string.EventLogToggledInvitesHistoryOff), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOff", CLASSNAMER.string.EventLogToggledInvitesHistoryOff), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOn", C0541R.string.EventLogToggledInvitesHistoryOn), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOn", CLASSNAMER.string.EventLogToggledInvitesHistoryOn), "un1", fromUser);
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionChangeAbout) {
             CharSequence string;
             if (chat.megagroup) {
-                string = LocaleController.getString("EventLogEditedGroupDescription", C0541R.string.EventLogEditedGroupDescription);
+                string = LocaleController.getString("EventLogEditedGroupDescription", CLASSNAMER.string.EventLogEditedGroupDescription);
             } else {
-                string = LocaleController.getString("EventLogEditedChannelDescription", C0541R.string.EventLogEditedChannelDescription);
+                string = LocaleController.getString("EventLogEditedChannelDescription", CLASSNAMER.string.EventLogEditedChannelDescription);
             }
             this.messageText = replaceWithLink(string, "un1", fromUser);
             message = new TL_message();
@@ -1567,15 +1567,15 @@ public class MessageObject {
                 message.media.webpage.flags = 10;
                 message.media.webpage.display_url = TtmlNode.ANONYMOUS_REGION_ID;
                 message.media.webpage.url = TtmlNode.ANONYMOUS_REGION_ID;
-                message.media.webpage.site_name = LocaleController.getString("EventLogPreviousGroupDescription", C0541R.string.EventLogPreviousGroupDescription);
+                message.media.webpage.site_name = LocaleController.getString("EventLogPreviousGroupDescription", CLASSNAMER.string.EventLogPreviousGroupDescription);
                 message.media.webpage.description = ((TL_channelAdminLogEventActionChangeAbout) event.action).prev_value;
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionChangeUsername) {
             String newLink = ((TL_channelAdminLogEventActionChangeUsername) event.action).new_value;
             if (TextUtils.isEmpty(newLink)) {
-                this.messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogRemovedGroupLink", C0541R.string.EventLogRemovedGroupLink) : LocaleController.getString("EventLogRemovedChannelLink", C0541R.string.EventLogRemovedChannelLink), "un1", fromUser);
+                this.messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogRemovedGroupLink", CLASSNAMER.string.EventLogRemovedGroupLink) : LocaleController.getString("EventLogRemovedChannelLink", CLASSNAMER.string.EventLogRemovedChannelLink), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogChangedGroupLink", C0541R.string.EventLogChangedGroupLink) : LocaleController.getString("EventLogChangedChannelLink", C0541R.string.EventLogChangedChannelLink), "un1", fromUser);
+                this.messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogChangedGroupLink", CLASSNAMER.string.EventLogChangedGroupLink) : LocaleController.getString("EventLogChangedChannelLink", CLASSNAMER.string.EventLogChangedChannelLink), "un1", fromUser);
             }
             message = new TL_message();
             message.out = false;
@@ -1600,7 +1600,7 @@ public class MessageObject {
                 message.media.webpage.flags = 10;
                 message.media.webpage.display_url = TtmlNode.ANONYMOUS_REGION_ID;
                 message.media.webpage.url = TtmlNode.ANONYMOUS_REGION_ID;
-                message.media.webpage.site_name = LocaleController.getString("EventLogPreviousLink", C0541R.string.EventLogPreviousLink);
+                message.media.webpage.site_name = LocaleController.getString("EventLogPreviousLink", CLASSNAMER.string.EventLogPreviousLink);
                 message.media.webpage.description = "https://" + MessagesController.getInstance(accountNum).linkPrefix + "/" + ((TL_channelAdminLogEventActionChangeUsername) event.action).prev_value;
             }
         } else if (event.action instanceof TL_channelAdminLogEventActionEditMessage) {
@@ -1613,13 +1613,13 @@ public class MessageObject {
             Message newMessage = ((TL_channelAdminLogEventActionEditMessage) event.action).new_message;
             Message oldMessage = ((TL_channelAdminLogEventActionEditMessage) event.action).prev_message;
             if (newMessage.media == null || (newMessage.media instanceof TL_messageMediaEmpty) || (newMessage.media instanceof TL_messageMediaWebPage)) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMessages", C0541R.string.EventLogEditedMessages), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMessages", CLASSNAMER.string.EventLogEditedMessages), "un1", fromUser);
                 message.message = newMessage.message;
                 message.media = new TL_messageMediaWebPage();
                 message.media.webpage = new TL_webPage();
-                message.media.webpage.site_name = LocaleController.getString("EventLogOriginalMessages", C0541R.string.EventLogOriginalMessages);
+                message.media.webpage.site_name = LocaleController.getString("EventLogOriginalMessages", CLASSNAMER.string.EventLogOriginalMessages);
                 if (TextUtils.isEmpty(oldMessage.message)) {
-                    message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", C0541R.string.EventLogOriginalCaptionEmpty);
+                    message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", CLASSNAMER.string.EventLogOriginalCaptionEmpty);
                 } else {
                     message.media.webpage.description = oldMessage.message;
                 }
@@ -1631,24 +1631,24 @@ public class MessageObject {
                 } else {
                     changedCaption = true;
                 }
-                if (newMessage.media.getClass() == oldMessage.media.getClass() && ((newMessage.media.photo == null || oldMessage.media.photo == null || newMessage.media.photo.f143id == oldMessage.media.photo.f143id) && (newMessage.media.document == null || oldMessage.media.document == null || newMessage.media.document.f119id == oldMessage.media.document.f119id))) {
+                if (newMessage.media.getClass() == oldMessage.media.getClass() && ((newMessage.media.photo == null || oldMessage.media.photo == null || newMessage.media.photo.var_id == oldMessage.media.photo.var_id) && (newMessage.media.document == null || oldMessage.media.document == null || newMessage.media.document.var_id == oldMessage.media.document.var_id))) {
                     changedMedia = false;
                 } else {
                     changedMedia = true;
                 }
                 if (changedMedia && changedCaption) {
-                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMediaCaption", C0541R.string.EventLogEditedMediaCaption), "un1", fromUser);
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMediaCaption", CLASSNAMER.string.EventLogEditedMediaCaption), "un1", fromUser);
                 } else if (changedCaption) {
-                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedCaption", C0541R.string.EventLogEditedCaption), "un1", fromUser);
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedCaption", CLASSNAMER.string.EventLogEditedCaption), "un1", fromUser);
                 } else {
-                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMedia", C0541R.string.EventLogEditedMedia), "un1", fromUser);
+                    this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedMedia", CLASSNAMER.string.EventLogEditedMedia), "un1", fromUser);
                 }
                 message.media = newMessage.media;
                 if (changedCaption) {
                     message.media.webpage = new TL_webPage();
-                    message.media.webpage.site_name = LocaleController.getString("EventLogOriginalCaption", C0541R.string.EventLogOriginalCaption);
+                    message.media.webpage.site_name = LocaleController.getString("EventLogOriginalCaption", CLASSNAMER.string.EventLogOriginalCaption);
                     if (TextUtils.isEmpty(oldMessage.message)) {
-                        message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", C0541R.string.EventLogOriginalCaptionEmpty);
+                        message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", CLASSNAMER.string.EventLogOriginalCaptionEmpty);
                     } else {
                         message.media.webpage.description = oldMessage.message;
                     }
@@ -1664,9 +1664,9 @@ public class MessageObject {
             InputStickerSet newStickerset = ((TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
             InputStickerSet oldStickerset = ((TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
             if (newStickerset == null || (newStickerset instanceof TL_inputStickerSetEmpty)) {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogRemovedStickersSet", C0541R.string.EventLogRemovedStickersSet), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogRemovedStickersSet", CLASSNAMER.string.EventLogRemovedStickersSet), "un1", fromUser);
             } else {
-                this.messageText = replaceWithLink(LocaleController.getString("EventLogChangedStickersSet", C0541R.string.EventLogChangedStickersSet), "un1", fromUser);
+                this.messageText = replaceWithLink(LocaleController.getString("EventLogChangedStickersSet", CLASSNAMER.string.EventLogChangedStickersSet), "un1", fromUser);
             }
         } else {
             this.messageText = "unsupported " + event.action;
@@ -1680,11 +1680,11 @@ public class MessageObject {
         Message message2 = this.messageOwner;
         int i = mid[0];
         mid[0] = i + 1;
-        message2.f139id = i;
-        this.eventId = event.f150id;
+        message2.var_id = i;
+        this.eventId = event.var_id;
         this.messageOwner.out = false;
         this.messageOwner.to_id = new TL_peerChannel();
-        this.messageOwner.to_id.channel_id = chat.f113id;
+        this.messageOwner.to_id.channel_id = chat.var_id;
         this.messageOwner.unread = false;
         if (chat.megagroup) {
             message2 = this.messageOwner;
@@ -1698,7 +1698,7 @@ public class MessageObject {
             message.out = false;
             int i2 = mid[0];
             mid[0] = i2 + 1;
-            message.f139id = i2;
+            message.var_id = i2;
             message.reply_to_msg_id = 0;
             message.flags &= -32769;
             if (chat.megagroup) {
@@ -1780,7 +1780,7 @@ public class MessageObject {
         }
         if (offset >= 0) {
             entity = new TL_messageEntityMentionName();
-            entity.user_id = user.f228id;
+            entity.user_id = user.var_id;
             entity.offset = offset;
             entity.length = name.length();
             entities.add(entity);
@@ -1790,7 +1790,7 @@ public class MessageObject {
         }
         if (offset >= 0) {
             entity = new TL_messageEntityMentionName();
-            entity.user_id = user.f228id;
+            entity.user_id = user.var_id;
             entity.offset = (name.length() + offset) + 2;
             entity.length = user.username.length() + 1;
             entities.add(entity);
@@ -1825,16 +1825,16 @@ public class MessageObject {
             game = this.replyMessageObject.messageOwner.media.game;
         }
         if (game != null) {
-            if (fromUser == null || fromUser.f228id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                this.messageText = replaceWithLink(LocaleController.formatString("ActionUserScoredInGame", C0541R.string.ActionUserScoredInGame, LocaleController.formatPluralString("Points", this.messageOwner.action.score)), "un1", fromUser);
+            if (fromUser == null || fromUser.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                this.messageText = replaceWithLink(LocaleController.formatString("ActionUserScoredInGame", CLASSNAMER.string.ActionUserScoredInGame, LocaleController.formatPluralString("Points", this.messageOwner.action.score)), "un1", fromUser);
             } else {
-                this.messageText = LocaleController.formatString("ActionYouScoredInGame", C0541R.string.ActionYouScoredInGame, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
+                this.messageText = LocaleController.formatString("ActionYouScoredInGame", CLASSNAMER.string.ActionYouScoredInGame, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
             }
             this.messageText = replaceWithLink(this.messageText, "un2", game);
-        } else if (fromUser == null || fromUser.f228id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-            this.messageText = replaceWithLink(LocaleController.formatString("ActionUserScored", C0541R.string.ActionUserScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score)), "un1", fromUser);
+        } else if (fromUser == null || fromUser.var_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+            this.messageText = replaceWithLink(LocaleController.formatString("ActionUserScored", CLASSNAMER.string.ActionUserScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score)), "un1", fromUser);
         } else {
-            this.messageText = LocaleController.formatString("ActionYouScored", C0541R.string.ActionYouScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
+            this.messageText = LocaleController.formatString("ActionYouScored", CLASSNAMER.string.ActionYouScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
         }
     }
 
@@ -1853,10 +1853,10 @@ public class MessageObject {
             name = TtmlNode.ANONYMOUS_REGION_ID;
         }
         if (this.replyMessageObject == null || !(this.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
-            this.messageText = LocaleController.formatString("PaymentSuccessfullyPaidNoItem", C0541R.string.PaymentSuccessfullyPaidNoItem, LocaleController.getInstance().formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name);
+            this.messageText = LocaleController.formatString("PaymentSuccessfullyPaidNoItem", CLASSNAMER.string.PaymentSuccessfullyPaidNoItem, LocaleController.getInstance().formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name);
             return;
         }
-        this.messageText = LocaleController.formatString("PaymentSuccessfullyPaid", C0541R.string.PaymentSuccessfullyPaid, LocaleController.getInstance().formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name, this.replyMessageObject.messageOwner.media.title);
+        this.messageText = LocaleController.formatString("PaymentSuccessfullyPaid", CLASSNAMER.string.PaymentSuccessfullyPaid, LocaleController.getInstance().formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name, this.replyMessageObject.messageOwner.media.title);
     }
 
     public void generatePinMessageText(User fromUser, Chat chat) {
@@ -1873,91 +1873,91 @@ public class MessageObject {
         String str;
         TLObject fromUser2;
         if (this.replyMessageObject == null || (this.replyMessageObject.messageOwner instanceof TL_messageEmpty) || (this.replyMessageObject.messageOwner.action instanceof TL_messageActionHistoryClear)) {
-            string = LocaleController.getString("ActionPinnedNoText", C0541R.string.ActionPinnedNoText);
+            string = LocaleController.getString("ActionPinnedNoText", CLASSNAMER.string.ActionPinnedNoText);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.isMusic()) {
-            string = LocaleController.getString("ActionPinnedMusic", C0541R.string.ActionPinnedMusic);
+            string = LocaleController.getString("ActionPinnedMusic", CLASSNAMER.string.ActionPinnedMusic);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.isVideo()) {
-            string = LocaleController.getString("ActionPinnedVideo", C0541R.string.ActionPinnedVideo);
+            string = LocaleController.getString("ActionPinnedVideo", CLASSNAMER.string.ActionPinnedVideo);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.isGif()) {
-            string = LocaleController.getString("ActionPinnedGif", C0541R.string.ActionPinnedGif);
+            string = LocaleController.getString("ActionPinnedGif", CLASSNAMER.string.ActionPinnedGif);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.isVoice()) {
-            string = LocaleController.getString("ActionPinnedVoice", C0541R.string.ActionPinnedVoice);
+            string = LocaleController.getString("ActionPinnedVoice", CLASSNAMER.string.ActionPinnedVoice);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.isRoundVideo()) {
-            string = LocaleController.getString("ActionPinnedRound", C0541R.string.ActionPinnedRound);
+            string = LocaleController.getString("ActionPinnedRound", CLASSNAMER.string.ActionPinnedRound);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.isSticker()) {
-            string = LocaleController.getString("ActionPinnedSticker", C0541R.string.ActionPinnedSticker);
+            string = LocaleController.getString("ActionPinnedSticker", CLASSNAMER.string.ActionPinnedSticker);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.messageOwner.media instanceof TL_messageMediaDocument) {
-            string = LocaleController.getString("ActionPinnedFile", C0541R.string.ActionPinnedFile);
+            string = LocaleController.getString("ActionPinnedFile", CLASSNAMER.string.ActionPinnedFile);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.messageOwner.media instanceof TL_messageMediaGeo) {
-            string = LocaleController.getString("ActionPinnedGeo", C0541R.string.ActionPinnedGeo);
+            string = LocaleController.getString("ActionPinnedGeo", CLASSNAMER.string.ActionPinnedGeo);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.messageOwner.media instanceof TL_messageMediaGeoLive) {
-            string = LocaleController.getString("ActionPinnedGeoLive", C0541R.string.ActionPinnedGeoLive);
+            string = LocaleController.getString("ActionPinnedGeoLive", CLASSNAMER.string.ActionPinnedGeoLive);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.messageOwner.media instanceof TL_messageMediaContact) {
-            string = LocaleController.getString("ActionPinnedContact", C0541R.string.ActionPinnedContact);
+            string = LocaleController.getString("ActionPinnedContact", CLASSNAMER.string.ActionPinnedContact);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.messageOwner.media instanceof TL_messageMediaPhoto) {
-            string = LocaleController.getString("ActionPinnedPhoto", C0541R.string.ActionPinnedPhoto);
+            string = LocaleController.getString("ActionPinnedPhoto", CLASSNAMER.string.ActionPinnedPhoto);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.messageOwner.media instanceof TL_messageMediaGame) {
-            string = LocaleController.formatString("ActionPinnedGame", C0541R.string.ActionPinnedGame, "\ud83c\udfae " + this.replyMessageObject.messageOwner.media.game.title);
+            string = LocaleController.formatString("ActionPinnedGame", CLASSNAMER.string.ActionPinnedGame, "\ud83c\udfae " + this.replyMessageObject.messageOwner.media.game.title);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
@@ -1965,7 +1965,7 @@ public class MessageObject {
             this.messageText = replaceWithLink(string, str, fromUser);
             this.messageText = Emoji.replaceEmoji(this.messageText, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(20.0f), false);
         } else if (this.replyMessageObject.messageText == null || this.replyMessageObject.messageText.length() <= 0) {
-            string = LocaleController.getString("ActionPinnedNoText", C0541R.string.ActionPinnedNoText);
+            string = LocaleController.getString("ActionPinnedNoText", CLASSNAMER.string.ActionPinnedNoText);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
@@ -1977,7 +1977,7 @@ public class MessageObject {
                 mess = mess.subSequence(0, 20) + "...";
             }
             mess = Emoji.replaceEmoji(mess, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.m10dp(20.0f), false);
-            string = LocaleController.formatString("ActionPinnedText", C0541R.string.ActionPinnedText, mess);
+            string = LocaleController.formatString("ActionPinnedText", CLASSNAMER.string.ActionPinnedText, mess);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
@@ -1990,12 +1990,12 @@ public class MessageObject {
         if (webPage == null || webPage.cached_page == null) {
             return null;
         }
-        if (webPage.photo != null && webPage.photo.f143id == id) {
+        if (webPage.photo != null && webPage.photo.var_id == id) {
             return webPage.photo;
         }
         for (int a = 0; a < webPage.cached_page.photos.size(); a++) {
             Photo photo = (Photo) webPage.cached_page.photos.get(a);
-            if (photo.f143id == id) {
+            if (photo.var_id == id) {
                 return photo;
             }
         }
@@ -2006,12 +2006,12 @@ public class MessageObject {
         if (webPage == null || webPage.cached_page == null) {
             return null;
         }
-        if (webPage.document != null && webPage.document.f119id == id) {
+        if (webPage.document != null && webPage.document.var_id == id) {
             return webPage.document;
         }
         for (int a = 0; a < webPage.cached_page.documents.size(); a++) {
             Document document = (Document) webPage.cached_page.documents.get(a);
-            if (document.f119id == id) {
+            if (document.var_id == id) {
                 return document;
             }
         }
@@ -2037,7 +2037,7 @@ public class MessageObject {
             message.media.document = getDocumentWithId(webPage, pageBlock.video_id);
         }
         message.message = TtmlNode.ANONYMOUS_REGION_ID;
-        message.f139id = Utilities.random.nextInt();
+        message.var_id = Utilities.random.nextInt();
         message.date = this.messageOwner.date;
         message.to_id = this.messageOwner.to_id;
         message.out = this.messageOwner.out;
@@ -2083,7 +2083,7 @@ public class MessageObject {
         if (this.messageOwner.message == null) {
             return;
         }
-        if ((this.messageOwner.f139id < 0 || isEditing()) && this.messageOwner.params != null) {
+        if ((this.messageOwner.var_id < 0 || isEditing()) && this.messageOwner.params != null) {
             String param = (String) this.messageOwner.params.get("ve");
             if (param != null && (isVideo() || isNewGif() || isRoundVideo())) {
                 this.videoEditedInfo = new VideoEditedInfo();
@@ -2131,7 +2131,7 @@ public class MessageObject {
                     if (!(button instanceof TL_keyboardButtonBuy) || (this.messageOwner.media.flags & 4) == 0) {
                         text = Emoji.replaceEmoji(button.text, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.m10dp(15.0f), false);
                     } else {
-                        text = LocaleController.getString("PaymentReceipt", C0541R.string.PaymentReceipt);
+                        text = LocaleController.getString("PaymentReceipt", CLASSNAMER.string.PaymentReceipt);
                     }
                     StaticLayout staticLayout = new StaticLayout(text, Theme.chat_msgBotButtonPaint, AndroidUtilities.m10dp(2000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (staticLayout.getLineCount() > 0) {
@@ -2298,8 +2298,8 @@ public class MessageObject {
             for (int a = 0; a < document.attributes.size(); a++) {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f122w;
-                    height = attribute.f122w;
+                    width = attribute.var_w;
+                    height = attribute.var_w;
                     round = attribute.round_message;
                 }
             }
@@ -2318,8 +2318,8 @@ public class MessageObject {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
                 if (!(attribute instanceof TL_documentAttributeAnimated)) {
                     if (attribute instanceof TL_documentAttributeVideo) {
-                        width = attribute.f122w;
-                        height = attribute.f122w;
+                        width = attribute.var_w;
+                        height = attribute.var_w;
                     }
                 }
             }
@@ -2340,8 +2340,8 @@ public class MessageObject {
                 if (attribute instanceof TL_documentAttributeAnimated) {
                     animated = true;
                 } else if (attribute instanceof TL_documentAttributeVideo) {
-                    width = attribute.f122w;
-                    height = attribute.f122w;
+                    width = attribute.var_w;
+                    height = attribute.var_w;
                 }
             }
             if (animated && width <= 1280 && height <= 1280) {
@@ -2398,8 +2398,8 @@ public class MessageObject {
                     } else if (this.photoThumbs != null && !this.photoThumbs.isEmpty() && this.messageOwner.media.document.thumb != null) {
                         photoObject = (PhotoSize) this.photoThumbs.get(0);
                         photoObject.location = this.messageOwner.media.document.thumb.location;
-                        photoObject.f145w = this.messageOwner.media.document.thumb.f145w;
-                        photoObject.f144h = this.messageOwner.media.document.thumb.f144h;
+                        photoObject.var_w = this.messageOwner.media.document.thumb.var_w;
+                        photoObject.var_h = this.messageOwner.media.document.thumb.var_h;
                     }
                 }
             } else if (this.messageOwner.media instanceof TL_messageMediaGame) {
@@ -2482,7 +2482,7 @@ public class MessageObject {
                     names.append(", ");
                 }
                 names.append(name);
-                names.setSpan(new URLSpanNoUnderlineBold(TtmlNode.ANONYMOUS_REGION_ID + user.f228id), start, name.length() + start, 33);
+                names.setSpan(new URLSpanNoUnderlineBold(TtmlNode.ANONYMOUS_REGION_ID + user.var_id), start, name.length() + start, 33);
             }
         }
         return TextUtils.replace(source, new String[]{param}, new CharSequence[]{names});
@@ -2497,10 +2497,10 @@ public class MessageObject {
         String id;
         if (object instanceof User) {
             name = UserObject.getUserName((User) object);
-            id = TtmlNode.ANONYMOUS_REGION_ID + ((User) object).f228id;
+            id = TtmlNode.ANONYMOUS_REGION_ID + ((User) object).var_id;
         } else if (object instanceof Chat) {
             name = ((Chat) object).title;
-            id = TtmlNode.ANONYMOUS_REGION_ID + (-((Chat) object).f113id);
+            id = TtmlNode.ANONYMOUS_REGION_ID + (-((Chat) object).var_id);
         } else if (object instanceof TL_game) {
             name = ((TL_game) object).title;
             id = "game";
@@ -2661,7 +2661,7 @@ public class MessageObject {
             } else {
                 hasEntities = !this.messageOwner.entities.isEmpty();
             }
-            if (hasEntities || !(this.eventId != 0 || (this.messageOwner.media instanceof TL_messageMediaPhoto_old) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer68) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer74) || (this.messageOwner.media instanceof TL_messageMediaDocument_old) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer68) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer74) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.f139id < 0))) {
+            if (hasEntities || !(this.eventId != 0 || (this.messageOwner.media instanceof TL_messageMediaPhoto_old) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer68) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer74) || (this.messageOwner.media instanceof TL_messageMediaDocument_old) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer68) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer74) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.var_id < 0))) {
                 useManualParse = false;
             } else {
                 useManualParse = true;
@@ -2730,9 +2730,9 @@ public class MessageObject {
         while (a < size) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeImageSize) {
-                return new int[]{attribute.f122w, attribute.f121h};
+                return new int[]{attribute.var_w, attribute.var_h};
             } else if (attribute instanceof TL_documentAttributeVideo) {
-                return new int[]{attribute.f122w, attribute.f121h};
+                return new int[]{attribute.var_w, attribute.var_h};
             } else {
                 a++;
             }
@@ -2911,7 +2911,7 @@ public class MessageObject {
                             }
                         } else if (entity instanceof TL_messageEntityPhone) {
                             hasUrls = true;
-                            String tel = C0216PhoneFormat.stripExceptNumbers(url);
+                            String tel = CLASSNAMEPhoneFormat.stripExceptNumbers(url);
                             if (url.startsWith("+")) {
                                 tel = "+" + tel;
                             }
@@ -2957,7 +2957,7 @@ public class MessageObject {
             } else {
                 hasEntities = !this.messageOwner.entities.isEmpty();
             }
-            boolean useManualParse = !hasEntities && (this.eventId != 0 || (this.messageOwner instanceof TL_message_old) || (this.messageOwner instanceof TL_message_old2) || (this.messageOwner instanceof TL_message_old3) || (this.messageOwner instanceof TL_message_old4) || (this.messageOwner instanceof TL_messageForwarded_old) || (this.messageOwner instanceof TL_messageForwarded_old2) || (this.messageOwner instanceof TL_message_secret) || (this.messageOwner.media instanceof TL_messageMediaInvoice) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.f139id < 0 || (this.messageOwner.media instanceof TL_messageMediaUnsupported)));
+            boolean useManualParse = !hasEntities && (this.eventId != 0 || (this.messageOwner instanceof TL_message_old) || (this.messageOwner instanceof TL_message_old2) || (this.messageOwner instanceof TL_message_old3) || (this.messageOwner instanceof TL_message_old4) || (this.messageOwner instanceof TL_messageForwarded_old) || (this.messageOwner instanceof TL_messageForwarded_old2) || (this.messageOwner instanceof TL_message_secret) || (this.messageOwner.media instanceof TL_messageMediaInvoice) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.var_id < 0 || (this.messageOwner.media instanceof TL_messageMediaUnsupported)));
             if (useManualParse) {
                 addLinks(isOutOwner(), this.messageText);
             } else if ((this.messageText instanceof Spannable) && this.messageText.length() < 1000) {
@@ -3217,7 +3217,7 @@ public class MessageObject {
     }
 
     public int getId() {
-        return this.messageOwner.f139id;
+        return this.messageOwner.var_id;
     }
 
     public static int getMessageSize(Message message) {
@@ -3232,7 +3232,7 @@ public class MessageObject {
     }
 
     public long getIdWithChannel() {
-        long id = (long) this.messageOwner.f139id;
+        long id = (long) this.messageOwner.var_id;
         if (this.messageOwner.to_id == null || this.messageOwner.to_id.channel_id == 0) {
             return id;
         }
@@ -3396,19 +3396,19 @@ public class MessageObject {
     }
 
     public boolean isSending() {
-        return this.messageOwner.send_state == 1 && this.messageOwner.f139id < 0;
+        return this.messageOwner.send_state == 1 && this.messageOwner.var_id < 0;
     }
 
     public boolean isEditing() {
-        return this.messageOwner.send_state == 3 && this.messageOwner.f139id > 0;
+        return this.messageOwner.send_state == 3 && this.messageOwner.var_id > 0;
     }
 
     public boolean isSendError() {
-        return this.messageOwner.send_state == 2 && this.messageOwner.f139id < 0;
+        return this.messageOwner.send_state == 2 && this.messageOwner.var_id < 0;
     }
 
     public boolean isSent() {
-        return this.messageOwner.send_state == 0 || this.messageOwner.f139id > 0;
+        return this.messageOwner.send_state == 0 || this.messageOwner.var_id > 0;
     }
 
     public int getSecretTimeLeft() {
@@ -3528,8 +3528,8 @@ public class MessageObject {
                     return false;
                 }
                 isVideo = true;
-                width = attribute.f122w;
-                height = attribute.f121h;
+                width = attribute.var_w;
+                height = attribute.var_h;
             } else if (attribute instanceof TL_documentAttributeAnimated) {
                 isAnimated = true;
             }
@@ -3645,7 +3645,7 @@ public class MessageObject {
             } else if (attribute.stickerset instanceof TL_inputStickerSetEmpty) {
                 return -1;
             } else {
-                return attribute.stickerset.f138id;
+                return attribute.stickerset.var_id;
             }
         }
         return -1;
@@ -3710,8 +3710,8 @@ public class MessageObject {
                 while (it.hasNext()) {
                     DocumentAttribute attribute = (DocumentAttribute) it.next();
                     if (attribute instanceof TL_documentAttributeImageSize) {
-                        photoWidth = attribute.f122w;
-                        photoHeight = attribute.f121h;
+                        photoWidth = attribute.var_w;
+                        photoHeight = attribute.var_h;
                         break;
                     }
                 }
@@ -3742,7 +3742,7 @@ public class MessageObject {
             }
             PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.photoThumbs, AndroidUtilities.getPhotoSize());
             if (currentPhotoObject != null) {
-                int h = (int) (((float) currentPhotoObject.f144h) / (((float) currentPhotoObject.f145w) / ((float) photoWidth)));
+                int h = (int) (((float) currentPhotoObject.var_h) / (((float) currentPhotoObject.var_w) / ((float) photoWidth)));
                 if (h == 0) {
                     h = AndroidUtilities.m10dp(100.0f);
                 }
@@ -3869,7 +3869,7 @@ public class MessageObject {
                         }
                         title = FileLoader.getDocumentFileName(document);
                         if (TextUtils.isEmpty(title) && unknown) {
-                            return LocaleController.getString("AudioUnknownTitle", C0541R.string.AudioUnknownTitle);
+                            return LocaleController.getString("AudioUnknownTitle", CLASSNAMER.string.AudioUnknownTitle);
                         }
                         return title;
                     } else if (unknown) {
@@ -3888,7 +3888,7 @@ public class MessageObject {
                 return fileName;
             }
         }
-        return LocaleController.getString("AudioUnknownTitle", C0541R.string.AudioUnknownTitle);
+        return LocaleController.getString("AudioUnknownTitle", CLASSNAMER.string.AudioUnknownTitle);
     }
 
     public int getDuration() {
@@ -3931,7 +3931,7 @@ public class MessageObject {
                     } else {
                         String performer = attribute.performer;
                         if (TextUtils.isEmpty(performer) && unknown) {
-                            return LocaleController.getString("AudioUnknownArtist", C0541R.string.AudioUnknownArtist);
+                            return LocaleController.getString("AudioUnknownArtist", CLASSNAMER.string.AudioUnknownArtist);
                         }
                         return performer;
                     }
@@ -3943,7 +3943,7 @@ public class MessageObject {
                         return null;
                     }
                     if (isOutOwner() || (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId())) {
-                        return LocaleController.getString("FromYou", C0541R.string.FromYou);
+                        return LocaleController.getString("FromYou", CLASSNAMER.string.FromYou);
                     }
                     User user = null;
                     Chat chat = null;
@@ -3967,7 +3967,7 @@ public class MessageObject {
                 }
             }
         }
-        return LocaleController.getString("AudioUnknownArtist", C0541R.string.AudioUnknownArtist);
+        return LocaleController.getString("AudioUnknownArtist", CLASSNAMER.string.AudioUnknownArtist);
     }
 
     public InputStickerSet getInputStickerSet() {
@@ -4024,7 +4024,7 @@ public class MessageObject {
     }
 
     public static boolean canEditMessageAnytime(int currentAccount, Message message, Chat chat) {
-        if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.f139id < 0))) {
+        if (message == null || message.to_id == null || ((message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) || ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.var_id < 0))) {
             return false;
         }
         if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getInstance(currentAccount).getClientUserId() && !isLiveLocationMessage(message)) {
@@ -4055,7 +4055,7 @@ public class MessageObject {
         if (message.media != null && (isRoundVideoDocument(message.media.document) || isStickerDocument(message.media.document))) {
             return false;
         }
-        if ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.f139id < 0) {
+        if ((message.action != null && !(message.action instanceof TL_messageActionEmpty)) || isForwardedMessage(message) || message.via_bot_id != 0 || message.var_id < 0) {
             return false;
         }
         if (message.from_id == message.to_id.user_id && message.from_id == UserConfig.getInstance(currentAccount).getClientUserId() && !isLiveLocationMessage(message) && !(message.media instanceof TL_messageMediaContact)) {
@@ -4110,14 +4110,14 @@ public class MessageObject {
 
     public static boolean canDeleteMessage(int currentAccount, Message message, Chat chat) {
         boolean z = false;
-        if (message.f139id < 0) {
+        if (message.var_id < 0) {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
             chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(message.to_id.channel_id));
         }
         if (ChatObject.isChannel(chat)) {
-            if (message.f139id != 1) {
+            if (message.var_id != 1) {
                 if (chat.creator) {
                     return true;
                 }

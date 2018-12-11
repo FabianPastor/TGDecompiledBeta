@@ -104,7 +104,7 @@ public class StickerView extends EntityView {
             DocumentAttribute attribute = (DocumentAttribute) sticker.attributes.get(a);
             if (attribute instanceof TL_documentAttributeSticker) {
                 if (attribute.mask_coords != null) {
-                    this.anchor = attribute.mask_coords.f186n;
+                    this.anchor = attribute.mask_coords.var_n;
                 }
                 this.containerView = new FrameLayoutDrawer(context);
                 addView(this.containerView, LayoutHelper.createFrame(-1, -1.0f));
@@ -142,8 +142,8 @@ public class StickerView extends EntityView {
 
     protected void updatePosition() {
         float halfHeight = this.baseSize.height / 2.0f;
-        setX(this.position.f264x - (this.baseSize.width / 2.0f));
-        setY(this.position.f265y - halfHeight);
+        setX(this.position.var_x - (this.baseSize.width / 2.0f));
+        setY(this.position.var_y - halfHeight);
         updateSelectionView();
     }
 
@@ -169,7 +169,7 @@ public class StickerView extends EntityView {
     protected Rect getSelectionBounds() {
         float scale = ((ViewGroup) getParent()).getScaleX();
         float side = ((float) getWidth()) * (getScale() + 0.4f);
-        return new Rect((this.position.f264x - (side / 2.0f)) * scale, (this.position.f265y - (side / 2.0f)) * scale, side * scale, side * scale);
+        return new Rect((this.position.var_x - (side / 2.0f)) * scale, (this.position.var_y - (side / 2.0f)) * scale, side * scale, side * scale);
     }
 
     protected SelectionView createSelectionView() {

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.C0541R;
+import org.telegram.messenger.CLASSNAMER;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -30,7 +30,7 @@ import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.p005ui.ActionBar.C0704ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.p005ui.ActionBar.CLASSNAMEActionBar.ActionBarMenuOnItemClick;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.ActionBar.ThemeDescription;
 import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
@@ -70,8 +70,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private boolean searching;
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$1 */
-    class C11651 extends ActionBarMenuOnItemClick {
-        C11651() {
+    class CLASSNAME extends ActionBarMenuOnItemClick {
+        CLASSNAME() {
         }
 
         public void onItemClick(int id) {
@@ -82,8 +82,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$2 */
-    class C11662 extends ActionBarMenuItemSearchListener {
-        C11662() {
+    class CLASSNAME extends ActionBarMenuItemSearchListener {
+        CLASSNAME() {
         }
 
         public void onSearchExpand() {
@@ -120,8 +120,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.ChatUsersActivity$3 */
-    class C11673 extends OnScrollListener {
-        C11673() {
+    class CLASSNAME extends OnScrollListener {
+        CLASSNAME() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -165,7 +165,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, C0541R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, CLASSNAMER.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             return new Holder(view);
@@ -446,18 +446,18 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         int i = 1;
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(C0541R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(CLASSNAMER.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("GroupMembers", C0541R.string.GroupMembers));
-        this.actionBar.setActionBarMenuOnItemClick(new C11651());
+        this.actionBar.setTitle(LocaleController.getString("GroupMembers", CLASSNAMER.string.GroupMembers));
+        this.actionBar.setActionBarMenuOnItemClick(new CLASSNAME());
         this.searchListViewAdapter = new SearchAdapter(context);
-        this.searchItem = this.actionBar.createMenu().addItem(0, (int) C0541R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C11662());
-        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", C0541R.string.Search));
+        this.searchItem = this.actionBar.createMenu().addItem(0, (int) CLASSNAMER.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new CLASSNAME());
+        this.searchItem.getSearchField().setHint(LocaleController.getString("Search", CLASSNAMER.string.Search));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoResult", C0541R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", CLASSNAMER.string.NoResult));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
@@ -474,7 +474,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new ChatUsersActivity$$Lambda$0(this));
         this.listView.setOnItemLongClickListener(new ChatUsersActivity$$Lambda$1(this));
-        this.listView.setOnScrollListener(new C11673());
+        this.listView.setOnScrollListener(new CLASSNAME());
         if (this.loadingUsers) {
             this.emptyView.showProgress();
         } else {
@@ -536,7 +536,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
         ArrayList<String> items = new ArrayList();
         ArrayList<Integer> actions = new ArrayList();
-        items.add(LocaleController.getString("KickFromGroup", C0541R.string.KickFromGroup));
+        items.add(LocaleController.getString("KickFromGroup", CLASSNAMER.string.KickFromGroup));
         actions.add(Integer.valueOf(0));
         Builder builder = new Builder(getParentActivity());
         builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), new ChatUsersActivity$$Lambda$2(this, actions, participant));
@@ -554,7 +554,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (id == NotificationCenter.chatInfoDidLoaded) {
             ChatFull chatFull = args[0];
             boolean byChannelUsers = ((Boolean) args[2]).booleanValue();
-            if (chatFull.f114id == this.chatId && !byChannelUsers) {
+            if (chatFull.var_id == this.chatId && !byChannelUsers) {
                 this.info = chatFull;
                 fetchUsers();
                 updateRows();
