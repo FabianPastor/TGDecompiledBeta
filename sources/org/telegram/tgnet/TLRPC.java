@@ -14885,9 +14885,6 @@ public class TLRPC {
                 case -1906403213:
                     result = new TL_updateDcOptions();
                     break;
-                case -1870238482:
-                    result = new TL_updateDeleteScheduledMessages();
-                    break;
                 case -1821035490:
                     result = new TL_updateSavedGifs();
                     break;
@@ -15010,9 +15007,6 @@ public class TLRPC {
                     break;
                 case 956179895:
                     result = new TL_updateEncryptedMessagesRead();
-                    break;
-                case 967122427:
-                    result = new TL_updateNewScheduledMessage();
                     break;
                 case 1081547008:
                     result = new TL_updateChannelWebPage();
@@ -27361,35 +27355,6 @@ public class TLRPC {
         }
     }
 
-    public static class TL_updateDeleteScheduledMessages extends Update {
-        public static int constructor = -NUM;
-        public ArrayList<Integer> messages = new ArrayList();
-        public Peer peer;
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.peer = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
-            if (stream.readInt32(exception) == NUM) {
-                int count = stream.readInt32(exception);
-                for (int a = 0; a < count; a++) {
-                    this.messages.add(Integer.valueOf(stream.readInt32(exception)));
-                }
-            } else if (exception) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
-            }
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            this.peer.serializeToStream(stream);
-            stream.writeInt32(NUM);
-            int count = this.messages.size();
-            stream.writeInt32(count);
-            for (int a = 0; a < count; a++) {
-                stream.writeInt32(((Integer) this.messages.get(a)).intValue());
-            }
-        }
-    }
-
     public static class TL_updateDialogPinned extends Update {
         public static int constructor = NUM;
         public int flags;
@@ -27677,20 +27642,6 @@ public class TLRPC {
             this.message.serializeToStream(stream);
             stream.writeInt32(this.pts);
             stream.writeInt32(this.pts_count);
-        }
-    }
-
-    public static class TL_updateNewScheduledMessage extends Update {
-        public static int constructor = NUM;
-        public Message message;
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.message = Message.TLdeserialize(stream, stream.readInt32(exception), exception);
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            this.message.serializeToStream(stream);
         }
     }
 

@@ -222,7 +222,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     FileLocation location = (FileLocation) fileLocation;
                     key = location.volume_id + "_" + location.local_id;
                 } else if (fileLocation instanceof WebFile) {
-                    key = "hash" + ((WebFile) fileLocation).url.hashCode();
+                    key = Utilities.MD5(((WebFile) fileLocation).url);
                 } else {
                     Document location2 = (Document) fileLocation;
                     if (location2.dc_id != 0) {
@@ -232,7 +232,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     }
                 }
             } else if (httpUrl != null) {
-                key = "hash" + httpUrl.hashCode();
+                key = Utilities.MD5(httpUrl);
             }
             if (!(key == null || filter == null)) {
                 key = key + "@" + filter;

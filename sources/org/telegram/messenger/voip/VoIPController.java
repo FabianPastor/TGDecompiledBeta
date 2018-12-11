@@ -1,6 +1,7 @@
 package org.telegram.messenger.voip;
 
 import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.NoiseSuppressor;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
 import java.io.File;
@@ -244,7 +245,7 @@ public class VoIPController {
         if (VERSION.SDK_INT >= 16) {
             try {
                 sysAecAvailable = AcousticEchoCanceler.isAvailable();
-                sysNsAvailable = AcousticEchoCanceler.isAvailable();
+                sysNsAvailable = NoiseSuppressor.isAvailable();
             } catch (Throwable th) {
             }
         }

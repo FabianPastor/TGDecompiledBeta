@@ -2,11 +2,14 @@ package org.telegram.messenger.voip;
 
 import android.media.AudioRecord;
 import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.AudioEffect;
+import android.media.audiofx.AudioEffect.Descriptor;
 import android.media.audiofx.AutomaticGainControl;
 import android.media.audiofx.NoiseSuppressor;
 import android.os.Build.VERSION;
-import android.util.Log;
+import android.text.TextUtils;
 import java.nio.ByteBuffer;
+import java.util.regex.Pattern;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
@@ -34,21 +37,79 @@ public class AudioRecordJNI {
     }
 
     public void init(int sampleRate, int bitsPerSample, int channels, int bufferSize) {
+        boolean z = true;
         if (this.audioRecord != null) {
             throw new IllegalStateException("already inited");
         }
         this.bufferSize = bufferSize;
         boolean res = tryInit(7, 48000);
         if (!res) {
-            tryInit(1, 48000);
+            res = tryInit(1, 48000);
         }
         if (!res) {
-            tryInit(7, 44100);
+            res = tryInit(7, 44100);
         }
         if (!res) {
-            tryInit(1, 44100);
+            res = tryInit(1, 44100);
         }
-        this.buffer = ByteBuffer.allocateDirect(bufferSize);
+        if (res) {
+            if (VERSION.SDK_INT >= 16) {
+                try {
+                    if (AutomaticGainControl.isAvailable()) {
+                        this.agc = AutomaticGainControl.create(this.audioRecord.getAudioSessionId());
+                        if (this.agc != null) {
+                            this.agc.setEnabled(false);
+                        }
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m14w("AutomaticGainControl is not available on this device :(");
+                    }
+                } catch (Throwable x) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m12e("error creating AutomaticGainControl", x);
+                    }
+                }
+                try {
+                    if (NoiseSuppressor.isAvailable()) {
+                        this.var_ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
+                        if (this.var_ns != null) {
+                            boolean z2;
+                            NoiseSuppressor noiseSuppressor = this.var_ns;
+                            if (VoIPServerConfig.getBoolean("use_system_ns", true) && isGoodAudioEffect(this.var_ns)) {
+                                z2 = true;
+                            } else {
+                                z2 = false;
+                            }
+                            noiseSuppressor.setEnabled(z2);
+                        }
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m14w("NoiseSuppressor is not available on this device :(");
+                    }
+                } catch (Throwable x2) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m12e("error creating NoiseSuppressor", x2);
+                    }
+                }
+                try {
+                    if (AcousticEchoCanceler.isAvailable()) {
+                        this.aec = AcousticEchoCanceler.create(this.audioRecord.getAudioSessionId());
+                        if (this.aec != null) {
+                            AcousticEchoCanceler acousticEchoCanceler = this.aec;
+                            if (!(VoIPServerConfig.getBoolean("use_system_aec", true) && isGoodAudioEffect(this.aec))) {
+                                z = false;
+                            }
+                            acousticEchoCanceler.setEnabled(z);
+                        }
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m14w("AcousticEchoCanceler is not available on this device");
+                    }
+                } catch (Throwable x22) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m12e("error creating AcousticEchoCanceler", x22);
+                    }
+                }
+            }
+            this.buffer = ByteBuffer.allocateDirect(bufferSize);
+        }
     }
 
     private boolean tryInit(int source, int sampleRate) {
@@ -114,6 +175,9 @@ public class AudioRecordJNI {
     }
 
     public boolean start() {
+        if (this.audioRecord == null || this.audioRecord.getState() != 1) {
+            return false;
+        }
         try {
             if (this.thread != null) {
                 this.audioRecord.startRecording();
@@ -121,58 +185,14 @@ public class AudioRecordJNI {
                 return false;
             } else {
                 this.audioRecord.startRecording();
-                if (VERSION.SDK_INT >= 16) {
-                    try {
-                        if (AutomaticGainControl.isAvailable()) {
-                            this.agc = AutomaticGainControl.create(this.audioRecord.getAudioSessionId());
-                            if (this.agc != null) {
-                                this.agc.setEnabled(false);
-                            }
-                        } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m14w("AutomaticGainControl is not available on this device :(");
-                        }
-                    } catch (Throwable x) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("error creating AutomaticGainControl", x);
-                        }
-                    }
-                    try {
-                        if (NoiseSuppressor.isAvailable()) {
-                            this.var_ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
-                            if (this.var_ns != null) {
-                                this.var_ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
-                            }
-                        } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m14w("NoiseSuppressor is not available on this device :(");
-                        }
-                    } catch (Throwable x2) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("error creating NoiseSuppressor", x2);
-                        }
-                    }
-                    try {
-                        if (AcousticEchoCanceler.isAvailable()) {
-                            this.aec = AcousticEchoCanceler.create(this.audioRecord.getAudioSessionId());
-                            if (this.aec != null) {
-                                this.aec.setEnabled(VoIPServerConfig.getBoolean("use_system_aec", true));
-                            }
-                        } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m14w("AcousticEchoCanceler is not available on this device");
-                        }
-                    } catch (Throwable x22) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m12e("error creating AcousticEchoCanceler", x22);
-                        }
-                    }
-                }
                 startThread();
             }
             return true;
-        } catch (Exception x3) {
+        } catch (Exception x) {
             if (!BuildVars.LOGS_ENABLED) {
                 return false;
             }
-            FileLog.m12e("Error initializing AudioRecord", x3);
+            FileLog.m12e("Error initializing AudioRecord", x);
             return false;
         }
     }
@@ -203,10 +223,71 @@ public class AudioRecordJNI {
                     }
                 }
                 if (BuildVars.LOGS_ENABLED) {
-                    Log.i("tg-voip", "audiorecord thread exits");
+                    FileLog.m10d("audiorecord thread exits");
                 }
             }
         });
         this.thread.start();
+    }
+
+    public int getEnabledEffectsMask() {
+        int r = 0;
+        if (this.aec != null && this.aec.getEnabled()) {
+            r = 0 | 1;
+        }
+        if (this.var_ns == null || !this.var_ns.getEnabled()) {
+            return r;
+        }
+        return r | 2;
+    }
+
+    private static Pattern makeNonEmptyRegex(String configKey) {
+        Pattern pattern = null;
+        String r = VoIPServerConfig.getString(configKey, TtmlNode.ANONYMOUS_REGION_ID);
+        if (TextUtils.isEmpty(r)) {
+            return pattern;
+        }
+        try {
+            return Pattern.compile(r);
+        } catch (Throwable x) {
+            FileLog.m13e(x);
+            return pattern;
+        }
+    }
+
+    private static boolean isGoodAudioEffect(AudioEffect effect) {
+        Pattern globalImpl = makeNonEmptyRegex("adsp_good_impls");
+        Pattern globalName = makeNonEmptyRegex("adsp_good_names");
+        Descriptor desc = effect.getDescriptor();
+        FileLog.m10d(effect.getClass().getSimpleName() + ": implementor=" + desc.implementor + ", name=" + desc.name);
+        if (globalImpl != null && globalImpl.matcher(desc.implementor).find()) {
+            return true;
+        }
+        if (globalName != null && globalName.matcher(desc.name).find()) {
+            return true;
+        }
+        Pattern impl;
+        Pattern name;
+        if (effect instanceof AcousticEchoCanceler) {
+            impl = makeNonEmptyRegex("aaec_good_impls");
+            name = makeNonEmptyRegex("aaec_good_names");
+            if (impl != null && impl.matcher(desc.implementor).find()) {
+                return true;
+            }
+            if (name != null && name.matcher(desc.name).find()) {
+                return true;
+            }
+        }
+        if (effect instanceof NoiseSuppressor) {
+            impl = makeNonEmptyRegex("ans_good_impls");
+            name = makeNonEmptyRegex("ans_good_names");
+            if (impl != null && impl.matcher(desc.implementor).find()) {
+                return true;
+            }
+            if (name != null && name.matcher(desc.name).find()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

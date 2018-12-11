@@ -2206,7 +2206,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
                 loadMediaCounts();
             }
-        } else if (id == NotificationCenter.messagesDeleted && !((Boolean) args[2]).booleanValue()) {
+        } else if (id == NotificationCenter.messagesDeleted) {
             int channelId = ((Integer) args[1]).intValue();
             if (ChatObject.isChannel(this.currentChat)) {
                 if ((channelId != 0 || this.mergeDialogId == 0) && channelId != this.currentChat.var_id) {

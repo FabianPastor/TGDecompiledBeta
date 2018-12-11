@@ -2606,7 +2606,7 @@ public class ImageLoader {
         }
         String key = null;
         if (httpUrl != null) {
-            key = "hash" + httpUrl.hashCode();
+            key = Utilities.MD5(httpUrl);
         } else if (fileLocation instanceof FileLocation) {
             FileLocation location = (FileLocation) fileLocation;
             key = location.volume_id + "_" + location.local_id;
@@ -2617,7 +2617,7 @@ public class ImageLoader {
             SecureDocument location3 = (SecureDocument) fileLocation;
             key = location3.secureFile.dc_id + "_" + location3.secureFile.var_id;
         } else if (fileLocation instanceof WebFile) {
-            key = "hash" + ((WebFile) fileLocation).url.hashCode();
+            key = Utilities.MD5(((WebFile) fileLocation).url);
         }
         if (filter != null) {
             key = key + "@" + filter;
@@ -2915,8 +2915,8 @@ public class ImageLoader {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x02d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0301  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x02ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x02d9  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void loadImageForImageReceiver(ImageReceiver imageReceiver) {
         if (imageReceiver != null) {
@@ -2961,7 +2961,7 @@ public class ImageLoader {
                 ext = "jpg";
             }
             if (httpLocation != null) {
-                key = "hash" + httpLocation.hashCode();
+                key = Utilities.MD5(httpLocation);
                 url = key + "." + getHttpUrlExtension(httpLocation, "jpg");
             } else if (imageLocation != null) {
                 if (imageLocation instanceof FileLocation) {
@@ -2974,7 +2974,7 @@ public class ImageLoader {
                 } else if (imageLocation instanceof WebFile) {
                     WebFile document = (WebFile) imageLocation;
                     String defaultExt = FileLoader.getExtensionByMime(document.mime_type);
-                    key = "hash" + document.url.hashCode();
+                    key = Utilities.MD5(document.url);
                     url = key + "." + getHttpUrlExtension(document.url, defaultExt);
                 } else if (imageLocation instanceof SecureDocument) {
                     SecureDocument document2 = (SecureDocument) imageLocation;
