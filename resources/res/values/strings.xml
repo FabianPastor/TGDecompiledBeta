@@ -138,7 +138,7 @@
     <string name="AndOther_zero">and %1$d others</string>
     <string name="ApkRestricted">APK installation is restricted for this app. You can enable this in system settings.</string>
     <string name="AppName">Telegram</string>
-    <string name="AppNameBeta">Telegram</string>
+    <string name="AppNameBeta">Telegram Beta</string>
     <string name="Appearance">Appearance</string>
     <string name="ApplyLocalizationFile">Apply localization file</string>
     <string name="ApplyTheme">APPLY</string>
@@ -905,6 +905,7 @@
     <string name="IncorrectLocalization">Incorrect localization file</string>
     <string name="IncorrectTheme">Incorrect theme file</string>
     <string name="Info">Info</string>
+    <string name="InstallGoogleMaps">Install Google Maps?</string>
     <string name="InstantView">INSTANT VIEW</string>
     <string name="InstantViewNightMode">The dark theme will turn automatically during night time</string>
     <string name="InstantViewReference">Reference</string>

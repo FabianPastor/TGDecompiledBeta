@@ -2238,7 +2238,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             CLASSNAME() {
             }
 
-            public void didPressedShare(ChatMessageCell cell) {
+            public void didPressShare(ChatMessageCell cell) {
                 if (ChatActivity.this.getParentActivity() != null) {
                     if (ChatActivity.this.chatActivityEnterView != null) {
                         ChatActivity.this.chatActivityEnterView.closeKeyboard();
@@ -2287,7 +2287,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            public void didPressedChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
+            public void didPressChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
                 if (ChatActivity.this.actionBar.isActionModeShowed()) {
                     ChatActivity.this.processRowSelect(cell, true);
                 } else if (chat != null && chat != ChatActivity.this.currentChat) {
@@ -2302,7 +2302,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            public void didPressedOther(ChatMessageCell cell) {
+            public void didPressOther(ChatMessageCell cell) {
                 if (cell.getMessageObject().type != 16) {
                     ChatActivity.this.createMenu(cell, true, false, false);
                 } else if (ChatActivity.this.currentUser != null) {
@@ -2310,7 +2310,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            public void didPressedUserAvatar(ChatMessageCell cell, User user) {
+            public void didPressUserAvatar(ChatMessageCell cell, User user) {
                 boolean z = true;
                 if (ChatActivity.this.actionBar.isActionModeShowed()) {
                     ChatActivity.this.processRowSelect(cell, true);
@@ -2326,7 +2326,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            public void didPressedBotButton(ChatMessageCell cell, KeyboardButton button) {
+            public void didPressBotButton(ChatMessageCell cell, KeyboardButton button) {
                 if (ChatActivity.this.getParentActivity() == null) {
                     return;
                 }
@@ -2335,14 +2335,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            public void didPressedCancelSendButton(ChatMessageCell cell) {
+            public void didPressCancelSendButton(ChatMessageCell cell) {
                 MessageObject message = cell.getMessageObject();
                 if (message.messageOwner.send_state != 0) {
                     SendMessagesHelper.getInstance(ChatActivity.this.currentAccount).cancelSendingMessage(message);
                 }
             }
 
-            public void didLongPressed(ChatMessageCell cell) {
+            public void didLongPress(ChatMessageCell cell) {
                 ChatActivity.this.createMenu(cell, false, false);
             }
 
@@ -2350,7 +2350,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 return (ChatActivity.this.actionBar == null || ChatActivity.this.actionBar.isActionModeShowed()) ? false : true;
             }
 
-            public void didPressedUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
+            public void didPressUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
                 if (url != null) {
                     if (url instanceof URLSpanMono) {
                         ((URLSpanMono) url).copyToClipboard();
@@ -2425,7 +2425,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            final /* synthetic */ void lambda$didPressedUrl$0$ChatActivity$ChatActivityAdapter$1(String urlFinal, DialogInterface dialog, int which) {
+            final /* synthetic */ void lambda$didPressUrl$0$ChatActivity$ChatActivityAdapter$1(String urlFinal, DialogInterface dialog, int which) {
                 boolean z = true;
                 if (which == 0) {
                     Context parentActivity = ChatActivity.this.getParentActivity();
@@ -2452,7 +2452,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            public void didPressedReplyMessage(ChatMessageCell cell, int id) {
+            public void didPressReplyMessage(ChatMessageCell cell, int id) {
                 int i;
                 MessageObject messageObject = cell.getMessageObject();
                 ChatActivity chatActivity = ChatActivity.this;
@@ -2465,7 +2465,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 chatActivity.scrollToMessageId(id, id2, true, i, false);
             }
 
-            public void didPressedViaBot(ChatMessageCell cell, String username) {
+            public void didPressViaBot(ChatMessageCell cell, String username) {
                 if (ChatActivity.this.bottomOverlayChat != null && ChatActivity.this.bottomOverlayChat.getVisibility() == 0) {
                     return;
                 }
@@ -2475,7 +2475,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            public void didPressedImage(ChatMessageCell cell) {
+            public void didPressImage(ChatMessageCell cell) {
                 MessageObject message = cell.getMessageObject();
                 if (message.isSendError()) {
                     ChatActivity.this.createMenu(cell, false, false);
@@ -2594,7 +2594,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
             }
 
-            public void didPressedInstantButton(ChatMessageCell cell, int type) {
+            public void didPressInstantButton(ChatMessageCell cell, int type) {
                 MessageObject messageObject = cell.getMessageObject();
                 if (type == 0) {
                     if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null && messageObject.messageOwner.media.webpage.cached_page != null) {
@@ -6434,7 +6434,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 presentFragment(fragment);
                 return;
             }
-            getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
+            try {
+                getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
+            } catch (Throwable th) {
+            }
         } else if (which == 2) {
             if (VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.CAMERA") == 0) {
                 try {
@@ -6458,7 +6461,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     return;
                 }
             }
-            getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 20);
+            try {
+                getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 20);
+            } catch (Throwable th2) {
+            }
         } else if (which == 6) {
             if (AndroidUtilities.isGoogleMapsInstalled(this)) {
                 if (this.currentEncryptedChat != null) {
@@ -6480,7 +6486,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 presentFragment(fragment3);
                 return;
             }
-            getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
+            try {
+                getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
+            } catch (Throwable th3) {
+            }
         } else if (which == 3) {
             if (VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 AudioSelectActivity fragment4 = new AudioSelectActivity();
@@ -8906,7 +8915,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     this.chatListView.invalidate();
                                     if (this.scrollToMessagePosition == -10000 || this.scrollToMessagePosition == -9000) {
                                         showPagedownButton(true, true);
-                                        if (unread_to_load != 0) {
+                                        if (!(unread_to_load == 0 || this.pagedownButtonCounter == null)) {
                                             this.pagedownButtonCounter.setVisibility(0);
                                             if (this.prevSetUnreadCount != this.newUnreadMessageCount) {
                                                 textView = this.pagedownButtonCounter;
@@ -8925,12 +8934,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 }
                                 if (loaded_mentions_count != 0) {
                                     showMentiondownButton(true, true);
-                                    this.mentiondownButtonCounter.setVisibility(0);
-                                    textView = this.mentiondownButtonCounter;
-                                    objArr = new Object[1];
-                                    this.newMentionsCount = loaded_mentions_count;
-                                    objArr[0] = Integer.valueOf(loaded_mentions_count);
-                                    textView.setText(String.format("%d", objArr));
+                                    if (this.mentiondownButtonCounter != null) {
+                                        this.mentiondownButtonCounter.setVisibility(0);
+                                        textView = this.mentiondownButtonCounter;
+                                        objArr = new Object[1];
+                                        this.newMentionsCount = loaded_mentions_count;
+                                        objArr[0] = Integer.valueOf(loaded_mentions_count);
+                                        textView.setText(String.format("%d", objArr));
+                                    }
                                 }
                             } else if (newRowsCount != 0) {
                                 boolean end = false;

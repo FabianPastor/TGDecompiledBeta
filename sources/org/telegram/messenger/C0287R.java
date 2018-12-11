@@ -1794,6 +1794,7 @@ public final class CLASSNAMER {
         public static final int IncorrectLocalization = NUM;
         public static final int IncorrectTheme = NUM;
         public static final int Info = NUM;
+        public static final int InstallGoogleMaps = NUM;
         public static final int InstantView = NUM;
         public static final int InstantViewNightMode = NUM;
         public static final int InstantViewReference = NUM;

@@ -1092,7 +1092,10 @@ public class ActionBarLayout extends FrameLayout {
                 parent = (ViewGroup) fragmentView.getParent();
                 if (parent != null) {
                     previousFragment.onRemoveFromParent();
-                    parent.removeView(fragmentView);
+                    try {
+                        parent.removeView(fragmentView);
+                    } catch (Throwable th) {
+                    }
                 }
                 this.containerView.addView(fragmentView);
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) fragmentView.getLayoutParams();

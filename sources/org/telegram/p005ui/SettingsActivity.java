@@ -883,7 +883,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             text = "Switch Backend";
                             break;
                     }
-                    textCell.setText(text, a != 5);
+                    boolean z = (BuildVars.LOGS_ENABLED || BuildVars.DEBUG_VERSION) ? a != 5 : a != 2;
+                    textCell.setText(text, z);
                     textCell.setTag(Integer.valueOf(a));
                     textCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(-1, -2));

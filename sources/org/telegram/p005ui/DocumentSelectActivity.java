@@ -644,7 +644,7 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x02f7 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x02d5 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:11:0x0094} */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x02d5 A:{Splitter: B:11:0x0094, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:49:0x01bd, code:
             r7 = move-exception;

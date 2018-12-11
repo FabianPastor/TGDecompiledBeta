@@ -1,12 +1,13 @@
 package org.telegram.messenger;
 
 final /* synthetic */ class ApplicationLoader$$Lambda$1 implements Runnable {
-    static final Runnable $instance = new ApplicationLoader$$Lambda$1();
+    private final ApplicationLoader arg$1;
 
-    private ApplicationLoader$$Lambda$1() {
+    ApplicationLoader$$Lambda$1(ApplicationLoader applicationLoader) {
+        this.arg$1 = applicationLoader;
     }
 
     public void run() {
-        ApplicationLoader.startPushService();
+        this.arg$1.lambda$initPlayServices$2$ApplicationLoader();
     }
 }

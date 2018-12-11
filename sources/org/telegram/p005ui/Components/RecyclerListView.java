@@ -128,11 +128,21 @@ public class RecyclerListView extends RecyclerView {
         public abstract void onBindViewHolder(int i, int i2, ViewHolder viewHolder);
 
         private void cleanupCache() {
-            this.sectionCache = new SparseIntArray();
-            this.sectionPositionCache = new SparseIntArray();
-            this.sectionCountCache = new SparseIntArray();
+            if (this.sectionCache == null) {
+                this.sectionCache = new SparseIntArray();
+                this.sectionPositionCache = new SparseIntArray();
+                this.sectionCountCache = new SparseIntArray();
+            } else {
+                this.sectionCache.clear();
+                this.sectionPositionCache.clear();
+                this.sectionCountCache.clear();
+            }
             this.count = -1;
             this.sectionCount = -1;
+        }
+
+        public void notifySectionsChanged() {
+            cleanupCache();
         }
 
         public SectionsAdapter() {
@@ -154,7 +164,8 @@ public class RecyclerListView extends RecyclerView {
                 return this.count;
             }
             this.count = 0;
-            for (int i = 0; i < internalGetSectionCount(); i++) {
+            int N = internalGetSectionCount();
+            for (int i = 0; i < N; i++) {
                 this.count += internalGetCountForSection(i);
             }
             return this.count;
@@ -197,7 +208,8 @@ public class RecyclerListView extends RecyclerView {
             }
             int sectionStart = 0;
             int i = 0;
-            while (i < internalGetSectionCount()) {
+            int N = internalGetSectionCount();
+            while (i < N) {
                 int sectionEnd = sectionStart + internalGetCountForSection(i);
                 if (position < sectionStart || position >= sectionEnd) {
                     sectionStart = sectionEnd;
@@ -217,7 +229,8 @@ public class RecyclerListView extends RecyclerView {
             }
             int sectionStart = 0;
             int i = 0;
-            while (i < internalGetSectionCount()) {
+            int N = internalGetSectionCount();
+            while (i < N) {
                 int sectionEnd = sectionStart + internalGetCountForSection(i);
                 if (position < sectionStart || position >= sectionEnd) {
                     sectionStart = sectionEnd;

@@ -1913,11 +1913,11 @@ public class DataQuery {
         return this.lastSearchQuery;
     }
 
-    public void loadMedia(long uid, int count, int max_id, int type, boolean fromCache, int classGuid) {
+    public void loadMedia(long uid, int count, int max_id, int type, int fromCache, int classGuid) {
         boolean isChannel = ((int) uid) < 0 && ChatObject.isChannel(-((int) uid), this.currentAccount);
         int lower_part = (int) uid;
-        if (fromCache || lower_part == 0) {
-            loadMediaDatabase(uid, count, max_id, type, classGuid, isChannel);
+        if (fromCache != 0 || lower_part == 0) {
+            loadMediaDatabase(uid, count, max_id, type, classGuid, isChannel, fromCache);
             return;
         }
         TL_messages_search req = new TL_messages_search();
@@ -1951,7 +1951,7 @@ public class DataQuery {
             } else {
                 topReached = true;
             }
-            processLoadedMedia(res, uid, count, max_id, type, false, classGuid, isChannel, topReached);
+            processLoadedMedia(res, uid, count, max_id, type, 0, classGuid, isChannel, topReached);
         }
     }
 
@@ -2176,34 +2176,49 @@ public class DataQuery {
         return false;
     }
 
-    private void processLoadedMedia(messages_Messages res, long uid, int count, int max_id, int type, boolean fromCache, int classGuid, boolean isChannel, boolean topReached) {
+    private void processLoadedMedia(messages_Messages res, long uid, int count, int max_id, int type, int fromCache, int classGuid, boolean isChannel, boolean topReached) {
         int lower_part = (int) uid;
-        if (fromCache && res.messages.isEmpty() && lower_part != 0) {
-            loadMedia(uid, count, max_id, type, false, classGuid);
-            return;
+        if (fromCache == 0 || !res.messages.isEmpty() || lower_part == 0) {
+            int a;
+            if (fromCache == 0) {
+                ImageLoader.saveMessagesThumbs(res.messages);
+                MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
+                putMediaDatabase(uid, type, res.messages, max_id, topReached);
+            }
+            SparseArray<User> usersDict = new SparseArray();
+            for (a = 0; a < res.users.size(); a++) {
+                User u = (User) res.users.get(a);
+                usersDict.put(u.var_id, u);
+            }
+            ArrayList<MessageObject> objects = new ArrayList();
+            for (a = 0; a < res.messages.size(); a++) {
+                objects.add(new MessageObject(this.currentAccount, (Message) res.messages.get(a), (SparseArray) usersDict, true));
+            }
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$36(this, res, fromCache, uid, objects, classGuid, type, topReached));
+        } else if (fromCache != 2) {
+            loadMedia(uid, count, max_id, type, 0, classGuid);
         }
-        int a;
-        if (!fromCache) {
-            ImageLoader.saveMessagesThumbs(res.messages);
-            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
-            putMediaDatabase(uid, type, res.messages, max_id, topReached);
-        }
-        SparseArray<User> usersDict = new SparseArray();
-        for (a = 0; a < res.users.size(); a++) {
-            User u = (User) res.users.get(a);
-            usersDict.put(u.var_id, u);
-        }
-        ArrayList<MessageObject> objects = new ArrayList();
-        for (a = 0; a < res.messages.size(); a++) {
-            objects.add(new MessageObject(this.currentAccount, (Message) res.messages.get(a), (SparseArray) usersDict, true));
-        }
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$36(this, res, fromCache, uid, objects, classGuid, type, topReached));
     }
 
-    final /* synthetic */ void lambda$processLoadedMedia$59$DataQuery(messages_Messages res, boolean fromCache, long uid, ArrayList objects, int classGuid, int type, boolean topReached) {
+    final /* synthetic */ void lambda$processLoadedMedia$59$DataQuery(messages_Messages res, int fromCache, long uid, ArrayList objects, int classGuid, int type, boolean topReached) {
+        boolean z;
         int totalCount = res.count;
-        MessagesController.getInstance(this.currentAccount).putUsers(res.users, fromCache);
-        MessagesController.getInstance(this.currentAccount).putChats(res.chats, fromCache);
+        MessagesController instance = MessagesController.getInstance(this.currentAccount);
+        ArrayList arrayList = res.users;
+        if (fromCache != 0) {
+            z = true;
+        } else {
+            z = false;
+        }
+        instance.putUsers(arrayList, z);
+        instance = MessagesController.getInstance(this.currentAccount);
+        arrayList = res.chats;
+        if (fromCache != 0) {
+            z = true;
+        } else {
+            z = false;
+        }
+        instance.putChats(arrayList, z);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mediaDidLoad, Long.valueOf(uid), Integer.valueOf(totalCount), objects, Integer.valueOf(classGuid), Integer.valueOf(type), Boolean.valueOf(topReached));
     }
 
@@ -2285,11 +2300,11 @@ public class DataQuery {
         }
     }
 
-    private void loadMediaDatabase(long uid, int count, int max_id, int type, int classGuid, boolean isChannel) {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$40(this, count, uid, max_id, isChannel, type, classGuid));
+    private void loadMediaDatabase(long uid, int count, int max_id, int type, int classGuid, boolean isChannel, int fromCache) {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$40(this, count, uid, max_id, isChannel, type, fromCache, classGuid));
     }
 
-    final /* synthetic */ void lambda$loadMediaDatabase$63$DataQuery(int count, long uid, int max_id, boolean isChannel, int type, int classGuid) {
+    final /* synthetic */ void lambda$loadMediaDatabase$63$DataQuery(int count, long uid, int max_id, boolean isChannel, int type, int fromCache, int classGuid) {
         TL_messages_messages res = new TL_messages_messages();
         try {
             SQLiteCursor cursor;
@@ -2398,16 +2413,16 @@ public class DataQuery {
             } else {
                 topReached = isEnd;
             }
-            processLoadedMedia(res, uid, count, max_id, type, true, classGuid, isChannel, topReached);
+            processLoadedMedia(res, uid, count, max_id, type, fromCache, classGuid, isChannel, topReached);
         } catch (Throwable e) {
             res.messages.clear();
             res.chats.clear();
             res.users.clear();
             FileLog.m13e(e);
-            processLoadedMedia(res, uid, count, max_id, type, true, classGuid, isChannel, false);
+            processLoadedMedia(res, uid, count, max_id, type, fromCache, classGuid, isChannel, false);
         } catch (Throwable th) {
             Throwable th2 = th;
-            processLoadedMedia(res, uid, count, max_id, type, true, classGuid, isChannel, false);
+            processLoadedMedia(res, uid, count, max_id, type, fromCache, classGuid, isChannel, false);
         }
     }
 

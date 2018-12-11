@@ -193,7 +193,7 @@ public class ClippingImageView extends View {
             this.bitmapShader = null;
         }
         this.bmp = bitmap;
-        if (bitmap != null) {
+        if (!(bitmap == null || bitmap.bitmap == null)) {
             this.bitmapRect.set(0.0f, 0.0f, (float) bitmap.getWidth(), (float) bitmap.getHeight());
             if (this.needRadius) {
                 this.bitmapShader = new BitmapShader(bitmap.bitmap, TileMode.CLAMP, TileMode.CLAMP);

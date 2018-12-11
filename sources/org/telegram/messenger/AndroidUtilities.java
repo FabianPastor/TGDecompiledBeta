@@ -550,7 +550,7 @@ public class AndroidUtilities {
                 return false;
             }
             Builder builder = new Builder(fragment.getParentActivity());
-            builder.setMessage("Install Google Maps?");
+            builder.setMessage(LocaleController.getString("InstallGoogleMaps", CLASSNAMER.string.InstallGoogleMaps));
             builder.setPositiveButton(LocaleController.getString("OK", CLASSNAMER.string.OK), new AndroidUtilities$$Lambda$0(fragment));
             builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
             fragment.showDialog(builder.create());

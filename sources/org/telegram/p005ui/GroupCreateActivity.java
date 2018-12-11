@@ -501,7 +501,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
 
         /* renamed from: lambda$updateSearchResults$0$GroupCreateActivity$GroupCreateAdapter */
-        final /* synthetic */ void mo18295x38var_e(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo18310x38var_e(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();

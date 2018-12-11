@@ -124,6 +124,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.radialProgress.onAttachedToWindow();
+        updateButtonState(false, false);
     }
 
     protected void onDetachedFromWindow() {
