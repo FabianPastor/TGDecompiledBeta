@@ -449,7 +449,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             /* renamed from: lambda$didPressedUrl$0$ChannelAdminLogActivity$ChatActivityAdapter$1 */
-            final /* synthetic */ void mo16125xd3354c8f(String urlFinal, DialogInterface dialog, int which) {
+            final /* synthetic */ void mo16126xd3354c8f(String urlFinal, DialogInterface dialog, int which) {
                 if (which == 0) {
                     Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), urlFinal, true);
                 } else if (which == 1) {
@@ -674,7 +674,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: lambda$onCreateViewHolder$0$ChannelAdminLogActivity$ChatActivityAdapter */
-        final /* synthetic */ void mo16126xd4cdd41c(String url) {
+        final /* synthetic */ void mo16127xd4cdd41c(String url) {
             if (url.startsWith("@")) {
                 MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).openByUserName(url.substring(1), ChannelAdminLogActivity.this, 0);
             } else if (url.startsWith("#")) {

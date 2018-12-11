@@ -848,12 +848,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         /* renamed from: lambda$handleVideoFrameAvailable$0$InstantCameraView$VideoRecorder */
-        final /* synthetic */ void mo11401x44721c1a() {
+        final /* synthetic */ void mo11402x44721c1a() {
             InstantCameraView.this.textureOverlayView.animate().setDuration(120).alpha(0.0f).setInterpolator(new DecelerateInterpolator()).start();
         }
 
         /* renamed from: lambda$handleVideoFrameAvailable$1$InstantCameraView$VideoRecorder */
-        final /* synthetic */ void mo11402xCLASSNAMEd81b() {
+        final /* synthetic */ void mo11403xCLASSNAMEd81b() {
             InstantCameraView.this.textureOverlayView.animate().setDuration(120).alpha(0.0f).setInterpolator(new DecelerateInterpolator()).start();
         }
 

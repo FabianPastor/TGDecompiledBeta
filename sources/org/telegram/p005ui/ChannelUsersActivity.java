@@ -1333,6 +1333,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
         if (this.type == 0) {
             this.participants.remove(participant);
+            this.participants2.remove(participant);
             updateRows();
             this.listViewAdapter.notifyDataSetChanged();
             TL_channels_editBanned req = new TL_channels_editBanned();
@@ -1434,6 +1435,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
         if (error == null) {
             int a;
+            ChannelParticipant participant;
             TL_channels_channelParticipants res = (TL_channels_channelParticipants) response;
             MessagesController.getInstance(this.currentAccount).putUsers(res.users, false);
             int selfId = UserConfig.getInstance(this.currentAccount).getClientUserId();
@@ -1446,13 +1448,10 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 }
             }
             if (this.type != 0) {
-                this.participantsMap.clear();
                 this.participants = res.participants;
             } else if (byEndReached) {
                 this.participants2 = res.participants;
             } else {
-                this.participants2 = new ArrayList();
-                this.participantsMap.clear();
                 this.participants = res.participants;
                 if (changeFirst) {
                     this.firstLoaded = false;
@@ -1460,8 +1459,15 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 this.firstEndReached = true;
                 getChannelParticipants(0, Callback.DEFAULT_DRAG_ANIMATION_DURATION);
             }
-            for (a = 0; a < res.participants.size(); a++) {
-                ChannelParticipant participant = (ChannelParticipant) res.participants.get(a);
+            this.participantsMap.clear();
+            int size = this.participants.size();
+            for (a = 0; a < size; a++) {
+                participant = (ChannelParticipant) this.participants.get(a);
+                this.participantsMap.put(participant.user_id, participant);
+            }
+            size = this.participants2.size();
+            for (a = 0; a < size; a++) {
+                participant = (ChannelParticipant) this.participants2.get(a);
                 this.participantsMap.put(participant.user_id, participant);
             }
             try {

@@ -646,8 +646,9 @@ public class FileRefController {
             if (!requester.completed) {
                 requester.completed = true;
                 int i;
-                int size10;
+                int a;
                 Chat chat;
+                int size10;
                 ArrayList<Chat> arrayList1;
                 int size;
                 int size2;
@@ -655,8 +656,9 @@ public class FileRefController {
                 if (response instanceof messages_Messages) {
                     messages_Messages res = (messages_Messages) response;
                     if (!res.messages.isEmpty()) {
+                        i = 0;
                         int size3 = res.messages.size();
-                        for (i = 0; i < size3; i++) {
+                        while (i < size3) {
                             Message message = (Message) res.messages.get(i);
                             if (message.media != null) {
                                 if (message.media.document != null) {
@@ -674,9 +676,22 @@ public class FileRefController {
                             } else if (message.action instanceof TL_messageActionChatEditPhoto) {
                                 result = getFileReference(message.action.photo, requester.location);
                             }
-                            if (cache && result != null) {
+                            if (result == null) {
+                                i++;
+                            } else if (cache) {
+                                if (!(message.to_id == null || message.to_id.channel_id == 0)) {
+                                    a = 0;
+                                    int N2 = res.chats.size();
+                                    while (a < N2) {
+                                        chat = (Chat) res.chats.get(a);
+                                        if (chat.var_id != message.to_id.channel_id) {
+                                            a++;
+                                        } else if (chat.megagroup) {
+                                            message.flags |= Integer.MIN_VALUE;
+                                        }
+                                    }
+                                }
                                 MessagesStorage.getInstance(this.currentAccount).replaceMessageIfExists(message);
-                                break;
                             }
                         }
                     }
@@ -708,7 +723,7 @@ public class FileRefController {
                                 }
                             } else if (object instanceof WallPaper) {
                                 WallPaper wallPaper = (WallPaper) object;
-                                int a = 0;
+                                a = 0;
                                 size = wallPaper.sizes.size();
                                 while (a < size) {
                                     result = getFileReference((PhotoSize) wallPaper.sizes.get(a), requester.location);

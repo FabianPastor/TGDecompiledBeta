@@ -13,6 +13,6 @@ final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$Lambda$1 im
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.mo17238x12ed5CLASSNAME(dialogInterface, i);
+        this.arg$1.mo17239x12ed5CLASSNAME(dialogInterface, i);
     }
 }

@@ -675,7 +675,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     object.thumb = object.imageReceiver.getBitmapSafe();
                     object.parentView.getLocationInWindow(coords);
                     object.clipTopAddition = (int) (((float) MediaActivity.this.actionBar.getHeight()) + MediaActivity.this.actionBar.getTranslationY());
-                    if (MediaActivity.this.fragmentContextView.getVisibility() != 0) {
+                    if (MediaActivity.this.fragmentContextView == null || MediaActivity.this.fragmentContextView.getVisibility() != 0) {
                         return object;
                     }
                     object.clipTopAddition += AndroidUtilities.m9dp(36.0f);

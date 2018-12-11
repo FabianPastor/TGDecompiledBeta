@@ -12,6 +12,6 @@ final /* synthetic */ class ChannelAdminLogActivity$ChatActivityAdapter$$Lambda$
     }
 
     public void didPressUrl(String str) {
-        this.arg$1.mo16126xd4cdd41c(str);
+        this.arg$1.mo16127xd4cdd41c(str);
     }
 }

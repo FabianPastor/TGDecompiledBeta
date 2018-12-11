@@ -621,7 +621,7 @@ public class MessageObject {
                         }
                     }
                     messageObject = (MessageObject) this.messages.get(a);
-                    if (!isOut && messageObject.needDrawAvatar()) {
+                    if (!isOut && messageObject.needDrawAvatarInternal()) {
                         if (pos.edge) {
                             if (pos.spanSize != 1000) {
                                 pos.spanSize += 108;
@@ -3064,7 +3064,7 @@ public class MessageObject {
     public int getMaxMessageTextWidth(User fromUser) {
         this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
         int i = this.generatedWithMinSize;
-        float f = (!needDrawAvatar() || isOutOwner()) ? 80.0f : 132.0f;
+        float f = (!needDrawAvatarInternal() || isOutOwner()) ? 80.0f : 132.0f;
         int maxWidth = i - AndroidUtilities.m9dp(f);
         if (needDrawShareButton() && !isOutOwner()) {
             maxWidth -= AndroidUtilities.m9dp(10.0f);
@@ -3308,7 +3308,28 @@ public class MessageObject {
     }
 
     public boolean needDrawAvatar() {
-        return (((!isMegagroup() && (this.messageOwner.to_id == null || this.messageOwner.to_id.chat_id == 0)) || !isFromUser()) && this.eventId == 0 && (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null)) ? false : true;
+        return (!isFromUser() && this.eventId == 0 && (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null)) ? false : true;
+    }
+
+    private boolean needDrawAvatarInternal() {
+        return ((!isFromChat() || !isFromUser()) && this.eventId == 0 && (this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.saved_from_peer == null)) ? false : true;
+    }
+
+    public boolean isFromChat() {
+        if (isMegagroup()) {
+            return true;
+        }
+        if (this.messageOwner.to_id != null && this.messageOwner.to_id.chat_id != 0) {
+            return true;
+        }
+        if (this.messageOwner.to_id == null || this.messageOwner.to_id.channel_id == 0) {
+            return false;
+        }
+        Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.messageOwner.to_id.channel_id));
+        if (chat == null || !chat.megagroup) {
+            return false;
+        }
+        return true;
     }
 
     public boolean isFromUser() {

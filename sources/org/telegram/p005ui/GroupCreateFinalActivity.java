@@ -249,6 +249,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if (this.editText != null) {
             this.editText.onDestroy();
         }
+        AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
     }
 
     public void onResume() {
@@ -259,6 +260,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if (this.adapter != null) {
             this.adapter.notifyDataSetChanged();
         }
+        AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
     public void onPause() {

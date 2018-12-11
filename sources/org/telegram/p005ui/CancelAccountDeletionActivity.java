@@ -165,7 +165,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             }
 
             /* renamed from: lambda$run$0$CancelAccountDeletionActivity$LoginActivitySmsView$4 */
-            final /* synthetic */ void mo9685xbdCLASSNAMEd14() {
+            final /* synthetic */ void mo9686xbdCLASSNAMEd14() {
                 double currentTime = (double) System.currentTimeMillis();
                 double diff = currentTime - LoginActivitySmsView.this.lastCodeTime;
                 LoginActivitySmsView.this.lastCodeTime = currentTime;
@@ -237,14 +237,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
 
                 /* renamed from: lambda$run$1$CancelAccountDeletionActivity$LoginActivitySmsView$5$1 */
-                final /* synthetic */ void mo9689x56e58341(TLObject response, TL_error error) {
+                final /* synthetic */ void mo9690x56e58341(TLObject response, TL_error error) {
                     if (error != null && error.text != null) {
                         AndroidUtilities.runOnUIThread(new CancelAccountDeletionActivity$LoginActivitySmsView$5$1$$Lambda$1(this, error));
                     }
                 }
 
                 /* renamed from: lambda$null$0$CancelAccountDeletionActivity$LoginActivitySmsView$5$1 */
-                final /* synthetic */ void mo9688x9cc5d90c(TL_error error) {
+                final /* synthetic */ void mo9689x9cc5d90c(TL_error error) {
                     LoginActivitySmsView.this.lastError = error.text;
                 }
             }
@@ -441,7 +441,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$resendCode$3$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ void mo15925x5var_a36a(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
+        final /* synthetic */ void mo15926x5var_a36a(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$7(this, error, params, response, req));
         }
 
@@ -615,7 +615,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$setParams$4$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ boolean mo15926x631f1var_(int num, View v, int keyCode, KeyEvent event) {
+        final /* synthetic */ boolean mo15927x631f1var_(int num, View v, int keyCode, KeyEvent event) {
             if (keyCode != 67 || this.codeField[num].length() != 0 || num <= 0) {
                 return false;
             }
@@ -626,7 +626,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$setParams$5$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ boolean mo15927x90f7b9c2(TextView textView, int i, KeyEvent keyEvent) {
+        final /* synthetic */ boolean mo15928x90f7b9c2(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
                 return false;
             }
@@ -713,7 +713,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$onNextPressed$7$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ void mo15923x417aab38(TL_account_confirmPhone req, TLObject response, TL_error error) {
+        final /* synthetic */ void mo15924x417aab38(TL_account_confirmPhone req, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new CancelAccountDeletionActivity$LoginActivitySmsView$$Lambda$6(this, error, req));
         }
 
@@ -772,7 +772,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$onShow$8$CancelAccountDeletionActivity$LoginActivitySmsView */
-        final /* synthetic */ void mo15924x84fafCLASSNAME() {
+        final /* synthetic */ void mo15925x84fafCLASSNAME() {
             if (this.codeField != null) {
                 int a = this.codeField.length - 1;
                 while (a >= 0) {

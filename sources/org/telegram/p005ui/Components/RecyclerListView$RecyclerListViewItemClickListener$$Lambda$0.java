@@ -11,6 +11,6 @@ final /* synthetic */ class RecyclerListView$RecyclerListViewItemClickListener$$
     }
 
     public void run() {
-        this.arg$1.mo16893xe03CLASSNAMEc();
+        this.arg$1.mo16894xe03CLASSNAMEc();
     }
 }
