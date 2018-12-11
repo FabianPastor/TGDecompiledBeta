@@ -34,9 +34,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
@@ -174,7 +176,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private boolean tabsAnimationInProgress;
     private SharedDocumentsAdapter voiceAdapter;
 
-    /* renamed from: org.telegram.ui.MediaActivity$14 */
+    /* renamed from: org.telegram.ui.MediaActivity$15 */
     class CLASSNAME implements SharedLinkCellDelegate {
         CLASSNAME() {
         }
@@ -190,11 +192,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         public void onLinkLongPress(String urlFinal) {
             Builder builder = new Builder(MediaActivity.this.getParentActivity());
             builder.setTitle(urlFinal);
-            builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new MediaActivity$14$$Lambda$0(this, urlFinal));
+            builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new MediaActivity$15$$Lambda$0(this, urlFinal));
             MediaActivity.this.showDialog(builder.create());
         }
 
-        final /* synthetic */ void lambda$onLinkLongPress$0$MediaActivity$14(String urlFinal, DialogInterface dialog, int which) {
+        final /* synthetic */ void lambda$onLinkLongPress$0$MediaActivity$15(String urlFinal, DialogInterface dialog, int which) {
             if (which == 0) {
                 Browser.openUrl(MediaActivity.this.getParentActivity(), urlFinal, true);
             } else if (which == 1) {
@@ -896,7 +898,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             boolean z = true;
             MessageObject messageObject;
             boolean z2;
-            SparseArray[] access$1500;
+            SparseArray[] access$1700;
             int i;
             if (this.currentType == 1) {
                 SharedDocumentCell sharedDocumentCell = holder.itemView;
@@ -908,13 +910,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
                 sharedDocumentCell.setDocument(messageObject, z2);
                 if (MediaActivity.this.actionBar.isActionModeShowed()) {
-                    access$1500 = MediaActivity.this.selectedFiles;
+                    access$1700 = MediaActivity.this.selectedFiles;
                     if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                         i = 0;
                     } else {
                         i = 1;
                     }
-                    if (access$1500[i].indexOfKey(messageObject.getId()) >= 0) {
+                    if (access$1700[i].indexOfKey(messageObject.getId()) >= 0) {
                         z2 = true;
                     } else {
                         z2 = false;
@@ -939,13 +941,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
                 sharedLinkCell.setLink(messageObject, z2);
                 if (MediaActivity.this.actionBar.isActionModeShowed()) {
-                    access$1500 = MediaActivity.this.selectedFiles;
+                    access$1700 = MediaActivity.this.selectedFiles;
                     if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                         i = 0;
                     } else {
                         i = 1;
                     }
-                    z2 = access$1500[i].indexOfKey(messageObject.getId()) >= 0;
+                    z2 = access$1700[i].indexOfKey(messageObject.getId()) >= 0;
                     if (MediaActivity.this.scrolling) {
                         z = false;
                     }
@@ -966,13 +968,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
                 sharedAudioCell.setMessageObject(messageObject, z2);
                 if (MediaActivity.this.actionBar.isActionModeShowed()) {
-                    access$1500 = MediaActivity.this.selectedFiles;
+                    access$1700 = MediaActivity.this.selectedFiles;
                     if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                         i = 0;
                     } else {
                         i = 1;
                     }
-                    z2 = access$1500[i].indexOfKey(messageObject.getId()) >= 0;
+                    z2 = access$1700[i].indexOfKey(messageObject.getId()) >= 0;
                     if (MediaActivity.this.scrolling) {
                         z = false;
                     }
@@ -1215,13 +1217,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         sharedLinkCell.setLink(messageObject, z2);
                         if (MediaActivity.this.actionBar.isActionModeShowed()) {
                             int i;
-                            SparseArray[] access$1500 = MediaActivity.this.selectedFiles;
+                            SparseArray[] access$1700 = MediaActivity.this.selectedFiles;
                             if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                                 i = 0;
                             } else {
                                 i = 1;
                             }
-                            z2 = access$1500[i].indexOfKey(messageObject.getId()) >= 0;
+                            z2 = access$1700[i].indexOfKey(messageObject.getId()) >= 0;
                             if (MediaActivity.this.scrolling) {
                                 z = false;
                             }
@@ -1259,36 +1261,29 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.ui.MediaActivity$SharedMediaData */
-    private class SharedMediaData {
-        private boolean[] endReached;
+    public static class SharedMediaData {
+        private boolean[] endReached = new boolean[]{false, true};
         private boolean loading;
-        private int[] max_id;
-        private ArrayList<MessageObject> messages;
-        private SparseArray<MessageObject>[] messagesDict;
-        private HashMap<String, ArrayList<MessageObject>> sectionArrays;
-        private ArrayList<String> sections;
+        private int[] max_id = new int[]{0, 0};
+        private ArrayList<MessageObject> messages = new ArrayList();
+        private SparseArray<MessageObject>[] messagesDict = new SparseArray[]{new SparseArray(), new SparseArray()};
+        private HashMap<String, ArrayList<MessageObject>> sectionArrays = new HashMap();
+        private ArrayList<String> sections = new ArrayList();
         private int totalCount;
 
-        private SharedMediaData() {
-            this.messages = new ArrayList();
-            this.messagesDict = new SparseArray[]{new SparseArray(), new SparseArray()};
-            this.sections = new ArrayList();
-            this.sectionArrays = new HashMap();
-            this.endReached = new boolean[]{false, true};
-            this.max_id = new int[]{0, 0};
+        public void setTotalCount(int count) {
+            this.totalCount = count;
         }
 
-        /* synthetic */ SharedMediaData(MediaActivity x0, CLASSNAME x1) {
-            this();
+        public void setMaxId(int num, int value) {
+            this.max_id[num] = value;
         }
 
-        public boolean addMessage(MessageObject messageObject, boolean isNew, boolean enc) {
-            int loadIndex;
-            if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
-                loadIndex = 0;
-            } else {
-                loadIndex = 1;
-            }
+        public void setEndReached(int num, boolean value) {
+            this.endReached[num] = value;
+        }
+
+        public boolean addMessage(MessageObject messageObject, int loadIndex, boolean isNew, boolean enc) {
             if (this.messagesDict[loadIndex].indexOfKey(messageObject.getId()) >= 0) {
                 return false;
             }
@@ -1448,13 +1443,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     int i;
                                     boolean z;
                                     boolean z2;
-                                    SparseArray[] access$1500 = MediaActivity.this.selectedFiles;
+                                    SparseArray[] access$1700 = MediaActivity.this.selectedFiles;
                                     if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                                         i = 0;
                                     } else {
                                         i = 1;
                                     }
-                                    if (access$1500[i].indexOfKey(messageObject.getId()) >= 0) {
+                                    if (access$1700[i].indexOfKey(messageObject.getId()) >= 0) {
                                         z = true;
                                     } else {
                                         z = false;
@@ -1500,10 +1495,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     public MediaActivity(Bundle args, int[] media) {
-        this(args, media, 0);
+        this(args, media, null, 0);
     }
 
-    public MediaActivity(Bundle args, int[] media, int initTab) {
+    public MediaActivity(Bundle args, int[] media, SharedMediaData[] mediaData, int initTab) {
         super(args);
         this.mediaPages = new MediaPage[2];
         this.cellCache = new ArrayList(10);
@@ -1532,6 +1527,27 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.sharedLinkCellDelegate = new CLASSNAME();
         this.hasMedia = media;
         this.initialTab = initTab;
+        for (int a = 0; a < this.sharedMediaData.length; a++) {
+            this.sharedMediaData[a] = new SharedMediaData();
+            this.sharedMediaData[a].max_id[0] = ((int) this.dialog_id) == 0 ? Integer.MIN_VALUE : ConnectionsManager.DEFAULT_DATACENTER_ID;
+            if (!(this.mergeDialogId == 0 || this.info == null)) {
+                this.sharedMediaData[a].max_id[1] = this.info.migrated_from_max_id;
+                this.sharedMediaData[a].endReached[1] = false;
+            }
+            if (mediaData != null) {
+                this.sharedMediaData[a].totalCount = mediaData[a].totalCount;
+                this.sharedMediaData[a].endReached = mediaData[a].endReached;
+                this.sharedMediaData[a].messages.addAll(mediaData[a].messages);
+                this.sharedMediaData[a].sections.addAll(mediaData[a].sections);
+                for (Entry<String, ArrayList<MessageObject>> entry : mediaData[a].sectionArrays.entrySet()) {
+                    this.sharedMediaData[a].sectionArrays.put(entry.getKey(), new ArrayList((Collection) entry.getValue()));
+                }
+                for (int i = 0; i < 2; i++) {
+                    this.sharedMediaData[a].messagesDict[i] = mediaData[a].messagesDict[i].clone();
+                    this.sharedMediaData[a].max_id[i] = mediaData[a].max_id[i];
+                }
+            }
+        }
     }
 
     public boolean onFragmentCreate() {
@@ -1544,14 +1560,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStart);
         this.dialog_id = getArguments().getLong("dialog_id", 0);
-        for (int a = 0; a < this.sharedMediaData.length; a++) {
-            this.sharedMediaData[a] = new SharedMediaData(this, null);
-            this.sharedMediaData[a].max_id[0] = ((int) this.dialog_id) == 0 ? Integer.MIN_VALUE : ConnectionsManager.DEFAULT_DATACENTER_ID;
-            if (!(this.mergeDialogId == 0 || this.info == null)) {
-                this.sharedMediaData[a].max_id[1] = this.info.migrated_from_max_id;
-                this.sharedMediaData[a].endReached[1] = false;
-            }
-        }
         return true;
     }
 
@@ -1938,37 +1946,37 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         MediaActivity mediaActivity = MediaActivity.this;
                         z = Math.abs(x) < ((float) MediaActivity.this.mediaPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(velX) < 3500.0f || Math.abs(velX) < Math.abs(velY));
                         mediaActivity.backAnimation = z;
-                        AnimatorSet access$6400;
+                        AnimatorSet access$6700;
                         Animator[] animatorArr;
                         if (MediaActivity.this.backAnimation) {
                             dx2 = Math.abs(x);
                             if (MediaActivity.this.animatingForward) {
-                                access$6400 = MediaActivity.this.tabsAnimation;
+                                access$6700 = MediaActivity.this.tabsAnimation;
                                 animatorArr = new Animator[2];
                                 animatorArr[0] = ObjectAnimator.ofFloat(MediaActivity.this.mediaPages[0], View.TRANSLATION_X, new float[]{0.0f});
                                 animatorArr[1] = ObjectAnimator.ofFloat(MediaActivity.this.mediaPages[1], View.TRANSLATION_X, new float[]{(float) MediaActivity.this.mediaPages[1].getMeasuredWidth()});
-                                access$6400.playTogether(animatorArr);
+                                access$6700.playTogether(animatorArr);
                             } else {
-                                access$6400 = MediaActivity.this.tabsAnimation;
+                                access$6700 = MediaActivity.this.tabsAnimation;
                                 animatorArr = new Animator[2];
                                 animatorArr[0] = ObjectAnimator.ofFloat(MediaActivity.this.mediaPages[0], View.TRANSLATION_X, new float[]{0.0f});
                                 animatorArr[1] = ObjectAnimator.ofFloat(MediaActivity.this.mediaPages[1], View.TRANSLATION_X, new float[]{(float) (-MediaActivity.this.mediaPages[1].getMeasuredWidth())});
-                                access$6400.playTogether(animatorArr);
+                                access$6700.playTogether(animatorArr);
                             }
                         } else {
                             dx2 = ((float) MediaActivity.this.mediaPages[0].getMeasuredWidth()) - Math.abs(x);
                             if (MediaActivity.this.animatingForward) {
-                                access$6400 = MediaActivity.this.tabsAnimation;
+                                access$6700 = MediaActivity.this.tabsAnimation;
                                 animatorArr = new Animator[2];
                                 animatorArr[0] = ObjectAnimator.ofFloat(MediaActivity.this.mediaPages[0], View.TRANSLATION_X, new float[]{(float) (-MediaActivity.this.mediaPages[0].getMeasuredWidth())});
                                 animatorArr[1] = ObjectAnimator.ofFloat(MediaActivity.this.mediaPages[1], View.TRANSLATION_X, new float[]{0.0f});
-                                access$6400.playTogether(animatorArr);
+                                access$6700.playTogether(animatorArr);
                             } else {
-                                access$6400 = MediaActivity.this.tabsAnimation;
+                                access$6700 = MediaActivity.this.tabsAnimation;
                                 animatorArr = new Animator[2];
                                 animatorArr[0] = ObjectAnimator.ofFloat(MediaActivity.this.mediaPages[0], View.TRANSLATION_X, new float[]{(float) MediaActivity.this.mediaPages[0].getMeasuredWidth()});
                                 animatorArr[1] = ObjectAnimator.ofFloat(MediaActivity.this.mediaPages[1], View.TRANSLATION_X, new float[]{0.0f});
-                                access$6400.playTogether(animatorArr);
+                                access$6700.playTogether(animatorArr);
                             }
                         }
                         MediaActivity.this.tabsAnimation.setInterpolator(MediaActivity.interpolator);
@@ -2034,13 +2042,18 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             };
             CLASSNAME.addView(CLASSNAME, LayoutHelper.createFrame(-1, -1.0f));
             this.mediaPages[a] = CLASSNAME;
-            LayoutManager layoutManager = this.mediaPages[a].layoutManager = new LinearLayoutManager(context, 1, false);
+            LayoutManager layoutManager = this.mediaPages[a].layoutManager = new LinearLayoutManager(context, 1, false) {
+                public boolean supportsPredictiveItemAnimations() {
+                    return false;
+                }
+            };
             this.mediaPages[a].listView = new RecyclerListView(context) {
                 protected void onLayout(boolean changed, int l, int t, int r, int b) {
                     super.onLayout(changed, l, t, r, b);
                     MediaActivity.this.updateSections(this, true);
                 }
             };
+            this.mediaPages[a].listView.setItemAnimator(null);
             this.mediaPages[a].listView.setClipToPadding(false);
             this.mediaPages[a].listView.setSectionsType(2);
             this.mediaPages[a].listView.setLayoutManager(layoutManager);
@@ -2081,10 +2094,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             }
                             if (!MediaActivity.this.sharedMediaData[view.selectedType].endReached[0]) {
                                 MediaActivity.this.sharedMediaData[view.selectedType].loading = true;
-                                DataQuery.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.dialog_id, 50, MediaActivity.this.sharedMediaData[view.selectedType].max_id[0], type, true, MediaActivity.this.classGuid);
+                                DataQuery.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.dialog_id, 50, MediaActivity.this.sharedMediaData[view.selectedType].max_id[0], type, 1, MediaActivity.this.classGuid);
                             } else if (!(MediaActivity.this.mergeDialogId == 0 || MediaActivity.this.sharedMediaData[view.selectedType].endReached[1])) {
                                 MediaActivity.this.sharedMediaData[view.selectedType].loading = true;
-                                DataQuery.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.mergeDialogId, 50, MediaActivity.this.sharedMediaData[view.selectedType].max_id[1], type, true, MediaActivity.this.classGuid);
+                                DataQuery.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.mergeDialogId, 50, MediaActivity.this.sharedMediaData[view.selectedType].max_id[1], type, 1, MediaActivity.this.classGuid);
                             }
                         }
                         if (!(recyclerView != MediaActivity.this.mediaPages[0].listView || MediaActivity.this.searching || MediaActivity.this.actionBar.isActionModeShowed())) {
@@ -2209,26 +2222,64 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         ArrayList<MessageObject> arr;
         boolean enc;
         int loadIndex;
-        int a;
         Adapter adapter;
-        int count;
+        int a;
         boolean updated;
+        int b;
+        int count;
         if (id == NotificationCenter.mediaDidLoad) {
             long uid = ((Long) args[0]).longValue();
             if (((Integer) args[3]).intValue() == this.classGuid) {
+                int oldItemCount;
                 type = ((Integer) args[4]).intValue();
                 this.sharedMediaData[type].loading = false;
                 this.sharedMediaData[type].totalCount = ((Integer) args[1]).intValue();
                 arr = args[2];
                 enc = ((int) this.dialog_id) == 0;
                 loadIndex = uid == this.dialog_id ? 0 : 1;
+                adapter = null;
+                if (type == 0) {
+                    adapter = this.photoVideoAdapter;
+                } else if (type == 1) {
+                    adapter = this.documentsAdapter;
+                } else if (type == 2) {
+                    adapter = this.voiceAdapter;
+                } else if (type == 3) {
+                    adapter = this.linksAdapter;
+                } else if (type == 4) {
+                    adapter = this.audioAdapter;
+                }
+                if (adapter != null) {
+                    oldItemCount = adapter.getItemCount();
+                    if (adapter instanceof SectionsAdapter) {
+                        ((SectionsAdapter) adapter).notifySectionsChanged();
+                    }
+                } else {
+                    oldItemCount = 0;
+                }
                 for (a = 0; a < arr.size(); a++) {
-                    this.sharedMediaData[type].addMessage((MessageObject) arr.get(a), false, enc);
+                    this.sharedMediaData[type].addMessage((MessageObject) arr.get(a), loadIndex, false, enc);
                 }
                 this.sharedMediaData[type].endReached[loadIndex] = ((Boolean) args[5]).booleanValue();
                 if (loadIndex == 0 && this.sharedMediaData[type].endReached[loadIndex] && this.mergeDialogId != 0) {
                     this.sharedMediaData[type].loading = true;
-                    DataQuery.getInstance(this.currentAccount).loadMedia(this.mergeDialogId, 50, this.sharedMediaData[type].max_id[1], type, true, this.classGuid);
+                    DataQuery.getInstance(this.currentAccount).loadMedia(this.mergeDialogId, 50, this.sharedMediaData[type].max_id[1], type, 1, this.classGuid);
+                }
+                if (adapter != null) {
+                    for (a = 0; a < this.mediaPages.length; a++) {
+                        if (this.mediaPages[a].listView.getAdapter() == adapter) {
+                            this.mediaPages[a].listView.stopScroll();
+                        }
+                    }
+                    int newItemCount = adapter.getItemCount();
+                    if (oldItemCount > 1) {
+                        adapter.notifyItemChanged(oldItemCount - 2);
+                    }
+                    if (newItemCount > oldItemCount) {
+                        adapter.notifyItemRangeInserted(oldItemCount, newItemCount);
+                    } else if (newItemCount < oldItemCount) {
+                        adapter.notifyItemRangeRemoved(newItemCount, oldItemCount - newItemCount);
+                    }
                 }
                 this.scrolling = true;
                 a = 0;
@@ -2241,28 +2292,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             this.mediaPages[a].listView.setEmptyView(this.mediaPages[a].emptyView);
                         }
                     }
-                    adapter = null;
-                    if (this.mediaPages[a].selectedType == 0 && type == 0) {
-                        adapter = this.photoVideoAdapter;
-                    } else if (this.mediaPages[a].selectedType == 1 && type == 1) {
-                        adapter = this.documentsAdapter;
-                    } else if (this.mediaPages[a].selectedType == 2 && type == 2) {
-                        adapter = this.voiceAdapter;
-                    } else if (this.mediaPages[a].selectedType == 3 && type == 3) {
-                        adapter = this.linksAdapter;
-                    } else if (this.mediaPages[a].selectedType == 4 && type == 4) {
-                        adapter = this.audioAdapter;
-                    }
-                    if (adapter != null) {
-                        count = adapter.getItemCount();
-                        this.photoVideoAdapter.notifyDataSetChanged();
-                        this.documentsAdapter.notifyDataSetChanged();
-                        this.voiceAdapter.notifyDataSetChanged();
-                        this.linksAdapter.notifyDataSetChanged();
-                        this.audioAdapter.notifyDataSetChanged();
-                        if (count == 0 && this.actionBar.getTranslationY() != 0.0f) {
-                            this.mediaPages[a].layoutManager.scrollToPositionWithOffset(0, (int) this.actionBar.getTranslationY());
-                        }
+                    if (oldItemCount == 0 && this.actionBar.getTranslationY() != 0.0f && this.mediaPages[a].listView.getAdapter() == adapter) {
+                        this.mediaPages[a].layoutManager.scrollToPositionWithOffset(0, (int) this.actionBar.getTranslationY());
                     }
                     a++;
                 }
@@ -2285,12 +2316,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             } else if (channelId != 0) {
                 return;
             }
+            ArrayList<Integer> markAsDeletedMessages = args[0];
             updated = false;
-            Iterator it = args[0].iterator();
-            while (it.hasNext()) {
-                Integer ids = (Integer) it.next();
+            int N = markAsDeletedMessages.size();
+            for (a = 0; a < N; a++) {
                 for (SharedMediaData deleteMessage : this.sharedMediaData) {
-                    if (deleteMessage.deleteMessage(ids.intValue(), loadIndex)) {
+                    if (deleteMessage.deleteMessage(((Integer) markAsDeletedMessages.get(a)).intValue(), loadIndex)) {
                         updated = true;
                     }
                 }
@@ -2322,12 +2353,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     MessageObject obj = (MessageObject) arr.get(a);
                     if (!(obj.messageOwner.media == null || obj.needDrawBluredPreview())) {
                         type = DataQuery.getMediaType(obj.messageOwner);
-                        if (type == -1) {
+                        if (type != -1) {
+                            if (this.sharedMediaData[type].addMessage(obj, obj.getDialogId() == this.dialog_id ? 0 : 1, true, enc)) {
+                                updated = true;
+                                this.hasMedia[type] = 1;
+                            }
+                        } else {
                             return;
-                        }
-                        if (this.sharedMediaData[type].addMessage(obj, true, enc)) {
-                            updated = true;
-                            this.hasMedia[type] = 1;
                         }
                     }
                 }
@@ -2369,7 +2401,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
         } else if (id != NotificationCenter.messagePlayingDidStart && id != NotificationCenter.messagePlayingPlayStateChanged && id != NotificationCenter.messagePlayingDidReset) {
         } else {
-            int b;
             View view;
             SharedAudioCell cell;
             if (id == NotificationCenter.messagePlayingDidReset || id == NotificationCenter.messagePlayingPlayStateChanged) {
@@ -2666,7 +2697,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
             if (!(this.sharedMediaData[this.mediaPages[a].selectedType].loading || this.sharedMediaData[this.mediaPages[a].selectedType].endReached[0] || !this.sharedMediaData[this.mediaPages[a].selectedType].messages.isEmpty())) {
                 this.sharedMediaData[this.mediaPages[a].selectedType].loading = true;
-                DataQuery.getInstance(this.currentAccount).loadMedia(this.dialog_id, 50, 0, this.mediaPages[a].selectedType, true, this.classGuid);
+                DataQuery.getInstance(this.currentAccount).loadMedia(this.dialog_id, 50, 0, this.mediaPages[a].selectedType, 1, this.classGuid);
             }
             if (this.sharedMediaData[this.mediaPages[a].selectedType].loading && this.sharedMediaData[this.mediaPages[a].selectedType].messages.isEmpty()) {
                 this.mediaPages[a].progressView.setVisibility(0);

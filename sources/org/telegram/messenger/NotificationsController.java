@@ -430,7 +430,7 @@ public class NotificationsController {
     }
 
     /* renamed from: lambda$removeDeletedMessagesFromNotifications$8$NotificationsController */
-    final /* synthetic */ void mo10551xbCLASSNAMEe(SparseArray deletedMessages, ArrayList popupArrayRemove) {
+    final /* synthetic */ void mo10550xbCLASSNAMEe(SparseArray deletedMessages, ArrayList popupArrayRemove) {
         int old_unread_count = this.total_unread_count;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
         for (int a = 0; a < deletedMessages.size(); a++) {
@@ -505,7 +505,7 @@ public class NotificationsController {
     }
 
     /* renamed from: lambda$removeDeletedHisoryFromNotifications$11$NotificationsController */
-    final /* synthetic */ void mo10550x6900fe42(SparseIntArray deletedMessages, ArrayList popupArrayRemove) {
+    final /* synthetic */ void mo10549x6900fe42(SparseIntArray deletedMessages, ArrayList popupArrayRemove) {
         int old_unread_count = this.total_unread_count;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
         for (int a = 0; a < deletedMessages.size(); a++) {

@@ -15,6 +15,6 @@ final /* synthetic */ class ChatActivity$ChatActivityAdapter$1$$Lambda$0 impleme
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$didPressedUrl$0$ChatActivity$ChatActivityAdapter$1(this.arg$2, dialogInterface, i);
+        this.arg$1.lambda$didPressUrl$0$ChatActivity$ChatActivityAdapter$1(this.arg$2, dialogInterface, i);
     }
 }

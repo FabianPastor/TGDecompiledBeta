@@ -404,29 +404,29 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     public interface ChatMessageCellDelegate {
         boolean canPerformActions();
 
-        void didLongPressed(ChatMessageCell chatMessageCell);
+        void didLongPress(ChatMessageCell chatMessageCell);
 
-        void didPressedBotButton(ChatMessageCell chatMessageCell, KeyboardButton keyboardButton);
+        void didPressBotButton(ChatMessageCell chatMessageCell, KeyboardButton keyboardButton);
 
-        void didPressedCancelSendButton(ChatMessageCell chatMessageCell);
+        void didPressCancelSendButton(ChatMessageCell chatMessageCell);
 
-        void didPressedChannelAvatar(ChatMessageCell chatMessageCell, Chat chat, int i);
+        void didPressChannelAvatar(ChatMessageCell chatMessageCell, Chat chat, int i);
 
-        void didPressedImage(ChatMessageCell chatMessageCell);
+        void didPressImage(ChatMessageCell chatMessageCell);
 
-        void didPressedInstantButton(ChatMessageCell chatMessageCell, int i);
+        void didPressInstantButton(ChatMessageCell chatMessageCell, int i);
 
-        void didPressedOther(ChatMessageCell chatMessageCell);
+        void didPressOther(ChatMessageCell chatMessageCell);
 
-        void didPressedReplyMessage(ChatMessageCell chatMessageCell, int i);
+        void didPressReplyMessage(ChatMessageCell chatMessageCell, int i);
 
-        void didPressedShare(ChatMessageCell chatMessageCell);
+        void didPressShare(ChatMessageCell chatMessageCell);
 
-        void didPressedUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z);
+        void didPressUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z);
 
-        void didPressedUserAvatar(ChatMessageCell chatMessageCell, User user);
+        void didPressUserAvatar(ChatMessageCell chatMessageCell, User user);
 
-        void didPressedViaBot(ChatMessageCell chatMessageCell, String str);
+        void didPressViaBot(ChatMessageCell chatMessageCell, String str);
 
         boolean isChatAdminCell(int i);
 
@@ -598,7 +598,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 return true;
                             }
                             if (link[0] == this.pressedLink) {
-                                this.delegate.didPressedUrl(this.currentMessageObject, this.pressedLink, false);
+                                this.delegate.didPressUrl(this.currentMessageObject, this.pressedLink, false);
                                 resetPressedLink(1);
                                 return true;
                             }
@@ -660,7 +660,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     FileLog.m13e(e2);
                 }
             } else if (this.pressedLinkType == 3) {
-                this.delegate.didPressedUrl(this.currentMessageObject, this.pressedLink, false);
+                this.delegate.didPressUrl(this.currentMessageObject, this.pressedLink, false);
                 resetPressedLink(3);
                 return true;
             }
@@ -728,7 +728,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     BotButton button = (BotButton) this.botButtons.get(a);
                     if (button.button instanceof TL_keyboardButtonGame) {
                         playSoundEffect(0);
-                        this.delegate.didPressedBotButton(this, button.button);
+                        this.delegate.didPressBotButton(this, button.button);
                         invalidate();
                         break;
                     }
@@ -823,7 +823,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 } else if (event.getAction() == 1) {
                     if (this.instantPressed) {
                         if (this.delegate != null) {
-                            this.delegate.didPressedInstantButton(this, this.drawInstantViewType);
+                            this.delegate.didPressInstantButton(this, this.drawInstantViewType);
                         }
                         playSoundEffect(0);
                         if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
@@ -863,14 +863,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             if (webPage != null && !TextUtils.isEmpty(webPage.embed_url)) {
                                 this.delegate.needOpenWebView(webPage.embed_url, webPage.site_name, webPage.title, webPage.url, webPage.embed_width, webPage.embed_height);
                             } else if (this.buttonState == -1 || this.buttonState == 3) {
-                                this.delegate.didPressedImage(this);
+                                this.delegate.didPressImage(this);
                                 playSoundEffect(0);
                             } else if (webPage != null) {
                                 Browser.openUrl(getContext(), webPage.url);
                             }
                         } else if (this.buttonState == -1) {
                             if (SharedConfig.autoplayGifs) {
-                                this.delegate.didPressedImage(this);
+                                this.delegate.didPressImage(this);
                             } else {
                                 this.buttonState = 2;
                                 this.currentMessageObject.gifState = 1.0f;
@@ -915,7 +915,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         } else if (event.getAction() == 1) {
             if (this.instantPressed) {
                 if (this.delegate != null) {
-                    this.delegate.didPressedInstantButton(this, this.drawInstantViewType);
+                    this.delegate.didPressInstantButton(this, this.drawInstantViewType);
                 }
                 playSoundEffect(0);
                 if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
@@ -966,7 +966,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         } else if (event.getAction() == 1 && this.otherPressed) {
             this.otherPressed = false;
             playSoundEffect(0);
-            this.delegate.didPressedOther(this);
+            this.delegate.didPressOther(this);
             invalidate();
             result = true;
         }
@@ -1173,7 +1173,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             return false;
         } else {
             playSoundEffect(0);
-            this.delegate.didPressedBotButton(this, ((BotButton) this.botButtons.get(this.pressedBotButton)).button);
+            this.delegate.didPressBotButton(this, ((BotButton) this.botButtons.get(this.pressedBotButton)).button);
             this.pressedBotButton = -1;
             invalidate();
             return false;
@@ -1250,12 +1250,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         return result;
                     }
                     if (this.currentUser != null) {
-                        this.delegate.didPressedUserAvatar(this, this.currentUser);
+                        this.delegate.didPressUserAvatar(this, this.currentUser);
                         return result;
                     } else if (this.currentChat == null) {
                         return result;
                     } else {
-                        this.delegate.didPressedChannelAvatar(this, this.currentChat, 0);
+                        this.delegate.didPressChannelAvatar(this, this.currentChat, 0);
                         return result;
                     }
                 } else if (event.getAction() == 3) {
@@ -1275,12 +1275,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         return result;
                     }
                     if (this.currentForwardChannel != null) {
-                        this.delegate.didPressedChannelAvatar(this, this.currentForwardChannel, this.currentMessageObject.messageOwner.fwd_from.channel_post);
+                        this.delegate.didPressChannelAvatar(this, this.currentForwardChannel, this.currentMessageObject.messageOwner.fwd_from.channel_post);
                         return result;
                     } else if (this.currentForwardUser == null) {
                         return result;
                     } else {
-                        this.delegate.didPressedUserAvatar(this, this.currentForwardUser);
+                        this.delegate.didPressUserAvatar(this, this.currentForwardUser);
                         return result;
                     }
                 } else if (event.getAction() == 3) {
@@ -1302,7 +1302,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (this.delegate == null) {
                         return result;
                     }
-                    this.delegate.didPressedViaBot(this, this.currentViaBotUser != null ? this.currentViaBotUser.username : this.currentMessageObject.messageOwner.via_bot_name);
+                    this.delegate.didPressViaBot(this, this.currentViaBotUser != null ? this.currentViaBotUser.username : this.currentMessageObject.messageOwner.via_bot_name);
                     return result;
                 } else if (event.getAction() == 3) {
                     this.forwardBotPressed = false;
@@ -1330,7 +1330,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (this.delegate == null) {
                         return result;
                     }
-                    this.delegate.didPressedReplyMessage(this, this.currentMessageObject.messageOwner.reply_to_msg_id);
+                    this.delegate.didPressReplyMessage(this, this.currentMessageObject.messageOwner.reply_to_msg_id);
                     return result;
                 } else if (event.getAction() == 3) {
                     this.replyPressed = false;
@@ -1356,7 +1356,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.sharePressed = false;
                     playSoundEffect(0);
                     if (this.delegate != null) {
-                        this.delegate.didPressedShare(this);
+                        this.delegate.didPressShare(this);
                     }
                 } else if (event.getAction() == 3) {
                     this.sharePressed = false;
@@ -1578,12 +1578,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private void didClickedImage() {
         if (this.currentMessageObject.type == 1 || this.currentMessageObject.type == 13) {
             if (this.buttonState == -1) {
-                this.delegate.didPressedImage(this);
+                this.delegate.didPressImage(this);
             } else if (this.buttonState == 0) {
                 didPressedButton(false);
             }
         } else if (this.currentMessageObject.type == 12) {
-            this.delegate.didPressedUserAvatar(this, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentMessageObject.messageOwner.media.user_id)));
+            this.delegate.didPressUserAvatar(this, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentMessageObject.messageOwner.media.user_id)));
         } else if (this.currentMessageObject.type == 5) {
             if (!MediaController.getInstance().isPlayingMessage(this.currentMessageObject) || MediaController.getInstance().isMessagePaused()) {
                 this.delegate.needPlayMessage(this.currentMessageObject);
@@ -1593,7 +1593,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         } else if (this.currentMessageObject.type == 8) {
             if (this.buttonState == -1) {
                 if (SharedConfig.autoplayGifs) {
-                    this.delegate.didPressedImage(this);
+                    this.delegate.didPressImage(this);
                     return;
                 }
                 this.buttonState = 2;
@@ -1607,15 +1607,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
         } else if (this.documentAttachType == 4) {
             if (this.buttonState == -1) {
-                this.delegate.didPressedImage(this);
+                this.delegate.didPressImage(this);
             } else if (this.buttonState == 0 || this.buttonState == 3) {
                 didPressedButton(false);
             }
         } else if (this.currentMessageObject.type == 4) {
-            this.delegate.didPressedImage(this);
+            this.delegate.didPressImage(this);
         } else if (this.documentAttachType == 1) {
             if (this.buttonState == -1) {
-                this.delegate.didPressedImage(this);
+                this.delegate.didPressImage(this);
             }
         } else if (this.documentAttachType == 2) {
             if (this.buttonState == -1) {
@@ -1630,7 +1630,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
             }
         } else if (this.hasInvoicePreview && this.buttonState == -1) {
-            this.delegate.didPressedImage(this);
+            this.delegate.didPressImage(this);
         }
     }
 
@@ -1795,16 +1795,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     protected void onLongPress() {
         if (this.pressedLink instanceof URLSpanMono) {
-            this.delegate.didPressedUrl(this.currentMessageObject, this.pressedLink, true);
+            this.delegate.didPressUrl(this.currentMessageObject, this.pressedLink, true);
             return;
         }
         if (this.pressedLink instanceof URLSpanNoUnderline) {
             if (this.pressedLink.getURL().startsWith("/")) {
-                this.delegate.didPressedUrl(this.currentMessageObject, this.pressedLink, true);
+                this.delegate.didPressUrl(this.currentMessageObject, this.pressedLink, true);
                 return;
             }
         } else if (this.pressedLink instanceof URLSpan) {
-            this.delegate.didPressedUrl(this.currentMessageObject, this.pressedLink, true);
+            this.delegate.didPressUrl(this.currentMessageObject, this.pressedLink, true);
             return;
         }
         resetPressedLink(-1);
@@ -1823,7 +1823,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             invalidate();
         }
         if (this.delegate != null) {
-            this.delegate.didLongPressed(this);
+            this.delegate.didLongPress(this);
         }
     }
 
@@ -6236,7 +6236,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
                 invalidate();
             } else if (!this.radialProgress.isDrawCheckDrawable()) {
-                this.delegate.didPressedCancelSendButton(this);
+                this.delegate.didPressCancelSendButton(this);
             }
         } else if (this.buttonState == 2) {
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
@@ -6258,7 +6258,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.radialProgress.setProgress(0.0f, false);
                 this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
             }
-            this.delegate.didPressedImage(this);
+            this.delegate.didPressImage(this);
         } else if (this.buttonState != 4) {
         } else {
             if (this.documentAttachType != 3 && this.documentAttachType != 5) {
@@ -6270,7 +6270,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
             } else if (this.delegate != null) {
-                this.delegate.didPressedCancelSendButton(this);
+                this.delegate.didPressCancelSendButton(this);
             }
         }
     }
@@ -6807,6 +6807,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 Drawable currentBackgroundSelectedDrawable;
                 Drawable currentBackgroundShadowDrawable;
                 int i;
+                int i2;
                 long newTime;
                 long dt;
                 if (this.currentMessageObject.isOutOwner()) {
@@ -6855,7 +6856,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 int additionalTop = 0;
                 int additionalBottom = 0;
-                int i2;
                 int offsetBottom;
                 int backgroundTop;
                 if (this.currentMessageObject.isOutOwner()) {
@@ -7039,6 +7039,40 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         Theme.chat_shareIconDrawable.draw(canvas);
                     }
                 }
+                if (this.replyNameLayout != null) {
+                    if (this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5) {
+                        if (this.currentMessageObject.isOutOwner()) {
+                            this.replyStartX = AndroidUtilities.m9dp(23.0f);
+                        } else if (this.currentMessageObject.type == 5) {
+                            this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m9dp(4.0f);
+                        } else {
+                            this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m9dp(17.0f);
+                        }
+                        this.replyStartY = AndroidUtilities.m9dp(12.0f);
+                    } else {
+                        if (this.currentMessageObject.isOutOwner()) {
+                            this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(12.0f);
+                        } else if (this.mediaBackground) {
+                            this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(12.0f);
+                        } else {
+                            i = this.backgroundDrawableLeft;
+                            float f = (this.mediaBackground || !this.drawPinnedBottom) ? 18.0f : 12.0f;
+                            this.replyStartX = AndroidUtilities.m9dp(f) + i;
+                        }
+                        if (!this.drawForwardedName || this.forwardedNameLayout[0] == null) {
+                            i2 = 0;
+                        } else {
+                            i2 = 36;
+                        }
+                        i = i2 + 12;
+                        if (!this.drawNameLayout || this.nameLayout == null) {
+                            i2 = 0;
+                        } else {
+                            i2 = 20;
+                        }
+                        this.replyStartY = AndroidUtilities.m9dp((float) (i2 + i));
+                    }
+                }
                 if (this.currentPosition == null) {
                     drawNamesLayout(canvas);
                 }
@@ -7105,9 +7139,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     public void drawNamesLayout(Canvas canvas) {
         float f;
         int backWidth;
-        int i;
+        int i = 0;
         float f2 = 11.0f;
-        int i2 = 0;
         if (this.drawNameLayout && this.nameLayout != null) {
             canvas.save();
             if (this.currentMessageObject.type == 13 || this.currentMessageObject.type == 5) {
@@ -7125,9 +7158,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (this.mediaBackground || this.currentMessageObject.isOutOwner()) {
                     this.nameX = ((float) (this.backgroundDrawableLeft + AndroidUtilities.m9dp(11.0f))) - this.nameOffsetX;
                 } else {
-                    int i3 = this.backgroundDrawableLeft;
+                    int i2 = this.backgroundDrawableLeft;
                     f = (this.mediaBackground || !this.drawPinnedBottom) ? 17.0f : 11.0f;
-                    this.nameX = ((float) (AndroidUtilities.m9dp(f) + i3)) - this.nameOffsetX;
+                    this.nameX = ((float) (AndroidUtilities.m9dp(f) + i2)) - this.nameOffsetX;
                 }
                 if (this.currentUser != null) {
                     Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(this.currentUser.var_id));
@@ -7170,12 +7203,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 Theme.chat_systemDrawable.setBounds(this.forwardNameX - AndroidUtilities.m9dp(7.0f), this.forwardNameY - AndroidUtilities.m9dp(6.0f), (this.forwardNameX - AndroidUtilities.m9dp(7.0f)) + backWidth, this.forwardNameY + AndroidUtilities.m9dp(38.0f));
                 Theme.chat_systemDrawable.draw(canvas);
             } else {
+                int i3;
                 if (this.drawNameLayout) {
-                    i = 19;
+                    i3 = 19;
                 } else {
-                    i = 0;
+                    i3 = 0;
                 }
-                this.forwardNameY = AndroidUtilities.m9dp((float) (i + 10));
+                this.forwardNameY = AndroidUtilities.m9dp((float) (i3 + 10));
                 if (this.currentMessageObject.isOutOwner()) {
                     Theme.chat_forwardNamePaint.setColor(Theme.getColor(Theme.key_chat_outForwardedNameText));
                     this.forwardNameX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(11.0f);
@@ -7184,11 +7218,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (this.mediaBackground) {
                         this.forwardNameX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(11.0f);
                     } else {
-                        i = this.backgroundDrawableLeft;
+                        i3 = this.backgroundDrawableLeft;
                         if (this.mediaBackground || !this.drawPinnedBottom) {
                             f2 = 17.0f;
                         }
-                        this.forwardNameX = i + AndroidUtilities.m9dp(f2);
+                        this.forwardNameX = i3 + AndroidUtilities.m9dp(f2);
                     }
                 }
             }
@@ -7204,57 +7238,26 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 Theme.chat_replyLinePaint.setColor(Theme.getColor(Theme.key_chat_stickerReplyLine));
                 Theme.chat_replyNamePaint.setColor(Theme.getColor(Theme.key_chat_stickerReplyNameText));
                 Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_stickerReplyMessageText));
-                if (this.currentMessageObject.isOutOwner()) {
-                    this.replyStartX = AndroidUtilities.m9dp(23.0f);
-                } else if (this.currentMessageObject.type == 5) {
-                    this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m9dp(4.0f);
-                } else {
-                    this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.m9dp(17.0f);
-                }
-                this.replyStartY = AndroidUtilities.m9dp(12.0f);
                 backWidth = Math.max(this.replyNameWidth, this.replyTextWidth) + AndroidUtilities.m9dp(14.0f);
                 Theme.chat_systemDrawable.setColorFilter(Theme.colorFilter);
                 Theme.chat_systemDrawable.setBounds(this.replyStartX - AndroidUtilities.m9dp(7.0f), this.replyStartY - AndroidUtilities.m9dp(6.0f), (this.replyStartX - AndroidUtilities.m9dp(7.0f)) + backWidth, this.replyStartY + AndroidUtilities.m9dp(41.0f));
                 Theme.chat_systemDrawable.draw(canvas);
+            } else if (this.currentMessageObject.isOutOwner()) {
+                Theme.chat_replyLinePaint.setColor(Theme.getColor(Theme.key_chat_outReplyLine));
+                Theme.chat_replyNamePaint.setColor(Theme.getColor(Theme.key_chat_outReplyNameText));
+                if (!this.currentMessageObject.hasValidReplyMessageObject() || this.currentMessageObject.replyMessageObject.type != 0 || (this.currentMessageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaGame) || (this.currentMessageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
+                    Theme.chat_replyTextPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_outReplyMediaMessageSelectedText : Theme.key_chat_outReplyMediaMessageText));
+                } else {
+                    Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_outReplyMessageText));
+                }
             } else {
-                int i4;
-                if (this.currentMessageObject.isOutOwner()) {
-                    Theme.chat_replyLinePaint.setColor(Theme.getColor(Theme.key_chat_outReplyLine));
-                    Theme.chat_replyNamePaint.setColor(Theme.getColor(Theme.key_chat_outReplyNameText));
-                    if (!this.currentMessageObject.hasValidReplyMessageObject() || this.currentMessageObject.replyMessageObject.type != 0 || (this.currentMessageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaGame) || (this.currentMessageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
-                        Theme.chat_replyTextPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_outReplyMediaMessageSelectedText : Theme.key_chat_outReplyMediaMessageText));
-                    } else {
-                        Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_outReplyMessageText));
-                    }
-                    this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(12.0f);
+                Theme.chat_replyLinePaint.setColor(Theme.getColor(Theme.key_chat_inReplyLine));
+                Theme.chat_replyNamePaint.setColor(Theme.getColor(Theme.key_chat_inReplyNameText));
+                if (!this.currentMessageObject.hasValidReplyMessageObject() || this.currentMessageObject.replyMessageObject.type != 0 || (this.currentMessageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaGame) || (this.currentMessageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
+                    Theme.chat_replyTextPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_inReplyMediaMessageSelectedText : Theme.key_chat_inReplyMediaMessageText));
                 } else {
-                    Theme.chat_replyLinePaint.setColor(Theme.getColor(Theme.key_chat_inReplyLine));
-                    Theme.chat_replyNamePaint.setColor(Theme.getColor(Theme.key_chat_inReplyNameText));
-                    if (!this.currentMessageObject.hasValidReplyMessageObject() || this.currentMessageObject.replyMessageObject.type != 0 || (this.currentMessageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaGame) || (this.currentMessageObject.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
-                        Theme.chat_replyTextPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_inReplyMediaMessageSelectedText : Theme.key_chat_inReplyMediaMessageText));
-                    } else {
-                        Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_inReplyMessageText));
-                    }
-                    if (this.mediaBackground) {
-                        this.replyStartX = this.backgroundDrawableLeft + AndroidUtilities.m9dp(12.0f);
-                    } else {
-                        i4 = this.backgroundDrawableLeft;
-                        f = (this.mediaBackground || !this.drawPinnedBottom) ? 18.0f : 12.0f;
-                        this.replyStartX = AndroidUtilities.m9dp(f) + i4;
-                    }
+                    Theme.chat_replyTextPaint.setColor(Theme.getColor(Theme.key_chat_inReplyMessageText));
                 }
-                if (!this.drawForwardedName || this.forwardedNameLayout[0] == null) {
-                    i = 0;
-                } else {
-                    i = 36;
-                }
-                i4 = i + 12;
-                if (!this.drawNameLayout || this.nameLayout == null) {
-                    i = 0;
-                } else {
-                    i = 20;
-                }
-                this.replyStartY = AndroidUtilities.m9dp((float) (i + i4));
             }
             if (this.currentPosition == null || (this.currentPosition.minY == (byte) 0 && this.currentPosition.minX == (byte) 0)) {
                 canvas.drawRect((float) this.replyStartX, (float) this.replyStartY, (float) (this.replyStartX + AndroidUtilities.m9dp(2.0f)), (float) (this.replyStartY + AndroidUtilities.m9dp(35.0f)), Theme.chat_replyLinePaint);
@@ -7272,9 +7275,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     canvas.save();
                     f = ((float) this.replyStartX) - this.replyTextOffset;
                     if (this.needReplyImage) {
-                        i2 = 44;
+                        i = 44;
                     }
-                    canvas.translate(f + ((float) AndroidUtilities.m9dp((float) (i2 + 10))), (float) (this.replyStartY + AndroidUtilities.m9dp(19.0f)));
+                    canvas.translate(f + ((float) AndroidUtilities.m9dp((float) (i + 10))), (float) (this.replyStartY + AndroidUtilities.m9dp(19.0f)));
                     this.replyTextLayout.draw(canvas);
                     canvas.restore();
                 }

@@ -105,6 +105,7 @@ import org.telegram.p005ui.Components.RecyclerListView.Holder;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.p005ui.Components.voip.VoIPHelper;
 import org.telegram.p005ui.DialogsActivity.DialogsActivityDelegate;
+import org.telegram.p005ui.MediaActivity.SharedMediaData;
 import org.telegram.p005ui.PhotoViewer.EmptyPhotoViewerProvider;
 import org.telegram.p005ui.PhotoViewer.PhotoViewerProvider;
 import org.telegram.p005ui.PhotoViewer.PlaceProviderObject;
@@ -231,6 +232,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private int settingsSectionRow;
     private int settingsTimerRow;
     private int sharedHeaderRow;
+    private SharedMediaData[] sharedMediaData;
     private int sharedSectionRow;
     private ArrayList<Integer> sortedUsers;
     private int startSecretChatRow;
@@ -952,7 +954,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     public boolean onFragmentCreate() {
-        boolean z = false;
         this.user_id = this.arguments.getInt("user_id", 0);
         this.chat_id = this.arguments.getInt("chat_id", 0);
         this.banFromGroup = this.arguments.getInt("ban_chat_id", 0);
@@ -965,6 +966,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             if (user == null) {
                 return false;
             }
+            boolean z;
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.contactsDidLoad);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.encryptedChatCreated);
@@ -974,6 +976,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.userInfoDidLoad);
             if (MessagesController.getInstance(this.currentAccount).blockedUsers.indexOfKey(this.user_id) >= 0) {
                 z = true;
+            } else {
+                z = false;
             }
             this.userBlocked = z;
             if (user.bot) {
@@ -1011,9 +1015,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 MessagesController.getInstance(this.currentAccount).loadFullChat(this.chat_id, this.classGuid, true);
             }
         }
+        this.sharedMediaData = new SharedMediaData[5];
+        for (int a = 0; a < this.sharedMediaData.length; a++) {
+            this.sharedMediaData[a] = new SharedMediaData();
+            this.sharedMediaData[a].setMaxId(0, this.dialog_id != 0 ? Integer.MIN_VALUE : ConnectionsManager.DEFAULT_DATACENTER_ID);
+        }
         loadMediaCounts();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.mediaCountDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.mediaCountsDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.mediaDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didReceiveNewMessages);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
@@ -1031,6 +1041,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         super.onFragmentDestroy();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.mediaCountDidLoad);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.mediaCountsDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.mediaDidLoad);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.didReceiveNewMessages);
@@ -1288,7 +1299,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
                 Object media = new int[5];
                 System.arraycopy(this.lastMediaCount, 0, media, 0, media.length);
-                BaseFragment mediaActivity = new MediaActivity(args, media, tab);
+                BaseFragment mediaActivity = new MediaActivity(args, media, this.sharedMediaData, tab);
                 mediaActivity.setChatInfo(this.chatInfo);
                 presentFragment(mediaActivity);
             } else if (position == this.groupsInCommonRow) {
@@ -2000,6 +2011,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         int a;
         long uid;
         long did;
+        int type;
+        ArrayList<MessageObject> arr;
+        boolean enc;
         if (id == NotificationCenter.updateInterfaces) {
             int mask = ((Integer) args[0]).intValue();
             if (this.user_id != 0) {
@@ -2046,6 +2060,27 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         } else if (id == NotificationCenter.contactsDidLoad) {
             createActionBarMenu();
+        } else if (id == NotificationCenter.mediaDidLoad) {
+            uid = ((Long) args[0]).longValue();
+            if (((Integer) args[3]).intValue() == this.classGuid) {
+                did = this.dialog_id;
+                if (did == 0) {
+                    if (this.user_id != 0) {
+                        did = (long) this.user_id;
+                    } else if (this.chat_id != 0) {
+                        did = (long) (-this.chat_id);
+                    }
+                }
+                type = ((Integer) args[4]).intValue();
+                this.sharedMediaData[type].setTotalCount(((Integer) args[1]).intValue());
+                arr = args[2];
+                enc = ((int) did) == 0;
+                int loadIndex = uid == did ? 0 : 1;
+                this.sharedMediaData[type].setEndReached(loadIndex, ((Boolean) args[5]).booleanValue());
+                for (a = 0; a < arr.size(); a++) {
+                    this.sharedMediaData[type].addMessage((MessageObject) arr.get(a), loadIndex, false, enc);
+                }
+            }
         } else if (id == NotificationCenter.mediaCountsDidLoad) {
             uid = ((Long) args[0]).longValue();
             did = this.dialog_id;
@@ -2075,6 +2110,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else {
                         this.lastMediaCount[a] = 0;
                     }
+                    if (uid == did && this.lastMediaCount[a] != 0) {
+                        DataQuery.getInstance(this.currentAccount).loadMedia(did, 50, 0, a, 2, this.classGuid);
+                    }
                     a++;
                 }
                 updateSharedMediaRows();
@@ -2090,7 +2128,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
             }
             if (uid == did || uid == this.mergeDialogId) {
-                int type = ((Integer) args[3]).intValue();
+                type = ((Integer) args[3]).intValue();
                 int mCount = ((Integer) args[1]).intValue();
                 if (uid == did) {
                     this.mediaCount[type] = mCount;
@@ -2192,16 +2230,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 did = (long) (-this.chat_id);
             }
             if (did == ((Long) args[0]).longValue()) {
-                if (this.currentEncryptedChat != null) {
-                    ArrayList<MessageObject> arr = args[1];
-                    for (a = 0; a < arr.size(); a++) {
-                        MessageObject obj = (MessageObject) arr.get(a);
-                        if (this.currentEncryptedChat != null && obj.messageOwner.action != null && (obj.messageOwner.action instanceof TL_messageEncryptedAction) && (obj.messageOwner.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL)) {
-                            TL_decryptedMessageActionSetMessageTTL action = obj.messageOwner.action.encryptedAction;
-                            if (this.listAdapter != null) {
-                                this.listAdapter.notifyDataSetChanged();
-                            }
+                enc = ((int) did) == 0;
+                arr = (ArrayList) args[1];
+                a = 0;
+                while (a < arr.size()) {
+                    MessageObject obj = (MessageObject) arr.get(a);
+                    if (this.currentEncryptedChat != null && obj.messageOwner.action != null && (obj.messageOwner.action instanceof TL_messageEncryptedAction) && (obj.messageOwner.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL)) {
+                        TL_decryptedMessageActionSetMessageTTL action = (TL_decryptedMessageActionSetMessageTTL) obj.messageOwner.action.encryptedAction;
+                        if (this.listAdapter != null) {
+                            this.listAdapter.notifyDataSetChanged();
                         }
+                    }
+                    type = DataQuery.getMediaType(obj.messageOwner);
+                    if (type != -1) {
+                        this.sharedMediaData[type].addMessage(obj, 0, true, enc);
+                        a++;
+                    } else {
+                        return;
                     }
                 }
                 loadMediaCounts();
@@ -2214,6 +2259,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
             } else if (channelId != 0) {
                 return;
+            }
+            ArrayList<Integer> markAsDeletedMessages = args[0];
+            int N = markAsDeletedMessages.size();
+            for (a = 0; a < N; a++) {
+                for (SharedMediaData deleteMessage : this.sharedMediaData) {
+                    deleteMessage.deleteMessage(((Integer) markAsDeletedMessages.get(a)).intValue(), 0);
+                }
             }
             loadMediaCounts();
         }

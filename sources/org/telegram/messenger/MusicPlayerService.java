@@ -220,10 +220,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
 
     private Bitmap loadArtworkFromUrl(String artworkUrl, boolean big) {
         float f = 600.0f;
-        BitmapDrawable drawable = ImageLoader.getInstance().getAnyImageFromMemory(ImageLoader.getHttpFileName(artworkUrl));
-        if (drawable != null) {
-            return drawable.getBitmap();
-        }
+        String name = ImageLoader.getHttpFileName(artworkUrl);
         File path = ImageLoader.getHttpFilePath(artworkUrl, "jpg");
         if (path.exists()) {
             String absolutePath = path.getAbsolutePath();

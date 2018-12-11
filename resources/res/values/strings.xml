@@ -905,6 +905,7 @@
     <string name="IncorrectLocalization">Incorrect localization file</string>
     <string name="IncorrectTheme">Incorrect theme file</string>
     <string name="Info">Info</string>
+    <string name="InstallGoogleMaps">Install Google Maps?</string>
     <string name="InstantView">INSTANT VIEW</string>
     <string name="InstantViewNightMode">The dark theme will turn automatically during night time</string>
     <string name="InstantViewReference">Reference</string>

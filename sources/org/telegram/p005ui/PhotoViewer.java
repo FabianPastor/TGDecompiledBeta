@@ -1386,7 +1386,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     PhotoViewer.this.disableShowCheck = true;
                     Bundle args2 = new Bundle();
                     args2.putLong("dialog_id", PhotoViewer.this.currentDialogId);
-                    mediaActivity = new MediaActivity(args2, new int[]{-1, -1, -1, -1, -1}, PhotoViewer.this.sharedMediaType);
+                    mediaActivity = new MediaActivity(args2, new int[]{-1, -1, -1, -1, -1}, null, PhotoViewer.this.sharedMediaType);
                     if (PhotoViewer.this.parentChatActivity != null) {
                         mediaActivity.setChatInfo(PhotoViewer.this.parentChatActivity.getCurrentChatInfo());
                     }
@@ -2654,7 +2654,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 if (this.needSearchImageInArr && this.isFirstLoading) {
                     this.isFirstLoading = false;
                     this.loadingMoreImages = true;
-                    DataQuery.getInstance(this.currentAccount).loadMedia(this.currentDialogId, 80, 0, this.sharedMediaType, true, this.classGuid);
+                    DataQuery.getInstance(this.currentAccount).loadMedia(this.currentDialogId, 80, 0, this.sharedMediaType, 1, this.classGuid);
                 } else if (!this.imagesArr.isEmpty()) {
                     if (this.opennedFromMedia) {
                         this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(this.currentIndex + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
@@ -2776,10 +2776,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             } else {
                                 j = this.mergeDialogId;
                             }
-                            instance.loadMedia(j, 80, loadFromMaxId, this.sharedMediaType, true, this.classGuid);
+                            instance.loadMedia(j, 80, loadFromMaxId, this.sharedMediaType, 1, this.classGuid);
                             return;
                         }
-                        DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, true, this.classGuid);
+                        DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, 1, this.classGuid);
                     }
                 } else {
                     this.needSearchImageInArr = false;
@@ -6065,7 +6065,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                     loadFromMaxId = 0;
                                 }
                             }
-                            DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, true, this.classGuid);
+                            DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, 1, this.classGuid);
                             this.loadingMoreImages = true;
                         }
                         this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(this.switchingToIndex + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
@@ -6079,7 +6079,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                     loadFromMaxId = 0;
                                 }
                             }
-                            DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, true, this.classGuid);
+                            DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, 1, this.classGuid);
                             this.loadingMoreImages = true;
                         }
                         this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf((((this.totalImagesCount + this.totalImagesCountMerge) - this.imagesArr.size()) + this.switchingToIndex) + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));

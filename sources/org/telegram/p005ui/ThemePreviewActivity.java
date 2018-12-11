@@ -331,51 +331,51 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             CLASSNAME() {
             }
 
-            public void didPressedShare(ChatMessageCell cell) {
+            public void didPressShare(ChatMessageCell cell) {
             }
 
             public boolean needPlayMessage(MessageObject messageObject) {
                 return false;
             }
 
-            public void didPressedChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
+            public void didPressChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
             }
 
-            public void didPressedOther(ChatMessageCell cell) {
+            public void didPressOther(ChatMessageCell cell) {
             }
 
-            public void didPressedUserAvatar(ChatMessageCell cell, User user) {
+            public void didPressUserAvatar(ChatMessageCell cell, User user) {
             }
 
-            public void didPressedBotButton(ChatMessageCell cell, KeyboardButton button) {
+            public void didPressBotButton(ChatMessageCell cell, KeyboardButton button) {
             }
 
-            public void didPressedCancelSendButton(ChatMessageCell cell) {
+            public void didPressCancelSendButton(ChatMessageCell cell) {
             }
 
-            public void didLongPressed(ChatMessageCell cell) {
+            public void didLongPress(ChatMessageCell cell) {
             }
 
             public boolean canPerformActions() {
                 return false;
             }
 
-            public void didPressedUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
+            public void didPressUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
             }
 
             public void needOpenWebView(String url, String title, String description, String originalUrl, int w, int h) {
             }
 
-            public void didPressedReplyMessage(ChatMessageCell cell, int id) {
+            public void didPressReplyMessage(ChatMessageCell cell, int id) {
             }
 
-            public void didPressedViaBot(ChatMessageCell cell, String username) {
+            public void didPressViaBot(ChatMessageCell cell, String username) {
             }
 
-            public void didPressedImage(ChatMessageCell cell) {
+            public void didPressImage(ChatMessageCell cell) {
             }
 
-            public void didPressedInstantButton(ChatMessageCell cell, int type) {
+            public void didPressInstantButton(ChatMessageCell cell, int type) {
             }
 
             public boolean isChatAdminCell(int uid) {

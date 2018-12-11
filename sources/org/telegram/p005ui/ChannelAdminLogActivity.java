@@ -396,7 +396,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             CLASSNAME() {
             }
 
-            public void didPressedShare(ChatMessageCell cell) {
+            public void didPressShare(ChatMessageCell cell) {
                 if (ChannelAdminLogActivity.this.getParentActivity() != null) {
                     ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
                     Context access$4100 = ChatActivityAdapter.this.mContext;
@@ -416,7 +416,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
             }
 
-            public void didPressedChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
+            public void didPressChannelAvatar(ChatMessageCell cell, Chat chat, int postId) {
                 if (chat != null && chat != ChannelAdminLogActivity.this.currentChat) {
                     Bundle args = new Bundle();
                     args.putInt("chat_id", chat.var_id);
@@ -429,11 +429,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
             }
 
-            public void didPressedOther(ChatMessageCell cell) {
+            public void didPressOther(ChatMessageCell cell) {
                 ChannelAdminLogActivity.this.createMenu(cell);
             }
 
-            public void didPressedUserAvatar(ChatMessageCell cell, User user) {
+            public void didPressUserAvatar(ChatMessageCell cell, User user) {
                 if (user != null && user.var_id != UserConfig.getInstance(ChannelAdminLogActivity.this.currentAccount).getClientUserId()) {
                     Bundle args = new Bundle();
                     args.putInt("user_id", user.var_id);
@@ -444,13 +444,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
             }
 
-            public void didPressedBotButton(ChatMessageCell cell, KeyboardButton button) {
+            public void didPressBotButton(ChatMessageCell cell, KeyboardButton button) {
             }
 
-            public void didPressedCancelSendButton(ChatMessageCell cell) {
+            public void didPressCancelSendButton(ChatMessageCell cell) {
             }
 
-            public void didLongPressed(ChatMessageCell cell) {
+            public void didLongPress(ChatMessageCell cell) {
                 ChannelAdminLogActivity.this.createMenu(cell);
             }
 
@@ -458,7 +458,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 return true;
             }
 
-            public void didPressedUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
+            public void didPressUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
                 if (url != null) {
                     if (url instanceof URLSpanMono) {
                         ((URLSpanMono) url).copyToClipboard();
@@ -504,8 +504,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
             }
 
-            /* renamed from: lambda$didPressedUrl$0$ChannelAdminLogActivity$ChatActivityAdapter$1 */
-            final /* synthetic */ void mo15101xd3354c8f(String urlFinal, DialogInterface dialog, int which) {
+            /* renamed from: lambda$didPressUrl$0$ChannelAdminLogActivity$ChatActivityAdapter$1 */
+            final /* synthetic */ void mo15101xeCLASSNAMEe(String urlFinal, DialogInterface dialog, int which) {
                 if (which == 0) {
                     Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), urlFinal, true);
                 } else if (which == 1) {
@@ -523,13 +523,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 EmbedBottomSheet.show(ChatActivityAdapter.this.mContext, title, description, originalUrl, url, w, h);
             }
 
-            public void didPressedReplyMessage(ChatMessageCell cell, int id) {
+            public void didPressReplyMessage(ChatMessageCell cell, int id) {
             }
 
-            public void didPressedViaBot(ChatMessageCell cell, String username) {
+            public void didPressViaBot(ChatMessageCell cell, String username) {
             }
 
-            public void didPressedImage(ChatMessageCell cell) {
+            public void didPressImage(ChatMessageCell cell) {
                 MessageObject message = cell.getMessageObject();
                 File f;
                 if (message.type == 13) {
@@ -606,7 +606,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
             }
 
-            public void didPressedInstantButton(ChatMessageCell cell, int type) {
+            public void didPressInstantButton(ChatMessageCell cell, int type) {
                 MessageObject messageObject = cell.getMessageObject();
                 if (type == 0) {
                     if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null && messageObject.messageOwner.media.webpage.cached_page != null) {

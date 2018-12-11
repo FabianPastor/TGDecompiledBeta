@@ -7,6 +7,6 @@ final /* synthetic */ class ApplicationLoader$$Lambda$0 implements Runnable {
     }
 
     public void run() {
-        ApplicationLoader.ensureCurrentNetworkGet();
+        ApplicationLoader.startPushService();
     }
 }

@@ -16,6 +16,6 @@ final /* synthetic */ class InviteContactsActivity$InviteAdapter$$Lambda$0 imple
     }
 
     public void run() {
-        this.arg$1.mo18412xvar_d2e5d(this.arg$2, this.arg$3);
+        this.arg$1.mo18427xvar_d2e5d(this.arg$2, this.arg$3);
     }
 }

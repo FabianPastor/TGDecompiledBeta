@@ -45,9 +45,10 @@ public class ApplicationLoader extends Application {
 
         public void onReceive(Context context, Intent intent) {
             ApplicationLoader.currentNetworkInfo = ApplicationLoader.connectivityManager.getActiveNetworkInfo();
+            boolean isSlow = ApplicationLoader.isConnectionSlow();
             for (int a = 0; a < 3; a++) {
                 ConnectionsManager.getInstance(a).checkConnection();
-                FileLoader.getInstance(a).onNetworkChanged(ApplicationLoader.isConnectionSlow());
+                FileLoader.getInstance(a).onNetworkChanged(isSlow);
             }
         }
     }
@@ -82,7 +83,6 @@ public class ApplicationLoader extends Application {
             try {
                 connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
                 applicationContext.registerReceiver(new CLASSNAME(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
-                Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$0.$instance);
             } catch (Exception e2) {
                 ThrowableExtension.printStackTrace(e2);
             }
@@ -133,7 +133,7 @@ public class ApplicationLoader extends Application {
         ConnectionsManager.native_setJava(false);
         ForegroundDetector foregroundDetector = new ForegroundDetector(this);
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread(ApplicationLoader$$Lambda$1.$instance);
+        AndroidUtilities.runOnUIThread(ApplicationLoader$$Lambda$0.$instance);
     }
 
     public static void startPushService() {
@@ -164,7 +164,7 @@ public class ApplicationLoader extends Application {
     }
 
     private void initPlayServices() {
-        AndroidUtilities.runOnUIThread(new ApplicationLoader$$Lambda$2(this), 1000);
+        AndroidUtilities.runOnUIThread(new ApplicationLoader$$Lambda$1(this), 1000);
     }
 
     final /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
@@ -177,7 +177,7 @@ public class ApplicationLoader extends Application {
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.m10d("GCM regId = " + currentPushString);
             }
-            Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$3.$instance);
+            Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$2.$instance);
         } else if (BuildVars.LOGS_ENABLED) {
             FileLog.m10d("No valid Google Play Services APK found.");
         }
@@ -185,7 +185,7 @@ public class ApplicationLoader extends Application {
 
     static final /* synthetic */ void lambda$null$1$ApplicationLoader() {
         try {
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(ApplicationLoader$$Lambda$4.$instance);
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(ApplicationLoader$$Lambda$3.$instance);
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
@@ -210,38 +210,24 @@ public class ApplicationLoader extends Application {
         }
     }
 
-    private static void ensureCurrentNetworkGet() {
-        if (currentNetworkInfo == null) {
-            try {
-                currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                unableGetCurrentNetwork = false;
-            } catch (Throwable th) {
-                unableGetCurrentNetwork = true;
-            }
-        }
-    }
-
     public static boolean isRoaming() {
         try {
-            ensureCurrentNetworkGet();
-            if (currentNetworkInfo == null || !currentNetworkInfo.isRoaming()) {
-                return false;
+            NetworkInfo netInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
+            if (netInfo != null) {
+                return netInfo.isRoaming();
             }
-            return true;
         } catch (Throwable e) {
             FileLog.m13e(e);
-            return false;
         }
+        return false;
     }
 
     public static boolean isConnectedOrConnectingToWiFi() {
         try {
-            ensureCurrentNetworkGet();
-            if (currentNetworkInfo != null) {
-                State state = currentNetworkInfo.getState();
-                if (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED) {
-                    return true;
-                }
+            NetworkInfo netInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
+            State state = netInfo.getState();
+            if (netInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
+                return true;
             }
         } catch (Throwable e) {
             FileLog.m13e(e);
@@ -251,8 +237,8 @@ public class ApplicationLoader extends Application {
 
     public static boolean isConnectedToWiFi() {
         try {
-            ensureCurrentNetworkGet();
-            if (currentNetworkInfo != null && currentNetworkInfo.getState() == State.CONNECTED) {
+            NetworkInfo netInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
+            if (netInfo != null && netInfo.getState() == State.CONNECTED) {
                 return true;
             }
         } catch (Throwable e) {
@@ -273,9 +259,9 @@ public class ApplicationLoader extends Application {
 
     public static boolean isConnectionSlow() {
         try {
-            ensureCurrentNetworkGet();
-            if (currentNetworkInfo != null && currentNetworkInfo.getType() == 0) {
-                switch (currentNetworkInfo.getSubtype()) {
+            NetworkInfo netInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
+            if (netInfo.getType() == 0) {
+                switch (netInfo.getSubtype()) {
                     case 1:
                     case 2:
                     case 4:
@@ -291,14 +277,12 @@ public class ApplicationLoader extends Application {
 
     public static boolean isNetworkOnline() {
         try {
-            ensureCurrentNetworkGet();
-            if (!unableGetCurrentNetwork && currentNetworkInfo == null) {
-                return false;
-            }
-            if (currentNetworkInfo.isConnectedOrConnecting() || currentNetworkInfo.isAvailable()) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            if (netInfo != null && (netInfo.isConnectedOrConnecting() || netInfo.isAvailable())) {
                 return true;
             }
-            NetworkInfo netInfo = connectivityManager.getNetworkInfo(0);
+            netInfo = connectivityManager.getNetworkInfo(0);
             if (netInfo != null && netInfo.isConnectedOrConnecting()) {
                 return true;
             }

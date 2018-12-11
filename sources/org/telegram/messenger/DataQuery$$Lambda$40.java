@@ -8,8 +8,9 @@ final /* synthetic */ class DataQuery$$Lambda$40 implements Runnable {
     private final boolean arg$5;
     private final int arg$6;
     private final int arg$7;
+    private final int arg$8;
 
-    DataQuery$$Lambda$40(DataQuery dataQuery, int i, long j, int i2, boolean z, int i3, int i4) {
+    DataQuery$$Lambda$40(DataQuery dataQuery, int i, long j, int i2, boolean z, int i3, int i4, int i5) {
         this.arg$1 = dataQuery;
         this.arg$2 = i;
         this.arg$3 = j;
@@ -17,9 +18,10 @@ final /* synthetic */ class DataQuery$$Lambda$40 implements Runnable {
         this.arg$5 = z;
         this.arg$6 = i3;
         this.arg$7 = i4;
+        this.arg$8 = i5;
     }
 
     public void run() {
-        this.arg$1.lambda$loadMediaDatabase$63$DataQuery(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
+        this.arg$1.lambda$loadMediaDatabase$63$DataQuery(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8);
     }
 }
