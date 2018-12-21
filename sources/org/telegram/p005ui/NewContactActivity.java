@@ -92,7 +92,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
         public void onItemClick(int id) {
             if (id == -1) {
-                NewContactActivity.this.finishFragment();
+                NewContactActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             } else if (id == 1 && !NewContactActivity.this.donePressed) {
                 Vibrator v;
                 if (NewContactActivity.this.firstNameField.length() == 0) {

@@ -851,7 +851,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             builder.setApplyTopPadding(false);
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(1);
-            HeaderCell headerCell = new HeaderCell(context, true, 23);
+            HeaderCell headerCell = new HeaderCell(context, true, 23, false);
             headerCell.setHeight(47);
             headerCell.setText(LocaleController.getString("SettingsHelp", R.string.SettingsHelp));
             linearLayout.addView(headerCell);

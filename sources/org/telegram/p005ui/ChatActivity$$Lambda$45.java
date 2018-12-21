@@ -9,6 +9,6 @@ final /* synthetic */ class ChatActivity$$Lambda$45 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$applyDraftMaybe$57$ChatActivity();
+        this.arg$1.lambda$onResume$57$ChatActivity();
     }
 }

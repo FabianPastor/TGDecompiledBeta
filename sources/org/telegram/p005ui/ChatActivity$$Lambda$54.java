@@ -1,17 +1,18 @@
 package org.telegram.p005ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$54 */
-final /* synthetic */ class ChatActivity$$Lambda$54 implements OnClickListener {
-    private final boolean[] arg$1;
+final /* synthetic */ class ChatActivity$$Lambda$54 implements RequestDelegate {
+    private final ChatActivity arg$1;
 
-    ChatActivity$$Lambda$54(boolean[] zArr) {
-        this.arg$1 = zArr;
+    ChatActivity$$Lambda$54(ChatActivity chatActivity) {
+        this.arg$1 = chatActivity;
     }
 
-    public void onClick(View view) {
-        ChatActivity.lambda$processSelectedOption$70$ChatActivity(this.arg$1, view);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$startEditingMessageObject$70$ChatActivity(tLObject, tL_error);
     }
 }

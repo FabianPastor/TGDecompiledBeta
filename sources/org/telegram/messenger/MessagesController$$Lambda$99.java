@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesController$$Lambda$99 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$toogleChannelInvitesHistory$151$MessagesController(tLObject, tL_error);
+        this.arg$1.lambda$toogleChannelInvites$151$MessagesController(tLObject, tL_error);
     }
 }

@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$17 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$putWebRecent$27$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$putWebRecent$28$MessagesStorage(this.arg$2);
     }
 }

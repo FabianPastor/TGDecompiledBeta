@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
+import android.util.LongSparseArray;
 
 final /* synthetic */ class MessagesStorage$$Lambda$80 implements Runnable {
     private final MessagesStorage arg$1;
-    private final SparseArray arg$2;
-    private final boolean arg$3;
+    private final LongSparseArray arg$2;
 
-    MessagesStorage$$Lambda$80(MessagesStorage messagesStorage, SparseArray sparseArray, boolean z) {
+    MessagesStorage$$Lambda$80(MessagesStorage messagesStorage, LongSparseArray longSparseArray) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = sparseArray;
-        this.arg$3 = z;
+        this.arg$2 = longSparseArray;
     }
 
     public void run() {
-        this.arg$1.lambda$putChannelViews$108$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$putWebPages$108$MessagesStorage(this.arg$2);
     }
 }

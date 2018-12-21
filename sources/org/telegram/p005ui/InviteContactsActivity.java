@@ -97,7 +97,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
 
         public void onItemClick(int id) {
             if (id == -1) {
-                InviteContactsActivity.this.finishFragment();
+                InviteContactsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             }
         }
     }
@@ -335,7 +335,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         }
 
         /* renamed from: lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter */
-        final /* synthetic */ void mo18427xvar_d2e5d(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo18517xvar_d2e5d(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
@@ -781,7 +781,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
-        finishFragment();
+        lambda$checkDiscard$2$PollCreateActivity();
     }
 
     public void onResume() {

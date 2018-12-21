@@ -1,30 +1,17 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.MessageObject.GroupedMessages;
-import org.telegram.tgnet.TLRPC.User;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$51 */
 final /* synthetic */ class ChatActivity$$Lambda$51 implements OnClickListener {
-    private final ChatActivity arg$1;
-    private final MessageObject arg$2;
-    private final GroupedMessages arg$3;
-    private final boolean[] arg$4;
-    private final User arg$5;
-    private final boolean[] arg$6;
+    private final boolean[] arg$1;
 
-    ChatActivity$$Lambda$51(ChatActivity chatActivity, MessageObject messageObject, GroupedMessages groupedMessages, boolean[] zArr, User user, boolean[] zArr2) {
-        this.arg$1 = chatActivity;
-        this.arg$2 = messageObject;
-        this.arg$3 = groupedMessages;
-        this.arg$4 = zArr;
-        this.arg$5 = user;
-        this.arg$6 = zArr2;
+    ChatActivity$$Lambda$51(boolean[] zArr) {
+        this.arg$1 = zArr;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$createDeleteMessagesAlert$66$ChatActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, dialogInterface, i);
+    public void onClick(View view) {
+        ChatActivity.lambda$createDeleteMessagesAlert$65$ChatActivity(this.arg$1, view);
     }
 }

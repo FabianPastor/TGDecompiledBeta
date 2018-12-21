@@ -105,7 +105,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ContactsActivity.this.finishFragment();
+                ContactsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             } else if (id == 1) {
                 ContactsActivity.this.presentFragment(new NewContactActivity());
             }
@@ -439,7 +439,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 this.delegate = null;
             }
             if (this.needFinishFragment) {
-                finishFragment();
+                lambda$checkDiscard$2$PollCreateActivity();
             }
         } else if (getParentActivity() != null) {
             if (user.bot && user.bot_nochats && !this.addingToChannel) {

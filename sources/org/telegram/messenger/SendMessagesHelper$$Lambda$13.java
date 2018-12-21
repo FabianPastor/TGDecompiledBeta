@@ -1,23 +1,18 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.QuickAckDelegate;
+import org.telegram.tgnet.TLRPC.Message;
 
-final /* synthetic */ class SendMessagesHelper$$Lambda$13 implements Runnable {
+final /* synthetic */ class SendMessagesHelper$$Lambda$13 implements QuickAckDelegate {
     private final SendMessagesHelper arg$1;
-    private final ArrayList arg$2;
-    private final ArrayList arg$3;
-    private final ArrayList arg$4;
-    private final ArrayList arg$5;
+    private final Message arg$2;
 
-    SendMessagesHelper$$Lambda$13(SendMessagesHelper sendMessagesHelper, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4) {
+    SendMessagesHelper$$Lambda$13(SendMessagesHelper sendMessagesHelper, Message message) {
         this.arg$1 = sendMessagesHelper;
-        this.arg$2 = arrayList;
-        this.arg$3 = arrayList2;
-        this.arg$4 = arrayList3;
-        this.arg$5 = arrayList4;
+        this.arg$2 = message;
     }
 
     public void run() {
-        this.arg$1.lambda$processUnsentMessages$42$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+        this.arg$1.lambda$performSendMessageRequest$43$SendMessagesHelper(this.arg$2);
     }
 }

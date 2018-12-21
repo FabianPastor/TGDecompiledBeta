@@ -167,7 +167,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
         public void onItemClick(int id) {
             if (id == -1) {
-                LocationActivity.this.finishFragment();
+                LocationActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             } else if (id == 2) {
                 if (LocationActivity.this.googleMap != null) {
                     LocationActivity.this.googleMap.setMapType(1);
@@ -599,20 +599,20 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     location.geo._long = AndroidUtilities.fixLocationCoord(this.userLocation.getLongitude());
                     this.delegate.didSelectLocation(location, this.liveLocationType);
                 }
-                finishFragment();
+                lambda$checkDiscard$2$PollCreateActivity();
             } else if ((position != 2 || this.liveLocationType != 1) && ((position != 1 || this.liveLocationType != 2) && (position != 3 || this.liveLocationType != 3))) {
                 Object object = this.adapter.getItem(position);
                 if (object instanceof TL_messageMediaVenue) {
                     if (!(object == null || this.delegate == null)) {
                         this.delegate.didSelectLocation((TL_messageMediaVenue) object, this.liveLocationType);
                     }
-                    finishFragment();
+                    lambda$checkDiscard$2$PollCreateActivity();
                 } else if (object instanceof LiveLocation) {
                     this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(((LiveLocation) object).marker.getPosition(), this.googleMap.getMaxZoomLevel() - 4.0f));
                 }
             } else if (LocationController.getInstance(this.currentAccount).isSharingLocation(this.dialogId)) {
                 LocationController.getInstance(this.currentAccount).removeSharingLocation(this.dialogId);
-                finishFragment();
+                lambda$checkDiscard$2$PollCreateActivity();
             } else if (this.delegate != null && getParentActivity() != null && this.myLocation != null) {
                 User user = null;
                 if (((int) this.dialogId) > 0) {
@@ -632,7 +632,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         location.geo._long = AndroidUtilities.fixLocationCoord(this.myLocation.getLongitude());
         location.period = param;
         this.delegate.didSelectLocation(location, this.liveLocationType);
-        finishFragment();
+        lambda$checkDiscard$2$PollCreateActivity();
     }
 
     final /* synthetic */ void lambda$createView$2$LocationActivity(ArrayList places) {
@@ -677,7 +677,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (!(object == null || this.delegate == null)) {
             this.delegate.didSelectLocation(object, this.liveLocationType);
         }
-        finishFragment();
+        lambda$checkDiscard$2$PollCreateActivity();
     }
 
     final /* synthetic */ void lambda$createView$7$LocationActivity(View v) {

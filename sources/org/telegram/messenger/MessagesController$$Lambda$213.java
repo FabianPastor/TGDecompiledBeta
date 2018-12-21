@@ -1,19 +1,13 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
-
 final /* synthetic */ class MessagesController$$Lambda$213 implements Runnable {
     private final MessagesController arg$1;
-    private final TLObject arg$2;
-    private final int arg$3;
 
-    MessagesController$$Lambda$213(MessagesController messagesController, TLObject tLObject, int i) {
+    MessagesController$$Lambda$213(MessagesController messagesController) {
         this.arg$1 = messagesController;
-        this.arg$2 = tLObject;
-        this.arg$3 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$97$MessagesController(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$107$MessagesController();
     }
 }

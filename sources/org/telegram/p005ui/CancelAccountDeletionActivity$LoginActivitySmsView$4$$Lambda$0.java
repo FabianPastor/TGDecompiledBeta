@@ -11,6 +11,6 @@ final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySmsView$4
     }
 
     public void run() {
-        this.arg$1.mo14123xbdCLASSNAMEd14();
+        this.arg$1.mo14168xbdCLASSNAMEd14();
     }
 }

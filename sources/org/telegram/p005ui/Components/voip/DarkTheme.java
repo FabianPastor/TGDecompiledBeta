@@ -13,6 +13,7 @@ import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.p005ui.ActionBar.Theme;
+import org.telegram.tgnet.TLRPC;
 
 /* renamed from: org.telegram.ui.Components.voip.DarkTheme */
 public class DarkTheme {
@@ -1515,11 +1516,11 @@ public class DarkTheme {
                 return -9408400;
             case 88:
                 return -81911774;
-            case 89:
+            case TsExtractor.TS_STREAM_TYPE_DVBSUBS /*89*/:
                 return -1;
             case 90:
                 return -1;
-            case 91:
+            case TLRPC.LAYER /*91*/:
                 return -13925429;
             case 92:
                 return -9316522;

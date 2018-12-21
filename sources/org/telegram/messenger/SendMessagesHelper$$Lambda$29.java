@@ -12,6 +12,6 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$29 implements Runnable {
     }
 
     public void run() {
-        SendMessagesHelper.lambda$null$50$SendMessagesHelper(this.arg$1, this.arg$2, this.arg$3);
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$30(this.arg$1, this.arg$2, this.arg$3));
     }
 }

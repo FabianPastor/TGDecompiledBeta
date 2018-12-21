@@ -1,21 +1,17 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$55 */
 final /* synthetic */ class ChatActivity$$Lambda$55 implements OnClickListener {
-    private final ChatActivity arg$1;
-    private final int arg$2;
-    private final boolean[] arg$3;
+    private final boolean[] arg$1;
 
-    ChatActivity$$Lambda$55(ChatActivity chatActivity, int i, boolean[] zArr) {
-        this.arg$1 = chatActivity;
-        this.arg$2 = i;
-        this.arg$3 = zArr;
+    ChatActivity$$Lambda$55(boolean[] zArr) {
+        this.arg$1 = zArr;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$processSelectedOption$71$ChatActivity(this.arg$2, this.arg$3, dialogInterface, i);
+    public void onClick(View view) {
+        ChatActivity.lambda$processSelectedOption$71$ChatActivity(this.arg$1, view);
     }
 }

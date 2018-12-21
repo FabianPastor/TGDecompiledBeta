@@ -1,20 +1,24 @@
 package org.telegram.messenger;
 
+import java.util.ArrayList;
 import org.telegram.tgnet.TLRPC.Message;
-import org.telegram.tgnet.TLRPC.Updates;
 
 final /* synthetic */ class SendMessagesHelper$$Lambda$42 implements Runnable {
     private final SendMessagesHelper arg$1;
-    private final Updates arg$2;
-    private final Message arg$3;
+    private final boolean arg$2;
+    private final ArrayList arg$3;
+    private final Message arg$4;
+    private final int arg$5;
 
-    SendMessagesHelper$$Lambda$42(SendMessagesHelper sendMessagesHelper, Updates updates, Message message) {
+    SendMessagesHelper$$Lambda$42(SendMessagesHelper sendMessagesHelper, boolean z, ArrayList arrayList, Message message, int i) {
         this.arg$1 = sendMessagesHelper;
-        this.arg$2 = updates;
-        this.arg$3 = message;
+        this.arg$2 = z;
+        this.arg$3 = arrayList;
+        this.arg$4 = message;
+        this.arg$5 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$30$SendMessagesHelper(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$38$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
     }
 }

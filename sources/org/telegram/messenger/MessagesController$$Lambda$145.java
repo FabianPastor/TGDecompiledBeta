@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import org.telegram.p005ui.ActionBar.BaseFragment;
-
-final /* synthetic */ class MessagesController$$Lambda$145 implements OnCancelListener {
+final /* synthetic */ class MessagesController$$Lambda$145 implements Runnable {
     private final MessagesController arg$1;
     private final int arg$2;
-    private final BaseFragment arg$3;
+    private final int arg$3;
 
-    MessagesController$$Lambda$145(MessagesController messagesController, int i, BaseFragment baseFragment) {
+    MessagesController$$Lambda$145(MessagesController messagesController, int i, int i2) {
         this.arg$1 = messagesController;
         this.arg$2 = i;
-        this.arg$3 = baseFragment;
+        this.arg$3 = i2;
     }
 
-    public void onCancel(DialogInterface dialogInterface) {
-        this.arg$1.lambda$checkCanOpenChat$238$MessagesController(this.arg$2, this.arg$3, dialogInterface);
+    public void run() {
+        this.arg$1.lambda$processUpdateArray$239$MessagesController(this.arg$2, this.arg$3);
     }
 }

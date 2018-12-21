@@ -411,7 +411,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener(new ProxyListActivity$$Lambda$0(this));
         this.listView.setOnItemLongClickListener(new ProxyListActivity$$Lambda$1(this));
-        frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }
 

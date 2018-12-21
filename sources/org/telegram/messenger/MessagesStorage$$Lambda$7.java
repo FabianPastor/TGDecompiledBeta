@@ -8,6 +8,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$7 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$loadPendingTasks$15$MessagesStorage();
+        this.arg$1.lambda$loadPendingTasks$16$MessagesStorage();
     }
 }

@@ -3151,8 +3151,11 @@ public class ImageLoader {
             this.currentHttpTasksCount--;
         }
         while (this.currentHttpTasksCount < 4 && !this.httpTasks.isEmpty()) {
-            ((HttpImageTask) this.httpTasks.poll()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            this.currentHttpTasksCount++;
+            HttpImageTask task = (HttpImageTask) this.httpTasks.poll();
+            if (task != null) {
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentHttpTasksCount++;
+            }
         }
     }
 

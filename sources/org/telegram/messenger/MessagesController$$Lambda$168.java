@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.updates_Difference;
+import org.telegram.tgnet.TLObject;
 
 final /* synthetic */ class MessagesController$$Lambda$168 implements Runnable {
     private final MessagesController arg$1;
-    private final updates_Difference arg$2;
+    private final TLObject arg$2;
 
-    MessagesController$$Lambda$168(MessagesController messagesController, updates_Difference updates_difference) {
+    MessagesController$$Lambda$168(MessagesController messagesController, TLObject tLObject) {
         this.arg$1 = messagesController;
-        this.arg$2 = updates_difference;
+        this.arg$2 = tLObject;
     }
 
     public void run() {
-        this.arg$1.lambda$null$190$MessagesController(this.arg$2);
+        this.arg$1.lambda$null$203$MessagesController(this.arg$2);
     }
 }

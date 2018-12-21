@@ -1,31 +1,23 @@
 package org.telegram.messenger;
 
+import java.util.concurrent.CountDownLatch;
+
 final /* synthetic */ class MessagesStorage$$Lambda$62 implements Runnable {
     private final MessagesStorage arg$1;
-    private final int arg$10;
-    private final int arg$2;
+    private final long arg$2;
     private final int arg$3;
-    private final boolean arg$4;
-    private final long arg$5;
-    private final int arg$6;
-    private final int arg$7;
-    private final int arg$8;
-    private final int arg$9;
+    private final boolean[] arg$4;
+    private final CountDownLatch arg$5;
 
-    MessagesStorage$$Lambda$62(MessagesStorage messagesStorage, int i, int i2, boolean z, long j, int i3, int i4, int i5, int i6, int i7) {
+    MessagesStorage$$Lambda$62(MessagesStorage messagesStorage, long j, int i, boolean[] zArr, CountDownLatch countDownLatch) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = i;
-        this.arg$3 = i2;
-        this.arg$4 = z;
-        this.arg$5 = j;
-        this.arg$6 = i3;
-        this.arg$7 = i4;
-        this.arg$8 = i5;
-        this.arg$9 = i6;
-        this.arg$10 = i7;
+        this.arg$2 = j;
+        this.arg$3 = i;
+        this.arg$4 = zArr;
+        this.arg$5 = countDownLatch;
     }
 
     public void run() {
-        this.arg$1.lambda$getMessages$87$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, this.arg$10);
+        this.arg$1.lambda$checkMessageId$86$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
     }
 }

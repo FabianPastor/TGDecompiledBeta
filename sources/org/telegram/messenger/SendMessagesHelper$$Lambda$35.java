@@ -9,21 +9,21 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$35 implements Runnable {
     private final TL_error arg$2;
     private final Message arg$3;
     private final TLObject arg$4;
-    private final TLObject arg$5;
-    private final MessageObject arg$6;
-    private final String arg$7;
+    private final MessageObject arg$5;
+    private final String arg$6;
+    private final TLObject arg$7;
 
-    SendMessagesHelper$$Lambda$35(SendMessagesHelper sendMessagesHelper, TL_error tL_error, Message message, TLObject tLObject, TLObject tLObject2, MessageObject messageObject, String str) {
+    SendMessagesHelper$$Lambda$35(SendMessagesHelper sendMessagesHelper, TL_error tL_error, Message message, TLObject tLObject, MessageObject messageObject, String str, TLObject tLObject2) {
         this.arg$1 = sendMessagesHelper;
         this.arg$2 = tL_error;
         this.arg$3 = message;
         this.arg$4 = tLObject;
-        this.arg$5 = tLObject2;
-        this.arg$6 = messageObject;
-        this.arg$7 = str;
+        this.arg$5 = messageObject;
+        this.arg$6 = str;
+        this.arg$7 = tLObject2;
     }
 
     public void run() {
-        this.arg$1.lambda$null$38$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
+        this.arg$1.lambda$null$33$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
     }
 }

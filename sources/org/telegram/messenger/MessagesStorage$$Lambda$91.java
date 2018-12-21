@@ -5,15 +5,13 @@ import java.util.ArrayList;
 final /* synthetic */ class MessagesStorage$$Lambda$91 implements Runnable {
     private final MessagesStorage arg$1;
     private final ArrayList arg$2;
-    private final int arg$3;
 
-    MessagesStorage$$Lambda$91(MessagesStorage messagesStorage, ArrayList arrayList, int i) {
+    MessagesStorage$$Lambda$91(MessagesStorage messagesStorage, ArrayList arrayList) {
         this.arg$1 = messagesStorage;
         this.arg$2 = arrayList;
-        this.arg$3 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$markMessagesAsDeleted$120$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$markMessagesAsDeletedByRandoms$121$MessagesStorage(this.arg$2);
     }
 }

@@ -62,7 +62,7 @@ public class CountrySelectActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                CountrySelectActivity.this.finishFragment();
+                CountrySelectActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             }
         }
     }
@@ -301,7 +301,7 @@ public class CountrySelectActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter */
-        final /* synthetic */ void mo18181xa1825eb2(String query) {
+        final /* synthetic */ void mo18269xa1825eb2(String query) {
             if (query.trim().toLowerCase().length() == 0) {
                 updateSearchResults(new ArrayList());
                 return;
@@ -325,7 +325,7 @@ public class CountrySelectActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter */
-        final /* synthetic */ void mo18182xa883bb23(ArrayList arrCounties) {
+        final /* synthetic */ void mo18270xa883bb23(ArrayList arrCounties) {
             this.searchResult = arrCounties;
             notifyDataSetChanged();
         }
@@ -424,7 +424,7 @@ public class CountrySelectActivity extends BaseFragment {
             }
         }
         if (position >= 0) {
-            finishFragment();
+            lambda$checkDiscard$2$PollCreateActivity();
             if (country != null && this.delegate != null) {
                 this.delegate.didSelectCountry(country.name, country.shortname);
             }

@@ -56,6 +56,7 @@ import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 public class DocumentSelectActivity extends BaseFragment {
     private static final int done = 3;
     private ArrayList<View> actionModeViews = new ArrayList();
+    private boolean allowMusic;
     private boolean canSelectOnlyImageFiles;
     private File currentDir;
     private DocumentSelectActivityDelegate delegate;
@@ -79,6 +80,8 @@ public class DocumentSelectActivity extends BaseFragment {
         void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList);
 
         void startDocumentSelectActivity();
+
+        void startMusicSelectActivity(BaseFragment baseFragment);
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$1 */
@@ -127,7 +130,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     }
                     return;
                 }
-                DocumentSelectActivity.this.finishFragment();
+                DocumentSelectActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             } else if (id == 3 && DocumentSelectActivity.this.delegate != null) {
                 DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet()));
                 for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
@@ -274,6 +277,10 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
+    public DocumentSelectActivity(boolean music) {
+        this.allowMusic = music;
+    }
+
     public boolean onFragmentCreate() {
         loadRecentFiles();
         return super.onFragmentCreate();
@@ -402,16 +409,18 @@ public class DocumentSelectActivity extends BaseFragment {
                         this.delegate.startDocumentSelectActivity();
                     }
                     finishFragment(false);
-                    return;
+                } else if (item.icon != R.drawable.ic_storage_music) {
+                    he = (HistoryEntry) this.history.remove(this.history.size() - 1);
+                    this.actionBar.setTitle(he.title);
+                    if (he.dir != null) {
+                        listFiles(he.dir);
+                    } else {
+                        listRoots();
+                    }
+                    this.layoutManager.scrollToPositionWithOffset(he.scrollItem, he.scrollOffset);
+                } else if (this.delegate != null) {
+                    this.delegate.startMusicSelectActivity(this);
                 }
-                he = (HistoryEntry) this.history.remove(this.history.size() - 1);
-                this.actionBar.setTitle(he.title);
-                if (he.dir != null) {
-                    listFiles(he.dir);
-                } else {
-                    listRoots();
-                }
-                this.layoutManager.scrollToPositionWithOffset(he.scrollItem, he.scrollOffset);
             } else if (file.isDirectory()) {
                 he = new HistoryEntry(this, null);
                 he.scrollItem = this.layoutManager.findLastVisibleItemPosition();
@@ -643,19 +652,22 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x02f7 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x02d5 A:{Splitter: B:11:0x0094, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:11:0x0094} */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x033e }} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing block: B:49:0x01bd, code:
-            r7 = move-exception;
+    /* JADX WARNING: Missing block: B:53:0x01c3, code:
+            r7 = e;
      */
-    /* JADX WARNING: Missing block: B:51:?, code:
-            org.telegram.messenger.FileLog.m13e(r7);
+    /* JADX WARNING: Missing block: B:54:0x01c4, code:
+            r3 = r4;
      */
-    /* JADX WARNING: Missing block: B:73:0x02d5, code:
+    /* JADX WARNING: Missing block: B:76:0x031c, code:
             r21 = th;
      */
-    /* JADX WARNING: Missing block: B:74:0x02d6, code:
+    /* JADX WARNING: Missing block: B:77:0x031d, code:
             r3 = r4;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -730,21 +742,20 @@ public class DocumentSelectActivity extends BaseFragment {
                             bufferedReader = bufferedReader2;
                         }
                     }
-                } catch (Exception e3) {
-                    e2 = e3;
-                    bufferedReader = bufferedReader2;
+                } catch (Throwable e22) {
+                    FileLog.m13e(e22);
                 } catch (Throwable th) {
                 }
             }
-        } catch (Exception e4) {
-            e2 = e4;
+        } catch (Exception e3) {
+            e22 = e3;
             try {
-                FileLog.m13e(e2);
+                FileLog.m13e(e22);
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
-                    } catch (Throwable e22) {
-                        FileLog.m13e(e22);
+                    } catch (Throwable e222) {
+                        FileLog.m13e(e222);
                     }
                 }
                 fs = new ListItem(this, null);
@@ -762,6 +773,8 @@ public class DocumentSelectActivity extends BaseFragment {
                 fs.icon = R.drawable.ic_storage_gallery;
                 fs.file = null;
                 this.items.add(fs);
+                if (this.allowMusic) {
+                }
                 AndroidUtilities.clearDrawableAnimation(this.listView);
                 this.scrolling = true;
                 this.listAdapter.notifyDataSetChanged();
@@ -770,8 +783,8 @@ public class DocumentSelectActivity extends BaseFragment {
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
-                    } catch (Throwable e222) {
-                        FileLog.m13e(e222);
+                    } catch (Throwable e2222) {
+                        FileLog.m13e(e2222);
                     }
                 }
                 throw th3;
@@ -794,30 +807,34 @@ public class DocumentSelectActivity extends BaseFragment {
                     fs2.file = file;
                     this.items.add(fs2);
                     fs = fs2;
-                } catch (Exception e5) {
-                    e222 = e5;
+                } catch (Exception e4) {
+                    e2222 = e4;
                     fs = fs2;
-                    FileLog.m13e(e222);
+                    FileLog.m13e(e2222);
                     fs = new ListItem(this, null);
                     fs.title = LocaleController.getString("Gallery", R.string.Gallery);
                     fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
                     fs.icon = R.drawable.ic_storage_gallery;
                     fs.file = null;
                     this.items.add(fs);
+                    if (this.allowMusic) {
+                    }
                     AndroidUtilities.clearDrawableAnimation(this.listView);
                     this.scrolling = true;
                     this.listAdapter.notifyDataSetChanged();
                 }
             }
-        } catch (Exception e6) {
-            e222 = e6;
-            FileLog.m13e(e222);
+        } catch (Exception e5) {
+            e2222 = e5;
+            FileLog.m13e(e2222);
             fs = new ListItem(this, null);
             fs.title = LocaleController.getString("Gallery", R.string.Gallery);
             fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
             fs.icon = R.drawable.ic_storage_gallery;
             fs.file = null;
             this.items.add(fs);
+            if (this.allowMusic) {
+            }
             AndroidUtilities.clearDrawableAnimation(this.listView);
             this.scrolling = true;
             this.listAdapter.notifyDataSetChanged();
@@ -828,6 +845,14 @@ public class DocumentSelectActivity extends BaseFragment {
         fs.icon = R.drawable.ic_storage_gallery;
         fs.file = null;
         this.items.add(fs);
+        if (this.allowMusic) {
+            fs = new ListItem(this, null);
+            fs.title = LocaleController.getString("AttachMusic", R.string.AttachMusic);
+            fs.subtitle = LocaleController.getString("MusicInfo", R.string.MusicInfo);
+            fs.icon = R.drawable.ic_storage_music;
+            fs.file = null;
+            this.items.add(fs);
+        }
         AndroidUtilities.clearDrawableAnimation(this.listView);
         this.scrolling = true;
         this.listAdapter.notifyDataSetChanged();

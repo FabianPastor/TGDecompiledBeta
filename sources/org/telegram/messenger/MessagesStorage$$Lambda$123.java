@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 final /* synthetic */ class MessagesStorage$$Lambda$123 implements Runnable {
     private final MessagesStorage arg$1;
-    private final int arg$2;
-    private final ArrayList arg$3;
+    private final ArrayList arg$2;
+    private final int arg$3;
 
-    MessagesStorage$$Lambda$123(MessagesStorage messagesStorage, int i, ArrayList arrayList) {
+    MessagesStorage$$Lambda$123(MessagesStorage messagesStorage, ArrayList arrayList, int i) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = i;
-        this.arg$3 = arrayList;
+        this.arg$2 = arrayList;
+        this.arg$3 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$23$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$35$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

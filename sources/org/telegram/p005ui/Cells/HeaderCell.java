@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.p005ui.ActionBar.SimpleTextView;
 import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.LayoutHelper;
 
@@ -18,17 +19,19 @@ import org.telegram.p005ui.Components.LayoutHelper;
 public class HeaderCell extends FrameLayout {
     private int height;
     private TextView textView;
+    private SimpleTextView textView2;
 
     public HeaderCell(Context context) {
-        this(context, false, 21);
+        this(context, false, 21, false);
     }
 
     public HeaderCell(Context context, int padding) {
-        this(context, false, padding);
+        this(context, false, padding, false);
     }
 
-    public HeaderCell(Context context, boolean dialog, int padding) {
-        int i = 5;
+    public HeaderCell(Context context, boolean dialog, int padding, boolean text2) {
+        int i;
+        int i2 = 3;
         super(context);
         this.height = 40;
         this.textView = new TextView(getContext());
@@ -45,10 +48,29 @@ public class HeaderCell extends FrameLayout {
             this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
         }
         View view = this.textView;
-        if (!LocaleController.isRTL) {
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
             i = 3;
         }
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) padding, 15.0f, (float) padding, 0.0f));
+        if (text2) {
+            int i3;
+            this.textView2 = new SimpleTextView(getContext());
+            this.textView2.setTextSize(13);
+            SimpleTextView simpleTextView = this.textView2;
+            if (LocaleController.isRTL) {
+                i3 = 3;
+            } else {
+                i3 = 5;
+            }
+            simpleTextView.setGravity(i3 | 48);
+            view = this.textView2;
+            if (!LocaleController.isRTL) {
+                i2 = 5;
+            }
+            addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) padding, 21.0f, (float) padding, 0.0f));
+        }
     }
 
     public void setHeight(int value) {
@@ -82,5 +104,13 @@ public class HeaderCell extends FrameLayout {
 
     public void setText(String text) {
         this.textView.setText(text);
+    }
+
+    public void setText2(String text) {
+        this.textView2.setText(text);
+    }
+
+    public SimpleTextView getTextView2() {
+        return this.textView2;
     }
 }

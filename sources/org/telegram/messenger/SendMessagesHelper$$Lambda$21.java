@@ -1,44 +1,39 @@
 package org.telegram.messenger;
 
-import android.graphics.Bitmap;
 import java.util.ArrayList;
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC.TL_document;
 
 final /* synthetic */ class SendMessagesHelper$$Lambda$21 implements Runnable {
-    private final Bitmap arg$1;
-    private final long arg$10;
+    private final VideoEditedInfo arg$1;
+    private final CharSequence arg$10;
     private final MessageObject arg$11;
-    private final String arg$12;
+    private final MessageObject arg$12;
     private final ArrayList arg$13;
-    private final int arg$14;
     private final String arg$2;
-    private final MessageObject arg$3;
-    private final int arg$4;
-    private final VideoEditedInfo arg$5;
-    private final TL_document arg$6;
-    private final String arg$7;
-    private final HashMap arg$8;
-    private final String arg$9;
+    private final long arg$3;
+    private final long arg$4;
+    private final int arg$5;
+    private final int arg$6;
+    private final int arg$7;
+    private final int arg$8;
+    private final long arg$9;
 
-    SendMessagesHelper$$Lambda$21(Bitmap bitmap, String str, MessageObject messageObject, int i, VideoEditedInfo videoEditedInfo, TL_document tL_document, String str2, HashMap hashMap, String str3, long j, MessageObject messageObject2, String str4, ArrayList arrayList, int i2) {
-        this.arg$1 = bitmap;
+    SendMessagesHelper$$Lambda$21(VideoEditedInfo videoEditedInfo, String str, long j, long j2, int i, int i2, int i3, int i4, long j3, CharSequence charSequence, MessageObject messageObject, MessageObject messageObject2, ArrayList arrayList) {
+        this.arg$1 = videoEditedInfo;
         this.arg$2 = str;
-        this.arg$3 = messageObject;
-        this.arg$4 = i;
-        this.arg$5 = videoEditedInfo;
-        this.arg$6 = tL_document;
-        this.arg$7 = str2;
-        this.arg$8 = hashMap;
-        this.arg$9 = str3;
-        this.arg$10 = j;
-        this.arg$11 = messageObject2;
-        this.arg$12 = str4;
+        this.arg$3 = j;
+        this.arg$4 = j2;
+        this.arg$5 = i;
+        this.arg$6 = i2;
+        this.arg$7 = i3;
+        this.arg$8 = i4;
+        this.arg$9 = j3;
+        this.arg$10 = charSequence;
+        this.arg$11 = messageObject;
+        this.arg$12 = messageObject2;
         this.arg$13 = arrayList;
-        this.arg$14 = i2;
     }
 
     public void run() {
-        SendMessagesHelper.lambda$null$60$SendMessagesHelper(this.arg$1, this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, this.arg$10, this.arg$11, this.arg$12, this.arg$13, this.arg$14);
+        SendMessagesHelper.lambda$prepareSendingVideo$63$SendMessagesHelper(this.arg$1, this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, this.arg$10, this.arg$11, this.arg$12, this.arg$13);
     }
 }

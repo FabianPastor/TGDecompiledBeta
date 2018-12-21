@@ -659,6 +659,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     /* renamed from: org.telegram.ui.PassportActivity$25 */
     class CLASSNAME implements DocumentSelectActivityDelegate {
+        public void startMusicSelectActivity(BaseFragment baseFragment) {
+            DocumentSelectActivity$DocumentSelectActivityDelegate$$CC.startMusicSelectActivity(this, baseFragment);
+        }
+
         CLASSNAME() {
         }
 
@@ -7563,24 +7567,24 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.doneItem.setEnabled(false);
                 animatorSet = this.doneItemAnimation;
                 animatorArr = new Animator[6];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{0.1f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{0.1f});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{1.0f});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{1.0f});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{1.0f});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.SCALE_X, new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.SCALE_Y, new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.ALPHA, new float[]{0.0f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, View.SCALE_X, new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, View.SCALE_Y, new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, View.ALPHA, new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             } else {
                 this.doneItem.getImageView().setVisibility(0);
                 this.doneItem.setEnabled(true);
                 animatorSet = this.doneItemAnimation;
                 animatorArr = new Animator[6];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{0.1f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{0.1f});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{1.0f});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{1.0f});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{1.0f});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.progressView, View.SCALE_X, new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.progressView, View.SCALE_Y, new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.progressView, View.ALPHA, new float[]{0.0f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.SCALE_X, new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.SCALE_Y, new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.ALPHA, new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             }
             this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
@@ -7609,24 +7613,24 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.bottomLayout.setEnabled(false);
                 animatorSet = this.doneItemAnimation;
                 animatorArr = new Animator[6];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.acceptTextView, "scaleX", new float[]{0.1f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.acceptTextView, "scaleY", new float[]{0.1f});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.acceptTextView, "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.progressViewButton, "scaleX", new float[]{1.0f});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.progressViewButton, "scaleY", new float[]{1.0f});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.progressViewButton, "alpha", new float[]{1.0f});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.acceptTextView, View.SCALE_X, new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.acceptTextView, View.SCALE_Y, new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.acceptTextView, View.ALPHA, new float[]{0.0f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.progressViewButton, View.SCALE_X, new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.progressViewButton, View.SCALE_Y, new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.progressViewButton, View.ALPHA, new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             } else {
                 this.acceptTextView.setVisibility(0);
                 this.bottomLayout.setEnabled(true);
                 animatorSet = this.doneItemAnimation;
                 animatorArr = new Animator[6];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.progressViewButton, "scaleX", new float[]{0.1f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.progressViewButton, "scaleY", new float[]{0.1f});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.progressViewButton, "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.acceptTextView, "scaleX", new float[]{1.0f});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.acceptTextView, "scaleY", new float[]{1.0f});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.acceptTextView, "alpha", new float[]{1.0f});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.progressViewButton, View.SCALE_X, new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.progressViewButton, View.SCALE_Y, new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.progressViewButton, View.ALPHA, new float[]{0.0f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.acceptTextView, View.SCALE_X, new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.acceptTextView, View.SCALE_Y, new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.acceptTextView, View.ALPHA, new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             }
             this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
@@ -8017,7 +8021,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         } else if (which != 4) {
         } else {
             if (VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
-                DocumentSelectActivity fragment2 = new DocumentSelectActivity();
+                DocumentSelectActivity fragment2 = new DocumentSelectActivity(false);
                 fragment2.setCurrentAccount(this.currentAccount);
                 fragment2.setCanSelectOnlyImageFiles(true);
                 fragment2.setMaxSelectedFiles(getMaxSelectedDocuments());

@@ -550,9 +550,9 @@ public class AlertsCreator {
                 NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(did);
                 if (resultCallback != null) {
                     if (defaultEnabled) {
-                        resultCallback.lambda$null$84$MessagesStorage(0);
+                        resultCallback.lambda$null$87$MessagesStorage(0);
                     } else {
-                        resultCallback.lambda$null$84$MessagesStorage(1);
+                        resultCallback.lambda$null$87$MessagesStorage(1);
                     }
                 }
             } else {
@@ -594,9 +594,9 @@ public class AlertsCreator {
                 NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(did);
                 if (resultCallback != null) {
                     if (i != 4 || defaultEnabled) {
-                        resultCallback.lambda$null$84$MessagesStorage(1);
+                        resultCallback.lambda$null$87$MessagesStorage(1);
                     } else {
-                        resultCallback.lambda$null$84$MessagesStorage(0);
+                        resultCallback.lambda$null$87$MessagesStorage(0);
                     }
                 }
             } else if (i == 4) {
@@ -612,7 +612,7 @@ public class AlertsCreator {
             parentFragment.presentFragment(new NotificationsCustomSettingsActivity(globalType, exceptions));
         }
         if (callback != null) {
-            callback.lambda$null$84$MessagesStorage(i);
+            callback.lambda$null$87$MessagesStorage(i);
         }
         builder.getDismissRunnable().run();
     }
@@ -1323,7 +1323,7 @@ public class AlertsCreator {
         } else {
             time = 28800;
         }
-        callback.lambda$null$84$MessagesStorage(time);
+        callback.lambda$null$87$MessagesStorage(time);
     }
 
     public static Builder createContactsPermissionDialog(Activity parentActivity, IntCallback callback) {

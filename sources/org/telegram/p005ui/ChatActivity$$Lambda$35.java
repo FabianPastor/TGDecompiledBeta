@@ -9,6 +9,6 @@ final /* synthetic */ class ChatActivity$$Lambda$35 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.bridge$lambda$1$ChatActivity();
+        this.arg$1.lambda$showFieldPanel$48$ChatActivity();
     }
 }

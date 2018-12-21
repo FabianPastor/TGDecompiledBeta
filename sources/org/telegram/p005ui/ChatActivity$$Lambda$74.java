@@ -1,21 +1,16 @@
 package org.telegram.p005ui;
 
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_messages_getWebPagePreview;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$74 */
-final /* synthetic */ class ChatActivity$$Lambda$74 implements RequestDelegate {
-    private final ChatActivity arg$1;
-    private final TL_messages_getWebPagePreview arg$2;
+final /* synthetic */ class ChatActivity$$Lambda$74 implements Runnable {
+    private final TLObject arg$1;
 
-    ChatActivity$$Lambda$74(ChatActivity chatActivity, TL_messages_getWebPagePreview tL_messages_getWebPagePreview) {
-        this.arg$1 = chatActivity;
-        this.arg$2 = tL_messages_getWebPagePreview;
+    ChatActivity$$Lambda$74(TLObject tLObject) {
+        this.arg$1 = tLObject;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$null$45$ChatActivity(this.arg$2, tLObject, tL_error);
+    public void run() {
+        ChatActivity.lambda$null$74$ChatActivity(this.arg$1);
     }
 }

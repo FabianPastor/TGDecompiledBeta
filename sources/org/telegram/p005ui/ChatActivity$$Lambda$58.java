@@ -1,17 +1,18 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$58 */
-final /* synthetic */ class ChatActivity$$Lambda$58 implements OnClickListener {
-    private final ChatActivity arg$1;
+final /* synthetic */ class ChatActivity$$Lambda$58 implements RequestDelegate {
+    static final RequestDelegate $instance = new ChatActivity$$Lambda$58();
 
-    ChatActivity$$Lambda$58(ChatActivity chatActivity) {
-        this.arg$1 = chatActivity;
+    private ChatActivity$$Lambda$58() {
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$checkRecordLocked$75$ChatActivity(dialogInterface, i);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new ChatActivity$$Lambda$74(tLObject));
     }
 }

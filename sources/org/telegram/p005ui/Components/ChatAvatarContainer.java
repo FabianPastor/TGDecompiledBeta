@@ -274,7 +274,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                                 } else {
                                     newSubtitle = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                                 }
-                            } else if (!chat.megagroup || info.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+                            } else if (!chat.megagroup) {
                                 int[] result = new int[1];
                                 String shortNumber = LocaleController.formatShortNumber(info.participants_count, result);
                                 if (chat.megagroup) {
@@ -282,10 +282,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                                 } else {
                                     newSubtitle = LocaleController.formatPluralString("Subscribers", result[0]).replace(String.format("%d", new Object[]{Integer.valueOf(result[0])}), shortNumber);
                                 }
-                            } else if (this.onlineCount <= 1 || info.participants_count == 0) {
-                                newSubtitle = LocaleController.formatPluralString("Members", info.participants_count);
+                            } else if (this.onlineCount > 1) {
+                                newSubtitle = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("OnlineCount", Math.min(this.onlineCount, info.participants_count))});
                             } else {
-                                newSubtitle = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", info.participants_count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)});
+                                newSubtitle = LocaleController.formatPluralString("Members", info.participants_count);
                             }
                         } else if (ChatObject.isKickedFromChat(chat)) {
                             newSubtitle = LocaleController.getString("YouWereKicked", R.string.YouWereKicked);
@@ -400,6 +400,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             this.onlineCount++;
                         }
                     }
+                } else if ((info instanceof TL_channelFull) && info.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+                    this.onlineCount = info.online_count;
                 }
             }
         }

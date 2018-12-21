@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class MessagesController$$Lambda$119 implements Runnable {
-    private final MessagesController arg$1;
-    private final boolean arg$2;
-    private final int arg$3;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC.Updates;
 
-    MessagesController$$Lambda$119(MessagesController messagesController, boolean z, int i) {
-        this.arg$1 = messagesController;
-        this.arg$2 = z;
-        this.arg$3 = i;
+final /* synthetic */ class MessagesController$$Lambda$119 implements Comparator {
+    static final Comparator $instance = new MessagesController$$Lambda$119();
+
+    private MessagesController$$Lambda$119() {
     }
 
-    public void run() {
-        this.arg$1.lambda$startShortPoll$179$MessagesController(this.arg$2, this.arg$3);
+    public int compare(Object obj, Object obj2) {
+        return AndroidUtilities.compare(((Updates) obj).pts, ((Updates) obj2).pts);
     }
 }

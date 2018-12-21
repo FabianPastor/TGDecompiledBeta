@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 final /* synthetic */ class MessagesStorage$$Lambda$55 implements Runnable {
     private final MessagesStorage arg$1;
-    private final HashMap arg$2;
-    private final boolean arg$3;
+    private final ArrayList arg$2;
 
-    MessagesStorage$$Lambda$55(MessagesStorage messagesStorage, HashMap hashMap, boolean z) {
+    MessagesStorage$$Lambda$55(MessagesStorage messagesStorage, ArrayList arrayList) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = hashMap;
-        this.arg$3 = z;
+        this.arg$2 = arrayList;
     }
 
     public void run() {
-        this.arg$1.lambda$putCachedPhoneBook$78$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$deleteContacts$79$MessagesStorage(this.arg$2);
     }
 }

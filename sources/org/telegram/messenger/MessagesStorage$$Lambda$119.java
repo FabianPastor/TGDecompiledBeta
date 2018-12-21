@@ -1,13 +1,16 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class MessagesStorage$$Lambda$119 implements Runnable {
-    private final MessagesStorage arg$1;
+import android.util.LongSparseArray;
+import java.util.Comparator;
 
-    MessagesStorage$$Lambda$119(MessagesStorage messagesStorage) {
-        this.arg$1 = messagesStorage;
+final /* synthetic */ class MessagesStorage$$Lambda$119 implements Comparator {
+    private final LongSparseArray arg$1;
+
+    MessagesStorage$$Lambda$119(LongSparseArray longSparseArray) {
+        this.arg$1 = longSparseArray;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$36$MessagesStorage();
+    public int compare(Object obj, Object obj2) {
+        return MessagesStorage.lambda$null$43$MessagesStorage(this.arg$1, (Long) obj, (Long) obj2);
     }
 }

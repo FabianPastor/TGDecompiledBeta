@@ -35,6 +35,7 @@ import android.view.ViewStructure;
 import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.util.MimeTypes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import net.hockeyapp.android.UpdateFragment;
@@ -110,6 +111,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
+import org.telegram.tgnet.TLRPC.TL_messageMediaPoll;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_page;
 import org.telegram.tgnet.TLRPC.TL_pageBlockCollage;
@@ -118,6 +120,9 @@ import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
+import org.telegram.tgnet.TLRPC.TL_poll;
+import org.telegram.tgnet.TLRPC.TL_pollAnswer;
+import org.telegram.tgnet.TLRPC.TL_pollAnswerVoters;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.tgnet.TLRPC.TL_webPage;
@@ -139,6 +144,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private boolean addedForTest;
     private StaticLayout adminLayout;
     private boolean allowAssistant;
+    private boolean animatePollAnswer;
+    private boolean animatePollAnswerAlpha;
     private StaticLayout authorLayout;
     private int authorX;
     private int availableTimeWidth;
@@ -217,6 +224,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private boolean drwaShareGoIcon;
     private StaticLayout durationLayout;
     private int durationWidth;
+    private boolean firstCircleLength;
     private int firstVisibleBlockNum;
     private boolean forceNotDrawTime;
     private boolean forwardBotPressed;
@@ -247,7 +255,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int instantTextLeftX;
     private int instantTextX;
     private StaticLayout instantViewLayout;
-    private Drawable instantViewSelectorDrawable;
     private int instantWidth;
     private Runnable invalidateRunnable = new CLASSNAME();
     private boolean isAvatarVisible;
@@ -262,6 +269,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int lastDeleteDate;
     private int lastHeight;
     private long lastHighlightProgressTime;
+    private TL_poll lastPoll;
+    private ArrayList<TL_pollAnswerVoters> lastPollResults;
+    private int lastPollResultsVoters;
     private int lastSendState;
     private int lastTime;
     private int lastViewsCount;
@@ -274,6 +284,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int linkSelectionBlockNum;
     private boolean locationExpired;
     private ImageReceiver locationImageReceiver;
+    private int maxVote;
     private boolean mediaBackground;
     private int mediaOffsetY;
     private boolean mediaWasInvisible;
@@ -298,10 +309,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int photosCountWidth;
     private boolean pinnedBottom;
     private boolean pinnedTop;
+    private float pollAnimationProgress;
+    private float pollAnimationProgressTime;
+    private ArrayList<PollButton> pollButtons = new ArrayList();
+    private boolean pollClosed;
+    private boolean pollUnvoteInProgress;
+    private boolean pollVoteInProgress;
+    private int pollVoteInProgressNum;
+    private boolean pollVoted;
     private int pressedBotButton;
     private CharacterStyle pressedLink;
     private int pressedLinkType;
     private int[] pressedState = new int[]{16842910, 16842919};
+    private int pressedVoteButton;
     private RadialProgress radialProgress;
     private RectF rect = new RectF();
     private ImageReceiver replyImageReceiver;
@@ -321,6 +341,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private SeekBarWaveform seekBarWaveform;
     private int seekBarX;
     private int seekBarY;
+    private Drawable selectorDrawable;
     private boolean sharePressed;
     private int shareStartX;
     private int shareStartY;
@@ -355,6 +376,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private StaticLayout videoInfoLayout;
     private StaticLayout viewsLayout;
     private int viewsTextWidth;
+    private float voteCurrentCircleLength;
+    private float voteCurrentProgressTime;
+    private long voteLastUpdateTime;
+    private float voteRadOffset;
+    private boolean voteRisingCircleLength;
     private boolean wasLayout;
     private int widthBeforeNewTimeLine;
     private int widthForButtons;
@@ -428,11 +454,35 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
         void didPressViaBot(ChatMessageCell chatMessageCell, String str);
 
+        void didPressVoteButton(ChatMessageCell chatMessageCell, TL_pollAnswer tL_pollAnswer);
+
         boolean isChatAdminCell(int i);
 
         void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2);
 
         boolean needPlayMessage(MessageObject messageObject);
+    }
+
+    /* renamed from: org.telegram.ui.Cells.ChatMessageCell$PollButton */
+    private class PollButton {
+        private TL_pollAnswer answer;
+        private int height;
+        private int percent;
+        private float percentProgress;
+        private int prevPercent;
+        private float prevPercentProgress;
+        private StaticLayout title;
+        /* renamed from: x */
+        private int var_x;
+        /* renamed from: y */
+        private int var_y;
+
+        private PollButton() {
+        }
+
+        /* synthetic */ PollButton(ChatMessageCell x0, CLASSNAME x1) {
+            this();
+        }
     }
 
     public ChatMessageCell(Context context) {
@@ -803,9 +853,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             return true;
                         } else if (this.drawInstantView) {
                             this.instantPressed = true;
-                            if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null && this.instantViewSelectorDrawable.getBounds().contains(x, y)) {
-                                this.instantViewSelectorDrawable.setState(this.pressedState);
-                                this.instantViewSelectorDrawable.setHotspot((float) x, (float) y);
+                            if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null && this.selectorDrawable.getBounds().contains(x, y)) {
+                                this.selectorDrawable.setState(this.pressedState);
+                                this.selectorDrawable.setHotspot((float) x, (float) y);
                                 this.instantButtonPressed = true;
                             }
                             invalidate();
@@ -826,8 +876,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.delegate.didPressInstantButton(this, this.drawInstantViewType);
                         }
                         playSoundEffect(0);
-                        if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
-                            this.instantViewSelectorDrawable.setState(StateSet.NOTHING);
+                        if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                            this.selectorDrawable.setState(StateSet.NOTHING);
                         }
                         this.instantButtonPressed = false;
                         this.instantPressed = false;
@@ -837,12 +887,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     } else if (this.buttonPressed != 0) {
                         this.buttonPressed = 0;
                         playSoundEffect(0);
-                        didPressedButton(false);
+                        didPressButton(false);
                         invalidate();
                     } else if (this.miniButtonPressed != 0) {
                         this.miniButtonPressed = 0;
                         playSoundEffect(0);
-                        didPressedMiniButton(false);
+                        didPressMiniButton(false);
                         invalidate();
                     } else if (this.pressedLink != null) {
                         if (this.pressedLink instanceof URLSpan) {
@@ -881,18 +931,69 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 playSoundEffect(0);
                             }
                         } else if (this.buttonState == 2 || this.buttonState == 0) {
-                            didPressedButton(false);
+                            didPressButton(false);
                             playSoundEffect(0);
                         }
                         resetPressedLink(2);
                         return true;
                     }
-                } else if (event.getAction() == 2 && this.instantButtonPressed && VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
-                    this.instantViewSelectorDrawable.setHotspot((float) x, (float) y);
+                } else if (event.getAction() == 2 && this.instantButtonPressed && VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                    this.selectorDrawable.setHotspot((float) x, (float) y);
                 }
             }
         }
         return false;
+    }
+
+    private boolean checkPollButtonMotionEvent(MotionEvent event) {
+        if (this.pollVoted || this.pollClosed || this.pollVoteInProgress || this.pollUnvoteInProgress || this.pollButtons.isEmpty() || this.currentMessageObject.type != 17 || !this.currentMessageObject.isSent()) {
+            return false;
+        }
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        if (event.getAction() == 0) {
+            int a = 0;
+            while (a < this.pollButtons.size()) {
+                PollButton button = (PollButton) this.pollButtons.get(a);
+                int y2 = (button.var_y + this.namesOffset) - AndroidUtilities.m9dp(13.0f);
+                if (x < button.var_x || x > (button.var_x + this.backgroundWidth) - AndroidUtilities.m9dp(31.0f) || y < y2 || y > (button.height + y2) + AndroidUtilities.m9dp(26.0f)) {
+                    a++;
+                } else {
+                    this.pressedVoteButton = a;
+                    if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                        this.selectorDrawable.setBounds(button.var_x - AndroidUtilities.m9dp(9.0f), y2, (button.var_x + this.backgroundWidth) - AndroidUtilities.m9dp(22.0f), (button.height + y2) + AndroidUtilities.m9dp(26.0f));
+                        this.selectorDrawable.setState(this.pressedState);
+                        this.selectorDrawable.setHotspot((float) x, (float) y);
+                    }
+                    invalidate();
+                    return true;
+                }
+            }
+            return false;
+        } else if (event.getAction() == 1) {
+            if (this.pressedVoteButton == -1) {
+                return false;
+            }
+            playSoundEffect(0);
+            if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                this.selectorDrawable.setState(StateSet.NOTHING);
+            }
+            this.pollVoteInProgressNum = this.pressedVoteButton;
+            this.pollVoteInProgress = true;
+            this.voteCurrentProgressTime = 0.0f;
+            this.firstCircleLength = true;
+            this.voteCurrentCircleLength = 360.0f;
+            this.voteRisingCircleLength = false;
+            this.delegate.didPressVoteButton(this, ((PollButton) this.pollButtons.get(this.pressedVoteButton)).answer);
+            this.pressedVoteButton = -1;
+            invalidate();
+            return false;
+        } else if (event.getAction() != 2 || this.pressedVoteButton == -1 || VERSION.SDK_INT < 21 || this.selectorDrawable == null) {
+            return false;
+        } else {
+            this.selectorDrawable.setHotspot((float) x, (float) y);
+            return false;
+        }
     }
 
     private boolean checkInstantButtonMotionEvent(MotionEvent event) {
@@ -904,9 +1005,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (event.getAction() == 0) {
             if (this.drawInstantView && this.instantButtonRect.contains((float) x, (float) y)) {
                 this.instantPressed = true;
-                if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null && this.instantViewSelectorDrawable.getBounds().contains(x, y)) {
-                    this.instantViewSelectorDrawable.setState(this.pressedState);
-                    this.instantViewSelectorDrawable.setHotspot((float) x, (float) y);
+                if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null && this.selectorDrawable.getBounds().contains(x, y)) {
+                    this.selectorDrawable.setState(this.pressedState);
+                    this.selectorDrawable.setHotspot((float) x, (float) y);
                     this.instantButtonPressed = true;
                 }
                 invalidate();
@@ -918,15 +1019,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.delegate.didPressInstantButton(this, this.drawInstantViewType);
                 }
                 playSoundEffect(0);
-                if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
-                    this.instantViewSelectorDrawable.setState(StateSet.NOTHING);
+                if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                    this.selectorDrawable.setState(StateSet.NOTHING);
                 }
                 this.instantButtonPressed = false;
                 this.instantPressed = false;
                 invalidate();
             }
-        } else if (event.getAction() == 2 && this.instantButtonPressed && VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
-            this.instantViewSelectorDrawable.setHotspot((float) x, (float) y);
+        } else if (event.getAction() == 2 && this.instantButtonPressed && VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+            this.selectorDrawable.setHotspot((float) x, (float) y);
         }
         return false;
     }
@@ -1005,7 +1106,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     result = true;
                 }
             } else if (!(this.currentMessageObject.type == 13 && this.currentMessageObject.getInputStickerSet() == null)) {
-                if (x >= this.photoImage.getImageX() && x <= this.photoImage.getImageX() + this.backgroundWidth && y >= this.photoImage.getImageY() && y <= this.photoImage.getImageY() + this.photoImage.getImageHeight()) {
+                if (x >= this.photoImage.getImageX() && x <= this.photoImage.getImageX() + this.photoImage.getImageWidth() && y >= this.photoImage.getImageY() && y <= this.photoImage.getImageY() + this.photoImage.getImageHeight()) {
                     this.imagePressed = true;
                     result = true;
                 }
@@ -1030,13 +1131,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (this.buttonPressed == 1) {
                 this.buttonPressed = 0;
                 playSoundEffect(0);
-                didPressedButton(false);
+                didPressButton(false);
                 updateRadialProgressBackground();
                 invalidate();
             } else if (this.miniButtonPressed == 1) {
                 this.miniButtonPressed = 0;
                 playSoundEffect(0);
-                didPressedMiniButton(false);
+                didPressMiniButton(false);
                 invalidate();
             } else if (this.imagePressed) {
                 this.imagePressed = false;
@@ -1045,7 +1146,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     didClickedImage();
                 } else if (this.buttonState == 0 && this.documentAttachType == 1) {
                     playSoundEffect(0);
-                    didPressedButton(false);
+                    didPressButton(false);
                 }
                 invalidate();
             }
@@ -1069,7 +1170,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (!this.useSeekBarWaweform && event.getAction() == 0) {
                 getParent().requestDisallowInterceptTouchEvent(true);
             } else if (this.useSeekBarWaweform && !this.seekBarWaveform.isStartDraging() && event.getAction() == 1) {
-                didPressedButton(true);
+                didPressButton(true);
             }
             this.disallowLongPress = true;
             invalidate();
@@ -1112,7 +1213,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (event.getAction() == 1) {
                 this.buttonPressed = 0;
                 playSoundEffect(0);
-                didPressedButton(true);
+                didPressButton(true);
                 invalidate();
             } else if (event.getAction() == 3) {
                 this.buttonPressed = 0;
@@ -1129,7 +1230,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (event.getAction() == 1) {
                 this.miniButtonPressed = 0;
                 playSoundEffect(0);
-                didPressedMiniButton(true);
+                didPressMiniButton(true);
                 invalidate();
             } else if (event.getAction() == 3) {
                 this.miniButtonPressed = 0;
@@ -1210,6 +1311,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (!result) {
             result = checkBotButtonMotionEvent(event);
         }
+        if (!result) {
+            result = checkPollButtonMotionEvent(event);
+        }
         if (event.getAction() == 3) {
             this.buttonPressed = 0;
             this.miniButtonPressed = 0;
@@ -1220,8 +1324,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.gamePreviewPressed = false;
             this.instantButtonPressed = false;
             this.instantPressed = false;
-            if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
-                this.instantViewSelectorDrawable.setState(StateSet.NOTHING);
+            if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                this.selectorDrawable.setState(StateSet.NOTHING);
             }
             result = false;
             resetPressedLink(-1);
@@ -1580,7 +1684,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (this.buttonState == -1) {
                 this.delegate.didPressImage(this);
             } else if (this.buttonState == 0) {
-                didPressedButton(false);
+                didPressButton(false);
             }
         } else if (this.currentMessageObject.type == 12) {
             this.delegate.didPressUserAvatar(this, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentMessageObject.messageOwner.media.user_id)));
@@ -1603,13 +1707,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
             } else if (this.buttonState == 2 || this.buttonState == 0) {
-                didPressedButton(false);
+                didPressButton(false);
             }
         } else if (this.documentAttachType == 4) {
             if (this.buttonState == -1) {
                 this.delegate.didPressImage(this);
             } else if (this.buttonState == 0 || this.buttonState == 3) {
-                didPressedButton(false);
+                didPressButton(false);
             }
         } else if (this.currentMessageObject.type == 4) {
             this.delegate.didPressImage(this);
@@ -1817,8 +1921,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (this.instantPressed) {
             this.instantButtonPressed = false;
             this.instantPressed = false;
-            if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
-                this.instantViewSelectorDrawable.setState(StateSet.NOTHING);
+            if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                this.selectorDrawable.setState(StateSet.NOTHING);
+            }
+            invalidate();
+        }
+        if (this.pressedVoteButton != -1) {
+            this.pressedVoteButton = -1;
+            if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                this.selectorDrawable.setState(StateSet.NOTHING);
             }
             invalidate();
         }
@@ -2106,7 +2217,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     }
 
     protected boolean verifyDrawable(Drawable who) {
-        return super.verifyDrawable(who) || who == this.instantViewSelectorDrawable;
+        return super.verifyDrawable(who) || who == this.selectorDrawable;
     }
 
     private boolean isCurrentLocationTimeExpired(MessageObject messageObject) {
@@ -2141,137 +2252,137 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x069f  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x06bd  */
-    /* JADX WARNING: Removed duplicated region for block: B:759:0x18b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:751:0x1882  */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x18bb  */
-    /* JADX WARNING: Removed duplicated region for block: B:754:0x188c  */
-    /* JADX WARNING: Removed duplicated region for block: B:757:0x18ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
-    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
-    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
-    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:516:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
-    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
-    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
-    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
-    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
-    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
-    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
-    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
-    /* JADX WARNING: Removed duplicated region for block: B:516:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
-    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
-    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
-    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
-    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
-    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
-    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
-    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
-    /* JADX WARNING: Removed duplicated region for block: B:475:0x0df0 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
-    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
-    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
-    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
-    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
-    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:516:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
-    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
-    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
-    /* JADX WARNING: Removed duplicated region for block: B:545:0x10f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
-    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
-    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
-    /* JADX WARNING: Removed duplicated region for block: B:1749:0x3a8e  */
-    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d3a  */
-    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
-    /* JADX WARNING: Removed duplicated region for block: B:1823:0x3d82  */
-    /* JADX WARNING: Removed duplicated region for block: B:404:0x0c4a  */
-    /* JADX WARNING: Removed duplicated region for block: B:621:0x13f1  */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x0db2  */
-    /* JADX WARNING: Removed duplicated region for block: B:744:0x1864  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0dba  */
-    /* JADX WARNING: Removed duplicated region for block: B:475:0x0df0 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:477:0x0df4  */
-    /* JADX WARNING: Removed duplicated region for block: B:490:0x0e2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:493:0x0e53  */
-    /* JADX WARNING: Removed duplicated region for block: B:768:0x18e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:498:0x0e6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:771:0x18f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e80  */
-    /* JADX WARNING: Removed duplicated region for block: B:772:0x18fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e96  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0ea7  */
-    /* JADX WARNING: Removed duplicated region for block: B:791:0x1998  */
-    /* JADX WARNING: Removed duplicated region for block: B:516:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:792:0x19b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x0f5f  */
-    /* JADX WARNING: Removed duplicated region for block: B:849:0x1be3  */
-    /* JADX WARNING: Removed duplicated region for block: B:525:0x0fbd  */
-    /* JADX WARNING: Removed duplicated region for block: B:545:0x10f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:1732:0x3a1a  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x127b A:{Catch:{ Exception -> 0x3a1d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:580:0x12b1 A:{Catch:{ Exception -> 0x3a34 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x131b A:{Catch:{ Exception -> 0x3a34 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1741:0x3a49  */
-    /* JADX WARNING: Removed duplicated region for block: B:1746:0x3a75  */
-    /* JADX WARNING: Removed duplicated region for block: B:1749:0x3a8e  */
-    /* JADX WARNING: Removed duplicated region for block: B:1810:0x3d3a  */
-    /* JADX WARNING: Removed duplicated region for block: B:1832:0x3db1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1831:0x3da1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1820:0x3d73  */
-    /* JADX WARNING: Removed duplicated region for block: B:1823:0x3d82  */
-    /* JADX WARNING: Missing block: B:207:0x0682, code:
-            if (r146.equals("article") != false) goto L_0x0684;
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x073a  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x0758  */
+    /* JADX WARNING: Removed duplicated region for block: B:796:0x1953  */
+    /* JADX WARNING: Removed duplicated region for block: B:788:0x191d  */
+    /* JADX WARNING: Removed duplicated region for block: B:797:0x1956  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x1927  */
+    /* JADX WARNING: Removed duplicated region for block: B:794:0x1948  */
+    /* JADX WARNING: Removed duplicated region for block: B:527:0x0ec9  */
+    /* JADX WARNING: Removed duplicated region for block: B:805:0x197f  */
+    /* JADX WARNING: Removed duplicated region for block: B:530:0x0eee  */
+    /* JADX WARNING: Removed duplicated region for block: B:808:0x1992  */
+    /* JADX WARNING: Removed duplicated region for block: B:535:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:809:0x1995  */
+    /* JADX WARNING: Removed duplicated region for block: B:538:0x0f1b  */
+    /* JADX WARNING: Removed duplicated region for block: B:828:0x1a33  */
+    /* JADX WARNING: Removed duplicated region for block: B:547:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a50  */
+    /* JADX WARNING: Removed duplicated region for block: B:553:0x0fd3  */
+    /* JADX WARNING: Removed duplicated region for block: B:556:0x0ffa  */
+    /* JADX WARNING: Removed duplicated region for block: B:886:0x1c7e  */
+    /* JADX WARNING: Removed duplicated region for block: B:441:0x0ce5  */
+    /* JADX WARNING: Removed duplicated region for block: B:658:0x148c  */
+    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e4d  */
+    /* JADX WARNING: Removed duplicated region for block: B:781:0x18ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e55  */
+    /* JADX WARNING: Removed duplicated region for block: B:514:0x0e8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:527:0x0ec9  */
+    /* JADX WARNING: Removed duplicated region for block: B:530:0x0eee  */
+    /* JADX WARNING: Removed duplicated region for block: B:805:0x197f  */
+    /* JADX WARNING: Removed duplicated region for block: B:535:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:808:0x1992  */
+    /* JADX WARNING: Removed duplicated region for block: B:538:0x0f1b  */
+    /* JADX WARNING: Removed duplicated region for block: B:809:0x1995  */
+    /* JADX WARNING: Removed duplicated region for block: B:542:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:547:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:828:0x1a33  */
+    /* JADX WARNING: Removed duplicated region for block: B:553:0x0fd3  */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a50  */
+    /* JADX WARNING: Removed duplicated region for block: B:556:0x0ffa  */
+    /* JADX WARNING: Removed duplicated region for block: B:886:0x1c7e  */
+    /* JADX WARNING: Removed duplicated region for block: B:562:0x1058  */
+    /* JADX WARNING: Removed duplicated region for block: B:1844:0x3e89  */
+    /* JADX WARNING: Removed duplicated region for block: B:611:0x1316 A:{Catch:{ Exception -> 0x3e8c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:617:0x134c A:{Catch:{ Exception -> 0x3ea3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13b6 A:{Catch:{ Exception -> 0x3ea3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1853:0x3eb8  */
+    /* JADX WARNING: Removed duplicated region for block: B:1858:0x3ee4  */
+    /* JADX WARNING: Removed duplicated region for block: B:1944:0x4224  */
+    /* JADX WARNING: Removed duplicated region for block: B:1943:0x4214  */
+    /* JADX WARNING: Removed duplicated region for block: B:1932:0x41e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:441:0x0ce5  */
+    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e4d  */
+    /* JADX WARNING: Removed duplicated region for block: B:658:0x148c  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e55  */
+    /* JADX WARNING: Removed duplicated region for block: B:781:0x18ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:512:0x0e8b A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:514:0x0e8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:527:0x0ec9  */
+    /* JADX WARNING: Removed duplicated region for block: B:805:0x197f  */
+    /* JADX WARNING: Removed duplicated region for block: B:530:0x0eee  */
+    /* JADX WARNING: Removed duplicated region for block: B:808:0x1992  */
+    /* JADX WARNING: Removed duplicated region for block: B:535:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:809:0x1995  */
+    /* JADX WARNING: Removed duplicated region for block: B:538:0x0f1b  */
+    /* JADX WARNING: Removed duplicated region for block: B:542:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:828:0x1a33  */
+    /* JADX WARNING: Removed duplicated region for block: B:547:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a50  */
+    /* JADX WARNING: Removed duplicated region for block: B:553:0x0fd3  */
+    /* JADX WARNING: Removed duplicated region for block: B:556:0x0ffa  */
+    /* JADX WARNING: Removed duplicated region for block: B:886:0x1c7e  */
+    /* JADX WARNING: Removed duplicated region for block: B:562:0x1058  */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x118b  */
+    /* JADX WARNING: Removed duplicated region for block: B:611:0x1316 A:{Catch:{ Exception -> 0x3e8c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1844:0x3e89  */
+    /* JADX WARNING: Removed duplicated region for block: B:617:0x134c A:{Catch:{ Exception -> 0x3ea3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13b6 A:{Catch:{ Exception -> 0x3ea3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1853:0x3eb8  */
+    /* JADX WARNING: Removed duplicated region for block: B:1858:0x3ee4  */
+    /* JADX WARNING: Removed duplicated region for block: B:1861:0x3efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1922:0x41ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:1943:0x4214  */
+    /* JADX WARNING: Removed duplicated region for block: B:1944:0x4224  */
+    /* JADX WARNING: Removed duplicated region for block: B:1932:0x41e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:1935:0x41f5  */
+    /* JADX WARNING: Removed duplicated region for block: B:441:0x0ce5  */
+    /* JADX WARNING: Removed duplicated region for block: B:658:0x148c  */
+    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e4d  */
+    /* JADX WARNING: Removed duplicated region for block: B:781:0x18ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e55  */
+    /* JADX WARNING: Removed duplicated region for block: B:512:0x0e8b A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:514:0x0e8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:527:0x0ec9  */
+    /* JADX WARNING: Removed duplicated region for block: B:530:0x0eee  */
+    /* JADX WARNING: Removed duplicated region for block: B:805:0x197f  */
+    /* JADX WARNING: Removed duplicated region for block: B:535:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:808:0x1992  */
+    /* JADX WARNING: Removed duplicated region for block: B:538:0x0f1b  */
+    /* JADX WARNING: Removed duplicated region for block: B:809:0x1995  */
+    /* JADX WARNING: Removed duplicated region for block: B:542:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:547:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:828:0x1a33  */
+    /* JADX WARNING: Removed duplicated region for block: B:553:0x0fd3  */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a50  */
+    /* JADX WARNING: Removed duplicated region for block: B:556:0x0ffa  */
+    /* JADX WARNING: Removed duplicated region for block: B:886:0x1c7e  */
+    /* JADX WARNING: Removed duplicated region for block: B:562:0x1058  */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x118b  */
+    /* JADX WARNING: Removed duplicated region for block: B:1844:0x3e89  */
+    /* JADX WARNING: Removed duplicated region for block: B:611:0x1316 A:{Catch:{ Exception -> 0x3e8c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:617:0x134c A:{Catch:{ Exception -> 0x3ea3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x13b6 A:{Catch:{ Exception -> 0x3ea3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1853:0x3eb8  */
+    /* JADX WARNING: Removed duplicated region for block: B:1858:0x3ee4  */
+    /* JADX WARNING: Removed duplicated region for block: B:1861:0x3efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:1922:0x41ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:1944:0x4224  */
+    /* JADX WARNING: Removed duplicated region for block: B:1943:0x4214  */
+    /* JADX WARNING: Removed duplicated region for block: B:1932:0x41e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:1935:0x41f5  */
+    /* JADX WARNING: Missing block: B:244:0x071d, code:
+            if (r158.equals("article") != false) goto L_0x071f;
      */
-    /* JADX WARNING: Missing block: B:220:0x06b3, code:
-            if (r146.equals("article") != false) goto L_0x06b5;
+    /* JADX WARNING: Missing block: B:257:0x074e, code:
+            if (r158.equals("article") != false) goto L_0x0750;
      */
-    /* JADX WARNING: Missing block: B:319:0x0968, code:
-            if ("telegram_album".equals(r152) == false) goto L_0x04ae;
+    /* JADX WARNING: Missing block: B:356:0x0a03, code:
+            if ("telegram_album".equals(r165) == false) goto L_0x0549;
      */
-    /* JADX WARNING: Missing block: B:486:0x0e21, code:
-            if (r158.documentAttachType != 4) goto L_0x18d4;
+    /* JADX WARNING: Missing block: B:523:0x0ebc, code:
+            if (r170.documentAttachType != 4) goto L_0x196f;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
@@ -2291,6 +2402,33 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = (this.currentMessageObject != null && this.currentMessageObject.getId() == messageObject.getId() && this.lastSendState == 3 && messageObject.isSent()) || (this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet));
         boolean groupChanged = groupedMessages != this.currentMessagesGroup;
+        boolean pollChanged = false;
+        if (!(dataChanged || messageChanged || messageObject.type != 17)) {
+            ArrayList<TL_pollAnswerVoters> newResults = null;
+            TL_poll newPoll = null;
+            int newVoters = 0;
+            if (messageObject.messageOwner.media instanceof TL_messageMediaPoll) {
+                TL_messageMediaPoll mediaPoll = (TL_messageMediaPoll) messageObject.messageOwner.media;
+                newResults = mediaPoll.results.results;
+                newPoll = mediaPoll.poll;
+                newVoters = mediaPoll.results.total_voters;
+            }
+            if (!(newResults == null || this.lastPollResults == null || newVoters == this.lastPollResultsVoters)) {
+                pollChanged = true;
+            }
+            if (!(pollChanged || newResults == this.lastPollResults)) {
+                pollChanged = true;
+            }
+            if (!(pollChanged || this.lastPoll == newPoll || this.lastPoll.closed == newPoll.closed)) {
+                pollChanged = true;
+            }
+            if (pollChanged) {
+                this.pollAnimationProgressTime = 0.0f;
+                if (this.pollVoted && !messageObject.isVoted()) {
+                    this.pollUnvoteInProgress = true;
+                }
+            }
+        }
         if (!(groupChanged || groupedMessages == null)) {
             GroupedMessagePosition newPosition;
             if (groupedMessages.messages.size() > 1) {
@@ -2300,7 +2438,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             groupChanged = newPosition != this.currentPosition;
         }
-        if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
+        if (messageChanged || dataChanged || groupChanged || pollChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int a;
             int dp;
             int linkPreviewMaxWidth;
@@ -2309,6 +2447,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             int lineLeft;
             float f;
             int timeWidthTotal;
+            int b;
             int widthForCaption;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
@@ -2371,9 +2510,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.hasInvoicePreview = false;
             this.instantButtonPressed = false;
             this.instantPressed = false;
-            if (VERSION.SDK_INT >= 21 && this.instantViewSelectorDrawable != null) {
-                this.instantViewSelectorDrawable.setVisible(false, false);
-                this.instantViewSelectorDrawable.setState(StateSet.NOTHING);
+            if (!(pollChanged || VERSION.SDK_INT < 21 || this.selectorDrawable == null)) {
+                this.selectorDrawable.setVisible(false, false);
+                this.selectorDrawable.setState(StateSet.NOTHING);
             }
             this.linkPreviewPressed = false;
             this.buttonPressed = 0;
@@ -2416,6 +2555,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.drawInstantViewType = 0;
             this.drawForwardedName = false;
             this.mediaBackground = false;
+            if (messageChanged || dataChanged) {
+                this.pollButtons.clear();
+            }
             int captionNewLine = 0;
             this.availableTimeWidth = 0;
             this.photoImage.setForceLoading(false);
@@ -3661,6 +3803,99 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (this.drawPinnedTop) {
                     this.namesOffset -= AndroidUtilities.m9dp(1.0f);
                 }
+            } else if (messageObject.type == 17) {
+                int N2;
+                byte[] votingFor;
+                createSelectorDrawable();
+                this.drawName = true;
+                this.drawForwardedName = true;
+                this.drawPhotoImage = false;
+                maxWidth = Math.min(AndroidUtilities.m9dp(500.0f), messageObject.getMaxMessageTextWidth());
+                this.availableTimeWidth = maxWidth;
+                this.backgroundWidth = AndroidUtilities.m9dp(31.0f) + maxWidth;
+                this.availableTimeWidth = AndroidUtilities.m9dp(120.0f);
+                measureTime(messageObject);
+                TL_messageMediaPoll media = (TL_messageMediaPoll) messageObject.messageOwner.media;
+                this.pollClosed = media.poll.closed;
+                this.pollVoted = messageObject.isVoted();
+                this.titleLayout = new StaticLayout(Emoji.replaceEmoji(media.poll.question, Theme.chat_audioTitlePaint.getFontMetricsInt(), AndroidUtilities.m9dp(16.0f), false), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.docTitleLayout = new StaticLayout(TextUtils.ellipsize(media.poll.closed ? LocaleController.getString("FinalResults", R.string.FinalResults) : LocaleController.getString("AnonymousPoll", R.string.AnonymousPoll), Theme.chat_timePaint, (float) maxWidth, TruncateAt.END), Theme.chat_timePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.infoLayout = new StaticLayout(TextUtils.ellipsize(media.results.total_voters == 0 ? LocaleController.getString("NoVotes", R.string.NoVotes) : LocaleController.formatPluralString("Vote", media.results.total_voters), Theme.chat_livePaint, (float) ((maxWidth - this.timeWidth) - AndroidUtilities.m9dp(8.0f)), TruncateAt.END), Theme.chat_livePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.lastPoll = media.poll;
+                this.lastPollResults = media.results.results;
+                this.lastPollResultsVoters = media.results.total_voters;
+                this.maxVote = 0;
+                z = this.pollVoteInProgress || this.pollUnvoteInProgress;
+                this.animatePollAnswer = z;
+                this.animatePollAnswerAlpha = z;
+                ArrayList<PollButton> previousPollButtons = null;
+                if (!this.pollButtons.isEmpty()) {
+                    ArrayList<PollButton> arrayList2 = new ArrayList(this.pollButtons);
+                    this.pollButtons.clear();
+                    this.animatePollAnswer = true;
+                    if (this.pollAnimationProgress > 0.0f && this.pollAnimationProgress < 1.0f) {
+                        N2 = arrayList2.size();
+                        for (b = 0; b < N2; b++) {
+                            PollButton button = (PollButton) arrayList2.get(b);
+                            button.percent = (int) Math.ceil((double) (((float) button.prevPercent) + (((float) (button.percent - button.prevPercent)) * this.pollAnimationProgress)));
+                            button.prevPercentProgress = button.prevPercentProgress + ((button.percentProgress - button.prevPercentProgress) * this.pollAnimationProgress);
+                        }
+                    }
+                }
+                this.pollAnimationProgress = this.animatePollAnswer ? 0.0f : 1.0f;
+                if (this.animatePollAnswerAlpha) {
+                    votingFor = null;
+                } else {
+                    this.pollVoteInProgress = false;
+                    this.pollVoteInProgressNum = -1;
+                    votingFor = SendMessagesHelper.getInstance(this.currentAccount).isSendingVote(this.currentMessageObject);
+                }
+                height = this.titleLayout != null ? this.titleLayout.getHeight() : 0;
+                int N = media.poll.answers.size();
+                for (a = 0; a < N; a++) {
+                    PollButton pollButton = new PollButton(this, null);
+                    pollButton.answer = (TL_pollAnswer) media.poll.answers.get(a);
+                    pollButton.title = new StaticLayout(Emoji.replaceEmoji(pollButton.answer.text, Theme.chat_audioPerformerPaint.getFontMetricsInt(), AndroidUtilities.m9dp(15.0f), false), Theme.chat_audioPerformerPaint, maxWidth - AndroidUtilities.m9dp(33.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    pollButton.var_y = AndroidUtilities.m9dp(52.0f) + height;
+                    pollButton.height = pollButton.title.getHeight();
+                    this.pollButtons.add(pollButton);
+                    height += pollButton.height + AndroidUtilities.m9dp(26.0f);
+                    if (!media.results.results.isEmpty()) {
+                        b = 0;
+                        N2 = media.results.results.size();
+                        while (b < N2) {
+                            TL_pollAnswerVoters answer = (TL_pollAnswerVoters) media.results.results.get(b);
+                            if (Arrays.equals(pollButton.answer.option, answer.option)) {
+                                dp = (this.pollVoted || this.pollClosed) ? media.results.total_voters != 0 ? (int) (100.0f * (((float) answer.voters) / ((float) media.results.total_voters))) : 0 : 0;
+                                pollButton.percent = dp;
+                                this.maxVote = Math.max(pollButton.percent, this.maxVote);
+                            } else {
+                                b++;
+                            }
+                        }
+                    }
+                    if (previousPollButtons != null) {
+                        N2 = previousPollButtons.size();
+                        for (b = 0; b < N2; b++) {
+                            PollButton prevButton = (PollButton) previousPollButtons.get(b);
+                            if (Arrays.equals(pollButton.answer.option, prevButton.answer.option)) {
+                                pollButton.prevPercent = prevButton.percent;
+                                pollButton.prevPercentProgress = prevButton.percentProgress;
+                                break;
+                            }
+                        }
+                    }
+                    if (votingFor != null && Arrays.equals(pollButton.answer.option, votingFor)) {
+                        this.pollVoteInProgressNum = a;
+                        this.pollVoteInProgress = true;
+                        votingFor = null;
+                    }
+                }
+                setMessageObjectInternal(messageObject);
+                this.totalHeight = (AndroidUtilities.m9dp(73.0f) + this.namesOffset) + height;
+                if (this.drawPinnedTop) {
+                    this.namesOffset -= AndroidUtilities.m9dp(1.0f);
+                }
             } else {
                 z = (messageObject.messageOwner.fwd_from == null || messageObject.type == 13) ? false : true;
                 this.drawForwardedName = z;
@@ -4415,7 +4650,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     int buttonsCount = row.buttons.size();
                     if (buttonsCount != 0) {
                         int buttonWidth = ((this.widthForButtons - (AndroidUtilities.m9dp(5.0f) * (buttonsCount - 1))) - AndroidUtilities.m9dp(2.0f)) / buttonsCount;
-                        for (int b = 0; b < row.buttons.size(); b++) {
+                        for (b = 0; b < row.buttons.size(); b++) {
                             BotButton oldButton;
                             CharSequence buttonText;
                             BotButton botButton = new BotButton(this, null);
@@ -4488,9 +4723,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         return w;
     }
 
-    private void createInstantViewButton() {
-        if (VERSION.SDK_INT >= 21 && this.drawInstantView) {
-            if (this.instantViewSelectorDrawable == null) {
+    private void createSelectorDrawable() {
+        if (VERSION.SDK_INT >= 21) {
+            if (this.selectorDrawable == null) {
                 final Paint maskPaint = new Paint(1);
                 maskPaint.setColor(-1);
                 Drawable maskDrawable = new Drawable() {
@@ -4515,12 +4750,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 int[][] iArr = new int[][]{StateSet.WILD_CARD};
                 int[] iArr2 = new int[1];
                 iArr2[0] = Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outPreviewInstantText : Theme.key_chat_inPreviewInstantText) & NUM;
-                this.instantViewSelectorDrawable = new RippleDrawable(new ColorStateList(iArr, iArr2), null, maskDrawable);
-                this.instantViewSelectorDrawable.setCallback(this);
+                this.selectorDrawable = new RippleDrawable(new ColorStateList(iArr, iArr2), null, maskDrawable);
+                this.selectorDrawable.setCallback(this);
             } else {
-                Theme.setSelectorDrawableColor(this.instantViewSelectorDrawable, Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outPreviewInstantText : Theme.key_chat_inPreviewInstantText) & NUM, true);
+                Theme.setSelectorDrawableColor(this.selectorDrawable, Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outPreviewInstantText : Theme.key_chat_inPreviewInstantText) & NUM, true);
             }
-            this.instantViewSelectorDrawable.setVisible(true, false);
+            this.selectorDrawable.setVisible(true, false);
+        }
+    }
+
+    private void createInstantViewButton() {
+        if (VERSION.SDK_INT >= 21 && this.drawInstantView) {
+            createSelectorDrawable();
         }
         if (this.drawInstantView && this.instantViewLayout == null) {
             String str;
@@ -4565,7 +4806,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (this.currentMessageObject != null && (this.currentMessageObject.checkLayout() || !(this.currentPosition == null || this.lastHeight == AndroidUtilities.displaySize.y))) {
+        if (this.currentMessageObject != null && (this.currentMessageObject.checkLayout() || ((this.currentMessageObject.type == 17 || this.currentPosition != null) && this.lastHeight != AndroidUtilities.displaySize.y))) {
             this.inLayout = true;
             MessageObject messageObject = this.currentMessageObject;
             this.currentMessageObject = null;
@@ -4766,6 +5007,61 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     public void drawRoundProgress(Canvas canvas) {
         this.rect.set(((float) this.photoImage.getImageX()) + AndroidUtilities.dpf2(1.5f), ((float) this.photoImage.getImageY()) + AndroidUtilities.dpf2(1.5f), ((float) this.photoImage.getImageX2()) - AndroidUtilities.dpf2(1.5f), ((float) this.photoImage.getImageY2()) - AndroidUtilities.dpf2(1.5f));
         canvas.drawArc(this.rect, -90.0f, this.currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+    }
+
+    private void updatePollAnimations() {
+        long newTime = System.currentTimeMillis();
+        long dt = newTime - this.voteLastUpdateTime;
+        if (dt > 17) {
+            dt = 17;
+        }
+        this.voteLastUpdateTime = newTime;
+        if (this.pollVoteInProgress) {
+            this.voteRadOffset += ((float) (360 * dt)) / 2000.0f;
+            this.voteRadOffset -= (float) (((int) (this.voteRadOffset / 360.0f)) * 360);
+            this.voteCurrentProgressTime += (float) dt;
+            if (this.voteCurrentProgressTime >= 500.0f) {
+                this.voteCurrentProgressTime = 500.0f;
+            }
+            if (this.voteRisingCircleLength) {
+                this.voteCurrentCircleLength = (266.0f * AndroidUtilities.accelerateInterpolator.getInterpolation(this.voteCurrentProgressTime / 500.0f)) + 4.0f;
+            } else {
+                this.voteCurrentCircleLength = 4.0f - (((float) (this.firstCircleLength ? 360 : 270)) * (1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(this.voteCurrentProgressTime / 500.0f)));
+            }
+            if (this.voteCurrentProgressTime == 500.0f) {
+                boolean z;
+                if (this.voteRisingCircleLength) {
+                    this.voteRadOffset += 270.0f;
+                    this.voteCurrentCircleLength = -266.0f;
+                }
+                if (this.voteRisingCircleLength) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                this.voteRisingCircleLength = z;
+                if (this.firstCircleLength) {
+                    this.firstCircleLength = false;
+                }
+                this.voteCurrentProgressTime = 0.0f;
+            }
+            invalidate();
+        }
+        if (this.animatePollAnswer) {
+            this.pollAnimationProgressTime += (float) dt;
+            if (this.pollAnimationProgressTime >= 300.0f) {
+                this.pollAnimationProgressTime = 300.0f;
+            }
+            this.pollAnimationProgress = AndroidUtilities.decelerateInterpolator.getInterpolation(this.pollAnimationProgressTime / 300.0f);
+            if (this.pollAnimationProgress >= 1.0f) {
+                this.pollAnimationProgress = 1.0f;
+                this.animatePollAnswer = false;
+                this.animatePollAnswerAlpha = false;
+                this.pollVoteInProgress = false;
+                this.pollUnvoteInProgress = false;
+            }
+            invalidate();
+        }
     }
 
     private void drawContent(Canvas canvas) {
@@ -5071,8 +5367,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         backPaint.setColor(Theme.getColor(Theme.key_chat_inPreviewInstantText));
                     }
                     if (VERSION.SDK_INT >= 21) {
-                        this.instantViewSelectorDrawable.setBounds(linkX, instantY, this.instantWidth + linkX, AndroidUtilities.m9dp(36.0f) + instantY);
-                        this.instantViewSelectorDrawable.draw(canvas);
+                        this.selectorDrawable.setBounds(linkX, instantY, this.instantWidth + linkX, AndroidUtilities.m9dp(36.0f) + instantY);
+                        this.selectorDrawable.draw(canvas);
                     }
                     this.rect.set((float) linkX, (float) instantY, (float) (this.instantWidth + linkX), (float) (AndroidUtilities.m9dp(36.0f) + instantY));
                     canvas.drawRoundRect(this.rect, (float) AndroidUtilities.m9dp(6.0f), (float) AndroidUtilities.m9dp(6.0f), backPaint);
@@ -5292,6 +5588,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 canvas.drawCircle((float) ((this.timeAudioX + this.timeWidthAudio) + AndroidUtilities.m9dp(6.0f)), (float) ((AndroidUtilities.m9dp(51.0f) + this.namesOffset) + this.mediaOffsetY), (float) AndroidUtilities.m9dp(3.0f), Theme.chat_docBackPaint);
             }
         }
+        String text;
         if (this.currentMessageObject.type == 1 || this.documentAttachType == 4) {
             if (this.photoImage.getVisible()) {
                 if (!this.currentMessageObject.needDrawBluredPreview() && this.documentAttachType == 4) {
@@ -5349,7 +5646,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         canvas.drawCircle(this.rect.centerX(), this.rect.centerY(), (float) AndroidUtilities.m9dp(15.0f), Theme.chat_radialProgress2Paint);
                         Theme.chat_radialProgress2Paint.setAlpha(255);
                         canvas.drawArc(this.rect, -90.0f, -360.0f * progress, false, Theme.chat_radialProgress2Paint);
-                        String text = LocaleController.formatLocationLeftTime(Math.abs(this.currentMessageObject.messageOwner.media.period - (ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - this.currentMessageObject.messageOwner.date)));
+                        text = LocaleController.formatLocationLeftTime(Math.abs(this.currentMessageObject.messageOwner.media.period - (ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - this.currentMessageObject.messageOwner.date)));
                         canvas.drawText(text, this.rect.centerX() - (Theme.chat_livePaint.measureText(text) / 2.0f), (float) (AndroidUtilities.m9dp(4.0f) + cy), Theme.chat_livePaint);
                         canvas.save();
                         canvas.translate((float) (this.photoImage.getImageX() + AndroidUtilities.m9dp(10.0f)), (float) (this.photoImage.getImageY2() + AndroidUtilities.m9dp(10.0f)));
@@ -5425,6 +5722,113 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.otherY = i;
             BaseCell.setDrawableBounds(phone, i2, i);
             phone.draw(canvas);
+        } else if (this.currentMessageObject.type == 17) {
+            int color;
+            if (this.currentMessageObject.isOutOwner()) {
+                color = Theme.getColor(Theme.key_chat_messageTextOut);
+                Theme.chat_audioTitlePaint.setColor(color);
+                Theme.chat_audioPerformerPaint.setColor(color);
+                Theme.chat_instantViewPaint.setColor(color);
+                color = Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_outTimeSelectedText : Theme.key_chat_outTimeText);
+                Theme.chat_timePaint.setColor(color);
+                Theme.chat_livePaint.setColor(color);
+            } else {
+                color = Theme.getColor(Theme.key_chat_messageTextIn);
+                Theme.chat_audioTitlePaint.setColor(color);
+                Theme.chat_audioPerformerPaint.setColor(color);
+                Theme.chat_instantViewPaint.setColor(color);
+                color = Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_inTimeSelectedText : Theme.key_chat_inTimeText);
+                Theme.chat_timePaint.setColor(color);
+                Theme.chat_livePaint.setColor(color);
+            }
+            if (this.currentMessageObject.isOutOwner()) {
+                x = (this.layoutWidth - this.backgroundWidth) + AndroidUtilities.m9dp(11.0f);
+            } else if (this.isChat && this.currentMessageObject.needDrawAvatar()) {
+                x = AndroidUtilities.m9dp(68.0f);
+            } else {
+                x = AndroidUtilities.m9dp(20.0f);
+            }
+            if (this.titleLayout != null) {
+                canvas.save();
+                canvas.translate((float) x, (float) (AndroidUtilities.m9dp(15.0f) + this.namesOffset));
+                this.titleLayout.draw(canvas);
+                canvas.restore();
+            }
+            if (this.docTitleLayout != null) {
+                canvas.save();
+                canvas.translate((float) x, (float) (((this.titleLayout != null ? this.titleLayout.getHeight() : 0) + AndroidUtilities.m9dp(20.0f)) + this.namesOffset));
+                this.docTitleLayout.draw(canvas);
+                canvas.restore();
+            }
+            if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
+                this.selectorDrawable.draw(canvas);
+            }
+            a = 0;
+            int N = this.pollButtons.size();
+            while (a < N) {
+                PollButton button = (PollButton) this.pollButtons.get(a);
+                button.var_x = x;
+                canvas.save();
+                canvas.translate((float) (AndroidUtilities.m9dp(34.0f) + x), (float) (button.var_y + this.namesOffset));
+                button.title.draw(canvas);
+                if (this.animatePollAnswerAlpha) {
+                    f = Math.min((this.pollUnvoteInProgress ? 1.0f - this.pollAnimationProgress : this.pollAnimationProgress) / 0.3f, 1.0f) * 255.0f;
+                } else {
+                    f = 255.0f;
+                }
+                int alpha = (int) f;
+                if (this.pollVoted || this.pollClosed || this.animatePollAnswerAlpha) {
+                    Theme.chat_docBackPaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outAudioSeekbarFill : Theme.key_chat_inAudioSeekbarFill));
+                    if (this.animatePollAnswerAlpha) {
+                        Theme.chat_instantViewPaint.setAlpha((int) (((float) alpha) * (((float) Theme.chat_instantViewPaint.getAlpha()) / 255.0f)));
+                        Theme.chat_docBackPaint.setAlpha((int) (((float) alpha) * (((float) Theme.chat_docBackPaint.getAlpha()) / 255.0f)));
+                    }
+                    text = String.format("%d%%", new Object[]{Integer.valueOf((int) Math.ceil((double) (((float) button.prevPercent) + (((float) (button.percent - button.prevPercent)) * this.pollAnimationProgress))))});
+                    canvas.drawText(text, (float) ((-AndroidUtilities.m9dp(7.0f)) - ((int) Math.ceil((double) Theme.chat_instantViewPaint.measureText(text)))), (float) AndroidUtilities.m9dp(14.0f), Theme.chat_instantViewPaint);
+                    int width = this.backgroundWidth - AndroidUtilities.m9dp(76.0f);
+                    button.percentProgress = Math.max(((float) AndroidUtilities.m9dp(5.0f)) / ((float) width), this.maxVote != 0 ? ((float) button.percent) / ((float) this.maxVote) : 0.0f);
+                    this.instantButtonRect.set(0.0f, (float) (button.height + AndroidUtilities.m9dp(6.0f)), ((float) width) * (button.prevPercentProgress + ((button.percentProgress - button.prevPercentProgress) * this.pollAnimationProgress)), (float) (button.height + AndroidUtilities.m9dp(11.0f)));
+                    canvas.drawRoundRect(this.instantButtonRect, (float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(2.0f), Theme.chat_docBackPaint);
+                }
+                if ((!this.pollVoted && !this.pollClosed) || this.animatePollAnswerAlpha) {
+                    if (isDrawSelectedBackground()) {
+                        Theme.chat_replyLinePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outVoiceSeekbarSelected : Theme.key_chat_inVoiceSeekbarSelected));
+                    } else {
+                        Theme.chat_replyLinePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outVoiceSeekbar : Theme.key_chat_inVoiceSeekbar));
+                    }
+                    if (this.animatePollAnswerAlpha) {
+                        Theme.chat_replyLinePaint.setAlpha((int) (((float) (255 - alpha)) * (((float) Theme.chat_replyLinePaint.getAlpha()) / 255.0f)));
+                    }
+                    canvas.drawLine((float) (-AndroidUtilities.m9dp(2.0f)), (float) (button.height + AndroidUtilities.m9dp(13.0f)), (float) (this.backgroundWidth - AndroidUtilities.m9dp(56.0f)), (float) (button.height + AndroidUtilities.m9dp(13.0f)), Theme.chat_replyLinePaint);
+                    if (this.pollVoteInProgress && a == this.pollVoteInProgressNum) {
+                        Theme.chat_instantViewRectPaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outAudioSeekbarFill : Theme.key_chat_inAudioSeekbarFill));
+                        if (this.animatePollAnswerAlpha) {
+                            Theme.chat_instantViewRectPaint.setAlpha((int) (((float) (255 - alpha)) * (((float) Theme.chat_instantViewRectPaint.getAlpha()) / 255.0f)));
+                        }
+                        this.instantButtonRect.set((float) ((-AndroidUtilities.m9dp(23.0f)) - AndroidUtilities.m9dp(8.5f)), (float) (AndroidUtilities.m9dp(9.0f) - AndroidUtilities.m9dp(8.5f)), (float) ((-AndroidUtilities.m9dp(23.0f)) + AndroidUtilities.m9dp(8.5f)), (float) (AndroidUtilities.m9dp(9.0f) + AndroidUtilities.m9dp(8.5f)));
+                        canvas.drawArc(this.instantButtonRect, this.voteRadOffset, this.voteCurrentCircleLength, false, Theme.chat_instantViewRectPaint);
+                    } else {
+                        if (this.currentMessageObject.isOutOwner()) {
+                            Theme.chat_instantViewRectPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_outMenuSelected : Theme.key_chat_outMenu));
+                        } else {
+                            Theme.chat_instantViewRectPaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_inMenuSelected : Theme.key_chat_inMenu));
+                        }
+                        if (this.animatePollAnswerAlpha) {
+                            Theme.chat_instantViewRectPaint.setAlpha((int) (((float) (255 - alpha)) * (((float) Theme.chat_instantViewRectPaint.getAlpha()) / 255.0f)));
+                        }
+                        canvas.drawCircle((float) (-AndroidUtilities.m9dp(23.0f)), (float) AndroidUtilities.m9dp(9.0f), (float) AndroidUtilities.m9dp(8.5f), Theme.chat_instantViewRectPaint);
+                    }
+                }
+                canvas.restore();
+                a++;
+            }
+            if (this.infoLayout != null) {
+                canvas.save();
+                canvas.translate((float) x, (float) (getMeasuredHeight() - AndroidUtilities.m9dp(25.0f)));
+                this.infoLayout.draw(canvas);
+                canvas.restore();
+            }
+            updatePollAnimations();
         } else if (this.currentMessageObject.type == 12) {
             if (this.currentMessageObject.isOutOwner()) {
                 Theme.chat_contactNamePaint.setColor(Theme.getColor(Theme.key_chat_outContactNameText));
@@ -5464,8 +5868,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     backPaint.setColor(Theme.getColor(Theme.key_chat_inPreviewInstantText));
                 }
                 if (VERSION.SDK_INT >= 21) {
-                    this.instantViewSelectorDrawable.setBounds(textX, instantY, this.instantWidth + textX, AndroidUtilities.m9dp(36.0f) + instantY);
-                    this.instantViewSelectorDrawable.draw(canvas);
+                    this.selectorDrawable.setBounds(textX, instantY, this.instantWidth + textX, AndroidUtilities.m9dp(36.0f) + instantY);
+                    this.selectorDrawable.draw(canvas);
                 }
                 this.instantButtonRect.set((float) textX, (float) instantY, (float) (this.instantWidth + textX), (float) (AndroidUtilities.m9dp(36.0f) + instantY));
                 canvas.drawRoundRect(this.instantButtonRect, (float) AndroidUtilities.m9dp(6.0f), (float) AndroidUtilities.m9dp(6.0f), backPaint);
@@ -5564,7 +5968,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 x = (this.photoImage.getImageX() + this.photoImage.getImageWidth()) + AndroidUtilities.m9dp(10.0f);
                 titleY = this.photoImage.getImageY() + AndroidUtilities.m9dp(8.0f);
-                subtitleY = (this.photoImage.getImageY() + this.docTitleLayout.getLineBottom(this.docTitleLayout.getLineCount() - 1)) + AndroidUtilities.m9dp(13.0f);
+                subtitleY = this.photoImage.getImageY() + (this.docTitleLayout != null ? this.docTitleLayout.getLineBottom(this.docTitleLayout.getLineCount() - 1) + AndroidUtilities.m9dp(13.0f) : AndroidUtilities.m9dp(8.0f));
                 if (this.buttonState >= 0 && this.buttonState < 4) {
                     if (imageDrawn) {
                         this.radialProgress.swapBackground(Theme.chat_photoStatesDrawables[this.buttonState][this.buttonPressed]);
@@ -5670,49 +6074,49 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             a = 0;
             while (a < this.botButtons.size()) {
-                BotButton button = (BotButton) this.botButtons.get(a);
-                y = (button.var_y + this.layoutHeight) - AndroidUtilities.m9dp(2.0f);
+                BotButton button2 = (BotButton) this.botButtons.get(a);
+                y = (button2.var_y + this.layoutHeight) - AndroidUtilities.m9dp(2.0f);
                 Theme.chat_systemDrawable.setColorFilter(a == this.pressedBotButton ? Theme.colorPressedFilter : Theme.colorFilter);
-                Theme.chat_systemDrawable.setBounds(button.var_x + addX, y, (button.var_x + addX) + button.width, button.height + y);
+                Theme.chat_systemDrawable.setBounds(button2.var_x + addX, y, (button2.var_x + addX) + button2.width, button2.height + y);
                 Theme.chat_systemDrawable.draw(canvas);
                 canvas.save();
-                canvas.translate((float) ((button.var_x + addX) + AndroidUtilities.m9dp(5.0f)), (float) (((AndroidUtilities.m9dp(44.0f) - button.title.getLineBottom(button.title.getLineCount() - 1)) / 2) + y));
-                button.title.draw(canvas);
+                canvas.translate((float) ((button2.var_x + addX) + AndroidUtilities.m9dp(5.0f)), (float) (((AndroidUtilities.m9dp(44.0f) - button2.title.getLineBottom(button2.title.getLineCount() - 1)) / 2) + y));
+                button2.title.draw(canvas);
                 canvas.restore();
-                if (button.button instanceof TL_keyboardButtonUrl) {
-                    BaseCell.setDrawableBounds(Theme.chat_botLinkDrawalbe, (((button.var_x + button.width) - AndroidUtilities.m9dp(3.0f)) - Theme.chat_botLinkDrawalbe.getIntrinsicWidth()) + addX, AndroidUtilities.m9dp(3.0f) + y);
+                if (button2.button instanceof TL_keyboardButtonUrl) {
+                    BaseCell.setDrawableBounds(Theme.chat_botLinkDrawalbe, (((button2.var_x + button2.width) - AndroidUtilities.m9dp(3.0f)) - Theme.chat_botLinkDrawalbe.getIntrinsicWidth()) + addX, AndroidUtilities.m9dp(3.0f) + y);
                     Theme.chat_botLinkDrawalbe.draw(canvas);
-                } else if (button.button instanceof TL_keyboardButtonSwitchInline) {
-                    BaseCell.setDrawableBounds(Theme.chat_botInlineDrawable, (((button.var_x + button.width) - AndroidUtilities.m9dp(3.0f)) - Theme.chat_botInlineDrawable.getIntrinsicWidth()) + addX, AndroidUtilities.m9dp(3.0f) + y);
+                } else if (button2.button instanceof TL_keyboardButtonSwitchInline) {
+                    BaseCell.setDrawableBounds(Theme.chat_botInlineDrawable, (((button2.var_x + button2.width) - AndroidUtilities.m9dp(3.0f)) - Theme.chat_botInlineDrawable.getIntrinsicWidth()) + addX, AndroidUtilities.m9dp(3.0f) + y);
                     Theme.chat_botInlineDrawable.draw(canvas);
-                } else if ((button.button instanceof TL_keyboardButtonCallback) || (button.button instanceof TL_keyboardButtonRequestGeoLocation) || (button.button instanceof TL_keyboardButtonGame) || (button.button instanceof TL_keyboardButtonBuy)) {
-                    boolean drawProgress = (((button.button instanceof TL_keyboardButtonCallback) || (button.button instanceof TL_keyboardButtonGame) || (button.button instanceof TL_keyboardButtonBuy)) && SendMessagesHelper.getInstance(this.currentAccount).isSendingCallback(this.currentMessageObject, button.button)) || ((button.button instanceof TL_keyboardButtonRequestGeoLocation) && SendMessagesHelper.getInstance(this.currentAccount).isSendingCurrentLocation(this.currentMessageObject, button.button));
-                    if (drawProgress || !(drawProgress || button.progressAlpha == 0.0f)) {
-                        Theme.chat_botProgressPaint.setAlpha(Math.min(255, (int) (button.progressAlpha * 255.0f)));
-                        x = ((button.var_x + button.width) - AndroidUtilities.m9dp(12.0f)) + addX;
+                } else if ((button2.button instanceof TL_keyboardButtonCallback) || (button2.button instanceof TL_keyboardButtonRequestGeoLocation) || (button2.button instanceof TL_keyboardButtonGame) || (button2.button instanceof TL_keyboardButtonBuy)) {
+                    boolean drawProgress = (((button2.button instanceof TL_keyboardButtonCallback) || (button2.button instanceof TL_keyboardButtonGame) || (button2.button instanceof TL_keyboardButtonBuy)) && SendMessagesHelper.getInstance(this.currentAccount).isSendingCallback(this.currentMessageObject, button2.button)) || ((button2.button instanceof TL_keyboardButtonRequestGeoLocation) && SendMessagesHelper.getInstance(this.currentAccount).isSendingCurrentLocation(this.currentMessageObject, button2.button));
+                    if (drawProgress || !(drawProgress || button2.progressAlpha == 0.0f)) {
+                        Theme.chat_botProgressPaint.setAlpha(Math.min(255, (int) (button2.progressAlpha * 255.0f)));
+                        x = ((button2.var_x + button2.width) - AndroidUtilities.m9dp(12.0f)) + addX;
                         this.rect.set((float) x, (float) (AndroidUtilities.m9dp(4.0f) + y), (float) (AndroidUtilities.m9dp(8.0f) + x), (float) (AndroidUtilities.m9dp(12.0f) + y));
-                        canvas.drawArc(this.rect, (float) button.angle, 220.0f, false, Theme.chat_botProgressPaint);
+                        canvas.drawArc(this.rect, (float) button2.angle, 220.0f, false, Theme.chat_botProgressPaint);
                         invalidate(((int) this.rect.left) - AndroidUtilities.m9dp(2.0f), ((int) this.rect.top) - AndroidUtilities.m9dp(2.0f), ((int) this.rect.right) + AndroidUtilities.m9dp(2.0f), ((int) this.rect.bottom) + AndroidUtilities.m9dp(2.0f));
                         long newTime = System.currentTimeMillis();
-                        if (Math.abs(button.lastUpdateTime - System.currentTimeMillis()) < 1000) {
-                            long delta = newTime - button.lastUpdateTime;
-                            button.angle = (int) (((float) button.angle) + (((float) (360 * delta)) / 2000.0f));
-                            button.angle = button.angle - ((button.angle / 360) * 360);
+                        if (Math.abs(button2.lastUpdateTime - System.currentTimeMillis()) < 1000) {
+                            long delta = newTime - button2.lastUpdateTime;
+                            button2.angle = (int) (((float) button2.angle) + (((float) (360 * delta)) / 2000.0f));
+                            button2.angle = button2.angle - ((button2.angle / 360) * 360);
                             if (drawProgress) {
-                                if (button.progressAlpha < 1.0f) {
-                                    button.progressAlpha = button.progressAlpha + (((float) delta) / 200.0f);
-                                    if (button.progressAlpha > 1.0f) {
-                                        button.progressAlpha = 1.0f;
+                                if (button2.progressAlpha < 1.0f) {
+                                    button2.progressAlpha = button2.progressAlpha + (((float) delta) / 200.0f);
+                                    if (button2.progressAlpha > 1.0f) {
+                                        button2.progressAlpha = 1.0f;
                                     }
                                 }
-                            } else if (button.progressAlpha > 0.0f) {
-                                button.progressAlpha = button.progressAlpha - (((float) delta) / 200.0f);
-                                if (button.progressAlpha < 0.0f) {
-                                    button.progressAlpha = 0.0f;
+                            } else if (button2.progressAlpha > 0.0f) {
+                                button2.progressAlpha = button2.progressAlpha - (((float) delta) / 200.0f);
+                                if (button2.progressAlpha < 0.0f) {
+                                    button2.progressAlpha = 0.0f;
                                 }
                             }
                         }
-                        button.lastUpdateTime = newTime;
+                        button2.lastUpdateTime = newTime;
                     }
                 }
                 a++;
@@ -6120,7 +6524,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
     }
 
-    private void didPressedMiniButton(boolean animated) {
+    private void didPressMiniButton(boolean animated) {
         if (this.miniButtonState == 0) {
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
@@ -6142,7 +6546,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
     }
 
-    private void didPressedButton(boolean animated) {
+    private void didPressButton(boolean animated) {
         if (this.buttonState == 0) {
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
                 if (this.miniButtonState == 0) {
@@ -6297,7 +6701,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if ((this.currentMessageObject.type == 8 || this.currentMessageObject.type == 5) && this.currentMessageObject.gifState != 1.0f) {
                     this.photoNotSet = false;
                     this.buttonState = 2;
-                    didPressedButton(true);
+                    didPressButton(true);
                 } else {
                     updateButtonState(true, false);
                 }
@@ -6307,7 +6711,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
         } else if (this.documentAttachType == 2 && this.currentMessageObject.gifState != 1.0f) {
             this.buttonState = 2;
-            didPressedButton(true);
+            didPressButton(true);
         } else if (this.photoNotSet) {
             setMessageObject(this.currentMessageObject, this.currentMessagesGroup, this.pinnedBottom, this.pinnedTop);
         } else {
@@ -6463,10 +6867,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     }
 
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
-        if (this.currentPosition == null || this.currentPosition.last) {
-            return messageObject.needDrawShareButton();
+        if (this.currentPosition != null && !this.currentPosition.last) {
+            return false;
         }
-        return false;
+        if (!(messageObject.messageOwner.fwd_from == null || messageObject.isOutOwner() || messageObject.messageOwner.fwd_from.saved_from_peer == null || messageObject.getDialogId() != ((long) UserConfig.getInstance(this.currentAccount).getClientUserId()))) {
+            this.drwaShareGoIcon = true;
+        }
+        return messageObject.needDrawShareButton();
     }
 
     public boolean isInsideBackground(float x, float y) {
@@ -6515,7 +6922,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         SpannableStringBuilder spannableStringBuilder;
         String name;
         if (!((messageObject.messageOwner.flags & 1024) == 0 || this.currentMessageObject.viewsReloaded)) {
-            MessagesController.getInstance(this.currentAccount).addToViewsQueue(this.currentMessageObject.messageOwner);
+            MessagesController.getInstance(this.currentAccount).addToViewsQueue(this.currentMessageObject);
             this.currentMessageObject.viewsReloaded = true;
         }
         updateCurrentUserAndChat();

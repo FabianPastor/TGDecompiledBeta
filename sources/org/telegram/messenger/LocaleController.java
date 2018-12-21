@@ -1245,10 +1245,17 @@ public class LocaleController {
                 }
             }
             try {
+                String[] args;
                 Locale newLocale;
-                String[] args = localeInfo.shortName.split("_");
+                if (!TextUtils.isEmpty(localeInfo.pluralLangCode)) {
+                    args = localeInfo.pluralLangCode.split("_");
+                } else if (TextUtils.isEmpty(localeInfo.baseLangCode)) {
+                    args = localeInfo.shortName.split("_");
+                } else {
+                    args = localeInfo.baseLangCode.split("_");
+                }
                 if (args.length == 1) {
-                    newLocale = new Locale(localeInfo.shortName);
+                    newLocale = new Locale(args[0]);
                 } else {
                     newLocale = new Locale(args[0], args[1]);
                 }
@@ -2186,7 +2193,7 @@ public class LocaleController {
             lang = "en";
         }
         lang = lang.toLowerCase();
-        boolean z = lang.startsWith("ar") || lang.startsWith("fa") || lang.startsWith("he") || lang.startsWith("iw") || (this.currentLocaleInfo != null && this.currentLocaleInfo.isRtl);
+        boolean z = (lang.length() == 2 && (lang.equals("ar") || lang.equals("fa") || lang.equals("he") || lang.equals("iw"))) || lang.startsWith("ar_") || lang.startsWith("fa_") || lang.startsWith("he_") || lang.startsWith("iw_") || (this.currentLocaleInfo != null && this.currentLocaleInfo.isRtl);
         isRTL = z;
         if (lang.equals("ko")) {
             i = 2;
@@ -2424,10 +2431,17 @@ public class LocaleController {
         saveOtherLanguages();
         try {
             if (this.currentLocaleInfo == localeInfo) {
+                String[] args;
                 Locale newLocale;
-                String[] args = localeInfo.shortName.split("_");
+                if (!TextUtils.isEmpty(localeInfo.pluralLangCode)) {
+                    args = localeInfo.pluralLangCode.split("_");
+                } else if (TextUtils.isEmpty(localeInfo.baseLangCode)) {
+                    args = localeInfo.shortName.split("_");
+                } else {
+                    args = localeInfo.baseLangCode.split("_");
+                }
                 if (args.length == 1) {
-                    newLocale = new Locale(localeInfo.shortName);
+                    newLocale = new Locale(args[0]);
                 } else {
                     newLocale = new Locale(args[0], args[1]);
                 }

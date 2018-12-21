@@ -1,29 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ChatActivity;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.KeyboardButton;
+import org.telegram.tgnet.TLRPC.InputMedia;
 
 final /* synthetic */ class SendMessagesHelper$$Lambda$52 implements Runnable {
     private final SendMessagesHelper arg$1;
-    private final String arg$2;
-    private final boolean arg$3;
-    private final TLObject arg$4;
-    private final MessageObject arg$5;
-    private final KeyboardButton arg$6;
-    private final ChatActivity arg$7;
+    private final TLObject arg$2;
+    private final InputMedia arg$3;
+    private final DelayedMessage arg$4;
 
-    SendMessagesHelper$$Lambda$52(SendMessagesHelper sendMessagesHelper, String str, boolean z, TLObject tLObject, MessageObject messageObject, KeyboardButton keyboardButton, ChatActivity chatActivity) {
+    SendMessagesHelper$$Lambda$52(SendMessagesHelper sendMessagesHelper, TLObject tLObject, InputMedia inputMedia, DelayedMessage delayedMessage) {
         this.arg$1 = sendMessagesHelper;
-        this.arg$2 = str;
-        this.arg$3 = z;
-        this.arg$4 = tLObject;
-        this.arg$5 = messageObject;
-        this.arg$6 = keyboardButton;
-        this.arg$7 = chatActivity;
+        this.arg$2 = tLObject;
+        this.arg$3 = inputMedia;
+        this.arg$4 = delayedMessage;
     }
 
     public void run() {
-        this.arg$1.lambda$null$15$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
+        this.arg$1.lambda$null$20$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4);
     }
 }

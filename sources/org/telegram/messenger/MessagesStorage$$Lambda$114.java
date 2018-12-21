@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC.TL_userFull;
 
 final /* synthetic */ class MessagesStorage$$Lambda$114 implements Runnable {
     private final MessagesStorage arg$1;
-    private final ArrayList arg$2;
+    private final int arg$2;
+    private final TL_userFull arg$3;
 
-    MessagesStorage$$Lambda$114(MessagesStorage messagesStorage, ArrayList arrayList) {
+    MessagesStorage$$Lambda$114(MessagesStorage messagesStorage, int i, TL_userFull tL_userFull) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = arrayList;
+        this.arg$2 = i;
+        this.arg$3 = tL_userFull;
     }
 
     public void run() {
-        this.arg$1.lambda$null$53$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$null$68$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

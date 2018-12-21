@@ -65,6 +65,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private View selectedMenuView;
     private Runnable showMenuRunnable;
     private int subMenuOpenSide;
+    private int yOffset;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarMenuItem$3 */
     class CLASSNAME implements Callback {
@@ -406,6 +407,10 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public boolean hasSubMenu() {
         return this.popupLayout != null;
+    }
+
+    public void setMenuYOffset(int offset) {
+        this.yOffset = offset;
     }
 
     public void toggleSubMenu() {
@@ -757,6 +762,7 @@ public class ActionBarMenuItem extends FrameLayout {
             float scaleY = getScaleY();
             offsetY = (-((int) ((((float) getMeasuredHeight()) * scaleY) - (getTranslationY() / scaleY)))) + this.additionalOffset;
         }
+        offsetY += this.yOffset;
         if (show) {
             this.popupLayout.scrollToTop();
         }

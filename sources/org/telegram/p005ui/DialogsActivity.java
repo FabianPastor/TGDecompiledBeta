@@ -156,7 +156,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private ActionBarMenuItem proxyItem;
     private boolean proxyItemVisisble;
     private boolean scrollUpdated;
+    private long searchDialogId;
     private EmptyTextProgressView searchEmptyView;
+    private TLObject searchObject;
     private String searchString;
     private boolean searchWas;
     private boolean searching;
@@ -389,7 +391,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             if (DialogsActivity.this.searchString == null) {
                 return true;
             }
-            DialogsActivity.this.finishFragment();
+            DialogsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             return false;
         }
 
@@ -449,7 +451,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             boolean z = true;
             if (id == -1) {
                 if (DialogsActivity.this.onlySelect) {
-                    DialogsActivity.this.finishFragment();
+                    DialogsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
                 } else if (DialogsActivity.this.parentLayout != null) {
                     DialogsActivity.this.parentLayout.getDrawerLayoutContainer().openDrawer(false);
                 }
@@ -1396,7 +1398,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 if (obj instanceof User) {
                     dialog_id = (long) ((User) obj).var_id;
                     if (!this.onlySelect) {
-                        this.dialogsSearchAdapter.putRecentSearch(dialog_id, (User) obj);
+                        this.searchDialogId = dialog_id;
+                        this.searchObject = (User) obj;
                     }
                 } else if (obj instanceof Chat) {
                     if (((Chat) obj).var_id > 0) {
@@ -1405,12 +1408,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         dialog_id = AndroidUtilities.makeBroadcastId(((Chat) obj).var_id);
                     }
                     if (!this.onlySelect) {
-                        this.dialogsSearchAdapter.putRecentSearch(dialog_id, (Chat) obj);
+                        this.searchDialogId = dialog_id;
+                        this.searchObject = (Chat) obj;
                     }
                 } else if (obj instanceof EncryptedChat) {
                     dialog_id = ((long) ((EncryptedChat) obj).var_id) << 32;
                     if (!this.onlySelect) {
-                        this.dialogsSearchAdapter.putRecentSearch(dialog_id, (EncryptedChat) obj);
+                        this.searchDialogId = dialog_id;
+                        this.searchObject = (EncryptedChat) obj;
                     }
                 } else if (obj instanceof MessageObject) {
                     MessageObject messageObject = obj;
@@ -1448,6 +1453,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     args.putInt("message_id", message_id);
                 } else if (!isGlobalSearch) {
                     closeSearch();
+                } else if (this.searchObject != null) {
+                    this.dialogsSearchAdapter.putRecentSearch(this.searchDialogId, this.searchObject);
+                    this.searchObject = null;
                 }
                 if (AndroidUtilities.isTablet()) {
                     if (this.openedDialogId == dialog_id && adapter != this.dialogsSearchAdapter) {
@@ -1626,16 +1634,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             if (this.actionBar != null) {
                 this.actionBar.closeSearchField();
             }
+            if (this.searchObject != null) {
+                this.dialogsSearchAdapter.putRecentSearch(this.searchDialogId, this.searchObject);
+                this.searchObject = null;
+            }
             this.closeSearchFieldOnHide = false;
         }
     }
 
     private void closeSearch() {
-        if (!AndroidUtilities.isTablet()) {
-            this.closeSearchFieldOnHide = true;
-        } else if (this.actionBar != null) {
-            this.actionBar.closeSearchField();
+        if (AndroidUtilities.isTablet()) {
+            if (this.actionBar != null) {
+                this.actionBar.closeSearchField();
+            }
+            if (this.searchObject != null) {
+                this.dialogsSearchAdapter.putRecentSearch(this.searchDialogId, this.searchObject);
+                this.searchObject = null;
+                return;
+            }
+            return;
         }
+        this.closeSearchFieldOnHide = true;
     }
 
     private void checkUnreadCount(boolean animated) {
@@ -2129,7 +2148,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.delegate = null;
                 return;
             }
-            finishFragment();
+            lambda$checkDiscard$2$PollCreateActivity();
         } else if (getParentActivity() != null) {
             builder = new Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));

@@ -1,23 +1,20 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.Message;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_messages_forwardMessages;
 
 final /* synthetic */ class SendMessagesHelper$$Lambda$59 implements Runnable {
     private final SendMessagesHelper arg$1;
-    private final Message arg$2;
-    private final long arg$3;
-    private final int arg$4;
-    private final Message arg$5;
+    private final TL_error arg$2;
+    private final TL_messages_forwardMessages arg$3;
 
-    SendMessagesHelper$$Lambda$59(SendMessagesHelper sendMessagesHelper, Message message, long j, int i, Message message2) {
+    SendMessagesHelper$$Lambda$59(SendMessagesHelper sendMessagesHelper, TL_error tL_error, TL_messages_forwardMessages tL_messages_forwardMessages) {
         this.arg$1 = sendMessagesHelper;
-        this.arg$2 = message;
-        this.arg$3 = j;
-        this.arg$4 = i;
-        this.arg$5 = message2;
+        this.arg$2 = tL_error;
+        this.arg$3 = tL_messages_forwardMessages;
     }
 
     public void run() {
-        this.arg$1.lambda$null$5$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+        this.arg$1.lambda$null$7$SendMessagesHelper(this.arg$2, this.arg$3);
     }
 }

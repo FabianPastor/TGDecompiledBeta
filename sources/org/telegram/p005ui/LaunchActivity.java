@@ -1023,11 +1023,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             r46.uri = r71;
             r76.photoPathsArray.add(r46);
      */
-    /* JADX WARNING: Missing block: B:214:0x05c0, code:
-            if (r44.equals("telesco.pe") != false) goto L_0x05c2;
+    /* JADX WARNING: Missing block: B:212:0x05b5, code:
+            if (r44.equals("telegram.dog") != false) goto L_0x05b7;
      */
-    /* JADX WARNING: Missing block: B:441:0x0de9, code:
-            if (org.telegram.messenger.MessagesController.getInstance(r47[0]).checkCanOpenChat(r31, (org.telegram.p005ui.ActionBar.BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)) != false) goto L_0x0deb;
+    /* JADX WARNING: Missing block: B:444:0x0e1b, code:
+            if (org.telegram.messenger.MessagesController.getInstance(r47[0]).checkCanOpenChat(r31, (org.telegram.p005ui.ActionBar.BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)) != false) goto L_0x0e1d;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
@@ -1280,66 +1280,71 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                                                             if (!url.startsWith("tg:share")) {
                                                                                 if (!url.startsWith("tg:confirmphone")) {
                                                                                     if (!url.startsWith("tg://confirmphone")) {
-                                                                                        if (!url.startsWith("tg:openmessage")) {
-                                                                                            if (!url.startsWith("tg://openmessage")) {
-                                                                                                if (!url.startsWith("tg:passport")) {
-                                                                                                    if (!url.startsWith("tg://passport")) {
-                                                                                                        if (!url.startsWith("tg:secureid")) {
-                                                                                                            if (!url.startsWith("tg:setlanguage")) {
-                                                                                                                if (!url.startsWith("tg://setlanguage")) {
-                                                                                                                    unsupportedUrl = url.replace("tg://", TtmlNode.ANONYMOUS_REGION_ID).replace("tg:", TtmlNode.ANONYMOUS_REGION_ID);
-                                                                                                                    int index = unsupportedUrl.indexOf(63);
-                                                                                                                    if (index >= 0) {
-                                                                                                                        unsupportedUrl = unsupportedUrl.substring(0, index);
+                                                                                        if (!url.startsWith("tg:login")) {
+                                                                                            if (!url.startsWith("tg://login")) {
+                                                                                                if (!url.startsWith("tg:openmessage")) {
+                                                                                                    if (!url.startsWith("tg://openmessage")) {
+                                                                                                        if (!url.startsWith("tg:passport")) {
+                                                                                                            if (!url.startsWith("tg://passport")) {
+                                                                                                                if (!url.startsWith("tg:secureid")) {
+                                                                                                                    if (!url.startsWith("tg:setlanguage")) {
+                                                                                                                        if (!url.startsWith("tg://setlanguage")) {
+                                                                                                                            unsupportedUrl = url.replace("tg://", TtmlNode.ANONYMOUS_REGION_ID).replace("tg:", TtmlNode.ANONYMOUS_REGION_ID);
+                                                                                                                            int index = unsupportedUrl.indexOf(63);
+                                                                                                                            if (index >= 0) {
+                                                                                                                                unsupportedUrl = unsupportedUrl.substring(0, index);
+                                                                                                                            }
+                                                                                                                        }
                                                                                                                     }
+                                                                                                                    lang = Uri.parse(url.replace("tg:setlanguage", "tg://telegram.org").replace("tg://setlanguage", "tg://telegram.org")).getQueryParameter("lang");
                                                                                                                 }
                                                                                                             }
-                                                                                                            lang = Uri.parse(url.replace("tg:setlanguage", "tg://telegram.org").replace("tg://setlanguage", "tg://telegram.org")).getQueryParameter("lang");
                                                                                                         }
+                                                                                                        data = Uri.parse(url.replace("tg:passport", "tg://telegram.org").replace("tg://passport", "tg://telegram.org").replace("tg:secureid", "tg://telegram.org"));
+                                                                                                        auth = new HashMap();
+                                                                                                        scope = data.getQueryParameter("scope");
+                                                                                                        if (!TextUtils.isEmpty(scope)) {
+                                                                                                            if (scope.startsWith("{")) {
+                                                                                                                if (scope.endsWith("}")) {
+                                                                                                                    auth.put("nonce", data.getQueryParameter("nonce"));
+                                                                                                                    auth.put("bot_id", data.getQueryParameter("bot_id"));
+                                                                                                                    auth.put("scope", scope);
+                                                                                                                    auth.put("public_key", data.getQueryParameter("public_key"));
+                                                                                                                    auth.put("callback_url", data.getQueryParameter("callback_url"));
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                        auth.put("payload", data.getQueryParameter("payload"));
+                                                                                                        auth.put("bot_id", data.getQueryParameter("bot_id"));
+                                                                                                        auth.put("scope", scope);
+                                                                                                        auth.put("public_key", data.getQueryParameter("public_key"));
+                                                                                                        auth.put("callback_url", data.getQueryParameter("callback_url"));
                                                                                                     }
                                                                                                 }
-                                                                                                data = Uri.parse(url.replace("tg:passport", "tg://telegram.org").replace("tg://passport", "tg://telegram.org").replace("tg:secureid", "tg://telegram.org"));
-                                                                                                auth = new HashMap();
-                                                                                                scope = data.getQueryParameter("scope");
-                                                                                                if (!TextUtils.isEmpty(scope)) {
-                                                                                                    if (scope.startsWith("{")) {
-                                                                                                        if (scope.endsWith("}")) {
-                                                                                                            auth.put("nonce", data.getQueryParameter("nonce"));
-                                                                                                            auth.put("bot_id", data.getQueryParameter("bot_id"));
-                                                                                                            auth.put("scope", scope);
-                                                                                                            auth.put("public_key", data.getQueryParameter("public_key"));
-                                                                                                            auth.put("callback_url", data.getQueryParameter("callback_url"));
-                                                                                                        }
+                                                                                                data = Uri.parse(url.replace("tg:openmessage", "tg://telegram.org").replace("tg://openmessage", "tg://telegram.org"));
+                                                                                                String userID = data.getQueryParameter("user_id");
+                                                                                                String chatID = data.getQueryParameter("chat_id");
+                                                                                                String msgID = data.getQueryParameter("message_id");
+                                                                                                if (userID != null) {
+                                                                                                    try {
+                                                                                                        push_user_id = Integer.valueOf(Integer.parseInt(userID));
+                                                                                                    } catch (NumberFormatException e3) {
+                                                                                                    }
+                                                                                                } else if (chatID != null) {
+                                                                                                    try {
+                                                                                                        push_chat_id = Integer.valueOf(Integer.parseInt(chatID));
+                                                                                                    } catch (NumberFormatException e4) {
                                                                                                     }
                                                                                                 }
-                                                                                                auth.put("payload", data.getQueryParameter("payload"));
-                                                                                                auth.put("bot_id", data.getQueryParameter("bot_id"));
-                                                                                                auth.put("scope", scope);
-                                                                                                auth.put("public_key", data.getQueryParameter("public_key"));
-                                                                                                auth.put("callback_url", data.getQueryParameter("callback_url"));
+                                                                                                if (msgID != null) {
+                                                                                                    try {
+                                                                                                        push_msg_id = Integer.valueOf(Integer.parseInt(msgID));
+                                                                                                    } catch (NumberFormatException e5) {
+                                                                                                    }
+                                                                                                }
                                                                                             }
                                                                                         }
-                                                                                        data = Uri.parse(url.replace("tg:openmessage", "tg://telegram.org").replace("tg://openmessage", "tg://telegram.org"));
-                                                                                        String userID = data.getQueryParameter("user_id");
-                                                                                        String chatID = data.getQueryParameter("chat_id");
-                                                                                        String msgID = data.getQueryParameter("message_id");
-                                                                                        if (userID != null) {
-                                                                                            try {
-                                                                                                push_user_id = Integer.valueOf(Integer.parseInt(userID));
-                                                                                            } catch (NumberFormatException e3) {
-                                                                                            }
-                                                                                        } else if (chatID != null) {
-                                                                                            try {
-                                                                                                push_chat_id = Integer.valueOf(Integer.parseInt(chatID));
-                                                                                            } catch (NumberFormatException e4) {
-                                                                                            }
-                                                                                        }
-                                                                                        if (msgID != null) {
-                                                                                            try {
-                                                                                                push_msg_id = Integer.valueOf(Integer.parseInt(msgID));
-                                                                                            } catch (NumberFormatException e5) {
-                                                                                            }
-                                                                                        }
+                                                                                        code = Uri.parse(url.replace("tg:login", "tg://telegram.org").replace("tg://login", "tg://telegram.org")).getQueryParameter("code");
                                                                                     }
                                                                                 }
                                                                                 data = Uri.parse(url.replace("tg:confirmphone", "tg://telegram.org").replace("tg://confirmphone", "tg://telegram.org"));
@@ -1412,8 +1417,6 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                             String host = data.getHost().toLowerCase();
                             if (!host.equals("telegram.me")) {
                                 if (!host.equals("t.me")) {
-                                    if (!host.equals("telegram.dog")) {
-                                    }
                                 }
                             }
                             path = data.getPath();
@@ -1799,12 +1802,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         } else {
             Builder builder = new Builder((Context) this);
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            String codeToInsert = code;
-            if (codeToInsert.length() > 3) {
-                codeToInsert = codeToInsert.substring(0, 3) + "-" + codeToInsert.substring(3);
-            }
             builder = builder;
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("OtherLoginCode", R.string.OtherLoginCode, codeToInsert)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("OtherLoginCode", R.string.OtherLoginCode, code)));
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             showAlertDialog(builder);
         }

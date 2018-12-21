@@ -1,7 +1,10 @@
 package org.telegram.p005ui;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$70 */
-final /* synthetic */ class ChatActivity$$Lambda$70 implements Runnable {
+final /* synthetic */ class ChatActivity$$Lambda$70 implements OnCancelListener {
     private final ChatActivity arg$1;
     private final int arg$2;
 
@@ -10,7 +13,7 @@ final /* synthetic */ class ChatActivity$$Lambda$70 implements Runnable {
         this.arg$2 = i;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$50$ChatActivity(this.arg$2);
+    public void onCancel(DialogInterface dialogInterface) {
+        this.arg$1.lambda$null$82$ChatActivity(this.arg$2, dialogInterface);
     }
 }

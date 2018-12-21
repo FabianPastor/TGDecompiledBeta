@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.Message;
+import java.util.ArrayList;
 
 final /* synthetic */ class MessagesStorage$$Lambda$93 implements Runnable {
     private final MessagesStorage arg$1;
-    private final Message arg$2;
+    private final ArrayList arg$2;
+    private final int arg$3;
 
-    MessagesStorage$$Lambda$93(MessagesStorage messagesStorage, Message message) {
+    MessagesStorage$$Lambda$93(MessagesStorage messagesStorage, ArrayList arrayList, int i) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = message;
+        this.arg$2 = arrayList;
+        this.arg$3 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$replaceMessageIfExists$122$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$markMessagesAsDeleted$123$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

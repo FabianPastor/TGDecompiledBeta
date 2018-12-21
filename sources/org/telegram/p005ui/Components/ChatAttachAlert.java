@@ -1073,7 +1073,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
     }
 
-    public ChatAttachAlert(Context context, final BaseFragment parentFragment) {
+    public ChatAttachAlert(Context context, BaseFragment parentFragment) {
+        String string;
         super(context, false);
         this.baseFragment = parentFragment;
         this.ciclePaint.setColor(Theme.getColor(Theme.key_dialogBackground));
@@ -1312,13 +1313,38 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         viewArr[10] = CLASSNAME;
         this.lineView.setBackgroundColor(Theme.getColor(Theme.key_dialogGrayLine));
         this.attachView.addView(this.lineView, new FrameLayout.LayoutParams(-1, 1, 51));
-        CharSequence[] items = new CharSequence[]{LocaleController.getString("ChatCamera", R.string.ChatCamera), LocaleController.getString("ChatGallery", R.string.ChatGallery), LocaleController.getString("ChatVideo", R.string.ChatVideo), LocaleController.getString("AttachMusic", R.string.AttachMusic), LocaleController.getString("ChatDocument", R.string.ChatDocument), LocaleController.getString("AttachContact", R.string.AttachContact), LocaleController.getString("ChatLocation", R.string.ChatLocation), TtmlNode.ANONYMOUS_REGION_ID};
+        boolean allowPoll = false;
+        if (this.baseFragment instanceof ChatActivity) {
+            Chat currentChat = ((ChatActivity) this.baseFragment).getCurrentChat();
+            if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
+                allowPoll = ChatObject.isChannel(currentChat) && (currentChat.creator || currentChat.admin_rights != null);
+            } else if (currentChat != null) {
+                allowPoll = true;
+            }
+        }
+        CharSequence[] items = new CharSequence[8];
+        items[0] = LocaleController.getString("ChatCamera", R.string.ChatCamera);
+        items[1] = LocaleController.getString("ChatGallery", R.string.ChatGallery);
+        items[2] = LocaleController.getString("ChatVideo", R.string.ChatVideo);
+        if (allowPoll) {
+            string = LocaleController.getString("Poll", R.string.Poll);
+        } else {
+            string = LocaleController.getString("AttachMusic", R.string.AttachMusic);
+        }
+        items[3] = string;
+        items[4] = LocaleController.getString("ChatDocument", R.string.ChatDocument);
+        items[5] = LocaleController.getString("AttachContact", R.string.AttachContact);
+        items[6] = LocaleController.getString("ChatLocation", R.string.ChatLocation);
+        items[7] = TtmlNode.ANONYMOUS_REGION_ID;
         int a = 0;
         while (a < 8) {
             if ((this.baseFragment instanceof ChatActivity) || !(a == 2 || a == 3 || a == 5 || a == 6)) {
                 AttachButton attachButton = new AttachButton(context);
                 this.attachButtons.add(attachButton);
-                attachButton.setTextAndIcon(items[a], Theme.chat_attachButtonDrawables[a]);
+                CharSequence charSequence = items[a];
+                Drawable[] drawableArr = Theme.chat_attachButtonDrawables;
+                int i = (a == 3 && allowPoll) ? 9 : a;
+                attachButton.setTextAndIcon(charSequence, drawableArr[i]);
                 this.attachView.addView(attachButton, LayoutHelper.createFrame(85, 91, 51));
                 attachButton.setTag(Integer.valueOf(a));
                 this.views[a] = attachButton;
@@ -1399,6 +1425,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         this.counterTextView.setOnClickListener(new ChatAttachAlert$$Lambda$2(this));
         this.shutterButton = new ShutterButton(context);
         this.cameraPanel.addView(this.shutterButton, LayoutHelper.createFrame(84, 84, 17));
+        final BaseFragment baseFragment = parentFragment;
         this.shutterButton.setDelegate(new ShutterButtonDelegate() {
             private File outputFile;
 
@@ -1417,7 +1444,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     ChatAttachAlert.this.recordTime.setText(String.format("%02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0)}));
                     ChatAttachAlert.this.videoRecordTime = 0;
                     ChatAttachAlert.this.videoRecordRunnable = new ChatAttachAlert$10$$Lambda$0(this);
-                    AndroidUtilities.lockOrientation(parentFragment.getParentActivity());
+                    AndroidUtilities.lockOrientation(baseFragment.getParentActivity());
                     CameraController.getInstance().recordVideo(ChatAttachAlert.this.cameraView.getCameraSession(), this.outputFile, new ChatAttachAlert$10$$Lambda$1(this), new ChatAttachAlert$10$$Lambda$2(this));
                     ChatAttachAlert.this.shutterButton.setState(ShutterButton.State.RECORDING, true);
                     return true;
@@ -1477,7 +1504,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     }
                     File cameraFile = AndroidUtilities.generatePicturePath(z);
                     boolean sameTakePictureOrientation = ChatAttachAlert.this.cameraView.getCameraSession().isSameTakePictureOrientation();
-                    ChatAttachAlert.this.cameraView.getCameraSession().setFlipFront(parentFragment instanceof ChatActivity);
+                    ChatAttachAlert.this.cameraView.getCameraSession().setFlipFront(baseFragment instanceof ChatActivity);
                     ChatAttachAlert.this.takingPhoto = CameraController.getInstance().takePicture(cameraFile, ChatAttachAlert.this.cameraView.getCameraSession(), new ChatAttachAlert$10$$Lambda$3(this, cameraFile, sameTakePictureOrientation));
                 }
             }

@@ -1,15 +1,22 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class SendMessagesHelper$$Lambda$9 implements Runnable {
-    private final SendMessagesHelper arg$1;
-    private final String arg$2;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.InputMedia;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-    SendMessagesHelper$$Lambda$9(SendMessagesHelper sendMessagesHelper, String str) {
+final /* synthetic */ class SendMessagesHelper$$Lambda$9 implements RequestDelegate {
+    private final SendMessagesHelper arg$1;
+    private final InputMedia arg$2;
+    private final DelayedMessage arg$3;
+
+    SendMessagesHelper$$Lambda$9(SendMessagesHelper sendMessagesHelper, InputMedia inputMedia, DelayedMessage delayedMessage) {
         this.arg$1 = sendMessagesHelper;
-        this.arg$2 = str;
+        this.arg$2 = inputMedia;
+        this.arg$3 = delayedMessage;
     }
 
-    public void run() {
-        this.arg$1.lambda$stopVideoService$21$SendMessagesHelper(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$uploadMultiMedia$21$SendMessagesHelper(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

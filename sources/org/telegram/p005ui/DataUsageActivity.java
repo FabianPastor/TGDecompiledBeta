@@ -2,7 +2,6 @@ package org.telegram.p005ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -25,7 +24,6 @@ import org.telegram.p005ui.Cells.TextSettingsCell;
 import org.telegram.p005ui.Components.LayoutHelper;
 import org.telegram.p005ui.Components.RecyclerListView;
 import org.telegram.p005ui.Components.RecyclerListView.Holder;
-import org.telegram.p005ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.p005ui.Components.RecyclerListView.SelectionAdapter;
 
 /* renamed from: org.telegram.ui.DataUsageActivity */
@@ -85,36 +83,7 @@ public class DataUsageActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                DataUsageActivity.this.finishFragment();
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.DataUsageActivity$2 */
-    class CLASSNAME implements OnItemClickListener {
-
-        /* renamed from: org.telegram.ui.DataUsageActivity$2$1 */
-        class CLASSNAME implements OnClickListener {
-            CLASSNAME() {
-            }
-
-            public void onClick(DialogInterface dialogInterface, int i) {
-                StatsController.getInstance(DataUsageActivity.this.currentAccount).resetStats(DataUsageActivity.this.currentType);
-                DataUsageActivity.this.listAdapter.notifyDataSetChanged();
-            }
-        }
-
-        CLASSNAME() {
-        }
-
-        public void onItemClick(View view, int position) {
-            if (DataUsageActivity.this.getParentActivity() != null && position == DataUsageActivity.this.resetRow) {
-                Builder builder = new Builder(DataUsageActivity.this.getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ResetStatisticsAlert", R.string.ResetStatisticsAlert));
-                builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new CLASSNAME());
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                DataUsageActivity.this.showDialog(builder.create());
+                DataUsageActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             }
         }
     }
@@ -432,9 +401,24 @@ public class DataUsageActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new CLASSNAME());
-        frameLayout.addView(this.actionBar);
+        this.listView.setOnItemClickListener(new DataUsageActivity$$Lambda$0(this));
         return this.fragmentView;
+    }
+
+    final /* synthetic */ void lambda$createView$1$DataUsageActivity(View view, int position) {
+        if (getParentActivity() != null && position == this.resetRow) {
+            Builder builder = new Builder(getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setMessage(LocaleController.getString("ResetStatisticsAlert", R.string.ResetStatisticsAlert));
+            builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new DataUsageActivity$$Lambda$1(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            showDialog(builder.create());
+        }
+    }
+
+    final /* synthetic */ void lambda$null$0$DataUsageActivity(DialogInterface dialogInterface, int i) {
+        StatsController.getInstance(this.currentAccount).resetStats(this.currentType);
+        this.listAdapter.notifyDataSetChanged();
     }
 
     public void onResume() {
