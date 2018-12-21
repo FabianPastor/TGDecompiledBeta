@@ -8473,8 +8473,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         return this.chatActivityEnterView.processSendingText(text);
     }
 
-    /* JADX WARNING: Missing block: B:271:0x07ff, code:
-            if (r116.indexOfKey(r122.getGroupId()) < 0) goto L_0x0801;
+    /* JADX WARNING: Missing block: B:265:0x07d8, code:
+            if (r116.indexOfKey(r122.getGroupId()) < 0) goto L_0x07da;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -8486,8 +8486,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         int loadIndex;
         int count;
         LongSparseArray<GroupedMessages> newGroups;
-        long pollId;
-        ArrayList<MessageObject> arrayList;
         MessageObject player;
         ArrayList<MessageObject> dayArray;
         Message dateMsg;
@@ -8500,6 +8498,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         MessageObject messageObject2;
         int b;
         int size;
+        ArrayList<MessageObject> arrayList;
         View child;
         boolean updated;
         int key;
@@ -8673,15 +8672,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                         }
                         if (this.messagesDict[loadIndex].indexOfKey(obj.getId()) < 0) {
-                            pollId = obj.getPollId();
-                            if (pollId != 0) {
-                                arrayList = (ArrayList) this.polls.get(pollId);
-                                if (arrayList == null) {
-                                    arrayList = new ArrayList();
-                                    this.polls.put(pollId, arrayList);
-                                }
-                                arrayList.add(obj);
-                            }
+                            addToPolls(obj, null);
                             if (isSecretChat()) {
                                 checkSecretMessageForLocation(obj);
                             }
@@ -9254,6 +9245,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             this.avatarContainer.setTime(((TL_decryptedMessageActionSetMessageTTL) obj.messageOwner.action.encryptedAction).ttl_seconds);
                         }
                         if (obj.type >= 0 && this.messagesDict[0].indexOfKey(obj.getId()) < 0) {
+                            addToPolls(obj, null);
                             if (a == 0 && obj.messageOwner.var_id < 0 && obj.type == 5) {
                                 this.animatingMessageObjects.add(obj);
                             }
@@ -9508,15 +9500,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             return;
                         }
                         if (obj.type >= 0 && this.messagesDict[0].indexOfKey(obj.getId()) < 0) {
-                            pollId = obj.getPollId();
-                            if (pollId != 0) {
-                                arrayList = (ArrayList) this.polls.get(pollId);
-                                if (arrayList == null) {
-                                    arrayList = new ArrayList();
-                                    this.polls.put(pollId, arrayList);
-                                }
-                                arrayList.add(obj);
-                            }
+                            addToPolls(obj, null);
                             obj.checkLayout();
                             currentMaxDate = Math.max(currentMaxDate, obj.messageOwner.date);
                             if (obj.getId() > 0) {
@@ -9961,15 +9945,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     obj.messageOwner.var_id = newMsgId.intValue();
                     obj.messageOwner.send_state = 0;
                     obj.forceUpdate = mediaUpdated;
-                    pollId = obj.getPollId();
-                    if (pollId != 0) {
-                        arrayList = (ArrayList) this.polls.get(pollId);
-                        if (arrayList == null) {
-                            arrayList = new ArrayList();
-                            this.polls.put(pollId, arrayList);
-                        }
-                        arrayList.add(obj);
-                    }
+                    addToPolls(obj, null);
                     messArr = new ArrayList();
                     messArr.add(obj);
                     if (this.currentEncryptedChat == null) {
@@ -10472,16 +10448,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         updatePinnedMessageView(true);
                     }
                     if (old != null) {
-                        pollId = messageObject2.getPollId();
-                        if (pollId != 0) {
-                            arrayList = (ArrayList) this.polls.get(pollId);
-                            if (arrayList == null) {
-                                arrayList = new ArrayList();
-                                this.polls.put(pollId, arrayList);
-                            }
-                            arrayList.remove(old);
-                            arrayList.add(messageObject2);
-                        }
+                        addToPolls(messageObject2, old);
                         if (messageObject2.type >= 0) {
                             if (old.replyMessageObject != null) {
                                 messageObject2.replyMessageObject = old.replyMessageObject;
@@ -10892,6 +10859,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         }
         return true;
+    }
+
+    private void addToPolls(MessageObject obj, MessageObject old) {
+        long pollId = obj.getPollId();
+        if (pollId != 0) {
+            ArrayList<MessageObject> arrayList = (ArrayList) this.polls.get(pollId);
+            if (arrayList == null) {
+                arrayList = new ArrayList();
+                this.polls.put(pollId, arrayList);
+            }
+            arrayList.add(obj);
+            if (old != null) {
+                arrayList.remove(old);
+            }
+        }
     }
 
     private void updateSearchButtons(int mask, int num, int count) {
