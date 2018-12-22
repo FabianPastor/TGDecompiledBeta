@@ -83,7 +83,7 @@ public class DataUsageActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                DataUsageActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                DataUsageActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }

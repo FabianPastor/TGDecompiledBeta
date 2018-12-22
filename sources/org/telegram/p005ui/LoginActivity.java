@@ -2665,7 +2665,7 @@ public class LoginActivity extends BaseFragment {
             if (UserConfig.selectedAccount != num) {
                 ((LaunchActivity) LoginActivity.this.getParentActivity()).switchToAccount(num, false);
             }
-            LoginActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+            LoginActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
         }
 
         final /* synthetic */ void lambda$onNextPressed$8$LoginActivity$PhoneView(Bundle params, TL_auth_sendCode req, TLObject response, TL_error error) {
@@ -3096,7 +3096,7 @@ public class LoginActivity extends BaseFragment {
             if (!this.newAccount) {
                 return true;
             }
-            lambda$checkDiscard$2$PollCreateActivity();
+            lambda$createView$1$PhotoAlbumPickerActivity();
             return true;
         }
         if (this.currentViewNum == 6) {
@@ -3323,7 +3323,7 @@ public class LoginActivity extends BaseFragment {
             if (this.newAccount) {
                 this.newAccount = false;
                 ((LaunchActivity) getParentActivity()).switchToAccount(this.currentAccount, false);
-                lambda$checkDiscard$2$PollCreateActivity();
+                lambda$createView$1$PhotoAlbumPickerActivity();
                 return;
             }
             presentFragment(new DialogsActivity(null), true);

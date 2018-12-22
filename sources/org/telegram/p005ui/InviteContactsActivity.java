@@ -97,7 +97,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
 
         public void onItemClick(int id) {
             if (id == -1) {
-                InviteContactsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                InviteContactsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }
@@ -781,7 +781,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
-        lambda$checkDiscard$2$PollCreateActivity();
+        lambda$createView$1$PhotoAlbumPickerActivity();
     }
 
     public void onResume() {

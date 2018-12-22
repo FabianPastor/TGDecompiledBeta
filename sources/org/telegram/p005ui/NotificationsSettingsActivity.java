@@ -111,7 +111,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
 
         public void onItemClick(int id) {
             if (id == -1) {
-                NotificationsSettingsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                NotificationsSettingsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }

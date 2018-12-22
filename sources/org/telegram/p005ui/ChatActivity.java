@@ -1676,7 +1676,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files) {
-            activity.lambda$checkDiscard$2$PollCreateActivity();
+            activity.lambda$createView$1$PhotoAlbumPickerActivity();
             ChatActivity.this.fillEditingMediaWithCaption(null, null);
             SendMessagesHelper.prepareSendingDocuments(files, files, null, null, null, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, null, ChatActivity.this.editingMessageObject);
             ChatActivity.this.hideFieldPanel();
@@ -1930,7 +1930,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.updateVisibleRows();
                     return;
                 }
-                ChatActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                ChatActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 10) {
                 String str = TtmlNode.ANONYMOUS_REGION_ID;
                 int previousUid = 0;
@@ -2135,7 +2135,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 } else {
                     MessagesController.getInstance(ChatActivity.this.currentAccount).deleteUserFromChat((int) (-ChatActivity.this.dialog_id), MessagesController.getInstance(ChatActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(ChatActivity.this.currentAccount).getClientUserId())), null);
                 }
-                ChatActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                ChatActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
                 return;
             }
             if (ChatActivity.this.chatInfo != null && ChatActivity.this.chatInfo.pinned_msg_id != 0) {
@@ -5318,7 +5318,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         } else {
             MessagesController.getInstance(this.currentAccount).deleteUserFromChat((int) (-this.dialog_id), MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId())), null);
         }
-        lambda$checkDiscard$2$PollCreateActivity();
+        lambda$createView$1$PhotoAlbumPickerActivity();
     }
 
     final /* synthetic */ void lambda$createView$13$ChatActivity(View v) {
@@ -5624,7 +5624,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     final /* synthetic */ void lambda$null$33$ChatActivity(DialogInterface dialogInterface, int i) {
         MessagesController.getInstance(this.currentAccount).deleteDialog(this.dialog_id, 0);
-        lambda$checkDiscard$2$PollCreateActivity();
+        lambda$createView$1$PhotoAlbumPickerActivity();
     }
 
     private TextureView createTextureView(boolean add) {
@@ -6454,7 +6454,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 boolean allowGifs = (ChatObject.isChannel(this.currentChat) && this.currentChat.banned_rights != null && this.currentChat.banned_rights.send_gifs) ? false : this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) >= 46;
                 PhotoAlbumPickerActivity fragment = new PhotoAlbumPickerActivity(false, allowGifs, true, this);
-                fragment.setMaxSelectedPhotos(this.editingMessageObject != null ? 1 : 100);
+                fragment.setMaxSelectedPhotos(this.editingMessageObject != null ? 1 : 0);
                 fragment.setDelegate(new CLASSNAME());
                 presentFragment(fragment);
                 return;
@@ -9551,7 +9551,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (args == null || args.length <= 0) {
                 removeSelfFromStack();
             } else if (((Long) args[0]).longValue() == this.dialog_id) {
-                lambda$checkDiscard$2$PollCreateActivity();
+                lambda$createView$1$PhotoAlbumPickerActivity();
             }
         } else if (id == NotificationCenter.messagesRead) {
             int size2;
@@ -10844,7 +10844,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.parentLayout.fragmentsStack.size() > 1) {
                 BaseFragment prevFragment = (BaseFragment) this.parentLayout.fragmentsStack.get(this.parentLayout.fragmentsStack.size() - 2);
                 if ((prevFragment instanceof ChatActivity) && ((ChatActivity) prevFragment).dialog_id == this.inlineReturn) {
-                    lambda$checkDiscard$2$PollCreateActivity();
+                    lambda$createView$1$PhotoAlbumPickerActivity();
                 } else {
                     Bundle bundle = new Bundle();
                     int lower_part = (int) this.inlineReturn;
@@ -10965,12 +10965,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.closeChatDialog != null && dialog == this.closeChatDialog) {
             MessagesController.getInstance(this.currentAccount).deleteDialog(this.dialog_id, 0);
             if (this.parentLayout == null || this.parentLayout.fragmentsStack.isEmpty() || this.parentLayout.fragmentsStack.get(this.parentLayout.fragmentsStack.size() - 1) == this) {
-                lambda$checkDiscard$2$PollCreateActivity();
+                lambda$createView$1$PhotoAlbumPickerActivity();
                 return;
             }
             BaseFragment fragment = (BaseFragment) this.parentLayout.fragmentsStack.get(this.parentLayout.fragmentsStack.size() - 1);
             removeSelfFromStack();
-            fragment.lambda$checkDiscard$2$PollCreateActivity();
+            fragment.lambda$createView$1$PhotoAlbumPickerActivity();
         }
     }
 
@@ -13101,7 +13101,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                     SendMessagesHelper.getInstance(this.currentAccount).sendMessage(fmessages, did);
                 }
-                fragment.lambda$checkDiscard$2$PollCreateActivity();
+                fragment.lambda$createView$1$PhotoAlbumPickerActivity();
                 return;
             }
             did = ((Long) dids.get(0)).longValue();
@@ -13127,12 +13127,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         }
                         return;
                     }
-                    fragment.lambda$checkDiscard$2$PollCreateActivity();
+                    fragment.lambda$createView$1$PhotoAlbumPickerActivity();
                     return;
                 }
                 return;
             }
-            fragment.lambda$checkDiscard$2$PollCreateActivity();
+            fragment.lambda$createView$1$PhotoAlbumPickerActivity();
             moveScrollToLastMessage();
             showFieldPanelForForward(true, fmessages);
             if (AndroidUtilities.isTablet()) {

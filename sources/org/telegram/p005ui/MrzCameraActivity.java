@@ -50,7 +50,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                MrzCameraActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                MrzCameraActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }
@@ -211,7 +211,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                                     }
 
                                     public void run() {
-                                        MrzCameraActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                                        MrzCameraActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
                                     }
                                 }
 

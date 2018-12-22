@@ -96,7 +96,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
 
         public void onItemClick(int id) {
             if (id == -1) {
-                PasscodeActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                PasscodeActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 1) {
                 if (PasscodeActivity.this.passcodeSetStep == 0) {
                     PasscodeActivity.this.processNext();
@@ -675,7 +675,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 }
                 SharedConfig.passcodeType = this.currentPasswordType;
                 SharedConfig.saveConfig();
-                lambda$checkDiscard$2$PollCreateActivity();
+                lambda$createView$1$PhotoAlbumPickerActivity();
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
                 this.passwordEditText.clearFocus();
                 AndroidUtilities.hideKeyboard(this.passwordEditText);

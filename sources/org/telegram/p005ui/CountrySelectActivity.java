@@ -62,7 +62,7 @@ public class CountrySelectActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                CountrySelectActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                CountrySelectActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }
@@ -424,7 +424,7 @@ public class CountrySelectActivity extends BaseFragment {
             }
         }
         if (position >= 0) {
-            lambda$checkDiscard$2$PollCreateActivity();
+            lambda$createView$1$PhotoAlbumPickerActivity();
             if (country != null && this.delegate != null) {
                 this.delegate.didSelectCountry(country.name, country.shortname);
             }

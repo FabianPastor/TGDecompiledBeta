@@ -131,7 +131,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
 
         public void onItemClick(int id) {
             if (id == -1) {
-                GroupCreateActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                GroupCreateActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 1) {
                 GroupCreateActivity.this.onDonePressed();
             }
@@ -1019,7 +1019,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 }
             }
         } else if (id == NotificationCenter.chatDidCreated) {
-            removeSelfFromStack();
+            lambda$null$10$ProfileActivity();
         }
     }
 
@@ -1081,7 +1081,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 if (this.delegate != null) {
                     this.delegate.didSelectUsers(result2);
                 }
-                lambda$checkDiscard$2$PollCreateActivity();
+                lambda$createView$1$PhotoAlbumPickerActivity();
             } else {
                 Bundle args = new Bundle();
                 args.putIntegerArrayList("result", result2);

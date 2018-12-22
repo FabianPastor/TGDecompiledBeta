@@ -108,7 +108,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         public void onItemClick(int id) {
             if (id == -1) {
-                GroupCreateFinalActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                GroupCreateFinalActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }

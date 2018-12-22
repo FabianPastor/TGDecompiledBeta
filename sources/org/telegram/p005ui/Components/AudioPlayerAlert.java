@@ -1096,7 +1096,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 }
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(fmessages, did);
             }
-            fragment1.lambda$checkDiscard$2$PollCreateActivity();
+            fragment1.lambda$createView$1$PhotoAlbumPickerActivity();
             return;
         }
         did = ((Long) dids.get(0)).longValue();
@@ -1116,7 +1116,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         if (this.parentActivity.presentFragment(chatActivity, true, false)) {
             chatActivity.showFieldPanelForForward(true, fmessages);
         } else {
-            fragment1.lambda$checkDiscard$2$PollCreateActivity();
+            fragment1.lambda$createView$1$PhotoAlbumPickerActivity();
         }
     }
 

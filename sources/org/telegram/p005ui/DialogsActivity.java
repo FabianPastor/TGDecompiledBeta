@@ -391,7 +391,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             if (DialogsActivity.this.searchString == null) {
                 return true;
             }
-            DialogsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+            DialogsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             return false;
         }
 
@@ -451,7 +451,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             boolean z = true;
             if (id == -1) {
                 if (DialogsActivity.this.onlySelect) {
-                    DialogsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                    DialogsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
                 } else if (DialogsActivity.this.parentLayout != null) {
                     DialogsActivity.this.parentLayout.getDrawerLayoutContainer().openDrawer(false);
                 }
@@ -2148,7 +2148,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.delegate = null;
                 return;
             }
-            lambda$checkDiscard$2$PollCreateActivity();
+            lambda$createView$1$PhotoAlbumPickerActivity();
         } else if (getParentActivity() != null) {
             builder = new Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));

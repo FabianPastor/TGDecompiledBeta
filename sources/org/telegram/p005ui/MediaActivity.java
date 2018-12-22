@@ -281,7 +281,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     MediaActivity.this.updateRowsSelection();
                     return;
                 }
-                MediaActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                MediaActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 4) {
                 if (MediaActivity.this.getParentActivity() != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MediaActivity.this.getParentActivity());
@@ -462,7 +462,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     }
                     SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(fmessages, did);
                 }
-                fragment1.lambda$checkDiscard$2$PollCreateActivity();
+                fragment1.lambda$createView$1$PhotoAlbumPickerActivity();
                 return;
             }
             did = ((Long) dids.get(0)).longValue();

@@ -130,7 +130,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     }
                     return;
                 }
-                DocumentSelectActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                DocumentSelectActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 3 && DocumentSelectActivity.this.delegate != null) {
                 DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet()));
                 for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {

@@ -3161,7 +3161,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         ((AttachButton) this.attachButtons.get(a + 3)).setAlpha(0.2f);
                     }
                 }
-                updatePollMusicButton();
                 RecyclerListView recyclerListView = this.attachPhotoRecyclerView;
                 if (this.mediaEnabled) {
                     f2 = 1.0f;
@@ -3203,6 +3202,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     this.cameraIcon.setEnabled(this.mediaEnabled);
                 }
             }
+            updatePollMusicButton();
         }
         if (!this.useRevealAnimation) {
             return false;

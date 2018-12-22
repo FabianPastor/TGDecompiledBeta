@@ -93,7 +93,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                NotificationsCustomSettingsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                NotificationsCustomSettingsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }
