@@ -15,6 +15,6 @@ final /* synthetic */ class NotificationsSettingsActivity$$Lambda$2 implements O
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$showExceptionsAlert$8$NotificationsSettingsActivity(this.arg$2, dialogInterface, i);
+        this.arg$1.lambda$showExceptionsAlert$9$NotificationsSettingsActivity(this.arg$2, dialogInterface, i);
     }
 }

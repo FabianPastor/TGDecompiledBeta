@@ -1260,6 +1260,7 @@ public final class CLASSNAMER {
         public static final int ChannelMessageMusic = NUM;
         public static final int ChannelMessageNoText = NUM;
         public static final int ChannelMessagePhoto = NUM;
+        public static final int ChannelMessagePoll = NUM;
         public static final int ChannelMessageRound = NUM;
         public static final int ChannelMessageSticker = NUM;
         public static final int ChannelMessageStickerEmoji = NUM;
@@ -2151,6 +2152,7 @@ public final class CLASSNAMER {
         public static final int NotificationMessageGroupMusic = NUM;
         public static final int NotificationMessageGroupNoText = NUM;
         public static final int NotificationMessageGroupPhoto = NUM;
+        public static final int NotificationMessageGroupPoll = NUM;
         public static final int NotificationMessageGroupRound = NUM;
         public static final int NotificationMessageGroupSticker = NUM;
         public static final int NotificationMessageGroupStickerEmoji = NUM;
@@ -2162,6 +2164,7 @@ public final class CLASSNAMER {
         public static final int NotificationMessageMusic = NUM;
         public static final int NotificationMessageNoText = NUM;
         public static final int NotificationMessagePhoto = NUM;
+        public static final int NotificationMessagePoll = NUM;
         public static final int NotificationMessageRound = NUM;
         public static final int NotificationMessageSDPhoto = NUM;
         public static final int NotificationMessageSDVideo = NUM;

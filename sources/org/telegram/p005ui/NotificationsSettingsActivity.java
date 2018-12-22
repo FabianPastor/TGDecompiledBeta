@@ -57,6 +57,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_account_resetNotifySettings;
+import org.telegram.tgnet.TLRPC.TL_account_setContactSignUpNotification;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.User;
 
@@ -608,7 +609,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
             }
         }
-        AndroidUtilities.runOnUIThread(new NotificationsSettingsActivity$$Lambda$8(this, users, chats, encryptedChats, usersResult, chatsResult, channelsResult));
+        AndroidUtilities.runOnUIThread(new NotificationsSettingsActivity$$Lambda$9(this, users, chats, encryptedChats, usersResult, chatsResult, channelsResult));
     }
 
     final /* synthetic */ void lambda$null$0$NotificationsSettingsActivity(ArrayList users, ArrayList chats, ArrayList encryptedChats, ArrayList usersResult, ArrayList chatsResult, ArrayList channelsResult) {
@@ -654,7 +655,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$7$NotificationsSettingsActivity(View view, int position, float x, float y) {
+    final /* synthetic */ void lambda$createView$8$NotificationsSettingsActivity(View view, int position, float x, float y) {
         boolean enabled = false;
         if (getParentActivity() != null) {
             if (position == this.privateRow || position == this.groupRow || position == this.channelsRow) {
@@ -762,6 +763,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                                                 MessagesController.getInstance(this.currentAccount).enableJoined = !enabled;
                                                 editor.putBoolean("EnableContactJoined", !enabled);
                                                 editor.commit();
+                                                TLObject req = new TL_account_setContactSignUpNotification();
+                                                req.silent = !enabled;
+                                                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, NotificationsSettingsActivity$$Lambda$4.$instance);
                                             } else {
                                                 if (position == this.pinnedMessageRow) {
                                                     preferences = MessagesController.getNotificationsSettings(this.currentAccount);
@@ -829,7 +833,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                                                                                 if (position == this.repeatRow) {
                                                                                     builder = new Builder(getParentActivity());
                                                                                     builder.setTitle(LocaleController.getString("RepeatNotifications", R.string.RepeatNotifications));
-                                                                                    builder.setItems(new CharSequence[]{LocaleController.getString("RepeatDisabled", R.string.RepeatDisabled), LocaleController.formatPluralString("Minutes", 5), LocaleController.formatPluralString("Minutes", 10), LocaleController.formatPluralString("Minutes", 30), LocaleController.formatPluralString("Hours", 1), LocaleController.formatPluralString("Hours", 2), LocaleController.formatPluralString("Hours", 4)}, new NotificationsSettingsActivity$$Lambda$5(this, position));
+                                                                                    builder.setItems(new CharSequence[]{LocaleController.getString("RepeatDisabled", R.string.RepeatDisabled), LocaleController.formatPluralString("Minutes", 5), LocaleController.formatPluralString("Minutes", 10), LocaleController.formatPluralString("Minutes", 30), LocaleController.formatPluralString("Hours", 1), LocaleController.formatPluralString("Hours", 2), LocaleController.formatPluralString("Hours", 4)}, new NotificationsSettingsActivity$$Lambda$6(this, position));
                                                                                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                                                                     showDialog(builder.create());
                                                                                 }
@@ -838,7 +842,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                                                                                 if (position == this.callsVibrateRow) {
                                                                                     key = "vibrate_calls";
                                                                                 }
-                                                                                showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0, key, new NotificationsSettingsActivity$$Lambda$4(this, position)));
+                                                                                showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0, key, new NotificationsSettingsActivity$$Lambda$5(this, position)));
                                                                             } else {
                                                                                 return;
                                                                             }
@@ -874,12 +878,12 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     final /* synthetic */ void lambda$null$4$NotificationsSettingsActivity(DialogInterface dialogInterface, int i) {
         if (!this.reseting) {
             this.reseting = true;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_resetNotifySettings(), new NotificationsSettingsActivity$$Lambda$6(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_resetNotifySettings(), new NotificationsSettingsActivity$$Lambda$7(this));
         }
     }
 
     final /* synthetic */ void lambda$null$3$NotificationsSettingsActivity(TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new NotificationsSettingsActivity$$Lambda$7(this));
+        AndroidUtilities.runOnUIThread(new NotificationsSettingsActivity$$Lambda$8(this));
     }
 
     final /* synthetic */ void lambda$null$2$NotificationsSettingsActivity() {
@@ -896,11 +900,14 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         }
     }
 
-    final /* synthetic */ void lambda$null$5$NotificationsSettingsActivity(int position) {
+    static final /* synthetic */ void lambda$null$5$NotificationsSettingsActivity(TLObject response, TL_error error) {
+    }
+
+    final /* synthetic */ void lambda$null$6$NotificationsSettingsActivity(int position) {
         this.adapter.notifyItemChanged(position);
     }
 
-    final /* synthetic */ void lambda$null$6$NotificationsSettingsActivity(int position, DialogInterface dialog, int which) {
+    final /* synthetic */ void lambda$null$7$NotificationsSettingsActivity(int position, DialogInterface dialog, int which) {
         int minutes = 0;
         if (which == 1) {
             minutes = 5;
@@ -988,7 +995,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         }
     }
 
-    final /* synthetic */ void lambda$showExceptionsAlert$8$NotificationsSettingsActivity(ArrayList exceptions, DialogInterface dialogInterface, int i) {
+    final /* synthetic */ void lambda$showExceptionsAlert$9$NotificationsSettingsActivity(ArrayList exceptions, DialogInterface dialogInterface, int i) {
         presentFragment(new NotificationsCustomSettingsActivity(-1, exceptions));
     }
 

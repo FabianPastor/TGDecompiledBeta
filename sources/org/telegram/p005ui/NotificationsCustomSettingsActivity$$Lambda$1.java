@@ -11,6 +11,6 @@ final /* synthetic */ class NotificationsCustomSettingsActivity$$Lambda$1 implem
     }
 
     public void didSetColor() {
-        this.arg$1.mo18943xvar_();
+        this.arg$1.mo18948xvar_();
     }
 }

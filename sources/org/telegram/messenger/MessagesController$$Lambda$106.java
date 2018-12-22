@@ -5,12 +5,15 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class MessagesController$$Lambda$106 implements RequestDelegate {
-    static final RequestDelegate $instance = new MessagesController$$Lambda$106();
+    private final MessagesController arg$1;
+    private final int arg$2;
 
-    private MessagesController$$Lambda$106() {
+    MessagesController$$Lambda$106(MessagesController messagesController, int i) {
+        this.arg$1 = messagesController;
+        this.arg$2 = i;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        MessagesController.lambda$toggleUserAdmin$162$MessagesController(tLObject, tL_error);
+        this.arg$1.lambda$toggleAdminMode$163$MessagesController(this.arg$2, tLObject, tL_error);
     }
 }

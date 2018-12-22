@@ -1,30 +1,26 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
-import android.util.SparseIntArray;
-import java.util.ArrayList;
-import org.telegram.messenger.support.SparseLongArray;
+import android.os.Bundle;
+import org.telegram.p005ui.ActionBar.AlertDialog;
+import org.telegram.p005ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLObject;
 
 final /* synthetic */ class MessagesController$$Lambda$153 implements Runnable {
     private final MessagesController arg$1;
-    private final SparseLongArray arg$2;
-    private final SparseLongArray arg$3;
-    private final SparseIntArray arg$4;
-    private final ArrayList arg$5;
-    private final SparseArray arg$6;
-    private final SparseIntArray arg$7;
+    private final AlertDialog arg$2;
+    private final TLObject arg$3;
+    private final BaseFragment arg$4;
+    private final Bundle arg$5;
 
-    MessagesController$$Lambda$153(MessagesController messagesController, SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray, ArrayList arrayList, SparseArray sparseArray, SparseIntArray sparseIntArray2) {
+    MessagesController$$Lambda$153(MessagesController messagesController, AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
         this.arg$1 = messagesController;
-        this.arg$2 = sparseLongArray;
-        this.arg$3 = sparseLongArray2;
-        this.arg$4 = sparseIntArray;
-        this.arg$5 = arrayList;
-        this.arg$6 = sparseArray;
-        this.arg$7 = sparseIntArray2;
+        this.arg$2 = alertDialog;
+        this.arg$3 = tLObject;
+        this.arg$4 = baseFragment;
+        this.arg$5 = bundle;
     }
 
     public void run() {
-        this.arg$1.lambda$null$236$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
+        this.arg$1.lambda$null$242$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
     }
 }

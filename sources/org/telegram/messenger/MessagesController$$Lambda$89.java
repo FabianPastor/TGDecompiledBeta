@@ -1,15 +1,16 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class MessagesController$$Lambda$89 implements Runnable {
-    private final MessagesController arg$1;
-    private final long arg$2;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-    MessagesController$$Lambda$89(MessagesController messagesController, long j) {
-        this.arg$1 = messagesController;
-        this.arg$2 = j;
+final /* synthetic */ class MessagesController$$Lambda$89 implements RequestDelegate {
+    static final RequestDelegate $instance = new MessagesController$$Lambda$89();
+
+    private MessagesController$$Lambda$89() {
     }
 
-    public void run() {
-        this.arg$1.lambda$markDialogAsReadNow$132$MessagesController(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        MessagesController.lambda$completeReadTask$133$MessagesController(tLObject, tL_error);
     }
 }

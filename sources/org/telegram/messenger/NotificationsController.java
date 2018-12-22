@@ -431,7 +431,7 @@ public class NotificationsController {
     }
 
     /* renamed from: lambda$removeDeletedMessagesFromNotifications$8$NotificationsController */
-    final /* synthetic */ void mo10588xbCLASSNAMEe(SparseArray deletedMessages, ArrayList popupArrayRemove) {
+    final /* synthetic */ void mo10591xbCLASSNAMEe(SparseArray deletedMessages, ArrayList popupArrayRemove) {
         int old_unread_count = this.total_unread_count;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
         for (int a = 0; a < deletedMessages.size(); a++) {
@@ -506,7 +506,7 @@ public class NotificationsController {
     }
 
     /* renamed from: lambda$removeDeletedHisoryFromNotifications$11$NotificationsController */
-    final /* synthetic */ void mo10587x6900fe42(SparseIntArray deletedMessages, ArrayList popupArrayRemove) {
+    final /* synthetic */ void mo10590x6900fe42(SparseIntArray deletedMessages, ArrayList popupArrayRemove) {
         int old_unread_count = this.total_unread_count;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
         for (int a = 0; a < deletedMessages.size(); a++) {
@@ -1496,6 +1496,9 @@ public class NotificationsController {
             if (messageObject.messageOwner.media instanceof TL_messageMediaContact) {
                 return LocaleController.getString("AttachContact", R.string.AttachContact);
             }
+            if (messageObject.messageOwner.media instanceof TL_messageMediaPoll) {
+                return LocaleController.getString("Poll", R.string.Poll);
+            }
             if ((messageObject.messageOwner.media instanceof TL_messageMediaGeo) || (messageObject.messageOwner.media instanceof TL_messageMediaVenue)) {
                 return LocaleController.getString("AttachLocation", R.string.AttachLocation);
             }
@@ -1660,6 +1663,8 @@ public class NotificationsController {
                 msg = LocaleController.formatString("NotificationMessageMusic", R.string.NotificationMessageMusic, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaContact) {
                 msg = LocaleController.formatString("NotificationMessageContact", R.string.NotificationMessageContact, name);
+            } else if (messageObject.messageOwner.media instanceof TL_messageMediaPoll) {
+                msg = LocaleController.formatString("NotificationMessagePoll", R.string.NotificationMessagePoll, name);
             } else if ((messageObject.messageOwner.media instanceof TL_messageMediaGeo) || (messageObject.messageOwner.media instanceof TL_messageMediaVenue)) {
                 msg = LocaleController.formatString("NotificationMessageMap", R.string.NotificationMessageMap, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaGeoLive) {
@@ -1879,7 +1884,7 @@ public class NotificationsController {
                 } else if (messageObject.messageOwner.media instanceof TL_messageMediaPhoto) {
                     msg = (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupPhoto", R.string.NotificationMessageGroupPhoto, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\uddbc " + messageObject.messageOwner.message);
                 } else if (messageObject.isVideo()) {
-                    msg = (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString("NotificationMessageGroupVideo", R.string.NotificationMessageGroupVideo, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\udcf9 " + messageObject.messageOwner.message);
+                    msg = (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.message)) ? LocaleController.formatString(" ", R.string.NotificationMessageGroupVideo, name, chat.title) : LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\ud83d\udcf9 " + messageObject.messageOwner.message);
                 } else if (messageObject.isVoice()) {
                     msg = LocaleController.formatString("NotificationMessageGroupAudio", R.string.NotificationMessageGroupAudio, name, chat.title);
                 } else if (messageObject.isRoundVideo()) {
@@ -1888,6 +1893,8 @@ public class NotificationsController {
                     msg = LocaleController.formatString("NotificationMessageGroupMusic", R.string.NotificationMessageGroupMusic, name, chat.title);
                 } else if (messageObject.messageOwner.media instanceof TL_messageMediaContact) {
                     msg = LocaleController.formatString("NotificationMessageGroupContact", R.string.NotificationMessageGroupContact, name, chat.title);
+                } else if (messageObject.messageOwner.media instanceof TL_messageMediaPoll) {
+                    msg = LocaleController.formatString("NotificationMessageGroupPoll", R.string.NotificationMessageGroupPoll, name, chat.title);
                 } else if (messageObject.messageOwner.media instanceof TL_messageMediaGame) {
                     msg = LocaleController.formatString("NotificationMessageGroupGame", R.string.NotificationMessageGroupGame, name, chat.title, messageObject.messageOwner.media.game.title);
                 } else if ((messageObject.messageOwner.media instanceof TL_messageMediaGeo) || (messageObject.messageOwner.media instanceof TL_messageMediaVenue)) {
@@ -1930,6 +1937,8 @@ public class NotificationsController {
                 msg = LocaleController.formatString("ChannelMessageMusic", R.string.ChannelMessageMusic, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaContact) {
                 msg = LocaleController.formatString("ChannelMessageContact", R.string.ChannelMessageContact, name);
+            } else if (messageObject.messageOwner.media instanceof TL_messageMediaPoll) {
+                msg = LocaleController.formatString("ChannelMessagePoll", R.string.ChannelMessagePoll, name);
             } else if ((messageObject.messageOwner.media instanceof TL_messageMediaGeo) || (messageObject.messageOwner.media instanceof TL_messageMediaVenue)) {
                 msg = LocaleController.formatString("ChannelMessageMap", R.string.ChannelMessageMap, name);
             } else if (messageObject.messageOwner.media instanceof TL_messageMediaGeoLive) {

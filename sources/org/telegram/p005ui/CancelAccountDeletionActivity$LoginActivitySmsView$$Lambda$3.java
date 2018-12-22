@@ -14,6 +14,6 @@ final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySmsView$$
     }
 
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.arg$1.mo14193x90f7b9c2(textView, i, keyEvent);
+        return this.arg$1.mo14197x90f7b9c2(textView, i, keyEvent);
     }
 }

@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLObject;
 
 final /* synthetic */ class MessagesController$$Lambda$242 implements Runnable {
     private final MessagesController arg$1;
     private final long arg$2;
-    private final ArrayList arg$3;
-    private final ArrayList arg$4;
+    private final TLObject arg$3;
 
-    MessagesController$$Lambda$242(MessagesController messagesController, long j, ArrayList arrayList, ArrayList arrayList2) {
+    MessagesController$$Lambda$242(MessagesController messagesController, long j, TLObject tLObject) {
         this.arg$1 = messagesController;
         this.arg$2 = j;
-        this.arg$3 = arrayList;
-        this.arg$4 = arrayList2;
+        this.arg$3 = tLObject;
     }
 
     public void run() {
-        this.arg$1.lambda$null$19$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$null$26$MessagesController(this.arg$2, this.arg$3);
     }
 }

@@ -15,6 +15,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v13.view.inputmethod.InputContentInfoCompat;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -235,6 +236,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     private LocationProvider locationProvider = new LocationProvider(new CLASSNAME());
     private SparseArray<Message> sendingMessages = new SparseArray();
     private SparseArray<MessageObject> unsentMessages = new SparseArray();
+    private LongSparseArray<Long> voteSendTime = new LongSparseArray();
     private HashMap<String, Boolean> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
     private HashMap<String, byte[]> waitingForVote = new HashMap();
@@ -2081,19 +2083,25 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (answer != null) {
             req.options.add(answer.option);
         }
-        return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$6(this, key, finishRunnable));
+        return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$6(this, key, messageObject, finishRunnable));
     }
 
-    final /* synthetic */ void lambda$sendVote$16$SendMessagesHelper(String key, Runnable finishRunnable, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$54(this, key, error, response, finishRunnable));
+    final /* synthetic */ void lambda$sendVote$16$SendMessagesHelper(String key, MessageObject messageObject, Runnable finishRunnable, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$54(this, key, error, messageObject, response, finishRunnable));
     }
 
-    final /* synthetic */ void lambda$null$15$SendMessagesHelper(String key, TL_error error, TLObject response, Runnable finishRunnable) {
+    final /* synthetic */ void lambda$null$15$SendMessagesHelper(String key, TL_error error, MessageObject messageObject, TLObject response, Runnable finishRunnable) {
         this.waitingForVote.remove(key);
         if (error == null) {
+            this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(0));
             MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
+            this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(SystemClock.uptimeMillis()));
         }
         AndroidUtilities.runOnUIThread(finishRunnable);
+    }
+
+    protected long getVoteSendTime(long pollId) {
+        return ((Long) this.voteSendTime.get(pollId, Long.valueOf(0))).longValue();
     }
 
     public void sendCallback(boolean cache, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment) {

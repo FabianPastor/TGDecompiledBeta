@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLRPC.messages_Dialogs;
+
 final /* synthetic */ class MessagesController$$Lambda$80 implements Runnable {
     private final MessagesController arg$1;
-    private final MessageObject arg$2;
+    private final messages_Dialogs arg$2;
 
-    MessagesController$$Lambda$80(MessagesController messagesController, MessageObject messageObject) {
+    MessagesController$$Lambda$80(MessagesController messagesController, messages_Dialogs messages_dialogs) {
         this.arg$1 = messagesController;
-        this.arg$2 = messageObject;
+        this.arg$2 = messages_dialogs;
     }
 
     public void run() {
-        this.arg$1.lambda$addToViewsQueue$123$MessagesController(this.arg$2);
+        this.arg$1.lambda$processDialogsUpdate$124$MessagesController(this.arg$2);
     }
 }

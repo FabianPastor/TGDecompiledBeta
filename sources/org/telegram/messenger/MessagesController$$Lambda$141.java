@@ -1,14 +1,14 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC.TL_updateLangPack;
 
 final /* synthetic */ class MessagesController$$Lambda$141 implements Runnable {
     private final MessagesController arg$1;
-    private final ArrayList arg$2;
+    private final TL_updateLangPack arg$2;
 
-    MessagesController$$Lambda$141(MessagesController messagesController, ArrayList arrayList) {
+    MessagesController$$Lambda$141(MessagesController messagesController, TL_updateLangPack tL_updateLangPack) {
         this.arg$1 = messagesController;
-        this.arg$2 = arrayList;
+        this.arg$2 = tL_updateLangPack;
     }
 
     public void run() {

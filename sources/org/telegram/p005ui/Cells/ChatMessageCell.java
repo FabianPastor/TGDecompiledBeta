@@ -36,6 +36,7 @@ import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.android.exoplayer2.util.MimeTypes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import net.hockeyapp.android.UpdateFragment;
@@ -146,6 +147,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private boolean allowAssistant;
     private boolean animatePollAnswer;
     private boolean animatePollAnswerAlpha;
+    private boolean attachedToWindow;
     private StaticLayout authorLayout;
     private int authorX;
     private int availableTimeWidth;
@@ -284,7 +286,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private int linkSelectionBlockNum;
     private boolean locationExpired;
     private ImageReceiver locationImageReceiver;
-    private int maxVote;
     private boolean mediaBackground;
     private int mediaOffsetY;
     private boolean mediaWasInvisible;
@@ -466,6 +467,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* renamed from: org.telegram.ui.Cells.ChatMessageCell$PollButton */
     private class PollButton {
         private TL_pollAnswer answer;
+        private float decimal;
         private int height;
         private int percent;
         private float percentProgress;
@@ -946,12 +948,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     }
 
     private boolean checkPollButtonMotionEvent(MotionEvent event) {
-        if (this.pollVoted || this.pollClosed || this.pollVoteInProgress || this.pollUnvoteInProgress || this.pollButtons.isEmpty() || this.currentMessageObject.type != 17 || !this.currentMessageObject.isSent()) {
+        if (this.currentMessageObject.eventId != 0 || this.pollVoted || this.pollClosed || this.pollVoteInProgress || this.pollUnvoteInProgress || this.pollButtons.isEmpty() || this.currentMessageObject.type != 17 || !this.currentMessageObject.isSent()) {
             return false;
         }
         int x = (int) event.getX();
         int y = (int) event.getY();
         if (event.getAction() == 0) {
+            this.pressedVoteButton = -1;
             int a = 0;
             while (a < this.pollButtons.size()) {
                 PollButton button = (PollButton) this.pollButtons.get(a);
@@ -1318,6 +1321,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.buttonPressed = 0;
             this.miniButtonPressed = 0;
             this.pressedBotButton = -1;
+            this.pressedVoteButton = -1;
             this.linkPreviewPressed = false;
             this.otherPressed = false;
             this.imagePressed = false;
@@ -1841,7 +1845,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (this.currentNameString != null && newNameString != null && !this.currentNameString.equals(newNameString)) {
             return true;
         }
-        if (!this.drawForwardedName) {
+        if (!this.drawForwardedName || !this.currentMessageObject.needDrawForwarded()) {
             return false;
         }
         newNameString = this.currentMessageObject.getForwardedName();
@@ -1857,6 +1861,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        this.attachedToWindow = false;
         this.avatarImage.onDetachedFromWindow();
         this.replyImageReceiver.onDetachedFromWindow();
         this.locationImageReceiver.onDetachedFromWindow();
@@ -1870,6 +1875,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        this.attachedToWindow = true;
         setTranslationX(0.0f);
         this.avatarImage.onAttachedToWindow();
         this.avatarImage.setParentView((View) getParent());
@@ -2252,137 +2258,137 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x073a  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x0758  */
-    /* JADX WARNING: Removed duplicated region for block: B:796:0x1953  */
-    /* JADX WARNING: Removed duplicated region for block: B:788:0x191d  */
-    /* JADX WARNING: Removed duplicated region for block: B:797:0x1956  */
-    /* JADX WARNING: Removed duplicated region for block: B:791:0x1927  */
-    /* JADX WARNING: Removed duplicated region for block: B:794:0x1948  */
-    /* JADX WARNING: Removed duplicated region for block: B:527:0x0ec9  */
-    /* JADX WARNING: Removed duplicated region for block: B:805:0x197f  */
-    /* JADX WARNING: Removed duplicated region for block: B:530:0x0eee  */
-    /* JADX WARNING: Removed duplicated region for block: B:808:0x1992  */
-    /* JADX WARNING: Removed duplicated region for block: B:535:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:809:0x1995  */
-    /* JADX WARNING: Removed duplicated region for block: B:538:0x0f1b  */
-    /* JADX WARNING: Removed duplicated region for block: B:828:0x1a33  */
-    /* JADX WARNING: Removed duplicated region for block: B:547:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a50  */
-    /* JADX WARNING: Removed duplicated region for block: B:553:0x0fd3  */
-    /* JADX WARNING: Removed duplicated region for block: B:556:0x0ffa  */
-    /* JADX WARNING: Removed duplicated region for block: B:886:0x1c7e  */
-    /* JADX WARNING: Removed duplicated region for block: B:441:0x0ce5  */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x148c  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e4d  */
-    /* JADX WARNING: Removed duplicated region for block: B:781:0x18ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e55  */
-    /* JADX WARNING: Removed duplicated region for block: B:514:0x0e8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:527:0x0ec9  */
-    /* JADX WARNING: Removed duplicated region for block: B:530:0x0eee  */
-    /* JADX WARNING: Removed duplicated region for block: B:805:0x197f  */
-    /* JADX WARNING: Removed duplicated region for block: B:535:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:808:0x1992  */
-    /* JADX WARNING: Removed duplicated region for block: B:538:0x0f1b  */
-    /* JADX WARNING: Removed duplicated region for block: B:809:0x1995  */
-    /* JADX WARNING: Removed duplicated region for block: B:542:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:547:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:828:0x1a33  */
-    /* JADX WARNING: Removed duplicated region for block: B:553:0x0fd3  */
-    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a50  */
-    /* JADX WARNING: Removed duplicated region for block: B:556:0x0ffa  */
-    /* JADX WARNING: Removed duplicated region for block: B:886:0x1c7e  */
-    /* JADX WARNING: Removed duplicated region for block: B:562:0x1058  */
-    /* JADX WARNING: Removed duplicated region for block: B:1844:0x3e89  */
-    /* JADX WARNING: Removed duplicated region for block: B:611:0x1316 A:{Catch:{ Exception -> 0x3e8c }} */
-    /* JADX WARNING: Removed duplicated region for block: B:617:0x134c A:{Catch:{ Exception -> 0x3ea3 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:621:0x13b6 A:{Catch:{ Exception -> 0x3ea3 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1853:0x3eb8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1858:0x3ee4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1944:0x4224  */
-    /* JADX WARNING: Removed duplicated region for block: B:1943:0x4214  */
-    /* JADX WARNING: Removed duplicated region for block: B:1932:0x41e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:441:0x0ce5  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e4d  */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x148c  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e55  */
-    /* JADX WARNING: Removed duplicated region for block: B:781:0x18ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:512:0x0e8b A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:514:0x0e8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:527:0x0ec9  */
-    /* JADX WARNING: Removed duplicated region for block: B:805:0x197f  */
-    /* JADX WARNING: Removed duplicated region for block: B:530:0x0eee  */
-    /* JADX WARNING: Removed duplicated region for block: B:808:0x1992  */
-    /* JADX WARNING: Removed duplicated region for block: B:535:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:809:0x1995  */
-    /* JADX WARNING: Removed duplicated region for block: B:538:0x0f1b  */
-    /* JADX WARNING: Removed duplicated region for block: B:542:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:828:0x1a33  */
-    /* JADX WARNING: Removed duplicated region for block: B:547:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a50  */
-    /* JADX WARNING: Removed duplicated region for block: B:553:0x0fd3  */
-    /* JADX WARNING: Removed duplicated region for block: B:556:0x0ffa  */
-    /* JADX WARNING: Removed duplicated region for block: B:886:0x1c7e  */
-    /* JADX WARNING: Removed duplicated region for block: B:562:0x1058  */
-    /* JADX WARNING: Removed duplicated region for block: B:582:0x118b  */
-    /* JADX WARNING: Removed duplicated region for block: B:611:0x1316 A:{Catch:{ Exception -> 0x3e8c }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1844:0x3e89  */
-    /* JADX WARNING: Removed duplicated region for block: B:617:0x134c A:{Catch:{ Exception -> 0x3ea3 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:621:0x13b6 A:{Catch:{ Exception -> 0x3ea3 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1853:0x3eb8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1858:0x3ee4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1861:0x3efd  */
-    /* JADX WARNING: Removed duplicated region for block: B:1922:0x41ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:1943:0x4214  */
-    /* JADX WARNING: Removed duplicated region for block: B:1944:0x4224  */
-    /* JADX WARNING: Removed duplicated region for block: B:1932:0x41e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1935:0x41f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:441:0x0ce5  */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x148c  */
-    /* JADX WARNING: Removed duplicated region for block: B:499:0x0e4d  */
-    /* JADX WARNING: Removed duplicated region for block: B:781:0x18ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x0e55  */
-    /* JADX WARNING: Removed duplicated region for block: B:512:0x0e8b A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:514:0x0e8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:527:0x0ec9  */
-    /* JADX WARNING: Removed duplicated region for block: B:530:0x0eee  */
-    /* JADX WARNING: Removed duplicated region for block: B:805:0x197f  */
-    /* JADX WARNING: Removed duplicated region for block: B:535:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:808:0x1992  */
-    /* JADX WARNING: Removed duplicated region for block: B:538:0x0f1b  */
-    /* JADX WARNING: Removed duplicated region for block: B:809:0x1995  */
-    /* JADX WARNING: Removed duplicated region for block: B:542:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:547:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:828:0x1a33  */
-    /* JADX WARNING: Removed duplicated region for block: B:553:0x0fd3  */
-    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a50  */
-    /* JADX WARNING: Removed duplicated region for block: B:556:0x0ffa  */
-    /* JADX WARNING: Removed duplicated region for block: B:886:0x1c7e  */
-    /* JADX WARNING: Removed duplicated region for block: B:562:0x1058  */
-    /* JADX WARNING: Removed duplicated region for block: B:582:0x118b  */
-    /* JADX WARNING: Removed duplicated region for block: B:1844:0x3e89  */
-    /* JADX WARNING: Removed duplicated region for block: B:611:0x1316 A:{Catch:{ Exception -> 0x3e8c }} */
-    /* JADX WARNING: Removed duplicated region for block: B:617:0x134c A:{Catch:{ Exception -> 0x3ea3 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:621:0x13b6 A:{Catch:{ Exception -> 0x3ea3 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1853:0x3eb8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1858:0x3ee4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1861:0x3efd  */
-    /* JADX WARNING: Removed duplicated region for block: B:1922:0x41ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:1944:0x4224  */
-    /* JADX WARNING: Removed duplicated region for block: B:1943:0x4214  */
-    /* JADX WARNING: Removed duplicated region for block: B:1932:0x41e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:1935:0x41f5  */
-    /* JADX WARNING: Missing block: B:244:0x071d, code:
-            if (r158.equals("article") != false) goto L_0x071f;
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:261:0x0761  */
+    /* JADX WARNING: Removed duplicated region for block: B:797:0x195c  */
+    /* JADX WARNING: Removed duplicated region for block: B:789:0x1926  */
+    /* JADX WARNING: Removed duplicated region for block: B:798:0x195f  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x1930  */
+    /* JADX WARNING: Removed duplicated region for block: B:795:0x1951  */
+    /* JADX WARNING: Removed duplicated region for block: B:528:0x0ed2  */
+    /* JADX WARNING: Removed duplicated region for block: B:806:0x1988  */
+    /* JADX WARNING: Removed duplicated region for block: B:531:0x0ef7  */
+    /* JADX WARNING: Removed duplicated region for block: B:809:0x199b  */
+    /* JADX WARNING: Removed duplicated region for block: B:536:0x0f0e  */
+    /* JADX WARNING: Removed duplicated region for block: B:810:0x199e  */
+    /* JADX WARNING: Removed duplicated region for block: B:539:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a3c  */
+    /* JADX WARNING: Removed duplicated region for block: B:548:0x0f4b  */
+    /* JADX WARNING: Removed duplicated region for block: B:830:0x1a59  */
+    /* JADX WARNING: Removed duplicated region for block: B:554:0x0fdc  */
+    /* JADX WARNING: Removed duplicated region for block: B:557:0x1003  */
+    /* JADX WARNING: Removed duplicated region for block: B:887:0x1CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:442:0x0cee  */
+    /* JADX WARNING: Removed duplicated region for block: B:659:0x1495  */
+    /* JADX WARNING: Removed duplicated region for block: B:500:0x0e56  */
+    /* JADX WARNING: Removed duplicated region for block: B:782:0x1908  */
+    /* JADX WARNING: Removed duplicated region for block: B:502:0x0e5e  */
+    /* JADX WARNING: Removed duplicated region for block: B:515:0x0e98  */
+    /* JADX WARNING: Removed duplicated region for block: B:528:0x0ed2  */
+    /* JADX WARNING: Removed duplicated region for block: B:531:0x0ef7  */
+    /* JADX WARNING: Removed duplicated region for block: B:806:0x1988  */
+    /* JADX WARNING: Removed duplicated region for block: B:536:0x0f0e  */
+    /* JADX WARNING: Removed duplicated region for block: B:809:0x199b  */
+    /* JADX WARNING: Removed duplicated region for block: B:539:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:810:0x199e  */
+    /* JADX WARNING: Removed duplicated region for block: B:543:0x0f3a  */
+    /* JADX WARNING: Removed duplicated region for block: B:548:0x0f4b  */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a3c  */
+    /* JADX WARNING: Removed duplicated region for block: B:554:0x0fdc  */
+    /* JADX WARNING: Removed duplicated region for block: B:830:0x1a59  */
+    /* JADX WARNING: Removed duplicated region for block: B:557:0x1003  */
+    /* JADX WARNING: Removed duplicated region for block: B:887:0x1CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x1061  */
+    /* JADX WARNING: Removed duplicated region for block: B:1865:0x3f5e  */
+    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1874:0x3f8d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1879:0x3fb9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1965:0x42f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1964:0x42e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1953:0x42bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:442:0x0cee  */
+    /* JADX WARNING: Removed duplicated region for block: B:500:0x0e56  */
+    /* JADX WARNING: Removed duplicated region for block: B:659:0x1495  */
+    /* JADX WARNING: Removed duplicated region for block: B:502:0x0e5e  */
+    /* JADX WARNING: Removed duplicated region for block: B:782:0x1908  */
+    /* JADX WARNING: Removed duplicated region for block: B:513:0x0e94 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:515:0x0e98  */
+    /* JADX WARNING: Removed duplicated region for block: B:528:0x0ed2  */
+    /* JADX WARNING: Removed duplicated region for block: B:806:0x1988  */
+    /* JADX WARNING: Removed duplicated region for block: B:531:0x0ef7  */
+    /* JADX WARNING: Removed duplicated region for block: B:809:0x199b  */
+    /* JADX WARNING: Removed duplicated region for block: B:536:0x0f0e  */
+    /* JADX WARNING: Removed duplicated region for block: B:810:0x199e  */
+    /* JADX WARNING: Removed duplicated region for block: B:539:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:543:0x0f3a  */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a3c  */
+    /* JADX WARNING: Removed duplicated region for block: B:548:0x0f4b  */
+    /* JADX WARNING: Removed duplicated region for block: B:830:0x1a59  */
+    /* JADX WARNING: Removed duplicated region for block: B:554:0x0fdc  */
+    /* JADX WARNING: Removed duplicated region for block: B:557:0x1003  */
+    /* JADX WARNING: Removed duplicated region for block: B:887:0x1CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x1061  */
+    /* JADX WARNING: Removed duplicated region for block: B:583:0x1194  */
+    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1865:0x3f5e  */
+    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1874:0x3f8d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1879:0x3fb9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1882:0x3fd2  */
+    /* JADX WARNING: Removed duplicated region for block: B:1943:0x4282  */
+    /* JADX WARNING: Removed duplicated region for block: B:1964:0x42e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1965:0x42f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1953:0x42bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:1956:0x42ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:442:0x0cee  */
+    /* JADX WARNING: Removed duplicated region for block: B:659:0x1495  */
+    /* JADX WARNING: Removed duplicated region for block: B:500:0x0e56  */
+    /* JADX WARNING: Removed duplicated region for block: B:782:0x1908  */
+    /* JADX WARNING: Removed duplicated region for block: B:502:0x0e5e  */
+    /* JADX WARNING: Removed duplicated region for block: B:513:0x0e94 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:515:0x0e98  */
+    /* JADX WARNING: Removed duplicated region for block: B:528:0x0ed2  */
+    /* JADX WARNING: Removed duplicated region for block: B:531:0x0ef7  */
+    /* JADX WARNING: Removed duplicated region for block: B:806:0x1988  */
+    /* JADX WARNING: Removed duplicated region for block: B:536:0x0f0e  */
+    /* JADX WARNING: Removed duplicated region for block: B:809:0x199b  */
+    /* JADX WARNING: Removed duplicated region for block: B:539:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:810:0x199e  */
+    /* JADX WARNING: Removed duplicated region for block: B:543:0x0f3a  */
+    /* JADX WARNING: Removed duplicated region for block: B:548:0x0f4b  */
+    /* JADX WARNING: Removed duplicated region for block: B:829:0x1a3c  */
+    /* JADX WARNING: Removed duplicated region for block: B:554:0x0fdc  */
+    /* JADX WARNING: Removed duplicated region for block: B:830:0x1a59  */
+    /* JADX WARNING: Removed duplicated region for block: B:557:0x1003  */
+    /* JADX WARNING: Removed duplicated region for block: B:887:0x1CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x1061  */
+    /* JADX WARNING: Removed duplicated region for block: B:583:0x1194  */
+    /* JADX WARNING: Removed duplicated region for block: B:1865:0x3f5e  */
+    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x3var_ }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1874:0x3f8d  */
+    /* JADX WARNING: Removed duplicated region for block: B:1879:0x3fb9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1882:0x3fd2  */
+    /* JADX WARNING: Removed duplicated region for block: B:1943:0x4282  */
+    /* JADX WARNING: Removed duplicated region for block: B:1965:0x42f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1964:0x42e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:1953:0x42bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:1956:0x42ca  */
+    /* JADX WARNING: Missing block: B:245:0x0726, code:
+            if (r163.equals("article") != false) goto L_0x0728;
      */
-    /* JADX WARNING: Missing block: B:257:0x074e, code:
-            if (r158.equals("article") != false) goto L_0x0750;
+    /* JADX WARNING: Missing block: B:258:0x0757, code:
+            if (r163.equals("article") != false) goto L_0x0759;
      */
-    /* JADX WARNING: Missing block: B:356:0x0a03, code:
-            if ("telegram_album".equals(r165) == false) goto L_0x0549;
+    /* JADX WARNING: Missing block: B:357:0x0a0c, code:
+            if ("telegram_album".equals(r170) == false) goto L_0x0552;
      */
-    /* JADX WARNING: Missing block: B:523:0x0ebc, code:
-            if (r170.documentAttachType != 4) goto L_0x196f;
+    /* JADX WARNING: Missing block: B:524:0x0ec5, code:
+            if (r176.documentAttachType != 4) goto L_0x1978;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
@@ -2403,7 +2409,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         boolean dataChanged = (this.currentMessageObject != null && this.currentMessageObject.getId() == messageObject.getId() && this.lastSendState == 3 && messageObject.isSent()) || (this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet));
         boolean groupChanged = groupedMessages != this.currentMessagesGroup;
         boolean pollChanged = false;
-        if (!(dataChanged || messageChanged || messageObject.type != 17)) {
+        if (!messageChanged && messageObject.type == 17) {
             ArrayList<TL_pollAnswerVoters> newResults = null;
             TL_poll newPoll = null;
             int newVoters = 0;
@@ -2422,7 +2428,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             if (!(pollChanged || this.lastPoll == newPoll || this.lastPoll.closed == newPoll.closed)) {
                 pollChanged = true;
             }
-            if (pollChanged) {
+            if (pollChanged && this.attachedToWindow) {
                 this.pollAnimationProgressTime = 0.0f;
                 if (this.pollVoted && !messageObject.isVoted()) {
                     this.pollUnvoteInProgress = true;
@@ -2518,6 +2524,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.buttonPressed = 0;
             this.miniButtonPressed = 0;
             this.pressedBotButton = -1;
+            this.pressedVoteButton = -1;
             this.linkPreviewHeight = 0;
             this.mediaOffsetY = 0;
             this.documentAttachType = 0;
@@ -3805,6 +3812,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
             } else if (messageObject.type == 17) {
                 int N2;
+                PollButton button;
                 byte[] votingFor;
                 createSelectorDrawable();
                 this.drawName = true;
@@ -3824,21 +3832,22 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.lastPoll = media.poll;
                 this.lastPollResults = media.results.results;
                 this.lastPollResultsVoters = media.results.total_voters;
-                this.maxVote = 0;
-                z = this.pollVoteInProgress || this.pollUnvoteInProgress;
+                int maxVote = 0;
+                z = this.attachedToWindow && (this.pollVoteInProgress || this.pollUnvoteInProgress);
                 this.animatePollAnswer = z;
                 this.animatePollAnswerAlpha = z;
                 ArrayList<PollButton> previousPollButtons = null;
+                ArrayList<PollButton> sortedPollButtons = new ArrayList();
                 if (!this.pollButtons.isEmpty()) {
                     ArrayList<PollButton> arrayList2 = new ArrayList(this.pollButtons);
                     this.pollButtons.clear();
-                    this.animatePollAnswer = true;
+                    this.animatePollAnswer = this.attachedToWindow;
                     if (this.pollAnimationProgress > 0.0f && this.pollAnimationProgress < 1.0f) {
                         N2 = arrayList2.size();
                         for (b = 0; b < N2; b++) {
-                            PollButton button = (PollButton) arrayList2.get(b);
+                            button = (PollButton) arrayList2.get(b);
                             button.percent = (int) Math.ceil((double) (((float) button.prevPercent) + (((float) (button.percent - button.prevPercent)) * this.pollAnimationProgress)));
-                            button.prevPercentProgress = button.prevPercentProgress + ((button.percentProgress - button.prevPercentProgress) * this.pollAnimationProgress);
+                            button.percentProgress = button.prevPercentProgress + ((button.percentProgress - button.prevPercentProgress) * this.pollAnimationProgress);
                         }
                     }
                 }
@@ -3851,6 +3860,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     votingFor = SendMessagesHelper.getInstance(this.currentAccount).isSendingVote(this.currentMessageObject);
                 }
                 height = this.titleLayout != null ? this.titleLayout.getHeight() : 0;
+                int restPercent = 100;
+                boolean hasDifferent = false;
+                int previousPercent = 0;
                 int N = media.poll.answers.size();
                 for (a = 0; a < N; a++) {
                     PollButton pollButton = new PollButton(this, null);
@@ -3859,6 +3871,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     pollButton.var_y = AndroidUtilities.m9dp(52.0f) + height;
                     pollButton.height = pollButton.title.getHeight();
                     this.pollButtons.add(pollButton);
+                    sortedPollButtons.add(pollButton);
                     height += pollButton.height + AndroidUtilities.m9dp(26.0f);
                     if (!media.results.results.isEmpty()) {
                         b = 0;
@@ -3866,9 +3879,23 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         while (b < N2) {
                             TL_pollAnswerVoters answer = (TL_pollAnswerVoters) media.results.results.get(b);
                             if (Arrays.equals(pollButton.answer.option, answer.option)) {
-                                dp = (this.pollVoted || this.pollClosed) ? media.results.total_voters != 0 ? (int) (100.0f * (((float) answer.voters) / ((float) media.results.total_voters))) : 0 : 0;
-                                pollButton.percent = dp;
-                                this.maxVote = Math.max(pollButton.percent, this.maxVote);
+                                if ((this.pollVoted || this.pollClosed) && media.results.total_voters > 0) {
+                                    pollButton.decimal = 100.0f * (((float) answer.voters) / ((float) media.results.total_voters));
+                                    pollButton.percent = (int) pollButton.decimal;
+                                    pollButton.decimal = pollButton.decimal - ((float) pollButton.percent);
+                                } else {
+                                    pollButton.percent = 0;
+                                    pollButton.decimal = 0.0f;
+                                }
+                                if (a == 0) {
+                                    previousPercent = pollButton.percent;
+                                } else {
+                                    if (previousPercent != pollButton.percent) {
+                                        hasDifferent = true;
+                                    }
+                                }
+                                restPercent -= pollButton.percent;
+                                maxVote = Math.max(pollButton.percent, maxVote);
                             } else {
                                 b++;
                             }
@@ -3890,6 +3917,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         this.pollVoteInProgress = true;
                         votingFor = null;
                     }
+                }
+                if (hasDifferent && restPercent != 0) {
+                    Collections.sort(sortedPollButtons, ChatMessageCell$$Lambda$0.$instance);
+                    N = Math.min(restPercent, sortedPollButtons.size());
+                    for (a = 0; a < N; a++) {
+                        PollButton pollButton2 = (PollButton) sortedPollButtons.get(a);
+                        pollButton2.percent = pollButton2.percent + 1;
+                    }
+                }
+                width = this.backgroundWidth - AndroidUtilities.m9dp(76.0f);
+                N2 = this.pollButtons.size();
+                for (b = 0; b < N2; b++) {
+                    button = (PollButton) this.pollButtons.get(b);
+                    button.percentProgress = Math.max(((float) AndroidUtilities.m9dp(5.0f)) / ((float) width), maxVote != 0 ? ((float) button.percent) / ((float) maxVote) : 0.0f);
                 }
                 setMessageObjectInternal(messageObject);
                 this.totalHeight = (AndroidUtilities.m9dp(73.0f) + this.namesOffset) + height;
@@ -4707,6 +4748,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         updateWaveform();
         z = dataChanged && !messageObject.cancelEditing;
         updateButtonState(z, true);
+    }
+
+    static final /* synthetic */ int lambda$setMessageObject$0$ChatMessageCell(PollButton o1, PollButton o2) {
+        if (o1.decimal > o2.decimal) {
+            return -1;
+        }
+        if (o1.decimal < o2.decimal) {
+            return 1;
+        }
+        return 0;
     }
 
     private int getAdditionalWidthForPosition(GroupedMessagePosition position) {
@@ -5785,9 +5836,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                     text = String.format("%d%%", new Object[]{Integer.valueOf((int) Math.ceil((double) (((float) button.prevPercent) + (((float) (button.percent - button.prevPercent)) * this.pollAnimationProgress))))});
                     canvas.drawText(text, (float) ((-AndroidUtilities.m9dp(7.0f)) - ((int) Math.ceil((double) Theme.chat_instantViewPaint.measureText(text)))), (float) AndroidUtilities.m9dp(14.0f), Theme.chat_instantViewPaint);
-                    int width = this.backgroundWidth - AndroidUtilities.m9dp(76.0f);
-                    button.percentProgress = Math.max(((float) AndroidUtilities.m9dp(5.0f)) / ((float) width), this.maxVote != 0 ? ((float) button.percent) / ((float) this.maxVote) : 0.0f);
-                    this.instantButtonRect.set(0.0f, (float) (button.height + AndroidUtilities.m9dp(6.0f)), ((float) width) * (button.prevPercentProgress + ((button.percentProgress - button.prevPercentProgress) * this.pollAnimationProgress)), (float) (button.height + AndroidUtilities.m9dp(11.0f)));
+                    this.instantButtonRect.set(0.0f, (float) (button.height + AndroidUtilities.m9dp(6.0f)), ((float) (this.backgroundWidth - AndroidUtilities.m9dp(76.0f))) * (button.prevPercentProgress + ((button.percentProgress - button.prevPercentProgress) * this.pollAnimationProgress)), (float) (button.height + AndroidUtilities.m9dp(11.0f)));
                     canvas.drawRoundRect(this.instantButtonRect, (float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(2.0f), Theme.chat_docBackPaint);
                 }
                 if ((!this.pollVoted && !this.pollClosed) || this.animatePollAnswerAlpha) {

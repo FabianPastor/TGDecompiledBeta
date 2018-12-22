@@ -4,12 +4,13 @@ import java.util.Comparator;
 import org.telegram.tgnet.TLRPC.Updates;
 
 final /* synthetic */ class MessagesController$$Lambda$118 implements Comparator {
-    static final Comparator $instance = new MessagesController$$Lambda$118();
+    private final MessagesController arg$1;
 
-    private MessagesController$$Lambda$118() {
+    MessagesController$$Lambda$118(MessagesController messagesController) {
+        this.arg$1 = messagesController;
     }
 
     public int compare(Object obj, Object obj2) {
-        return AndroidUtilities.compare(((Updates) obj).pts, ((Updates) obj2).pts);
+        return this.arg$1.lambda$processUpdatesQueue$181$MessagesController((Updates) obj, (Updates) obj2);
     }
 }

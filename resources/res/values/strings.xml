@@ -367,6 +367,7 @@
     <string name="ChannelMessageMusic">%1$s posted an audio file</string>
     <string name="ChannelMessageNoText">%1$s posted a message</string>
     <string name="ChannelMessagePhoto">%1$s posted a photo</string>
+    <string name="ChannelMessagePoll">%1$s posted a poll</string>
     <string name="ChannelMessageRound">%1$s posted a video message</string>
     <string name="ChannelMessageSticker">%1$s posted a sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s posted a %2$s sticker</string>
@@ -1187,7 +1188,7 @@
     <string name="NoStickers">No stickers yet</string>
     <string name="NoStickersFound">No stickers found</string>
     <string name="NoUsernameFound">There is no Telegram account with this username.</string>
-    <string name="NoVotes">no votes</string>
+    <string name="NoVotes">No votes</string>
     <string name="NobodyLikesSpam1">Sorry, you can only send messages to mutual contacts at the moment.</string>
     <string name="NobodyLikesSpam2">Sorry, you can only add mutual contacts to groups at the moment.</string>
     <string name="NobodyLikesSpam3">Sorry, you are currently restricted from posting to public groups.</string>
@@ -1258,6 +1259,7 @@
     <string name="NotificationMessageGroupMusic">%1$s sent an audio file to the group %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s sent a message to the group %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s sent a photo to the group %2$s</string>
+    <string name="NotificationMessageGroupPoll">%1$s sent a poll to the group %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s sent a video message to the group %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s sent a sticker to the group %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s sent a %3$s sticker to the group %2$s</string>
@@ -1269,6 +1271,7 @@
     <string name="NotificationMessageMusic">%1$s sent you an audio file</string>
     <string name="NotificationMessageNoText">%1$s sent you a message</string>
     <string name="NotificationMessagePhoto">%1$s sent you a photo</string>
+    <string name="NotificationMessagePoll">%1$s sent you a poll</string>
     <string name="NotificationMessageRound">%1$s sent you a video message</string>
     <string name="NotificationMessageSDPhoto">%1$s sent you a self-destructing photo</string>
     <string name="NotificationMessageSDVideo">%1$s sent you a self-destructing video</string>

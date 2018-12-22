@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.TL_updateServiceNotification;
+import org.telegram.tgnet.TLRPC.TL_updateUserBlocked;
 
 final /* synthetic */ class MessagesController$$Lambda$139 implements Runnable {
     private final MessagesController arg$1;
-    private final TL_updateServiceNotification arg$2;
+    private final TL_updateUserBlocked arg$2;
 
-    MessagesController$$Lambda$139(MessagesController messagesController, TL_updateServiceNotification tL_updateServiceNotification) {
+    MessagesController$$Lambda$139(MessagesController messagesController, TL_updateUserBlocked tL_updateUserBlocked) {
         this.arg$1 = messagesController;
-        this.arg$2 = tL_updateServiceNotification;
+        this.arg$2 = tL_updateUserBlocked;
     }
 
     public void run() {
-        this.arg$1.lambda$processUpdateArray$228$MessagesController(this.arg$2);
+        this.arg$1.lambda$processUpdateArray$229$MessagesController(this.arg$2);
     }
 }

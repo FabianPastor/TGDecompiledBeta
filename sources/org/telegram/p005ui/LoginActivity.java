@@ -817,13 +817,13 @@ public class LoginActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$showTermsOfService$0$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo18745x6d0cdb6d(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo18750x6d0cdb6d(DialogInterface dialog, int which) {
             LoginActivity.this.currentTermsOfService.popup = false;
             onNextPressed();
         }
 
         /* renamed from: lambda$showTermsOfService$3$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo18746x12ed5CLASSNAME(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo18751x12ed5CLASSNAME(DialogInterface dialog, int which) {
             Builder builder1 = new Builder(LoginActivity.this.getParentActivity());
             builder1.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
             builder1.setMessage(LocaleController.getString("TosDecline", R.string.TosDecline));

@@ -15,6 +15,6 @@ final /* synthetic */ class ArticleViewer$BlockEmbedCell$TelegramWebviewProxy$$L
     }
 
     public void run() {
-        this.arg$1.mo13868x2b8da535(this.arg$2, this.arg$3);
+        this.arg$1.mo13872x2b8da535(this.arg$2, this.arg$3);
     }
 }

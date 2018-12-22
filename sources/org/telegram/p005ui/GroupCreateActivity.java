@@ -501,7 +501,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
 
         /* renamed from: lambda$updateSearchResults$0$GroupCreateActivity$GroupCreateAdapter */
-        final /* synthetic */ void mo18400x38var_e(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo18405x38var_e(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
@@ -1019,7 +1019,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 }
             }
         } else if (id == NotificationCenter.chatDidCreated) {
-            removeSelfFromStack();
+            lambda$null$10$ProfileActivity();
         }
     }
 

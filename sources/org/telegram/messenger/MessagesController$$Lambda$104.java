@@ -6,12 +6,16 @@ import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class MessagesController$$Lambda$104 implements RequestDelegate {
     private final MessagesController arg$1;
+    private final int arg$2;
+    private final String arg$3;
 
-    MessagesController$$Lambda$104(MessagesController messagesController) {
+    MessagesController$$Lambda$104(MessagesController messagesController, int i, String str) {
         this.arg$1 = messagesController;
+        this.arg$2 = i;
+        this.arg$3 = str;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$sendBotStart$160$MessagesController(tLObject, tL_error);
+        this.arg$1.lambda$updateChannelUserName$161$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

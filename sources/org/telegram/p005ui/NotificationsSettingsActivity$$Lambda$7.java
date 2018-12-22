@@ -1,14 +1,18 @@
 package org.telegram.p005ui;
 
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+
 /* renamed from: org.telegram.ui.NotificationsSettingsActivity$$Lambda$7 */
-final /* synthetic */ class NotificationsSettingsActivity$$Lambda$7 implements Runnable {
+final /* synthetic */ class NotificationsSettingsActivity$$Lambda$7 implements RequestDelegate {
     private final NotificationsSettingsActivity arg$1;
 
     NotificationsSettingsActivity$$Lambda$7(NotificationsSettingsActivity notificationsSettingsActivity) {
         this.arg$1 = notificationsSettingsActivity;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$2$NotificationsSettingsActivity();
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$null$3$NotificationsSettingsActivity(tLObject, tL_error);
     }
 }
