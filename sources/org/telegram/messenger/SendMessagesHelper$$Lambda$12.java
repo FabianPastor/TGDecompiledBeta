@@ -29,6 +29,6 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$12 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$performSendMessageRequest$41$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, tLObject, tL_error);
+        this.arg$1.lambda$performSendMessageRequest$40$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, tLObject, tL_error);
     }
 }

@@ -54,6 +54,7 @@
     <string name="ActionPinnedMusic">un1 heeft muziekbestand vastgezet</string>
     <string name="ActionPinnedNoText">un1 heeft bericht vastgezet</string>
     <string name="ActionPinnedPhoto">un1 heeft foto vastgezet</string>
+    <string name="ActionPinnedPoll">un1 heeft een poll vastgezet</string>
     <string name="ActionPinnedRound">un1 heeft videobericht vastgezet</string>
     <string name="ActionPinnedSticker">un1 heeft sticker vastgezet</string>
     <string name="ActionPinnedText">un1 heeft \"%1$s\" vastgezet</string>
@@ -77,6 +78,9 @@
     <string name="AddAccount">Account toevoegen</string>
     <string name="AddAdminErrorBlacklisted">Je mag geen leden deblokkeren, deze gebruiker is geblokkeerd en kan daarom niet worden toegevoegd als beheerder.</string>
     <string name="AddAdminErrorNotAMember">Je mag geen leden toevoegen, deze gebruiker is nog geen lid en kan daarom niet worden toegevoegd als beheerder.</string>
+    <string name="AddAnOption">Optie toevoegen</string>
+    <string name="AddAnOptionInfo">Je kan nog %1$s.</string>
+    <string name="AddAnOptionInfoMax">Maximaal aantal opties zijn toegevoegd.</string>
     <string name="AddBannedErrorAdmin">Je mag geen leden degraderen, deze gebruiker is een beheerder en kan daarom niet worden geblokkeerd.</string>
     <string name="AddCaption">Onderschrift toevoegen</string>
     <string name="AddContact">Toevoegen</string>
@@ -136,6 +140,7 @@
     <string name="AndOther_other">en %1$d anderen</string>
     <string name="AndOther_two">en %1$d anderen</string>
     <string name="AndOther_zero">en %1$d anderen</string>
+    <string name="AnonymousPoll">Anonieme poll</string>
     <string name="ApkRestricted">APK-installatie is beperkt voor deze app. Je kunt dit inschakelen via de systeeminstellingen.</string>
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram-bèta</string>
@@ -300,6 +305,8 @@
     <string name="CancelLinkExpired">Deze link is ongeldig of verlopen.</string>
     <string name="CancelLinkSuccess">De verwijdering van account: %1$s is geannuleerd. Je kunt dit venster sluiten.</string>
     <string name="CancelPasswordQuestion">Instellen van Twee-staps-verificatie annuleren?</string>
+    <string name="CancelPollAlertText">Deze poll echt weggooien?</string>
+    <string name="CancelPollAlertTitle">Poll verwijderen?</string>
     <string name="CancelRegistration">Registratie annuleren</string>
     <string name="CancelSending">Versturen annuleren</string>
     <string name="CantPlayVideo">De app kon deze video niet afspelen. Afspelen proberen met externe speler?</string>
@@ -360,6 +367,7 @@
     <string name="ChannelMessageMusic">%1$s plaatste een muziekbestand</string>
     <string name="ChannelMessageNoText">%1$s plaatste een bericht</string>
     <string name="ChannelMessagePhoto">%1$s plaatste een foto</string>
+    <string name="ChannelMessagePoll">%1$s heeft een poll geplaatst</string>
     <string name="ChannelMessageRound">%1$s plaatste een videobericht</string>
     <string name="ChannelMessageSticker">%1$s plaatste een sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s plaatste een %2$s sticker</string>
@@ -402,7 +410,7 @@
     <string name="ChatCamera">Camera</string>
     <string name="ChatDocument">Bestand</string>
     <string name="ChatGallery">Galerij</string>
-    <string name="ChatHints">MENSEN</string>
+    <string name="ChatHints">Mensen</string>
     <string name="ChatHintsDelete">%1$s uit suggesties verwijderen?</string>
     <string name="ChatHistory">Geschiedenis voor nieuwe leden</string>
     <string name="ChatHistoryHidden">Verborgen</string>
@@ -761,6 +769,7 @@
     <string name="Files_other">%1$d bestanden</string>
     <string name="Files_two">%1$d bestanden</string>
     <string name="Files_zero">%1$d bestanden</string>
+    <string name="FinalResults">Eindresultaat</string>
     <string name="FingerprintHelp">Vingerafdruksensor</string>
     <string name="FingerprintInfo">Vingerafdruk bevestigen</string>
     <string name="FingerprintNotRecognized">Vingerafdruk niet herkend, probeer opnieuw</string>
@@ -815,6 +824,12 @@
     <string name="ForwardedPhoto_other">Bijlage: %1$d foto\'s</string>
     <string name="ForwardedPhoto_two">Bijlage: %1$d foto\'s</string>
     <string name="ForwardedPhoto_zero">Bijlage: %1$d foto\'s</string>
+    <string name="ForwardedPoll_few">%1$d doorgestuurde polls</string>
+    <string name="ForwardedPoll_many">%1$d doorgestuurde polls</string>
+    <string name="ForwardedPoll_one">Doorgestuurde poll</string>
+    <string name="ForwardedPoll_other">%1$d doorgestuurde polls</string>
+    <string name="ForwardedPoll_two">%1$d doorgestuurde polls</string>
+    <string name="ForwardedPoll_zero">%1$d doorgestuurde polls</string>
     <string name="ForwardedRound_few">Bijlage: %1$d videoberichten</string>
     <string name="ForwardedRound_many">Bijlage: %1$d videoberichten</string>
     <string name="ForwardedRound_one">Doorgestuurd videobericht</string>
@@ -905,6 +920,7 @@
     <string name="IncorrectLocalization">Ongeldig vertalingsbestand</string>
     <string name="IncorrectTheme">Themabestand is ongeldig</string>
     <string name="Info">Info</string>
+    <string name="InstallGoogleMaps">Google Maps installeren?</string>
     <string name="InstantView">SNELLE WEERGAVE</string>
     <string name="InstantViewNightMode">Donker thema schakelt automatisch in tijdens de nacht</string>
     <string name="InstantViewReference">Referentie</string>
@@ -1105,6 +1121,7 @@
     <string name="Months_two">%1$d maanden</string>
     <string name="Months_zero">%1$d maanden</string>
     <string name="MoreInfo">Meer informatie</string>
+    <string name="MusicInfo">Om muziek bestanden te versturen</string>
     <string name="MuteDisable">Uitschakelen</string>
     <string name="MuteFor">%1$s stil</string>
     <string name="MuteNotifications">Meldingen stil</string>
@@ -1126,6 +1143,7 @@
     <string name="NewMessages_other">%1$d nieuwe berichten</string>
     <string name="NewMessages_two">%1$d nieuwe berichten</string>
     <string name="NewMessages_zero">%1$d nieuwe berichten</string>
+    <string name="NewPoll">Nieuwe poll</string>
     <string name="NewSecretChat">Nieuwe geheime chat</string>
     <string name="NewTheme">Nieuw Thema</string>
     <string name="NoAudio">Voeg bestanden toe aan de muziekbibliotheek op je apparaat om ze hier te zien.</string>
@@ -1170,6 +1188,7 @@
     <string name="NoStickers">Nog geen stickers</string>
     <string name="NoStickersFound">Geen stickers gevonden</string>
     <string name="NoUsernameFound">Er is geen Telegram-account met deze gebruikersnaam.</string>
+    <string name="NoVotes">Geen stemmen</string>
     <string name="NobodyLikesSpam1">Je kunt momenteel alleen berichten sturen aan onderlingen contacten.</string>
     <string name="NobodyLikesSpam2">Je kunt momenteel alleen onderlinge contacten aan groepen toevoegen</string>
     <string name="NobodyLikesSpam3">Sorry, je bent momenteel beperkt in het plaatsen van berichten in publieke groepen.</string>
@@ -1194,6 +1213,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s heeft bericht vastgezet</string>
     <string name="NotificationActionPinnedPhoto">%1$s heeft foto vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s heeft foto vastgezet</string>
+    <string name="NotificationActionPinnedPoll">%1$s heeft poll vastgezet in de groep %2$s</string>
+    <string name="NotificationActionPinnedPollChannel">%1$s heeft een poll vastgezet</string>
     <string name="NotificationActionPinnedRound">%1$s heeft videobericht vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s heeft videobericht vastgezet</string>
     <string name="NotificationActionPinnedSticker">%1$s heeft sticker vastgezet in de groep %2$s</string>
@@ -1238,6 +1259,7 @@
     <string name="NotificationMessageGroupMusic">%1$s heeft een muziekbestand gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s heeft een bericht gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s heeft een foto gestuurd naar de groep %2$s</string>
+    <string name="NotificationMessageGroupPoll">%1$s heeft een poll gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s heeft een videobericht gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s heeft een sticker gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s heeft een %3$s sticker gestuurd naar de groep %2$s</string>
@@ -1249,6 +1271,7 @@
     <string name="NotificationMessageMusic">%1$s heeft je een muziekbestand gestuurd</string>
     <string name="NotificationMessageNoText">%1$s heeft je een bericht gestuurd</string>
     <string name="NotificationMessagePhoto">%1$s heeft je een foto gestuurd</string>
+    <string name="NotificationMessagePoll">%1$s heeft je een poll gestuurd</string>
     <string name="NotificationMessageRound">%1$s heeft je een videobericht gestuurd</string>
     <string name="NotificationMessageSDPhoto">%1$s heeft je een zelfvernietigende foto gestuurd</string>
     <string name="NotificationMessageSDVideo">%1$s heeft je een zelfvernietigende video gestuurd</string>
@@ -1317,6 +1340,13 @@
     <string name="OpenInExternalApp">Open met...</string>
     <string name="OpenMessage">BEKIJK BERICHT</string>
     <string name="OpenUrlAlert">URL %1$s openen?</string>
+    <string name="OptionHint">Optie</string>
+    <string name="Option_few">%1$d meer opties</string>
+    <string name="Option_many">%1$d meer opties</string>
+    <string name="Option_one">%1$d optie</string>
+    <string name="Option_other">%1$d meer opties</string>
+    <string name="Option_two">%1$d meer opties</string>
+    <string name="Option_zero">%1$d meer opties</string>
     <string name="OtherLoginCode">Je logincode is **%1$s**. Voer de code in in de Telegram-app waarop je probeert in te loggen.\10\10Geef deze code nooit aan iemand anders.</string>
     <string name="OtherSessions">Actieve sessies</string>
     <string name="OtherWebSessions">Verbonden websites</string>
@@ -1610,7 +1640,7 @@
     <string name="PermissionXiaomiLockscreen">Sta Telegram toe om weer te kunnen geven op het vergrendelscherm om ervoor te zorgen dat oproepen goed werken.</string>
     <string name="Phone">Telefoon</string>
     <string name="PhoneCopied">Nummer gekopieerd naar klembord</string>
-    <string name="PhoneHidden">Verborgen</string>
+    <string name="PhoneHidden">Onbekend</string>
     <string name="PhoneHome">Thuis</string>
     <string name="PhoneMain">Hoofd</string>
     <string name="PhoneMobile">Mobiel</string>
@@ -1636,6 +1666,7 @@
     <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">Vastgezet bericht</string>
     <string name="PinnedMessages">Vastgezette berichten</string>
+    <string name="PinnedPoll">Vastgezette poll</string>
     <string name="PleaseDownload">Download media eerst</string>
     <string name="PleaseEnterCurrentPassword">Voer je wachtwoord in</string>
     <string name="PleaseEnterFirstPassword">Wachtwoord invoeren</string>
@@ -1649,6 +1680,8 @@
     <string name="Points_other">%1$d punten</string>
     <string name="Points_two">%1$d punten</string>
     <string name="Points_zero">%1$d punten</string>
+    <string name="Poll">Poll</string>
+    <string name="PollOptions">Poll opties</string>
     <string name="PopupDisabled">Uitgeschakeld</string>
     <string name="PopupEnabled">Ingeschakeld</string>
     <string name="PopupNotification">Pop-up meldingen</string>
@@ -1679,6 +1712,8 @@
     <string name="ProxyConnections">Connecties</string>
     <string name="ProxyDetails">Proxy-details</string>
     <string name="ProxySettings">Proxy-instellingen</string>
+    <string name="Question">Vraag</string>
+    <string name="QuestionHint">Stel een vraag</string>
     <string name="QuickReplyCustom">Aangepast bericht.</string>
     <string name="QuickReplyDefault1">Kan nu niet praten, wat is er?</string>
     <string name="QuickReplyDefault2">Ik bel je zo terug.</string>
@@ -1686,7 +1721,7 @@
     <string name="QuickReplyDefault4">Kan nu niet praten, bel je me later?</string>
     <string name="RaiseToSpeak">Houd bij oor</string>
     <string name="ReEnterYourPasscode">Toegangscode opnieuw invoeren</string>
-    <string name="Recent">RECENT</string>
+    <string name="Recent">Recent</string>
     <string name="RecentStickers">Recent gebruikt</string>
     <string name="RecentlyViewed">Recent bekeken</string>
     <string name="RecentlyViewedHide">VERBERG</string>
@@ -1917,6 +1952,7 @@
     <string name="StartEncryptedChat">Geheime chat starten</string>
     <string name="StartMessaging">Begin met chatten</string>
     <string name="StartText">Bevestig je landnummer en voer je telefoonnummer in.</string>
+    <string name="Statistics">Statistieken</string>
     <string name="StickersAndMasks">Stickers and Maskers</string>
     <string name="StickersCopy">Link kopiëren</string>
     <string name="StickersHide">Archiveer</string>
@@ -1938,6 +1974,9 @@
     <string name="StopLiveLocationAlertToGroup">Echt stoppen met het delen van je live-locatie met %1$s?</string>
     <string name="StopLiveLocationAlertToUser">Echt stoppen met het delen van je live-locatie met %1$s?</string>
     <string name="StopLoading">Stopped met laden?</string>
+    <string name="StopPoll">Poll stoppen</string>
+    <string name="StopPollAlertText">Als je deze poll nu stopt kan niemand meer stemmen. Deze actie kan niet ongedaan worden gemaakt.</string>
+    <string name="StopPollAlertTitle">Poll stoppen?</string>
     <string name="StopVerification">Wil je telefoonnummerverificatieproces stoppen?</string>
     <string name="StorageUsage">Opslaggebruik</string>
     <string name="Streaming">Streaming</string>
@@ -2046,6 +2085,7 @@
     <string name="UnreadMessages">Ongelezen berichten</string>
     <string name="UnsupportedAttachment">Bestandstype niet ondersteund</string>
     <string name="UnsupportedMedia">Dit bericht wordt niet ondersteund door jouw versie van Telegram. Werk Telegram bij om dit bericht te bekijken: https://telegram.org/update</string>
+    <string name="Unvote">Stem intrekken</string>
     <string name="Update">BIJWERKEN</string>
     <string name="UpdateApp">App bijwerken</string>
     <string name="UpdateAppAlert">Je gebruikt een verouderde versie van Telegram, deze kan dit verzoek niet verwerken. Werk Telegram bij.</string>
@@ -2165,6 +2205,12 @@
     <string name="VoipSettingsRingtone">Beltoon</string>
     <string name="VoipUseLessData">Minder data voor oproepen gebruiken</string>
     <string name="VoipWaiting">Wachten</string>
+    <string name="Vote_few">%1$d stemmen</string>
+    <string name="Vote_many">%1$d stemmen</string>
+    <string name="Vote_one">%1$d stem</string>
+    <string name="Vote_other">%1$d stemmen</string>
+    <string name="Vote_two">%1$d stemmen</string>
+    <string name="Vote_zero">%1$d stemmen</string>
     <string name="WaitMore">Langer wachten</string>
     <string name="WaitingForNetwork">Wachten op netwerk</string>
     <string name="Warmth">Warmte</string>

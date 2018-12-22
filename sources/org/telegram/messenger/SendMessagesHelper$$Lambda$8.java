@@ -14,6 +14,6 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$8 implements RequestDeleg
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$sendGame$19$SendMessagesHelper(this.arg$2, tLObject, tL_error);
+        this.arg$1.lambda$sendGame$18$SendMessagesHelper(this.arg$2, tLObject, tL_error);
     }
 }

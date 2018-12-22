@@ -7,6 +7,6 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$32 implements Runnable {
     }
 
     public void run() {
-        SendMessagesHelper.lambda$null$48$SendMessagesHelper();
+        SendMessagesHelper.lambda$null$47$SendMessagesHelper();
     }
 }

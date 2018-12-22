@@ -54,6 +54,7 @@
     <string name="ActionPinnedMusic">un1 ha fissato un file audio</string>
     <string name="ActionPinnedNoText">un1 ha fissato un messaggio</string>
     <string name="ActionPinnedPhoto">un1 ha fissato una foto</string>
+    <string name="ActionPinnedPoll">un1 ha fissato un sondaggio</string>
     <string name="ActionPinnedRound">un1 ha fissato un videomessaggio</string>
     <string name="ActionPinnedSticker">un1 ha fissato uno sticker</string>
     <string name="ActionPinnedText">un1 ha fissato \"%1$s\"</string>
@@ -77,6 +78,9 @@
     <string name="AddAccount">Aggiungi account</string>
     <string name="AddAdminErrorBlacklisted">Spiacenti, non puoi aggiungere questo utente come amministratore perché è bloccato e non puoi sbloccarlo.</string>
     <string name="AddAdminErrorNotAMember">Spiacenti, non puoi aggiungere questo utente come amministratore perché non è un membro del gruppo e non sei autorizzato ad aggiungerlo.</string>
+    <string name="AddAnOption">Aggiungi un\'opzione</string>
+    <string name="AddAnOptionInfo">Puoi aggiungere %1$s.</string>
+    <string name="AddAnOptionInfoMax">Hai aggiunto il numero massimo di opzioni.</string>
     <string name="AddBannedErrorAdmin">Spiacenti, non puoi bloccare questo utente perché è un amministratore in questo gruppo e non sei autorizzato a degradarlo.</string>
     <string name="AddCaption">Aggiungi una didascalia...</string>
     <string name="AddContact">Aggiungi</string>
@@ -136,6 +140,7 @@
     <string name="AndOther_other">e altri %1$d</string>
     <string name="AndOther_two">e altri %1$d</string>
     <string name="AndOther_zero">e altri %1$d</string>
+    <string name="AnonymousPoll">Sondaggio anonimo</string>
     <string name="ApkRestricted">L\'installazione di APK è disattivata per questa app. Puoi attivarla nelle impostazioni di sistema.</string>
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram</string>
@@ -300,6 +305,8 @@
     <string name="CancelLinkExpired">Link non valido o scaduto.</string>
     <string name="CancelLinkSuccess">Il processo di eliminazione per il tuo account %1$s è stato annullato. Puoi chiudere questa finestra ora.</string>
     <string name="CancelPasswordQuestion">Sei sicuro di voler annullare la configurazione della verifica in due passaggi?</string>
+    <string name="CancelPollAlertText">Sei sicuro di voler scartare questo sondaggio?</string>
+    <string name="CancelPollAlertTitle">Scartare il sondaggio?</string>
     <string name="CancelRegistration">Annulla iscrizione</string>
     <string name="CancelSending">Annulla invio</string>
     <string name="CantPlayVideo">L\'app non è in grado di riprodurre questo video. Vuoi provare con un player esterno?</string>
@@ -360,6 +367,7 @@
     <string name="ChannelMessageMusic">%1$s ha pubblicato una file audio</string>
     <string name="ChannelMessageNoText">%1$s ha pubblicato un messaggio</string>
     <string name="ChannelMessagePhoto">%1$s ha pubblicato una foto</string>
+    <string name="ChannelMessagePoll">%1$s ha pubblicato un sondaggio</string>
     <string name="ChannelMessageRound">%1$s ha pubblicato un videomessaggio</string>
     <string name="ChannelMessageSticker">%1$s ha pubblicato uno sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s ha pubblicato uno %2$s sticker</string>
@@ -761,6 +769,7 @@
     <string name="Files_other">%1$d file</string>
     <string name="Files_two">%1$d file</string>
     <string name="Files_zero">%1$d file</string>
+    <string name="FinalResults">Risultati finali</string>
     <string name="FingerprintHelp">Sensore touch</string>
     <string name="FingerprintInfo">Conferma impronta digitale per continuare</string>
     <string name="FingerprintNotRecognized">Impronta digitale non riconosciuta. Riprova.</string>
@@ -815,6 +824,12 @@
     <string name="ForwardedPhoto_other">%1$d foto inoltrate</string>
     <string name="ForwardedPhoto_two">%1$d foto inoltrate</string>
     <string name="ForwardedPhoto_zero">%1$d foto inoltrate</string>
+    <string name="ForwardedPoll_few">%1$d sondaggi inoltrati</string>
+    <string name="ForwardedPoll_many">%1$d sondaggi inoltrati</string>
+    <string name="ForwardedPoll_one">Sondaggio inoltrato</string>
+    <string name="ForwardedPoll_other">%1$d sondaggi inoltrati</string>
+    <string name="ForwardedPoll_two">%1$d sondaggi inoltrati</string>
+    <string name="ForwardedPoll_zero">%1$d sondaggi inoltrati</string>
     <string name="ForwardedRound_few">%1$d videomessaggi inoltrati</string>
     <string name="ForwardedRound_many">%1$d videomessaggi inoltrati</string>
     <string name="ForwardedRound_one">Videomessaggio inoltrato</string>
@@ -905,6 +920,7 @@
     <string name="IncorrectLocalization">File di traduzione non valido</string>
     <string name="IncorrectTheme">File tema non valido</string>
     <string name="Info">Info</string>
+    <string name="InstallGoogleMaps">Installare Google Maps?</string>
     <string name="InstantView">APERTURA RAPIDA</string>
     <string name="InstantViewNightMode">Il tema scuro si attiverà automaticamente durante la notte</string>
     <string name="InstantViewReference">Note</string>
@@ -1105,6 +1121,7 @@
     <string name="Months_two">%1$d mesi</string>
     <string name="Months_zero">%1$d mesi</string>
     <string name="MoreInfo">Maggiori info</string>
+    <string name="MusicInfo">Per inviare file audio</string>
     <string name="MuteDisable">Disattiva</string>
     <string name="MuteFor">Silenzia per %1$s</string>
     <string name="MuteNotifications">Silenzia notifiche</string>
@@ -1126,6 +1143,7 @@
     <string name="NewMessages_other">%1$d nuovi messaggi</string>
     <string name="NewMessages_two">%1$d nuovi messaggi</string>
     <string name="NewMessages_zero">%1$d nuovi messaggi</string>
+    <string name="NewPoll">Nuovo sondaggio</string>
     <string name="NewSecretChat">Nuova chat segreta</string>
     <string name="NewTheme">Nuovo tema</string>
     <string name="NoAudio">Aggiungi file nella libreria musicale del tuo dispositivo per vederli qui.</string>
@@ -1170,6 +1188,7 @@
     <string name="NoStickers">Ancora nessuno sticker</string>
     <string name="NoStickersFound">Nessuno sticker trovato</string>
     <string name="NoUsernameFound">Non esiste alcun account Telegram con questo username.</string>
+    <string name="NoVotes">Nessun voto</string>
     <string name="NobodyLikesSpam1">Spiacenti, al momento puoi scrivere solo ai contatti reciproci.</string>
     <string name="NobodyLikesSpam2">Spiacenti, al momento puoi aggiungere ai gruppi solo i contatti reciproci.</string>
     <string name="NobodyLikesSpam3">Spiacenti, al momento ti è vietato pubblicare nei gruppi pubblici.</string>
@@ -1194,6 +1213,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s ha fissato un messaggio</string>
     <string name="NotificationActionPinnedPhoto">%1$s ha fissato una foto nel gruppo %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s ha fissato una foto</string>
+    <string name="NotificationActionPinnedPoll">%1$s ha fissato un sondaggio nel gruppo %2$s</string>
+    <string name="NotificationActionPinnedPollChannel">%1$s ha fissato un sondaggio</string>
     <string name="NotificationActionPinnedRound">%1$s ha fissato un videomessaggio nel gruppo %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s ha fissato un videomessaggio</string>
     <string name="NotificationActionPinnedSticker">%1$s ha fissato uno sticker nel gruppo %2$s</string>
@@ -1238,6 +1259,7 @@
     <string name="NotificationMessageGroupMusic">%1$s ha inviato un file audio al gruppo %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s ha inviato un messaggio al gruppo %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s ha inviato una foto al gruppo %2$s</string>
+    <string name="NotificationMessageGroupPoll">%1$s ha inviato un sondaggio al gruppo %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s ha inviato un videomessaggio al gruppo %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s ha inviato uno sticker al gruppo %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s ha inviato uno %3$s sticker al gruppo %2$s</string>
@@ -1249,6 +1271,7 @@
     <string name="NotificationMessageMusic">%1$s ti ha inviato un file audio</string>
     <string name="NotificationMessageNoText">%1$s ti ha inviato un messaggio</string>
     <string name="NotificationMessagePhoto">%1$s ti ha inviato una foto</string>
+    <string name="NotificationMessagePoll">%1$s ti ha inviato un sondaggio</string>
     <string name="NotificationMessageRound">%1$s ti ha inviato un videomessaggio</string>
     <string name="NotificationMessageSDPhoto">%1$s ti ha inviato una foto con autodistruzione</string>
     <string name="NotificationMessageSDVideo">%1$s ti ha inviato un video con autodistruzione</string>
@@ -1317,6 +1340,13 @@
     <string name="OpenInExternalApp">Apri in...</string>
     <string name="OpenMessage">APRI MESSAGGIO</string>
     <string name="OpenUrlAlert">Aprire url %1$s?</string>
+    <string name="OptionHint">Opzione</string>
+    <string name="Option_few">altre %1$d opzioni</string>
+    <string name="Option_many">altre %1$d opzioni</string>
+    <string name="Option_one">un\'altra opzione</string>
+    <string name="Option_other">altre %1$d opzioni</string>
+    <string name="Option_two">altre %1$d opzioni</string>
+    <string name="Option_zero">altre %1$d opzioni</string>
     <string name="OtherLoginCode">Il tuo codice di accesso è **%1$s**. Inseriscilo nell\'app Telegram in cui stai cercando di accedere.\10\10Non dare questo codice a nessuno.</string>
     <string name="OtherSessions">Sessioni attive</string>
     <string name="OtherWebSessions">Siti web connessi</string>
@@ -1610,7 +1640,7 @@
     <string name="PermissionXiaomiLockscreen">Per favore consenti a Telegram di essere visualizzato sulla schermata di blocco in modo che le chiamate possano funzionare correttamente.</string>
     <string name="Phone">Telefono</string>
     <string name="PhoneCopied">Numero copiato negli appunti</string>
-    <string name="PhoneHidden">Nascosto</string>
+    <string name="PhoneHidden">Sconosciuto</string>
     <string name="PhoneHome">Casa</string>
     <string name="PhoneMain">Principale</string>
     <string name="PhoneMobile">Cellulare</string>
@@ -1636,6 +1666,7 @@
     <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">Messaggio fissato</string>
     <string name="PinnedMessages">Messaggi fissati</string>
+    <string name="PinnedPoll">Sondaggio fissato</string>
     <string name="PleaseDownload">Scarica prima il file</string>
     <string name="PleaseEnterCurrentPassword">Inserisci la tua password</string>
     <string name="PleaseEnterFirstPassword">Inserisci una password</string>
@@ -1649,6 +1680,8 @@
     <string name="Points_other">%1$d punti</string>
     <string name="Points_two">%1$d punti</string>
     <string name="Points_zero">%1$d punti</string>
+    <string name="Poll">Sondaggio</string>
+    <string name="PollOptions">Opzioni sondaggio</string>
     <string name="PopupDisabled">Disattivate</string>
     <string name="PopupEnabled">Attivate</string>
     <string name="PopupNotification">Notifiche popup</string>
@@ -1679,6 +1712,8 @@
     <string name="ProxyConnections">Connessioni</string>
     <string name="ProxyDetails">Dettagli proxy</string>
     <string name="ProxySettings">Impostazioni proxy</string>
+    <string name="Question">Domanda</string>
+    <string name="QuestionHint">Fai una domanda</string>
     <string name="QuickReplyCustom">Messaggio personalizzato...</string>
     <string name="QuickReplyDefault1">Non posso parlare ora. Cosa succede?</string>
     <string name="QuickReplyDefault2">Ti richiamerò fra poco.</string>
@@ -1917,6 +1952,7 @@
     <string name="StartEncryptedChat">Inizia chat segreta</string>
     <string name="StartMessaging">Inizia a messaggiare</string>
     <string name="StartText">Conferma il prefisso internazionale e inserisci il tuo numero di telefono.</string>
+    <string name="Statistics">Statistiche</string>
     <string name="StickersAndMasks">Sticker e maschere</string>
     <string name="StickersCopy">Copia link</string>
     <string name="StickersHide">Archivia</string>
@@ -1938,6 +1974,9 @@
     <string name="StopLiveLocationAlertToGroup">Sei sicuro di voler terminare la condivisione della posizione attuale con %1$s?</string>
     <string name="StopLiveLocationAlertToUser">Sei sicuro di voler terminare la condivisione della posizione attuale con %1$s?</string>
     <string name="StopLoading">Arrestare il caricamento?</string>
+    <string name="StopPoll">Termina sondaggio</string>
+    <string name="StopPollAlertText">Se termini questo sondaggio adesso, nessuno sarà in grado di aggiungere altri voti. Questa azione non può essere annullata.</string>
+    <string name="StopPollAlertTitle">Terminare il sondaggio?</string>
     <string name="StopVerification">Vuoi arrestare il processo di verifica del numero di telefono?</string>
     <string name="StorageUsage">Utilizzo archivio</string>
     <string name="Streaming">Streaming</string>
@@ -2046,6 +2085,7 @@
     <string name="UnreadMessages">Messaggi non letti</string>
     <string name="UnsupportedAttachment">Allegato non supportato</string>
     <string name="UnsupportedMedia">Questo messaggio non è supportato dalla tua versione di Telegram. Aggiorna l\'app per visualizzarlo: https://telegram.org/update</string>
+    <string name="Unvote">Ritira voto</string>
     <string name="Update">AGGIORNA</string>
     <string name="UpdateApp">Aggiorna App</string>
     <string name="UpdateAppAlert">Spiacenti, la tua app Telegram è obsoleta e non può gestire la richiesta. Per favore aggiorna Telegram.</string>
@@ -2165,6 +2205,12 @@
     <string name="VoipSettingsRingtone">Suoneria</string>
     <string name="VoipUseLessData">Utilizza meno dati per le chiamate</string>
     <string name="VoipWaiting">Attendo</string>
+    <string name="Vote_few">%1$d voti</string>
+    <string name="Vote_many">%1$d voti</string>
+    <string name="Vote_one">%1$d voto</string>
+    <string name="Vote_other">%1$d voti</string>
+    <string name="Vote_two">%1$d voti</string>
+    <string name="Vote_zero">%1$d voti</string>
     <string name="WaitMore">Aspetta di più</string>
     <string name="WaitingForNetwork">Attendo la rete...</string>
     <string name="Warmth">Calore</string>

@@ -15,6 +15,6 @@ final /* synthetic */ class ChannelAdminLogActivity$ChatActivityAdapter$1$$Lambd
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.mo15169xeCLASSNAMEe(this.arg$2, dialogInterface, i);
+        this.arg$1.mo15168xeCLASSNAMEe(this.arg$2, dialogInterface, i);
     }
 }

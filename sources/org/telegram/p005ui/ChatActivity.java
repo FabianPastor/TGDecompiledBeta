@@ -6511,10 +6511,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
         } else if (which == 3) {
             boolean allowPoll = false;
-            if (ChatObject.isChannel(this.currentChat) && !this.currentChat.megagroup) {
-                allowPoll = ChatObject.isChannel(this.currentChat) && (this.currentChat.creator || this.currentChat.admin_rights != null);
-            } else if (this.currentChat != null) {
-                allowPoll = true;
+            if (this.editingMessageObject == null) {
+                if (ChatObject.isChannel(this.currentChat) && !this.currentChat.megagroup) {
+                    allowPoll = ChatObject.isChannel(this.currentChat) && (this.currentChat.creator || this.currentChat.admin_rights != null);
+                } else if (this.currentChat != null) {
+                    allowPoll = true;
+                }
             }
             if (allowPoll) {
                 PollCreateActivity pollCreateActivity = new PollCreateActivity();

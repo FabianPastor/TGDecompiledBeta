@@ -16,6 +16,6 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$23 implements Runnable {
     }
 
     public void run() {
-        SendMessagesHelper.lambda$null$55$SendMessagesHelper(this.arg$1, this.arg$2, this.arg$3, this.arg$4);
+        SendMessagesHelper.lambda$null$54$SendMessagesHelper(this.arg$1, this.arg$2, this.arg$3, this.arg$4);
     }
 }

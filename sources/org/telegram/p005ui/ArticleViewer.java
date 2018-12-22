@@ -2300,7 +2300,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
 
             /* renamed from: lambda$postEvent$0$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy */
-            final /* synthetic */ void mo13872x2b8da535(String eventName, String eventData) {
+            final /* synthetic */ void mo13871x2b8da535(String eventName, String eventData) {
                 Object obj = -1;
                 switch (eventName.hashCode()) {
                     case -1065790942:

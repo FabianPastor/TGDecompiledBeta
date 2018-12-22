@@ -54,6 +54,7 @@
     <string name="ActionPinnedMusic">un1 ancló un audio</string>
     <string name="ActionPinnedNoText">un1 ancló un mensaje</string>
     <string name="ActionPinnedPhoto">un1 ancló una foto</string>
+    <string name="ActionPinnedPoll">un1 ancló una encuesta</string>
     <string name="ActionPinnedRound">un1 ancló un videomensaje</string>
     <string name="ActionPinnedSticker">un1 ancló un sticker</string>
     <string name="ActionPinnedText">un1 ancló \"%1$s\"</string>
@@ -77,6 +78,9 @@
     <string name="AddAccount">Añadir cuenta</string>
     <string name="AddAdminErrorBlacklisted">No puedes añadir a este usuario como administrador porque está en la lista de suspendidos y no puedes quitar su suspensión.</string>
     <string name="AddAdminErrorNotAMember">No puedes añadir a este usuario como administrador porque no es un miembro de este grupo y no tienes permitido añadirlo.</string>
+    <string name="AddAnOption">Añadir una opción...</string>
+    <string name="AddAnOptionInfo">Puedes añadir %1$s.</string>
+    <string name="AddAnOptionInfoMax">Has añadido el número máximo de opciones.</string>
     <string name="AddBannedErrorAdmin">No puedes suspender a este usuario porque es un administrador del grupo y no tienes permitido degradarlo.</string>
     <string name="AddCaption">Añadir un comentario...</string>
     <string name="AddContact">Añadir</string>
@@ -136,6 +140,7 @@
     <string name="AndOther_other">y otros %1$d</string>
     <string name="AndOther_two">y otros %1$d</string>
     <string name="AndOther_zero">y otros %1$d</string>
+    <string name="AnonymousPoll">Encuesta anónima</string>
     <string name="ApkRestricted">La instalación de APK está restringida para esta aplicación. Puedes habilitarla en los ajustes del sistema.</string>
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram</string>
@@ -147,12 +152,12 @@
     <string name="ArchivedMasksAlertInfo">Algunos de tus packs de máscaras más viejos fueron archivados. Puedes reactivarlos desde los ajustes de máscaras.</string>
     <string name="ArchivedMasksAlertTitle">Máscaras archivadas</string>
     <string name="ArchivedMasksEmpty">Sin máscaras archivadas</string>
-    <string name="ArchivedMasksInfo">Puedes añadir hasta 200 packs de máscaras. Si añades más, se archivarán los que no uses.</string>
+    <string name="ArchivedMasksInfo">Puedes añadir hasta 200 packs de máscaras.\10Si añades más, se archivarán los que no usas.</string>
     <string name="ArchivedStickers">Stickers archivados</string>
     <string name="ArchivedStickersAlertInfo">Algunos de tus packs de stickers más viejos fueron archivados. Puedes reactivarlos desde los ajustes de Stickers.</string>
     <string name="ArchivedStickersAlertTitle">Stickers archivados</string>
     <string name="ArchivedStickersEmpty">Stickers no archivados</string>
-    <string name="ArchivedStickersInfo">Puedes añadir hasta 200 packs de stickers. Si añades más, se archivarán los que no uses.</string>
+    <string name="ArchivedStickersInfo">Puedes añadir hasta 200 packs de stickers.\10Si añades más, se archivarán los que no usas.</string>
     <string name="AreTyping">están escribiendo...</string>
     <string name="AreTypingGroup">%1$s están escribiendo...</string>
     <string name="AreYouSure">¿Quieres hacerlo?</string>
@@ -180,7 +185,7 @@
     <string name="ArticleByAuthor">por %1$s</string>
     <string name="ArticleDateByAuthor">%1$s por %2$s</string>
     <string name="AskAQuestion">Hacer una pregunta</string>
-    <string name="AskAQuestionInfo">Por favor, considera que el soporte de Telegram está hecho por voluntarios. Respondemos lo antes posible, pero puede tomar tiempo.\10\10Por favor, mira las &lt;a href=\"https://telegram.org/faq/es#general\"&gt;Preguntas frecuentes de Telegram&lt;/a&gt;: tienen respuestas para la mayoría de las preguntas y &lt;a href=\"https://telegram.org/faq#troubleshooting\"&gt;soluciones a problemas&lt;/a&gt;.</string>
+    <string name="AskAQuestionInfo">Ten en cuenta que el soporte de Telegram está hecho por voluntarios. Respondemos lo antes posible, pero puede tomar tiempo.\10\10Por favor, mira las &lt;a href=\"https://telegram.org/faq/es#general\"&gt;Preguntas frecuentes de Telegram&lt;/a&gt;: tienen respuestas para la mayoría de las preguntas y &lt;a href=\"https://telegram.org/faq#troubleshooting\"&gt;soluciones a problemas&lt;/a&gt;.</string>
     <string name="AskButton">Preguntar</string>
     <string name="AttachAudio">Mensaje de voz</string>
     <string name="AttachBotsHelp">Ve abajo para los bots</string>
@@ -289,17 +294,19 @@
     <string name="CallReportSent">Gracias por ayudarnos a mejorar las llamadas de Telegram.</string>
     <string name="CallText">Telegram te llamará en %1$d:%2$02d</string>
     <string name="CallViaTelegram">Llamada de Telegram</string>
-    <string name="Calling">Llamándote...</string>
+    <string name="Calling">Te estamos llamando...</string>
     <string name="Calls">Llamadas</string>
     <string name="CallsDataUsage">Llamadas</string>
     <string name="CallsTotalTime">Tiempo total</string>
     <string name="Cancel">Cancelar</string>
     <string name="CancelAccountReset">No restablecer la cuenta</string>
-    <string name="CancelAccountResetInfo">Alguien, con acceso a tu número de teléfono **%1$s** , solicitó eliminar tu cuenta de Telegram y restablecer tu contraseña de la verificación en dos pasos.\10\10Si no eras tú, por favor, inserta el código que enviamos por SMS a tu número.</string>
+    <string name="CancelAccountResetInfo">Alguien con acceso a tu número de teléfono **%1$s** solicitó eliminar tu cuenta de Telegram y restablecer tu contraseña de la verificación en dos pasos.\10\10Si no fuiste tú, por favor, inserta el código que enviamos por SMS a tu número.</string>
     <string name="CancelEmailQuestion">¿Quieres cancelar la configuración del correo de recuperación?</string>
     <string name="CancelLinkExpired">El enlace no es válido o expiró.</string>
     <string name="CancelLinkSuccess">El proceso de eliminación de la cuenta %1$s fue cancelado. Puedes cerrar esta ventana.</string>
     <string name="CancelPasswordQuestion">¿Quieres cancelar la configuración de la verificación en dos pasos?</string>
+    <string name="CancelPollAlertText">¿Quieres descartar esta encuesta?</string>
+    <string name="CancelPollAlertTitle">¿Descartar encuesta?</string>
     <string name="CancelRegistration">Cancelar registro</string>
     <string name="CancelSending">Cancelar envío</string>
     <string name="CantPlayVideo">La app no logró reproducir este video. ¿Quieres intentarlo con un reproductor externo?</string>
@@ -360,6 +367,7 @@
     <string name="ChannelMessageMusic">%1$s publicó un audio</string>
     <string name="ChannelMessageNoText">%1$s publicó un mensaje</string>
     <string name="ChannelMessagePhoto">%1$s publicó una foto</string>
+    <string name="ChannelMessagePoll">%1$s posted a poll</string>
     <string name="ChannelMessageRound">%1$s publicó un videomensaje</string>
     <string name="ChannelMessageSticker">%1$s publicó un sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s publicó un %2$s sticker</string>
@@ -372,7 +380,7 @@
     <string name="ChannelPrivateInfo">Puedes unirte a canales privados sólo con enlaces de invitación.</string>
     <string name="ChannelPrivateLinkHelp">Las personas pueden unirse a tu canal siguiendo este enlace. Puedes anular el enlace en cualquier momento.</string>
     <string name="ChannelPublic">Canal público</string>
-    <string name="ChannelPublicEmptyUsername">Por favor, elige un enlace para tu canal público para que las personas puedan encontrarlo en la búsqueda y compartirlo con otros.\10\10Si no estás interesado, te sugerimos crear un canal privado.</string>
+    <string name="ChannelPublicEmptyUsername">Por favor, elige un enlace para tu canal público para que las personas puedan encontrarlo en la búsqueda y compartirlo con otros.\10\10Si no te interesa, te sugerimos crear un canal privado.</string>
     <string name="ChannelPublicInfo">Cualquiera puede unirse a los canales públicos, tras encontrarlos en la búsqueda.</string>
     <string name="ChannelRemoveUser">Eliminar del canal</string>
     <string name="ChannelRemoveUserAdmin">Eliminar administrador</string>
@@ -443,7 +451,7 @@
     <string name="ChooseStickerSetNotFound">El pack no ha sido encontrado</string>
     <string name="ChooseStickerSetNotFoundInfo">Reinténtalo o elige uno de la lista de abajo</string>
     <string name="ChooseStickerSetPlaceholder">stickerset</string>
-    <string name="ChooseTakePhoto">Hacer foto</string>
+    <string name="ChooseTakePhoto">Tomar foto</string>
     <string name="ChooseYourLanguage">Elige tu idioma</string>
     <string name="ChooseYourLanguageOther">Otro</string>
     <string name="ChromeCustomTabs">Usar navegador interno</string>
@@ -761,6 +769,7 @@
     <string name="Files_other">%1$d archivos</string>
     <string name="Files_two">%1$d archivos</string>
     <string name="Files_zero">%1$d archivos</string>
+    <string name="FinalResults">Resultados finales</string>
     <string name="FingerprintHelp">Sensor táctil</string>
     <string name="FingerprintInfo">Confirma la huella digital para continuar</string>
     <string name="FingerprintNotRecognized">Huella digital no reconocida. Reinténtalo.</string>
@@ -815,6 +824,12 @@
     <string name="ForwardedPhoto_other">%1$d fotos reenviadas</string>
     <string name="ForwardedPhoto_two">%1$d fotos reenviadas</string>
     <string name="ForwardedPhoto_zero">%1$d fotos reenviadas</string>
+    <string name="ForwardedPoll_few">%1$d encuestas reenviadas</string>
+    <string name="ForwardedPoll_many">%1$d encuestas reenviadas</string>
+    <string name="ForwardedPoll_one">Encuesta reenviada</string>
+    <string name="ForwardedPoll_other">%1$d encuestas reenviadas</string>
+    <string name="ForwardedPoll_two">%1$d encuestas reenviadas</string>
+    <string name="ForwardedPoll_zero">%1$d encuestas reenviadas</string>
     <string name="ForwardedRound_few">%1$d videomensajes reenviados</string>
     <string name="ForwardedRound_many">%1$d videomensajes reenviados</string>
     <string name="ForwardedRound_one">Videomensaje reenviado</string>
@@ -905,6 +920,7 @@
     <string name="IncorrectLocalization">Archivo de traducción incorrecto</string>
     <string name="IncorrectTheme">Archivo de tema incorrecto</string>
     <string name="Info">Información</string>
+    <string name="InstallGoogleMaps">¿Instalar Google Maps?</string>
     <string name="InstantView">VISTA RÁPIDA</string>
     <string name="InstantViewNightMode">El tema oscuro se usará automáticamente en la noche</string>
     <string name="InstantViewReference">Referencia</string>
@@ -1006,7 +1022,7 @@
     <string name="LocalCache">Otros archivos</string>
     <string name="LocalDatabase">Base de datos local</string>
     <string name="LocalDatabaseClear">¿Eliminar los mensajes en la caché?</string>
-    <string name="LocalDatabaseInfo">Al eliminar la base de datos se eliminarán los mensajes en la caché y se comprimirá la base de datos para liberar espacio de almacenamiento. Telegram requiere algunos datos para funcionar, así que la base de datos nunca podrá llegar a cero.\10\10Esto puede tardar algunos minutos.</string>
+    <string name="LocalDatabaseInfo">Al eliminar la base de datos se eliminarán los mensajes en la caché y se comprimirá la base de datos para liberar espacio de almacenamiento. Telegram requiere algunos datos para funcionar, así que la base de datos nunca podrá llegar a cero.\10\10Esto puede tomar unos minutos.</string>
     <string name="LocalDocumentCache">Archivos</string>
     <string name="LocalGifCache">GIF</string>
     <string name="LocalMusicCache">Música</string>
@@ -1105,6 +1121,7 @@
     <string name="Months_two">%1$d meses</string>
     <string name="Months_zero">%1$d meses</string>
     <string name="MoreInfo">Más información</string>
+    <string name="MusicInfo">Para enviar archivos de música</string>
     <string name="MuteDisable">Desactivar</string>
     <string name="MuteFor">Silenciar %1$s</string>
     <string name="MuteNotifications">Silenciar notificaciones</string>
@@ -1126,6 +1143,7 @@
     <string name="NewMessages_other">%1$d mensajes nuevos</string>
     <string name="NewMessages_two">%1$d mensajes nuevos</string>
     <string name="NewMessages_zero">%1$d mensajes nuevos</string>
+    <string name="NewPoll">Nueva encuesta</string>
     <string name="NewSecretChat">Nuevo chat secreto</string>
     <string name="NewTheme">Nuevo tema</string>
     <string name="NoAudio">Por favor, añade archivos a la carpeta de música en tu dispositivo para verlos aquí.</string>
@@ -1170,6 +1188,7 @@
     <string name="NoStickers">Aún no hay stickers</string>
     <string name="NoStickersFound">No se encontraron stickers</string>
     <string name="NoUsernameFound">No hay ninguna cuenta de Telegram con este alias.</string>
+    <string name="NoVotes">Sin votos</string>
     <string name="NobodyLikesSpam1">Lo sentimos, por ahora puedes enviar mensajes sólo a contactos mutuos.</string>
     <string name="NobodyLikesSpam2">Lo sentimos, por ahora sólo puedes añadir contactos mutuos a grupos.</string>
     <string name="NobodyLikesSpam3">Lo sentimos, actualmente tienes restringido enviar contenidos en grupos públicos.</string>
@@ -1194,6 +1213,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s ancló un mensaje</string>
     <string name="NotificationActionPinnedPhoto">%1$s ancló una foto en el grupo %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s ancló una foto</string>
+    <string name="NotificationActionPinnedPoll">%1$s ancló una encuesta en el grupo %2$s</string>
+    <string name="NotificationActionPinnedPollChannel">%1$s ancló una encuesta</string>
     <string name="NotificationActionPinnedRound">%1$s ancló un videomensaje en el grupo %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s ancló un videomensaje</string>
     <string name="NotificationActionPinnedSticker">%1$s ancló un sticker en el grupo %2$s</string>
@@ -1238,6 +1259,7 @@
     <string name="NotificationMessageGroupMusic">%1$s envió un audio al grupo %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s envió un mensaje al grupo %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s envió una foto al grupo %2$s</string>
+    <string name="NotificationMessageGroupPoll">%1$s sent a poll to the group %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s envió un videomensaje al grupo %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s envió un sticker al grupo %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s envió un %3$s sticker al grupo %2$s</string>
@@ -1249,6 +1271,7 @@
     <string name="NotificationMessageMusic">%1$s te envió un audio</string>
     <string name="NotificationMessageNoText">%1$s te envió un mensaje</string>
     <string name="NotificationMessagePhoto">%1$s te envió una foto</string>
+    <string name="NotificationMessagePoll">%1$s sent you a poll</string>
     <string name="NotificationMessageRound">%1$s te envió un videomensaje</string>
     <string name="NotificationMessageSDPhoto">%1$s te envió una foto con autodestrucción</string>
     <string name="NotificationMessageSDVideo">%1$s te envió un video con autodestrucción</string>
@@ -1291,7 +1314,7 @@
     <string name="NotificationsPrivateChats">Chats privados</string>
     <string name="NotificationsService">Servicio keep-alive</string>
     <string name="NotificationsServiceConnection">Conexión en segundo plano</string>
-    <string name="NotificationsServiceConnectionInfo">Mantiene una conexión de bajo impacto en segundo plano de Telegram para notificaciones más fiables.</string>
+    <string name="NotificationsServiceConnectionInfo">Mantiene una conexión en segundo plano de bajo impacto con Telegram para notificaciones más fiables.</string>
     <string name="NotificationsServiceInfo">Vuelve a abrir la app cuando se cierra. Actívala para notificaciones más fiables.</string>
     <string name="NotificationsTurnOff">Desactivar</string>
     <string name="NotificationsTurnOn">Activar</string>
@@ -1317,6 +1340,13 @@
     <string name="OpenInExternalApp">Abrir en...</string>
     <string name="OpenMessage">VER MENSAJE</string>
     <string name="OpenUrlAlert">¿Abrir %1$s?</string>
+    <string name="OptionHint">Opción</string>
+    <string name="Option_few">%1$d opciones más</string>
+    <string name="Option_many">%1$d opciones más</string>
+    <string name="Option_one">%1$d opción más</string>
+    <string name="Option_other">%1$d opciones más</string>
+    <string name="Option_two">%1$d opciones más</string>
+    <string name="Option_zero">%1$d opciones más</string>
     <string name="OtherLoginCode">Tu código de inicio de sesión es **%1$s**. Ponlo en la app de Telegram en la que estás intentando iniciar sesión.\10\10No le des este código a nadie.</string>
     <string name="OtherSessions">Sesiones activas</string>
     <string name="OtherWebSessions">Sitios web conectados</string>
@@ -1334,7 +1364,7 @@
     <string name="Page1Title">Telegram</string>
     <string name="Page2Message">**Telegram** entrega mensajes más rápido\10que cualquier otra aplicación.</string>
     <string name="Page2Title">Rápida</string>
-    <string name="Page3Message">**Telegram** es gratis para siempre.\10Sin publicidad ni suscripciones.</string>
+    <string name="Page3Message">**Telegram** es gratis para siempre.\10Sin publicidad. Sin suscripciones.</string>
     <string name="Page3Title">Gratuita</string>
     <string name="Page4Message">**Telegram** mantiene tus mensajes\10a salvo del ataque de hackers.</string>
     <string name="Page4Title">Segura</string>
@@ -1408,7 +1438,7 @@
     <string name="PassportEmailCode">Código</string>
     <string name="PassportEmailInfo">Pon tu dirección de correo electrónico</string>
     <string name="PassportEmailUploadInfo">Nota: Recibirás un código de confirmación en la dirección de correo que nos diste.</string>
-    <string name="PassportEmailVerifyInfo">Por favor, pon el código que hemos enviado a %1$s.</string>
+    <string name="PassportEmailVerifyInfo">Por favor, pon el código de confirmación que hemos enviado a %1$s.</string>
     <string name="PassportExpired">Vencimiento</string>
     <string name="PassportFemale">Femenino</string>
     <string name="PassportFrontSide">Lado delantero</string>
@@ -1610,7 +1640,7 @@
     <string name="PermissionXiaomiLockscreen">Por favor, permite a Telegram aparecer en la pantalla bloqueada para que las llamadas funcionen correctamente.</string>
     <string name="Phone">Teléfono</string>
     <string name="PhoneCopied">Teléfono copiado al portapapeles</string>
-    <string name="PhoneHidden">Oculto</string>
+    <string name="PhoneHidden">Desconocido</string>
     <string name="PhoneHome">Casa</string>
     <string name="PhoneMain">Principal</string>
     <string name="PhoneMobile">Móvil</string>
@@ -1636,6 +1666,7 @@
     <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">Mensaje anclado</string>
     <string name="PinnedMessages">Mensajes anclados</string>
+    <string name="PinnedPoll">Encuesta anclada</string>
     <string name="PleaseDownload">Por favor, primero descarga la multimedia</string>
     <string name="PleaseEnterCurrentPassword">Pon tu contraseña</string>
     <string name="PleaseEnterFirstPassword">Pon una contraseña</string>
@@ -1649,6 +1680,8 @@
     <string name="Points_other">%1$d puntos</string>
     <string name="Points_two">%1$d puntos</string>
     <string name="Points_zero">%1$d puntos</string>
+    <string name="Poll">Encuesta</string>
+    <string name="PollOptions">Opciones de encuesta</string>
     <string name="PopupDisabled">Desactivadas</string>
     <string name="PopupEnabled">Activadas</string>
     <string name="PopupNotification">Notificaciones emergentes</string>
@@ -1679,6 +1712,8 @@
     <string name="ProxyConnections">Conexiones</string>
     <string name="ProxyDetails">Detalles del proxy</string>
     <string name="ProxySettings">Ajustes de proxy</string>
+    <string name="Question">Pregunta</string>
+    <string name="QuestionHint">Haz una pregunta</string>
     <string name="QuickReplyCustom">Mensaje personalizado...</string>
     <string name="QuickReplyDefault1">No puedo hablar ahora. ¿Qué pasa?</string>
     <string name="QuickReplyDefault2">Te llamaré enseguida.</string>
@@ -1772,7 +1807,7 @@
     <string name="SavedMessages">Mensajes guardados</string>
     <string name="SavedMessagesInfo">Reenvía aquí para guardar.</string>
     <string name="ScreenCapture">Permitir captura de pantalla</string>
-    <string name="ScreenCaptureInfo">Si está activada, puedes hacer capturas de pantalla de la aplicación, pero el sistema mostrará tus chats en la multitarea aunque tengas activo el código de acceso.\10\10Puede ser necesario reiniciar la aplicación para que tenga efecto.</string>
+    <string name="ScreenCaptureInfo">Si está activada, puedes tomar capturas de pantalla de la aplicación, pero el sistema mostrará tus chats en la multitarea aunque tengas activo el código de acceso.\10\10Puede ser necesario reiniciar la aplicación para que tenga efecto.</string>
     <string name="SdCard">Tarjeta SD</string>
     <string name="Search">Buscar</string>
     <string name="SearchFriends">Buscar contactos</string>
@@ -1846,7 +1881,7 @@
     <string name="SentCallOnly">Estamos llamando al **%1$s** para dictar un código.</string>
     <string name="SentSmsCode">Enviamos un SMS con el código de activación al **%1$s**.</string>
     <string name="SentSmsCodeTitle">Pon el código</string>
-    <string name="ServiceNotifications">Servicio de notificaciones</string>
+    <string name="ServiceNotifications">notificaciones de servicio</string>
     <string name="SessionsInfo">Controla tus sesiones en otros dispositivos.</string>
     <string name="SessionsTitle">Sesiones activas</string>
     <string name="Set">OK</string>
@@ -1917,6 +1952,7 @@
     <string name="StartEncryptedChat">Iniciar chat secreto</string>
     <string name="StartMessaging">Empezar a chatear</string>
     <string name="StartText">Por favor, confirma el código de tu país y pon tu número de teléfono.</string>
+    <string name="Statistics">Estadísticas</string>
     <string name="StickersAndMasks">Stickers y máscaras</string>
     <string name="StickersCopy">Copiar enlace</string>
     <string name="StickersHide">Archivar</string>
@@ -1933,11 +1969,14 @@
     <string name="Stop">Detener</string>
     <string name="StopAllLocationSharings">DETENER TODO</string>
     <string name="StopDownload">Detener descarga</string>
-    <string name="StopLiveLocation">Dejar de enviar mi ubicación</string>
+    <string name="StopLiveLocation">Dejar de compartir</string>
     <string name="StopLiveLocationAlertAll">¿Quieres dejar de enviar tu ubicación en tiempo real?</string>
     <string name="StopLiveLocationAlertToGroup">¿Quieres dejar de enviar la ubicación en tiempo real a %1$s?</string>
     <string name="StopLiveLocationAlertToUser">¿Quieres dejar de enviar la ubicación en tiempo real a %1$s?</string>
     <string name="StopLoading">¿Detener la carga?</string>
+    <string name="StopPoll">Detener encuesta</string>
+    <string name="StopPollAlertText">Si detienes esta encuesta ahora, nadie más podrá votar. Esta acción no se puede deshacer.</string>
+    <string name="StopPollAlertTitle">¿Detener encuesta?</string>
     <string name="StopVerification">¿Quieres detener el proceso de verificación del número de teléfono?</string>
     <string name="StorageUsage">Uso de almacenamiento</string>
     <string name="Streaming">Streaming</string>
@@ -2000,7 +2039,7 @@
     <string name="ThemeInfo">Elige esquemas de colores personalizados</string>
     <string name="ThemePreview">Vista previa del tema</string>
     <string name="TimeToEdit">%1$s</string>
-    <string name="TimeToEditExpired">Terminó el tiempo de edición.</string>
+    <string name="TimeToEditExpired">Lo sentimos, terminó el tiempo de edición.</string>
     <string name="Times_few">%1$d veces</string>
     <string name="Times_many">%1$d veces</string>
     <string name="Times_one">%1$d vez</string>
@@ -2046,6 +2085,7 @@
     <string name="UnreadMessages">Mensajes no leídos</string>
     <string name="UnsupportedAttachment">Adjunto no soportado</string>
     <string name="UnsupportedMedia">Tu versión de Telegram no es compatible con este mensaje. Por favor, actualiza tu app para verlo: https://telegram.org/update</string>
+    <string name="Unvote">Retractar voto</string>
     <string name="Update">ACTUALIZAR</string>
     <string name="UpdateApp">Actualizar aplicación</string>
     <string name="UpdateAppAlert">Lo sentimos, tu aplicación de Telegram no está actualizada y no puede procesar esta solicitud. Por favor, actualiza Telegram.</string>
@@ -2165,6 +2205,12 @@
     <string name="VoipSettingsRingtone">Tono de llamada</string>
     <string name="VoipUseLessData">Usar menos datos</string>
     <string name="VoipWaiting">Esperando</string>
+    <string name="Vote_few">%1$d votos</string>
+    <string name="Vote_many">%1$d votos</string>
+    <string name="Vote_one">%1$d voto</string>
+    <string name="Vote_other">%1$d votos</string>
+    <string name="Vote_two">%1$d votos</string>
+    <string name="Vote_zero">%1$d votos</string>
     <string name="WaitMore">Esperar más</string>
     <string name="WaitingForNetwork">Esperando red...</string>
     <string name="Warmth">Temperatura</string>

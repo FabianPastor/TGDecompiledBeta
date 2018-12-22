@@ -899,7 +899,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$didReceivedNotification$2$SendMessagesHelper(File cacheFile, MessageObject messageObject, DelayedMessage message, String path) {
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$63(this, generatePhotoSizes(cacheFile.toString(), null), messageObject, cacheFile, message, path));
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$62(this, generatePhotoSizes(cacheFile.toString(), null), messageObject, cacheFile, message, path));
     }
 
     final /* synthetic */ void lambda$null$1$SendMessagesHelper(TL_photo photo, MessageObject messageObject, File cacheFile, DelayedMessage message, String path) {
@@ -948,7 +948,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 document.thumb.type = "s";
             }
         }
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$62(this, message, cacheFile, document, messageObject));
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$61(this, message, cacheFile, document, messageObject));
     }
 
     final /* synthetic */ void lambda$null$3$SendMessagesHelper(DelayedMessage message, File cacheFile, Document document, MessageObject messageObject) {
@@ -1601,7 +1601,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 newMsgObj1.var_id = message.var_id;
                                 sentCount++;
                                 updateMediaPaths(msgObj1, message, null, true);
-                                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$58(this, newMsgObj1, oldId, to_id, sentMessages, peer, message));
+                                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$57(this, newMsgObj1, oldId, to_id, sentMessages, peer, message));
                             }
                         }
                     }
@@ -1613,19 +1613,19 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             }
             StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), 1, sentCount);
         } else {
-            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$59(this, error, req));
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$58(this, error, req));
         }
         for (a1 = 0; a1 < newMsgObjArr.size(); a1++) {
             newMsgObj1 = (Message) newMsgObjArr.get(a1);
             MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsgObj1);
-            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$60(this, newMsgObj1));
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$59(this, newMsgObj1));
         }
     }
 
     final /* synthetic */ void lambda$null$6$SendMessagesHelper(Message newMsgObj1, int oldId, Peer to_id, ArrayList sentMessages, long peer, Message message) {
         MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj1.random_id, Integer.valueOf(oldId), newMsgObj1.var_id, 0, false, to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, false, 0);
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$61(this, newMsgObj1, peer, oldId, message));
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$60(this, newMsgObj1, peer, oldId, message));
     }
 
     final /* synthetic */ void lambda$null$5$SendMessagesHelper(Message newMsgObj1, long peer, int oldId, Message message) {
@@ -1986,7 +1986,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
         } else {
-            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$57(this, error, fragment, req));
+            AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$56(this, error, fragment, req));
         }
         AndroidUtilities.runOnUIThread(callback);
     }
@@ -2049,7 +2049,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             req.flags |= 1;
             req.data = data;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$55(this, key), 2);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$54(this, key), 2);
         MessagesController.getInstance(this.currentAccount).markDialogAsRead(dialogId, msgId, msgId, 0, false, 0, true);
     }
 
@@ -2058,7 +2058,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$null$13$SendMessagesHelper(String key, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$56(this, key));
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$55(this, key));
     }
 
     public byte[] isSendingVote(MessageObject messageObject) {
@@ -2083,21 +2083,23 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (answer != null) {
             req.options.add(answer.option);
         }
-        return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$6(this, key, messageObject, finishRunnable));
+        return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$6(this, key, finishRunnable, messageObject));
     }
 
-    final /* synthetic */ void lambda$sendVote$16$SendMessagesHelper(String key, MessageObject messageObject, Runnable finishRunnable, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$54(this, key, error, messageObject, response, finishRunnable));
-    }
-
-    final /* synthetic */ void lambda$null$15$SendMessagesHelper(String key, TL_error error, MessageObject messageObject, TLObject response, Runnable finishRunnable) {
-        this.waitingForVote.remove(key);
+    final /* synthetic */ void lambda$sendVote$15$SendMessagesHelper(final String key, final Runnable finishRunnable, MessageObject messageObject, TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                SendMessagesHelper.this.waitingForVote.remove(key);
+                if (finishRunnable != null) {
+                    finishRunnable.run();
+                }
+            }
+        });
         if (error == null) {
             this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(0));
             MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
             this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(SystemClock.uptimeMillis()));
         }
-        AndroidUtilities.runOnUIThread(finishRunnable);
     }
 
     protected long getVoteSendTime(long pollId) {
@@ -2146,11 +2148,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$sendCallback$18$SendMessagesHelper(String key, boolean cacheFinal, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$sendCallback$17$SendMessagesHelper(String key, boolean cacheFinal, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$53(this, key, cacheFinal, response, messageObject, button, parentFragment));
     }
 
-    final /* synthetic */ void lambda$null$17$SendMessagesHelper(String key, boolean cacheFinal, TLObject response, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment) {
+    final /* synthetic */ void lambda$null$16$SendMessagesHelper(String key, boolean cacheFinal, TLObject response, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment) {
         this.waitingForCallback.remove(key);
         if (cacheFinal && response == null) {
             sendCallback(false, messageObject, button, parentFragment);
@@ -2284,7 +2286,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$sendGame$19$SendMessagesHelper(long newTaskId, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$sendGame$18$SendMessagesHelper(long newTaskId, TLObject response, TL_error error) {
         if (error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
         }
@@ -3908,11 +3910,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$uploadMultiMedia$21$SendMessagesHelper(InputMedia inputMedia, DelayedMessage message, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$uploadMultiMedia$20$SendMessagesHelper(InputMedia inputMedia, DelayedMessage message, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$52(this, response, inputMedia, message));
     }
 
-    final /* synthetic */ void lambda$null$20$SendMessagesHelper(TLObject response, InputMedia inputMedia, DelayedMessage message) {
+    final /* synthetic */ void lambda$null$19$SendMessagesHelper(TLObject response, InputMedia inputMedia, DelayedMessage message) {
         InputMedia newInputMedia = null;
         if (response != null) {
             MessageMedia messageMedia = (MessageMedia) response;
@@ -4007,11 +4009,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$22$SendMessagesHelper(String path) {
+    final /* synthetic */ void lambda$null$21$SendMessagesHelper(String path) {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopEncodingService, path, Integer.valueOf(this.currentAccount));
     }
 
-    final /* synthetic */ void lambda$stopVideoService$23$SendMessagesHelper(String path) {
+    final /* synthetic */ void lambda$stopVideoService$22$SendMessagesHelper(String path) {
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$51(this, path));
     }
 
@@ -4043,11 +4045,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         ConnectionsManager.getInstance(this.currentAccount).sendRequest((TLObject) req, new SendMessagesHelper$$Lambda$11(this, parentObjects, req, msgObjs, originalPaths, delayedMessage), null, 68);
     }
 
-    final /* synthetic */ void lambda$performSendMessageRequestMulti$30$SendMessagesHelper(ArrayList parentObjects, TL_messages_sendMultiMedia req, ArrayList msgObjs, ArrayList originalPaths, DelayedMessage delayedMessage, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$performSendMessageRequestMulti$29$SendMessagesHelper(ArrayList parentObjects, TL_messages_sendMultiMedia req, ArrayList msgObjs, ArrayList originalPaths, DelayedMessage delayedMessage, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$45(this, error, parentObjects, req, msgObjs, originalPaths, delayedMessage, response));
     }
 
-    final /* synthetic */ void lambda$null$29$SendMessagesHelper(TL_error error, ArrayList parentObjects, TL_messages_sendMultiMedia req, ArrayList msgObjs, ArrayList originalPaths, DelayedMessage delayedMessage, TLObject response) {
+    final /* synthetic */ void lambda$null$28$SendMessagesHelper(TL_error error, ArrayList parentObjects, TL_messages_sendMultiMedia req, ArrayList msgObjs, ArrayList originalPaths, DelayedMessage delayedMessage, TLObject response) {
         int i;
         Message newMsgObj;
         if (error != null && FileRefController.isFileRefError(error.text)) {
@@ -4165,28 +4167,28 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$24$SendMessagesHelper(TL_updateNewMessage newMessage) {
+    final /* synthetic */ void lambda$null$23$SendMessagesHelper(TL_updateNewMessage newMessage) {
         MessagesController.getInstance(this.currentAccount).processNewDifferenceParams(-1, newMessage.pts, -1, newMessage.pts_count);
     }
 
-    final /* synthetic */ void lambda$null$25$SendMessagesHelper(TL_updateNewChannelMessage newMessage) {
+    final /* synthetic */ void lambda$null$24$SendMessagesHelper(TL_updateNewChannelMessage newMessage) {
         MessagesController.getInstance(this.currentAccount).processNewChannelDifferenceParams(newMessage.pts, newMessage.pts_count, newMessage.message.to_id.channel_id);
     }
 
-    final /* synthetic */ void lambda$null$27$SendMessagesHelper(Message newMsgObj, int oldId, ArrayList sentMessages, long grouped_id) {
+    final /* synthetic */ void lambda$null$26$SendMessagesHelper(Message newMsgObj, int oldId, ArrayList sentMessages, long grouped_id) {
         MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.var_id, 0, false, newMsgObj.to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, false, 0);
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$50(this, newMsgObj, oldId, grouped_id));
     }
 
-    final /* synthetic */ void lambda$null$26$SendMessagesHelper(Message newMsgObj, int oldId, long grouped_id) {
+    final /* synthetic */ void lambda$null$25$SendMessagesHelper(Message newMsgObj, int oldId, long grouped_id) {
         DataQuery.getInstance(this.currentAccount).increasePeerRaiting(newMsgObj.dialog_id);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.var_id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
         processSentMessage(oldId);
         removeFromSendingMessages(oldId);
     }
 
-    final /* synthetic */ void lambda$null$28$SendMessagesHelper(Updates updates) {
+    final /* synthetic */ void lambda$null$27$SendMessagesHelper(Updates updates) {
         MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
     }
 
@@ -4248,7 +4250,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$performSendMessageRequest$41$SendMessagesHelper(final TLObject req, Object parentObject, MessageObject msgObj, String originalPath, DelayedMessage parentMessage, boolean check, DelayedMessage delayedMessage, Message newMsgObj, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$performSendMessageRequest$40$SendMessagesHelper(final TLObject req, Object parentObject, MessageObject msgObj, String originalPath, DelayedMessage parentMessage, boolean check, DelayedMessage delayedMessage, Message newMsgObj, TLObject response, TL_error error) {
         if (error != null && (((req instanceof TL_messages_sendMedia) || (req instanceof TL_messages_editMessage)) && FileRefController.isFileRefError(error.text))) {
             if (parentObject != null) {
                 FileRefController.getInstance(this.currentAccount).requestReference(parentObject, req, msgObj, originalPath, parentMessage, Boolean.valueOf(check), delayedMessage);
@@ -4288,7 +4290,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$33$SendMessagesHelper(TL_error error, Message newMsgObj, TLObject response, MessageObject msgObj, String originalPath, TLObject req) {
+    final /* synthetic */ void lambda$null$32$SendMessagesHelper(TL_error error, Message newMsgObj, TLObject response, MessageObject msgObj, String originalPath, TLObject req) {
         if (error == null) {
             String attachPath = newMsgObj.attachPath;
             Updates updates = (Updates) response;
@@ -4326,17 +4328,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         revertEditingMessageObject(msgObj);
     }
 
-    final /* synthetic */ void lambda$null$32$SendMessagesHelper(Updates updates, Message newMsgObj) {
+    final /* synthetic */ void lambda$null$31$SendMessagesHelper(Updates updates, Message newMsgObj) {
         MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$44(this, newMsgObj));
     }
 
-    final /* synthetic */ void lambda$null$31$SendMessagesHelper(Message newMsgObj) {
+    final /* synthetic */ void lambda$null$30$SendMessagesHelper(Message newMsgObj) {
         processSentMessage(newMsgObj.var_id);
         removeFromSendingMessages(newMsgObj.var_id);
     }
 
-    final /* synthetic */ void lambda$null$40$SendMessagesHelper(TL_error error, Message newMsgObj, TLObject req, TLObject response, MessageObject msgObj, String originalPath) {
+    final /* synthetic */ void lambda$null$39$SendMessagesHelper(TL_error error, Message newMsgObj, TLObject req, TLObject response, MessageObject msgObj, String originalPath) {
         boolean isSentError = false;
         if (error == null) {
             int i;
@@ -4446,23 +4448,23 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$34$SendMessagesHelper(TL_updateShortSentMessage res) {
+    final /* synthetic */ void lambda$null$33$SendMessagesHelper(TL_updateShortSentMessage res) {
         MessagesController.getInstance(this.currentAccount).processNewDifferenceParams(-1, res.pts, res.date, res.pts_count);
     }
 
-    final /* synthetic */ void lambda$null$35$SendMessagesHelper(TL_updateNewMessage newMessage) {
+    final /* synthetic */ void lambda$null$34$SendMessagesHelper(TL_updateNewMessage newMessage) {
         MessagesController.getInstance(this.currentAccount).processNewDifferenceParams(-1, newMessage.pts, -1, newMessage.pts_count);
     }
 
-    final /* synthetic */ void lambda$null$36$SendMessagesHelper(TL_updateNewChannelMessage newMessage) {
+    final /* synthetic */ void lambda$null$35$SendMessagesHelper(TL_updateNewChannelMessage newMessage) {
         MessagesController.getInstance(this.currentAccount).processNewChannelDifferenceParams(newMessage.pts, newMessage.pts_count, newMessage.message.to_id.channel_id);
     }
 
-    final /* synthetic */ void lambda$null$37$SendMessagesHelper(Updates updates) {
+    final /* synthetic */ void lambda$null$36$SendMessagesHelper(Updates updates) {
         MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
     }
 
-    final /* synthetic */ void lambda$null$39$SendMessagesHelper(Message newMsgObj, int oldId, boolean isBroadcast, ArrayList sentMessages, String attachPath) {
+    final /* synthetic */ void lambda$null$38$SendMessagesHelper(Message newMsgObj, int oldId, boolean isBroadcast, ArrayList sentMessages, String attachPath) {
         MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), isBroadcast ? oldId : newMsgObj.var_id, 0, false, newMsgObj.to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, isBroadcast, 0);
         if (isBroadcast) {
@@ -4476,7 +4478,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$38$SendMessagesHelper(boolean isBroadcast, ArrayList sentMessages, Message newMsgObj, int oldId) {
+    final /* synthetic */ void lambda$null$37$SendMessagesHelper(boolean isBroadcast, ArrayList sentMessages, Message newMsgObj, int oldId) {
         if (isBroadcast) {
             for (int a = 0; a < sentMessages.size(); a++) {
                 Message message = (Message) sentMessages.get(a);
@@ -4501,11 +4503,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         removeFromSendingMessages(oldId);
     }
 
-    final /* synthetic */ void lambda$performSendMessageRequest$43$SendMessagesHelper(Message newMsgObj) {
+    final /* synthetic */ void lambda$performSendMessageRequest$42$SendMessagesHelper(Message newMsgObj) {
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$34(this, newMsgObj, newMsgObj.var_id));
     }
 
-    final /* synthetic */ void lambda$null$42$SendMessagesHelper(Message newMsgObj, int msg_id) {
+    final /* synthetic */ void lambda$null$41$SendMessagesHelper(Message newMsgObj, int msg_id) {
         newMsgObj.send_state = 0;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByAck, Integer.valueOf(msg_id));
     }
@@ -4685,7 +4687,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$14(this, users, chats, encryptedChats, messages));
     }
 
-    final /* synthetic */ void lambda$processUnsentMessages$44$SendMessagesHelper(ArrayList users, ArrayList chats, ArrayList encryptedChats, ArrayList messages) {
+    final /* synthetic */ void lambda$processUnsentMessages$43$SendMessagesHelper(ArrayList users, ArrayList chats, ArrayList encryptedChats, ArrayList messages) {
         MessagesController.getInstance(this.currentAccount).putUsers(users, true);
         MessagesController.getInstance(this.currentAccount).putChats(chats, true);
         MessagesController.getInstance(this.currentAccount).putEncryptedChats(encryptedChats, true);
@@ -5142,7 +5144,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return true;
     }
 
-    static final /* synthetic */ void lambda$prepareSendingDocumentInternal$45$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, String pathFinal, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, String captionFinal, ArrayList entities) {
+    static final /* synthetic */ void lambda$prepareSendingDocumentInternal$44$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, String pathFinal, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, String captionFinal, ArrayList entities) {
         if (editingMessageObject != null) {
             getInstance(currentAccount).editMessageMedia(editingMessageObject, null, null, documentFinal, pathFinal, params, false, parentFinal);
         } else {
@@ -5171,7 +5173,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         new Thread(new SendMessagesHelper$$Lambda$16(messageObjects, dialog_id, UserConfig.selectedAccount, editingMessageObject, reply_to_msg)).start();
     }
 
-    static final /* synthetic */ void lambda$prepareSendingAudioDocuments$47$SendMessagesHelper(ArrayList messageObjects, long dialog_id, int currentAccount, MessageObject editingMessageObject, MessageObject reply_to_msg) {
+    static final /* synthetic */ void lambda$prepareSendingAudioDocuments$46$SendMessagesHelper(ArrayList messageObjects, long dialog_id, int currentAccount, MessageObject editingMessageObject, MessageObject reply_to_msg) {
         int size = messageObjects.size();
         for (int a = 0; a < size; a++) {
             MessageObject messageObject = (MessageObject) messageObjects.get(a);
@@ -5207,7 +5209,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    static final /* synthetic */ void lambda$null$46$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, MessageObject messageObject, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg) {
+    static final /* synthetic */ void lambda$null$45$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, MessageObject messageObject, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg) {
         if (editingMessageObject != null) {
             getInstance(currentAccount).editMessageMedia(editingMessageObject, null, null, documentFinal, messageObject.messageOwner.attachPath, params, false, parentFinal);
             return;
@@ -5223,7 +5225,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    static final /* synthetic */ void lambda$prepareSendingDocuments$49$SendMessagesHelper(ArrayList paths, int currentAccount, ArrayList originalPaths, String mime, long dialog_id, MessageObject reply_to_msg, String caption, MessageObject editingMessageObject, ArrayList uris, InputContentInfoCompat inputContent) {
+    static final /* synthetic */ void lambda$prepareSendingDocuments$48$SendMessagesHelper(ArrayList paths, int currentAccount, ArrayList originalPaths, String mime, long dialog_id, MessageObject reply_to_msg, String caption, MessageObject editingMessageObject, ArrayList uris, InputContentInfoCompat inputContent) {
         int a;
         boolean error = false;
         if (paths != null) {
@@ -5248,7 +5250,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    static final /* synthetic */ void lambda$null$48$SendMessagesHelper() {
+    static final /* synthetic */ void lambda$null$47$SendMessagesHelper() {
         try {
             Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("UnsupportedAttachment", R.string.UnsupportedAttachment), 0).show();
         } catch (Throwable e) {
@@ -5336,7 +5338,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    static final /* synthetic */ void lambda$prepareSendingBotContextResult$51$SendMessagesHelper(BotInlineResult result, long dialog_id, int currentAccount, HashMap params, MessageObject reply_to_msg) {
+    static final /* synthetic */ void lambda$prepareSendingBotContextResult$50$SendMessagesHelper(BotInlineResult result, long dialog_id, int currentAccount, HashMap params, MessageObject reply_to_msg) {
         String finalPath = null;
         TL_document document = null;
         TL_photo photo = null;
@@ -5629,7 +5631,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$31(finalDocument, currentAccount, finalPathFinal, dialog_id, reply_to_msg, result, params, finalPhoto, finalGame));
     }
 
-    static final /* synthetic */ void lambda$null$50$SendMessagesHelper(TL_document finalDocument, int currentAccount, String finalPathFinal, long dialog_id, MessageObject reply_to_msg, BotInlineResult result, HashMap params, TL_photo finalPhoto, TL_game finalGame) {
+    static final /* synthetic */ void lambda$null$49$SendMessagesHelper(TL_document finalDocument, int currentAccount, String finalPathFinal, long dialog_id, MessageObject reply_to_msg, BotInlineResult result, HashMap params, TL_photo finalPhoto, TL_game finalGame) {
         if (finalDocument != null) {
             getInstance(currentAccount).sendMessage(finalDocument, null, finalPathFinal, dialog_id, reply_to_msg, result.send_message.message, result.send_message.entities, result.send_message.reply_markup, params, 0, result);
         } else if (finalPhoto != null) {
@@ -5658,7 +5660,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$19(text, currentAccount, dialog_id));
     }
 
-    static final /* synthetic */ void lambda$null$52$SendMessagesHelper(String text, int currentAccount, long dialog_id) {
+    static final /* synthetic */ void lambda$null$51$SendMessagesHelper(String text, int currentAccount, long dialog_id) {
         String textFinal = getTrimmedString(text);
         if (textFinal.length() != 0) {
             int count = (int) Math.ceil((double) (((float) textFinal.length()) / 4096.0f));
@@ -5723,7 +5725,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (r113.size() == 1) goto L_0x0b39;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static final /* synthetic */ void lambda$prepareSendingMedia$61$SendMessagesHelper(ArrayList media, long dialog_id, int currentAccount, boolean forceDocument, boolean groupPhotos, MessageObject editingMessageObject, MessageObject reply_to_msg, InputContentInfoCompat inputContent) {
+    static final /* synthetic */ void lambda$prepareSendingMedia$60$SendMessagesHelper(ArrayList media, long dialog_id, int currentAccount, boolean forceDocument, boolean groupPhotos, MessageObject editingMessageObject, MessageObject reply_to_msg, InputContentInfoCompat inputContent) {
         HashMap<SendingMediaInfo, MediaSendPrepareWorker> workers;
         int a;
         SendingMediaInfo info;
@@ -6287,7 +6289,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    static final /* synthetic */ void lambda$null$55$SendMessagesHelper(MediaSendPrepareWorker worker, int currentAccount, SendingMediaInfo info, boolean isEncrypted) {
+    static final /* synthetic */ void lambda$null$54$SendMessagesHelper(MediaSendPrepareWorker worker, int currentAccount, SendingMediaInfo info, boolean isEncrypted) {
         worker.photo = getInstance(currentAccount).generatePhotoSizes(info.path, info.uri);
         if (isEncrypted && info.canDeleteAfter) {
             new File(info.path).delete();
@@ -6295,7 +6297,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         worker.sync.countDown();
     }
 
-    static final /* synthetic */ void lambda$null$56$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, String pathFinal, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
+    static final /* synthetic */ void lambda$null$55$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_document documentFinal, String pathFinal, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
         if (editingMessageObject != null) {
             getInstance(currentAccount).editMessageMedia(editingMessageObject, null, null, documentFinal, pathFinal, params, false, parentFinal);
             return;
@@ -6303,7 +6305,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         getInstance(currentAccount).sendMessage(documentFinal, null, pathFinal, dialog_id, reply_to_msg, info.caption, info.entities, null, params, 0, parentFinal);
     }
 
-    static final /* synthetic */ void lambda$null$57$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_photo photoFinal, boolean needDownloadHttpFinal, SendingMediaInfo info, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg) {
+    static final /* synthetic */ void lambda$null$56$SendMessagesHelper(MessageObject editingMessageObject, int currentAccount, TL_photo photoFinal, boolean needDownloadHttpFinal, SendingMediaInfo info, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg) {
         if (editingMessageObject != null) {
             getInstance(currentAccount).editMessageMedia(editingMessageObject, photoFinal, null, null, needDownloadHttpFinal ? info.searchImage.imageUrl : null, params, false, parentFinal);
         } else {
@@ -6311,7 +6313,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    static final /* synthetic */ void lambda$null$58$SendMessagesHelper(Bitmap thumbFinal, String thumbKeyFinal, MessageObject editingMessageObject, int currentAccount, VideoEditedInfo videoEditedInfo, TL_document videoFinal, String finalPath, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
+    static final /* synthetic */ void lambda$null$57$SendMessagesHelper(Bitmap thumbFinal, String thumbKeyFinal, MessageObject editingMessageObject, int currentAccount, VideoEditedInfo videoEditedInfo, TL_document videoFinal, String finalPath, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
         if (!(thumbFinal == null || thumbKeyFinal == null)) {
             ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
         }
@@ -6322,7 +6324,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         getInstance(currentAccount).sendMessage(videoFinal, videoEditedInfo, finalPath, dialog_id, reply_to_msg, info.caption, info.entities, null, params, info.ttl, parentFinal);
     }
 
-    static final /* synthetic */ void lambda$null$59$SendMessagesHelper(Bitmap[] bitmapFinal, String[] keyFinal, MessageObject editingMessageObject, int currentAccount, TL_photo photoFinal, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
+    static final /* synthetic */ void lambda$null$58$SendMessagesHelper(Bitmap[] bitmapFinal, String[] keyFinal, MessageObject editingMessageObject, int currentAccount, TL_photo photoFinal, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, SendingMediaInfo info) {
         if (!(bitmapFinal[0] == null || keyFinal[0] == null)) {
             ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapFinal[0]), keyFinal[0]);
         }
@@ -6333,7 +6335,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         getInstance(currentAccount).sendMessage(photoFinal, null, dialog_id, reply_to_msg, info.caption, info.entities, null, params, info.ttl, parentFinal);
     }
 
-    static final /* synthetic */ void lambda$null$60$SendMessagesHelper(int currentAccount, long lastGroupIdFinal) {
+    static final /* synthetic */ void lambda$null$59$SendMessagesHelper(int currentAccount, long lastGroupIdFinal) {
         SendMessagesHelper instance = getInstance(currentAccount);
         ArrayList<DelayedMessage> arrayList = (ArrayList) instance.delayedMessages.get("group_" + lastGroupIdFinal);
         if (arrayList != null && !arrayList.isEmpty()) {
@@ -6684,7 +6686,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    static final /* synthetic */ void lambda$prepareSendingVideo$63$SendMessagesHelper(VideoEditedInfo info, String videoPath, long dialog_id, long duration, int ttl, int currentAccount, int height, int width, long estimatedSize, CharSequence caption, MessageObject editingMessageObject, MessageObject reply_to_msg, ArrayList entities) {
+    static final /* synthetic */ void lambda$prepareSendingVideo$62$SendMessagesHelper(VideoEditedInfo info, String videoPath, long dialog_id, long duration, int ttl, int currentAccount, int height, int width, long estimatedSize, CharSequence caption, MessageObject editingMessageObject, MessageObject reply_to_msg, ArrayList entities) {
         VideoEditedInfo videoEditedInfo = info != null ? info : createCompressionSettings(videoPath);
         boolean isEncrypted = ((int) dialog_id) == 0;
         boolean isRound = videoEditedInfo != null && videoEditedInfo.roundVideo;
@@ -6814,7 +6816,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$22(thumbFinal, thumbKeyFinal, editingMessageObject, currentAccount, videoEditedInfo, videoFinal, finalPath, params, parentFinal, dialog_id, reply_to_msg, captionFinal, entities, ttl));
     }
 
-    static final /* synthetic */ void lambda$null$62$SendMessagesHelper(Bitmap thumbFinal, String thumbKeyFinal, MessageObject editingMessageObject, int currentAccount, VideoEditedInfo videoEditedInfo, TL_document videoFinal, String finalPath, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, String captionFinal, ArrayList entities, int ttl) {
+    static final /* synthetic */ void lambda$null$61$SendMessagesHelper(Bitmap thumbFinal, String thumbKeyFinal, MessageObject editingMessageObject, int currentAccount, VideoEditedInfo videoEditedInfo, TL_document videoFinal, String finalPath, HashMap params, String parentFinal, long dialog_id, MessageObject reply_to_msg, String captionFinal, ArrayList entities, int ttl) {
         if (!(thumbFinal == null || thumbKeyFinal == null)) {
             ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKeyFinal);
         }

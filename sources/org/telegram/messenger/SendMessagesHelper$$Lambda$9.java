@@ -17,6 +17,6 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$9 implements RequestDeleg
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$uploadMultiMedia$21$SendMessagesHelper(this.arg$2, this.arg$3, tLObject, tL_error);
+        this.arg$1.lambda$uploadMultiMedia$20$SendMessagesHelper(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

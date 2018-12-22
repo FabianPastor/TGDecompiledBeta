@@ -10,6 +10,6 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$10 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$stopVideoService$23$SendMessagesHelper(this.arg$2);
+        this.arg$1.lambda$stopVideoService$22$SendMessagesHelper(this.arg$2);
     }
 }
