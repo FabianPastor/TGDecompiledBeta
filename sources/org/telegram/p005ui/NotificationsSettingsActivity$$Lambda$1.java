@@ -12,6 +12,6 @@ final /* synthetic */ class NotificationsSettingsActivity$$Lambda$1 implements O
     }
 
     public void onItemClick(View view, int i, float f, float f2) {
-        this.arg$1.lambda$createView$7$NotificationsSettingsActivity(view, i, f, f2);
+        this.arg$1.lambda$createView$8$NotificationsSettingsActivity(view, i, f, f2);
     }
 }

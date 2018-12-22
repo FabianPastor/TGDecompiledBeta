@@ -45,7 +45,7 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ConvertGroupActivity.this.finishFragment();
+                ConvertGroupActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }

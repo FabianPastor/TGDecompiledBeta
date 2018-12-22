@@ -76,7 +76,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChatUsersActivity.this.finishFragment();
+                ChatUsersActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             }
         }
     }

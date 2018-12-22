@@ -54,6 +54,7 @@
     <string name="ActionPinnedMusic">un1 pinned an audio file</string>
     <string name="ActionPinnedNoText">un1 pinned a message</string>
     <string name="ActionPinnedPhoto">un1 pinned a photo</string>
+    <string name="ActionPinnedPoll">un1 pinned a poll</string>
     <string name="ActionPinnedRound">un1 pinned a video message</string>
     <string name="ActionPinnedSticker">un1 pinned a sticker</string>
     <string name="ActionPinnedText">un1 pinned \"%1$s\"</string>
@@ -77,6 +78,9 @@
     <string name="AddAccount">Add Account</string>
     <string name="AddAdminErrorBlacklisted">Sorry, you can\'t add this user as an admin because they are in the blacklist and you can\'t unban them.</string>
     <string name="AddAdminErrorNotAMember">Sorry, you can\'t add this user as an admin because they are not a member of this group and you are not allowed to add them.</string>
+    <string name="AddAnOption">Add an option...</string>
+    <string name="AddAnOptionInfo">You can add %1$s.</string>
+    <string name="AddAnOptionInfoMax">You have added the maximum number of options.</string>
     <string name="AddBannedErrorAdmin">Sorry, you can\'t ban this user because they are an admin in this group and you are not allowed to demote them.</string>
     <string name="AddCaption">Add a caption...</string>
     <string name="AddContact">Add</string>
@@ -136,6 +140,7 @@
     <string name="AndOther_other">and %1$d others</string>
     <string name="AndOther_two">and %1$d others</string>
     <string name="AndOther_zero">and %1$d others</string>
+    <string name="AnonymousPoll">Anonymous Poll</string>
     <string name="ApkRestricted">APK installation is restricted for this app. You can enable this in system settings.</string>
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram Beta</string>
@@ -300,6 +305,8 @@
     <string name="CancelLinkExpired">Link is invalid or expired.</string>
     <string name="CancelLinkSuccess">The deletion process was cancelled for your account %1$s. You may close this window now.</string>
     <string name="CancelPasswordQuestion">Are you sure you want to abort two-step verification setup?</string>
+    <string name="CancelPollAlertText">Are you sure you want to discard this poll?</string>
+    <string name="CancelPollAlertTitle">Discard poll?</string>
     <string name="CancelRegistration">Cancel registration</string>
     <string name="CancelSending">Cancel sending</string>
     <string name="CantPlayVideo">App was unable to play this video. Try to play it with external player?</string>
@@ -360,6 +367,7 @@
     <string name="ChannelMessageMusic">%1$s posted an audio file</string>
     <string name="ChannelMessageNoText">%1$s posted a message</string>
     <string name="ChannelMessagePhoto">%1$s posted a photo</string>
+    <string name="ChannelMessagePoll">%1$s posted a poll</string>
     <string name="ChannelMessageRound">%1$s posted a video message</string>
     <string name="ChannelMessageSticker">%1$s posted a sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s posted a %2$s sticker</string>
@@ -761,6 +769,7 @@
     <string name="Files_other">%1$d files</string>
     <string name="Files_two">%1$d files</string>
     <string name="Files_zero">%1$d files</string>
+    <string name="FinalResults">Final Results</string>
     <string name="FingerprintHelp">Touch sensor</string>
     <string name="FingerprintInfo">Confirm fingerprint to continue</string>
     <string name="FingerprintNotRecognized">Fingerprint not recognized. Try again.</string>
@@ -815,6 +824,12 @@
     <string name="ForwardedPhoto_other">%1$d forwarded photos</string>
     <string name="ForwardedPhoto_two">%1$d forwarded photos</string>
     <string name="ForwardedPhoto_zero">%1$d forwarded photos</string>
+    <string name="ForwardedPoll_few">%1$d forwarded polls</string>
+    <string name="ForwardedPoll_many">%1$d forwarded polls</string>
+    <string name="ForwardedPoll_one">Forwarded poll</string>
+    <string name="ForwardedPoll_other">%1$d forwarded polls</string>
+    <string name="ForwardedPoll_two">%1$d forwarded polls</string>
+    <string name="ForwardedPoll_zero">%1$d forwarded polls</string>
     <string name="ForwardedRound_few">%1$d forwarded video messages</string>
     <string name="ForwardedRound_many">%1$d forwarded video messages</string>
     <string name="ForwardedRound_one">Forwarded video message</string>
@@ -1106,6 +1121,7 @@
     <string name="Months_two">%1$d months</string>
     <string name="Months_zero">%1$d months</string>
     <string name="MoreInfo">More info</string>
+    <string name="MusicInfo">To send music files</string>
     <string name="MuteDisable">Disable</string>
     <string name="MuteFor">Mute for %1$s</string>
     <string name="MuteNotifications">Mute notifications</string>
@@ -1127,6 +1143,7 @@
     <string name="NewMessages_other">%1$d new messages</string>
     <string name="NewMessages_two">%1$d new messages</string>
     <string name="NewMessages_zero">%1$d new messages</string>
+    <string name="NewPoll">New Poll</string>
     <string name="NewSecretChat">New Secret Chat</string>
     <string name="NewTheme">New Theme</string>
     <string name="NoAudio">Please add files to the music library on your device to see them here.</string>
@@ -1171,6 +1188,7 @@
     <string name="NoStickers">No stickers yet</string>
     <string name="NoStickersFound">No stickers found</string>
     <string name="NoUsernameFound">There is no Telegram account with this username.</string>
+    <string name="NoVotes">No votes</string>
     <string name="NobodyLikesSpam1">Sorry, you can only send messages to mutual contacts at the moment.</string>
     <string name="NobodyLikesSpam2">Sorry, you can only add mutual contacts to groups at the moment.</string>
     <string name="NobodyLikesSpam3">Sorry, you are currently restricted from posting to public groups.</string>
@@ -1195,6 +1213,8 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s pinned a message</string>
     <string name="NotificationActionPinnedPhoto">%1$s pinned a photo in the group %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s pinned a photo</string>
+    <string name="NotificationActionPinnedPoll">%1$s pinned a poll in the group %2$s</string>
+    <string name="NotificationActionPinnedPollChannel">%1$s pinned a poll</string>
     <string name="NotificationActionPinnedRound">%1$s pinned a video message in the group %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s pinned a video message</string>
     <string name="NotificationActionPinnedSticker">%1$s pinned a sticker in the group %2$s</string>
@@ -1239,6 +1259,7 @@
     <string name="NotificationMessageGroupMusic">%1$s sent an audio file to the group %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s sent a message to the group %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s sent a photo to the group %2$s</string>
+    <string name="NotificationMessageGroupPoll">%1$s sent a poll to the group %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s sent a video message to the group %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s sent a sticker to the group %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s sent a %3$s sticker to the group %2$s</string>
@@ -1250,6 +1271,7 @@
     <string name="NotificationMessageMusic">%1$s sent you an audio file</string>
     <string name="NotificationMessageNoText">%1$s sent you a message</string>
     <string name="NotificationMessagePhoto">%1$s sent you a photo</string>
+    <string name="NotificationMessagePoll">%1$s sent you a poll</string>
     <string name="NotificationMessageRound">%1$s sent you a video message</string>
     <string name="NotificationMessageSDPhoto">%1$s sent you a self-destructing photo</string>
     <string name="NotificationMessageSDVideo">%1$s sent you a self-destructing video</string>
@@ -1318,6 +1340,13 @@
     <string name="OpenInExternalApp">Open in...</string>
     <string name="OpenMessage">VIEW MESSAGE</string>
     <string name="OpenUrlAlert">Open url %1$s?</string>
+    <string name="OptionHint">Option</string>
+    <string name="Option_few">%1$d more options</string>
+    <string name="Option_many">%1$d more options</string>
+    <string name="Option_one">%1$d more option</string>
+    <string name="Option_other">%1$d more options</string>
+    <string name="Option_two">%1$d more options</string>
+    <string name="Option_zero">%1$d more options</string>
     <string name="OtherLoginCode">Your login code is **%1$s**. Enter it in the Telegram app where you are trying to log in.\10\10Do not give this code to anyone.</string>
     <string name="OtherSessions">Active Sessions</string>
     <string name="OtherWebSessions">Connected websites</string>
@@ -1637,6 +1666,7 @@
     <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">Pinned Message</string>
     <string name="PinnedMessages">Pinned Messages</string>
+    <string name="PinnedPoll">Pinned Poll</string>
     <string name="PleaseDownload">Please download media first</string>
     <string name="PleaseEnterCurrentPassword">Enter your password</string>
     <string name="PleaseEnterFirstPassword">Enter a password</string>
@@ -1650,6 +1680,8 @@
     <string name="Points_other">%1$d</string>
     <string name="Points_two">%1$d</string>
     <string name="Points_zero">%1$d</string>
+    <string name="Poll">Poll</string>
+    <string name="PollOptions">Poll options</string>
     <string name="PopupDisabled">Disabled</string>
     <string name="PopupEnabled">Enabled</string>
     <string name="PopupNotification">Popup Notifications</string>
@@ -1680,6 +1712,8 @@
     <string name="ProxyConnections">Connections</string>
     <string name="ProxyDetails">Proxy Details</string>
     <string name="ProxySettings">Proxy Settings</string>
+    <string name="Question">Question</string>
+    <string name="QuestionHint">Ask a question</string>
     <string name="QuickReplyCustom">Custom Message...</string>
     <string name="QuickReplyDefault1">Can\'t talk now. What\'s up?</string>
     <string name="QuickReplyDefault2">I\'ll call you right back.</string>
@@ -1918,6 +1952,7 @@
     <string name="StartEncryptedChat">Start Secret Chat</string>
     <string name="StartMessaging">Start Messaging</string>
     <string name="StartText">Please confirm your country code and enter your phone number.</string>
+    <string name="Statistics">Statistics</string>
     <string name="StickersAndMasks">Stickers and Masks</string>
     <string name="StickersCopy">Copy link</string>
     <string name="StickersHide">Archive</string>
@@ -1939,6 +1974,9 @@
     <string name="StopLiveLocationAlertToGroup">Are you sure you want to stop sharing live location with %1$s?</string>
     <string name="StopLiveLocationAlertToUser">Are you sure you want to stop sharing live location with %1$s?</string>
     <string name="StopLoading">Stop loading?</string>
+    <string name="StopPoll">Stop Poll</string>
+    <string name="StopPollAlertText">If you stop this poll now, nobody will be able to vote in it anymore. This action cannot be undone.</string>
+    <string name="StopPollAlertTitle">Stop poll?</string>
     <string name="StopVerification">Do you want to stop the phone number verification process?</string>
     <string name="StorageUsage">Storage Usage</string>
     <string name="Streaming">Streaming</string>
@@ -2047,6 +2085,7 @@
     <string name="UnreadMessages">Unread Messages</string>
     <string name="UnsupportedAttachment">Unsupported attachment</string>
     <string name="UnsupportedMedia">This message is not supported on your version of Telegram. Update the app to view: https://telegram.org/update</string>
+    <string name="Unvote">Retract Vote</string>
     <string name="Update">UPDATE</string>
     <string name="UpdateApp">Update app</string>
     <string name="UpdateAppAlert">Sorry, your Telegram app is out of date and can\'t handle this request. Please update Telegram.</string>
@@ -2166,6 +2205,12 @@
     <string name="VoipSettingsRingtone">Ringtone</string>
     <string name="VoipUseLessData">Use less data for calls</string>
     <string name="VoipWaiting">Waiting</string>
+    <string name="Vote_few">%1$d votes</string>
+    <string name="Vote_many">%1$d votes</string>
+    <string name="Vote_one">%1$d vote</string>
+    <string name="Vote_other">%1$d votes</string>
+    <string name="Vote_two">%1$d votes</string>
+    <string name="Vote_zero">%1$d votes</string>
     <string name="WaitMore">Wait more</string>
     <string name="WaitingForNetwork">Waiting for network...</string>
     <string name="Warmth">Warmth</string>

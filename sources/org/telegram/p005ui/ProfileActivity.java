@@ -67,6 +67,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -75,6 +76,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.p005ui.ActionBar.ActionBarMenu;
 import org.telegram.p005ui.ActionBar.ActionBarMenuItem;
+import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.AlertDialog.Builder;
 import org.telegram.p005ui.ActionBar.BackDrawable;
 import org.telegram.p005ui.ActionBar.BaseFragment;
@@ -142,7 +144,9 @@ import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_encryptedChat;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
+import org.telegram.tgnet.TLRPC.TL_messages_getStatsURL;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
+import org.telegram.tgnet.TLRPC.TL_statsURL;
 import org.telegram.tgnet.TLRPC.TL_userEmpty;
 import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.User;
@@ -165,6 +169,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private static final int set_admins = 11;
     private static final int share = 10;
     private static final int share_contact = 3;
+    private static final int statistics = 19;
     private ActionBarMenuItem addItem;
     private int addMemberRow;
     private int administratorsRow;
@@ -475,6 +480,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     ProfileActivity.this.presentFragment(chatUsersActivity);
                 } else if (id == 18) {
                     ProfileActivity.this.openAddMember();
+                } else if (id == 19) {
+                    int did2;
+                    if (ProfileActivity.this.user_id != 0) {
+                        did2 = ProfileActivity.this.user_id;
+                    } else {
+                        did2 = -ProfileActivity.this.chat_id;
+                    }
+                    AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(ProfileActivity.this.getParentActivity(), 3)};
+                    TLObject req = new TL_messages_getStatsURL();
+                    req.peer = MessagesController.getInstance(ProfileActivity.this.currentAccount).getInputPeer(did2);
+                    int requestId = ConnectionsManager.getInstance(ProfileActivity.this.currentAccount).sendRequest(req, new ProfileActivity$3$$Lambda$3(this, progressDialog));
+                    if (progressDialog[0] != null) {
+                        progressDialog[0].setOnCancelListener(new ProfileActivity$3$$Lambda$4(this, requestId));
+                        ProfileActivity.this.showDialog(progressDialog[0]);
+                    }
                 }
             }
         }
@@ -505,6 +525,25 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 ProfileActivity.this.presentFragment(new ChatActivity(args1), true);
                 ProfileActivity.this.lambda$null$10$ProfileActivity();
             }
+        }
+
+        final /* synthetic */ void lambda$onItemClick$4$ProfileActivity$3(AlertDialog[] progressDialog, TLObject response, TL_error error) {
+            AndroidUtilities.runOnUIThread(new ProfileActivity$3$$Lambda$5(this, progressDialog, response));
+        }
+
+        final /* synthetic */ void lambda$null$3$ProfileActivity$3(AlertDialog[] progressDialog, TLObject response) {
+            try {
+                progressDialog[0].dismiss();
+            } catch (Throwable th) {
+            }
+            progressDialog[0] = null;
+            if (response != null) {
+                Browser.openUrl(ProfileActivity.this.getParentActivity(), ((TL_statsURL) response).url);
+            }
+        }
+
+        final /* synthetic */ void lambda$onItemClick$5$ProfileActivity$3(int requestId, DialogInterface dialog) {
+            ConnectionsManager.getInstance(ProfileActivity.this.currentAccount).cancelRequest(requestId, true);
         }
     }
 
@@ -1009,6 +1048,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.participantsMap = null;
             }
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatOnlineCountDidLoad);
             this.sortedUsers = new ArrayList();
             updateOnlineCount();
             if (ChatObject.isChannel(this.currentChat)) {
@@ -1056,6 +1096,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             MessagesController.getInstance(this.currentAccount).cancelLoadFullUser(this.user_id);
         } else if (this.chat_id != 0) {
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatOnlineCountDidLoad);
         }
     }
 
@@ -2058,6 +2099,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     }
                 }
             }
+        } else if (id == NotificationCenter.chatOnlineCountDidLoad) {
+            Integer chatId = args[0];
+            if (this.chatInfo != null && this.currentChat != null && this.currentChat.var_id == chatId.intValue()) {
+                this.chatInfo.online_count = ((Integer) args[1]).intValue();
+                updateOnlineCount();
+                updateProfileData();
+            }
         } else if (id == NotificationCenter.contactsDidLoad) {
             createActionBarMenu();
         } else if (id == NotificationCenter.mediaDidLoad) {
@@ -2076,7 +2124,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 arr = args[2];
                 enc = ((int) did) == 0;
                 int loadIndex = uid == did ? 0 : 1;
-                this.sharedMediaData[type].setEndReached(loadIndex, ((Boolean) args[5]).booleanValue());
+                if (!arr.isEmpty()) {
+                    this.sharedMediaData[type].setEndReached(loadIndex, ((Boolean) args[5]).booleanValue());
+                }
                 for (a = 0; a < arr.size(); a++) {
                     this.sharedMediaData[type].addMessage((MessageObject) arr.get(a), loadIndex, false, enc);
                 }
@@ -2609,16 +2659,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
                 this.sortedUsers.add(Integer.valueOf(a));
             }
-            if (this.chatInfo instanceof TL_chatFull) {
-                try {
-                    Collections.sort(this.sortedUsers, new ProfileActivity$$Lambda$15(this));
-                } catch (Throwable e) {
-                    FileLog.m13e(e);
-                }
-                if (this.listAdapter != null) {
-                    this.listAdapter.notifyItemRangeChanged(this.membersStartRow, this.sortedUsers.size());
-                }
+            try {
+                Collections.sort(this.sortedUsers, new ProfileActivity$$Lambda$15(this));
+            } catch (Throwable e) {
+                FileLog.m13e(e);
             }
+            if (this.listAdapter != null) {
+                this.listAdapter.notifyItemRangeChanged(this.membersStartRow, this.sortedUsers.size());
+            }
+        } else if ((this.chatInfo instanceof TL_channelFull) && this.chatInfo.participants_count > Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+            this.onlineCount = this.chatInfo.online_count;
         }
     }
 
@@ -3132,7 +3182,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else {
                         newString = LocaleController.getString("ChannelPrivate", CLASSNAMER.string.ChannelPrivate).toLowerCase();
                     }
-                } else if (!this.currentChat.megagroup || this.chatInfo.participants_count > 200) {
+                } else if (!this.currentChat.megagroup) {
                     shortNumber = LocaleController.formatShortNumber(this.chatInfo.participants_count, new int[1]);
                     if (this.currentChat.megagroup) {
                         newString = LocaleController.formatPluralString("Members", this.chatInfo.participants_count);
@@ -3142,7 +3192,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 } else if (this.onlineCount <= 1 || this.chatInfo.participants_count == 0) {
                     newString = LocaleController.formatPluralString("Members", this.chatInfo.participants_count);
                 } else {
-                    newString = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", this.chatInfo.participants_count), LocaleController.formatPluralString("OnlineCount", this.onlineCount)});
+                    newString = String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Members", this.chatInfo.participants_count), LocaleController.formatPluralString("OnlineCount", Math.min(this.onlineCount, this.chatInfo.participants_count))});
                 }
                 a = 0;
                 while (a < 2) {
@@ -3160,7 +3210,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         }
                         if (a == 0 && onlineTextOverride != null) {
                             this.onlineTextView[a].setText(onlineTextOverride);
-                        } else if (!this.currentChat.megagroup || this.chatInfo == null || this.chatInfo.participants_count > 200 || this.onlineCount <= 0) {
+                        } else if (!this.currentChat.megagroup || this.chatInfo == null || this.onlineCount <= 0) {
                             if (a == 0 && ChatObject.isChannel(this.currentChat) && this.chatInfo != null && this.chatInfo.participants_count != 0 && (this.currentChat.megagroup || this.currentChat.broadcast)) {
                                 int[] result = new int[1];
                                 shortNumber = LocaleController.formatShortNumber(this.chatInfo.participants_count, result);
@@ -3248,9 +3298,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     }
                     if ((chat.megagroup && ChatObject.hasAdminRights(chat)) || (!chat.megagroup && ChatObject.canChangeChatInfo(chat))) {
                         this.editItem = menu.addItem(12, (int) CLASSNAMER.drawable.menu_settings_filled);
+                    }
+                    if (!(chat.megagroup || this.chatInfo == null || !this.chatInfo.can_view_stats)) {
                         if (null == null) {
                             item = menu.addItem(10, (int) CLASSNAMER.drawable.ic_ab_other);
                         }
+                        item.addSubItem(19, LocaleController.getString("Statistics", CLASSNAMER.string.Statistics));
                     }
                     if (chat.megagroup) {
                         if (item == null) {

@@ -330,7 +330,7 @@ public class Browser {
                 }
                 return false;
             }
-        } else if ("telegram.me".equals(host) || "t.me".equals(host) || "telesco.pe".equals(host)) {
+        } else if ("telegram.me".equals(host) || "t.me".equals(host)) {
             path = uri.getPath();
             if (path != null && path.length() > 1) {
                 if (!path.substring(1).toLowerCase().equals("iv")) {

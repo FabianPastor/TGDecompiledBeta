@@ -1,23 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_channels_createChannel;
-import org.telegram.tgnet.TLRPC.TL_error;
-
-final /* synthetic */ class MessagesController$$Lambda$93 implements RequestDelegate {
+final /* synthetic */ class MessagesController$$Lambda$93 implements Runnable {
     private final MessagesController arg$1;
-    private final BaseFragment arg$2;
-    private final TL_channels_createChannel arg$3;
+    private final long arg$2;
+    private final int arg$3;
+    private final boolean arg$4;
+    private final int arg$5;
+    private final int arg$6;
 
-    MessagesController$$Lambda$93(MessagesController messagesController, BaseFragment baseFragment, TL_channels_createChannel tL_channels_createChannel) {
+    MessagesController$$Lambda$93(MessagesController messagesController, long j, int i, boolean z, int i2, int i3) {
         this.arg$1 = messagesController;
-        this.arg$2 = baseFragment;
-        this.arg$3 = tL_channels_createChannel;
+        this.arg$2 = j;
+        this.arg$3 = i;
+        this.arg$4 = z;
+        this.arg$5 = i2;
+        this.arg$6 = i3;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$createChat$140$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$markDialogAsRead$139$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
     }
 }

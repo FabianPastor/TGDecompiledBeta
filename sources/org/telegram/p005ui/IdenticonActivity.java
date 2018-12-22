@@ -65,7 +65,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
 
         public void onItemClick(int id) {
             if (id == -1) {
-                IdenticonActivity.this.finishFragment();
+                IdenticonActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }

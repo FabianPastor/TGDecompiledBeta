@@ -110,7 +110,7 @@ public class Theme {
     public static Paint chat_actionBackgroundPaint = null;
     public static TextPaint chat_actionTextPaint = null;
     public static TextPaint chat_adminPaint = null;
-    public static Drawable[] chat_attachButtonDrawables = new Drawable[9];
+    public static Drawable[] chat_attachButtonDrawables = new Drawable[10];
     public static TextPaint chat_audioPerformerPaint = null;
     public static TextPaint chat_audioTimePaint = null;
     public static TextPaint chat_audioTitlePaint = null;
@@ -345,6 +345,8 @@ public class Theme {
     public static final String key_chat_attachHideIcon = "chat_attachHideIcon";
     public static final String key_chat_attachLocationBackground = "chat_attachLocationBackground";
     public static final String key_chat_attachLocationIcon = "chat_attachLocationIcon";
+    public static final String key_chat_attachPollBackground = "chat_attachPollBackground";
+    public static final String key_chat_attachPollIcon = "chat_attachPollIcon";
     public static final String key_chat_attachSendBackground = "chat_attachSendBackground";
     public static final String key_chat_attachSendIcon = "chat_attachSendIcon";
     public static final String key_chat_attachVideoBackground = "chat_attachVideoBackground";
@@ -1367,6 +1369,8 @@ public class Theme {
         defaultColors.put(key_chat_attachHideBackground, Integer.valueOf(-5330248));
         defaultColors.put(key_chat_attachHideIcon, Integer.valueOf(-1));
         defaultColors.put(key_chat_attachSendBackground, Integer.valueOf(-12664838));
+        defaultColors.put(key_chat_attachPollBackground, Integer.valueOf(-670899));
+        defaultColors.put(key_chat_attachPollIcon, Integer.valueOf(-1));
         defaultColors.put(key_chat_attachSendIcon, Integer.valueOf(-1));
         defaultColors.put(key_chat_shareBackground, Integer.valueOf(NUM));
         defaultColors.put(key_chat_shareBackgroundSelected, Integer.valueOf(-NUM));
@@ -1726,6 +1730,8 @@ public class Theme {
         fallbackKeys.put(key_dialog_inlineProgress, key_chats_menuItemIcon);
         fallbackKeys.put(key_groupcreate_spanDelete, key_chats_actionIcon);
         fallbackKeys.put(key_sharedMedia_photoPlaceholder, key_windowBackgroundGray);
+        fallbackKeys.put(key_chat_attachPollBackground, key_chat_attachAudioBackground);
+        fallbackKeys.put(key_chat_attachPollIcon, key_chat_attachAudioIcon);
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         ArrayList arrayList = themes;
@@ -2927,6 +2933,7 @@ public class Theme {
             chat_attachButtonDrawables[6] = Theme.createCircleDrawableWithIcon(AndroidUtilities.m9dp(54.0f), CLASSNAMER.drawable.attach_location);
             chat_attachButtonDrawables[7] = Theme.createCircleDrawableWithIcon(AndroidUtilities.m9dp(54.0f), CLASSNAMER.drawable.attach_close);
             chat_attachButtonDrawables[8] = Theme.createCircleDrawableWithIcon(AndroidUtilities.m9dp(54.0f), CLASSNAMER.drawable.attach_send);
+            chat_attachButtonDrawables[9] = Theme.createCircleDrawableWithIcon(AndroidUtilities.m9dp(54.0f), CLASSNAMER.drawable.attach_polls);
             chat_cornerOuter[0] = resources.getDrawable(CLASSNAMER.drawable.corner_out_tl);
             chat_cornerOuter[1] = resources.getDrawable(CLASSNAMER.drawable.corner_out_tr);
             chat_cornerOuter[2] = resources.getDrawable(CLASSNAMER.drawable.corner_out_br);
@@ -3236,6 +3243,8 @@ public class Theme {
             Theme.setCombinedDrawableColor(chat_attachButtonDrawables[7], Theme.getColor(key_chat_attachHideIcon), true);
             Theme.setCombinedDrawableColor(chat_attachButtonDrawables[8], Theme.getColor(key_chat_attachSendBackground), false);
             Theme.setCombinedDrawableColor(chat_attachButtonDrawables[8], Theme.getColor(key_chat_attachSendIcon), true);
+            Theme.setCombinedDrawableColor(chat_attachButtonDrawables[9], Theme.getColor(key_chat_attachPollBackground), false);
+            Theme.setCombinedDrawableColor(chat_attachButtonDrawables[9], Theme.getColor(key_chat_attachPollIcon), true);
             Theme.applyChatServiceMessageColor();
         }
     }

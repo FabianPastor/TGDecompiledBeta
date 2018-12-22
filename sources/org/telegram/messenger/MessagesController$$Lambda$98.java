@@ -1,17 +1,18 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 
-final /* synthetic */ class MessagesController$$Lambda$98 implements RequestDelegate {
+final /* synthetic */ class MessagesController$$Lambda$98 implements OnCancelListener {
     private final MessagesController arg$1;
+    private final int arg$2;
 
-    MessagesController$$Lambda$98(MessagesController messagesController) {
+    MessagesController$$Lambda$98(MessagesController messagesController, int i) {
         this.arg$1 = messagesController;
+        this.arg$2 = i;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$toogleChannelSignatures$149$MessagesController(tLObject, tL_error);
+    public void onCancel(DialogInterface dialogInterface) {
+        this.arg$1.lambda$convertToMegaGroup$150$MessagesController(this.arg$2, dialogInterface);
     }
 }

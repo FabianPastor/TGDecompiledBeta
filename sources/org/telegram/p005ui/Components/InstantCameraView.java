@@ -964,7 +964,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             boolean ok = false;
                             a = 0;
                             while (a < input.results) {
-                                if (a == 0 && Math.abs(this.videoFirst - input.offset[a]) > NUM) {
+                                if (a == 0 && Math.abs(this.videoFirst - input.offset[a]) > 10000000) {
                                     this.desyncTime = this.videoFirst - input.offset[a];
                                     this.audioFirst = input.offset[a];
                                     ok = true;
@@ -1168,12 +1168,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         /* renamed from: lambda$handleVideoFrameAvailable$0$InstantCameraView$VideoRecorder */
-        final /* synthetic */ void mo16734x44721c1a() {
+        final /* synthetic */ void mo16820x44721c1a() {
             InstantCameraView.this.textureOverlayView.animate().setDuration(120).alpha(0.0f).setInterpolator(new DecelerateInterpolator()).start();
         }
 
         /* renamed from: lambda$handleVideoFrameAvailable$1$InstantCameraView$VideoRecorder */
-        final /* synthetic */ void mo16735xCLASSNAMEd81b() {
+        final /* synthetic */ void mo16821xCLASSNAMEd81b() {
             InstantCameraView.this.textureOverlayView.animate().setDuration(120).alpha(0.0f).setInterpolator(new DecelerateInterpolator()).start();
         }
 

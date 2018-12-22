@@ -1,25 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ActionBar.AlertDialog;
-import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
-
-final /* synthetic */ class MessagesController$$Lambda$146 implements RequestDelegate {
+final /* synthetic */ class MessagesController$$Lambda$146 implements Runnable {
     private final MessagesController arg$1;
-    private final AlertDialog[] arg$2;
-    private final BaseFragment arg$3;
-    private final int arg$4;
+    private final int arg$2;
+    private final int arg$3;
 
-    MessagesController$$Lambda$146(MessagesController messagesController, AlertDialog[] alertDialogArr, BaseFragment baseFragment, int i) {
+    MessagesController$$Lambda$146(MessagesController messagesController, int i, int i2) {
         this.arg$1 = messagesController;
-        this.arg$2 = alertDialogArr;
-        this.arg$3 = baseFragment;
-        this.arg$4 = i;
+        this.arg$2 = i;
+        this.arg$3 = i2;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$openByUserName$240$MessagesController(this.arg$2, this.arg$3, this.arg$4, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$processUpdateArray$241$MessagesController(this.arg$2, this.arg$3);
     }
 }

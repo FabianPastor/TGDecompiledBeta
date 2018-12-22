@@ -72,7 +72,7 @@ public class ChatSettingsActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                ChatSettingsActivity.this.finishFragment();
+                ChatSettingsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
             }
         }
     }
@@ -327,7 +327,6 @@ public class ChatSettingsActivity extends BaseFragment {
         this.listView.setLayoutAnimation(null);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setOnItemClickListener(new ChatSettingsActivity$$Lambda$0(this));
-        frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }
 

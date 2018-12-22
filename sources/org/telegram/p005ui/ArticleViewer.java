@@ -52,6 +52,7 @@ import android.text.style.MetricAffectingSpan;
 import android.text.style.URLSpan;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
+import android.view.DisplayCutout;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -89,6 +90,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import org.json.JSONObject;
@@ -2298,7 +2300,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
 
             /* renamed from: lambda$postEvent$0$ArticleViewer$BlockEmbedCell$TelegramWebviewProxy */
-            final /* synthetic */ void mo13823x2b8da535(String eventName, String eventData) {
+            final /* synthetic */ void mo13871x2b8da535(String eventName, String eventData) {
                 Object obj = -1;
                 switch (eventName.hashCode()) {
                     case -1065790942:
@@ -9255,6 +9257,15 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.lastInsets = insets;
         if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
             this.windowView.requestLayout();
+        }
+        if (VERSION.SDK_INT >= 28) {
+            DisplayCutout cutout = insets.getDisplayCutout();
+            if (cutout != null) {
+                List<Rect> rects = cutout.getBoundingRects();
+                if (!(rects == null || rects.isEmpty())) {
+                    this.settingsButton.setMenuYOffset(Math.abs(((Rect) rects.get(0)).height()));
+                }
+            }
         }
         return insets.consumeSystemWindowInsets();
     }

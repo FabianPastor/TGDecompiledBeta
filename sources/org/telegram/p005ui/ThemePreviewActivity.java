@@ -74,6 +74,7 @@ import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
+import org.telegram.tgnet.TLRPC.TL_pollAnswer;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.User;
 
@@ -348,6 +349,9 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             }
 
             public void didPressBotButton(ChatMessageCell cell, KeyboardButton button) {
+            }
+
+            public void didPressVoteButton(ChatMessageCell cell, TL_pollAnswer button) {
             }
 
             public void didPressCancelSendButton(ChatMessageCell cell) {

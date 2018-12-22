@@ -195,7 +195,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                         }
                     });
                     try {
-                        barrier.await(15, TimeUnit.SECONDS);
+                        barrier.await(30, TimeUnit.SECONDS);
                     } catch (Exception e2) {
                     }
                     notificationCenterDelegate = CLASSNAME;

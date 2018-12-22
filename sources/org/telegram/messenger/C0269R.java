@@ -180,6 +180,7 @@ public final class CLASSNAMER {
         public static final int attach_file = NUM;
         public static final int attach_gallery = NUM;
         public static final int attach_location = NUM;
+        public static final int attach_polls = NUM;
         public static final int attach_send = NUM;
         public static final int attach_video = NUM;
         public static final int audio_mini_arrow = NUM;
@@ -387,6 +388,7 @@ public final class CLASSNAMER {
         public static final int ic_smiles_trend = NUM;
         public static final int ic_storage = NUM;
         public static final int ic_storage_gallery = NUM;
+        public static final int ic_storage_music = NUM;
         public static final int ic_video = NUM;
         public static final int ic_volume_up_white_24dp = NUM;
         public static final int icplaceholder = NUM;
@@ -943,6 +945,7 @@ public final class CLASSNAMER {
         public static final int ActionPinnedMusic = NUM;
         public static final int ActionPinnedNoText = NUM;
         public static final int ActionPinnedPhoto = NUM;
+        public static final int ActionPinnedPoll = NUM;
         public static final int ActionPinnedRound = NUM;
         public static final int ActionPinnedSticker = NUM;
         public static final int ActionPinnedText = NUM;
@@ -966,6 +969,9 @@ public final class CLASSNAMER {
         public static final int AddAccount = NUM;
         public static final int AddAdminErrorBlacklisted = NUM;
         public static final int AddAdminErrorNotAMember = NUM;
+        public static final int AddAnOption = NUM;
+        public static final int AddAnOptionInfo = NUM;
+        public static final int AddAnOptionInfoMax = NUM;
         public static final int AddBannedErrorAdmin = NUM;
         public static final int AddCaption = NUM;
         public static final int AddContact = NUM;
@@ -1025,6 +1031,7 @@ public final class CLASSNAMER {
         public static final int AndOther_other = NUM;
         public static final int AndOther_two = NUM;
         public static final int AndOther_zero = NUM;
+        public static final int AnonymousPoll = NUM;
         public static final int ApkRestricted = NUM;
         public static final int AppName = NUM;
         public static final int AppNameBeta = NUM;
@@ -1189,6 +1196,8 @@ public final class CLASSNAMER {
         public static final int CancelLinkExpired = NUM;
         public static final int CancelLinkSuccess = NUM;
         public static final int CancelPasswordQuestion = NUM;
+        public static final int CancelPollAlertText = NUM;
+        public static final int CancelPollAlertTitle = NUM;
         public static final int CancelRegistration = NUM;
         public static final int CancelSending = NUM;
         public static final int CantPlayVideo = NUM;
@@ -1249,6 +1258,7 @@ public final class CLASSNAMER {
         public static final int ChannelMessageMusic = NUM;
         public static final int ChannelMessageNoText = NUM;
         public static final int ChannelMessagePhoto = NUM;
+        public static final int ChannelMessagePoll = NUM;
         public static final int ChannelMessageRound = NUM;
         public static final int ChannelMessageSticker = NUM;
         public static final int ChannelMessageStickerEmoji = NUM;
@@ -1650,6 +1660,7 @@ public final class CLASSNAMER {
         public static final int Files_other = NUM;
         public static final int Files_two = NUM;
         public static final int Files_zero = NUM;
+        public static final int FinalResults = NUM;
         public static final int FingerprintHelp = NUM;
         public static final int FingerprintInfo = NUM;
         public static final int FingerprintNotRecognized = NUM;
@@ -1704,6 +1715,12 @@ public final class CLASSNAMER {
         public static final int ForwardedPhoto_other = NUM;
         public static final int ForwardedPhoto_two = NUM;
         public static final int ForwardedPhoto_zero = NUM;
+        public static final int ForwardedPoll_few = NUM;
+        public static final int ForwardedPoll_many = NUM;
+        public static final int ForwardedPoll_one = NUM;
+        public static final int ForwardedPoll_other = NUM;
+        public static final int ForwardedPoll_two = NUM;
+        public static final int ForwardedPoll_zero = NUM;
         public static final int ForwardedRound_few = NUM;
         public static final int ForwardedRound_many = NUM;
         public static final int ForwardedRound_one = NUM;
@@ -1995,6 +2012,7 @@ public final class CLASSNAMER {
         public static final int Months_two = NUM;
         public static final int Months_zero = NUM;
         public static final int MoreInfo = NUM;
+        public static final int MusicInfo = NUM;
         public static final int MuteDisable = NUM;
         public static final int MuteFor = NUM;
         public static final int MuteNotifications = NUM;
@@ -2016,6 +2034,7 @@ public final class CLASSNAMER {
         public static final int NewMessages_other = NUM;
         public static final int NewMessages_two = NUM;
         public static final int NewMessages_zero = NUM;
+        public static final int NewPoll = NUM;
         public static final int NewSecretChat = NUM;
         public static final int NewTheme = NUM;
         public static final int NoAudio = NUM;
@@ -2060,6 +2079,7 @@ public final class CLASSNAMER {
         public static final int NoStickers = NUM;
         public static final int NoStickersFound = NUM;
         public static final int NoUsernameFound = NUM;
+        public static final int NoVotes = NUM;
         public static final int NobodyLikesSpam1 = NUM;
         public static final int NobodyLikesSpam2 = NUM;
         public static final int NobodyLikesSpam3 = NUM;
@@ -2084,6 +2104,8 @@ public final class CLASSNAMER {
         public static final int NotificationActionPinnedNoTextChannel = NUM;
         public static final int NotificationActionPinnedPhoto = NUM;
         public static final int NotificationActionPinnedPhotoChannel = NUM;
+        public static final int NotificationActionPinnedPoll = NUM;
+        public static final int NotificationActionPinnedPollChannel = NUM;
         public static final int NotificationActionPinnedRound = NUM;
         public static final int NotificationActionPinnedRoundChannel = NUM;
         public static final int NotificationActionPinnedSticker = NUM;
@@ -2128,6 +2150,7 @@ public final class CLASSNAMER {
         public static final int NotificationMessageGroupMusic = NUM;
         public static final int NotificationMessageGroupNoText = NUM;
         public static final int NotificationMessageGroupPhoto = NUM;
+        public static final int NotificationMessageGroupPoll = NUM;
         public static final int NotificationMessageGroupRound = NUM;
         public static final int NotificationMessageGroupSticker = NUM;
         public static final int NotificationMessageGroupStickerEmoji = NUM;
@@ -2139,6 +2162,7 @@ public final class CLASSNAMER {
         public static final int NotificationMessageMusic = NUM;
         public static final int NotificationMessageNoText = NUM;
         public static final int NotificationMessagePhoto = NUM;
+        public static final int NotificationMessagePoll = NUM;
         public static final int NotificationMessageRound = NUM;
         public static final int NotificationMessageSDPhoto = NUM;
         public static final int NotificationMessageSDVideo = NUM;
@@ -2209,6 +2233,13 @@ public final class CLASSNAMER {
         public static final int OpenInExternalApp = NUM;
         public static final int OpenMessage = NUM;
         public static final int OpenUrlAlert = NUM;
+        public static final int OptionHint = NUM;
+        public static final int Option_few = NUM;
+        public static final int Option_many = NUM;
+        public static final int Option_one = NUM;
+        public static final int Option_other = NUM;
+        public static final int Option_two = NUM;
+        public static final int Option_zero = NUM;
         public static final int OtherLoginCode = NUM;
         public static final int OtherSessions = NUM;
         public static final int OtherWebSessions = NUM;
@@ -2528,6 +2559,7 @@ public final class CLASSNAMER {
         public static final int Ping = NUM;
         public static final int PinnedMessage = NUM;
         public static final int PinnedMessages = NUM;
+        public static final int PinnedPoll = NUM;
         public static final int PleaseDownload = NUM;
         public static final int PleaseEnterCurrentPassword = NUM;
         public static final int PleaseEnterFirstPassword = NUM;
@@ -2541,6 +2573,8 @@ public final class CLASSNAMER {
         public static final int Points_other = NUM;
         public static final int Points_two = NUM;
         public static final int Points_zero = NUM;
+        public static final int Poll = NUM;
+        public static final int PollOptions = NUM;
         public static final int PopupDisabled = NUM;
         public static final int PopupEnabled = NUM;
         public static final int PopupNotification = NUM;
@@ -2571,6 +2605,8 @@ public final class CLASSNAMER {
         public static final int ProxyConnections = NUM;
         public static final int ProxyDetails = NUM;
         public static final int ProxySettings = NUM;
+        public static final int Question = NUM;
+        public static final int QuestionHint = NUM;
         public static final int QuickReplyCustom = NUM;
         public static final int QuickReplyDefault1 = NUM;
         public static final int QuickReplyDefault2 = NUM;
@@ -2809,6 +2845,7 @@ public final class CLASSNAMER {
         public static final int StartEncryptedChat = NUM;
         public static final int StartMessaging = NUM;
         public static final int StartText = NUM;
+        public static final int Statistics = NUM;
         public static final int StickersAndMasks = NUM;
         public static final int StickersCopy = NUM;
         public static final int StickersHide = NUM;
@@ -2830,6 +2867,9 @@ public final class CLASSNAMER {
         public static final int StopLiveLocationAlertToGroup = NUM;
         public static final int StopLiveLocationAlertToUser = NUM;
         public static final int StopLoading = NUM;
+        public static final int StopPoll = NUM;
+        public static final int StopPollAlertText = NUM;
+        public static final int StopPollAlertTitle = NUM;
         public static final int StopVerification = NUM;
         public static final int StorageUsage = NUM;
         public static final int Streaming = NUM;
@@ -2938,6 +2978,7 @@ public final class CLASSNAMER {
         public static final int UnreadMessages = NUM;
         public static final int UnsupportedAttachment = NUM;
         public static final int UnsupportedMedia = NUM;
+        public static final int Unvote = NUM;
         public static final int Update = NUM;
         public static final int UpdateApp = NUM;
         public static final int UpdateAppAlert = NUM;
@@ -3057,6 +3098,12 @@ public final class CLASSNAMER {
         public static final int VoipSettingsRingtone = NUM;
         public static final int VoipUseLessData = NUM;
         public static final int VoipWaiting = NUM;
+        public static final int Vote_few = NUM;
+        public static final int Vote_many = NUM;
+        public static final int Vote_one = NUM;
+        public static final int Vote_other = NUM;
+        public static final int Vote_two = NUM;
+        public static final int Vote_zero = NUM;
         public static final int WaitMore = NUM;
         public static final int WaitingForNetwork = NUM;
         public static final int Warmth = NUM;

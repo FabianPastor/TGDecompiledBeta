@@ -1,23 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC.Updates;
 
-final /* synthetic */ class MessagesController$$Lambda$120 implements RequestDelegate {
-    private final MessagesController arg$1;
-    private final int arg$2;
-    private final int arg$3;
-    private final long arg$4;
+final /* synthetic */ class MessagesController$$Lambda$120 implements Comparator {
+    static final Comparator $instance = new MessagesController$$Lambda$120();
 
-    MessagesController$$Lambda$120(MessagesController messagesController, int i, int i2, long j) {
-        this.arg$1 = messagesController;
-        this.arg$2 = i;
-        this.arg$3 = i2;
-        this.arg$4 = j;
+    private MessagesController$$Lambda$120() {
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$getChannelDifference$188$MessagesController(this.arg$2, this.arg$3, this.arg$4, tLObject, tL_error);
+    public int compare(Object obj, Object obj2) {
+        return AndroidUtilities.compare(((Updates) obj).pts, ((Updates) obj2).pts);
     }
 }

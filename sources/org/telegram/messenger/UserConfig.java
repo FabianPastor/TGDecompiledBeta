@@ -46,6 +46,7 @@ public class UserConfig {
     public int migrateOffsetId = -1;
     public int migrateOffsetUserId = -1;
     public boolean notificationsSettingsLoaded;
+    public boolean notificationsSignUpSettingsLoaded;
     public TL_help_appUpdate pendingAppUpdate;
     public int pendingAppUpdateBuildVersion;
     public long pendingAppUpdateInstallTime;
@@ -149,6 +150,7 @@ public class UserConfig {
             editor.putBoolean("suggestContacts", this.suggestContacts);
             editor.putBoolean("hasSecureData", this.hasSecureData);
             editor.putBoolean("notificationsSettingsLoaded3", this.notificationsSettingsLoaded);
+            editor.putBoolean("notificationsSignUpSettingsLoaded", this.notificationsSignUpSettingsLoaded);
             editor.putInt("3migrateOffsetId", this.migrateOffsetId);
             if (this.migrateOffsetId != -1) {
                 editor.putInt("3migrateOffsetDate", this.migrateOffsetDate);
@@ -291,6 +293,7 @@ public class UserConfig {
             this.suggestContacts = preferences.getBoolean("suggestContacts", true);
             this.hasSecureData = preferences.getBoolean("hasSecureData", false);
             this.notificationsSettingsLoaded = preferences.getBoolean("notificationsSettingsLoaded3", false);
+            this.notificationsSignUpSettingsLoaded = preferences.getBoolean("notificationsSignUpSettingsLoaded", false);
             try {
                 String terms = preferences.getString("terms", null);
                 if (terms != null) {
@@ -418,6 +421,7 @@ public class UserConfig {
         this.lastBroadcastId = -1;
         this.blockedUsersLoaded = false;
         this.notificationsSettingsLoaded = false;
+        this.notificationsSignUpSettingsLoaded = false;
         this.migrateOffsetId = -1;
         this.migrateOffsetDate = -1;
         this.migrateOffsetUserId = -1;

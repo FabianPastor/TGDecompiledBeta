@@ -14,6 +14,6 @@ final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySmsView$5
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.mo14127x56e58341(tLObject, tL_error);
+        this.arg$1.mo14175x56e58341(tLObject, tL_error);
     }
 }

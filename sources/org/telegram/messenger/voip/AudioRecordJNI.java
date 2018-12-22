@@ -141,8 +141,11 @@ public class AudioRecordJNI {
     }
 
     public void stop() {
-        if (this.audioRecord != null) {
-            this.audioRecord.stop();
+        try {
+            if (this.audioRecord != null) {
+                this.audioRecord.stop();
+            }
+        } catch (Exception e) {
         }
     }
 

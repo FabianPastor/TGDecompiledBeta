@@ -9,6 +9,6 @@ final /* synthetic */ class ChatActivity$$Lambda$42 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$updateBottomOverlay$55$ChatActivity();
+        this.arg$1.lambda$checkSecretMessageForLocation$55$ChatActivity();
     }
 }

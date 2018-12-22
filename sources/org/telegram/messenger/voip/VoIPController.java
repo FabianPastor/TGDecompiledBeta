@@ -93,7 +93,7 @@ public class VoIPController {
 
     private static native String nativeGetVersion();
 
-    private native long nativeInit();
+    private native long nativeInit(String str);
 
     private static native boolean nativeNeedRate(long j);
 
@@ -125,7 +125,7 @@ public class VoIPController {
 
     public VoIPController() {
         this.nativeInst = 0;
-        this.nativeInst = nativeInit();
+        this.nativeInst = nativeInit(new File(ApplicationLoader.applicationContext.getFilesDir(), "voip_persistent_state.json").getAbsolutePath());
     }
 
     public void start() {

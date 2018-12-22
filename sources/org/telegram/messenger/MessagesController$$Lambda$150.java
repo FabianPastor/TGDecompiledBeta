@@ -1,26 +1,22 @@
 package org.telegram.messenger;
 
-import android.os.Bundle;
 import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.tgnet.TLObject;
 
 final /* synthetic */ class MessagesController$$Lambda$150 implements Runnable {
     private final MessagesController arg$1;
-    private final AlertDialog arg$2;
-    private final TLObject arg$3;
+    private final AlertDialog[] arg$2;
+    private final int arg$3;
     private final BaseFragment arg$4;
-    private final Bundle arg$5;
 
-    MessagesController$$Lambda$150(MessagesController messagesController, AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
+    MessagesController$$Lambda$150(MessagesController messagesController, AlertDialog[] alertDialogArr, int i, BaseFragment baseFragment) {
         this.arg$1 = messagesController;
-        this.arg$2 = alertDialog;
-        this.arg$3 = tLObject;
+        this.arg$2 = alertDialogArr;
+        this.arg$3 = i;
         this.arg$4 = baseFragment;
-        this.arg$5 = bundle;
     }
 
     public void run() {
-        this.arg$1.lambda$null$236$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+        this.arg$1.lambda$openByUserName$248$MessagesController(this.arg$2, this.arg$3, this.arg$4);
     }
 }

@@ -24,6 +24,7 @@ import java.io.StringReader;
 import java.net.URLEncoder;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -151,6 +152,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto_layer68;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto_layer74;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto_old;
+import org.telegram.tgnet.TLRPC.TL_messageMediaPoll;
 import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
@@ -171,6 +173,8 @@ import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
+import org.telegram.tgnet.TLRPC.TL_pollAnswerVoters;
+import org.telegram.tgnet.TLRPC.TL_pollResults;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_secureValueTypeAddress;
 import org.telegram.tgnet.TLRPC.TL_secureValueTypeBankStatement;
@@ -200,6 +204,7 @@ public class MessageObject {
     public static final int POSITION_FLAG_LEFT = 1;
     public static final int POSITION_FLAG_RIGHT = 2;
     public static final int POSITION_FLAG_TOP = 4;
+    public static final int TYPE_POLL = 17;
     static final String[] excludeWords = new String[]{" vs. ", " vs ", " versus ", " ft. ", " ft ", " featuring ", " feat. ", " feat ", " presents ", " pres. ", " pres ", " and ", " & ", " . "};
     public static Pattern instagramUrlPattern;
     public static Pattern urlPattern;
@@ -242,6 +247,8 @@ public class MessageObject {
     public String monthKey;
     public ArrayList<PhotoSize> photoThumbs;
     public ArrayList<PhotoSize> photoThumbs2;
+    public long pollLastCheckTime;
+    public boolean pollVisibleOnScreen;
     public String previousAttachPath;
     public String previousCaption;
     public ArrayList<MessageEntity> previousCaptionEntities;
@@ -1174,6 +1181,8 @@ public class MessageObject {
             }
         } else if (isMediaEmpty()) {
             this.messageText = message.message;
+        } else if (message.media instanceof TL_messageMediaPoll) {
+            this.messageText = LocaleController.getString("Poll", CLASSNAMER.string.Poll);
         } else if (message.media instanceof TL_messageMediaPhoto) {
             if (message.media.ttl_seconds == 0 || (message instanceof TL_message_secret)) {
                 this.messageText = LocaleController.getString("AttachPhoto", CLASSNAMER.string.AttachPhoto);
@@ -1970,6 +1979,13 @@ public class MessageObject {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
+        } else if (this.replyMessageObject.messageOwner.media instanceof TL_messageMediaPoll) {
+            string = LocaleController.getString("ActionPinnedPoll", CLASSNAMER.string.ActionPinnedPoll);
+            str = "un1";
+            if (fromUser == null) {
+                fromUser2 = chat2;
+            }
+            this.messageText = replaceWithLink(string, str, fromUser);
         } else if (this.replyMessageObject.messageOwner.media instanceof TL_messageMediaPhoto) {
             string = LocaleController.getString("ActionPinnedPhoto", CLASSNAMER.string.ActionPinnedPhoto);
             str = "un1";
@@ -2005,6 +2021,75 @@ public class MessageObject {
             }
             this.messageText = replaceWithLink(string, str, fromUser);
         }
+    }
+
+    public static void updatePollResults(TL_messageMediaPoll media, TL_pollResults results) {
+        TL_pollResults tL_pollResults;
+        if ((results.flags & 2) != 0) {
+            int N2;
+            int b;
+            TL_pollAnswerVoters answerVoters;
+            byte[] chosen = null;
+            if (results.min && media.results.results != null) {
+                N2 = media.results.results.size();
+                for (b = 0; b < N2; b++) {
+                    answerVoters = (TL_pollAnswerVoters) media.results.results.get(b);
+                    if (answerVoters.chosen) {
+                        chosen = answerVoters.option;
+                        break;
+                    }
+                }
+            }
+            media.results.results = results.results;
+            if (chosen != null) {
+                N2 = media.results.results.size();
+                for (b = 0; b < N2; b++) {
+                    answerVoters = (TL_pollAnswerVoters) media.results.results.get(b);
+                    if (Arrays.equals(answerVoters.option, chosen)) {
+                        answerVoters.chosen = true;
+                        break;
+                    }
+                }
+            }
+            tL_pollResults = media.results;
+            tL_pollResults.flags |= 2;
+        }
+        if ((results.flags & 4) != 0) {
+            media.results.total_voters = results.total_voters;
+            tL_pollResults = media.results;
+            tL_pollResults.flags |= 4;
+        }
+    }
+
+    public boolean isPollClosed() {
+        if (this.type != 17) {
+            return false;
+        }
+        return ((TL_messageMediaPoll) this.messageOwner.media).poll.closed;
+    }
+
+    public boolean isVoted() {
+        if (this.type != 17) {
+            return false;
+        }
+        TL_messageMediaPoll mediaPoll = this.messageOwner.media;
+        if (mediaPoll.results == null || mediaPoll.results.results.isEmpty()) {
+            return false;
+        }
+        int N = mediaPoll.results.results.size();
+        for (int a = 0; a < N; a++) {
+            if (((TL_pollAnswerVoters) mediaPoll.results.results.get(a)).chosen) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public long getPollId() {
+        if (this.type != 17) {
+            return 0;
+        }
+        return ((TL_messageMediaPoll) this.messageOwner.media).poll.var_id;
     }
 
     private Photo getPhotoWithId(WebPage webPage, long id) {
@@ -2200,6 +2285,8 @@ public class MessageObject {
                 this.type = 14;
             } else if (this.messageOwner.media instanceof TL_messageMediaContact) {
                 this.type = 12;
+            } else if (this.messageOwner.media instanceof TL_messageMediaPoll) {
+                this.type = 17;
             } else if (this.messageOwner.media instanceof TL_messageMediaUnsupported) {
                 this.type = 0;
             } else if (this.messageOwner.media instanceof TL_messageMediaDocument) {
@@ -3060,7 +3147,7 @@ public class MessageObject {
         return false;
     }
 
-    public int getMaxMessageTextWidth(User fromUser) {
+    public int getMaxMessageTextWidth() {
         this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
         int i = this.generatedWithMinSize;
         float f = (!needDrawAvatarInternal() || isOutOwner()) ? 80.0f : 132.0f;
@@ -3107,7 +3194,7 @@ public class MessageObject {
                 }
             }
             boolean hasUrls = addEntitiesToText(this.messageText, useManualParse);
-            int maxWidth = getMaxMessageTextWidth(fromUser);
+            int maxWidth = getMaxMessageTextWidth();
             if (this.messageOwner.media instanceof TL_messageMediaGame) {
                 paint = Theme.chat_msgGameTextPaint;
             } else {
@@ -4102,10 +4189,12 @@ public class MessageObject {
 
     public String getMusicAuthor(boolean unknown) {
         Document document;
-        if (this.type == 0) {
+        if (this.type != 0) {
+            document = this.messageOwner.media.document;
+        } else if (this.messageOwner.media.webpage != null) {
             document = this.messageOwner.media.webpage.document;
         } else {
-            document = this.messageOwner.media.document;
+            document = null;
         }
         if (document != null) {
             boolean isVoice = false;

@@ -1,17 +1,16 @@
 package org.telegram.p005ui;
 
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.widget.DatePicker;
-
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$79 */
-final /* synthetic */ class ChatActivity$$Lambda$79 implements OnDateSetListener {
+final /* synthetic */ class ChatActivity$$Lambda$79 implements Runnable {
     private final ChatActivity arg$1;
+    private final int arg$2;
 
-    ChatActivity$$Lambda$79(ChatActivity chatActivity) {
+    ChatActivity$$Lambda$79(ChatActivity chatActivity, int i) {
         this.arg$1 = chatActivity;
+        this.arg$2 = i;
     }
 
-    public void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
-        this.arg$1.lambda$null$28$ChatActivity(datePicker, i, i2, i3);
+    public void run() {
+        this.arg$1.lambda$null$53$ChatActivity(this.arg$2);
     }
 }

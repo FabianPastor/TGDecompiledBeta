@@ -817,13 +817,13 @@ public class LoginActivity extends BaseFragment {
         }
 
         /* renamed from: lambda$showTermsOfService$0$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo18655x6d0cdb6d(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo18749x6d0cdb6d(DialogInterface dialog, int which) {
             LoginActivity.this.currentTermsOfService.popup = false;
             onNextPressed();
         }
 
         /* renamed from: lambda$showTermsOfService$3$LoginActivity$LoginActivityRegisterView */
-        final /* synthetic */ void mo18656x12ed5CLASSNAME(DialogInterface dialog, int which) {
+        final /* synthetic */ void mo18750x12ed5CLASSNAME(DialogInterface dialog, int which) {
             Builder builder1 = new Builder(LoginActivity.this.getParentActivity());
             builder1.setTitle(LocaleController.getString("TermsOfService", CLASSNAMER.string.TermsOfService));
             builder1.setMessage(LocaleController.getString("TosDecline", CLASSNAMER.string.TosDecline));
@@ -2665,7 +2665,7 @@ public class LoginActivity extends BaseFragment {
             if (UserConfig.selectedAccount != num) {
                 ((LaunchActivity) LoginActivity.this.getParentActivity()).switchToAccount(num, false);
             }
-            LoginActivity.this.finishFragment();
+            LoginActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
         }
 
         final /* synthetic */ void lambda$onNextPressed$8$LoginActivity$PhoneView(Bundle params, TL_auth_sendCode req, TLObject response, TL_error error) {
@@ -3096,7 +3096,7 @@ public class LoginActivity extends BaseFragment {
             if (!this.newAccount) {
                 return true;
             }
-            finishFragment();
+            lambda$createView$1$PhotoAlbumPickerActivity();
             return true;
         }
         if (this.currentViewNum == 6) {
@@ -3323,7 +3323,7 @@ public class LoginActivity extends BaseFragment {
             if (this.newAccount) {
                 this.newAccount = false;
                 ((LaunchActivity) getParentActivity()).switchToAccount(this.currentAccount, false);
-                finishFragment();
+                lambda$createView$1$PhotoAlbumPickerActivity();
                 return;
             }
             presentFragment(new DialogsActivity(null), true);

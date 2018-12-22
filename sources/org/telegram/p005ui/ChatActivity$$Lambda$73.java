@@ -1,22 +1,19 @@
 package org.telegram.p005ui;
 
-import org.telegram.messenger.MessagesController;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$73 */
-final /* synthetic */ class ChatActivity$$Lambda$73 implements Runnable {
+final /* synthetic */ class ChatActivity$$Lambda$73 implements OnCancelListener {
     private final ChatActivity arg$1;
-    private final MessagesController arg$2;
-    private final CharSequence arg$3;
-    private final boolean arg$4;
+    private final int arg$2;
 
-    ChatActivity$$Lambda$73(ChatActivity chatActivity, MessagesController messagesController, CharSequence charSequence, boolean z) {
+    ChatActivity$$Lambda$73(ChatActivity chatActivity, int i) {
         this.arg$1 = chatActivity;
-        this.arg$2 = messagesController;
-        this.arg$3 = charSequence;
-        this.arg$4 = z;
+        this.arg$2 = i;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$43$ChatActivity(this.arg$2, this.arg$3, this.arg$4);
+    public void onCancel(DialogInterface dialogInterface) {
+        this.arg$1.lambda$null$77$ChatActivity(this.arg$2, dialogInterface);
     }
 }

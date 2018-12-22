@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class MessagesController$$Lambda$180 implements Runnable {
     private final MessagesController arg$1;
-    private final LongSparseArray arg$2;
+    private final TL_error arg$2;
+    private final int arg$3;
 
-    MessagesController$$Lambda$180(MessagesController messagesController, LongSparseArray longSparseArray) {
+    MessagesController$$Lambda$180(MessagesController messagesController, TL_error tL_error, int i) {
         this.arg$1 = messagesController;
-        this.arg$2 = longSparseArray;
+        this.arg$2 = tL_error;
+        this.arg$3 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$182$MessagesController(this.arg$2);
+        this.arg$1.lambda$null$193$MessagesController(this.arg$2, this.arg$3);
     }
 }

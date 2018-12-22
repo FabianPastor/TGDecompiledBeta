@@ -131,7 +131,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
 
         public void onItemClick(int id) {
             if (id == -1) {
-                GroupCreateActivity.this.finishFragment();
+                GroupCreateActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 1) {
                 GroupCreateActivity.this.onDonePressed();
             }
@@ -501,7 +501,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
 
         /* renamed from: lambda$updateSearchResults$0$GroupCreateActivity$GroupCreateAdapter */
-        final /* synthetic */ void mo18310x38var_e(ArrayList users, ArrayList names) {
+        final /* synthetic */ void mo18404x38var_e(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
@@ -1019,7 +1019,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 }
             }
         } else if (id == NotificationCenter.chatDidCreated) {
-            removeSelfFromStack();
+            lambda$null$10$ProfileActivity();
         }
     }
 
@@ -1081,7 +1081,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 if (this.delegate != null) {
                     this.delegate.didSelectUsers(result2);
                 }
-                finishFragment();
+                lambda$createView$1$PhotoAlbumPickerActivity();
             } else {
                 Bundle args = new Bundle();
                 args.putIntegerArrayList("result", result2);

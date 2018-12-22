@@ -1669,11 +1669,36 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 attachButton.setAlpha(f);
                 a++;
             }
+            updatePollMusicButton();
         }
     }
 
     public MessageObject getEditingMessageObject() {
         return this.editingMessageObject;
+    }
+
+    private void updatePollMusicButton() {
+        int i = 3;
+        if ((this.baseFragment instanceof ChatActivity) && !this.attachButtons.isEmpty()) {
+            boolean allowPoll = false;
+            if (this.editingMessageObject != null) {
+                allowPoll = false;
+            } else {
+                Chat currentChat = ((ChatActivity) this.baseFragment).getCurrentChat();
+                if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
+                    allowPoll = ChatObject.isChannel(currentChat) && (currentChat.creator || currentChat.admin_rights != null);
+                } else if (currentChat != null) {
+                    allowPoll = true;
+                }
+            }
+            String text = allowPoll ? LocaleController.getString("Poll", CLASSNAMER.string.Poll) : LocaleController.getString("AttachMusic", CLASSNAMER.string.AttachMusic);
+            AttachButton attachButton = (AttachButton) this.attachButtons.get(3);
+            Drawable[] drawableArr = Theme.chat_attachButtonDrawables;
+            if (allowPoll) {
+                i = 9;
+            }
+            attachButton.setTextAndIcon(text, drawableArr[i]);
+        }
     }
 
     private void updatePhotosCounter() {
@@ -3177,6 +3202,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     this.cameraIcon.setEnabled(this.mediaEnabled);
                 }
             }
+            updatePollMusicButton();
         }
         if (!this.useRevealAnimation) {
             return false;

@@ -71,6 +71,7 @@ import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
 import org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
+import org.telegram.tgnet.TLRPC.TL_messageMediaPoll;
 import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported;
 import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported_old;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
@@ -85,6 +86,8 @@ import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettingsEmpty_layer77;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photos_photos;
+import org.telegram.tgnet.TLRPC.TL_poll;
+import org.telegram.tgnet.TLRPC.TL_pollResults;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong;
 import org.telegram.tgnet.TLRPC.TL_userFull;
@@ -140,7 +143,7 @@ public class MessagesStorage {
 
     public interface IntCallback {
         /* renamed from: run */
-        void lambda$null$84$MessagesStorage(int i);
+        void lambda$null$87$MessagesStorage(int i);
     }
 
     public static MessagesStorage getInstance(int num) {
@@ -333,7 +336,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media ON media_v2(uid, mid, type, date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE bot_keyboard(uid INTEGER PRIMARY KEY, mid INTEGER, info BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid ON bot_keyboard(mid);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE chat_settings_v2(uid INTEGER PRIMARY KEY, info BLOB, pinned INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE chat_settings_v2(uid INTEGER PRIMARY KEY, info BLOB, pinned INTEGER, online INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS chat_settings_pinned_idx ON chat_settings_v2(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_settings(uid INTEGER PRIMARY KEY, info BLOB, pinned INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS user_settings_pinned_idx ON user_settings(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
@@ -370,7 +373,9 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE unread_push_messages(uid INTEGER, mid INTEGER, random INTEGER, date INTEGER, data BLOB, fm TEXT, name TEXT, uname TEXT, flags INTEGER, PRIMARY KEY(uid, mid))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_date ON unread_push_messages(date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 52").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 54").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 if (BuildVars.LOGS_ENABLED) {
@@ -407,7 +412,7 @@ public class MessagesStorage {
                         FileLog.m13e(e2);
                     }
                 }
-                if (version < 52) {
+                if (version < 54) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -777,6 +782,17 @@ public class MessagesStorage {
         if (version == 51) {
             this.database.executeFast("ALTER TABLE media_counts_v2 ADD COLUMN old INTEGER").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 52").stepThis().dispose();
+            version = 52;
+        }
+        if (version == 52) {
+            this.database.executeFast("CREATE TABLE IF NOT EXISTS polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
+            this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 53").stepThis().dispose();
+            version = 53;
+        }
+        if (version == 53) {
+            this.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN online INTEGER default 0").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 54").stepThis().dispose();
         }
     }
 
@@ -821,7 +837,7 @@ public class MessagesStorage {
         cleanupInternal();
         openDatabase(false);
         if (isLogin) {
-            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$132(this));
+            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$135(this));
         }
     }
 
@@ -945,7 +961,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$7(this));
     }
 
-    final /* synthetic */ void lambda$loadPendingTasks$15$MessagesStorage() {
+    final /* synthetic */ void lambda$loadPendingTasks$16$MessagesStorage() {
         try {
             SQLiteCursor cursor = this.database.queryFinalized("SELECT id, data FROM pending_tasks WHERE 1", new Object[0]);
             while (cursor.next()) {
@@ -953,16 +969,17 @@ public class MessagesStorage {
                 AbstractSerializedData data = cursor.byteBufferValue(1);
                 if (data != null) {
                     int type = data.readInt32(false);
+                    int channelId;
                     switch (type) {
                         case 0:
                             Chat chat = Chat.TLdeserialize(data, data.readInt32(false), false);
                             if (chat != null) {
-                                Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$125(this, chat, taskId));
+                                Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$127(this, chat, taskId));
                                 break;
                             }
                             break;
                         case 1:
-                            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$126(this, data.readInt32(false), data.readInt32(false), taskId));
+                            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$128(this, data.readInt32(false), data.readInt32(false), taskId));
                             break;
                         case 2:
                         case 5:
@@ -987,33 +1004,45 @@ public class MessagesStorage {
                             if (type >= 10) {
                                 dialog.unread_mark = data.readBool(false);
                             }
-                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$127(this, dialog, InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
+                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$129(this, dialog, InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
                             break;
                         case 3:
                             long random_id = data.readInt64(false);
                             SendMessagesHelper.getInstance(this.currentAccount).sendGame(InputPeer.TLdeserialize(data, data.readInt32(false), false), (TL_inputMediaGame) InputMedia.TLdeserialize(data, data.readInt32(false), false), random_id, taskId);
                             break;
                         case 4:
-                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$128(this, data.readInt64(false), data.readBool(false), InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
+                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$130(this, data.readInt64(false), data.readBool(false), InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
                             break;
                         case 6:
-                            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$129(this, data.readInt32(false), data.readInt32(false), taskId, InputChannel.TLdeserialize(data, data.readInt32(false), false)));
+                            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$131(this, data.readInt32(false), data.readInt32(false), taskId, InputChannel.TLdeserialize(data, data.readInt32(false), false)));
                             break;
                         case 7:
-                            int channelId = data.readInt32(false);
+                            channelId = data.readInt32(false);
                             int constructor = data.readInt32(false);
                             TLObject request = TL_messages_deleteMessages.TLdeserialize(data, constructor, false);
                             if (request == null) {
                                 request = TL_channels_deleteMessages.TLdeserialize(data, constructor, false);
                             }
                             if (request != null) {
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$130(this, channelId, taskId, request));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$132(this, channelId, taskId, request));
                                 break;
                             }
                             removePendingTask(taskId);
                             break;
                         case 9:
-                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$131(this, data.readInt64(false), InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
+                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$133(this, data.readInt64(false), InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
+                            break;
+                        case 11:
+                            InputChannel inputChannel;
+                            int mid = data.readInt32(false);
+                            channelId = data.readInt32(false);
+                            int ttl = data.readInt32(false);
+                            if (channelId != 0) {
+                                inputChannel = InputChannel.TLdeserialize(data, data.readInt32(false), false);
+                            } else {
+                                inputChannel = null;
+                            }
+                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$134(this, mid, channelId, inputChannel, ttl, taskId));
                             break;
                     }
                     data.reuse();
@@ -1053,11 +1082,15 @@ public class MessagesStorage {
         MessagesController.getInstance(this.currentAccount).markDialogAsUnread(did, peer, taskId);
     }
 
+    final /* synthetic */ void lambda$null$15$MessagesStorage(int mid, int channelId, InputChannel inputChannel, int ttl, long taskId) {
+        MessagesController.getInstance(this.currentAccount).markMessageAsRead(mid, channelId, inputChannel, ttl, taskId);
+    }
+
     public void saveChannelPts(int channelId, int pts) {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$8(this, pts, channelId));
     }
 
-    final /* synthetic */ void lambda$saveChannelPts$16$MessagesStorage(int pts, int channelId) {
+    final /* synthetic */ void lambda$saveChannelPts$17$MessagesStorage(int pts, int channelId) {
         try {
             SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET pts = ? WHERE did = ?");
             state.bindInteger(1, pts);
@@ -1097,7 +1130,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$10(this, did, flags));
     }
 
-    final /* synthetic */ void lambda$setDialogFlags$18$MessagesStorage(long did, long flags) {
+    final /* synthetic */ void lambda$setDialogFlags$19$MessagesStorage(long did, long flags) {
         try {
             this.database.executeFast(String.format(Locale.US, "REPLACE INTO dialog_settings VALUES(%d, %d)", new Object[]{Long.valueOf(did), Long.valueOf(flags)})).stepThis().dispose();
         } catch (Throwable e) {
@@ -1109,7 +1142,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$11(this, message));
     }
 
-    final /* synthetic */ void lambda$putPushMessage$19$MessagesStorage(MessageObject message) {
+    final /* synthetic */ void lambda$putPushMessage$20$MessagesStorage(MessageObject message) {
         try {
             NativeByteBuffer data = new NativeByteBuffer(message.messageOwner.getObjectSize());
             message.messageOwner.serializeToStream(data);
@@ -1159,7 +1192,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$12(this));
     }
 
-    final /* synthetic */ void lambda$loadUnreadMessages$21$MessagesStorage() {
+    final /* synthetic */ void lambda$loadUnreadMessages$22$MessagesStorage() {
         try {
             long did;
             int lower_id;
@@ -1352,13 +1385,13 @@ public class MessagesStorage {
                 }
             }
             Collections.reverse(messages);
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$124(this, pushDialogs, messages, pushMessages, users, chats, encryptedChats));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$126(this, pushDialogs, messages, pushMessages, users, chats, encryptedChats));
         } catch (Throwable e2) {
             FileLog.m13e(e2);
         }
     }
 
-    final /* synthetic */ void lambda$null$20$MessagesStorage(LongSparseArray pushDialogs, ArrayList messages, ArrayList pushMessages, ArrayList users, ArrayList chats, ArrayList encryptedChats) {
+    final /* synthetic */ void lambda$null$21$MessagesStorage(LongSparseArray pushDialogs, ArrayList messages, ArrayList pushMessages, ArrayList users, ArrayList chats, ArrayList encryptedChats) {
         NotificationsController.getInstance(this.currentAccount).processLoadedUnreadMessages(pushDialogs, messages, pushMessages, users, chats, encryptedChats);
     }
 
@@ -1366,7 +1399,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$13(this, wallPapers));
     }
 
-    final /* synthetic */ void lambda$putWallpapers$22$MessagesStorage(ArrayList wallPapers) {
+    final /* synthetic */ void lambda$putWallpapers$23$MessagesStorage(ArrayList wallPapers) {
         int num = 0;
         try {
             this.database.executeFast("DELETE FROM wallpapers WHERE 1").stepThis().dispose();
@@ -1395,15 +1428,15 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$14(this, type));
     }
 
-    final /* synthetic */ void lambda$loadWebRecent$24$MessagesStorage(int type) {
+    final /* synthetic */ void lambda$loadWebRecent$25$MessagesStorage(int type) {
         try {
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$123(this, type, new ArrayList()));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$125(this, type, new ArrayList()));
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$23$MessagesStorage(int type, ArrayList arrayList) {
+    final /* synthetic */ void lambda$null$24$MessagesStorage(int type, ArrayList arrayList) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.recentImagesDidLoad, Integer.valueOf(type), arrayList);
     }
 
@@ -1415,7 +1448,7 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$addRecentLocalFile$25$MessagesStorage(Document document, String imageUrl, String localUrl) {
+    final /* synthetic */ void lambda$addRecentLocalFile$26$MessagesStorage(Document document, String imageUrl, String localUrl) {
         SQLitePreparedStatement state;
         if (document != null) {
             try {
@@ -1446,7 +1479,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$16(this, type));
     }
 
-    final /* synthetic */ void lambda$clearWebRecent$26$MessagesStorage(int type) {
+    final /* synthetic */ void lambda$clearWebRecent$27$MessagesStorage(int type) {
         try {
             this.database.executeFast("DELETE FROM web_recent_v3 WHERE type = " + type).stepThis().dispose();
         } catch (Throwable e) {
@@ -1460,7 +1493,7 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$putWebRecent$27$MessagesStorage(ArrayList arrayList) {
+    final /* synthetic */ void lambda$putWebRecent$28$MessagesStorage(ArrayList arrayList) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -1513,7 +1546,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$18(this));
     }
 
-    final /* synthetic */ void lambda$getWallpapers$29$MessagesStorage() {
+    final /* synthetic */ void lambda$getWallpapers$30$MessagesStorage() {
         try {
             SQLiteCursor cursor = this.database.queryFinalized("SELECT data FROM wallpapers WHERE 1", new Object[0]);
             ArrayList<WallPaper> wallPapers = new ArrayList();
@@ -1526,7 +1559,7 @@ public class MessagesStorage {
                 }
             }
             cursor.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$122(wallPapers));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$124(wallPapers));
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
@@ -1536,7 +1569,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$19(this));
     }
 
-    final /* synthetic */ void lambda$getBlockedUsers$30$MessagesStorage() {
+    final /* synthetic */ void lambda$getBlockedUsers$31$MessagesStorage() {
         try {
             SparseIntArray ids = new SparseIntArray();
             ArrayList<User> users = new ArrayList();
@@ -1564,7 +1597,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$20(this, id));
     }
 
-    final /* synthetic */ void lambda$deleteBlockedUser$31$MessagesStorage(int id) {
+    final /* synthetic */ void lambda$deleteBlockedUser$32$MessagesStorage(int id) {
         try {
             this.database.executeFast("DELETE FROM blocked_users WHERE uid = " + id).stepThis().dispose();
         } catch (Throwable e) {
@@ -1578,7 +1611,7 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$putBlockedUsers$32$MessagesStorage(boolean replace, SparseIntArray ids) {
+    final /* synthetic */ void lambda$putBlockedUsers$33$MessagesStorage(boolean replace, SparseIntArray ids) {
         if (replace) {
             try {
                 this.database.executeFast("DELETE FROM blocked_users WHERE 1").stepThis().dispose();
@@ -1603,7 +1636,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$22(this, channelId, uid));
     }
 
-    final /* synthetic */ void lambda$deleteUserChannelHistory$35$MessagesStorage(int channelId, int uid) {
+    final /* synthetic */ void lambda$deleteUserChannelHistory$36$MessagesStorage(int channelId, int uid) {
         long did = (long) (-channelId);
         try {
             ArrayList mids = new ArrayList();
@@ -1644,23 +1677,23 @@ public class MessagesStorage {
                 }
             }
             cursor.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$120(this, mids, channelId));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$122(this, mids, channelId));
             markMessagesAsDeletedInternal(mids, channelId);
             updateDialogsWithDeletedMessagesInternal(mids, null, channelId);
             FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
             if (!mids.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$121(this, mids, channelId));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$123(this, mids, channelId));
             }
         } catch (Throwable e2) {
             FileLog.m13e(e2);
         }
     }
 
-    final /* synthetic */ void lambda$null$33$MessagesStorage(ArrayList mids, int channelId) {
+    final /* synthetic */ void lambda$null$34$MessagesStorage(ArrayList mids, int channelId) {
         MessagesController.getInstance(this.currentAccount).markChannelDialogMessageAsDeleted(mids, channelId);
     }
 
-    final /* synthetic */ void lambda$null$34$MessagesStorage(ArrayList mids, int channelId) {
+    final /* synthetic */ void lambda$null$35$MessagesStorage(ArrayList mids, int channelId) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, mids, Integer.valueOf(channelId));
     }
 
@@ -1668,7 +1701,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$23(this, messagesOnly, did));
     }
 
-    final /* synthetic */ void lambda$deleteDialog$37$MessagesStorage(int messagesOnly, long did) {
+    final /* synthetic */ void lambda$deleteDialog$38$MessagesStorage(int messagesOnly, long did) {
         SQLiteCursor cursor;
         NativeByteBuffer data;
         Message message;
@@ -1790,10 +1823,10 @@ public class MessagesStorage {
         this.database.executeFast("DELETE FROM messages_holes WHERE uid = " + did).stepThis().dispose();
         this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did).stepThis().dispose();
         DataQuery.getInstance(this.currentAccount).clearBotKeyboard(did, null);
-        AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$119(this));
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$121(this));
     }
 
-    final /* synthetic */ void lambda$null$36$MessagesStorage() {
+    final /* synthetic */ void lambda$null$37$MessagesStorage() {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.needReloadRecentDialogsSearch, new Object[0]);
     }
 
@@ -1801,7 +1834,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$24(this, max_id, did, count, classGuid));
     }
 
-    final /* synthetic */ void lambda$getDialogPhotos$39$MessagesStorage(long max_id, int did, int count, int classGuid) {
+    final /* synthetic */ void lambda$getDialogPhotos$40$MessagesStorage(long max_id, int did, int count, int classGuid) {
         SQLiteCursor cursor;
         if (max_id != 0) {
             try {
@@ -1822,10 +1855,10 @@ public class MessagesStorage {
             }
         }
         cursor.dispose();
-        Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$118(this, res, did, count, max_id, classGuid));
+        Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$120(this, res, did, count, max_id, classGuid));
     }
 
-    final /* synthetic */ void lambda$null$38$MessagesStorage(photos_Photos res, int did, int count, long max_id, int classGuid) {
+    final /* synthetic */ void lambda$null$39$MessagesStorage(photos_Photos res, int did, int count, long max_id, int classGuid) {
         MessagesController.getInstance(this.currentAccount).processLoadedUserPhotos(res, did, count, max_id, true, classGuid);
     }
 
@@ -1833,7 +1866,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$25(this, uid));
     }
 
-    final /* synthetic */ void lambda$clearUserPhotos$40$MessagesStorage(int uid) {
+    final /* synthetic */ void lambda$clearUserPhotos$41$MessagesStorage(int uid) {
         try {
             this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid).stepThis().dispose();
         } catch (Throwable e) {
@@ -1845,7 +1878,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$26(this, uid, pid));
     }
 
-    final /* synthetic */ void lambda$clearUserPhoto$41$MessagesStorage(int uid, long pid) {
+    final /* synthetic */ void lambda$clearUserPhoto$42$MessagesStorage(int uid, long pid) {
         try {
             this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid + " AND id = " + pid).stepThis().dispose();
         } catch (Throwable e) {
@@ -1857,7 +1890,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$27(this, dialogsRes, dialogsCount, seq, newPts, date, qts, lastMessage, messagesCount, new_dialogs_dict, new_dialogMessage));
     }
 
-    final /* synthetic */ void lambda$resetDialogs$43$MessagesStorage(messages_Dialogs dialogsRes, int dialogsCount, int seq, int newPts, int date, int qts, Message lastMessage, int messagesCount, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage) {
+    final /* synthetic */ void lambda$resetDialogs$44$MessagesStorage(messages_Dialogs dialogsRes, int dialogsCount, int seq, int newPts, int date, int qts, Message lastMessage, int messagesCount, LongSparseArray new_dialogs_dict, LongSparseArray new_dialogMessage) {
         int maxPinnedNum = 0;
         try {
             int a;
@@ -1883,7 +1916,7 @@ public class MessagesStorage {
                     }
                 }
             }
-            Collections.sort(oldPinnedOrder, new MessagesStorage$$Lambda$117(oldPinnedDialogNums));
+            Collections.sort(oldPinnedOrder, new MessagesStorage$$Lambda$119(oldPinnedDialogNums));
             while (oldPinnedOrder.size() < totalPinnedCount) {
                 oldPinnedOrder.add(0, Long.valueOf(0));
             }
@@ -1892,6 +1925,7 @@ public class MessagesStorage {
             this.database.beginTransaction();
             this.database.executeFast("DELETE FROM dialogs WHERE did IN " + ids).stepThis().dispose();
             this.database.executeFast("DELETE FROM messages WHERE uid IN " + ids).stepThis().dispose();
+            this.database.executeFast("DELETE FROM polls WHERE 1").stepThis().dispose();
             this.database.executeFast("DELETE FROM bot_keyboard WHERE uid IN " + ids).stepThis().dispose();
             this.database.executeFast("DELETE FROM media_v2 WHERE uid IN " + ids).stepThis().dispose();
             this.database.executeFast("DELETE FROM messages_holes WHERE uid IN " + ids).stepThis().dispose();
@@ -1970,7 +2004,7 @@ public class MessagesStorage {
         }
     }
 
-    static final /* synthetic */ int lambda$null$42$MessagesStorage(LongSparseArray oldPinnedDialogNums, Long o1, Long o2) {
+    static final /* synthetic */ int lambda$null$43$MessagesStorage(LongSparseArray oldPinnedDialogNums, Long o1, Long o2) {
         Integer val1 = (Integer) oldPinnedDialogNums.get(o1.longValue());
         Integer val2 = (Integer) oldPinnedDialogNums.get(o2.longValue());
         if (val1.intValue() < val2.intValue()) {
@@ -1988,7 +2022,7 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$putDialogPhotos$44$MessagesStorage(int did, photos_Photos photos) {
+    final /* synthetic */ void lambda$putDialogPhotos$45$MessagesStorage(int did, photos_Photos photos) {
         try {
             this.database.executeFast("DELETE FROM user_photos WHERE uid = " + did).stepThis().dispose();
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO user_photos VALUES(?, ?, ?)");
@@ -2016,7 +2050,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$29(this, mids));
     }
 
-    final /* synthetic */ void lambda$emptyMessagesMedia$46$MessagesStorage(ArrayList mids) {
+    final /* synthetic */ void lambda$emptyMessagesMedia$47$MessagesStorage(ArrayList mids) {
         try {
             NativeByteBuffer data;
             Message message;
@@ -2086,7 +2120,7 @@ public class MessagesStorage {
                     data.reuse();
                 }
                 state.dispose();
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$116(this, messages));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$118(this, messages));
             }
             FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
         } catch (Throwable e) {
@@ -2094,17 +2128,128 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$45$MessagesStorage(ArrayList messages) {
+    final /* synthetic */ void lambda$null$46$MessagesStorage(ArrayList messages) {
         for (int a = 0; a < messages.size(); a++) {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateMessageMedia, messages.get(a));
         }
     }
 
-    public void getNewTask(ArrayList<Integer> oldTask, int channelId) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$30(this, oldTask));
+    public void updateMessagePollResults(long pollId, TL_poll poll, TL_pollResults results) {
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$30(this, pollId, poll, results));
     }
 
-    final /* synthetic */ void lambda$getNewTask$47$MessagesStorage(ArrayList oldTask) {
+    /* JADX WARNING: Missing block: B:13:?, code:
+            r4.dispose();
+     */
+    /* JADX WARNING: Missing block: B:14:0x0044, code:
+            if (r11 == null) goto L_?;
+     */
+    /* JADX WARNING: Missing block: B:15:0x0046, code:
+            r19.database.beginTransaction();
+            r3 = 0;
+            r2 = r11.size();
+     */
+    /* JADX WARNING: Missing block: B:16:0x0052, code:
+            if (r3 >= r2) goto L_0x0119;
+     */
+    /* JADX WARNING: Missing block: B:17:0x0054, code:
+            r9 = (java.lang.Long) r11.get(r3);
+            r4 = r19.database.queryFinalized(java.lang.String.format(java.util.Locale.US, "SELECT data FROM messages WHERE mid = %d", new java.lang.Object[]{r9}), new java.lang.Object[0]);
+     */
+    /* JADX WARNING: Missing block: B:18:0x007e, code:
+            if (r4.next() == false) goto L_0x00ee;
+     */
+    /* JADX WARNING: Missing block: B:19:0x0080, code:
+            r5 = r4.byteBufferValue(0);
+     */
+    /* JADX WARNING: Missing block: B:20:0x0085, code:
+            if (r5 == null) goto L_0x00e7;
+     */
+    /* JADX WARNING: Missing block: B:21:0x0087, code:
+            r8 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r5, r5.readInt32(false), false);
+            r8.readAttachPath(r5, org.telegram.messenger.UserConfig.getInstance(r19.currentAccount).clientUserId);
+            r5.reuse();
+     */
+    /* JADX WARNING: Missing block: B:22:0x00a5, code:
+            if ((r8.media instanceof org.telegram.tgnet.TLRPC.TL_messageMediaPoll) == false) goto L_0x00e7;
+     */
+    /* JADX WARNING: Missing block: B:23:0x00a7, code:
+            r7 = r8.media;
+     */
+    /* JADX WARNING: Missing block: B:24:0x00ab, code:
+            if (r22 == null) goto L_0x00b1;
+     */
+    /* JADX WARNING: Missing block: B:25:0x00ad, code:
+            r7.poll = r22;
+     */
+    /* JADX WARNING: Missing block: B:26:0x00b1, code:
+            if (r23 == null) goto L_0x00b8;
+     */
+    /* JADX WARNING: Missing block: B:27:0x00b3, code:
+            org.telegram.messenger.MessageObject.updatePollResults(r7, r23);
+     */
+    /* JADX WARNING: Missing block: B:28:0x00b8, code:
+            r12 = r19.database.executeFast("UPDATE messages SET data = ? WHERE mid = ?");
+            r5 = new org.telegram.tgnet.NativeByteBuffer(r8.getObjectSize());
+            r8.serializeToStream(r5);
+            r12.requery();
+            r12.bindByteBuffer(1, r5);
+            r12.bindLong(2, r9.longValue());
+            r12.step();
+            r5.reuse();
+            r12.dispose();
+     */
+    /* JADX WARNING: Missing block: B:29:0x00e7, code:
+            r4.dispose();
+            r3 = r3 + 1;
+     */
+    /* JADX WARNING: Missing block: B:30:0x00ee, code:
+            r19.database.executeFast(java.lang.String.format(java.util.Locale.US, "DELETE FROM polls WHERE mid = %d", new java.lang.Object[]{r9})).stepThis().dispose();
+     */
+    /* JADX WARNING: Missing block: B:35:?, code:
+            r19.database.commitTransaction();
+     */
+    /* JADX WARNING: Missing block: B:44:?, code:
+            return;
+     */
+    /* JADX WARNING: Missing block: B:45:?, code:
+            return;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    final /* synthetic */ void lambda$updateMessagePollResults$48$MessagesStorage(long pollId, TL_poll poll, TL_pollResults results) {
+        Throwable e;
+        ArrayList<Long> mids = null;
+        try {
+            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM polls WHERE id = %d", new Object[]{Long.valueOf(pollId)}), new Object[0]);
+            while (true) {
+                ArrayList<Long> mids2;
+                try {
+                    mids2 = mids;
+                    if (!cursor.next()) {
+                        break;
+                    }
+                    if (mids2 == null) {
+                        mids = new ArrayList();
+                    } else {
+                        mids = mids2;
+                    }
+                    mids.add(Long.valueOf(cursor.longValue(0)));
+                } catch (Exception e2) {
+                    e = e2;
+                    mids = mids2;
+                }
+            }
+        } catch (Exception e3) {
+            e = e3;
+        }
+        FileLog.m13e(e);
+    }
+
+    public void getNewTask(ArrayList<Integer> oldTask, int channelId) {
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$31(this, oldTask));
+    }
+
+    final /* synthetic */ void lambda$getNewTask$49$MessagesStorage(ArrayList oldTask) {
         if (oldTask != null) {
             try {
                 String ids = TextUtils.join(",", oldTask);
@@ -2137,10 +2282,10 @@ public class MessagesStorage {
     }
 
     public void markMentionMessageAsRead(int messageId, int channelId, long did) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$31(this, messageId, channelId, did));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$32(this, messageId, channelId, did));
     }
 
-    final /* synthetic */ void lambda$markMentionMessageAsRead$48$MessagesStorage(int messageId, int channelId, long did) {
+    final /* synthetic */ void lambda$markMentionMessageAsRead$50$MessagesStorage(int messageId, int channelId, long did) {
         long mid = (long) messageId;
         if (channelId != 0) {
             mid |= ((long) channelId) << 32;
@@ -2163,10 +2308,10 @@ public class MessagesStorage {
     }
 
     public void markMessageAsMention(long mid) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$32(this, mid));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$33(this, mid));
     }
 
-    final /* synthetic */ void lambda$markMessageAsMention$49$MessagesStorage(long mid) {
+    final /* synthetic */ void lambda$markMessageAsMention$51$MessagesStorage(long mid) {
         try {
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET mention = 1, read_state = read_state & ~2 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
         } catch (Throwable e) {
@@ -2175,10 +2320,10 @@ public class MessagesStorage {
     }
 
     public void resetMentionsCount(long did, int count) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$33(this, count, did));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$34(this, count, did));
     }
 
-    final /* synthetic */ void lambda$resetMentionsCount$50$MessagesStorage(int count, long did) {
+    final /* synthetic */ void lambda$resetMentionsCount$52$MessagesStorage(int count, long did) {
         if (count == 0) {
             try {
                 this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(did)})).stepThis().dispose();
@@ -2194,10 +2339,10 @@ public class MessagesStorage {
     }
 
     public void createTaskForMid(int messageId, int channelId, int time, int readTime, int ttl, boolean inner) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$34(this, time, readTime, ttl, messageId, channelId, inner));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$35(this, time, readTime, ttl, messageId, channelId, inner));
     }
 
-    final /* synthetic */ void lambda$createTaskForMid$52$MessagesStorage(int time, int readTime, int ttl, int messageId, int channelId, boolean inner) {
+    final /* synthetic */ void lambda$createTaskForMid$54$MessagesStorage(int time, int readTime, int ttl, int messageId, int channelId, boolean inner) {
         if (time <= readTime) {
             time = readTime;
         }
@@ -2211,7 +2356,7 @@ public class MessagesStorage {
             }
             midsArray.add(Long.valueOf(mid));
             messages.put(minDate, midsArray);
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$115(this, inner, midsArray));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$117(this, inner, midsArray));
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
             for (int a = 0; a < messages.size(); a++) {
                 int key = messages.keyAt(a);
@@ -2231,7 +2376,7 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$51$MessagesStorage(boolean inner, ArrayList midsArray) {
+    final /* synthetic */ void lambda$null$53$MessagesStorage(boolean inner, ArrayList midsArray) {
         if (!inner) {
             markMessagesContentAsRead(midsArray, 0);
         }
@@ -2239,10 +2384,10 @@ public class MessagesStorage {
     }
 
     public void createTaskForSecretChat(int chatId, int time, int readTime, int isOut, ArrayList<Long> random_ids) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$35(this, random_ids, chatId, isOut, time, readTime));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$36(this, random_ids, chatId, isOut, time, readTime));
     }
 
-    final /* synthetic */ void lambda$createTaskForSecretChat$54$MessagesStorage(ArrayList random_ids, int chatId, int isOut, int time, int readTime) {
+    final /* synthetic */ void lambda$createTaskForSecretChat$56$MessagesStorage(ArrayList random_ids, int chatId, int isOut, int time, int readTime) {
         int minDate = ConnectionsManager.DEFAULT_DATACENTER_ID;
         try {
             SQLiteCursor cursor;
@@ -2285,7 +2430,7 @@ public class MessagesStorage {
             }
             cursor.dispose();
             if (random_ids != null) {
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$114(this, midsArray));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$116(this, midsArray));
             }
             if (messages.size() != 0) {
                 this.database.beginTransaction();
@@ -2310,7 +2455,7 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$53$MessagesStorage(ArrayList midsArray) {
+    final /* synthetic */ void lambda$null$55$MessagesStorage(ArrayList midsArray) {
         markMessagesContentAsRead(midsArray, 0);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesReadContent, midsArray);
     }
@@ -2461,27 +2606,27 @@ public class MessagesStorage {
     public void updateDialogsWithReadMessages(SparseLongArray inbox, SparseLongArray outbox, ArrayList<Long> mentions, boolean useQueue) {
         if (!isEmpty(inbox) || !isEmpty((List) mentions)) {
             if (useQueue) {
-                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$36(this, inbox, outbox, mentions));
+                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$37(this, inbox, outbox, mentions));
             } else {
                 updateDialogsWithReadMessagesInternal(null, inbox, outbox, mentions);
             }
         }
     }
 
-    final /* synthetic */ void lambda$updateDialogsWithReadMessages$55$MessagesStorage(SparseLongArray inbox, SparseLongArray outbox, ArrayList mentions) {
+    final /* synthetic */ void lambda$updateDialogsWithReadMessages$57$MessagesStorage(SparseLongArray inbox, SparseLongArray outbox, ArrayList mentions) {
         updateDialogsWithReadMessagesInternal(null, inbox, outbox, mentions);
     }
 
     public void updateChatParticipants(ChatParticipants participants) {
         if (participants != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$37(this, participants));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$38(this, participants));
         }
     }
 
-    final /* synthetic */ void lambda$updateChatParticipants$57$MessagesStorage(ChatParticipants participants) {
+    final /* synthetic */ void lambda$updateChatParticipants$59$MessagesStorage(ChatParticipants participants) {
         try {
             NativeByteBuffer data;
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned FROM chat_settings_v2 WHERE uid = " + participants.chat_id, new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = " + participants.chat_id, new Object[0]);
             ChatFull info = null;
             ArrayList<User> loadedUsers = new ArrayList();
             if (cursor.next()) {
@@ -2490,18 +2635,20 @@ public class MessagesStorage {
                     info = ChatFull.TLdeserialize(data, data.readInt32(false), false);
                     data.reuse();
                     info.pinned_msg_id = cursor.intValue(1);
+                    info.online_count = cursor.intValue(2);
                 }
             }
             cursor.dispose();
             if (info instanceof TL_chatFull) {
                 info.participants = participants;
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$113(this, info));
-                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$115(this, info));
+                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
                 state.bindInteger(1, info.var_id);
                 state.bindByteBuffer(2, data);
                 state.bindInteger(3, info.pinned_msg_id);
+                state.bindInteger(4, info.online_count);
                 state.step();
                 state.dispose();
                 data.reuse();
@@ -2511,15 +2658,15 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$56$MessagesStorage(ChatFull finalInfo) {
+    final /* synthetic */ void lambda$null$58$MessagesStorage(ChatFull finalInfo) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public void loadChannelAdmins(int chatId) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$38(this, chatId));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$39(this, chatId));
     }
 
-    final /* synthetic */ void lambda$loadChannelAdmins$58$MessagesStorage(int chatId) {
+    final /* synthetic */ void lambda$loadChannelAdmins$60$MessagesStorage(int chatId) {
         try {
             SQLiteCursor cursor = this.database.queryFinalized("SELECT uid FROM channel_admins WHERE did = " + chatId, new Object[0]);
             ArrayList<Integer> ids = new ArrayList();
@@ -2534,10 +2681,10 @@ public class MessagesStorage {
     }
 
     public void putChannelAdmins(int chatId, ArrayList<Integer> ids) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$39(this, chatId, ids));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$40(this, chatId, ids));
     }
 
-    final /* synthetic */ void lambda$putChannelAdmins$59$MessagesStorage(int chatId, ArrayList ids) {
+    final /* synthetic */ void lambda$putChannelAdmins$61$MessagesStorage(int chatId, ArrayList ids) {
         try {
             this.database.executeFast("DELETE FROM channel_admins WHERE did = " + chatId).stepThis().dispose();
             this.database.beginTransaction();
@@ -2557,10 +2704,10 @@ public class MessagesStorage {
     }
 
     public void updateChannelUsers(int channel_id, ArrayList<ChannelParticipant> participants) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$40(this, channel_id, participants));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$41(this, channel_id, participants));
     }
 
-    final /* synthetic */ void lambda$updateChannelUsers$60$MessagesStorage(int channel_id, ArrayList participants) {
+    final /* synthetic */ void lambda$updateChannelUsers$62$MessagesStorage(int channel_id, ArrayList participants) {
         long did = (long) (-channel_id);
         try {
             this.database.executeFast("DELETE FROM channel_users_v2 WHERE did = " + did).stepThis().dispose();
@@ -2590,11 +2737,11 @@ public class MessagesStorage {
 
     public void saveBotCache(String key, TLObject result) {
         if (result != null && !TextUtils.isEmpty(key)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$41(this, result, key));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$42(this, result, key));
         }
     }
 
-    final /* synthetic */ void lambda$saveBotCache$61$MessagesStorage(TLObject result, String key) {
+    final /* synthetic */ void lambda$saveBotCache$63$MessagesStorage(TLObject result, String key) {
         try {
             int currentDate = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             if (result instanceof TL_messages_botCallbackAnswer) {
@@ -2618,11 +2765,11 @@ public class MessagesStorage {
 
     public void getBotCache(String key, RequestDelegate requestDelegate) {
         if (key != null && requestDelegate != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$42(this, ConnectionsManager.getInstance(this.currentAccount).getCurrentTime(), key, requestDelegate));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$43(this, ConnectionsManager.getInstance(this.currentAccount).getCurrentTime(), key, requestDelegate));
         }
     }
 
-    final /* synthetic */ void lambda$getBotCache$62$MessagesStorage(int currentDate, String key, RequestDelegate requestDelegate) {
+    final /* synthetic */ void lambda$getBotCache$64$MessagesStorage(int currentDate, String key, RequestDelegate requestDelegate) {
         TLObject result = null;
         try {
             this.database.executeFast("DELETE FROM botcache WHERE date < " + currentDate).stepThis().dispose();
@@ -2653,11 +2800,11 @@ public class MessagesStorage {
 
     public void loadUserInfo(User user, boolean force, int classGuid) {
         if (user != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$43(this, user, force, classGuid));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$44(this, user, force, classGuid));
         }
     }
 
-    final /* synthetic */ void lambda$loadUserInfo$63$MessagesStorage(User user, boolean force, int classGuid) {
+    final /* synthetic */ void lambda$loadUserInfo$65$MessagesStorage(User user, boolean force, int classGuid) {
         TL_userFull info = null;
         MessageObject pinnedMessageObject;
         try {
@@ -2686,10 +2833,10 @@ public class MessagesStorage {
     }
 
     public void updateUserInfo(TL_userFull info, boolean ifExist) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$44(this, ifExist, info));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$45(this, ifExist, info));
     }
 
-    final /* synthetic */ void lambda$updateUserInfo$64$MessagesStorage(boolean ifExist, TL_userFull info) {
+    final /* synthetic */ void lambda$updateUserInfo$66$MessagesStorage(boolean ifExist, TL_userFull info) {
         if (ifExist) {
             try {
                 SQLiteCursor cursor = this.database.queryFinalized("SELECT uid FROM user_settings WHERE uid = " + info.user.var_id, new Object[0]);
@@ -2715,68 +2862,70 @@ public class MessagesStorage {
     }
 
     public void updateChatInfo(ChatFull info, boolean ifExist) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$45(this, ifExist, info));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$46(this, info, ifExist));
     }
 
-    final /* synthetic */ void lambda$updateChatInfo$65$MessagesStorage(boolean ifExist, ChatFull info) {
-        SQLiteCursor cursor;
-        if (ifExist) {
-            try {
-                cursor = this.database.queryFinalized("SELECT uid FROM chat_settings_v2 WHERE uid = " + info.var_id, new Object[0]);
-                boolean exist = cursor.next();
-                cursor.dispose();
-                if (!exist) {
-                    return;
-                }
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-                return;
-            }
-        }
-        SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
-        NativeByteBuffer data = new NativeByteBuffer(info.getObjectSize());
-        info.serializeToStream(data);
-        state.bindInteger(1, info.var_id);
-        state.bindByteBuffer(2, data);
-        state.bindInteger(3, info.pinned_msg_id);
-        state.step();
-        state.dispose();
-        data.reuse();
-        if (info instanceof TL_channelFull) {
-            cursor = this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i, flags FROM dialogs WHERE did = " + (-info.var_id), new Object[0]);
-            if (cursor.next() && cursor.intValue(3) < info.read_inbox_max_id) {
-                int dialog_date = cursor.intValue(0);
-                int pts = cursor.intValue(1);
-                long last_mid = cursor.longValue(2);
-                int outbox_max = cursor.intValue(4);
-                int pinned = cursor.intValue(5);
-                int mentions = cursor.intValue(6);
-                int flags = cursor.intValue(7);
-                state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                state.bindLong(1, (long) (-info.var_id));
-                state.bindInteger(2, dialog_date);
-                state.bindInteger(3, info.unread_count);
-                state.bindLong(4, last_mid);
-                state.bindInteger(5, info.read_inbox_max_id);
-                state.bindInteger(6, Math.max(outbox_max, info.read_outbox_max_id));
-                state.bindLong(7, 0);
-                state.bindInteger(8, mentions);
-                state.bindInteger(9, pts);
-                state.bindInteger(10, 0);
-                state.bindInteger(11, pinned);
-                state.bindInteger(12, flags);
-                state.step();
-                state.dispose();
+    final /* synthetic */ void lambda$updateChatInfo$67$MessagesStorage(ChatFull info, boolean ifExist) {
+        int currentOnline = -1;
+        try {
+            SQLiteCursor cursor = this.database.queryFinalized("SELECT online FROM chat_settings_v2 WHERE uid = " + info.var_id, new Object[0]);
+            if (cursor.next()) {
+                currentOnline = cursor.intValue(0);
             }
             cursor.dispose();
+            if (!ifExist || currentOnline != -1) {
+                if (currentOnline >= 0 && (info.flags & MessagesController.UPDATE_MASK_CHANNEL) == 0) {
+                    info.online_count = currentOnline;
+                }
+                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
+                NativeByteBuffer data = new NativeByteBuffer(info.getObjectSize());
+                info.serializeToStream(data);
+                state.bindInteger(1, info.var_id);
+                state.bindByteBuffer(2, data);
+                state.bindInteger(3, info.pinned_msg_id);
+                state.bindInteger(4, info.online_count);
+                state.step();
+                state.dispose();
+                data.reuse();
+                if (info instanceof TL_channelFull) {
+                    cursor = this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i, flags FROM dialogs WHERE did = " + (-info.var_id), new Object[0]);
+                    if (cursor.next() && cursor.intValue(3) < info.read_inbox_max_id) {
+                        int dialog_date = cursor.intValue(0);
+                        int pts = cursor.intValue(1);
+                        long last_mid = cursor.longValue(2);
+                        int outbox_max = cursor.intValue(4);
+                        int pinned = cursor.intValue(5);
+                        int mentions = cursor.intValue(6);
+                        int flags = cursor.intValue(7);
+                        state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        state.bindLong(1, (long) (-info.var_id));
+                        state.bindInteger(2, dialog_date);
+                        state.bindInteger(3, info.unread_count);
+                        state.bindLong(4, last_mid);
+                        state.bindInteger(5, info.read_inbox_max_id);
+                        state.bindInteger(6, Math.max(outbox_max, info.read_outbox_max_id));
+                        state.bindLong(7, 0);
+                        state.bindInteger(8, mentions);
+                        state.bindInteger(9, pts);
+                        state.bindInteger(10, 0);
+                        state.bindInteger(11, pinned);
+                        state.bindInteger(12, flags);
+                        state.step();
+                        state.dispose();
+                    }
+                    cursor.dispose();
+                }
+            }
+        } catch (Throwable e) {
+            FileLog.m13e(e);
         }
     }
 
     public void updateUserPinnedMessage(int userId, int messageId) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$46(this, userId, messageId));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$47(this, userId, messageId));
     }
 
-    final /* synthetic */ void lambda$updateUserPinnedMessage$67$MessagesStorage(int userId, int messageId) {
+    final /* synthetic */ void lambda$updateUserPinnedMessage$69$MessagesStorage(int userId, int messageId) {
         try {
             NativeByteBuffer data;
             SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned FROM user_settings WHERE uid = " + userId, new Object[0]);
@@ -2793,7 +2942,7 @@ public class MessagesStorage {
             if (info instanceof TL_userFull) {
                 info.pinned_msg_id = messageId;
                 info.flags |= 64;
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$112(this, userId, info));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$114(this, userId, info));
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO user_settings VALUES(?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
@@ -2809,18 +2958,35 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$66$MessagesStorage(int userId, TL_userFull finalInfo) {
+    final /* synthetic */ void lambda$null$68$MessagesStorage(int userId, TL_userFull finalInfo) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(userId), finalInfo, null);
     }
 
-    public void updateChatPinnedMessage(int channelId, int messageId) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$47(this, channelId, messageId));
+    public void updateChatOnlineCount(int channelId, int onlineCount) {
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$48(this, onlineCount, channelId));
     }
 
-    final /* synthetic */ void lambda$updateChatPinnedMessage$69$MessagesStorage(int channelId, int messageId) {
+    final /* synthetic */ void lambda$updateChatOnlineCount$70$MessagesStorage(int onlineCount, int channelId) {
+        try {
+            SQLitePreparedStatement state = this.database.executeFast("UPDATE chat_settings_v2 SET online = ? WHERE uid = ?");
+            state.requery();
+            state.bindInteger(1, onlineCount);
+            state.bindInteger(2, channelId);
+            state.step();
+            state.dispose();
+        } catch (Throwable e) {
+            FileLog.m13e(e);
+        }
+    }
+
+    public void updateChatPinnedMessage(int channelId, int messageId) {
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$49(this, channelId, messageId));
+    }
+
+    final /* synthetic */ void lambda$updateChatPinnedMessage$72$MessagesStorage(int channelId, int messageId) {
         try {
             NativeByteBuffer data;
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned FROM chat_settings_v2 WHERE uid = " + channelId, new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = " + channelId, new Object[0]);
             ChatFull info = null;
             if (cursor.next()) {
                 data = cursor.byteBufferValue(0);
@@ -2828,6 +2994,7 @@ public class MessagesStorage {
                     info = ChatFull.TLdeserialize(data, data.readInt32(false), false);
                     data.reuse();
                     info.pinned_msg_id = cursor.intValue(1);
+                    info.online_count = cursor.intValue(2);
                 }
             }
             cursor.dispose();
@@ -2839,13 +3006,14 @@ public class MessagesStorage {
                     info.pinned_msg_id = messageId;
                     info.flags |= 64;
                 }
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$111(this, info));
-                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$113(this, info));
+                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
                 state.bindInteger(1, channelId);
                 state.bindByteBuffer(2, data);
                 state.bindInteger(3, info.pinned_msg_id);
+                state.bindInteger(4, info.online_count);
                 state.step();
                 state.dispose();
                 data.reuse();
@@ -2855,18 +3023,18 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$68$MessagesStorage(ChatFull finalInfo) {
+    final /* synthetic */ void lambda$null$71$MessagesStorage(ChatFull finalInfo) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public void updateChatInfo(int chat_id, int user_id, int what, int invited_id, int version) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$48(this, chat_id, what, user_id, invited_id, version));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$50(this, chat_id, what, user_id, invited_id, version));
     }
 
-    final /* synthetic */ void lambda$updateChatInfo$71$MessagesStorage(int chat_id, int what, int user_id, int invited_id, int version) {
+    final /* synthetic */ void lambda$updateChatInfo$74$MessagesStorage(int chat_id, int what, int user_id, int invited_id, int version) {
         try {
             NativeByteBuffer data;
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned FROM chat_settings_v2 WHERE uid = " + chat_id, new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = " + chat_id, new Object[0]);
             ChatFull info = null;
             ArrayList<User> loadedUsers = new ArrayList();
             if (cursor.next()) {
@@ -2875,6 +3043,7 @@ public class MessagesStorage {
                     info = ChatFull.TLdeserialize(data, data.readInt32(false), false);
                     data.reuse();
                     info.pinned_msg_id = cursor.intValue(1);
+                    info.online_count = cursor.intValue(2);
                 }
             }
             cursor.dispose();
@@ -2923,13 +3092,14 @@ public class MessagesStorage {
                     }
                 }
                 info.participants.version = version;
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$110(this, info));
-                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?)");
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$112(this, info));
+                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
                 state.bindInteger(1, chat_id);
                 state.bindByteBuffer(2, data);
                 state.bindInteger(3, info.pinned_msg_id);
+                state.bindInteger(4, info.online_count);
                 state.step();
                 state.dispose();
                 data.reuse();
@@ -2939,14 +3109,14 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$70$MessagesStorage(ChatFull finalInfo) {
+    final /* synthetic */ void lambda$null$73$MessagesStorage(ChatFull finalInfo) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, finalInfo, Integer.valueOf(0), Boolean.valueOf(false), null);
     }
 
     public boolean isMigratedChat(int chat_id) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] result = new boolean[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$49(this, chat_id, result, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$51(this, chat_id, result, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -2957,7 +3127,7 @@ public class MessagesStorage {
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$isMigratedChat$72$MessagesStorage(int chat_id, boolean[] result, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$isMigratedChat$75$MessagesStorage(int chat_id, boolean[] result, CountDownLatch countDownLatch) {
         boolean z = false;
         try {
             SQLiteCursor cursor = this.database.queryFinalized("SELECT info FROM chat_settings_v2 WHERE uid = " + chat_id, new Object[0]);
@@ -2995,39 +3165,40 @@ public class MessagesStorage {
     }
 
     public void loadChatInfo(int chat_id, CountDownLatch countDownLatch, boolean force, boolean byChannelUsers) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$50(this, chat_id, countDownLatch, force, byChannelUsers));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$52(this, chat_id, countDownLatch, force, byChannelUsers));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x0205 A:{Splitter: B:8:0x004b, ExcHandler: all (r2_51 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x020c A:{Splitter: B:8:0x0052, ExcHandler: all (r2_53 'th' java.lang.Throwable)} */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing block: B:58:0x019c, code:
+    /* JADX WARNING: Missing block: B:58:0x01a3, code:
             r16 = e;
      */
-    /* JADX WARNING: Missing block: B:59:0x019d, code:
+    /* JADX WARNING: Missing block: B:59:0x01a4, code:
             r4 = r17;
      */
-    /* JADX WARNING: Missing block: B:76:0x0205, code:
+    /* JADX WARNING: Missing block: B:76:0x020c, code:
             r2 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:77:0x0206, code:
+    /* JADX WARNING: Missing block: B:77:0x020d, code:
             r22 = r2;
             r4 = r17;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$loadChatInfo$73$MessagesStorage(int chat_id, CountDownLatch countDownLatch, boolean force, boolean byChannelUsers) {
+    final /* synthetic */ void lambda$loadChatInfo$76$MessagesStorage(int chat_id, CountDownLatch countDownLatch, boolean force, boolean byChannelUsers) {
         Throwable e;
         MessageObject pinnedMessageObject = null;
         ChatFull info = null;
         ArrayList<User> loadedUsers = new ArrayList();
         try {
             NativeByteBuffer data;
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned FROM chat_settings_v2 WHERE uid = " + chat_id, new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = " + chat_id, new Object[0]);
             if (cursor.next()) {
                 data = cursor.byteBufferValue(0);
                 if (data != null) {
                     info = ChatFull.TLdeserialize(data, data.readInt32(false), false);
                     data.reuse();
                     info.pinned_msg_id = cursor.intValue(1);
+                    info.online_count = cursor.intValue(2);
                 }
             }
             ChatFull info2 = info;
@@ -3126,10 +3297,10 @@ public class MessagesStorage {
     }
 
     public void processPendingRead(long dialog_id, long maxPositiveId, long maxNegativeId, int max_date, boolean isChannel) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$51(this, dialog_id, maxPositiveId, isChannel, maxNegativeId));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$53(this, dialog_id, maxPositiveId, isChannel, maxNegativeId));
     }
 
-    final /* synthetic */ void lambda$processPendingRead$74$MessagesStorage(long dialog_id, long maxPositiveId, boolean isChannel, long maxNegativeId) {
+    final /* synthetic */ void lambda$processPendingRead$77$MessagesStorage(long dialog_id, long maxPositiveId, boolean isChannel, long maxNegativeId) {
         long currentMaxId = 0;
         int unreadCount = 0;
         long last_mid = 0;
@@ -3214,11 +3385,11 @@ public class MessagesStorage {
 
     public void putContacts(ArrayList<TL_contact> contacts, boolean deleteAll) {
         if (!contacts.isEmpty() || deleteAll) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$52(this, deleteAll, new ArrayList(contacts)));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$54(this, deleteAll, new ArrayList(contacts)));
         }
     }
 
-    final /* synthetic */ void lambda$putContacts$75$MessagesStorage(boolean deleteAll, ArrayList contactsCopy) {
+    final /* synthetic */ void lambda$putContacts$78$MessagesStorage(boolean deleteAll, ArrayList contactsCopy) {
         if (deleteAll) {
             try {
                 this.database.executeFast("DELETE FROM contacts WHERE 1").stepThis().dispose();
@@ -3242,11 +3413,11 @@ public class MessagesStorage {
 
     public void deleteContacts(ArrayList<Integer> uids) {
         if (uids != null && !uids.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$53(this, uids));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$55(this, uids));
         }
     }
 
-    final /* synthetic */ void lambda$deleteContacts$76$MessagesStorage(ArrayList uids) {
+    final /* synthetic */ void lambda$deleteContacts$79$MessagesStorage(ArrayList uids) {
         try {
             this.database.executeFast("DELETE FROM contacts WHERE uid IN(" + TextUtils.join(",", uids) + ")").stepThis().dispose();
         } catch (Throwable e) {
@@ -3256,11 +3427,11 @@ public class MessagesStorage {
 
     public void applyPhoneBookUpdates(String adds, String deletes) {
         if (adds.length() != 0 || deletes.length() != 0) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$54(this, adds, deletes));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$56(this, adds, deletes));
         }
     }
 
-    final /* synthetic */ void lambda$applyPhoneBookUpdates$77$MessagesStorage(String adds, String deletes) {
+    final /* synthetic */ void lambda$applyPhoneBookUpdates$80$MessagesStorage(String adds, String deletes) {
         try {
             if (adds.length() != 0) {
                 this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 0 WHERE sphone IN(%s)", new Object[]{adds})).stepThis().dispose();
@@ -3278,11 +3449,11 @@ public class MessagesStorage {
             return;
         }
         if (!contactHashMap.isEmpty() || migrate || delete) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$55(this, contactHashMap, migrate));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$57(this, contactHashMap, migrate));
         }
     }
 
-    final /* synthetic */ void lambda$putCachedPhoneBook$78$MessagesStorage(HashMap contactHashMap, boolean migrate) {
+    final /* synthetic */ void lambda$putCachedPhoneBook$81$MessagesStorage(HashMap contactHashMap, boolean migrate) {
         try {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m10d(this.currentAccount + " save contacts to db " + contactHashMap.size());
@@ -3326,10 +3497,10 @@ public class MessagesStorage {
     }
 
     public void getCachedPhoneBook(boolean byError) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$56(this, byError));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$58(this, byError));
     }
 
-    final /* synthetic */ void lambda$getCachedPhoneBook$79$MessagesStorage(boolean byError) {
+    final /* synthetic */ void lambda$getCachedPhoneBook$82$MessagesStorage(boolean byError) {
         SQLiteCursor cursor = null;
         try {
             cursor = this.database.queryFinalized("SELECT name FROM sqlite_master WHERE type='table' AND name='user_contacts_v6'", new Object[0]);
@@ -3495,10 +3666,10 @@ public class MessagesStorage {
     }
 
     public void getContacts() {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$57(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$59(this));
     }
 
-    final /* synthetic */ void lambda$getContacts$80$MessagesStorage() {
+    final /* synthetic */ void lambda$getContacts$83$MessagesStorage() {
         ArrayList<TL_contact> contacts = new ArrayList();
         ArrayList<User> users = new ArrayList();
         try {
@@ -3534,10 +3705,10 @@ public class MessagesStorage {
     }
 
     public void getUnsentMessages(int count) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$58(this, count));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$60(this, count));
     }
 
-    final /* synthetic */ void lambda$getUnsentMessages$81$MessagesStorage(int count) {
+    final /* synthetic */ void lambda$getUnsentMessages$84$MessagesStorage(int count) {
         try {
             SparseArray<Message> messageHashMap = new SparseArray();
             ArrayList<Message> messages = new ArrayList();
@@ -3632,7 +3803,7 @@ public class MessagesStorage {
     public boolean checkMessageByRandomId(long random_id) {
         boolean[] result = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$59(this, random_id, result, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$61(this, random_id, result, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -3641,7 +3812,7 @@ public class MessagesStorage {
         return result[0];
     }
 
-    final /* synthetic */ void lambda$checkMessageByRandomId$82$MessagesStorage(long random_id, boolean[] result, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$checkMessageByRandomId$85$MessagesStorage(long random_id, boolean[] result, CountDownLatch countDownLatch) {
         SQLiteCursor cursor = null;
         try {
             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT random_id FROM randoms WHERE random_id = %d", new Object[]{Long.valueOf(random_id)}), new Object[0]);
@@ -3667,7 +3838,7 @@ public class MessagesStorage {
     public boolean checkMessageId(long dialog_id, int mid) {
         boolean[] result = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$60(this, dialog_id, mid, result, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$62(this, dialog_id, mid, result, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -3676,7 +3847,7 @@ public class MessagesStorage {
         return result[0];
     }
 
-    final /* synthetic */ void lambda$checkMessageId$83$MessagesStorage(long dialog_id, int mid, boolean[] result, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$checkMessageId$86$MessagesStorage(long dialog_id, int mid, boolean[] result, CountDownLatch countDownLatch) {
         SQLiteCursor cursor = null;
         try {
             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages WHERE uid = %d AND mid = %d", new Object[]{Long.valueOf(dialog_id), Integer.valueOf(mid)}), new Object[0]);
@@ -3700,10 +3871,10 @@ public class MessagesStorage {
     }
 
     public void getUnreadMention(long dialog_id, IntCallback callback) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$61(this, dialog_id, callback));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$63(this, dialog_id, callback));
     }
 
-    final /* synthetic */ void lambda$getUnreadMention$85$MessagesStorage(long dialog_id, IntCallback callback) {
+    final /* synthetic */ void lambda$getUnreadMention$88$MessagesStorage(long dialog_id, IntCallback callback) {
         try {
             int result;
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT MIN(mid) FROM messages WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(dialog_id)}), new Object[0]);
@@ -3713,17 +3884,17 @@ public class MessagesStorage {
                 result = 0;
             }
             cursor.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$109(callback, result));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$111(callback, result));
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
     }
 
     public void getMessages(long dialog_id, int count, int max_id, int offset_date, int minDate, int classGuid, int load_type, boolean isChannel, int loadIndex) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$62(this, count, max_id, isChannel, dialog_id, load_type, minDate, offset_date, classGuid, loadIndex));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$64(this, count, max_id, isChannel, dialog_id, load_type, minDate, offset_date, classGuid, loadIndex));
     }
 
-    final /* synthetic */ void lambda$getMessages$87$MessagesStorage(int count, int max_id, boolean isChannel, long dialog_id, int load_type, int minDate, int offset_date, int classGuid, int loadIndex) {
+    final /* synthetic */ void lambda$getMessages$90$MessagesStorage(int count, int max_id, boolean isChannel, long dialog_id, int load_type, int minDate, int offset_date, int classGuid, int loadIndex) {
         int currentUserId = UserConfig.getInstance(this.currentAccount).clientUserId;
         TL_messages_messages res = new TL_messages_messages();
         int count_unread = 0;
@@ -4201,7 +4372,7 @@ public class MessagesStorage {
                 }
                 cursor.dispose();
             }
-            Collections.sort(res.messages, MessagesStorage$$Lambda$108.$instance);
+            Collections.sort(res.messages, MessagesStorage$$Lambda$110.$instance);
             if (lower_id != 0) {
                 if ((load_type == 3 || load_type == 4 || (load_type == 2 && queryFromServer && !unreadCountIsLocal)) && !res.messages.isEmpty() && (minId > max_id_query || maxId < max_id_query)) {
                     replyMessages.clear();
@@ -4300,7 +4471,7 @@ public class MessagesStorage {
         }
     }
 
-    static final /* synthetic */ int lambda$null$86$MessagesStorage(Message lhs, Message rhs) {
+    static final /* synthetic */ int lambda$null$89$MessagesStorage(Message lhs, Message rhs) {
         if (lhs.var_id <= 0 || rhs.var_id <= 0) {
             if (lhs.var_id >= 0 || rhs.var_id >= 0) {
                 if (lhs.date > rhs.date) {
@@ -4327,10 +4498,10 @@ public class MessagesStorage {
     }
 
     public void clearSentMedia() {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$63(this));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$65(this));
     }
 
-    final /* synthetic */ void lambda$clearSentMedia$88$MessagesStorage() {
+    final /* synthetic */ void lambda$clearSentMedia$91$MessagesStorage() {
         try {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
         } catch (Throwable e) {
@@ -4344,7 +4515,7 @@ public class MessagesStorage {
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Object[] result = new Object[2];
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$64(this, path, type, result, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$66(this, path, type, result, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -4353,7 +4524,7 @@ public class MessagesStorage {
         return result[0] == null ? null : result;
     }
 
-    final /* synthetic */ void lambda$getSentFile$89$MessagesStorage(String path, int type, Object[] result, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getSentFile$92$MessagesStorage(String path, int type, Object[] result, CountDownLatch countDownLatch) {
         try {
             if (Utilities.MD5(path) != null) {
                 SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data, parent FROM sent_files_v2 WHERE uid = '%s' AND type = %d", new Object[]{id, Integer.valueOf(type)}), new Object[0]);
@@ -4386,13 +4557,13 @@ public class MessagesStorage {
 
     public void putSentFile(String path, TLObject file, int type, String parent) {
         if (path != null && file != null && parent != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$65(this, path, file, type, parent));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$67(this, path, file, type, parent));
         }
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$putSentFile$90$MessagesStorage(String path, TLObject file, int type, String parent) {
+    final /* synthetic */ void lambda$putSentFile$93$MessagesStorage(String path, TLObject file, int type, String parent) {
         SQLitePreparedStatement state = null;
         try {
             String id = Utilities.MD5(path);
@@ -4443,13 +4614,13 @@ public class MessagesStorage {
 
     public void updateEncryptedChatSeq(EncryptedChat chat, boolean cleanup) {
         if (chat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$66(this, chat, cleanup));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$68(this, chat, cleanup));
         }
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatSeq$91$MessagesStorage(EncryptedChat chat, boolean cleanup) {
+    final /* synthetic */ void lambda$updateEncryptedChatSeq$94$MessagesStorage(EncryptedChat chat, boolean cleanup) {
         SQLitePreparedStatement state = null;
         try {
             state = this.database.executeFast("UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?");
@@ -4482,13 +4653,13 @@ public class MessagesStorage {
 
     public void updateEncryptedChatTTL(EncryptedChat chat) {
         if (chat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$67(this, chat));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$69(this, chat));
         }
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatTTL$92$MessagesStorage(EncryptedChat chat) {
+    final /* synthetic */ void lambda$updateEncryptedChatTTL$95$MessagesStorage(EncryptedChat chat) {
         SQLitePreparedStatement state = null;
         try {
             state = this.database.executeFast("UPDATE enc_chats SET ttl = ? WHERE uid = ?");
@@ -4513,13 +4684,13 @@ public class MessagesStorage {
 
     public void updateEncryptedChatLayer(EncryptedChat chat) {
         if (chat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$68(this, chat));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$70(this, chat));
         }
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatLayer$93$MessagesStorage(EncryptedChat chat) {
+    final /* synthetic */ void lambda$updateEncryptedChatLayer$96$MessagesStorage(EncryptedChat chat) {
         SQLitePreparedStatement state = null;
         try {
             state = this.database.executeFast("UPDATE enc_chats SET layer = ? WHERE uid = ?");
@@ -4544,13 +4715,13 @@ public class MessagesStorage {
 
     public void updateEncryptedChat(EncryptedChat chat) {
         if (chat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$69(this, chat));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$71(this, chat));
         }
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChat$94$MessagesStorage(EncryptedChat chat) {
+    final /* synthetic */ void lambda$updateEncryptedChat$97$MessagesStorage(EncryptedChat chat) {
         int i = 1;
         SQLitePreparedStatement state = null;
         try {
@@ -4637,7 +4808,7 @@ public class MessagesStorage {
     public boolean isDialogHasMessages(long did) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] result = new boolean[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$70(this, did, result, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$72(this, did, result, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -4646,7 +4817,7 @@ public class MessagesStorage {
         return result[0];
     }
 
-    final /* synthetic */ void lambda$isDialogHasMessages$95$MessagesStorage(long did, boolean[] result, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$isDialogHasMessages$98$MessagesStorage(long did, boolean[] result, CountDownLatch countDownLatch) {
         try {
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages WHERE uid = %d LIMIT 1", new Object[]{Long.valueOf(did)}), new Object[0]);
             result[0] = cursor.next();
@@ -4661,7 +4832,7 @@ public class MessagesStorage {
     public boolean hasAuthMessage(int date) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] result = new boolean[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$71(this, date, result, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$73(this, date, result, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -4670,7 +4841,7 @@ public class MessagesStorage {
         return result[0];
     }
 
-    final /* synthetic */ void lambda$hasAuthMessage$96$MessagesStorage(int date, boolean[] result, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$hasAuthMessage$99$MessagesStorage(int date, boolean[] result, CountDownLatch countDownLatch) {
         try {
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages WHERE uid = 777000 AND date = %d AND mid < 0 LIMIT 1", new Object[]{Integer.valueOf(date)}), new Object[0]);
             result[0] = cursor.next();
@@ -4684,11 +4855,11 @@ public class MessagesStorage {
 
     public void getEncryptedChat(int chat_id, CountDownLatch countDownLatch, ArrayList<TLObject> result) {
         if (countDownLatch != null && result != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$72(this, chat_id, result, countDownLatch));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$74(this, chat_id, result, countDownLatch));
         }
     }
 
-    final /* synthetic */ void lambda$getEncryptedChat$97$MessagesStorage(int chat_id, ArrayList result, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getEncryptedChat$100$MessagesStorage(int chat_id, ArrayList result, CountDownLatch countDownLatch) {
         try {
             ArrayList<Integer> usersToLoad = new ArrayList();
             ArrayList<EncryptedChat> encryptedChats = new ArrayList();
@@ -4713,11 +4884,11 @@ public class MessagesStorage {
 
     public void putEncryptedChat(EncryptedChat chat, User user, TL_dialog dialog) {
         if (chat != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$73(this, chat, user, dialog));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$75(this, chat, user, dialog));
         }
     }
 
-    final /* synthetic */ void lambda$putEncryptedChat$98$MessagesStorage(EncryptedChat chat, User user, TL_dialog dialog) {
+    final /* synthetic */ void lambda$putEncryptedChat$101$MessagesStorage(EncryptedChat chat, User user, TL_dialog dialog) {
         int i = 1;
         try {
             int length;
@@ -5055,17 +5226,17 @@ public class MessagesStorage {
             return;
         }
         if (useQueue) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$74(this, users, chats, withTransaction));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$76(this, users, chats, withTransaction));
         } else {
             putUsersAndChatsInternal(users, chats, withTransaction);
         }
     }
 
     public void removeFromDownloadQueue(long id, int type, boolean move) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$75(this, move, type, id));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$77(this, move, type, id));
     }
 
-    final /* synthetic */ void lambda$removeFromDownloadQueue$100$MessagesStorage(boolean move, int type, long id) {
+    final /* synthetic */ void lambda$removeFromDownloadQueue$103$MessagesStorage(boolean move, int type, long id) {
         if (move) {
             int minDate = -1;
             try {
@@ -5088,10 +5259,10 @@ public class MessagesStorage {
     }
 
     public void clearDownloadQueue(int type) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$76(this, type));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$78(this, type));
     }
 
-    final /* synthetic */ void lambda$clearDownloadQueue$101$MessagesStorage(int type) {
+    final /* synthetic */ void lambda$clearDownloadQueue$104$MessagesStorage(int type) {
         if (type == 0) {
             try {
                 this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
@@ -5105,10 +5276,10 @@ public class MessagesStorage {
     }
 
     public void getDownloadQueue(int type) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$77(this, type));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$79(this, type));
     }
 
-    final /* synthetic */ void lambda$getDownloadQueue$103$MessagesStorage(int type) {
+    final /* synthetic */ void lambda$getDownloadQueue$106$MessagesStorage(int type) {
         try {
             ArrayList<DownloadObject> objects = new ArrayList();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, type, data, parent FROM download_queue WHERE type = %d ORDER BY date DESC LIMIT 3", new Object[]{Integer.valueOf(type)}), new Object[0]);
@@ -5137,13 +5308,13 @@ public class MessagesStorage {
                 objects.add(downloadObject);
             }
             cursor.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$107(this, type, objects));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$109(this, type, objects));
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$102$MessagesStorage(int type, ArrayList objects) {
+    final /* synthetic */ void lambda$null$105$MessagesStorage(int type, ArrayList objects) {
         DownloadController.getInstance(this.currentAccount).processDownloadObjects(type, objects);
     }
 
@@ -5167,11 +5338,11 @@ public class MessagesStorage {
 
     public void putWebPages(LongSparseArray<WebPage> webPages) {
         if (!isEmpty((LongSparseArray) webPages)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$78(this, webPages));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$80(this, webPages));
         }
     }
 
-    final /* synthetic */ void lambda$putWebPages$105$MessagesStorage(LongSparseArray webPages) {
+    final /* synthetic */ void lambda$putWebPages$108$MessagesStorage(LongSparseArray webPages) {
         try {
             int a;
             NativeByteBuffer data;
@@ -5228,22 +5399,22 @@ public class MessagesStorage {
                 state.dispose();
                 state2.dispose();
                 this.database.commitTransaction();
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$106(this, messages));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$108(this, messages));
             }
         } catch (Throwable e) {
             FileLog.m13e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$104$MessagesStorage(ArrayList messages) {
+    final /* synthetic */ void lambda$null$107$MessagesStorage(ArrayList messages) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didReceivedWebpages, messages);
     }
 
     public void overwriteChannel(int channel_id, TL_updates_channelDifferenceTooLong difference, int newDialogType) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$79(this, channel_id, newDialogType, difference));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$81(this, channel_id, newDialogType, difference));
     }
 
-    final /* synthetic */ void lambda$overwriteChannel$107$MessagesStorage(int channel_id, int newDialogType, TL_updates_channelDifferenceTooLong difference) {
+    final /* synthetic */ void lambda$overwriteChannel$110$MessagesStorage(int channel_id, int newDialogType, TL_updates_channelDifferenceTooLong difference) {
         boolean checkInvite = false;
         long did = (long) (-channel_id);
         int pinned = 0;
@@ -5283,7 +5454,7 @@ public class MessagesStorage {
             dialogs.dialogs.add(dialog);
             putDialogsInternal(dialogs, 0);
             updateDialogsWithDeletedMessages(new ArrayList(), null, false, channel_id);
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$105(this, did));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$107(this, did));
             if (!checkInvite) {
                 return;
             }
@@ -5297,17 +5468,17 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$106$MessagesStorage(long did) {
+    final /* synthetic */ void lambda$null$109$MessagesStorage(long did) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(did), Boolean.valueOf(true));
     }
 
     public void putChannelViews(SparseArray<SparseIntArray> channelViews, boolean isChannel) {
         if (!isEmpty((SparseArray) channelViews)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$80(this, channelViews, isChannel));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$82(this, channelViews, isChannel));
         }
     }
 
-    final /* synthetic */ void lambda$putChannelViews$108$MessagesStorage(SparseArray channelViews, boolean isChannel) {
+    final /* synthetic */ void lambda$putChannelViews$111$MessagesStorage(SparseArray channelViews, boolean isChannel) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement state = this.database.executeFast("UPDATE messages SET media = max((SELECT media FROM messages WHERE mid = ?), ?) WHERE mid = ?");
@@ -5384,11 +5555,12 @@ public class MessagesStorage {
         LongSparseArray<Integer> dialogsReadMax = new LongSparseArray();
         LongSparseArray<Long> messagesIdsMap = new LongSparseArray();
         LongSparseArray<Long> mentionsIdsMap = new LongSparseArray();
-        SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
-        SQLitePreparedStatement state2 = null;
-        SQLitePreparedStatement state3 = this.database.executeFast("REPLACE INTO randoms VALUES(?, ?)");
-        SQLitePreparedStatement state4 = this.database.executeFast("REPLACE INTO download_queue VALUES(?, ?, ?, ?, ?)");
-        SQLitePreparedStatement state5 = this.database.executeFast("REPLACE INTO webpage_pending VALUES(?, ?)");
+        SQLitePreparedStatement state_messages = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
+        SQLitePreparedStatement state_media = null;
+        SQLitePreparedStatement state_randoms = this.database.executeFast("REPLACE INTO randoms VALUES(?, ?)");
+        SQLitePreparedStatement state_download = this.database.executeFast("REPLACE INTO download_queue VALUES(?, ?, ?, ?, ?)");
+        SQLitePreparedStatement state_webpage = this.database.executeFast("REPLACE INTO webpage_pending VALUES(?, ?)");
+        SQLitePreparedStatement state_polls = null;
         for (a = 0; a < messages.size(); a++) {
             message = (Message) messages.get(a);
             messageId = (long) message.var_id;
@@ -5525,7 +5697,7 @@ public class MessagesStorage {
         for (a = 0; a < messages.size(); a++) {
             message = (Message) messages.get(a);
             fixUnsupportedMedia(message);
-            state.requery();
+            state_messages.requery();
             messageId = (long) message.var_id;
             if (message.local_id != 0) {
                 messageId = (long) message.local_id;
@@ -5545,45 +5717,54 @@ public class MessagesStorage {
                     messagesMap.put(message.dialog_id, message);
                 }
             }
-            state.bindLong(1, messageId);
-            state.bindLong(2, message.dialog_id);
-            state.bindInteger(3, MessageObject.getUnreadFlags(message));
-            state.bindInteger(4, message.send_state);
-            state.bindInteger(5, message.date);
-            state.bindByteBuffer(6, data);
-            state.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
-            state.bindInteger(8, message.ttl);
+            state_messages.bindLong(1, messageId);
+            state_messages.bindLong(2, message.dialog_id);
+            state_messages.bindInteger(3, MessageObject.getUnreadFlags(message));
+            state_messages.bindInteger(4, message.send_state);
+            state_messages.bindInteger(5, message.date);
+            state_messages.bindByteBuffer(6, data);
+            state_messages.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
+            state_messages.bindInteger(8, message.ttl);
             if ((message.flags & 1024) != 0) {
-                state.bindInteger(9, message.views);
+                state_messages.bindInteger(9, message.views);
             } else {
-                state.bindInteger(9, getMessageMediaType(message));
+                state_messages.bindInteger(9, getMessageMediaType(message));
             }
-            state.bindInteger(10, 0);
-            state.bindInteger(11, message.mentioned ? 1 : 0);
-            state.step();
+            state_messages.bindInteger(10, 0);
+            state_messages.bindInteger(11, message.mentioned ? 1 : 0);
+            state_messages.step();
             if (message.random_id != 0) {
-                state3.requery();
-                state3.bindLong(1, message.random_id);
-                state3.bindLong(2, messageId);
-                state3.step();
+                state_randoms.requery();
+                state_randoms.bindLong(1, message.random_id);
+                state_randoms.bindLong(2, messageId);
+                state_randoms.step();
             }
             if (DataQuery.canAddMessageToMedia(message)) {
-                if (state2 == null) {
-                    state2 = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
+                if (state_media == null) {
+                    state_media = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
                 }
-                state2.requery();
-                state2.bindLong(1, messageId);
-                state2.bindLong(2, message.dialog_id);
-                state2.bindInteger(3, message.date);
-                state2.bindInteger(4, DataQuery.getMediaType(message));
-                state2.bindByteBuffer(5, data);
-                state2.step();
+                state_media.requery();
+                state_media.bindLong(1, messageId);
+                state_media.bindLong(2, message.dialog_id);
+                state_media.bindInteger(3, message.date);
+                state_media.bindInteger(4, DataQuery.getMediaType(message));
+                state_media.bindByteBuffer(5, data);
+                state_media.step();
             }
-            if (message.media instanceof TL_messageMediaWebPage) {
-                state5.requery();
-                state5.bindLong(1, message.media.webpage.var_id);
-                state5.bindLong(2, messageId);
-                state5.step();
+            if (message.media instanceof TL_messageMediaPoll) {
+                if (state_polls == null) {
+                    state_polls = this.database.executeFast("REPLACE INTO polls VALUES(?, ?)");
+                }
+                TL_messageMediaPoll mediaPoll = (TL_messageMediaPoll) message.media;
+                state_polls.requery();
+                state_polls.bindLong(1, messageId);
+                state_polls.bindLong(2, mediaPoll.poll.var_id);
+                state_polls.step();
+            } else if (message.media instanceof TL_messageMediaWebPage) {
+                state_webpage.requery();
+                state_webpage.bindLong(1, message.media.webpage.var_id);
+                state_webpage.bindLong(2, messageId);
+                state_webpage.step();
             }
             data.reuse();
             if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - 3600 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
@@ -5635,27 +5816,30 @@ public class MessagesStorage {
                         object.flags |= 4;
                     }
                     downloadMediaMask |= type;
-                    state4.requery();
+                    state_download.requery();
                     data = new NativeByteBuffer(object.getObjectSize());
                     object.serializeToStream(data);
-                    state4.bindLong(1, id);
-                    state4.bindInteger(2, type);
-                    state4.bindInteger(3, message.date);
-                    state4.bindByteBuffer(4, data);
-                    state4.bindString(5, "sent_" + (message.to_id != null ? message.to_id.channel_id : 0) + "_" + message.var_id);
-                    state4.step();
+                    state_download.bindLong(1, id);
+                    state_download.bindInteger(2, type);
+                    state_download.bindInteger(3, message.date);
+                    state_download.bindByteBuffer(4, data);
+                    state_download.bindString(5, "sent_" + (message.to_id != null ? message.to_id.channel_id : 0) + "_" + message.var_id);
+                    state_download.step();
                     data.reuse();
                 }
             }
         }
-        state.dispose();
-        if (state2 != null) {
-            state2.dispose();
+        state_messages.dispose();
+        if (state_media != null) {
+            state_media.dispose();
         }
-        state3.dispose();
-        state4.dispose();
-        state5.dispose();
-        state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        if (state_polls != null) {
+            state_polls.dispose();
+        }
+        state_randoms.dispose();
+        state_download.dispose();
+        state_webpage.dispose();
+        state_messages = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         for (a = 0; a < messagesMap.size(); a++) {
             key = messagesMap.keyAt(a);
             if (key != 0) {
@@ -5711,29 +5895,29 @@ public class MessagesStorage {
                 if (channelId != 0) {
                     messageId |= ((long) channelId) << 32;
                 }
-                state.requery();
-                state.bindLong(1, key);
+                state_messages.requery();
+                state_messages.bindLong(1, key);
                 if (message == null || (doNotUpdateDialogDate && dialog_date != 0)) {
-                    state.bindInteger(2, dialog_date);
+                    state_messages.bindInteger(2, dialog_date);
                 } else {
-                    state.bindInteger(2, message.date);
+                    state_messages.bindInteger(2, message.date);
                 }
-                state.bindInteger(3, unread_count.intValue() + old_unread_count);
-                state.bindLong(4, messageId);
-                state.bindInteger(5, inbox_max);
-                state.bindInteger(6, outbox_max);
-                state.bindLong(7, 0);
-                state.bindInteger(8, mentions_count.intValue() + old_mentions_count);
-                state.bindInteger(9, pts);
-                state.bindInteger(10, 0);
-                state.bindInteger(11, pinned);
-                state.bindInteger(12, flags);
-                state.step();
+                state_messages.bindInteger(3, unread_count.intValue() + old_unread_count);
+                state_messages.bindLong(4, messageId);
+                state_messages.bindInteger(5, inbox_max);
+                state_messages.bindInteger(6, outbox_max);
+                state_messages.bindLong(7, 0);
+                state_messages.bindInteger(8, mentions_count.intValue() + old_mentions_count);
+                state_messages.bindInteger(9, pts);
+                state_messages.bindInteger(10, 0);
+                state_messages.bindInteger(11, pinned);
+                state_messages.bindInteger(12, flags);
+                state_messages.step();
             }
         }
-        state.dispose();
+        state_messages.dispose();
         if (mediaCounts != null) {
-            state3 = this.database.executeFast("REPLACE INTO media_counts_v2 VALUES(?, ?, ?, ?)");
+            state_randoms = this.database.executeFast("REPLACE INTO media_counts_v2 VALUES(?, ?, ?, ?)");
             for (a = 0; a < mediaCounts.size(); a++) {
                 type = mediaCounts.keyAt(a);
                 LongSparseArray<Integer> value2 = (LongSparseArray) mediaCounts.valueAt(a);
@@ -5749,28 +5933,28 @@ public class MessagesStorage {
                     }
                     cursor.dispose();
                     if (count2 != -1) {
-                        state3.requery();
+                        state_randoms.requery();
                         count2 += ((Integer) value2.valueAt(b)).intValue();
-                        state3.bindLong(1, uid);
-                        state3.bindInteger(2, type);
-                        state3.bindInteger(3, Math.max(0, count2));
-                        state3.bindInteger(4, old);
-                        state3.step();
+                        state_randoms.bindLong(1, uid);
+                        state_randoms.bindInteger(2, type);
+                        state_randoms.bindInteger(3, Math.max(0, count2));
+                        state_randoms.bindInteger(4, old);
+                        state_randoms.step();
                     }
                 }
             }
-            state3.dispose();
+            state_randoms.dispose();
         }
         if (withTransaction) {
             this.database.commitTransaction();
         }
         MessagesController.getInstance(this.currentAccount).processDialogsUpdateRead(messagesCounts, mentionCounts);
         if (downloadMediaMask != 0) {
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$81(this, downloadMediaMask));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$83(this, downloadMediaMask));
         }
     }
 
-    final /* synthetic */ void lambda$putMessagesInternal$109$MessagesStorage(int downloadMediaMaskFinal) {
+    final /* synthetic */ void lambda$putMessagesInternal$112$MessagesStorage(int downloadMediaMaskFinal) {
         DownloadController.getInstance(this.currentAccount).newDownloadObjectsAvailable(downloadMediaMaskFinal);
     }
 
@@ -5781,7 +5965,7 @@ public class MessagesStorage {
     public void putMessages(ArrayList<Message> messages, boolean withTransaction, boolean useQueue, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         if (messages.size() != 0) {
             if (useQueue) {
-                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$82(this, messages, withTransaction, doNotUpdateDialogDate, downloadMask, ifNoLastMessage));
+                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$84(this, messages, withTransaction, doNotUpdateDialogDate, downloadMask, ifNoLastMessage));
             } else {
                 putMessagesInternal(messages, withTransaction, doNotUpdateDialogDate, downloadMask, ifNoLastMessage);
             }
@@ -5789,10 +5973,10 @@ public class MessagesStorage {
     }
 
     public void markMessageAsSendError(Message message) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$83(this, message));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$85(this, message));
     }
 
-    final /* synthetic */ void lambda$markMessageAsSendError$111$MessagesStorage(Message message) {
+    final /* synthetic */ void lambda$markMessageAsSendError$114$MessagesStorage(Message message) {
         try {
             long messageId = (long) message.var_id;
             if (message.to_id.channel_id != 0) {
@@ -5805,10 +5989,10 @@ public class MessagesStorage {
     }
 
     public void setMessageSeq(int mid, int seq_in, int seq_out) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$84(this, mid, seq_in, seq_out));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$86(this, mid, seq_in, seq_out));
     }
 
-    final /* synthetic */ void lambda$setMessageSeq$112$MessagesStorage(int mid, int seq_in, int seq_out) {
+    final /* synthetic */ void lambda$setMessageSeq$115$MessagesStorage(int mid, int seq_in, int seq_out) {
         try {
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages_seq VALUES(?, ?, ?)");
             state.requery();
@@ -5973,7 +6157,7 @@ public class MessagesStorage {
         if (!useQueue) {
             return updateMessageStateAndIdInternal(random_id, _oldId, newId, date, channelId);
         }
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$85(this, random_id, _oldId, newId, date, channelId));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$87(this, random_id, _oldId, newId, date, channelId));
         return null;
     }
 
@@ -6055,7 +6239,7 @@ public class MessagesStorage {
     public void updateUsers(ArrayList<User> users, boolean onlyStatus, boolean withTransaction, boolean useQueue) {
         if (users != null && !users.isEmpty()) {
             if (useQueue) {
-                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$86(this, users, onlyStatus, withTransaction));
+                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$88(this, users, onlyStatus, withTransaction));
             } else {
                 updateUsersInternal(users, onlyStatus, withTransaction);
             }
@@ -6106,11 +6290,11 @@ public class MessagesStorage {
 
     public void markMessagesContentAsRead(ArrayList<Long> mids, int date) {
         if (!isEmpty((List) mids)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$87(this, mids, date));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$89(this, mids, date));
         }
     }
 
-    final /* synthetic */ void lambda$markMessagesContentAsRead$115$MessagesStorage(ArrayList mids, int date) {
+    final /* synthetic */ void lambda$markMessagesContentAsRead$118$MessagesStorage(ArrayList mids, int date) {
         try {
             String midsStr = TextUtils.join(",", mids);
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE mid IN (%s)", new Object[]{midsStr})).stepThis().dispose();
@@ -6135,7 +6319,7 @@ public class MessagesStorage {
 
     public void markMessagesAsRead(SparseLongArray inbox, SparseLongArray outbox, SparseIntArray encryptedMessages, boolean useQueue) {
         if (useQueue) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$88(this, inbox, outbox, encryptedMessages));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$90(this, inbox, outbox, encryptedMessages));
         } else {
             markMessagesAsReadInternal(inbox, outbox, encryptedMessages);
         }
@@ -6143,11 +6327,11 @@ public class MessagesStorage {
 
     public void markMessagesAsDeletedByRandoms(ArrayList<Long> messages) {
         if (!messages.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$89(this, messages));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$91(this, messages));
         }
     }
 
-    final /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$118$MessagesStorage(ArrayList messages) {
+    final /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$121$MessagesStorage(ArrayList messages) {
         try {
             String ids = TextUtils.join(",", messages);
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM randoms WHERE random_id IN(%s)", new Object[]{ids}), new Object[0]);
@@ -6157,7 +6341,7 @@ public class MessagesStorage {
             }
             cursor.dispose();
             if (!mids.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$104(this, mids));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$106(this, mids));
                 updateDialogsWithReadMessagesInternal(mids, null, null, null);
                 markMessagesAsDeletedInternal(mids, 0);
                 updateDialogsWithDeletedMessagesInternal(mids, null, 0);
@@ -6167,7 +6351,7 @@ public class MessagesStorage {
         }
     }
 
-    final /* synthetic */ void lambda$null$117$MessagesStorage(ArrayList mids) {
+    final /* synthetic */ void lambda$null$120$MessagesStorage(ArrayList mids) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, mids, Integer.valueOf(0));
     }
 
@@ -6275,6 +6459,7 @@ public class MessagesStorage {
                 state.dispose();
             }
             this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
+            this.database.executeFast(String.format(Locale.US, "DELETE FROM polls WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             this.database.executeFast(String.format(Locale.US, "DELETE FROM bot_keyboard WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             this.database.executeFast(String.format(Locale.US, "DELETE FROM messages_seq WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             if (arrayList.isEmpty()) {
@@ -6468,7 +6653,7 @@ public class MessagesStorage {
     public void updateDialogsWithDeletedMessages(ArrayList<Integer> messages, ArrayList<Long> additionalDialogsToUpdate, boolean useQueue, int channelId) {
         if (!messages.isEmpty() || channelId != 0) {
             if (useQueue) {
-                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$90(this, messages, additionalDialogsToUpdate, channelId));
+                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$92(this, messages, additionalDialogsToUpdate, channelId));
             } else {
                 updateDialogsWithDeletedMessagesInternal(messages, additionalDialogsToUpdate, channelId);
             }
@@ -6482,7 +6667,7 @@ public class MessagesStorage {
         if (!useQueue) {
             return markMessagesAsDeletedInternal((ArrayList) messages, channelId);
         }
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$91(this, messages, channelId));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$93(this, messages, channelId));
         return null;
     }
 
@@ -6586,7 +6771,7 @@ public class MessagesStorage {
         if (!useQueue) {
             return markMessagesAsDeletedInternal(channelId, mid);
         }
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$92(this, channelId, mid));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$94(this, channelId, mid));
         return null;
     }
 
@@ -6595,12 +6780,12 @@ public class MessagesStorage {
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 89;
+                    message.media.bytes[0] = (byte) 91;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 89;
+                message.media.bytes[0] = (byte) 91;
                 message.flags |= 512;
             }
         }
@@ -6778,11 +6963,11 @@ public class MessagesStorage {
 
     public void replaceMessageIfExists(Message message) {
         if (message != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$93(this, message));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$95(this, message));
         }
     }
 
-    final /* synthetic */ void lambda$replaceMessageIfExists$122$MessagesStorage(Message message) {
+    final /* synthetic */ void lambda$replaceMessageIfExists$125$MessagesStorage(Message message) {
         try {
             long messageId = (long) message.var_id;
             int channelId = 0;
@@ -6857,10 +7042,10 @@ public class MessagesStorage {
     }
 
     public void putMessages(messages_Messages messages, long dialog_id, int load_type, int max_id, boolean createDialog) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$94(this, messages, load_type, dialog_id, max_id, createDialog));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$96(this, messages, load_type, dialog_id, max_id, createDialog));
     }
 
-    final /* synthetic */ void lambda$putMessages$123$MessagesStorage(messages_Messages messages, int load_type, long dialog_id, int max_id, boolean createDialog) {
+    final /* synthetic */ void lambda$putMessages$126$MessagesStorage(messages_Messages messages, int load_type, long dialog_id, int max_id, boolean createDialog) {
         int mentionCountUpdate = ConnectionsManager.DEFAULT_DATACENTER_ID;
         try {
             if (!messages.messages.isEmpty()) {
@@ -6886,9 +7071,10 @@ public class MessagesStorage {
                     closeHolesInMedia(dialog_id, minId, maxId, -1);
                 }
                 int count = messages.messages.size();
-                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
-                SQLitePreparedStatement state2 = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
-                SQLitePreparedStatement state5 = null;
+                SQLitePreparedStatement state_messages = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
+                SQLitePreparedStatement state_media = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
+                SQLitePreparedStatement state_polls = null;
+                SQLitePreparedStatement state_webpage = null;
                 Message botKeyboard = null;
                 int channelId = 0;
                 for (int a = 0; a < count; a++) {
@@ -6967,52 +7153,64 @@ public class MessagesStorage {
                         state3.dispose();
                     }
                     fixUnsupportedMedia(message);
-                    state.requery();
+                    state_messages.requery();
                     AbstractSerializedData nativeByteBuffer = new NativeByteBuffer(message.getObjectSize());
                     message.serializeToStream(nativeByteBuffer);
-                    state.bindLong(1, messageId);
-                    state.bindLong(2, dialog_id);
-                    state.bindInteger(3, MessageObject.getUnreadFlags(message));
-                    state.bindInteger(4, message.send_state);
-                    state.bindInteger(5, message.date);
-                    state.bindByteBuffer(6, (NativeByteBuffer) nativeByteBuffer);
-                    state.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
-                    state.bindInteger(8, message.ttl);
+                    state_messages.bindLong(1, messageId);
+                    state_messages.bindLong(2, dialog_id);
+                    state_messages.bindInteger(3, MessageObject.getUnreadFlags(message));
+                    state_messages.bindInteger(4, message.send_state);
+                    state_messages.bindInteger(5, message.date);
+                    state_messages.bindByteBuffer(6, (NativeByteBuffer) nativeByteBuffer);
+                    state_messages.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
+                    state_messages.bindInteger(8, message.ttl);
                     if ((message.flags & 1024) != 0) {
-                        state.bindInteger(9, message.views);
+                        state_messages.bindInteger(9, message.views);
                     } else {
-                        state.bindInteger(9, getMessageMediaType(message));
+                        state_messages.bindInteger(9, getMessageMediaType(message));
                     }
-                    state.bindInteger(10, 0);
-                    state.bindInteger(11, message.mentioned ? 1 : 0);
-                    state.step();
+                    state_messages.bindInteger(10, 0);
+                    state_messages.bindInteger(11, message.mentioned ? 1 : 0);
+                    state_messages.step();
                     if (DataQuery.canAddMessageToMedia(message)) {
-                        state2.requery();
-                        state2.bindLong(1, messageId);
-                        state2.bindLong(2, dialog_id);
-                        state2.bindInteger(3, message.date);
-                        state2.bindInteger(4, DataQuery.getMediaType(message));
-                        state2.bindByteBuffer(5, (NativeByteBuffer) nativeByteBuffer);
-                        state2.step();
+                        state_media.requery();
+                        state_media.bindLong(1, messageId);
+                        state_media.bindLong(2, dialog_id);
+                        state_media.bindInteger(3, message.date);
+                        state_media.bindInteger(4, DataQuery.getMediaType(message));
+                        state_media.bindByteBuffer(5, (NativeByteBuffer) nativeByteBuffer);
+                        state_media.step();
                     }
                     nativeByteBuffer.reuse();
-                    if (message.media instanceof TL_messageMediaWebPage) {
-                        if (state5 == null) {
-                            state5 = this.database.executeFast("REPLACE INTO webpage_pending VALUES(?, ?)");
+                    if (message.media instanceof TL_messageMediaPoll) {
+                        if (state_polls == null) {
+                            state_polls = this.database.executeFast("REPLACE INTO polls VALUES(?, ?)");
                         }
-                        state5.requery();
-                        state5.bindLong(1, message.media.webpage.var_id);
-                        state5.bindLong(2, messageId);
-                        state5.step();
+                        TL_messageMediaPoll mediaPoll = (TL_messageMediaPoll) message.media;
+                        state_polls.requery();
+                        state_polls.bindLong(1, messageId);
+                        state_polls.bindLong(2, mediaPoll.poll.var_id);
+                        state_polls.step();
+                    } else if (message.media instanceof TL_messageMediaWebPage) {
+                        if (state_webpage == null) {
+                            state_webpage = this.database.executeFast("REPLACE INTO webpage_pending VALUES(?, ?)");
+                        }
+                        state_webpage.requery();
+                        state_webpage.bindLong(1, message.media.webpage.var_id);
+                        state_webpage.bindLong(2, messageId);
+                        state_webpage.step();
                     }
                     if (load_type == 0 && isValidKeyboardToSave(message) && (botKeyboard == null || botKeyboard.var_id < message.var_id)) {
                         botKeyboard = message;
                     }
                 }
-                state.dispose();
-                state2.dispose();
-                if (state5 != null) {
-                    state5.dispose();
+                state_messages.dispose();
+                state_media.dispose();
+                if (state_webpage != null) {
+                    state_webpage.dispose();
+                }
+                if (state_polls != null) {
+                    state_polls.dispose();
                 }
                 if (botKeyboard != null) {
                     DataQuery.getInstance(this.currentAccount).putBotKeyboard(dialog_id, botKeyboard);
@@ -7111,10 +7309,10 @@ public class MessagesStorage {
     }
 
     public void getDialogs(int offset, int count) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$95(this, offset, count));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$97(this, offset, count));
     }
 
-    final /* synthetic */ void lambda$getDialogs$124$MessagesStorage(int offset, int count) {
+    final /* synthetic */ void lambda$getDialogs$127$MessagesStorage(int offset, int count) {
         messages_Dialogs dialogs = new TL_messages_dialogs();
         ArrayList<EncryptedChat> encryptedChats = new ArrayList();
         try {
@@ -7293,29 +7491,30 @@ public class MessagesStorage {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x01c2 A:{Catch:{ Exception -> 0x0147 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x034f A:{Catch:{ Exception -> 0x0147 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x0405 A:{Catch:{ Exception -> 0x0147 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x011e A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0419 A:{Catch:{ Exception -> 0x0147 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x01ca A:{Catch:{ Exception -> 0x014d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x039c A:{Catch:{ Exception -> 0x014d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x0452 A:{Catch:{ Exception -> 0x014d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0124 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0466 A:{Catch:{ Exception -> 0x014d }} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void putDialogsInternal(messages_Dialogs dialogs, int check) {
         try {
             int a;
             Message message;
             this.database.beginTransaction();
-            LongSparseArray<Message> new_dialogMessage = new LongSparseArray(dialogs.messages.size());
+            LongSparseArray<Message> longSparseArray = new LongSparseArray(dialogs.messages.size());
             for (a = 0; a < dialogs.messages.size(); a++) {
                 message = (Message) dialogs.messages.get(a);
-                new_dialogMessage.put(MessageObject.getDialogId(message), message);
+                longSparseArray.put(MessageObject.getDialogId(message), message);
             }
             if (!dialogs.dialogs.isEmpty()) {
-                SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
-                SQLitePreparedStatement state2 = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                SQLitePreparedStatement state3 = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
-                SQLitePreparedStatement state4 = this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
-                SQLitePreparedStatement state5 = this.database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
-                SQLitePreparedStatement state6 = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
+                SQLitePreparedStatement state_messages = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
+                SQLitePreparedStatement state_dialogs = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                SQLitePreparedStatement state_media = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
+                SQLitePreparedStatement state_settings = this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
+                SQLitePreparedStatement state_holes = this.database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
+                SQLitePreparedStatement state_media_holes = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
+                SQLitePreparedStatement state_polls = null;
                 for (a = 0; a < dialogs.dialogs.size(); a++) {
                     TL_dialog dialog = (TL_dialog) dialogs.dialogs.get(a);
                     if (dialog.var_id == 0) {
@@ -7338,7 +7537,7 @@ public class MessagesStorage {
                         if (exists) {
                         }
                         messageDate = 0;
-                        message = (Message) new_dialogMessage.get(dialog.var_id);
+                        message = (Message) longSparseArray.get(dialog.var_id);
                         if (message != null) {
                             messageDate = Math.max(message.date, 0);
                             if (isValidKeyboardToSave(message)) {
@@ -7351,58 +7550,68 @@ public class MessagesStorage {
                             if (message.to_id.channel_id != 0) {
                                 messageId |= ((long) message.to_id.channel_id) << 32;
                             }
-                            state.requery();
-                            state.bindLong(1, messageId);
-                            state.bindLong(2, dialog.var_id);
-                            state.bindInteger(3, MessageObject.getUnreadFlags(message));
-                            state.bindInteger(4, message.send_state);
-                            state.bindInteger(5, message.date);
-                            state.bindByteBuffer(6, data);
-                            state.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
-                            state.bindInteger(8, 0);
-                            state.bindInteger(9, (message.flags & 1024) != 0 ? message.views : 0);
-                            state.bindInteger(10, 0);
-                            state.bindInteger(11, message.mentioned ? 1 : 0);
-                            state.step();
+                            state_messages.requery();
+                            state_messages.bindLong(1, messageId);
+                            state_messages.bindLong(2, dialog.var_id);
+                            state_messages.bindInteger(3, MessageObject.getUnreadFlags(message));
+                            state_messages.bindInteger(4, message.send_state);
+                            state_messages.bindInteger(5, message.date);
+                            state_messages.bindByteBuffer(6, data);
+                            state_messages.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
+                            state_messages.bindInteger(8, 0);
+                            state_messages.bindInteger(9, (message.flags & 1024) != 0 ? message.views : 0);
+                            state_messages.bindInteger(10, 0);
+                            state_messages.bindInteger(11, message.mentioned ? 1 : 0);
+                            state_messages.step();
                             if (DataQuery.canAddMessageToMedia(message)) {
-                                state3.requery();
-                                state3.bindLong(1, messageId);
-                                state3.bindLong(2, dialog.var_id);
-                                state3.bindInteger(3, message.date);
-                                state3.bindInteger(4, DataQuery.getMediaType(message));
-                                state3.bindByteBuffer(5, data);
-                                state3.step();
+                                state_media.requery();
+                                state_media.bindLong(1, messageId);
+                                state_media.bindLong(2, dialog.var_id);
+                                state_media.bindInteger(3, message.date);
+                                state_media.bindInteger(4, DataQuery.getMediaType(message));
+                                state_media.bindByteBuffer(5, data);
+                                state_media.step();
                             }
                             data.reuse();
-                            createFirstHoles(dialog.var_id, state5, state6, message.var_id);
+                            if (message.media instanceof TL_messageMediaPoll) {
+                                if (state_polls == null) {
+                                    state_polls = this.database.executeFast("REPLACE INTO polls VALUES(?, ?)");
+                                }
+                                TL_messageMediaPoll mediaPoll = message.media;
+                                state_polls.requery();
+                                state_polls.bindLong(1, messageId);
+                                state_polls.bindLong(2, mediaPoll.poll.var_id);
+                                state_polls.step();
+                            }
+                            createFirstHoles(dialog.var_id, state_holes, state_media_holes, message.var_id);
                         }
                         topMessage = (long) dialog.top_message;
                         if (dialog.peer.channel_id != 0) {
                             topMessage |= ((long) dialog.peer.channel_id) << 32;
                         }
-                        state2.requery();
-                        state2.bindLong(1, dialog.var_id);
-                        state2.bindInteger(2, messageDate);
-                        state2.bindInteger(3, dialog.unread_count);
-                        state2.bindLong(4, topMessage);
-                        state2.bindInteger(5, dialog.read_inbox_max_id);
-                        state2.bindInteger(6, dialog.read_outbox_max_id);
-                        state2.bindLong(7, 0);
-                        state2.bindInteger(8, dialog.unread_mentions_count);
-                        state2.bindInteger(9, dialog.pts);
-                        state2.bindInteger(10, 0);
-                        state2.bindInteger(11, dialog.pinnedNum);
+                        state_dialogs.requery();
+                        state_dialogs.bindLong(1, dialog.var_id);
+                        state_dialogs.bindInteger(2, messageDate);
+                        state_dialogs.bindInteger(3, dialog.unread_count);
+                        state_dialogs.bindLong(4, topMessage);
+                        state_dialogs.bindInteger(5, dialog.read_inbox_max_id);
+                        state_dialogs.bindInteger(6, dialog.read_outbox_max_id);
+                        state_dialogs.bindLong(7, 0);
+                        state_dialogs.bindInteger(8, dialog.unread_mentions_count);
+                        state_dialogs.bindInteger(9, dialog.pts);
+                        state_dialogs.bindInteger(10, 0);
+                        state_dialogs.bindInteger(11, dialog.pinnedNum);
                         flags = 0;
                         if (dialog.unread_mark) {
                             flags = 0 | 1;
                         }
-                        state2.bindInteger(12, flags);
-                        state2.step();
+                        state_dialogs.bindInteger(12, flags);
+                        state_dialogs.step();
                         if (dialog.notify_settings == null) {
-                            state4.requery();
-                            state4.bindLong(1, dialog.var_id);
-                            state4.bindInteger(2, dialog.notify_settings.mute_until != 0 ? 1 : 0);
-                            state4.step();
+                            state_settings.requery();
+                            state_settings.bindLong(1, dialog.var_id);
+                            state_settings.bindInteger(2, dialog.notify_settings.mute_until != 0 ? 1 : 0);
+                            state_settings.step();
                         }
                     } else {
                         if (dialog.pinned && check == 2) {
@@ -7413,39 +7622,42 @@ public class MessagesStorage {
                             cursor.dispose();
                         }
                         messageDate = 0;
-                        message = (Message) new_dialogMessage.get(dialog.var_id);
+                        message = (Message) longSparseArray.get(dialog.var_id);
                         if (message != null) {
                         }
                         topMessage = (long) dialog.top_message;
                         if (dialog.peer.channel_id != 0) {
                         }
-                        state2.requery();
-                        state2.bindLong(1, dialog.var_id);
-                        state2.bindInteger(2, messageDate);
-                        state2.bindInteger(3, dialog.unread_count);
-                        state2.bindLong(4, topMessage);
-                        state2.bindInteger(5, dialog.read_inbox_max_id);
-                        state2.bindInteger(6, dialog.read_outbox_max_id);
-                        state2.bindLong(7, 0);
-                        state2.bindInteger(8, dialog.unread_mentions_count);
-                        state2.bindInteger(9, dialog.pts);
-                        state2.bindInteger(10, 0);
-                        state2.bindInteger(11, dialog.pinnedNum);
+                        state_dialogs.requery();
+                        state_dialogs.bindLong(1, dialog.var_id);
+                        state_dialogs.bindInteger(2, messageDate);
+                        state_dialogs.bindInteger(3, dialog.unread_count);
+                        state_dialogs.bindLong(4, topMessage);
+                        state_dialogs.bindInteger(5, dialog.read_inbox_max_id);
+                        state_dialogs.bindInteger(6, dialog.read_outbox_max_id);
+                        state_dialogs.bindLong(7, 0);
+                        state_dialogs.bindInteger(8, dialog.unread_mentions_count);
+                        state_dialogs.bindInteger(9, dialog.pts);
+                        state_dialogs.bindInteger(10, 0);
+                        state_dialogs.bindInteger(11, dialog.pinnedNum);
                         flags = 0;
                         if (dialog.unread_mark) {
                         }
-                        state2.bindInteger(12, flags);
-                        state2.step();
+                        state_dialogs.bindInteger(12, flags);
+                        state_dialogs.step();
                         if (dialog.notify_settings == null) {
                         }
                     }
                 }
-                state.dispose();
-                state2.dispose();
-                state3.dispose();
-                state4.dispose();
-                state5.dispose();
-                state6.dispose();
+                state_messages.dispose();
+                state_dialogs.dispose();
+                state_media.dispose();
+                state_settings.dispose();
+                state_holes.dispose();
+                state_media_holes.dispose();
+                if (state_polls != null) {
+                    state_polls.dispose();
+                }
             }
             putUsersInternal(dialogs.users);
             putChatsInternal(dialogs.chats);
@@ -7456,10 +7668,10 @@ public class MessagesStorage {
     }
 
     public void unpinAllDialogsExceptNew(ArrayList<Long> dids) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$96(this, dids));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$98(this, dids));
     }
 
-    final /* synthetic */ void lambda$unpinAllDialogsExceptNew$125$MessagesStorage(ArrayList dids) {
+    final /* synthetic */ void lambda$unpinAllDialogsExceptNew$128$MessagesStorage(ArrayList dids) {
         try {
             ArrayList<Long> unpinnedDialogs = new ArrayList();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs WHERE pinned != 0 AND did NOT IN (%s)", new Object[]{TextUtils.join(",", dids)}), new Object[0]);
@@ -7486,10 +7698,10 @@ public class MessagesStorage {
     }
 
     public void setDialogUnread(long did, boolean unread) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$97(this, did, unread));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$99(this, did, unread));
     }
 
-    final /* synthetic */ void lambda$setDialogUnread$126$MessagesStorage(long did, boolean unread) {
+    final /* synthetic */ void lambda$setDialogUnread$129$MessagesStorage(long did, boolean unread) {
         int flags = 0;
         SQLiteCursor cursor = null;
         try {
@@ -7528,10 +7740,10 @@ public class MessagesStorage {
     }
 
     public void setDialogPinned(long did, int pinned) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$98(this, pinned, did));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$100(this, pinned, did));
     }
 
-    final /* synthetic */ void lambda$setDialogPinned$127$MessagesStorage(int pinned, long did) {
+    final /* synthetic */ void lambda$setDialogPinned$130$MessagesStorage(int pinned, long did) {
         try {
             SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
             state.bindInteger(1, pinned);
@@ -7545,11 +7757,11 @@ public class MessagesStorage {
 
     public void putDialogs(messages_Dialogs dialogs, int check) {
         if (!dialogs.dialogs.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$99(this, dialogs, check));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$101(this, dialogs, check));
         }
     }
 
-    final /* synthetic */ void lambda$putDialogs$128$MessagesStorage(messages_Dialogs dialogs, int check) {
+    final /* synthetic */ void lambda$putDialogs$131$MessagesStorage(messages_Dialogs dialogs, int check) {
         putDialogsInternal(dialogs, check);
         try {
             loadUnreadMessages();
@@ -7561,7 +7773,7 @@ public class MessagesStorage {
     public int getDialogReadMax(boolean outbox, long dialog_id) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] max = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$100(this, outbox, dialog_id, max, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$102(this, outbox, dialog_id, max, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -7570,7 +7782,7 @@ public class MessagesStorage {
         return max[0].intValue();
     }
 
-    final /* synthetic */ void lambda$getDialogReadMax$129$MessagesStorage(boolean outbox, long dialog_id, Integer[] max, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getDialogReadMax$132$MessagesStorage(boolean outbox, long dialog_id, Integer[] max, CountDownLatch countDownLatch) {
         SQLiteCursor cursor = null;
         if (outbox) {
             try {
@@ -7600,7 +7812,7 @@ public class MessagesStorage {
     public int getChannelPtsSync(int channelId) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] pts = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$101(this, channelId, pts, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$103(this, channelId, pts, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -7609,7 +7821,7 @@ public class MessagesStorage {
         return pts[0].intValue();
     }
 
-    final /* synthetic */ void lambda$getChannelPtsSync$130$MessagesStorage(int channelId, Integer[] pts, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getChannelPtsSync$133$MessagesStorage(int channelId, Integer[] pts, CountDownLatch countDownLatch) {
         SQLiteCursor cursor = null;
         try {
             cursor = this.database.queryFinalized("SELECT pts FROM dialogs WHERE did = " + (-channelId), new Object[0]);
@@ -7641,7 +7853,7 @@ public class MessagesStorage {
     public User getUserSync(int user_id) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         User[] user = new User[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$102(this, user, user_id, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$104(this, user, user_id, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -7650,7 +7862,7 @@ public class MessagesStorage {
         return user[0];
     }
 
-    final /* synthetic */ void lambda$getUserSync$131$MessagesStorage(User[] user, int user_id, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getUserSync$134$MessagesStorage(User[] user, int user_id, CountDownLatch countDownLatch) {
         user[0] = getUser(user_id);
         countDownLatch.countDown();
     }
@@ -7658,7 +7870,7 @@ public class MessagesStorage {
     public Chat getChatSync(int chat_id) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Chat[] chat = new Chat[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$103(this, chat, chat_id, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$105(this, chat, chat_id, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
@@ -7667,7 +7879,7 @@ public class MessagesStorage {
         return chat[0];
     }
 
-    final /* synthetic */ void lambda$getChatSync$132$MessagesStorage(Chat[] chat, int chat_id, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getChatSync$135$MessagesStorage(Chat[] chat, int chat_id, CountDownLatch countDownLatch) {
         chat[0] = getChat(chat_id);
         countDownLatch.countDown();
     }

@@ -124,7 +124,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         }
                         MessagesStorage.getInstance(GroupStickersActivity.this.currentAccount).updateChatInfo(GroupStickersActivity.this.info, false);
                         NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
-                        GroupStickersActivity.this.finishFragment();
+                        GroupStickersActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
                         return;
                     }
                     Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("ErrorOccurred", CLASSNAMER.string.ErrorOccurred) + "\n" + error.text, 0).show();
@@ -142,7 +142,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
         public void onItemClick(int id) {
             if (id == -1) {
-                GroupStickersActivity.this.finishFragment();
+                GroupStickersActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 1 && !GroupStickersActivity.this.donePressed) {
                 GroupStickersActivity.this.donePressed = true;
                 if (GroupStickersActivity.this.searching) {
@@ -658,7 +658,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     private void saveStickerSet() {
         if (this.info == null || (!(this.info.stickerset == null || this.selectedStickerSet == null || this.selectedStickerSet.set.var_id != this.info.stickerset.var_id) || (this.info.stickerset == null && this.selectedStickerSet == null))) {
-            finishFragment();
+            lambda$createView$1$PhotoAlbumPickerActivity();
             return;
         }
         showEditDoneProgress(true);

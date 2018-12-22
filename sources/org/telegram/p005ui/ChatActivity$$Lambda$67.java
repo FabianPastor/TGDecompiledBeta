@@ -1,19 +1,16 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
+import org.telegram.p005ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$67 */
-final /* synthetic */ class ChatActivity$$Lambda$67 implements OnCancelListener {
+final /* synthetic */ class ChatActivity$$Lambda$67 implements ThemeDescriptionDelegate {
     private final ChatActivity arg$1;
-    private final int arg$2;
 
-    ChatActivity$$Lambda$67(ChatActivity chatActivity, int i) {
+    ChatActivity$$Lambda$67(ChatActivity chatActivity) {
         this.arg$1 = chatActivity;
-        this.arg$2 = i;
     }
 
-    public void onCancel(DialogInterface dialogInterface) {
-        this.arg$1.lambda$null$60$ChatActivity(this.arg$2, dialogInterface);
+    public void didSetColor() {
+        this.arg$1.lambda$getThemeDescriptions$89$ChatActivity();
     }
 }

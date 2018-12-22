@@ -1,32 +1,25 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC.messages_Dialogs;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-final /* synthetic */ class MessagesController$$Lambda$73 implements Runnable {
+final /* synthetic */ class MessagesController$$Lambda$73 implements RequestDelegate {
     private final MessagesController arg$1;
     private final int arg$2;
-    private final messages_Dialogs arg$3;
-    private final boolean arg$4;
+    private final int arg$3;
+    private final int arg$4;
     private final int arg$5;
-    private final int arg$6;
-    private final boolean arg$7;
-    private final boolean arg$8;
-    private final ArrayList arg$9;
 
-    MessagesController$$Lambda$73(MessagesController messagesController, int i, messages_Dialogs messages_dialogs, boolean z, int i2, int i3, boolean z2, boolean z3, ArrayList arrayList) {
+    MessagesController$$Lambda$73(MessagesController messagesController, int i, int i2, int i3, int i4) {
         this.arg$1 = messagesController;
         this.arg$2 = i;
-        this.arg$3 = messages_dialogs;
-        this.arg$4 = z;
-        this.arg$5 = i2;
-        this.arg$6 = i3;
-        this.arg$7 = z2;
-        this.arg$8 = z3;
-        this.arg$9 = arrayList;
+        this.arg$3 = i2;
+        this.arg$4 = i3;
+        this.arg$5 = i4;
     }
 
-    public void run() {
-        this.arg$1.lambda$processLoadedDialogs$109$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$resetDialogs$106$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, tLObject, tL_error);
     }
 }

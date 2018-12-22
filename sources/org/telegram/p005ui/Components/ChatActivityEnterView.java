@@ -3399,7 +3399,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
         if (user == null) {
-            fragment1.finishFragment();
+            fragment1.lambda$createView$1$PhotoAlbumPickerActivity();
             return;
         }
         long did = ((Long) dids.get(0)).longValue();
@@ -3415,7 +3415,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(args1, fragment1)) {
                     if (!this.parentFragment.presentFragment(new ChatActivity(args1), true)) {
-                        fragment1.finishFragment();
+                        fragment1.lambda$createView$1$PhotoAlbumPickerActivity();
                         return;
                     } else if (!AndroidUtilities.isTablet()) {
                         this.parentFragment.removeSelfFromStack();
@@ -3426,10 +3426,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 return;
             }
-            fragment1.finishFragment();
+            fragment1.lambda$createView$1$PhotoAlbumPickerActivity();
             return;
         }
-        fragment1.finishFragment();
+        fragment1.lambda$createView$1$PhotoAlbumPickerActivity();
     }
 
     public boolean isPopupView(View view) {

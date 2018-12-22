@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -26,19 +25,14 @@ import android.view.ActionMode.Callback;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -86,40 +80,73 @@ public class PasscodeView extends FrameLayout {
     private TextView retryTextView;
     private boolean selfCancelled;
 
-    /* renamed from: org.telegram.ui.Components.PasscodeView$10 */
+    /* renamed from: org.telegram.ui.Components.PasscodeView$1 */
+    class CLASSNAME implements TextWatcher {
+        CLASSNAME() {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        public void afterTextChanged(Editable s) {
+            if (PasscodeView.this.passwordEditText.length() == 4 && SharedConfig.passcodeType == 0) {
+                PasscodeView.this.processDone(false);
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PasscodeView$2 */
+    class CLASSNAME implements Callback {
+        CLASSNAME() {
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PasscodeView$3 */
+    class CLASSNAME extends AnimatorListenerAdapter {
+        CLASSNAME() {
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            PasscodeView.this.setVisibility(8);
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.PasscodeView$5 */
     class CLASSNAME implements Runnable {
         CLASSNAME() {
         }
 
         public void run() {
-            if (PasscodeView.this.retryTextView.getVisibility() != 0 && PasscodeView.this.passwordEditText != null) {
-                PasscodeView.this.passwordEditText.requestFocus();
-                AndroidUtilities.showKeyboard(PasscodeView.this.passwordEditText);
-            }
+            PasscodeView.this.checkRetryTextView();
+            AndroidUtilities.runOnUIThread(PasscodeView.this.checkRunnable, 100);
         }
     }
 
-    /* renamed from: org.telegram.ui.Components.PasscodeView$11 */
-    class CLASSNAME implements OnDismissListener {
-        CLASSNAME() {
-        }
-
-        public void onDismiss(DialogInterface dialog) {
-            if (PasscodeView.this.cancellationSignal != null) {
-                PasscodeView.this.selfCancelled = true;
-                PasscodeView.this.cancellationSignal.cancel();
-                PasscodeView.this.cancellationSignal = null;
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$12 */
+    /* renamed from: org.telegram.ui.Components.PasscodeView$6 */
     class CLASSNAME extends AuthenticationCallback {
         CLASSNAME() {
         }
 
         public void onAuthenticationError(int errMsgId, CharSequence errString) {
-            if (!PasscodeView.this.selfCancelled) {
+            if (!PasscodeView.this.selfCancelled && errMsgId != 5) {
                 PasscodeView.this.showFingerprintError(errString);
             }
         }
@@ -142,159 +169,6 @@ public class PasscodeView extends FrameLayout {
             }
             PasscodeView.this.fingerprintDialog = null;
             PasscodeView.this.processDone(true);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$13 */
-    class CLASSNAME implements OnTouchListener {
-        CLASSNAME() {
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$1 */
-    class CLASSNAME implements OnEditorActionListener {
-        CLASSNAME() {
-        }
-
-        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-            if (i != 6) {
-                return false;
-            }
-            PasscodeView.this.processDone(false);
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$2 */
-    class CLASSNAME implements TextWatcher {
-        CLASSNAME() {
-        }
-
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        public void afterTextChanged(Editable s) {
-            if (PasscodeView.this.passwordEditText.length() == 4 && SharedConfig.passcodeType == 0) {
-                PasscodeView.this.processDone(false);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$3 */
-    class CLASSNAME implements Callback {
-        CLASSNAME() {
-        }
-
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        public void onDestroyActionMode(ActionMode mode) {
-        }
-
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return false;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$4 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            PasscodeView.this.processDone(false);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$5 */
-    class CLASSNAME implements OnLongClickListener {
-        CLASSNAME() {
-        }
-
-        public boolean onLongClick(View v) {
-            PasscodeView.this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
-            PasscodeView.this.passwordEditText2.eraseAllCharacters(true);
-            return true;
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$6 */
-    class CLASSNAME implements OnClickListener {
-        CLASSNAME() {
-        }
-
-        public void onClick(View v) {
-            switch (((Integer) v.getTag()).intValue()) {
-                case 0:
-                    PasscodeView.this.passwordEditText2.appendCharacter("0");
-                    break;
-                case 1:
-                    PasscodeView.this.passwordEditText2.appendCharacter("1");
-                    break;
-                case 2:
-                    PasscodeView.this.passwordEditText2.appendCharacter("2");
-                    break;
-                case 3:
-                    PasscodeView.this.passwordEditText2.appendCharacter("3");
-                    break;
-                case 4:
-                    PasscodeView.this.passwordEditText2.appendCharacter("4");
-                    break;
-                case 5:
-                    PasscodeView.this.passwordEditText2.appendCharacter("5");
-                    break;
-                case 6:
-                    PasscodeView.this.passwordEditText2.appendCharacter("6");
-                    break;
-                case 7:
-                    PasscodeView.this.passwordEditText2.appendCharacter("7");
-                    break;
-                case 8:
-                    PasscodeView.this.passwordEditText2.appendCharacter("8");
-                    break;
-                case 9:
-                    PasscodeView.this.passwordEditText2.appendCharacter("9");
-                    break;
-                case 10:
-                    PasscodeView.this.passwordEditText2.eraseLastCharacter();
-                    break;
-            }
-            if (PasscodeView.this.passwordEditText2.length() == 4) {
-                PasscodeView.this.processDone(false);
-            }
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$7 */
-    class CLASSNAME extends AnimatorListenerAdapter {
-        CLASSNAME() {
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            PasscodeView.this.setVisibility(8);
-        }
-    }
-
-    /* renamed from: org.telegram.ui.Components.PasscodeView$9 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            PasscodeView.this.checkRetryTextView();
-            AndroidUtilities.runOnUIThread(PasscodeView.this.checkRunnable, 100);
         }
     }
 
@@ -697,7 +571,7 @@ public class PasscodeView extends FrameLayout {
         layoutParams.rightMargin = AndroidUtilities.m9dp(70.0f);
         layoutParams.gravity = 81;
         this.passwordEditText.setLayoutParams(layoutParams);
-        this.passwordEditText.setOnEditorActionListener(new CLASSNAME());
+        this.passwordEditText.setOnEditorActionListener(new PasscodeView$$Lambda$0(this));
         this.passwordEditText.addTextChangedListener(new CLASSNAME());
         this.passwordEditText.setCustomSelectionActionModeCallback(new CLASSNAME());
         this.checkImage = new ImageView(context);
@@ -712,7 +586,7 @@ public class PasscodeView extends FrameLayout {
         layoutParams.rightMargin = AndroidUtilities.m9dp(10.0f);
         layoutParams.gravity = 85;
         this.checkImage.setLayoutParams(layoutParams);
-        this.checkImage.setOnClickListener(new CLASSNAME());
+        this.checkImage.setOnClickListener(new PasscodeView$$Lambda$1(this));
         FrameLayout lineFrameLayout = new FrameLayout(context);
         lineFrameLayout.setBackgroundColor(NUM);
         this.passwordFrameLayout.addView(lineFrameLayout);
@@ -803,9 +677,9 @@ public class PasscodeView extends FrameLayout {
             frameLayout.setBackgroundResource(CLASSNAMER.drawable.bar_selector_lock);
             frameLayout.setTag(Integer.valueOf(a));
             if (a == 10) {
-                frameLayout.setOnLongClickListener(new CLASSNAME());
+                frameLayout.setOnLongClickListener(new PasscodeView$$Lambda$2(this));
             }
-            frameLayout.setOnClickListener(new CLASSNAME());
+            frameLayout.setOnClickListener(new PasscodeView$$Lambda$3(this));
             this.numberFrameLayouts.add(frameLayout);
         }
         for (a = 10; a >= 0; a--) {
@@ -816,6 +690,65 @@ public class PasscodeView extends FrameLayout {
             layoutParams.height = AndroidUtilities.m9dp(100.0f);
             layoutParams.gravity = 51;
             frameLayout.setLayoutParams(layoutParams);
+        }
+    }
+
+    final /* synthetic */ boolean lambda$new$0$PasscodeView(TextView textView, int i, KeyEvent keyEvent) {
+        if (i != 6) {
+            return false;
+        }
+        processDone(false);
+        return true;
+    }
+
+    final /* synthetic */ void lambda$new$1$PasscodeView(View v) {
+        processDone(false);
+    }
+
+    final /* synthetic */ boolean lambda$new$2$PasscodeView(View v) {
+        this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
+        this.passwordEditText2.eraseAllCharacters(true);
+        return true;
+    }
+
+    final /* synthetic */ void lambda$new$3$PasscodeView(View v) {
+        switch (((Integer) v.getTag()).intValue()) {
+            case 0:
+                this.passwordEditText2.appendCharacter("0");
+                break;
+            case 1:
+                this.passwordEditText2.appendCharacter("1");
+                break;
+            case 2:
+                this.passwordEditText2.appendCharacter("2");
+                break;
+            case 3:
+                this.passwordEditText2.appendCharacter("3");
+                break;
+            case 4:
+                this.passwordEditText2.appendCharacter("4");
+                break;
+            case 5:
+                this.passwordEditText2.appendCharacter("5");
+                break;
+            case 6:
+                this.passwordEditText2.appendCharacter("6");
+                break;
+            case 7:
+                this.passwordEditText2.appendCharacter("7");
+                break;
+            case 8:
+                this.passwordEditText2.appendCharacter("8");
+                break;
+            case 9:
+                this.passwordEditText2.appendCharacter("9");
+                break;
+            case 10:
+                this.passwordEditText2.eraseLastCharacter();
+                break;
+        }
+        if (this.passwordEditText2.length() == 4) {
+            processDone(false);
         }
     }
 
@@ -941,9 +874,16 @@ public class PasscodeView extends FrameLayout {
                     this.passwordEditText.requestFocus();
                     AndroidUtilities.showKeyboard(this.passwordEditText);
                 }
-                AndroidUtilities.runOnUIThread(new CLASSNAME(), 200);
+                AndroidUtilities.runOnUIThread(new PasscodeView$$Lambda$4(this), 200);
             }
             checkFingerprint();
+        }
+    }
+
+    final /* synthetic */ void lambda$onResume$4$PasscodeView() {
+        if (this.retryTextView.getVisibility() != 0 && this.passwordEditText != null) {
+            this.passwordEditText.requestFocus();
+            AndroidUtilities.showKeyboard(this.passwordEditText);
         }
     }
 
@@ -1014,7 +954,7 @@ public class PasscodeView extends FrameLayout {
                     builder.setTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
                     builder.setView(relativeLayout);
                     builder.setNegativeButton(LocaleController.getString("Cancel", CLASSNAMER.string.Cancel), null);
-                    builder.setOnDismissListener(new CLASSNAME());
+                    builder.setOnDismissListener(new PasscodeView$$Lambda$5(this));
                     if (this.fingerprintDialog != null) {
                         if (this.fingerprintDialog.isShowing()) {
                             this.fingerprintDialog.dismiss();
@@ -1029,6 +969,14 @@ public class PasscodeView extends FrameLayout {
                 FileLog.m13e(e2);
             } catch (Throwable th) {
             }
+        }
+    }
+
+    final /* synthetic */ void lambda$checkFingerprint$5$PasscodeView(DialogInterface dialog) {
+        if (this.cancellationSignal != null) {
+            this.selfCancelled = true;
+            this.cancellationSignal.cancel();
+            this.cancellationSignal = null;
         }
     }
 
@@ -1088,7 +1036,7 @@ public class PasscodeView extends FrameLayout {
             this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
             this.passwordEditText.setText(TtmlNode.ANONYMOUS_REGION_ID);
             this.passwordEditText2.eraseAllCharacters(false);
-            setOnTouchListener(new CLASSNAME());
+            setOnTouchListener(PasscodeView$$Lambda$6.$instance);
         }
     }
 

@@ -11,6 +11,6 @@ final /* synthetic */ class InstantCameraView$VideoRecorder$$Lambda$1 implements
     }
 
     public void run() {
-        this.arg$1.mo16735xCLASSNAMEd81b();
+        this.arg$1.mo16821xCLASSNAMEd81b();
     }
 }

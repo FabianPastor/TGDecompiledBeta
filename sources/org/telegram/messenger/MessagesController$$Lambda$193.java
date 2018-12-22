@@ -1,23 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ActionBar.BaseFragment;
-import org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.ChatFull;
 
 final /* synthetic */ class MessagesController$$Lambda$193 implements Runnable {
     private final MessagesController arg$1;
-    private final TL_error arg$2;
-    private final BaseFragment arg$3;
-    private final TL_channels_inviteToChannel arg$4;
+    private final ChatFull arg$2;
+    private final String arg$3;
 
-    MessagesController$$Lambda$193(MessagesController messagesController, TL_error tL_error, BaseFragment baseFragment, TL_channels_inviteToChannel tL_channels_inviteToChannel) {
+    MessagesController$$Lambda$193(MessagesController messagesController, ChatFull chatFull, String str) {
         this.arg$1 = messagesController;
-        this.arg$2 = tL_error;
-        this.arg$3 = baseFragment;
-        this.arg$4 = tL_channels_inviteToChannel;
+        this.arg$2 = chatFull;
+        this.arg$3 = str;
     }
 
     public void run() {
-        this.arg$1.lambda$null$145$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$null$158$MessagesController(this.arg$2, this.arg$3);
     }
 }

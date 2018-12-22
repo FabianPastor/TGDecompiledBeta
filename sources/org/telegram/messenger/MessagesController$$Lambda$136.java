@@ -1,17 +1,13 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.TL_updateUserBlocked;
-
 final /* synthetic */ class MessagesController$$Lambda$136 implements Runnable {
     private final MessagesController arg$1;
-    private final TL_updateUserBlocked arg$2;
 
-    MessagesController$$Lambda$136(MessagesController messagesController, TL_updateUserBlocked tL_updateUserBlocked) {
+    MessagesController$$Lambda$136(MessagesController messagesController) {
         this.arg$1 = messagesController;
-        this.arg$2 = tL_updateUserBlocked;
     }
 
     public void run() {
-        this.arg$1.lambda$processUpdateArray$223$MessagesController(this.arg$2);
+        this.arg$1.lambda$processUpdates$225$MessagesController();
     }
 }

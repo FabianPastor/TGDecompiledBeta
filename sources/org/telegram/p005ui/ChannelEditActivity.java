@@ -686,7 +686,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         builder.setApplyTopPadding(false);
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
-        HeaderCell headerCell = new HeaderCell(context, true, 23);
+        HeaderCell headerCell = new HeaderCell(context, true, 23, false);
         headerCell.setHeight(47);
         headerCell.setText(LocaleController.getString("WhoCanAddMembers", CLASSNAMER.string.WhoCanAddMembers));
         linearLayout.addView(headerCell);
@@ -735,7 +735,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         builder.setApplyTopPadding(false);
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
-        HeaderCell headerCell = new HeaderCell(context, true, 23);
+        HeaderCell headerCell = new HeaderCell(context, true, 23, false);
         headerCell.setHeight(47);
         headerCell.setText(LocaleController.getString("ChatHistory", CLASSNAMER.string.ChatHistory));
         linearLayout.addView(headerCell);

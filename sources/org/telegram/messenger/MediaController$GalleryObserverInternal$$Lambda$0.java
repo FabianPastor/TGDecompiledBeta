@@ -8,6 +8,6 @@ final /* synthetic */ class MediaController$GalleryObserverInternal$$Lambda$0 im
     }
 
     public void run() {
-        this.arg$1.mo9321x623fvar_();
+        this.arg$1.mo9340x623fvar_();
     }
 }

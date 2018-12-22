@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -44,11 +45,15 @@ public class EditTextSettingsCell extends FrameLayout {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.m9dp(50.0f));
-        this.textView.measure(MeasureSpec.makeMeasureSpec(((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m9dp(34.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec(((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.m9dp(42.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
     public EditTextBoldCursor getTextView() {
         return this.textView;
+    }
+
+    public void addTextWatcher(TextWatcher watcher) {
+        this.textView.addTextChangedListener(watcher);
     }
 
     public String getText() {

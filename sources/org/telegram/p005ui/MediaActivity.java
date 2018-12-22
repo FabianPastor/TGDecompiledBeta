@@ -281,7 +281,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     MediaActivity.this.updateRowsSelection();
                     return;
                 }
-                MediaActivity.this.finishFragment();
+                MediaActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 4) {
                 if (MediaActivity.this.getParentActivity() != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MediaActivity.this.getParentActivity());
@@ -462,7 +462,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     }
                     SendMessagesHelper.getInstance(MediaActivity.this.currentAccount).sendMessage(fmessages, did);
                 }
-                fragment1.finishFragment();
+                fragment1.lambda$createView$1$PhotoAlbumPickerActivity();
                 return;
             }
             did = ((Long) dids.get(0)).longValue();
@@ -1066,6 +1066,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     } else {
                         view = (View) MediaActivity.this.audioCellCache.get(0);
                         MediaActivity.this.audioCellCache.remove(0);
+                        ViewGroup p = (ViewGroup) view.getParent();
+                        if (p != null) {
+                            p.removeView(view);
+                        }
                     }
                     if (this.currentType == 4) {
                         MediaActivity.this.audioCache.add((SharedAudioCell) view);
@@ -1412,6 +1416,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     } else {
                         view = (View) MediaActivity.this.cellCache.get(0);
                         MediaActivity.this.cellCache.remove(0);
+                        ViewGroup p = (ViewGroup) view.getParent();
+                        if (p != null) {
+                            p.removeView(view);
+                        }
                     }
                     ((SharedPhotoVideoCell) view).setDelegate(new CLASSNAME());
                     MediaActivity.this.cache.add((SharedPhotoVideoCell) view);
@@ -1527,6 +1535,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.sharedLinkCellDelegate = new CLASSNAME();
         this.hasMedia = media;
         this.initialTab = initTab;
+        this.dialog_id = args.getLong("dialog_id", 0);
         for (int a = 0; a < this.sharedMediaData.length; a++) {
             this.sharedMediaData[a] = new SharedMediaData();
             this.sharedMediaData[a].max_id[0] = ((int) this.dialog_id) == 0 ? Integer.MIN_VALUE : ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -1536,7 +1545,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
             if (mediaData != null) {
                 this.sharedMediaData[a].totalCount = mediaData[a].totalCount;
-                this.sharedMediaData[a].endReached = mediaData[a].endReached;
                 this.sharedMediaData[a].messages.addAll(mediaData[a].messages);
                 this.sharedMediaData[a].sections.addAll(mediaData[a].sections);
                 for (Entry<String, ArrayList<MessageObject>> entry : mediaData[a].sectionArrays.entrySet()) {
@@ -1559,7 +1567,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStart);
-        this.dialog_id = getArguments().getLong("dialog_id", 0);
         return true;
     }
 
@@ -1616,7 +1623,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         } else if (lower_id > 0) {
             user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
             if (user != null) {
-                this.actionBar.setTitle(ContactsController.formatName(user.first_name, user.last_name));
+                if (user.self) {
+                    this.actionBar.setTitle(LocaleController.getString("SavedMessages", CLASSNAMER.string.SavedMessages));
+                } else {
+                    this.actionBar.setTitle(ContactsController.formatName(user.first_name, user.last_name));
+                }
             }
         } else {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
@@ -1769,14 +1780,16 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 int actionBarHeight = MediaActivity.this.actionBar.getMeasuredHeight();
                 this.globalIgnoreLayout = true;
                 for (int a = 0; a < MediaActivity.this.mediaPages.length; a++) {
-                    if (MediaActivity.this.mediaPages[a].listView != null) {
-                        MediaActivity.this.mediaPages[a].listView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, AndroidUtilities.m9dp(4.0f));
-                    }
-                    if (MediaActivity.this.mediaPages[a].emptyView != null) {
-                        MediaActivity.this.mediaPages[a].emptyView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
-                    }
-                    if (MediaActivity.this.mediaPages[a].progressView != null) {
-                        MediaActivity.this.mediaPages[a].progressView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
+                    if (MediaActivity.this.mediaPages[a] != null) {
+                        if (MediaActivity.this.mediaPages[a].listView != null) {
+                            MediaActivity.this.mediaPages[a].listView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, AndroidUtilities.m9dp(4.0f));
+                        }
+                        if (MediaActivity.this.mediaPages[a].emptyView != null) {
+                            MediaActivity.this.mediaPages[a].emptyView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
+                        }
+                        if (MediaActivity.this.mediaPages[a].progressView != null) {
+                            MediaActivity.this.mediaPages[a].progressView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
+                        }
                     }
                 }
                 this.globalIgnoreLayout = false;
@@ -1802,15 +1815,17 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 MediaActivity.this.fragmentContextView.setTranslationY(((float) top) + MediaActivity.this.actionBar.getTranslationY());
                 int actionBarHeight = MediaActivity.this.actionBar.getMeasuredHeight();
                 for (int a = 0; a < MediaActivity.this.mediaPages.length; a++) {
-                    if (MediaActivity.this.mediaPages[a].emptyView != null) {
-                        MediaActivity.this.mediaPages[a].emptyView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
-                    }
-                    if (MediaActivity.this.mediaPages[a].progressView != null) {
-                        MediaActivity.this.mediaPages[a].progressView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
-                    }
-                    if (MediaActivity.this.mediaPages[a].listView != null) {
-                        MediaActivity.this.mediaPages[a].listView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, AndroidUtilities.m9dp(4.0f));
-                        MediaActivity.this.mediaPages[a].listView.checkSection();
+                    if (MediaActivity.this.mediaPages[a] != null) {
+                        if (MediaActivity.this.mediaPages[a].emptyView != null) {
+                            MediaActivity.this.mediaPages[a].emptyView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
+                        }
+                        if (MediaActivity.this.mediaPages[a].progressView != null) {
+                            MediaActivity.this.mediaPages[a].progressView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, 0);
+                        }
+                        if (MediaActivity.this.mediaPages[a].listView != null) {
+                            MediaActivity.this.mediaPages[a].listView.setPadding(0, MediaActivity.this.additionalPadding + actionBarHeight, 0, AndroidUtilities.m9dp(4.0f));
+                            MediaActivity.this.mediaPages[a].listView.checkSection();
+                        }
                     }
                 }
             }

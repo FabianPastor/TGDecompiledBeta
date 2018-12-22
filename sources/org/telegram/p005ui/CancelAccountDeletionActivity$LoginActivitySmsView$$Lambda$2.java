@@ -16,6 +16,6 @@ final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySmsView$$
     }
 
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return this.arg$1.mo14147x631f1var_(this.arg$2, view, i, keyEvent);
+        return this.arg$1.mo14195x631f1var_(this.arg$2, view, i, keyEvent);
     }
 }

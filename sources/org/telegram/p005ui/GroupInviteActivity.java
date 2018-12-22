@@ -66,7 +66,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
 
         public void onItemClick(int id) {
             if (id == -1) {
-                GroupInviteActivity.this.finishFragment();
+                GroupInviteActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }

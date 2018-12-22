@@ -1,17 +1,22 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_help_proxyDataPromo;
 
-final /* synthetic */ class MessagesController$$Lambda$226 implements Runnable {
+final /* synthetic */ class MessagesController$$Lambda$226 implements RequestDelegate {
     private final MessagesController arg$1;
-    private final SparseArray arg$2;
+    private final TL_help_proxyDataPromo arg$2;
+    private final long arg$3;
 
-    MessagesController$$Lambda$226(MessagesController messagesController, SparseArray sparseArray) {
+    MessagesController$$Lambda$226(MessagesController messagesController, TL_help_proxyDataPromo tL_help_proxyDataPromo, long j) {
         this.arg$1 = messagesController;
-        this.arg$2 = sparseArray;
+        this.arg$2 = tL_help_proxyDataPromo;
+        this.arg$3 = j;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$68$MessagesController(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$null$81$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

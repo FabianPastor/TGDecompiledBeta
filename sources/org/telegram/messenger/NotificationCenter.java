@@ -24,6 +24,7 @@ public class NotificationCenter {
     public static final int chatDidFailCreate;
     public static final int chatInfoCantLoad;
     public static final int chatInfoDidLoad;
+    public static final int chatOnlineCountDidLoad;
     public static final int chatSearchResultsAvailable;
     public static final int chatSearchResultsLoading;
     public static final int closeChats;
@@ -51,6 +52,7 @@ public class NotificationCenter {
     public static final int didSetTwoStepPassword;
     public static final int didStartedCall;
     public static final int didUpdateConnectionState;
+    public static final int didUpdatePollResults;
     public static final int didUpdatedMessagesViews;
     public static final int emojiDidLoad;
     public static final int encryptedChatCreated;
@@ -360,6 +362,12 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         updateMentionsCount = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didUpdatePollResults = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        chatOnlineCountDidLoad = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoad = i;

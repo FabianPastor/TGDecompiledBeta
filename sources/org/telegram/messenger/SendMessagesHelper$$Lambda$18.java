@@ -1,17 +1,24 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class SendMessagesHelper$$Lambda$18 implements Runnable {
-    private final String arg$1;
-    private final int arg$2;
-    private final long arg$3;
+import java.util.HashMap;
+import org.telegram.tgnet.TLRPC.BotInlineResult;
 
-    SendMessagesHelper$$Lambda$18(String str, int i, long j) {
-        this.arg$1 = str;
-        this.arg$2 = i;
-        this.arg$3 = j;
+final /* synthetic */ class SendMessagesHelper$$Lambda$18 implements Runnable {
+    private final BotInlineResult arg$1;
+    private final long arg$2;
+    private final int arg$3;
+    private final HashMap arg$4;
+    private final MessageObject arg$5;
+
+    SendMessagesHelper$$Lambda$18(BotInlineResult botInlineResult, long j, int i, HashMap hashMap, MessageObject messageObject) {
+        this.arg$1 = botInlineResult;
+        this.arg$2 = j;
+        this.arg$3 = i;
+        this.arg$4 = hashMap;
+        this.arg$5 = messageObject;
     }
 
     public void run() {
-        Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$28(this.arg$1, this.arg$2, this.arg$3));
+        SendMessagesHelper.lambda$prepareSendingBotContextResult$50$SendMessagesHelper(this.arg$1, this.arg$2, this.arg$3, this.arg$4, this.arg$5);
     }
 }

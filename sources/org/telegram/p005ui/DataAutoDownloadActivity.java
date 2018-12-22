@@ -78,7 +78,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                DataAutoDownloadActivity.this.finishFragment();
+                DataAutoDownloadActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             } else if (id == 1) {
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[0] = DataAutoDownloadActivity.this.mobileDataDownloadMask;
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).mobileDataDownloadMask[1] = DataAutoDownloadActivity.this.mobileDataPrivateDownloadMask;
@@ -108,7 +108,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 editor.putInt("roamingMaxDownloadSize" + DownloadController.maskToIndex(DataAutoDownloadActivity.this.currentType), DataAutoDownloadActivity.this.roamingMaxSize);
                 editor.commit();
                 DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).checkAutodownloadSettings();
-                DataAutoDownloadActivity.this.finishFragment();
+                DataAutoDownloadActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }
@@ -401,7 +401,6 @@ public class DataAutoDownloadActivity extends BaseFragment {
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener(new DataAutoDownloadActivity$$Lambda$0(this));
-        frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }
 

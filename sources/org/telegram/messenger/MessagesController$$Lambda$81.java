@@ -1,16 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+final /* synthetic */ class MessagesController$$Lambda$81 implements Runnable {
+    private final MessagesController arg$1;
+    private final MessageObject arg$2;
 
-final /* synthetic */ class MessagesController$$Lambda$81 implements RequestDelegate {
-    static final RequestDelegate $instance = new MessagesController$$Lambda$81();
-
-    private MessagesController$$Lambda$81() {
+    MessagesController$$Lambda$81(MessagesController messagesController, MessageObject messageObject) {
+        this.arg$1 = messagesController;
+        this.arg$2 = messageObject;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        MessagesController.lambda$markMentionMessageAsRead$122$MessagesController(tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$addToViewsQueue$125$MessagesController(this.arg$2);
     }
 }

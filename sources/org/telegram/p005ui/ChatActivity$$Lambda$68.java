@@ -1,27 +1,24 @@
 package org.telegram.p005ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.MessageObject.GroupedMessages;
 import org.telegram.p005ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_messages_editMessage;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$68 */
-final /* synthetic */ class ChatActivity$$Lambda$68 implements Runnable {
+final /* synthetic */ class ChatActivity$$Lambda$68 implements RequestDelegate {
     private final ChatActivity arg$1;
     private final AlertDialog[] arg$2;
-    private final TLObject arg$3;
-    private final MessageObject arg$4;
-    private final GroupedMessages arg$5;
+    private final TL_messages_editMessage arg$3;
 
-    ChatActivity$$Lambda$68(ChatActivity chatActivity, AlertDialog[] alertDialogArr, TLObject tLObject, MessageObject messageObject, GroupedMessages groupedMessages) {
+    ChatActivity$$Lambda$68(ChatActivity chatActivity, AlertDialog[] alertDialogArr, TL_messages_editMessage tL_messages_editMessage) {
         this.arg$1 = chatActivity;
         this.arg$2 = alertDialogArr;
-        this.arg$3 = tLObject;
-        this.arg$4 = messageObject;
-        this.arg$5 = groupedMessages;
+        this.arg$3 = tL_messages_editMessage;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$58$ChatActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$null$81$ChatActivity(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

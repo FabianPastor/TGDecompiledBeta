@@ -140,6 +140,7 @@ import org.telegram.tgnet.TLRPC.TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetShortName;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
+import org.telegram.tgnet.TLRPC.TL_pollAnswer;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.User;
 
@@ -447,6 +448,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             public void didPressBotButton(ChatMessageCell cell, KeyboardButton button) {
             }
 
+            public void didPressVoteButton(ChatMessageCell cell, TL_pollAnswer button) {
+            }
+
             public void didPressCancelSendButton(ChatMessageCell cell) {
             }
 
@@ -505,7 +509,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
 
             /* renamed from: lambda$didPressUrl$0$ChannelAdminLogActivity$ChatActivityAdapter$1 */
-            final /* synthetic */ void mo15101xeCLASSNAMEe(String urlFinal, DialogInterface dialog, int which) {
+            final /* synthetic */ void mo15168xeCLASSNAMEe(String urlFinal, DialogInterface dialog, int which) {
                 if (which == 0) {
                     Browser.openUrl(ChannelAdminLogActivity.this.getParentActivity(), urlFinal, true);
                 } else if (which == 1) {
@@ -730,7 +734,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: lambda$onCreateViewHolder$0$ChannelAdminLogActivity$ChatActivityAdapter */
-        final /* synthetic */ void mo15103xd4cdd41c(String url) {
+        final /* synthetic */ void mo15170xd4cdd41c(String url) {
             if (url.startsWith("@")) {
                 MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).openByUserName(url.substring(1), ChannelAdminLogActivity.this, 0);
             } else if (url.startsWith("#")) {

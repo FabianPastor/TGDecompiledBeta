@@ -81,7 +81,7 @@ public class DataSettingsActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                DataSettingsActivity.this.finishFragment();
+                DataSettingsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }
@@ -427,7 +427,6 @@ public class DataSettingsActivity extends BaseFragment {
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener(new DataSettingsActivity$$Lambda$0(this));
-        frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }
 

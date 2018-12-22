@@ -58,7 +58,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
         public void onItemClick(int id) {
             if (id == -1) {
-                LanguageSelectActivity.this.finishFragment();
+                LanguageSelectActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }
@@ -259,7 +259,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, this.currentAccount);
                 this.parentLayout.rebuildAllFragmentViews(false, false);
             }
-            finishFragment();
+            lambda$createView$1$PhotoAlbumPickerActivity();
         }
     }
 

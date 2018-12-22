@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.Chat;
 
-final /* synthetic */ class MessagesController$$Lambda$122 implements RequestDelegate {
+final /* synthetic */ class MessagesController$$Lambda$122 implements Runnable {
     private final MessagesController arg$1;
-    private final long arg$2;
+    private final boolean arg$2;
+    private final Chat arg$3;
 
-    MessagesController$$Lambda$122(MessagesController messagesController, long j) {
+    MessagesController$$Lambda$122(MessagesController messagesController, boolean z, Chat chat) {
         this.arg$1 = messagesController;
-        this.arg$2 = j;
+        this.arg$2 = z;
+        this.arg$3 = chat;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$markDialogAsUnread$198$MessagesController(this.arg$2, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$startShortPoll$185$MessagesController(this.arg$2, this.arg$3);
     }
 }

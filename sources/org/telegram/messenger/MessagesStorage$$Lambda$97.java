@@ -2,16 +2,16 @@ package org.telegram.messenger;
 
 final /* synthetic */ class MessagesStorage$$Lambda$97 implements Runnable {
     private final MessagesStorage arg$1;
-    private final long arg$2;
-    private final boolean arg$3;
+    private final int arg$2;
+    private final int arg$3;
 
-    MessagesStorage$$Lambda$97(MessagesStorage messagesStorage, long j, boolean z) {
+    MessagesStorage$$Lambda$97(MessagesStorage messagesStorage, int i, int i2) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = j;
-        this.arg$3 = z;
+        this.arg$2 = i;
+        this.arg$3 = i2;
     }
 
     public void run() {
-        this.arg$1.lambda$setDialogUnread$126$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$getDialogs$127$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

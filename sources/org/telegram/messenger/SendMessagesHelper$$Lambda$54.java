@@ -1,6 +1,10 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class SendMessagesHelper$$Lambda$54 implements Runnable {
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+
+final /* synthetic */ class SendMessagesHelper$$Lambda$54 implements RequestDelegate {
     private final SendMessagesHelper arg$1;
     private final String arg$2;
 
@@ -9,7 +13,7 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$54 implements Runnable {
         this.arg$2 = str;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$12$SendMessagesHelper(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$null$13$SendMessagesHelper(this.arg$2, tLObject, tL_error);
     }
 }

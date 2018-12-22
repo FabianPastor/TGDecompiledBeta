@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.ChatFull;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC.Message;
 
-final /* synthetic */ class MessagesStorage$$Lambda$110 implements Runnable {
-    private final MessagesStorage arg$1;
-    private final ChatFull arg$2;
+final /* synthetic */ class MessagesStorage$$Lambda$110 implements Comparator {
+    static final Comparator $instance = new MessagesStorage$$Lambda$110();
 
-    MessagesStorage$$Lambda$110(MessagesStorage messagesStorage, ChatFull chatFull) {
-        this.arg$1 = messagesStorage;
-        this.arg$2 = chatFull;
+    private MessagesStorage$$Lambda$110() {
     }
 
-    public void run() {
-        this.arg$1.lambda$null$70$MessagesStorage(this.arg$2);
+    public int compare(Object obj, Object obj2) {
+        return MessagesStorage.lambda$null$89$MessagesStorage((Message) obj, (Message) obj2);
     }
 }

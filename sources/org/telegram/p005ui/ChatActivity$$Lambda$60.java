@@ -1,27 +1,20 @@
 package org.telegram.p005ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC.TL_game;
+import org.telegram.p005ui.ActionBar.AlertDialog;
 
 /* renamed from: org.telegram.ui.ChatActivity$$Lambda$60 */
-final /* synthetic */ class ChatActivity$$Lambda$60 implements OnClickListener {
+final /* synthetic */ class ChatActivity$$Lambda$60 implements Runnable {
     private final ChatActivity arg$1;
-    private final TL_game arg$2;
-    private final MessageObject arg$3;
-    private final String arg$4;
-    private final int arg$5;
+    private final AlertDialog[] arg$2;
+    private final int arg$3;
 
-    ChatActivity$$Lambda$60(ChatActivity chatActivity, TL_game tL_game, MessageObject messageObject, String str, int i) {
+    ChatActivity$$Lambda$60(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
         this.arg$1 = chatActivity;
-        this.arg$2 = tL_game;
-        this.arg$3 = messageObject;
-        this.arg$4 = str;
-        this.arg$5 = i;
+        this.arg$2 = alertDialogArr;
+        this.arg$3 = i;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$showOpenGameAlert$76$ChatActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, dialogInterface, i);
+    public void run() {
+        this.arg$1.lambda$processSelectedOption$78$ChatActivity(this.arg$2, this.arg$3);
     }
 }

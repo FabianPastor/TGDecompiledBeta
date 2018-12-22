@@ -1,17 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.Updates;
+import org.telegram.p005ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLRPC.TL_channels_createChannel;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class MessagesController$$Lambda$199 implements Runnable {
     private final MessagesController arg$1;
-    private final Updates arg$2;
+    private final TL_error arg$2;
+    private final BaseFragment arg$3;
+    private final TL_channels_createChannel arg$4;
 
-    MessagesController$$Lambda$199(MessagesController messagesController, Updates updates) {
+    MessagesController$$Lambda$199(MessagesController messagesController, TL_error tL_error, BaseFragment baseFragment, TL_channels_createChannel tL_channels_createChannel) {
         this.arg$1 = messagesController;
-        this.arg$2 = updates;
+        this.arg$2 = tL_error;
+        this.arg$3 = baseFragment;
+        this.arg$4 = tL_channels_createChannel;
     }
 
     public void run() {
-        this.arg$1.lambda$null$136$MessagesController(this.arg$2);
+        this.arg$1.lambda$null$144$MessagesController(this.arg$2, this.arg$3, this.arg$4);
     }
 }

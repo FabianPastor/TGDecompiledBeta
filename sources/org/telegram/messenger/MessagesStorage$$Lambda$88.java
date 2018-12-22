@@ -1,22 +1,21 @@
 package org.telegram.messenger;
 
-import android.util.SparseIntArray;
-import org.telegram.messenger.support.SparseLongArray;
+import java.util.ArrayList;
 
 final /* synthetic */ class MessagesStorage$$Lambda$88 implements Runnable {
     private final MessagesStorage arg$1;
-    private final SparseLongArray arg$2;
-    private final SparseLongArray arg$3;
-    private final SparseIntArray arg$4;
+    private final ArrayList arg$2;
+    private final boolean arg$3;
+    private final boolean arg$4;
 
-    MessagesStorage$$Lambda$88(MessagesStorage messagesStorage, SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray) {
+    MessagesStorage$$Lambda$88(MessagesStorage messagesStorage, ArrayList arrayList, boolean z, boolean z2) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = sparseLongArray;
-        this.arg$3 = sparseLongArray2;
-        this.arg$4 = sparseIntArray;
+        this.arg$2 = arrayList;
+        this.arg$3 = z;
+        this.arg$4 = z2;
     }
 
     public void run() {
-        this.arg$1.lambda$markMessagesAsRead$116$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$updateUsers$117$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

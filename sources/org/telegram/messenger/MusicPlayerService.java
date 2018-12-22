@@ -174,7 +174,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
         if (set && !TextUtils.isEmpty(this.loadingFilePath)) {
             MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject != null) {
-                createNotification(messageObject);
+                createNotification(messageObject, true);
             }
             this.loadingFilePath = null;
         }
@@ -213,11 +213,11 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
                 FileLog.m13e(e2);
             }
         }
-        createNotification(messageObject);
+        createNotification(messageObject, false);
         return 1;
     }
 
-    private Bitmap loadArtworkFromUrl(String artworkUrl, boolean big) {
+    private Bitmap loadArtworkFromUrl(String artworkUrl, boolean big, boolean tryLoad) {
         float f = 600.0f;
         String name = ImageLoader.getHttpFileName(artworkUrl);
         File path = ImageLoader.getHttpFilePath(artworkUrl, "jpg");
@@ -228,17 +228,21 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
                 f = 100.0f;
             }
             return ImageLoader.loadBitmap(absolutePath, null, f2, f, false);
-        }
-        this.loadingFilePath = path.getAbsolutePath();
-        if (big) {
+        } else if (tryLoad) {
+            this.loadingFilePath = path.getAbsolutePath();
+            if (big) {
+                return null;
+            }
+            this.imageReceiver.setImage(artworkUrl, "48_48", null, null, 0);
+            return null;
+        } else {
+            this.loadingFilePath = null;
             return null;
         }
-        this.imageReceiver.setImage(artworkUrl, "48_48", null, null, 0);
-        return null;
     }
 
     @SuppressLint({"NewApi"})
-    private void createNotification(MessageObject messageObject) {
+    private void createNotification(MessageObject messageObject, boolean forBitmap) {
         String songName = messageObject.getMusicTitle();
         String authorName = messageObject.getMusicAuthor();
         AudioInfo audioInfo = MediaController.getInstance().getAudioInfo();
@@ -255,12 +259,12 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
         if (albumArt != null || TextUtils.isEmpty(artworkUrl)) {
             this.loadingFilePath = FileLoader.getPathToAttach(messageObject.getDocument()).getAbsolutePath();
         } else {
-            fullAlbumArt = loadArtworkFromUrl(artworkUrlBig, true);
+            fullAlbumArt = loadArtworkFromUrl(artworkUrlBig, true, !forBitmap);
             if (fullAlbumArt == null) {
-                albumArt = loadArtworkFromUrl(artworkUrl, false);
+                albumArt = loadArtworkFromUrl(artworkUrl, false, !forBitmap);
                 fullAlbumArt = albumArt;
             } else {
-                albumArt = loadArtworkFromUrl(artworkUrlBig, false);
+                albumArt = loadArtworkFromUrl(artworkUrlBig, false, !forBitmap);
             }
         }
         Notification notification;
@@ -447,7 +451,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
         if (id == NotificationCenter.messagePlayingPlayStateChanged) {
             messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject != null) {
-                createNotification(messageObject);
+                createNotification(messageObject, false);
             } else {
                 stopSelf();
             }
@@ -460,13 +464,13 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             path = args[0];
             messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject != null && this.loadingFilePath != null && this.loadingFilePath.equals(path)) {
-                createNotification(messageObject);
+                createNotification(messageObject, false);
             }
         } else if (id == NotificationCenter.fileDidLoad) {
             path = (String) args[0];
             messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject != null && this.loadingFilePath != null && this.loadingFilePath.equals(path)) {
-                createNotification(messageObject);
+                createNotification(messageObject, false);
             }
         }
     }

@@ -18,6 +18,6 @@ final /* synthetic */ class ChatActivity$$Lambda$40 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$didReceivedNotification$53$ChatActivity(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$didReceivedNotification$52$ChatActivity(this.arg$2, this.arg$3, this.arg$4);
     }
 }

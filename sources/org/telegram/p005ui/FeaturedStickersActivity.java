@@ -50,7 +50,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
 
         public void onItemClick(int id) {
             if (id == -1) {
-                FeaturedStickersActivity.this.finishFragment();
+                FeaturedStickersActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }

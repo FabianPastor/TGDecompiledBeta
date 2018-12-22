@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.messages_Dialogs;
+import java.util.ArrayList;
 
 final /* synthetic */ class MessagesController$$Lambda$77 implements Runnable {
     private final MessagesController arg$1;
-    private final messages_Dialogs arg$2;
+    private final ArrayList arg$2;
 
-    MessagesController$$Lambda$77(MessagesController messagesController, messages_Dialogs messages_dialogs) {
+    MessagesController$$Lambda$77(MessagesController messagesController, ArrayList arrayList) {
         this.arg$1 = messagesController;
-        this.arg$2 = messages_dialogs;
+        this.arg$2 = arrayList;
     }
 
     public void run() {
-        this.arg$1.lambda$processDialogsUpdate$118$MessagesController(this.arg$2);
+        this.arg$1.lambda$reloadMentionsCountForChannels$118$MessagesController(this.arg$2);
     }
 }

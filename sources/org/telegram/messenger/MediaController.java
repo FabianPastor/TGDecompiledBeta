@@ -540,7 +540,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
 
         /* renamed from: lambda$scheduleReloadRunnable$0$MediaController$GalleryObserverInternal */
-        final /* synthetic */ void mo9321x623fvar_() {
+        final /* synthetic */ void mo9340x623fvar_() {
             if (PhotoViewer.getInstance().isVisible()) {
                 scheduleReloadRunnable();
                 return;
