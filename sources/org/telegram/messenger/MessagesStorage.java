@@ -3168,7 +3168,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$52(this, chat_id, countDownLatch, force, byChannelUsers));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x020c A:{Splitter: B:8:0x0052, ExcHandler: all (r2_53 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x020c A:{ExcHandler: all (r2_53 'th' java.lang.Throwable), Splitter: B:8:0x0052} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:58:0x01a3, code:
             r16 = e;

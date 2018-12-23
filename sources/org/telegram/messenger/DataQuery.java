@@ -3794,15 +3794,15 @@ public class DataQuery {
                     int i2 = (firstChar == 32 || firstChar == 10) ? 1 : 0;
                     CharSequence endMessage = substring(charSequence, i2 + i, message[0].length());
                     if (startMessage.length() != 0) {
-                        startMessage = TextUtils.concat(new CharSequence[]{startMessage, "\n"});
+                        startMessage = AndroidUtilities.concat(startMessage, "\n");
                     } else {
                         replacedFirst = true;
                     }
                     if (endMessage.length() != 0) {
-                        endMessage = TextUtils.concat(new CharSequence[]{"\n", endMessage});
+                        endMessage = AndroidUtilities.concat("\n", endMessage);
                     }
                     if (!TextUtils.isEmpty(content)) {
-                        message[0] = TextUtils.concat(new CharSequence[]{startMessage, content, endMessage});
+                        message[0] = AndroidUtilities.concat(startMessage, content, endMessage);
                         TL_messageEntityPre entity3 = new TL_messageEntityPre();
                         entity3.offset = (replacedFirst ? 0 : 1) + start;
                         entity3.length = (replacedFirst ? 0 : 1) + ((index - start) - 3);
@@ -3815,7 +3815,7 @@ public class DataQuery {
                     charSequenceArr[0] = substring(message[0], 0, start);
                     charSequenceArr[1] = substring(message[0], start + 1, index);
                     charSequenceArr[2] = substring(message[0], index + 1, message[0].length());
-                    message[0] = TextUtils.concat(charSequenceArr);
+                    message[0] = AndroidUtilities.concat(charSequenceArr);
                     entity = new TL_messageEntityCode();
                     entity.offset = start;
                     entity.length = (index - start) - 1;
@@ -3830,7 +3830,7 @@ public class DataQuery {
             charSequenceArr = new CharSequence[2];
             charSequenceArr[0] = substring(message[0], 0, start);
             charSequenceArr[1] = substring(message[0], start + 2, message[0].length());
-            message[0] = TextUtils.concat(charSequenceArr);
+            message[0] = AndroidUtilities.concat(charSequenceArr);
             if (entities == null) {
                 entities = new ArrayList();
             }
@@ -3931,7 +3931,7 @@ public class DataQuery {
                                 charSequenceArr[0] = substring(message[0], 0, start);
                                 charSequenceArr[1] = substring(message[0], start + 2, index);
                                 charSequenceArr[2] = substring(message[0], index + 2, message[0].length());
-                                message[0] = TextUtils.concat(charSequenceArr);
+                                message[0] = AndroidUtilities.concat(charSequenceArr);
                             } catch (Exception e) {
                                 message[0] = substring(message[0], 0, start).toString() + substring(message[0], start + 2, index).toString() + substring(message[0], index + 2, message[0].length()).toString();
                             }

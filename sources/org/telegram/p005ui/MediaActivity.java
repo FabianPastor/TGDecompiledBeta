@@ -1812,7 +1812,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
 
             public void setPadding(int left, int top, int right, int bottom) {
                 MediaActivity.this.additionalPadding = top;
-                MediaActivity.this.fragmentContextView.setTranslationY(((float) top) + MediaActivity.this.actionBar.getTranslationY());
+                if (MediaActivity.this.fragmentContextView != null) {
+                    MediaActivity.this.fragmentContextView.setTranslationY(((float) top) + MediaActivity.this.actionBar.getTranslationY());
+                }
                 int actionBarHeight = MediaActivity.this.actionBar.getMeasuredHeight();
                 for (int a = 0; a < MediaActivity.this.mediaPages.length; a++) {
                     if (MediaActivity.this.mediaPages[a] != null) {

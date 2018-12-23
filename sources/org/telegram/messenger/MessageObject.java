@@ -2518,11 +2518,13 @@ public class MessageObject {
                 } else if (this.photoThumbs != null && !this.photoThumbs.isEmpty()) {
                     for (a = 0; a < this.photoThumbs.size(); a++) {
                         photoObject = (PhotoSize) this.photoThumbs.get(a);
-                        for (b = 0; b < this.messageOwner.media.photo.sizes.size(); b++) {
-                            size = (PhotoSize) this.messageOwner.media.photo.sizes.get(b);
-                            if (!(size instanceof TL_photoSizeEmpty) && size.type.equals(photoObject.type)) {
-                                photoObject.location = size.location;
-                                break;
+                        if (photoObject != null) {
+                            for (b = 0; b < this.messageOwner.media.photo.sizes.size(); b++) {
+                                size = (PhotoSize) this.messageOwner.media.photo.sizes.get(b);
+                                if (size != null && !(size instanceof TL_photoSizeEmpty) && size.type.equals(photoObject.type)) {
+                                    photoObject.location = size.location;
+                                    break;
+                                }
                             }
                         }
                     }

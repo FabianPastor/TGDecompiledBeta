@@ -251,6 +251,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private boolean inLayout;
     private StaticLayout infoLayout;
     private int infoWidth;
+    private int infoX;
     private boolean instantButtonPressed;
     private RectF instantButtonRect = new RectF();
     private boolean instantPressed;
@@ -2299,15 +2300,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:557:0x1003  */
     /* JADX WARNING: Removed duplicated region for block: B:887:0x1CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x1061  */
-    /* JADX WARNING: Removed duplicated region for block: B:1867:0x3var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x3var_ }} */
-    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x3f7e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x3f7e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1876:0x3var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:1881:0x3fbf  */
-    /* JADX WARNING: Removed duplicated region for block: B:1967:0x42ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:1966:0x42ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1955:0x42c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1909:0x401f  */
+    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x4022 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x4039 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x4039 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1918:0x404e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1923:0x407a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2009:0x43ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:2008:0x43aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:1997:0x437c  */
     /* JADX WARNING: Removed duplicated region for block: B:442:0x0cee  */
     /* JADX WARNING: Removed duplicated region for block: B:500:0x0e56  */
     /* JADX WARNING: Removed duplicated region for block: B:659:0x1495  */
@@ -2331,18 +2332,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:887:0x1CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x1061  */
     /* JADX WARNING: Removed duplicated region for block: B:583:0x1194  */
-    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x3var_ }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1867:0x3var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x3f7e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x3f7e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1876:0x3var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:1881:0x3fbf  */
-    /* JADX WARNING: Removed duplicated region for block: B:1884:0x3fd8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1945:0x4288  */
-    /* JADX WARNING: Removed duplicated region for block: B:1966:0x42ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1967:0x42ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:1955:0x42c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1958:0x42d0  */
+    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x4022 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1909:0x401f  */
+    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x4039 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x4039 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1918:0x404e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1923:0x407a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1926:0x4093  */
+    /* JADX WARNING: Removed duplicated region for block: B:1987:0x4343  */
+    /* JADX WARNING: Removed duplicated region for block: B:2008:0x43aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:2009:0x43ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:1997:0x437c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2000:0x438b  */
     /* JADX WARNING: Removed duplicated region for block: B:442:0x0cee  */
     /* JADX WARNING: Removed duplicated region for block: B:659:0x1495  */
     /* JADX WARNING: Removed duplicated region for block: B:500:0x0e56  */
@@ -2366,29 +2367,29 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:887:0x1CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x1061  */
     /* JADX WARNING: Removed duplicated region for block: B:583:0x1194  */
-    /* JADX WARNING: Removed duplicated region for block: B:1867:0x3var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x3var_ }} */
-    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x3f7e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x3f7e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:1876:0x3var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:1881:0x3fbf  */
-    /* JADX WARNING: Removed duplicated region for block: B:1884:0x3fd8  */
-    /* JADX WARNING: Removed duplicated region for block: B:1945:0x4288  */
-    /* JADX WARNING: Removed duplicated region for block: B:1967:0x42ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:1966:0x42ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:1955:0x42c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:1958:0x42d0  */
+    /* JADX WARNING: Removed duplicated region for block: B:1909:0x401f  */
+    /* JADX WARNING: Removed duplicated region for block: B:612:0x131f A:{Catch:{ Exception -> 0x4022 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:618:0x1355 A:{Catch:{ Exception -> 0x4039 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:622:0x13bf A:{Catch:{ Exception -> 0x4039 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:1918:0x404e  */
+    /* JADX WARNING: Removed duplicated region for block: B:1923:0x407a  */
+    /* JADX WARNING: Removed duplicated region for block: B:1926:0x4093  */
+    /* JADX WARNING: Removed duplicated region for block: B:1987:0x4343  */
+    /* JADX WARNING: Removed duplicated region for block: B:2009:0x43ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:2008:0x43aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:1997:0x437c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2000:0x438b  */
     /* JADX WARNING: Missing block: B:245:0x0726, code:
-            if (r163.equals("article") != false) goto L_0x0728;
+            if (r168.equals("article") != false) goto L_0x0728;
      */
     /* JADX WARNING: Missing block: B:258:0x0757, code:
-            if (r163.equals("article") != false) goto L_0x0759;
+            if (r168.equals("article") != false) goto L_0x0759;
      */
     /* JADX WARNING: Missing block: B:357:0x0a0c, code:
-            if ("telegram_album".equals(r170) == false) goto L_0x0552;
+            if ("telegram_album".equals(r174) == false) goto L_0x0552;
      */
     /* JADX WARNING: Missing block: B:524:0x0ec5, code:
-            if (r176.documentAttachType != 4) goto L_0x1978;
+            if (r180.documentAttachType != 4) goto L_0x1978;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
@@ -2587,6 +2588,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             boolean autoDownload;
             FileLocation fileLocation;
             boolean photoExist;
+            int w;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -3811,6 +3813,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.namesOffset -= AndroidUtilities.m9dp(1.0f);
                 }
             } else if (messageObject.type == 17) {
+                int N;
                 int N2;
                 PollButton button;
                 byte[] votingFor;
@@ -3827,8 +3830,28 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.pollClosed = media.poll.closed;
                 this.pollVoted = messageObject.isVoted();
                 this.titleLayout = new StaticLayout(Emoji.replaceEmoji(media.poll.question, Theme.chat_audioTitlePaint.getFontMetricsInt(), AndroidUtilities.m9dp(16.0f), false), Theme.chat_audioTitlePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                boolean titleRtl = false;
+                if (this.titleLayout != null) {
+                    N = this.titleLayout.getLineCount();
+                    for (a = 0; a < N; a++) {
+                        if (this.titleLayout.getLineLeft(a) != 0.0f) {
+                            titleRtl = true;
+                            break;
+                        }
+                    }
+                }
                 this.docTitleLayout = new StaticLayout(TextUtils.ellipsize(media.poll.closed ? LocaleController.getString("FinalResults", CLASSNAMER.string.FinalResults) : LocaleController.getString("AnonymousPoll", CLASSNAMER.string.AnonymousPoll), Theme.chat_timePaint, (float) maxWidth, TruncateAt.END), Theme.chat_timePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                this.infoLayout = new StaticLayout(TextUtils.ellipsize(media.results.total_voters == 0 ? LocaleController.getString("NoVotes", CLASSNAMER.string.NoVotes) : LocaleController.formatPluralString("Vote", media.results.total_voters), Theme.chat_livePaint, (float) ((maxWidth - this.timeWidth) - AndroidUtilities.m9dp(8.0f)), TruncateAt.END), Theme.chat_livePaint, maxWidth + AndroidUtilities.m9dp(2.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                if (this.docTitleLayout != null && this.docTitleLayout.getLineCount() > 0) {
+                    if (titleRtl && !LocaleController.isRTL) {
+                        this.docTitleOffsetX = (int) Math.ceil((double) (((float) maxWidth) - this.docTitleLayout.getLineWidth(0)));
+                    } else if (!titleRtl && LocaleController.isRTL) {
+                        this.docTitleOffsetX = -((int) Math.ceil((double) this.docTitleLayout.getLineLeft(0)));
+                    }
+                }
+                w = (maxWidth - this.timeWidth) - AndroidUtilities.m9dp(messageObject.isOutOwner() ? 28.0f : 8.0f);
+                this.infoLayout = new StaticLayout(TextUtils.ellipsize(media.results.total_voters == 0 ? LocaleController.getString("NoVotes", CLASSNAMER.string.NoVotes) : LocaleController.formatPluralString("Vote", media.results.total_voters), Theme.chat_livePaint, (float) w, TruncateAt.END), Theme.chat_livePaint, w, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                double d = (this.infoLayout == null || this.infoLayout.getLineCount() <= 0) ? 0.0d : (double) (-this.infoLayout.getLineLeft(0));
+                this.infoX = (int) Math.ceil(d);
                 this.lastPoll = media.poll;
                 this.lastPollResults = media.results.results;
                 this.lastPollResultsVoters = media.results.total_voters;
@@ -3841,7 +3864,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (!this.pollButtons.isEmpty()) {
                     ArrayList<PollButton> arrayList2 = new ArrayList(this.pollButtons);
                     this.pollButtons.clear();
-                    this.animatePollAnswer = this.attachedToWindow;
+                    if (!this.animatePollAnswer) {
+                        z = this.attachedToWindow && (this.pollVoted || this.pollClosed);
+                        this.animatePollAnswer = z;
+                    }
                     if (this.pollAnimationProgress > 0.0f && this.pollAnimationProgress < 1.0f) {
                         N2 = arrayList2.size();
                         for (b = 0; b < N2; b++) {
@@ -3863,7 +3889,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 int restPercent = 100;
                 boolean hasDifferent = false;
                 int previousPercent = 0;
-                int N = media.poll.answers.size();
+                N = media.poll.answers.size();
                 for (a = 0; a < N; a++) {
                     PollButton pollButton = new PollButton(this, null);
                     pollButton.answer = (TL_pollAnswer) media.poll.answers.get(a);
@@ -4222,7 +4248,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         this.mediaBackground = false;
                     }
                     this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
-                    int w = 0;
+                    w = 0;
                     int h = 0;
                     if (this.currentPhotoObject != null && this.currentPhotoObject == this.currentPhotoObjectThumb) {
                         this.currentPhotoObjectThumb = null;
@@ -5805,13 +5831,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             if (this.docTitleLayout != null) {
                 canvas.save();
-                canvas.translate((float) x, (float) (((this.titleLayout != null ? this.titleLayout.getHeight() : 0) + AndroidUtilities.m9dp(20.0f)) + this.namesOffset));
+                canvas.translate((float) (this.docTitleOffsetX + x), (float) (((this.titleLayout != null ? this.titleLayout.getHeight() : 0) + AndroidUtilities.m9dp(20.0f)) + this.namesOffset));
                 this.docTitleLayout.draw(canvas);
                 canvas.restore();
             }
             if (VERSION.SDK_INT >= 21 && this.selectorDrawable != null) {
                 this.selectorDrawable.draw(canvas);
             }
+            int lastVoteY = 0;
             a = 0;
             int N = this.pollButtons.size();
             while (a < N) {
@@ -5837,7 +5864,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.instantButtonRect.set(0.0f, (float) (button.height + AndroidUtilities.m9dp(6.0f)), ((float) (this.backgroundWidth - AndroidUtilities.m9dp(76.0f))) * (button.prevPercentProgress + ((button.percentProgress - button.prevPercentProgress) * this.pollAnimationProgress)), (float) (button.height + AndroidUtilities.m9dp(11.0f)));
                     canvas.drawRoundRect(this.instantButtonRect, (float) AndroidUtilities.m9dp(2.0f), (float) AndroidUtilities.m9dp(2.0f), Theme.chat_docBackPaint);
                 }
-                if ((!this.pollVoted && !this.pollClosed) || this.animatePollAnswerAlpha) {
+                if (!(this.pollVoted || this.pollClosed) || this.animatePollAnswerAlpha) {
                     if (isDrawSelectedBackground()) {
                         Theme.chat_replyLinePaint.setColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outVoiceSeekbarSelected : Theme.key_chat_inVoiceSeekbarSelected));
                     } else {
@@ -5867,11 +5894,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                 }
                 canvas.restore();
+                if (a == N - 1) {
+                    lastVoteY = (button.var_y + this.namesOffset) + button.height;
+                }
                 a++;
             }
             if (this.infoLayout != null) {
                 canvas.save();
-                canvas.translate((float) x, (float) (getMeasuredHeight() - AndroidUtilities.m9dp(25.0f)));
+                canvas.translate((float) (this.infoX + x), (float) (AndroidUtilities.m9dp(22.0f) + lastVoteY));
                 this.infoLayout.draw(canvas);
                 canvas.restore();
             }

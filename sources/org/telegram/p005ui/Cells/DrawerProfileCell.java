@@ -28,6 +28,7 @@ import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.AvatarDrawable;
 import org.telegram.p005ui.Components.BackupImageView;
 import org.telegram.p005ui.Components.LayoutHelper;
+import org.telegram.p005ui.Components.SnowflakesEffect;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.User;
 
@@ -42,6 +43,7 @@ public class DrawerProfileCell extends FrameLayout {
     private Paint paint = new Paint();
     private TextView phoneTextView;
     private ImageView shadowView;
+    private SnowflakesEffect snowflakesEffect;
     private Rect srcRect = new Rect();
 
     public DrawerProfileCell(Context context) {
@@ -73,6 +75,9 @@ public class DrawerProfileCell extends FrameLayout {
         this.arrowView = new ImageView(context);
         this.arrowView.setScaleType(ScaleType.CENTER);
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
+        if (Theme.getEventType() == 0) {
+            this.snowflakesEffect = new SnowflakesEffect();
+        }
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -105,34 +110,37 @@ public class DrawerProfileCell extends FrameLayout {
             this.shadowView.setVisibility(4);
             this.phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhoneCats));
             super.onDraw(canvas);
-            return;
+        } else {
+            this.phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
+            this.shadowView.setVisibility(0);
+            if (backgroundDrawable instanceof ColorDrawable) {
+                backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                backgroundDrawable.draw(canvas);
+            } else if (backgroundDrawable instanceof BitmapDrawable) {
+                float scale;
+                Bitmap bitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
+                float scaleX = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
+                float scaleY = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
+                if (scaleX < scaleY) {
+                    scale = scaleY;
+                } else {
+                    scale = scaleX;
+                }
+                int width = (int) (((float) getMeasuredWidth()) / scale);
+                int height = (int) (((float) getMeasuredHeight()) / scale);
+                int x = (bitmap.getWidth() - width) / 2;
+                int y = (bitmap.getHeight() - height) / 2;
+                this.srcRect.set(x, y, x + width, y + height);
+                this.destRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                try {
+                    canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
+                } catch (Throwable e) {
+                    FileLog.m13e(e);
+                }
+            }
         }
-        this.phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
-        this.shadowView.setVisibility(0);
-        if (backgroundDrawable instanceof ColorDrawable) {
-            backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-            backgroundDrawable.draw(canvas);
-        } else if (backgroundDrawable instanceof BitmapDrawable) {
-            float scale;
-            Bitmap bitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
-            float scaleX = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
-            float scaleY = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
-            if (scaleX < scaleY) {
-                scale = scaleY;
-            } else {
-                scale = scaleX;
-            }
-            int width = (int) (((float) getMeasuredWidth()) / scale);
-            int height = (int) (((float) getMeasuredHeight()) / scale);
-            int x = (bitmap.getWidth() - width) / 2;
-            int y = (bitmap.getHeight() - height) / 2;
-            this.srcRect.set(x, y, x + width, y + height);
-            this.destRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-            try {
-                canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
-            } catch (Throwable e) {
-                FileLog.m13e(e);
-            }
+        if (this.snowflakesEffect != null) {
+            this.snowflakesEffect.onDraw(this, canvas);
         }
     }
 
