@@ -2083,10 +2083,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (answer != null) {
             req.options.add(answer.option);
         }
-        return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$6(this, key, finishRunnable, messageObject));
+        return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new SendMessagesHelper$$Lambda$6(this, messageObject, key, finishRunnable));
     }
 
-    final /* synthetic */ void lambda$sendVote$15$SendMessagesHelper(final String key, final Runnable finishRunnable, MessageObject messageObject, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$sendVote$15$SendMessagesHelper(MessageObject messageObject, final String key, final Runnable finishRunnable, TLObject response, TL_error error) {
+        if (error == null) {
+            this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(0));
+            MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
+            this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(SystemClock.uptimeMillis()));
+        }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 SendMessagesHelper.this.waitingForVote.remove(key);
@@ -2095,11 +2100,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
             }
         });
-        if (error == null) {
-            this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(0));
-            MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
-            this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(SystemClock.uptimeMillis()));
-        }
     }
 
     protected long getVoteSendTime(long pollId) {

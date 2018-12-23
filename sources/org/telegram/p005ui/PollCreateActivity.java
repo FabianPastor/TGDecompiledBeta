@@ -92,7 +92,7 @@ public class PollCreateActivity extends BaseFragment {
                 poll.poll = new TL_poll();
                 poll.poll.question = PollCreateActivity.this.getFixedString(PollCreateActivity.this.questionString);
                 for (int a = 0; a < PollCreateActivity.this.answers.length; a++) {
-                    if (!TextUtils.isEmpty(PollCreateActivity.this.answers[a])) {
+                    if (!TextUtils.isEmpty(PollCreateActivity.this.getFixedString(PollCreateActivity.this.answers[a]))) {
                         TL_pollAnswer answer = new TL_pollAnswer();
                         answer.text = PollCreateActivity.this.getFixedString(PollCreateActivity.this.answers[a]);
                         answer.option = new byte[1];

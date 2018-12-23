@@ -18,6 +18,7 @@ import org.telegram.p005ui.ActionBar.Theme;
 import org.telegram.p005ui.Components.AvatarDrawable;
 import org.telegram.p005ui.Components.BackupImageView;
 import org.telegram.p005ui.Components.LayoutHelper;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_dialog;
@@ -29,6 +30,7 @@ public class HintDialogCell extends FrameLayout {
     private StaticLayout countLayout;
     private int countWidth;
     private int currentAccount = UserConfig.selectedAccount;
+    private User currentUser;
     private long dialog_id;
     private BackupImageView imageView;
     private int lastUnreadCount;
@@ -54,7 +56,12 @@ public class HintDialogCell extends FrameLayout {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.m9dp(86.0f), NUM));
     }
 
-    public void checkUnreadCounter(int mask) {
+    public void update(int mask) {
+        if (!((mask & 4) == 0 || this.currentUser == null)) {
+            this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.var_id));
+            this.imageView.invalidate();
+            invalidate();
+        }
         if (mask == 0 || (mask & 256) != 0 || (mask & 2048) != 0) {
             TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
             if (dialog == null || dialog.unread_count == 0) {
@@ -80,10 +87,12 @@ public class HintDialogCell extends FrameLayout {
     public void update() {
         int uid = (int) this.dialog_id;
         if (uid > 0) {
-            this.avatarDrawable.setInfo(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid)));
+            this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
+            this.avatarDrawable.setInfo(this.currentUser);
             return;
         }
         this.avatarDrawable.setInfo(MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-uid)));
+        this.currentUser = null;
     }
 
     public void setDialog(int uid, boolean counter, CharSequence name) {
@@ -91,19 +100,19 @@ public class HintDialogCell extends FrameLayout {
         this.dialog_id = (long) uid;
         TLObject photo = null;
         if (uid > 0) {
-            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
+            this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(uid));
             if (name != null) {
                 this.nameTextView.setText(name);
-            } else if (user != null) {
-                this.nameTextView.setText(UserObject.getFirstName(user));
+            } else if (this.currentUser != null) {
+                this.nameTextView.setText(UserObject.getFirstName(this.currentUser));
             } else {
                 this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
             }
-            this.avatarDrawable.setInfo(user);
-            if (!(user == null || user.photo == null)) {
-                photo = user.photo.photo_small;
+            this.avatarDrawable.setInfo(this.currentUser);
+            if (!(this.currentUser == null || this.currentUser.photo == null)) {
+                photo = this.currentUser.photo.photo_small;
             }
-            parentObject = user;
+            parentObject = this.currentUser;
         } else {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-uid));
             if (name != null) {
@@ -118,10 +127,11 @@ public class HintDialogCell extends FrameLayout {
                 photo = chat.photo.photo_small;
             }
             Chat parentObject2 = chat;
+            this.currentUser = null;
         }
         this.imageView.setImage(photo, "50_50", this.avatarDrawable, parentObject2);
         if (counter) {
-            checkUnreadCounter(0);
+            update(0);
         } else {
             this.countLayout = null;
         }
@@ -129,16 +139,28 @@ public class HintDialogCell extends FrameLayout {
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
-        if (child == this.imageView && this.countLayout != null) {
-            int top = AndroidUtilities.m9dp(6.0f);
-            int left = AndroidUtilities.m9dp(54.0f);
-            int x = left - AndroidUtilities.m9dp(5.5f);
-            this.rect.set((float) x, (float) top, (float) ((this.countWidth + x) + AndroidUtilities.m9dp(11.0f)), (float) (AndroidUtilities.m9dp(23.0f) + top));
-            canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
-            canvas.save();
-            canvas.translate((float) left, (float) (AndroidUtilities.m9dp(4.0f) + top));
-            this.countLayout.draw(canvas);
-            canvas.restore();
+        if (child == this.imageView) {
+            int top;
+            int left;
+            if (this.countLayout != null) {
+                top = AndroidUtilities.m9dp(6.0f);
+                left = AndroidUtilities.m9dp(54.0f);
+                int x = left - AndroidUtilities.m9dp(5.5f);
+                this.rect.set((float) x, (float) top, (float) ((this.countWidth + x) + AndroidUtilities.m9dp(11.0f)), (float) (AndroidUtilities.m9dp(23.0f) + top));
+                canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
+                canvas.save();
+                canvas.translate((float) left, (float) (AndroidUtilities.m9dp(4.0f) + top));
+                this.countLayout.draw(canvas);
+                canvas.restore();
+            }
+            if (!(this.currentUser == null || this.currentUser.status == null || this.currentUser.status.expires <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.var_id))) {
+                top = AndroidUtilities.m9dp(53.0f);
+                left = AndroidUtilities.m9dp(59.0f);
+                Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.m9dp(7.0f), Theme.dialogs_onlineCirclePaint);
+                Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_chats_onlineCircle));
+                canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.m9dp(5.0f), Theme.dialogs_onlineCirclePaint);
+            }
         }
         return result;
     }

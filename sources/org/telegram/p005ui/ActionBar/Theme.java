@@ -272,6 +272,7 @@ public class Theme {
     public static TextPaint dialogs_nameEncryptedPaint = null;
     public static TextPaint dialogs_namePaint = null;
     public static TextPaint dialogs_offlinePaint = null;
+    public static Paint dialogs_onlineCirclePaint = null;
     public static TextPaint dialogs_onlinePaint = null;
     public static Drawable dialogs_pinnedDrawable = null;
     public static Paint dialogs_pinnedPaint = null;
@@ -625,6 +626,7 @@ public class Theme {
     public static final String key_chats_name = "chats_name";
     public static final String key_chats_nameIcon = "chats_nameIcon";
     public static final String key_chats_nameMessage = "chats_nameMessage";
+    public static final String key_chats_onlineCircle = "chats_onlineCircle";
     public static final String key_chats_pinnedIcon = "chats_pinnedIcon";
     public static final String key_chats_pinnedOverlay = "chats_pinnedOverlay";
     public static final String key_chats_secretIcon = "chats_secretIcon";
@@ -1309,6 +1311,7 @@ public class Theme {
         defaultColors.put(key_actionBarDefaultSubmenuItem, Integer.valueOf(-14540254));
         defaultColors.put(key_actionBarDefaultSubmenuBackground, Integer.valueOf(-1));
         defaultColors.put(key_actionBarActionModeDefaultSelector, Integer.valueOf(-986896));
+        defaultColors.put(key_chats_onlineCircle, Integer.valueOf(-13456922));
         defaultColors.put(key_chats_unreadCounter, Integer.valueOf(-11613090));
         defaultColors.put(key_chats_unreadCounterMuted, Integer.valueOf(-3684409));
         defaultColors.put(key_chats_unreadCounterText, Integer.valueOf(-1));
@@ -1732,6 +1735,7 @@ public class Theme {
         fallbackKeys.put(key_sharedMedia_photoPlaceholder, key_windowBackgroundGray);
         fallbackKeys.put(key_chat_attachPollBackground, key_chat_attachAudioBackground);
         fallbackKeys.put(key_chat_attachPollIcon, key_chat_attachAudioIcon);
+        fallbackKeys.put(key_chats_onlineCircle, key_windowBackgroundWhiteBlueText);
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         ArrayList arrayList = themes;
@@ -1910,6 +1914,19 @@ public class Theme {
 
     public static boolean canStartHolidayAnimation() {
         return canStartHolidayAnimation;
+    }
+
+    public static int getEventType() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int monthOfYear = calendar.get(2);
+        int dayOfMonth = calendar.get(5);
+        int minutes = calendar.get(12);
+        int hour = calendar.get(11);
+        if ((monthOfYear != 11 || dayOfMonth < 24 || dayOfMonth > 31) && (monthOfYear != 0 || dayOfMonth != 1)) {
+            return -1;
+        }
+        return 0;
     }
 
     /* JADX WARNING: Missing block: B:16:0x0053, code:
@@ -2716,6 +2733,7 @@ public class Theme {
             dialogs_offlinePaint = new TextPaint(1);
             dialogs_tabletSeletedPaint = new Paint();
             dialogs_pinnedPaint = new Paint();
+            dialogs_onlineCirclePaint = new Paint(1);
             dialogs_countPaint = new Paint(1);
             dialogs_countGrayPaint = new Paint(1);
             dialogs_errorPaint = new Paint(1);

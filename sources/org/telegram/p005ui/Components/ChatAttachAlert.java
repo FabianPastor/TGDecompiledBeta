@@ -1729,7 +1729,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
         if (entry != null && !external && cameraPhotos.size() > 1) {
             updatePhotosCounter();
-            CameraController.getInstance().startPreview(this.cameraView.getCameraSession());
+            if (this.cameraView != null) {
+                CameraController.getInstance().startPreview(this.cameraView.getCameraSession());
+            }
             this.mediaCaptured = false;
         } else if (!cameraPhotos.isEmpty()) {
             ChatActivity chatActivity;

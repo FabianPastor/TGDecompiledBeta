@@ -51,6 +51,8 @@ import android.telephony.TelephonyManager;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
@@ -2422,5 +2424,44 @@ public class AndroidUtilities {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static CharSequence concat(CharSequence... text) {
+        int i = 0;
+        if (text.length == 0) {
+            return TtmlNode.ANONYMOUS_REGION_ID;
+        }
+        if (text.length == 1) {
+            return text[0];
+        }
+        int length;
+        CharSequence piece;
+        boolean spanned = false;
+        for (CharSequence piece2 : text) {
+            if (piece2 instanceof Spanned) {
+                spanned = true;
+                break;
+            }
+        }
+        if (spanned) {
+            SpannableStringBuilder ssb = new SpannableStringBuilder();
+            length = text.length;
+            while (i < length) {
+                piece2 = text[i];
+                if (piece2 == null) {
+                    piece2 = "null";
+                }
+                ssb.append(piece2);
+                i++;
+            }
+            return new SpannedString(ssb);
+        }
+        StringBuilder sb = new StringBuilder();
+        length = text.length;
+        while (i < length) {
+            sb.append(text[i]);
+            i++;
+        }
+        return sb.toString();
     }
 }
