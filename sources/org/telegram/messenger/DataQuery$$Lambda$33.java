@@ -6,17 +6,17 @@ import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class DataQuery$$Lambda$33 implements RequestDelegate {
     private final DataQuery arg$1;
-    private final int arg$2;
-    private final long arg$3;
+    private final long arg$2;
+    private final int arg$3;
     private final int arg$4;
     private final int arg$5;
     private final int arg$6;
     private final boolean arg$7;
 
-    DataQuery$$Lambda$33(DataQuery dataQuery, int i, long j, int i2, int i3, int i4, boolean z) {
+    DataQuery$$Lambda$33(DataQuery dataQuery, long j, int i, int i2, int i3, int i4, boolean z) {
         this.arg$1 = dataQuery;
-        this.arg$2 = i;
-        this.arg$3 = j;
+        this.arg$2 = j;
+        this.arg$3 = i;
         this.arg$4 = i2;
         this.arg$5 = i3;
         this.arg$6 = i4;

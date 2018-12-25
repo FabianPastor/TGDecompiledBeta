@@ -252,14 +252,16 @@ public class PollCreateActivity extends BaseFragment {
                             ViewHolder holder = PollCreateActivity.this.listView.findContainingViewHolder(cell);
                             if (holder != null) {
                                 int index = holder.getAdapterPosition() - PollCreateActivity.this.answerStartRow;
-                                PollCreateActivity.this.answers[index] = s.toString();
-                                PollCreateActivity.this.setTextLeft(cell, index);
-                                PollCreateActivity.this.checkDoneButton();
+                                if (index >= 0 && index < PollCreateActivity.this.answers.length) {
+                                    PollCreateActivity.this.answers[index] = s.toString();
+                                    PollCreateActivity.this.setTextLeft(cell, index);
+                                    PollCreateActivity.this.checkDoneButton();
+                                }
                             }
                         }
                     });
                     EditTextBoldCursor editText = cell.getTextView();
-                    editText.setRawInputType(147456);
+                    editText.setRawInputType(245760);
                     editText.setImeOptions(editText.getImeOptions() | 5);
                     editText.setOnEditorActionListener(new PollCreateActivity$ListAdapter$$Lambda$1(this, cell));
                     editText.setOnKeyListener(new PollCreateActivity$ListAdapter$$Lambda$2(cell));
