@@ -1922,7 +1922,7 @@ public class DataQuery {
             return;
         }
         TL_messages_search req = new TL_messages_search();
-        req.limit = count + 1;
+        req.limit = count;
         req.offset_id = max_id;
         if (type == 0) {
             req.filter = new TL_inputMessagesFilterPhotoVideo();
@@ -1938,21 +1938,14 @@ public class DataQuery {
         req.var_q = TtmlNode.ANONYMOUS_REGION_ID;
         req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_part);
         if (req.peer != null) {
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$33(this, count, uid, max_id, type, classGuid, isChannel)), classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$33(this, uid, count, max_id, type, classGuid, isChannel)), classGuid);
         }
     }
 
-    final /* synthetic */ void lambda$loadMedia$51$DataQuery(int count, long uid, int max_id, int type, int classGuid, boolean isChannel, TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$loadMedia$51$DataQuery(long uid, int count, int max_id, int type, int classGuid, boolean isChannel, TLObject response, TL_error error) {
         if (error == null) {
-            boolean topReached;
             messages_Messages res = (messages_Messages) response;
-            if (res.messages.size() > count) {
-                topReached = false;
-                res.messages.remove(res.messages.size() - 1);
-            } else {
-                topReached = true;
-            }
-            processLoadedMedia(res, uid, count, max_id, type, 0, classGuid, isChannel, topReached);
+            processLoadedMedia(res, uid, count, max_id, type, 0, classGuid, isChannel, res.messages.size() == 0);
         }
     }
 

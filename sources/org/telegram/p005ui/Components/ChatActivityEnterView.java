@@ -3195,7 +3195,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (!this.searchingStickers && !this.messageEditText.isFocused()) {
                     this.messageEditText.postDelayed(new ChatActivityEnterView$$Lambda$14(this), 600);
                 }
-            } else if (this.messageEditText.isFocused() && !this.keyboardVisible) {
+            } else if (this.messageEditText != null && this.messageEditText.isFocused() && !this.keyboardVisible) {
                 this.messageEditText.clearFocus();
             }
         }

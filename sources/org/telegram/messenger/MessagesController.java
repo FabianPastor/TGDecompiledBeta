@@ -7054,7 +7054,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$getChannelDifference$194$MessagesController(int channelId, int newDialogType, long newTaskId, TLObject response, TL_error error) {
-        if (error == null) {
+        if (response != null) {
             int a;
             updates_ChannelDifference res = (updates_ChannelDifference) response;
             SparseArray<User> usersDict = new SparseArray();
@@ -7087,12 +7087,12 @@ public class MessagesController implements NotificationCenterDelegate {
             MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
             AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$178(this, res));
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$179(this, msgUpdates, channelId, res, channelFinal, usersDict, newDialogType, newTaskId));
-            return;
-        }
-        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$180(this, error, channelId));
-        this.gettingDifferenceChannels.delete(channelId);
-        if (newTaskId != 0) {
-            MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
+        } else if (error != null) {
+            AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$180(this, error, channelId));
+            this.gettingDifferenceChannels.delete(channelId);
+            if (newTaskId != 0) {
+                MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
+            }
         }
     }
 

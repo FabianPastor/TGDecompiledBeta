@@ -1146,10 +1146,14 @@ public class NotificationsController {
         if (AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter) {
             return LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
         }
+        int chat_id;
         long dialog_id = messageObject.messageOwner.dialog_id;
-        int chat_id = messageObject.messageOwner.to_id.chat_id != 0 ? messageObject.messageOwner.to_id.chat_id : messageObject.messageOwner.to_id.channel_id;
+        if (messageObject.messageOwner.to_id.chat_id != 0) {
+            chat_id = messageObject.messageOwner.to_id.chat_id;
+        } else {
+            chat_id = messageObject.messageOwner.to_id.channel_id;
+        }
         int from_id = messageObject.messageOwner.to_id.user_id;
-        boolean isChannel = messageObject.messageOwner.to_id.channel_id != 0;
         if (preview != null) {
             preview[0] = true;
         }
@@ -1166,7 +1170,7 @@ public class NotificationsController {
                 }
             } else if (chat_id != 0) {
                 preferences = MessagesController.getNotificationsSettings(this.currentAccount);
-                if ((!isChannel && !preferences.getBoolean("EnablePreviewGroup", true)) || (isChannel && !preferences.getBoolean("EnablePreviewChannel", true))) {
+                if ((!messageObject.localChannel && !preferences.getBoolean("EnablePreviewGroup", true)) || (messageObject.localChannel && !preferences.getBoolean("EnablePreviewChannel", true))) {
                     if (preview != null) {
                         preview[0] = false;
                     }
@@ -1238,6 +1242,7 @@ public class NotificationsController {
             return LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
         }
         preferences = MessagesController.getNotificationsSettings(this.currentAccount);
+        boolean isChannel = ChatObject.isChannel(chat) && !chat.megagroup;
         if (!(chat_id == 0 && from_id != 0 && preferences.getBoolean("EnablePreviewAll", true)) && (chat_id == 0 || ((isChannel || !preferences.getBoolean("EnablePreviewGroup", true)) && !(isChannel && preferences.getBoolean("EnablePreviewChannel", true))))) {
             if (preview != null) {
                 preview[0] = false;
@@ -1531,10 +1536,14 @@ public class NotificationsController {
         if (AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter) {
             return LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
         }
+        int chat_id;
         long dialog_id = messageObject.messageOwner.dialog_id;
-        int chat_id = messageObject.messageOwner.to_id.chat_id != 0 ? messageObject.messageOwner.to_id.chat_id : messageObject.messageOwner.to_id.channel_id;
+        if (messageObject.messageOwner.to_id.chat_id != 0) {
+            chat_id = messageObject.messageOwner.to_id.chat_id;
+        } else {
+            chat_id = messageObject.messageOwner.to_id.channel_id;
+        }
         int from_id = messageObject.messageOwner.to_id.user_id;
-        boolean isChannel = messageObject.messageOwner.to_id.channel_id != 0;
         if (preview != null) {
             preview[0] = true;
         }
@@ -1549,7 +1558,7 @@ public class NotificationsController {
                 }
             } else if (chat_id != 0) {
                 preferences = MessagesController.getNotificationsSettings(this.currentAccount);
-                if (!(isChannel || preferences.getBoolean("EnablePreviewGroup", true)) || (isChannel && !preferences.getBoolean("EnablePreviewChannel", true))) {
+                if (!(messageObject.localChannel || preferences.getBoolean("EnablePreviewGroup", true)) || (messageObject.localChannel && !preferences.getBoolean("EnablePreviewChannel", true))) {
                     if (preview != null) {
                         preview[0] = false;
                     }
@@ -1688,6 +1697,7 @@ public class NotificationsController {
             }
         } else if (chat_id != 0) {
             preferences = MessagesController.getNotificationsSettings(this.currentAccount);
+            boolean isChannel = ChatObject.isChannel(chat) && !chat.megagroup;
             if ((isChannel || !preferences.getBoolean("EnablePreviewGroup", true)) && !(isChannel && preferences.getBoolean("EnablePreviewChannel", true))) {
                 if (preview != null) {
                     preview[0] = false;

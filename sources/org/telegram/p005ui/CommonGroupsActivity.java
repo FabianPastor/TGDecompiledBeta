@@ -58,7 +58,7 @@ public class CommonGroupsActivity extends BaseFragment {
 
         public void onItemClick(int id) {
             if (id == -1) {
-                CommonGroupsActivity.this.lambda$checkDiscard$2$PollCreateActivity();
+                CommonGroupsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
             }
         }
     }
